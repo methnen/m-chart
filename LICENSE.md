@@ -1,0 +1,33 @@
+License info for libraries found in `components/external`:
+- [canvg](https://github.com/gabelerner/canvg/)
+	- License at the time of writing: MIT
+- [handsontable](https://github.com/handsontable/handsontable)
+	- License at the time of writing: MIT
+- [highcharts](https://github.com/highslide-software/highcharts.com)
+	- License at the time of writing: CC Attribution-NonCommercial 3.0 Unported
+- [parsecsv](https://github.com/parsecsv/parsecsv-for-php)
+	- License at the time of writing: MIT
+
+License for M Charts:
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Jamie Poitra
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -1,0 +1,26 @@
+/* Global */
+
+@mixin clearfix {
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+$handsontable-cell-border-color: #cccccc;
+
+$wp-admin-border-color: #dddddd;
+$wp-admin-dark-background-color: #f5f5f5;
+$wp-admin-icon-color: #b8b8b8;
+$wp-admin-error-color: #b00000;
+
+#m-chart,
+#m-chart-spreadsheet,
+#m-chart-csv {
+	.inside {
+		.hide {
+			display: none;
+		}
+	}
+}

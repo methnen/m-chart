@@ -1,0 +1,177 @@
+/* Global */
+#m-chart .inside .hide,
+#m-chart-spreadsheet .inside .hide,
+#m-chart-csv .inside .hide {
+  display: none;
+}
+
+/* Handsontable Styles */
+#m-chart-spreadsheet h3 {
+  border-bottom: none;
+}
+#m-chart-spreadsheet .inside {
+  margin: 0;
+  padding: 0;
+}
+#m-chart-spreadsheet .hands-on-table-sheet {
+  height: 350px;
+}
+#m-chart-spreadsheet .hands-on-table-sheet thead tr .relative {
+  border-bottom: 1px solid #cccccc;
+}
+#m-chart-spreadsheet .hands-on-table-sheet table tbody tr td {
+  border-top: none;
+}
+#m-chart-spreadsheet .hands-on-table-sheet .handsontable table {
+  box-shadow: none;
+}
+#m-chart-spreadsheet .hands-on-table-sheet .handsontable table th {
+  border-left-style: none;
+}
+#m-chart-spreadsheet .hands-on-table-sheet .ht_clone_left tr:first-child th {
+  border-top: none;
+  padding-top: 1px;
+}
+
+/* Chart/Settings Styles */
+#m-chart .inside {
+  padding: 0;
+}
+#m-chart .inside .m-chart-container {
+  padding: 7px 10px 10px;
+}
+#m-chart .inside .settings {
+  background-color: #f5f5f5;
+  border-top: 1px solid #dddddd;
+  padding: 0 10px 10px;
+}
+#m-chart .inside .settings .row {
+  border-top: none;
+  padding: 0;
+}
+#m-chart .inside .settings .row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+#m-chart .inside .settings .row p {
+  margin-bottom: 0;
+}
+#m-chart .inside .settings .row.one p {
+  float: left;
+  margin-left: 1%;
+  width: 19%;
+}
+#m-chart .inside .settings .row.one p:first-child {
+  margin-left: 0;
+}
+#m-chart .inside .settings .row.two p, #m-chart .inside .settings .row.four p {
+  float: left;
+  width: 73%;
+}
+#m-chart .inside .settings .row.two p.units, #m-chart .inside .settings .row.four p.units {
+  float: right;
+  width: 25%;
+}
+#m-chart .inside .settings .row.three p {
+  margin: 0;
+}
+#m-chart .inside .settings .row.five p {
+  float: right;
+  width: 49%;
+}
+#m-chart .inside .settings .row.five p:first-child {
+  float: left;
+}
+#m-chart .inside .row {
+  border-top: 1px solid #dddddd;
+  padding: 0 10px 10px;
+}
+#m-chart .inside .row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+#m-chart .inside .row.six p {
+  float: right;
+  margin-bottom: 0;
+  width: 49%;
+}
+#m-chart .inside .row.six p:first-child {
+  float: left;
+}
+#m-chart .inside .row.six p.image {
+  position: relative;
+}
+#m-chart .inside .row.six p.image em {
+  display: block;
+  margin-top: 5px;
+}
+#m-chart .inside .row.six p.image .button {
+  height: 23px;
+  line-height: 20px;
+  position: absolute;
+  right: 1px;
+  top: 23px;
+}
+
+/* CSV Import/Export Styles */
+#m-chart-csv .inside:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+#m-chart-csv .inside:after {
+  clear: both;
+}
+#m-chart-csv .inside .button {
+  margin-top: 6px;
+}
+#m-chart-csv .inside .button.select {
+  margin-right: 10px;
+}
+#m-chart-csv .inside .button.import {
+  float: left;
+  margin-right: 10px;
+}
+#m-chart-csv .inside div.import {
+  margin-right: 65px;
+}
+#m-chart-csv .inside div.export {
+  float: right;
+}
+#m-chart-csv .inside .warning,
+#m-chart-csv .inside .error {
+  color: #b00000;
+}
+#m-chart-csv .inside .error,
+#m-chart-csv .inside .in-progress {
+  margin: 10px 0 0 5px;
+}
+#m-chart-csv .inside .error:not(.hide),
+#m-chart-csv .inside .in-progress:not(.hide) {
+  display: inline-block;
+}
+#m-chart-csv .inside a.dashicons {
+  color: #b8b8b8;
+}
+#m-chart-csv .inside a.dashicons:hover {
+  color: #b00000;
+}
+
+#side-sortables #m-chart-csv .inside {
+  padding: 0;
+}
+#side-sortables #m-chart-csv .inside .select,
+#side-sortables #m-chart-csv .inside .import,
+#side-sortables #m-chart-csv .inside .export {
+  float: none;
+  padding: 7px 12px 10px;
+}
+#side-sortables #m-chart-csv .inside .import {
+  padding-top: 0;
+}
+#side-sortables #m-chart-csv .inside .export {
+  border-top: 1px solid #dddddd;
+  float: none;
+}

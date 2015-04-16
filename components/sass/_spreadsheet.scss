@@ -1,0 +1,55 @@
+/* Handsontable Styles */
+
+#m-chart-spreadsheet {
+	h3 {
+		border-bottom: none;
+	}
+
+	.inside {
+		margin: 0;
+		padding: 0;
+	}
+
+	.hands-on-table-sheet {
+		height: 350px;
+
+		thead {
+			tr {
+				.relative {
+					border-bottom: 1px solid $handsontable-cell-border-color;
+				}
+			}
+		}
+
+		table {
+			tbody {
+				tr {
+					td {
+						border-top: none;
+					}
+				}
+			}
+		}
+
+		.handsontable {
+			table {
+				box-shadow: none;
+
+				th {
+					border-left-style: none;
+				}
+			}
+		}
+
+		.ht_clone_left {
+			tr {
+				&:first-child {
+					th {
+						border-top: none;
+						padding-top: 1px;
+					}
+				}
+			}
+		}
+	}
+}
