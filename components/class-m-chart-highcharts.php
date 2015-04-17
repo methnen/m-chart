@@ -98,7 +98,7 @@ class M_Chart_Highcharts {
 				'height'      => $this->post_meta['height'],
 			),
 			'title' => array(
-				'text' => $this->esc_title( get_the_title( $this->post->ID ) ),
+				'text' => $this->esc_title( apply_filters( 'the_title', $this->post->post_title ) ),
 			),
 			'subtitle' => array(
 				'text' => $this->esc_title( $this->post_meta['subtitle'] ),
@@ -270,7 +270,7 @@ class M_Chart_Highcharts {
 			else
 			{
 				$set_data = array(
-					'name' => $this->esc_title( get_the_title( $this->post->ID ) ),
+					'name' => $this->esc_title( apply_filters( 'the_title', $this->post->post_title ) ),
 					'data' => array(),
 				);
 
