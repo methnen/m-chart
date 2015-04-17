@@ -164,7 +164,7 @@ class M_Chart_Admin {
 			return;
 		}
 		?>
-		<form id="<?php echo esc_attr( $this->get_field_id( 'csv-import-form' ) ); ?>">
+		<form id="<?php echo esc_attr( $this->get_field_id( 'csv-import-form' ) ); ?>" style="display: none;">
 			<input type="file" name="import_csv_file" id="<?php echo esc_attr( $this->get_field_id( 'csv-file' ) ); ?>" class="hide" />
 		</form>
 		<?php
