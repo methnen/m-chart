@@ -14,8 +14,9 @@ var m_chart_admin = {
 
 		this.create_spreadsheet();
 
-		// Store the setting inputs for use later
+		// Store the setting inputs and title input for use later
 		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
+		this.$title_input    = $( document.getElementById( 'titlediv' ) ).find( 'input' );
 
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
@@ -235,9 +236,13 @@ var m_chart_admin = {
 		m_chart_admin.form_submission( true );
 	};
 
-	// Watch for changes to the chart settings or data
+	// Watch for changes to the chart settings or title
 	m_chart_admin.watch_for_chart_changes = function() {
 		this.$setting_inputs.on( 'change', function() {
+			m_chart_admin.refresh_chart();
+		});
+
+		this.$title_input.on( 'change', function() {
 			m_chart_admin.refresh_chart();
 		});
 	};
@@ -283,6 +288,7 @@ var m_chart_admin = {
 				post_id:   m_chart_admin.post_id,
 				nonce:     m_chart_admin.nonce,
 				library:   'highcharts',
+				title:     this.$title_input.attr( 'value' ),
 				post_meta: $post_meta
 			},
 			cache: false,
