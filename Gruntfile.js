@@ -42,6 +42,7 @@ module.exports = function( grunt ) {
 					src: [
 						'**',
 						'!**/bin/**',
+						'!**/deploy/**',
 						'!**/sass/**',
 						'!**/node_modules/**',
 						'!**/tests/**',
