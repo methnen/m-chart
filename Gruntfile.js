@@ -11,7 +11,7 @@ module.exports = function( grunt ) {
 				debugInfo: false
 			}
 		},
-		watch: {	
+		watch: {
 			files: ['components/sass/*.scss'],
 			tasks: [
 				'compass:prod'
@@ -26,18 +26,44 @@ module.exports = function( grunt ) {
 					screenshot_url: 'http://s.wordpress.org/extend/plugins/m-chart/{screenshot}.png',
 				}
 			}
-		}
+		},
+		wp_deploy: {
+	        deploy: {
+	            options: {
+	                plugin_slug: 'm-chart',
+	                build_dir: 'deploy' //relative path to your build directory
+	            },
+	        }
+	    },
+		copy: {
+			deploy: {
+				files: [{
+					expand: true,
+					src: [
+						'**',
+						'!**/bin/**',
+						'!**/sass/**',
+						'!**/node_modules/**',
+						'!**/tests/**',
+						'!config.rb',
+						'!Gruntfile.js',
+						'!package.json',
+						'!phpunit.xml',
+						'!README.md'
+					],
+					dest: 'deploy/'
+				}],
+			},
+		},
 	});
 
 	// Default task.
-	grunt.loadNpmTasks( 'grunt-newer' );
-	
 	grunt.loadNpmTasks( 'grunt-contrib-compass' );
-	
 	grunt.loadNpmTasks( 'grunt-contrib-watch' );
-	
 	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
+	grunt.loadNpmTasks( 'grunt-contrib-copy' );
+	grunt.loadNpmTasks( 'grunt-wp-deploy' );
 
 	grunt.registerTask( 'default', [ 'compass:prod', 'wp_readme_to_markdown' ] );
-
+	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy' ] );
 };
