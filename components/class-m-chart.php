@@ -256,14 +256,21 @@ class M_Chart {
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
 			if ( isset( $meta[ $field ] ) ) {
-				if ( 'source-url' == $field && '' != $meta[ $field ] ) {
+				if ( 'source_url' == $field && '' != $meta[ $field ] ) {
 					$chart_meta[ $field ] = esc_url_raw( $meta[ $field ] );
-				}
-				elseif ( 'data' == $field ) {
+				} elseif ( 'data' == $field ) {
 					$chart_meta[ $field ] = $meta[ $field ];
-				}
-				else
-				{
+				} elseif ( in_array( $field, array( 'labels', 'y_min', 'legend' ) ) ) {
+					$chart_meta[ $field ] = (bool) $meta[ $field ];
+				} elseif ( 'height' == $field ) {
+					$chart_meta[ $field ] = absint( $meta[ $field ] );
+					
+					if ( $chart_meta[ $field ] > 900 ) {
+						$chart_meta[ $field ] = 900;
+					} else if ( $chart_meta[ $field ] < 300 ) {
+						$chart_meta[ $field ] = 300;
+					}
+				} else {
 					$chart_meta[ $field ] = wp_filter_nohtml_kses( $meta[ $field ] );
 				}
 			}
@@ -276,6 +283,13 @@ class M_Chart {
 		// If the data value is not an array we asume it is JSON encoded (i.e. from Handsontable)
 		if ( ! is_array( $chart_meta['data'] ) && '' != $chart_meta['data'] ) {
 			$chart_meta['data'] = json_decode( stripslashes( $chart_meta['data'] ) );
+		}
+
+		// Validate the data array
+		if ( is_array( $chart_meta['data'] ) ) {
+			array_walk_recursive( $chart_meta['data'], function( &$value ) {
+				$value = wp_filter_nohtml_kses( $value );
+			});
 		}
 
 		return $chart_meta;
