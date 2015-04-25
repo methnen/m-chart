@@ -55,6 +55,7 @@ var m_chart_admin = {
 		});
 
 		this.handle_csv_import();
+		this.handle_csv_export();
 		this.watch_for_chart_changes();
 	};
 
@@ -199,6 +200,21 @@ var m_chart_admin = {
 				$select.removeClass( 'hide' );
 				$file_import.addClass( 'hide' );
 			});
+		});
+	};
+
+	// Handle CSV export functionality
+	m_chart_admin.handle_csv_export = function() {
+		$( document.getElementById( 'm-chart-csv' ) ).find( '.export a' ).on( 'click', function( event ) {
+			event.preventDefault();
+
+			var $form = $( document.getElementById( 'm-chart-csv-export-form' ) );
+
+			$( document.getElementById( 'm-chart-csv-post-id' ) ).val( m_chart_admin.post_id );
+			$( document.getElementById( 'm-chart-csv-data' ) ).val( JSON.stringify( m_chart_admin.$spreadsheet.getData() ) );
+			$( document.getElementById( 'm-chart-csv-title' ) ).val( m_chart_admin.$title_input.attr( 'value' ) );
+
+			$form.trigger( 'submit' );
 		});
 	};
 

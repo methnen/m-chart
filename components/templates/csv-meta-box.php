@@ -1,5 +1,5 @@
 <div class="export">
-	<a href="<?php echo esc_url( $export_url ); ?>" title="<?php esc_attr_e( 'Export CSV', 'm-chart' ); ?>" class="button"><?php esc_html_e( 'Export', 'm-chart' ); ?></a>
+	<a href="#export-csv" title="<?php esc_attr_e( 'Export CSV', 'm-chart' ); ?>" class="button"><?php esc_html_e( 'Export', 'm-chart' ); ?></a>
 </div>
 <div class="import">
 	<div class="controls">
