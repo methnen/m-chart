@@ -21,6 +21,9 @@ module.exports = function( grunt ) {
 			your_target: {
 				files: {
 					'README.md': 'readme.txt'
+				},
+				options: {
+					screenshot_url: 'http://s-plugins.wordpress.org/m-chart/assets/{screenshot}.png',
 				}
 			}
 		},
