@@ -21,9 +21,6 @@ module.exports = function( grunt ) {
 			your_target: {
 				files: {
 					'README.md': 'readme.txt'
-				},
-				options: {
-					screenshot_url: 'https://raw.githubusercontent.com/methnen/m-chart/master/{screenshot}.png',
 				}
 			}
 		},

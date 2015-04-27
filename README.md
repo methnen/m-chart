@@ -23,7 +23,7 @@ M Chart can be installed like any other WordPress plugin.
 ## Screenshots ##
 
 ### 1. M Chart UI ###
-![M Chart UI](https://raw.githubusercontent.com/methnen/m-chart/master/screenshot-1.png)
+![M Chart UI](http://s.wordpress.org/extend/plugins/m-chart/screenshot-1.png)
 
 
 ## Changelog ##
