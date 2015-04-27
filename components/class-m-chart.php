@@ -298,17 +298,23 @@ class M_Chart {
 	 *
 	 * @return array of validated data
 	 */
-	public function validate_data( $data ) {
+	function validate_data( $data ) {
 		if ( ! is_array( $data ) ) {
-			return $data;
+			return wp_filter_nohtml_kses( $data );
 		}
 
-		array_walk_recursive( $data, function( &$value ) {
-			$value = wp_filter_nohtml_kses( $value );
-		});
+        foreach ( $data as $key => $value ) {
+            if ( is_array( $value ) ) {
+                $data[ $key ] = $this->validate_data( $value );
+            }
+            else {
+                $data[ $key ] = wp_filter_nohtml_kses( $value );
+            }
+        }
 
-		return $data;
-	}
+        return $data;
+    }
+
 
 	/**
 	 * Hook to save_post action and save chart related post meta
