@@ -23,7 +23,7 @@ module.exports = function( grunt ) {
 					'README.md': 'readme.txt'
 				},
 				options: {
-					screenshot_url: 'http://s.wordpress.org/extend/plugins/m-chart/{screenshot}.png',
+					screenshot_url: 'https://raw.githubusercontent.com/methnen/m-chart/master/{screenshot}.png',
 				}
 			}
 		},
@@ -31,7 +31,8 @@ module.exports = function( grunt ) {
 	        deploy: {
 	            options: {
 	                plugin_slug: 'm-chart',
-	                build_dir: 'deploy' //relative path to your build directory
+	                build_dir: 'deploy', //relative path to your build directory
+					assets_dir: 'assets'
 	            },
 	        }
 	    },
@@ -41,6 +42,7 @@ module.exports = function( grunt ) {
 					expand: true,
 					src: [
 						'**',
+						'!**/assets/**',
 						'!**/bin/**',
 						'!**/deploy/**',
 						'!**/sass/**',
