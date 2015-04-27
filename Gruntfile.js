@@ -23,7 +23,7 @@ module.exports = function( grunt ) {
 					'README.md': 'readme.txt'
 				},
 				options: {
-					screenshot_url: 'http://s-plugins.wordpress.org/m-chart/assets/{screenshot}.png',
+					screenshot_url: 'https://methnen.com/misc/m-chart/{screenshot}.png',
 				}
 			}
 		},
