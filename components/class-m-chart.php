@@ -264,7 +264,7 @@ class M_Chart {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );
-					
+
 					if ( $chart_meta[ $field ] > 900 ) {
 						$chart_meta[ $field ] = 900;
 					} else if ( $chart_meta[ $field ] < 300 ) {
@@ -286,14 +286,35 @@ class M_Chart {
 		}
 
 		// Validate the data array
-		if ( is_array( $chart_meta['data'] ) ) {
-			array_walk_recursive( $chart_meta['data'], function( &$value ) {
-				$value = wp_filter_nohtml_kses( $value );
-			});
-		}
+		$chart_meta['data'] = $this->validate_data( $chart_meta['data'] );
 
 		return $chart_meta;
 	}
+
+	/**
+	 * Runs all of the raw data array values through wp_filter_nohtml_kses
+	 *
+	 * @param array $data an array of data as passed by the user
+	 *
+	 * @return array of validated data
+	 */
+	function validate_data( $data ) {
+		if ( ! is_array( $data ) ) {
+			return wp_filter_nohtml_kses( $data );
+		}
+
+        foreach ( $data as $key => $value ) {
+            if ( is_array( $value ) ) {
+                $data[ $key ] = $this->validate_data( $value );
+            }
+            else {
+                $data[ $key ] = wp_filter_nohtml_kses( $value );
+            }
+        }
+
+        return $data;
+    }
+
 
 	/**
 	 * Hook to save_post action and save chart related post meta

@@ -150,12 +150,11 @@ class M_Chart_Admin {
 	 * @param object the WP post object as returned by the metabox API
 	 */
 	public function csv_meta_box( $post ) {
-		$export_url = admin_url( 'admin-ajax.php?action=m_chart_export_csv&post_id=' . absint( $post->ID ) );
 		require_once __DIR__ . '/templates/csv-meta-box.php';
 	}
 
 	/**
-	 * Inserts a CSV Import form into the footer when editing charts
+	 * Insert CSV Import and Export forms into the footer when editing charts
 	 */
 	public function admin_footer() {
 		$screen = get_current_screen();
@@ -166,6 +165,11 @@ class M_Chart_Admin {
 		?>
 		<form id="<?php echo esc_attr( $this->get_field_id( 'csv-import-form' ) ); ?>" style="display: none;">
 			<input type="file" name="import_csv_file" id="<?php echo esc_attr( $this->get_field_id( 'csv-file' ) ); ?>" class="hide" />
+		</form>
+		<form action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=m_chart_export_csv' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'csv-export-form' ) ); ?>" style="display: none;" method="post">
+			<input type="hidden" name="post_id" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-post-id' ) ); ?>" />
+			<input type="hidden" name="data" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-data' ) ); ?>" />
+			<input type="hidden" name="title" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-title' ) ); ?>" />
 		</form>
 		<?php
 	}
@@ -403,12 +407,23 @@ class M_Chart_Admin {
 	 * Converts data array into CSV outputs it to the browser
 	 */
 	public function ajax_export_csv() {
-		if ( ! is_numeric( $_GET['post_id'] )  || ! current_user_can( 'edit_post', absint( $_GET['post_id'] ) ) ) {
+		// Purposely using $_REQUEST here since this method can work via a GET and POST request
+		// POST requests are used when passing the data value since it's too big to pass via GET
+		if ( ! is_numeric( $_REQUEST['post_id'] )  || ! current_user_can( 'edit_post', absint( $_REQUEST['post_id'] ) ) ) {
 			wp_die( 'Unauthorized access', 'You do not have permission to do that', array( 'response' => 401 ) );
 		}
 
-		$post = get_post( absint( $_GET['post_id'] ) );
-		$data = m_chart()->get_post_meta( $post->ID, 'data' );
+		$post = get_post( absint( $_REQUEST['post_id'] ) );
+
+		// If the user passed a data value in their request we'll use it after validation
+		if ( isset( $_POST['data'] ) && isset( $_POST['title'] ) ) {
+			$data      = m_chart()->validate_data( json_decode( stripslashes( $_POST['data'] ) ) );
+			$file_name = sanitize_title( $_POST['title'] );
+		}
+		else {
+			$data      = m_chart()->get_post_meta( $post->ID, 'data' );
+			$file_name = sanitize_title( get_the_title( $post->ID ) );
+		}
 
 		if ( empty( $data ) ) {
 			return;
@@ -417,7 +432,7 @@ class M_Chart_Admin {
 		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
 		$parse_csv = new parseCSV();
 
-		$parse_csv->output( sanitize_title( get_the_title( $post->ID ) ) . '.csv', $data );
+		$parse_csv->output( $file_name . '.csv', $data );
 		die;
 	}
 
