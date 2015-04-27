@@ -419,7 +419,8 @@ class M_Chart_Admin {
 		if ( isset( $_POST['data'] ) && isset( $_POST['title'] ) ) {
 			$data      = m_chart()->validate_data( json_decode( stripslashes( $_POST['data'] ) ) );
 			$file_name = sanitize_title( $_POST['title'] );
-		} else {
+		}
+		else {
 			$data      = m_chart()->get_post_meta( $post->ID, 'data' );
 			$file_name = sanitize_title( get_the_title( $post->ID ) );
 		}
