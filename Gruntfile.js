@@ -12,10 +12,8 @@ module.exports = function( grunt ) {
 			}
 		},
 		watch: {
-			files: ['components/sass/*.scss'],
-			tasks: [
-				'compass:prod'
-			]
+			files: [ 'components/sass/*.scss' ],
+			tasks: [ 'compass:prod' ]
 		},
 		wp_readme_to_markdown: {
 			your_target: {
@@ -27,15 +25,6 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
-		wp_deploy: {
-	        deploy: {
-	            options: {
-	                plugin_slug: 'm-chart',
-	                build_dir: 'deploy', //relative path to your build directory
-					assets_dir: 'assets'
-	            },
-	        }
-	    },
 		copy: {
 			deploy: {
 				files: [{
@@ -58,6 +47,16 @@ module.exports = function( grunt ) {
 				}],
 			},
 		},
+		wp_deploy: {
+			deploy: {
+				options: {
+					plugin_slug: 'm-chart',
+					build_dir: 'deploy', //relative path to your build directory
+					assets_dir: 'assets'
+				},
+			}
+		},
+		clean: [ 'deploy' ]
 	});
 
 	// Default task.
@@ -66,7 +65,8 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
 	grunt.loadNpmTasks( 'grunt-contrib-copy' );
 	grunt.loadNpmTasks( 'grunt-wp-deploy' );
+	grunt.loadNpmTasks( 'grunt-contrib-clean' );
 
 	grunt.registerTask( 'default', [ 'compass:prod', 'wp_readme_to_markdown' ] );
-	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy' ] );
+	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy', 'clean' ] );
 };
