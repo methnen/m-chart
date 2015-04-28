@@ -233,19 +233,20 @@ var m_chart_admin = {
 
 		// Create a Canvas object out of the SVG
 		var $canvas = $( '#m-chart-canvas-render-' + event.post_id );
-		var canvas = $canvas.get( 0 );
+		m_chart_admin.canvas = $canvas.get( 0 );
 
-		canvg( canvas, svg );
+		canvg( m_chart_admin.canvas, svg );
 
-		// @TODO figure out a way to handle the canvas_context modification without the awful hack I used in the past
-		// For now we'll consider this a feature that does not exist yet
 		// Create Canvas context so we can play with it before saving
-		//var canvas_context = canvas.getContext( '2d' );
+		m_chart_admin.canvas_context = m_chart_admin.canvas.getContext( '2d' );
 
-		var img = canvas.toDataURL( 'image/png' );
+		$( '.m-chart' ).trigger({
+			type: 'canvas_done'
+		});
+
+		var img = m_chart_admin.canvas.toDataURL( 'image/png' );
 
 		// Save the image string to the text area so we can save it on update/publish
-
 		$( document.getElementById( 'm-chart-img' ) ).attr( 'value', img );
 
 		// Allow form submission now that we've got a valid img value set
