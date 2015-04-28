@@ -31,6 +31,7 @@ class M_Chart {
 	);
 	public $options_set;
 	public $plugin_url;
+	public $is_shortcake = false;
 
 	private $admin;
 	private $highcharts;
@@ -45,6 +46,7 @@ class M_Chart {
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
+		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
 
 		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
 	}
@@ -338,7 +340,7 @@ class M_Chart {
 		$args = wp_parse_args( $args, $this->get_chart_default_args );
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 'yes' == $args['img'] || is_feed() ) {
+		if ( 'yes' == $args['img'] || is_feed() || $this->is_shortcake ) {
 			$image = $this->get_chart_image( $post_id );
 
 			// Default behavior is to return the full size image but with the width/height values halved
@@ -508,6 +510,19 @@ class M_Chart {
 		}
 
 		return $terms;
+	}
+
+	/**
+	 * Detect Shortcake usage and set is_shortcake to true
+	 *
+	 * @param string The shortcode being rendered
+	 */
+	public function shortcode_ui_before_do_shortcode( $shortcode ) {
+		if ( ! preg_match( '#\[chart*.*?\]#', $shortcode ) ) {
+			return;
+		}
+
+		$this->is_shortcake = true;
 	}
 
 	/**
