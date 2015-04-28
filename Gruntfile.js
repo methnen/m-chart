@@ -48,14 +48,14 @@ module.exports = function( grunt ) {
 			},
 		},
 		wp_deploy: {
-	        deploy: {
-	            options: {
-	                plugin_slug: 'm-chart',
-	                build_dir: 'deploy', //relative path to your build directory
+			deploy: {
+				options: {
+					plugin_slug: 'm-chart',
+					build_dir: 'deploy', //relative path to your build directory
 					assets_dir: 'assets'
-	            },
-	        }
-	    },
+				},
+			}
+		},
 		clean: [ 'deploy' ]
 	});
 
