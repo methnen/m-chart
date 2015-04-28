@@ -1,0 +1,50 @@
+linters:
+  BangFormat:
+    enabled: true
+    space_before_bang: true
+    space_after_bang: true
+
+  BorderZero:
+    enabled: true
+    convention: 'none'
+
+  FinalNewline:
+    enabled: false
+    present: true
+
+  HexLength:
+    enabled: true
+    style: 'long'
+
+  IdSelector:
+    enabled: false
+
+  ImportantRule:
+    enabled: true
+
+  Indentation:
+    enabled: true
+    allow_non_nested_indentation: false
+    character: 'tab'
+    width: 1
+
+  LeadingZero:
+    enabled: true
+    style: 'include_zero'
+
+  NestingDepth:
+    enabled: false
+    max_depth: 3
+
+  SelectorDepth:
+    enabled: false
+    max_depth: 3
+
+  SelectorFormat:
+    enabled: true
+    convention: hyphenated_lowercase
+    ignored_names: [ 'ht_clone_left' ]
+
+  SpaceBetweenParens:
+    enabled: true
+    spaces: 1

@@ -1,11 +1,9 @@
-/* Global */
 #m-chart .inside .hide,
 #m-chart-spreadsheet .inside .hide,
 #m-chart-csv .inside .hide {
   display: none;
 }
 
-/* Handsontable Styles */
 #m-chart-spreadsheet h3 {
   border-bottom: none;
 }
@@ -33,7 +31,6 @@
   padding-top: 1px;
 }
 
-/* Chart/Settings Styles */
 #m-chart .inside {
   padding: 0;
 }
@@ -50,9 +47,9 @@
   padding: 0;
 }
 #m-chart .inside .settings .row:after {
-  content: "";
-  display: table;
   clear: both;
+  content: '';
+  display: table;
 }
 #m-chart .inside .settings .row p {
   margin-bottom: 0;
@@ -88,9 +85,9 @@
   padding: 0 10px 10px;
 }
 #m-chart .inside .row:after {
-  content: "";
-  display: table;
   clear: both;
+  content: '';
+  display: table;
 }
 #m-chart .inside .row.six p {
   float: right;
@@ -115,11 +112,10 @@
   top: 23px;
 }
 
-/* CSV Import/Export Styles */
 #m-chart-csv .inside:after {
-  content: "";
-  display: table;
   clear: both;
+  content: '';
+  display: table;
 }
 #m-chart-csv .inside:after {
   clear: both;
