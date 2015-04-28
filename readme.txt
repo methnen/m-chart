@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.2
-Stable tag: 1
+Stable tag: 1.1
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -18,13 +18,18 @@ To contribute, report issue, or make feature requests use [Github](https://githu
 
 == Installation ==
 
-M Chart can be installed like any other WordPress plugin.
+1. Put the m-chart directory into your plugins directory
+2. Click 'Activate' in the Plugins admin panel
 
 == Screenshots ==
 
 1. M Chart UI
 
 == Changelog ==
+
+= 1.1 =
+
+* Added a Shortcake shortcode ui
 
 = 1.0 =
 
