@@ -7,11 +7,40 @@ class M_Chart_Admin {
 	public function __construct() {
 		$this->plugin_url = m_chart()->plugin_url();
 
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'wp_ajax_m_chart_export_csv', array( $this, 'ajax_export_csv' ) );
 		add_action( 'wp_ajax_m_chart_get_chart_args', array( $this, 'ajax_get_chart_args' ) );
 		add_action( 'wp_ajax_m_chart_import_csv', array( $this, 'ajax_import_csv' ) );
+	}
+
+	/**
+	 * Register a Shortcake ui if we can
+	 */
+	public function admin_init() {
+		if ( ! function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
+			return;
+		}
+
+		shortcode_ui_register_for_shortcode(
+			'chart',
+			array(
+				'label'         => esc_html__( 'Charts', 'm-chart' ),
+				'listItemImage' => 'dashicons-chart-pie',
+				'attrs'         => array(
+					array(
+						'label' => esc_html__( 'Chart', 'm-chart' ),
+						'attr'  => 'id',
+						'type'  => 'post_select',
+						'query' => array(
+							'post_type'   => m_chart()->slug,
+							'post_status' => 'publish',
+						),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -171,6 +200,9 @@ class M_Chart_Admin {
 			<input type="hidden" name="data" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-data' ) ); ?>" />
 			<input type="hidden" name="title" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-title' ) ); ?>" />
 		</form>
+		<script type="text/javascript">
+			<?php do_action( 'm_chart_admin_footer_javascript' ); ?>
+		</script>
 		<?php
 	}
 

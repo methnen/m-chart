@@ -1,5 +1,5 @@
 <?php
-// If there's multiple instances of a chart for some reason we don't want to redeclare this
+// If there's multiple instances of a chart on the page we don't want to redeclare this
 // @TODO if the embeds end up being done via iframes this conditional won't be necessary anymore
 if ( ! $this->options_set ) {
 	?>
