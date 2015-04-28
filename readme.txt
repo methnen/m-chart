@@ -32,6 +32,7 @@ To contribute, report issue, or make feature requests use [Github](https://githu
 * Added a Shortcake shortcode ui
 * Added [`canvas_done`](https://github.com/methnen/m-chart/wiki/Javascript-events#canvas_done) Javascript event
 * Added [`m_chart_admin_footer_javascript`](https://github.com/methnen/m-chart/wiki/Action-and-filter-hooks#admin_footer_javascript) Action hook
+* Fixed a PHP warning that occured when adding a new chart that had no data yet
 
 = 1.0 =
 
