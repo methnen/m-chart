@@ -1,11 +1,11 @@
-/* CSV Import/Export Styles */
+// CSV Import/Export Styles
 
 #m-chart-csv {
 	.inside {
 		@include clearfix;
 
 		&:after {
-	        clear: both;
+			clear: both;
 	    }
 
 		.button {
