@@ -513,7 +513,7 @@ class M_Chart {
 	}
 
 	/**
-	 * Detect Shortcake usage and set a class var so is_shortcake can tell
+	 * Detect Shortcake usage and set is_shortcake to true
 	 *
 	 * @param string The shortcode being rendered
 	 */
