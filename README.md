@@ -14,7 +14,7 @@ Allows you to manage data sets via a spreadsheet interface and present that data
 
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
-To contribute, report issue, or make feature requests use [Github](https://github.com/methnen/m-chart).
+To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
 
 ## Installation ##
 
@@ -28,6 +28,10 @@ To contribute, report issue, or make feature requests use [Github](https://githu
 
 
 ## Changelog ##
+
+### 1.1.1 ###
+
+* Fixed a bug where data sets with only one row/column of data that also had only one row/column of labels would fail to display in chart types other than pie
 
 ### 1.1 ###
 
