@@ -14,7 +14,7 @@ Allows you to manage data sets via a spreadsheet interface and present that data
 
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
-To contribute, report issue, or make feature requests use [Github](https://github.com/methnen/m-chart).
+To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
 
 ## Installation ##
 

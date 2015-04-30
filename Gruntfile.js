@@ -62,14 +62,7 @@ module.exports = function( grunt ) {
 		clean: [ 'deploy' ]
 	});
 
-	// Default task.
-	grunt.loadNpmTasks( 'grunt-contrib-compass' );
-	grunt.loadNpmTasks( 'grunt-contrib-watch' );
-	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
-	grunt.loadNpmTasks( 'grunt-scss-lint' );
-	grunt.loadNpmTasks( 'grunt-contrib-copy' );
-	grunt.loadNpmTasks( 'grunt-wp-deploy' );
-	grunt.loadNpmTasks( 'grunt-contrib-clean' );
+	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
 	grunt.registerTask( 'default', [ 'compass:prod', 'wp_readme_to_markdown', 'scsslint' ] );
 	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy', 'clean' ] );

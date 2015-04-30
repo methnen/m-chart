@@ -250,7 +250,7 @@ class M_Chart_Highcharts {
 		// When Highcharts encounters an empty data value it stops so we set them to NULL
 		$data_array = array_map( array( $this, 'fix_null_values' ), m_chart()->parse()->set_data );
 
-		if ( 'pie' != $this->post_meta['type'] ) {
+		if ( 'pie' != $this->post_meta['type'] && 'both' == m_chart()->parse()->value_labels_position ) {
 			$set_data = array();
 
 			if ( isset( m_chart()->parse()->value_labels['first_column'] ) ) {
@@ -283,23 +283,25 @@ class M_Chart_Highcharts {
 		}
 		else
 		{
-			$pie_data_array = array();
+			$new_data_array = array();
 
 			foreach ( $chart_args['xAxis']['categories'] as $key => $label ) {
-				$pie_data_array[ $key ] = array(
+				$new_data_array[ $key ] = array(
 					$label,
 					$data_array[ $key ],
 				);
 			}
 
-			// Don't need these anymore for pie charts
-			unset( $chart_args['xAxis']['categories'] );
+			if ( 'pie' == $this->post_meta['type'] ) {
+				// Don't need these anymore for pie charts
+				unset( $chart_args['xAxis']['categories'] );
+			}
 
 			$chart_args['series'] = array(
 				array(
-					'type'         => 'pie',
+					'type'         => $this->post_meta['type'],
 					'showInLegend' => true,
-					'data'         => $pie_data_array,
+					'data'         => $new_data_array,
 				),
 			);
 
