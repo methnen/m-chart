@@ -253,29 +253,16 @@ class M_Chart_Highcharts {
 		if ( 'pie' != $this->post_meta['type'] && 'both' == m_chart()->parse()->value_labels_position ) {
 			$set_data = array();
 
-			if ( isset( m_chart()->parse()->value_labels['first_column'] ) ) {
-				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+			$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
 
-				foreach ( $data_array as $key => $data_chunk ) {
-					$set_data[ $key ] = array(
-						'name' => m_chart()->parse()->value_labels[ $label_key ][ $key ],
-						'data' => array(),
-					);
-
-					foreach ( $data_chunk as $data ) {
-						$set_data[ $key ]['data'][] = $data;
-					}
-				}
-			}
-			else
-			{
-				$set_data = array(
-					'name' => $this->esc_title( apply_filters( 'the_title', $this->post->post_title ) ),
+			foreach ( $data_array as $key => $data_chunk ) {
+				$set_data[ $key ] = array(
+					'name' => m_chart()->parse()->value_labels[ $label_key ][ $key ],
 					'data' => array(),
 				);
 
-				foreach ( $data_array as $data ) {
-					$set_data['data'][] = $data;
+				foreach ( $data_chunk as $data ) {
+					$set_data[ $key ]['data'][] = $data;
 				}
 			}
 
