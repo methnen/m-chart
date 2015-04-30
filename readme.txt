@@ -27,6 +27,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.1.1 = 
+
+* Fixed a bug where data sets with only one row/column of data that also had only one row/column of labels would fail to display in the chart types other than pie
+
 = 1.1 =
 
 * Added a Shortcake shortcode ui
