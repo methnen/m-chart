@@ -31,7 +31,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ### 1.1.2 ###
 
-* Fixed an issue where subsequent charts on the same page inherited the data from the previous chart.
+* Fixed an issue where subsequent charts on the same page inherited the data from the previous chart
 
 ### 1.1.1 ###
 
