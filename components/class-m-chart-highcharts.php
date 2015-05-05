@@ -162,6 +162,9 @@ class M_Chart_Highcharts {
 			wp_cache_set( $cache_key, $chart_args, m_chart()->slug );
 		}
 
+		// Clear out all of the class vars so the next chart instance starts fresh
+		unset( $this->args, $this->post, $this->post_meta );
+
 		return $chart_args;
 	}
 
