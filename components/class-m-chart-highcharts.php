@@ -78,7 +78,7 @@ class M_Chart_Highcharts {
 		$cache_key = $post_id . '-chart-args';
 
 		if ( ! $force && $chart_args = wp_cache_get( $cache_key, m_chart()->slug ) ) {
-			// The width can be set via the args so we'll override whatever the in the cache has with the arg values
+			// The width can be set via the args so we'll override whatever the cache has with the arg value
 			$chart_args['graph']['width'] = is_numeric( $this->args['width'] ) ? $this->args['width'] : '';
 			return $chart_args;
 		}
@@ -161,6 +161,9 @@ class M_Chart_Highcharts {
 		if ( $cache ) {
 			wp_cache_set( $cache_key, $chart_args, m_chart()->slug );
 		}
+
+		// Clear out all of the class vars so the next chart instance starts fresh
+		unset( $this->args, $this->post, $this->post_meta );
 
 		return $chart_args;
 	}

@@ -29,6 +29,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.1.2 ###
+
+* Fixed an issue where subsequent charts on the same page inherited the data from the previous chart
+
 ### 1.1.1 ###
 
 * Fixed a bug where data sets with only one row/column of data that also had only one row/column of labels would fail to display in chart types other than pie
