@@ -5,10 +5,10 @@ if ( ! $this->options_set ) {
 	?>
 	<script type="text/javascript">
 	(function( $ ) {
-	$( function() {
-		Highcharts.setOptions( <?php echo $this->unicode_aware_stripslashes( json_encode( $this->highcharts()->get_chart_options() ) ); ?>);
-	} );
-})( jQuery );
+		$( function() {
+			Highcharts.setOptions( <?php echo $this->unicode_aware_stripslashes( json_encode( $this->highcharts()->get_chart_options() ) ); ?>);
+		} );
+	})( jQuery );
 	</script>
 	<?php
 	$this->options_set = true;
