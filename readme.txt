@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.2
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -27,9 +27,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.1.4 =
+
+* Updated Handsontable to a the latest stable version (0.15.1) this fixes a copy/paste issue in the spreadsheet for some browsers
+
 = 1.1.3 =
 
-* Fixed an issue where the Highcharts options where sometimes being set before Highcharts was available.
+* Fixed an issue where the Highcharts options where sometimes being set before Highcharts was available
 
 = 1.1.2 =
 
