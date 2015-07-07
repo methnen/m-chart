@@ -29,7 +29,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.1.4 =
 
-* Updated Handsontable to a the latest stable version (0.15.1) this fixes a copy/paste issue in the spreadsheet for some browsers
+* Updated Handsontable to the latest stable version (0.15.1) this fixes a copy/paste issue in the spreadsheet for some browsers
 
 = 1.1.3 =
 
