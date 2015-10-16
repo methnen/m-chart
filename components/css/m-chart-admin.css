@@ -4,31 +4,19 @@
   display: none;
 }
 
+#m-chart-spreadsheet {
+  border-left: none;
+}
 #m-chart-spreadsheet h3 {
   border-bottom: none;
+  border-left: 1px solid #e5e5e5;
+}
+#m-chart-spreadsheet .handlediv {
+  height: 35px;
 }
 #m-chart-spreadsheet .inside {
   margin: 0;
   padding: 0;
-}
-#m-chart-spreadsheet .hands-on-table-sheet {
-  height: 350px;
-}
-#m-chart-spreadsheet .hands-on-table-sheet thead tr .relative {
-  border-bottom: 1px solid #cccccc;
-}
-#m-chart-spreadsheet .hands-on-table-sheet table tbody tr td {
-  border-top: none;
-}
-#m-chart-spreadsheet .hands-on-table-sheet .handsontable table {
-  box-shadow: none;
-}
-#m-chart-spreadsheet .hands-on-table-sheet .handsontable table th {
-  border-left-style: none;
-}
-#m-chart-spreadsheet .hands-on-table-sheet .ht_clone_left tr:first-child th {
-  border-top: none;
-  padding-top: 1px;
 }
 
 #m-chart .inside {

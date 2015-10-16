@@ -29,6 +29,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.2 ###
+
+* Simplified the admin panel CSS a bit
+* Fixed a display issue with the spreadsheet interface
+* Updated Handsontable to the latest stable version (0.19.0)
+
 ### 1.1.4 ###
 
 * Updated Handsontable to the latest stable version (0.15.1) this fixes a copy/paste issue in the spreadsheet for some browsers
