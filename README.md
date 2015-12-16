@@ -26,8 +26,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 ### 1. M Chart UI ###
 ![M Chart UI](https://methnen.com/misc/m-chart/screenshot-1.png)
 
-	
+
 ## Changelog ##
+
+### 1.1.5 ###
+
+* Updated Highcharts to the latest stable version (4.2.0) this fixes an issue where bar charts could cause an Uncaught TypeError in some WP themes
 
 ### 1.1.4 ###
 

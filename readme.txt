@@ -24,8 +24,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 == Screenshots ==
 
 1. M Chart UI
-	
+
 == Changelog ==
+
+= 1.1.5 =
+
+* Updated Highcharts to the latest stable version (4.2.0) this fixes an issue where bar charts could cause an Uncaught TypeError in some WP themes
 
 = 1.1.4 =
 
@@ -39,7 +43,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Fixed an issue where subsequent charts on the same page inherited the data from the previous chart
 
-= 1.1.1 = 
+= 1.1.1 =
 
 * Fixed a bug where data sets with only one row/column of data that also had only one row/column of labels would fail to display in chart types other than pie
 
