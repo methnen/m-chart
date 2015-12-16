@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.2
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -43,7 +43,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Fixed an issue where subsequent charts on the same page inherited the data from the previous chart
 
-= 1.1.1 = 
+= 1.1.1 =
 
 * Fixed a bug where data sets with only one row/column of data that also had only one row/column of labels would fail to display in chart types other than pie
 
