@@ -46,7 +46,7 @@
   border-top: none;
   padding: 0;
 }
-#m-chart .inside .settings .row:after {
+#m-chart .inside .settings .row::after {
   clear: both;
   content: '';
   display: table;
@@ -84,7 +84,7 @@
   border-top: 1px solid #dddddd;
   padding: 0 10px 10px;
 }
-#m-chart .inside .row:after {
+#m-chart .inside .row::after {
   clear: both;
   content: '';
   display: table;
@@ -112,12 +112,12 @@
   top: 23px;
 }
 
-#m-chart-csv .inside:after {
+#m-chart-csv .inside::after {
   clear: both;
   content: '';
   display: table;
 }
-#m-chart-csv .inside:after {
+#m-chart-csv .inside::after {
   clear: both;
 }
 #m-chart-csv .inside .button {
