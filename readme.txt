@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.2
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -27,6 +27,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.1.5 =
+
+* Updated Highcharts to the latest stable version (4.2.0) this fixes an issue where bar charts could cause an Uncaught TypeError in some WP themes
+
 = 1.1.4 =
 
 * Updated Handsontable to the latest stable version (0.15.1) this fixes a copy/paste issue in the spreadsheet for some browsers
@@ -39,7 +43,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Fixed an issue where subsequent charts on the same page inherited the data from the previous chart
 
-= 1.1.1 = 
+= 1.1.1 =
 
 * Fixed a bug where data sets with only one row/column of data that also had only one row/column of labels would fail to display in chart types other than pie
 

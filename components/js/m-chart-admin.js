@@ -266,6 +266,7 @@ var m_chart_admin = {
 
 	// Refresh chart
 	m_chart_admin.refresh_chart = function() {
+		return false;
 		m_chart_admin.refresh_counter++;
 
 		// Handsontable calls afterChange on the first render for some silly reason
