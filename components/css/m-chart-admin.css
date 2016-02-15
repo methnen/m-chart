@@ -7,6 +7,9 @@
 #m-chart-spreadsheet {
   border-left: none;
 }
+#m-chart-spreadsheet h2.hndle {
+  border-bottom: none;
+}
 #m-chart-spreadsheet h3 {
   border-bottom: none;
   border-left: 1px solid #e5e5e5;
@@ -158,4 +161,8 @@
 #side-sortables #m-chart-csv .inside .export {
   border-top: 1px solid #dddddd;
   float: none;
+}
+
+#m-chart-settings-page span.description {
+  color: #666666;
 }

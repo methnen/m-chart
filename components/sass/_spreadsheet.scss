@@ -3,6 +3,12 @@
 #m-chart-spreadsheet {
 	border-left: none;
 
+	h2 {
+		&.hndle {
+			border-bottom: none;
+		}
+	}
+
 	h3 {
 		border-bottom: none;
 		border-left: 1px solid $wp-admin-meta-border-color;

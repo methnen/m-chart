@@ -27,6 +27,16 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.2 =
+
+* Simplified the admin panel CSS a bit
+* Fixed a display issue with the spreadsheet interface
+* Added an M Chart settings panel
+	* Turn off/on image generation and/or instant chart previews
+	* Set default Highcharts theme
+* Updated Handsontable to the latest stable version (0.22.0)
+* Updated Highcharts to the latest stable version (4.2.3)
+
 = 1.1.5 =
 
 * Updated Highcharts to the latest stable version (4.2.0) this fixes an issue where bar charts could cause an Uncaught TypeError in some WP themes

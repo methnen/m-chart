@@ -8,6 +8,7 @@ class M_Chart_Admin {
 		$this->plugin_url = m_chart()->plugin_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'wp_ajax_m_chart_export_csv', array( $this, 'ajax_export_csv' ) );
@@ -44,61 +45,81 @@ class M_Chart_Admin {
 	}
 
 	/**
+	 * Add settings admin page
+	 */
+	public function admin_menu() {
+		add_submenu_page(
+			'edit.php?post_type=' . m_chart()->slug,
+			esc_html__( 'M Chart Settings', 'm-chart' ),
+			esc_html__( 'Settings', 'm-chart' ),
+			'edit_posts',
+			m_chart()->slug . '-settings',
+			array( $this, 'm_chart_settings' )
+		);
+	}
+
+	public function m_chart_settings() {
+		require_once __DIR__ . '/templates/m-chart-settings.php';
+	}
+
+	/**
 	 * Load CSS/Javascript necessary for the interface
 	 *
 	 * @param object the current screen object as passed by the current_screen action hook
 	 */
 	public function current_screen( $screen ) {
-		if ( 'post' != $screen->base || m_chart()->slug != $screen->post_type ) {
+		if ( m_chart()->slug != $screen->post_type ) {
 			return;
 		}
 
-		$js_dir = m_chart()->dev ? 'lib' : 'min';
+		// Only load these if we are on a post page
+		if ( 'post' == $screen->base ) {
+			// Handsontable
+			wp_enqueue_style(
+				'handsontable-css',
+				$this->plugin_url . '/components/external/handsontable/handsontable.css'
+			);
 
-		// Handsontable
-		wp_enqueue_style(
-			'handsontable-css',
-			$this->plugin_url . '/components/external/handsontable/handsontable.css'
-		);
+			wp_enqueue_script(
+				'handsontable-js',
+				$this->plugin_url . '/components/external/handsontable/handsontable.js',
+				array( 'jquery' )
+			);
 
-		wp_enqueue_script(
-			'handsontable-js',
-			$this->plugin_url . '/components/external/handsontable/handsontable.js',
-			array( 'jquery' )
-		);
+			// In the admin panel we need highcharts enqueued before we enqueue the exporting stuff
+			wp_enqueue_script( 'highcharts-js' );
 
-		// In the admin panel we need highcharts enqueued before we enqueue the exporting stuff
-		wp_enqueue_script( 'highcharts-js' );
+			// Highcharts export.js is required for the image generation
+			wp_enqueue_script(
+				'highcharts-exporting-js',
+				$this->plugin_url . '/components/external/highcharts/exporting.js',
+				array( 'jquery' )
+			);
 
-		// Highcharts export.js is required for the image generation
-		wp_enqueue_script(
-			'highcharts-exporting-js',
-			$this->plugin_url . '/components/external/highcharts/exporting.js',
-			array( 'jquery' )
-		);
+			// canvg and rgbcolo do the SVG -> Canvas conversion
+			wp_enqueue_script(
+				'rgbcolor-js',
+				$this->plugin_url . '/components/external/canvg/rgbcolor.js'
+			);
 
-		// canvg and rgbcolo do the SVG -> Canvas conversion
-		wp_enqueue_script(
-			'rgbcolor-js',
-			$this->plugin_url . '/components/external/canvg/rgbcolor.js'
-		);
+			wp_enqueue_script(
+				'canvg-js',
+				$this->plugin_url . '/components/external/canvg/canvg.js',
+				array( 'rgbcolor-js' )
+			);
 
-		wp_enqueue_script(
-			'canvg-js',
-			$this->plugin_url . '/components/external/canvg/canvg.js',
-			array( 'rgbcolor-js' )
-		);
+			// Admin panel JS
+			wp_enqueue_script(
+				'm-chart-admin-js',
+				$this->plugin_url . '/components/js/m-chart-admin.js',
+				array( 'jquery' )
+			);
+		}
 
-		// Admin panel JS and CSS
+		// Admin panel CSS
 		wp_enqueue_style(
 			'm-chart-admin-css',
 			$this->plugin_url . '/components/css/m-chart-admin.css'
-		);
-
-		wp_enqueue_script(
-			'm-chart-admin-js',
-			$this->plugin_url . '/components/js/m-chart-admin.js',
-			array( 'jquery' )
 		);
 	}
 

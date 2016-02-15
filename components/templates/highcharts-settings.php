@@ -7,7 +7,7 @@
 				foreach ( m_chart()->highcharts()->type_options as $type ) {
 					?>
 					<option value="<?php echo esc_attr( $type ); ?>"<?php selected( $type, $post_meta['type'] ); ?>>
-						<?php echo esc_html( ucfirst( $type ) ); ?>
+						<?php esc_html_e( ucfirst( $type ), 'm-chart' ); ?>
 					</option>
 					<?php
 				}
@@ -21,7 +21,7 @@
 				foreach ( m_chart()->parse_options as $parse_in ) {
 					?>
 					<option value="<?php echo esc_attr( $parse_in ); ?>"<?php selected( $parse_in, $post_meta['parse_in'] ); ?>>
-						<?php echo esc_html( ucfirst( $parse_in ) ); ?>
+						<?php esc_html_e( ucfirst( $parse_in ), 'm-chart' ); ?>
 					</option>
 					<?php
 				}
