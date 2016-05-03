@@ -399,25 +399,17 @@ class M_Chart {
 	public function get_chart_image( $post_id ) {
 		$settings = $this->get_settings();
 
-		// If we aren't generating images we'll use a fallback
+		// If we aren't generating images we'll use a placeholder
 		if ( 'default' != $settings['performance'] ) {
-			$url = $this->plugin_url . '/components/images/chart-fallback.png';
-
-			return array(
-				'url'    => $url,
-				'file'   => basename( $url ),
-				'width'  => 640,
-				'height' => 480,
-				'name'   => get_the_title( $post_id ),
-			);
+			$this->get_chart_placeholder_image( $post_id );
 		}
 
 		if ( ! $thumbnail_id = get_post_meta( $post_id, '_thumbnail_id', true ) ) {
-			return false;
+			$this->get_chart_placeholder_image( $post_id );
 		}
 
 		if ( ! $thumbnail = wp_get_attachment_image_src( $thumbnail_id, 'full' ) ) {
-			return false;
+			$this->get_chart_placeholder_image( $post_id );
 		}
 
 		return array(
@@ -426,6 +418,18 @@ class M_Chart {
 			'width'  => $thumbnail[1],
 			'height' => $thumbnail[2],
 			'name'   => get_the_title( $thumbnail_id ),
+		);
+	}
+
+	public function get_chart_placeholder_image( $post_id ) {
+		$url = $this->plugin_url . '/components/images/chart-placeholder.png';
+
+		return array(
+			'url'    => $url,
+			'file'   => basename( $url ),
+			'width'  => 640,
+			'height' => 480,
+			'name'   => get_the_title( $post_id ),
 		);
 	}
 
