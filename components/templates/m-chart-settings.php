@@ -1,6 +1,7 @@
 <div id="m-chart-settings-page" class="wrap">
 	<h1><?php esc_html_e( 'M Chart Settings', 'm-chart' ); ?></h1>
-	<form>
+	<form method="post">
+		<?php wp_nonce_field( m_chart()->slug . '-save-settings', $this->get_field_name( 'nonce' ) ); ?>
 		<table class="form-table">
 			<tbody>
 				<tr>
@@ -54,8 +55,8 @@
 				</tr>
 			</tbody>
 		</table>
+		<p class="submit">
+			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr_e( 'Save Changes', 'm-chart' ); ?>">
+		</p>
 	</form>
-	<p class="submit">
-		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr_e( 'Save Changes', 'm-chart' ); ?>">
-	</p>
 </div>

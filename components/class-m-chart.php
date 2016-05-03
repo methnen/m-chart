@@ -32,6 +32,10 @@ class M_Chart {
 	public $options_set;
 	public $plugin_url;
 	public $is_shortcake = false;
+	public $settings = array(
+		'performance'   => 'default',
+		'default_theme' => '_default',
+	);
 
 	private $admin;
 	private $highcharts;
@@ -204,6 +208,12 @@ class M_Chart {
 		$post_meta = get_post_meta( $post_id, $this->slug, true );
 		$post_meta = wp_parse_args( $post_meta, $this->chart_meta_fields );
 
+		// Theme default is based off of an option so we'll handle that here
+		if ( ! isset( $post_meta['theme'] ) ) {
+			$settings = $this->get_settings();
+			$post_meta['theme'] = $settings['default_theme'];
+		}
+
 		if ( $field && isset( $post_meta[ $field ] ) ) {
 			return $post_meta[ $field ];
 		}
@@ -280,6 +290,11 @@ class M_Chart {
 				// Fall back on the default value if there wasn't one in the given meta
 				$chart_meta[ $field ] = $default;
 			}
+		}
+		
+		// The theme meta it isn't included in the chart_meta_fields class var so we handle it here
+		if ( isset( $meta['theme'] ) && preg_match('#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
+			$chart_meta['theme'] = $meta['theme'];
 		}
 
 		// If the data value is not an array we asume it is JSON encoded (i.e. from Handsontable)
@@ -538,6 +553,18 @@ class M_Chart {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Return the M Chart settings as an object
+	 *	 *
+	 * @return array current settings
+	 */
+	public function get_settings() {
+		$settings = (array) get_option( $this->slug, $this->settings );
+		$settings = wp_parse_args( $settings, $this->settings );
+
+		return $settings;
 	}
 }
 

@@ -1,6 +1,14 @@
 <?php
 
 class M_Chart_Admin {
+	private $safe_settings = array(
+		'performance' => array(
+			'default',
+			'no-images',
+			'no-preview',
+		),
+	);
+
 	/**
 	 * Constructor
 	 */
@@ -17,9 +25,11 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Register a Shortcake ui if we can
+	 * Register a Shortcake ui if we can and look for save settings submissions
 	 */
 	public function admin_init() {
+		$this->save_settings();
+
 		if ( ! function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
 			return;
 		}
@@ -58,8 +68,68 @@ class M_Chart_Admin {
 		);
 	}
 
+	/**
+	 * Display the M Chart settings admin page
+	 */
 	public function m_chart_settings() {
+		$settings = m_chart()->get_settings();
 		require_once __DIR__ . '/templates/m-chart-settings.php';
+	}
+
+	/**
+	 * Check for and save M Chart settings
+	 */
+	public function save_settings() {
+		// Check the nonce
+		if (
+			   ! isset( $_POST[ m_chart()->slug ] )
+			|| ! wp_verify_nonce( $_POST[ m_chart()->slug ]['nonce'], m_chart()->slug . '-save-settings' )
+		) {
+			return;
+		}
+
+		$validated_settings = array();
+		$submitted_settings = $_POST[ m_chart()->slug ];
+
+		foreach ( m_chart()->settings as $setting => $default ) {
+			if ( ! isset( $submitted_settings[ $setting ] ) ) {
+				$validated_settings[ $setting ] = $default;
+				continue;
+			}
+
+			if ( isset( $safe_settings[ $setting ] ) ) {
+				// If we've got an array of valid values lets check against that
+				$safe_setting = $safe_settings[ $setting ];
+
+				if ( in_array( $submitted_settings[ $setting ], $safe_setting, true ) ) {
+					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
+				} else {
+					$validated_settings[ $setting ] = $default;
+				}
+			} else {
+				// Make sure the value is safe before attempting to save it
+				if ( preg_match('#^[a-zA-Z0-9-_]+$#', $submitted_settings[ $setting ] ) ) {
+					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
+				} else {
+					$validated_settings[ $setting ] = $default;
+				}
+			}
+		}
+
+		update_option( m_chart()->slug, $validated_settings );
+
+		add_action( 'admin_notices', array( $this, 'save_success' ) );
+	}
+
+	/**
+	 * Display an admin notice that the settings have been saved
+	 */
+	public function save_success() {
+		?>
+	    <div class="updated notice">
+	         <p><?php esc_html_e( 'Settings saved', 'm-chart' ); ?></p>
+	     </div>
+		<?php
 	}
 
 	/**

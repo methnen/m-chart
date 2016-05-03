@@ -22,11 +22,12 @@
 					margin-bottom: 0;
 				}
 
-				&.one {
+				&.one,
+				&.two {
 					p {
 						float: left;
 						margin-left: 1%;
-						width: 19%;
+						width: 32%;
 
 						&:first-child {
 							margin-left: 0;
@@ -34,8 +35,8 @@
 					}
 				}
 
-				&.two,
-				&.four {
+				&.three,
+				&.five {
 					p {
 						float: left;
 						width: 73%;
@@ -47,13 +48,13 @@
 					}
 				}
 
-				&.three {
+				&.four {
 					p {
 						margin: 0;
 					}
 				}
 
-				&.five {
+				&.six {
 					p {
 						float: right;
 						width: 49%;
@@ -71,7 +72,7 @@
 			border-top: 1px solid $wp-admin-border-color;
 			padding: 0 10px 10px;
 
-			&.six {
+			&.seven {
 				p {
 					float: right;
 					margin-bottom: 0;

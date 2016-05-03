@@ -15,6 +15,26 @@
 			</select>
 		</p>
 		<p>
+			<label for="<?php echo $this->get_field_id( 'theme' ); ?>"><?php esc_html_e( 'Theme', 'm-chart' ); ?></label><br />
+			<select name="<?php echo $this->get_field_name( 'theme' ); ?>" id="<?php echo $this->get_field_id( 'theme' ); ?>">
+				<?php
+				foreach ( m_chart()->highcharts()->get_themes() as $theme ) {
+					?>
+					<option value="<?php echo esc_attr( $theme->slug ); ?>"<?php selected( $theme->slug, $post_meta['theme'] ); ?>>
+						<?php esc_html_e( $theme->name, 'm-chart' ); ?>
+					</option>
+					<?php
+				}
+				?>
+			</select>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_html_e( 'Height', 'm-chart' ); ?></label><br />
+			<input type="number" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" value="<?php echo absint( $post_meta['height'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" min="300" max="900" />
+		</p>
+	</div>
+	<div class="row two">
+		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'parse_in' ) ); ?>"><?php esc_html_e( 'Parse data in', 'm-chart' ); ?></label><br />
 			<select name='<?php echo esc_attr( $this->get_field_name( 'parse_in' ) ); ?>' class='select' id="<?php echo esc_attr( $this->get_field_id( 'parse_in' ) ); ?>">
 				<?php
@@ -27,10 +47,6 @@
 				}
 				?>
 			</select>
-		</p>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_html_e( 'Height', 'm-chart' ); ?></label><br />
-			<input type="number" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" value="<?php echo absint( $post_meta['height'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" min="300" max="900" />
 		</p>
 		<p class="labels">
 			&nbsp;<br />
@@ -47,7 +63,7 @@
 			</label>
 		</p>
 	</div>
-	<div class="row two vertical-axis">
+	<div class="row three vertical-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'y-title' ) ); ?>"><?php esc_html_e( 'Vertical axis title', 'm-chart' ); ?></label><br />
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-title' ) ); ?>" value="<?php echo esc_attr( $post_meta['y_title'] ); ?>" style="width: 100%;" />
@@ -76,7 +92,7 @@
 			</select>
 		</p>
 	</div>
-	<div class="row three y-min">
+	<div class="row four y-min">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'y_min' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>" value="1"<?php checked( $post_meta['y_min'], true ); ?>/>
@@ -84,7 +100,7 @@
 			</label>
 		</p>
 	</div>
-	<div class="row four horizontal-axis">
+	<div class="row five horizontal-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'x-title' ) ); ?>"><?php esc_html_e( 'Horizontal axis title', 'm-chart' ); ?></label><br />
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'x_title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'x-title' ) ); ?>" value="<?php echo esc_attr( $post_meta['x_title'] ); ?>" style="width: 100%;" />
@@ -113,18 +129,18 @@
 			</select>
 		</p>
 	</div>
-	<div class="row five">
+	<div class="row six">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'source' ) ); ?>"><?php esc_html_e( 'Source', 'm-chart' ); ?></label><br />
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'source' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'source' ) ); ?>" value="<?php echo esc_attr( $post_meta['source'] ); ?>" style="width: 100%;" placeholder="Name of the source of this data" />
 		</p>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>"><?php esc_html_e( 'URL', 'm-chart' ); ?></label><br />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>"><?php esc_html_e( 'Source URL', 'm-chart' ); ?></label><br />
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'source_url' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>" value="<?php echo esc_attr( $post_meta['source_url'] ); ?>" style="width: 100%;" placeholder="URL to the source of this data" />
 		</p>
 	</div>
 </div>
-<div class="row six">
+<div class="row seven">
 	<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'shortcode' ) ); ?>"><?php esc_html_e( 'Shortcode', 'm-chart' ); ?></label><br />
 		<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'shortcode' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'shortcode' ) ); ?>" value='[chart id="<?php echo absint( $post->ID ); ?>"]' style="width: 100%;" readonly="readonly" />
