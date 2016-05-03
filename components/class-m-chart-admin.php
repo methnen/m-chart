@@ -146,49 +146,62 @@ class M_Chart_Admin {
 		if ( 'post' == $screen->base ) {
 			// Handsontable
 			wp_enqueue_style(
-				'handsontable-css',
+				'handsontable',
 				$this->plugin_url . '/components/external/handsontable/handsontable.css'
 			);
 
 			wp_enqueue_script(
-				'handsontable-js',
+				'handsontable',
 				$this->plugin_url . '/components/external/handsontable/handsontable.js',
 				array( 'jquery' )
 			);
 
 			// In the admin panel we need highcharts enqueued before we enqueue the exporting stuff
-			wp_enqueue_script( 'highcharts-js' );
+			wp_enqueue_script( 'highcharts' );
 
 			// Highcharts export.js is required for the image generation
 			wp_enqueue_script(
-				'highcharts-exporting-js',
+				'highcharts-exporting',
 				$this->plugin_url . '/components/external/highcharts/exporting.js',
 				array( 'jquery' )
 			);
 
 			// canvg and rgbcolo do the SVG -> Canvas conversion
 			wp_enqueue_script(
-				'rgbcolor-js',
+				'rgbcolor',
 				$this->plugin_url . '/components/external/canvg/rgbcolor.js'
 			);
 
 			wp_enqueue_script(
-				'canvg-js',
+				'canvg',
 				$this->plugin_url . '/components/external/canvg/canvg.js',
-				array( 'rgbcolor-js' )
+				array( 'rgbcolor' )
 			);
 
 			// Admin panel JS
 			wp_enqueue_script(
-				'm-chart-admin-js',
+				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
 				array( 'jquery' )
+			);
+
+			$settings = m_chart()->get_settings();
+
+			wp_localize_script(
+				'm-chart-admin',
+				'm_chart_admin',
+				array(
+					'refresh_counter'       => 0,
+					'allow_form_submission' => false,
+					'request'               => false,
+					'performance'           => $settings['performance'],
+				)
 			);
 		}
 
 		// Admin panel CSS
 		wp_enqueue_style(
-			'm-chart-admin-css',
+			'm-chart-admin',
 			$this->plugin_url . '/components/css/m-chart-admin.css'
 		);
 	}
@@ -359,6 +372,13 @@ class M_Chart_Admin {
 	 * @param string a base64 encoded string of the image we want to attach
 	 */
 	public function attach_image() {
+		$settings = m_chart()->get_settings();
+
+		// If the performance setting isn't turned to default we don't do this
+		if ( 'default' != $settings['performance'] ) {
+			return;
+		}
+
 		if ( ! is_numeric( $_POST['post_ID'] ) ) {
 			return;
 		}

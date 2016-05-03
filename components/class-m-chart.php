@@ -48,6 +48,8 @@ class M_Chart {
 	 * Constructor
 	 */
 	public function __construct() {
+		$this->plugin_url = $this->plugin_url();
+
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
@@ -164,11 +166,9 @@ class M_Chart {
 			)
 		);
 
-		$this->plugin_url = $this->plugin_url();
-
 		// Register the graphing library scripts
 		wp_register_script(
-			'highcharts-js',
+			'highcharts',
 			$this->plugin_url . '/components/external/highcharts/highcharts.js',
 			array( 'jquery' )
 		);
@@ -291,7 +291,7 @@ class M_Chart {
 				$chart_meta[ $field ] = $default;
 			}
 		}
-		
+
 		// The theme meta it isn't included in the chart_meta_fields class var so we handle it here
 		if ( isset( $meta['theme'] ) && preg_match('#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
 			$chart_meta['theme'] = $meta['theme'];
@@ -380,8 +380,8 @@ class M_Chart {
 		}
 
 		// If we haven't enqueued the right library yet lets do it
-		if ( ! wp_script_is( $library . '-js', 'enqueued' ) ) {
-			wp_enqueue_script( $library . '-js' );
+		if ( ! wp_script_is( $library, 'enqueued' ) ) {
+			wp_enqueue_script( $library );
 		}
 
 		ob_start();
@@ -397,6 +397,21 @@ class M_Chart {
 	 * @return array an arry of image values url, width, height, etc...
 	 */
 	public function get_chart_image( $post_id ) {
+		$settings = $this->get_settings();
+
+		// If we aren't generating images we'll use a fallback
+		if ( 'default' != $settings['performance'] ) {
+			$url = $this->plugin_url . '/components/images/chart-fallback.png';
+
+			return array(
+				'url'    => $url,
+				'file'   => basename( $url ),
+				'width'  => 640,
+				'height' => 480,
+				'name'   => get_the_title( $post_id ),
+			);
+		}
+
 		if ( ! $thumbnail_id = get_post_meta( $post_id, '_thumbnail_id', true ) ) {
 			return false;
 		}

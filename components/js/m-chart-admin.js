@@ -1,9 +1,3 @@
-var m_chart_admin = {
-	refresh_counter: 0,
-	allow_form_submission: false,
-	request: false
-};
-
 (function( $ ) {
 	'use strict';
 
@@ -42,7 +36,9 @@ var m_chart_admin = {
 		this.$form_buttons = $( '#save-post, #wp-preview, #post-preview, #publish' );
 
 		// Watch for a new chart to be built
-		$( '.m-chart' ).on( 'render_done', this.generate_image_from_chart );
+		if ( 'default' === this.performance ) {
+			$( '.m-chart' ).on( 'render_done', this.generate_image_from_chart );
+		}
 
 		// Watch for clicks on the shortcode input
 		$( document.getElementById( 'm-chart-shortcode' ) ).on( 'click', function () {
@@ -54,9 +50,14 @@ var m_chart_admin = {
 			$( this ).select();
 		});
 
+		// Watch for clicks on the CSV tools
 		this.handle_csv_import();
 		this.handle_csv_export();
-		this.watch_for_chart_changes();
+		
+		// Do instant preview unless it's been turned off
+		if ( 'no-preview' !== this.performance ) {
+			this.watch_for_chart_changes();
+		}
 	};
 
 	// Instantiate the spreedsheet
