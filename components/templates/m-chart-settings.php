@@ -48,7 +48,7 @@
 						</select>
 						<p class="description">
 							<?php esc_html_e( 'See the M Chart documentation for more info on how to use themes:', 'm-chart' ); ?>
-							<a href="">http://github.com/methnen/m-chart/</a>
+							<a href="https://github.com/methnen/m-chart/wiki/Themes">https://github.com/methnen/m-chart/wiki/Themes</a>
 						</p>
 					</td>
 				</tr>
