@@ -54,6 +54,9 @@ class M_Chart {
 		add_action( 'save_post', array( $this, 'save_post' ) );
 		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
 
+		// Doing this before the default so it's already done before anything else
+		add_filter( 'm_chart_get_chart_image_tag', array( $this, 'm_chart_get_chart_image_tag' ), 9, 3 );
+
 		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
 	}
 
@@ -394,22 +397,22 @@ class M_Chart {
 	 *
 	 * @param int $post_id WP post ID of the chart you want an image for
 	 *
-	 * @return array an arry of image values url, width, height, etc...
+	 * @return array an array of image values url, width, height, etc...
 	 */
 	public function get_chart_image( $post_id ) {
 		$settings = $this->get_settings();
 
-		// If we aren't generating images we'll use a placeholder
+		// If we aren't generating images we'll return false
 		if ( 'default' != $settings['performance'] ) {
-			$this->get_chart_placeholder_image( $post_id );
+			return false;
 		}
 
 		if ( ! $thumbnail_id = get_post_meta( $post_id, '_thumbnail_id', true ) ) {
-			$this->get_chart_placeholder_image( $post_id );
+			return false;
 		}
 
 		if ( ! $thumbnail = wp_get_attachment_image_src( $thumbnail_id, 'full' ) ) {
-			$this->get_chart_placeholder_image( $post_id );
+			return false;
 		}
 
 		return array(
@@ -421,7 +424,19 @@ class M_Chart {
 		);
 	}
 
-	public function get_chart_placeholder_image( $post_id ) {
+	/**
+	 * Filter the m_chart_get_chart_image_tag and return a plaecholder if appropriate
+	 *
+	 * @param array|bool an array of image values or false if no image could be found
+	 * @param int $post_id WP post ID of the chart you want an image for
+	 *
+	 * @return array an array of image values url, width, height, etc...
+	 */
+	public function m_chart_get_chart_image_tag( $img, $post_id ) {
+		if ( ! $img ) {
+			return $img;
+		}
+
 		$url = $this->plugin_url . '/components/images/chart-placeholder.png';
 
 		return array(
