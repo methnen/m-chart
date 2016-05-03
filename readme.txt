@@ -36,7 +36,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Turn off/on image generation and/or instant chart previews
 	* Set default Highcharts theme
 * Updated Handsontable to the latest stable version (0.24.3)
-* Updated Highcharts to the latest stable version (4.2.4)
+* Updated Highcharts to the latest stable version (4.2.1)
 
 = 1.1.5 =
 

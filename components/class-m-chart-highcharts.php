@@ -25,7 +25,8 @@ class M_Chart_Highcharts {
 		add_action( 'm_chart_update_post_meta', array( $this, 'm_chart_update_post_meta' ), 10, 2 );
 
 		$this->theme_directories = array(
-			get_stylesheet_directory() . '/m-chart-highcharts-themes/',
+			get_stylesheet_directory() . '/m-chart-highcharts-themes/', // Child theme
+			get_template_directory() . '/m-chart-highcharts-themes/', // Parent theme
 			__DIR__ . '/highcharts-themes/',
 		);
 	}

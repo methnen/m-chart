@@ -153,6 +153,8 @@
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'image' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'image' ) ); ?>" value="<?php echo esc_url( $image['url'] ); ?>" style="width: 100%;" readonly="readonly" />
 			<a href="<?php echo esc_url( $image['url'] ); ?>" class="button" target="_blank"><?php esc_html_e( 'View', 'm-chart' ); ?></a>
 			<?php
+		} elseif ( 'default' != $settings['performance'] ) {
+			?><em><?php esc_html_e( 'Image generation is disabled', 'm-chart' ); ?></em><?php
 		} else {
 			?><em><?php esc_html_e( 'Save/Update this post to generate the image version', 'm-chart' ); ?></em><?php
 		}
