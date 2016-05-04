@@ -156,14 +156,11 @@ class M_Chart_Admin {
 				array( 'jquery' )
 			);
 
-			// In the admin panel we need highcharts enqueued before we enqueue the exporting stuff
-			wp_enqueue_script( 'highcharts' );
-
 			// Highcharts export.js is required for the image generation
 			wp_enqueue_script(
 				'highcharts-exporting',
 				$this->plugin_url . '/components/external/highcharts/exporting.js',
-				array( 'jquery' )
+				array( 'highcharts', 'jquery' )
 			);
 
 			// canvg and rgbcolo do the SVG -> Canvas conversion
@@ -182,7 +179,7 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'jquery' )
+				array( 'highcharts', 'jquery' )
 			);
 
 			$settings = m_chart()->get_settings();

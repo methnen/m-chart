@@ -19,6 +19,7 @@ return array(
 	),
 	esc_html__( 'Money', 'm-chart' ) => array(
 		esc_html__( 'USD', 'm-chart' ),
+		esc_html__( 'EUR', 'm-chart' ),
 		esc_html__( 'GBP', 'm-chart' ),
 		esc_html__( 'JPY', 'm-chart' ),
 		esc_html__( 'CNY', 'm-chart' ),
