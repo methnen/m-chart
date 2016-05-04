@@ -163,7 +163,9 @@ class M_Chart_Highcharts {
 		$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
 
 		// Apply the theme
-		$chart_args = array_merge( $chart_args, $this->get_theme( $this->post_meta['theme'] ) );
+		if ( $theme = $this->get_theme( $this->post_meta['theme'] ) ) {
+			$chart_args = array_merge( $chart_args, $this->get_theme( $theme );
+		}
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
 
@@ -388,7 +390,9 @@ class M_Chart_Highcharts {
 				} // END if
 			} // END foreach
 		} // END foreach
-	} // END _get_template
+
+		return false;
+	}
 
 	private function _get_themes_readdir( $theme_base ) {
 		// Sanity check to make sure we have a real directory
@@ -424,5 +428,5 @@ class M_Chart_Highcharts {
 		} // END foreach
 
 		return $themes;
-	} // END _get_templates_readdir
+	}
 }
