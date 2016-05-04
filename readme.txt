@@ -41,7 +41,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 		* Color Blind Safe ([Looking for suggestions on improvements](https://github.com/methnen/m-chart/issues))
 		* Highcharts 3.x
 		* Highcharts 2.x
-* Updated Handsontable to the latest stable version (0.24.3)
+* Updated Handsontable to the latest stable version (0.24.1)
 * Updated Highcharts to the latest stable version (4.2.1)
 
 = 1.1.5 =
