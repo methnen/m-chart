@@ -164,7 +164,7 @@ class M_Chart_Highcharts {
 
 		// Apply the theme
 		if ( $theme = $this->get_theme( $this->post_meta['theme'] ) ) {
-			$chart_args = array_merge( $chart_args, $this->get_theme( $theme );
+			$chart_args = array_merge( $chart_args, $theme );
 		}
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
