@@ -7,6 +7,8 @@ Description: Manage data sets and display them as charts in WordPress.
 Author: Jamie Poitra
 Author URI: http://methnen.com
 Tags: highcharts, graphs, charts, data, wordpress
+Text Domain: m-chart
+Domain Path: /components/languages
 License: MIT
 */
 

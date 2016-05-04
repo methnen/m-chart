@@ -51,6 +51,7 @@ class M_Chart {
 		$this->plugin_url = $this->plugin_url();
 
 		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
 
@@ -175,6 +176,13 @@ class M_Chart {
 			$this->plugin_url . '/components/external/highcharts/highcharts.js',
 			array( 'jquery' )
 		);
+	}
+
+	/**
+	 * Do plugins loaded stuff
+	 */
+	public function plugins_loaded() {
+		load_plugin_textdomain( 'm-chart', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**

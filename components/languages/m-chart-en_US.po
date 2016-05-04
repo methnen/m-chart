@@ -1,0 +1,479 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: M Chart\n"
+"POT-Creation-Date: 2016-05-03 20:49-0700\n"
+"PO-Revision-Date: 2016-05-04 09:25-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-WPHeader: m-chart.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: components/array-default-unit-terms.php:8
+msgid "Time"
+msgstr "Time"
+
+#: components/array-default-unit-terms.php:9
+msgid "Seconds"
+msgstr "Seconds"
+
+#: components/array-default-unit-terms.php:10
+msgid "Minutes"
+msgstr "Minutes"
+
+#: components/array-default-unit-terms.php:11
+msgid "Hours"
+msgstr "Hours"
+
+#: components/array-default-unit-terms.php:12
+msgid "Days"
+msgstr "Days"
+
+#: components/array-default-unit-terms.php:13
+msgid "Weeks"
+msgstr "Weeks"
+
+#: components/array-default-unit-terms.php:14
+msgid "Months"
+msgstr "Months"
+
+#: components/array-default-unit-terms.php:15
+msgid "Quarter"
+msgstr "Quarter"
+
+#: components/array-default-unit-terms.php:16
+msgid "Years"
+msgstr "Years"
+
+#: components/array-default-unit-terms.php:17
+msgid "Decades"
+msgstr "Decades"
+
+#: components/array-default-unit-terms.php:18
+msgid "Centuries"
+msgstr "Centuries"
+
+#: components/array-default-unit-terms.php:20
+msgid "Money"
+msgstr "Money"
+
+#: components/array-default-unit-terms.php:21
+msgid "USD"
+msgstr "USD"
+
+#: components/array-default-unit-terms.php:22
+msgid "GBP"
+msgstr "GBP"
+
+#: components/array-default-unit-terms.php:23
+msgid "JPY"
+msgstr "JPY"
+
+#: components/array-default-unit-terms.php:24
+msgid "CNY"
+msgstr "CNY"
+
+#: components/array-default-unit-terms.php:26
+msgid "Length"
+msgstr "Length"
+
+#: components/array-default-unit-terms.php:27
+msgid "Inch"
+msgstr "Inch"
+
+#: components/array-default-unit-terms.php:28
+msgid "Foot"
+msgstr "Foot"
+
+#: components/array-default-unit-terms.php:29
+msgid "Yard"
+msgstr "Yard"
+
+#: components/array-default-unit-terms.php:30
+msgid "Mile"
+msgstr "Mile"
+
+#: components/array-default-unit-terms.php:31
+msgid "Millimeter"
+msgstr "Millimeter"
+
+#: components/array-default-unit-terms.php:32
+msgid "Centimeter"
+msgstr "Centimeter"
+
+#: components/array-default-unit-terms.php:33
+msgid "Meter"
+msgstr "Meter"
+
+#: components/array-default-unit-terms.php:34
+msgid "Kilometer"
+msgstr "Kilometer"
+
+#: components/array-default-unit-terms.php:36
+msgid "Other"
+msgstr "Other"
+
+#: components/array-default-unit-terms.php:37
+msgid "Percent"
+msgstr "Percent"
+
+#: components/array-default-unit-terms.php:39
+msgid "Website/Traffic"
+msgstr "Website/Traffic"
+
+#: components/array-default-unit-terms.php:40
+msgid "Visitors"
+msgstr "Visitors"
+
+#: components/array-default-unit-terms.php:41
+msgid "Unique Visitors"
+msgstr "Unique Visitors"
+
+#: components/array-default-unit-terms.php:42
+msgid "Clicks"
+msgstr "Clicks"
+
+#: components/array-default-unit-terms.php:43
+msgid "Referrers"
+msgstr "Referrers"
+
+#: components/array-default-unit-terms.php:44
+msgid "Active Users"
+msgstr "Active Users"
+
+#: components/array-default-unit-terms.php:45
+msgid "Pages"
+msgstr "Pages"
+
+#: components/array-default-unit-terms.php:47
+msgid "Sales"
+msgstr "Sales"
+
+#: components/array-default-unit-terms.php:48
+#: components/templates/highcharts-settings.php:72
+#: components/templates/highcharts-settings.php:109
+msgid "Units"
+msgstr "Units"
+
+#: components/array-default-unit-terms.php:49
+msgid "CPM"
+msgstr "CPM"
+
+#: components/class-m-chart-admin.php:40 components/class-m-chart.php:139
+msgid "Charts"
+msgstr "Charts"
+
+#: components/class-m-chart-admin.php:44 components/class-m-chart-admin.php:231
+#: components/class-m-chart.php:140
+msgid "Chart"
+msgstr "Chart"
+
+#: components/class-m-chart-admin.php:63
+#: components/templates/m-chart-settings.php:2
+msgid "M Chart Settings"
+msgstr "M Chart Settings"
+
+#: components/class-m-chart-admin.php:64
+msgid "Settings"
+msgstr "Settings"
+
+#: components/class-m-chart-admin.php:130
+msgid "Settings saved"
+msgstr "Settings saved"
+
+#: components/class-m-chart-admin.php:222
+msgid "Data"
+msgstr "Data"
+
+#: components/class-m-chart-admin.php:242
+msgid "CSV Import/Export"
+msgstr "CSV Import/Export"
+
+#: components/class-m-chart-admin.php:461
+#: components/class-m-chart-admin.php:471
+msgid "Wrong post type"
+msgstr "Wrong post type"
+
+#: components/class-m-chart-admin.php:466
+#: components/class-m-chart-admin.php:590
+msgid "Invalid nonce"
+msgstr "Invalid nonce"
+
+#: components/class-m-chart-admin.php:476
+msgid "No file to import"
+msgstr "No file to import"
+
+#: components/class-m-chart-admin.php:483
+msgid "Only CSV files can be imported "
+msgstr "Only CSV files can be imported "
+
+#: components/class-m-chart-admin.php:490
+msgid "File path not found"
+msgstr "File path not found"
+
+#: components/class-m-chart-admin.php:496
+msgid "CSV file was empty"
+msgstr "CSV file was empty"
+
+#: components/class-m-chart-admin.php:595
+msgid "Invalid post"
+msgstr "Invalid post"
+
+#: components/class-m-chart-admin.php:600
+msgid "Permission error"
+msgstr "Permission error"
+
+#: components/class-m-chart-admin.php:605
+msgid "Invalid library"
+msgstr "Invalid library"
+
+#: components/class-m-chart.php:111 components/class-m-chart.php:121
+msgid "Chart Units"
+msgstr "Chart Units"
+
+#: components/class-m-chart.php:112
+msgid "Chart Unit"
+msgstr "Chart Unit"
+
+#: components/class-m-chart.php:113
+msgid "Search Chart Units"
+msgstr "Search Chart Units"
+
+#: components/class-m-chart.php:114
+msgid "All Chart Units"
+msgstr "All Chart Units"
+
+#: components/class-m-chart.php:115
+msgid "Parent Chart Unit"
+msgstr "Parent Chart Unit"
+
+#: components/class-m-chart.php:116
+msgid "Parent Chart Unit:"
+msgstr "Parent Chart Unit:"
+
+#: components/class-m-chart.php:117
+msgid "Edit Chart Unit"
+msgstr "Edit Chart Unit"
+
+#: components/class-m-chart.php:118
+msgid "Update Chart Unit"
+msgstr "Update Chart Unit"
+
+#: components/class-m-chart.php:119
+msgid "Add New Chart Unit"
+msgstr "Add New Chart Unit"
+
+#: components/class-m-chart.php:120
+msgid "Chart Unit Name"
+msgstr "Chart Unit Name"
+
+#: components/class-m-chart.php:141 components/class-m-chart.php:142
+msgid "Add Chart"
+msgstr "Add Chart"
+
+#: components/class-m-chart.php:143
+msgid "Edit"
+msgstr "Edit"
+
+#: components/class-m-chart.php:144
+msgid "Edit Chart"
+msgstr "Edit Chart"
+
+#: components/class-m-chart.php:145
+msgid "New Chart"
+msgstr "New Chart"
+
+#: components/class-m-chart.php:146
+#: components/templates/highcharts-settings.php:154
+msgid "View"
+msgstr "View"
+
+#: components/class-m-chart.php:147
+msgid "View Chart"
+msgstr "View Chart"
+
+#: components/class-m-chart.php:148
+msgid "Search Charts"
+msgstr "Search Charts"
+
+#: components/class-m-chart.php:149
+msgid "No Charts found"
+msgstr "No Charts found"
+
+#: components/class-m-chart.php:150
+msgid "No Charts found in the Trash"
+msgstr "No Charts found in the Trash"
+
+#. Description of the plugin/theme
+#: components/class-m-chart.php:161
+msgid "Manage data sets and display them as charts in WordPress."
+msgstr "Manage data sets and display them as charts in WordPress."
+
+#: components/templates/csv-meta-box.php:2
+msgid "Export CSV"
+msgstr "Export CSV"
+
+#: components/templates/csv-meta-box.php:2
+msgid "Export"
+msgstr "Export"
+
+#: components/templates/csv-meta-box.php:6
+msgid "Select CSV File"
+msgstr "Select CSV File"
+
+#: components/templates/csv-meta-box.php:6
+msgid "Select File"
+msgstr "Select File"
+
+#: components/templates/csv-meta-box.php:7
+msgid "Import"
+msgstr "Import"
+
+#: components/templates/csv-meta-box.php:8
+msgid "You can only import CSV files"
+msgstr "You can only import CSV files"
+
+#: components/templates/csv-meta-box.php:10
+msgid "Importing file"
+msgstr "Importing file"
+
+#: components/templates/csv-meta-box.php:12
+msgid "Cancel Import"
+msgstr "Cancel Import"
+
+#: components/templates/csv-meta-box.php:14
+msgid "Importing this file will replace all existing data"
+msgstr "Importing this file will replace all existing data"
+
+#: components/templates/highcharts-settings.php:4
+msgid "Type"
+msgstr "Type"
+
+#: components/templates/highcharts-settings.php:18
+msgid "Theme"
+msgstr "Theme"
+
+#: components/templates/highcharts-settings.php:32
+msgid "Height"
+msgstr "Height"
+
+#: components/templates/highcharts-settings.php:38
+msgid "Parse data in"
+msgstr "Parse data in"
+
+#: components/templates/highcharts-settings.php:55
+msgid "Show labels"
+msgstr "Show labels"
+
+#: components/templates/highcharts-settings.php:62
+msgid "Show legend"
+msgstr "Show legend"
+
+#: components/templates/highcharts-settings.php:68
+msgid "Vertical axis title"
+msgstr "Vertical axis title"
+
+#: components/templates/highcharts-settings.php:74
+#: components/templates/highcharts-settings.php:111
+msgid "N/A"
+msgstr "N/A"
+
+#: components/templates/highcharts-settings.php:99
+msgid "Force vertical axis minimum to zero"
+msgstr "Force vertical axis minimum to zero"
+
+#: components/templates/highcharts-settings.php:105
+msgid "Horizontal axis title"
+msgstr "Horizontal axis title"
+
+#: components/templates/highcharts-settings.php:134
+msgid "Source"
+msgstr "Source"
+
+#: components/templates/highcharts-settings.php:138
+msgid "Source URL"
+msgstr "Source URL"
+
+#: components/templates/highcharts-settings.php:145
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: components/templates/highcharts-settings.php:149
+msgid "Image"
+msgstr "Image"
+
+#: components/templates/highcharts-settings.php:157
+msgid "Image generation is disabled"
+msgstr "Image generation is disabled"
+
+#: components/templates/highcharts-settings.php:159
+msgid "Save/Update this post to generate the image version"
+msgstr "Save/Update this post to generate the image version"
+
+#: components/templates/m-chart-settings.php:8
+#: components/templates/m-chart-settings.php:12
+msgid "Performance"
+msgstr "Performance"
+
+#: components/templates/m-chart-settings.php:16
+msgid "Default"
+msgstr "Default"
+
+#: components/templates/m-chart-settings.php:17
+msgid "Provides all functionality"
+msgstr "Provides all functionality"
+
+#: components/templates/m-chart-settings.php:21
+msgid "No Images"
+msgstr "No Images"
+
+#: components/templates/m-chart-settings.php:22
+msgid "No generation of chart images"
+msgstr "No generation of chart images"
+
+#: components/templates/m-chart-settings.php:26
+msgid "No Instant Preview"
+msgstr "No Instant Preview"
+
+#: components/templates/m-chart-settings.php:27
+msgid "No instant preview and no generation of chart images"
+msgstr "No instant preview and no generation of chart images"
+
+#: components/templates/m-chart-settings.php:35
+msgid "Default Highcharts Theme"
+msgstr "Default Highcharts Theme"
+
+#: components/templates/m-chart-settings.php:51
+msgid "See the M Chart documentation for more info on how to use themes:"
+msgstr "See the M Chart documentation for more info on how to use themes:"
+
+#: components/templates/m-chart-settings.php:59
+msgid "Save Changes"
+msgstr "Save Changes"
+
+#. Plugin Name of the plugin/theme
+msgid "M Chart"
+msgstr "M Chart"
+
+#. Plugin URI of the plugin/theme
+msgid "http://github.com/methnen/m-charts"
+msgstr "http://github.com/methnen/m-charts"
+
+#. Author of the plugin/theme
+msgid "Jamie Poitra"
+msgstr "Jamie Poitra"
+
+#. Author URI of the plugin/theme
+msgid "http://methnen.com"
+msgstr "http://methnen.com"

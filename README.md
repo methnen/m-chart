@@ -40,6 +40,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added a settings panel
 	* Turn off/on image generation and/or instant chart previews
 	* Set default Highcharts theme
+* Added full language support
 * Simplified the admin panel CSS a bit
 * Fixed a display issue with the spreadsheet interface
 * Fixed a bug where the Source URL wasn't making into the charts
