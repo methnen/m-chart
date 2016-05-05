@@ -16,6 +16,8 @@ For full documentation please see the [Wiki](https://github.com/methnen/m-chart/
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
 
+**Note:** PHP version 5.3.6 or greater is required to run this plugin.
+
 == Installation ==
 
 1. Put the m-chart directory into your plugins directory
@@ -26,6 +28,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 1. M Chart UI
 
 == Changelog ==
+
+= 1.2.2 =
+
+* Noting that PHP >= 5.3.6 is required in the readme
+* Also checking manage_options permission when saving settings
+* Added a Simplified Chinese (zh_CN) translation
+* The Color Blind Safe theme is now based on a palette by [Martin Krzywinski](http://mkweb.bcgsc.ca/biovis2012/color-blindness-palette.png)
 
 = 1.2.1 =
 
