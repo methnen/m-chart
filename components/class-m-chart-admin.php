@@ -62,7 +62,7 @@ class M_Chart_Admin {
 			'edit.php?post_type=' . m_chart()->slug,
 			esc_html__( 'M Chart Settings', 'm-chart' ),
 			esc_html__( 'Settings', 'm-chart' ),
-			'edit_posts',
+			'manage_options',
 			m_chart()->slug . '-settings',
 			array( $this, 'm_chart_settings' )
 		);
