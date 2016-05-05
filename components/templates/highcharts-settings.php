@@ -1,3 +1,19 @@
+<?php
+$type_option_names = array(
+	'line'   => esc_html__( 'Line', 'm-chart' ),
+	'spline' => esc_html__( 'Spline', 'm-chart' ),
+	'area'   => esc_html__( 'Area', 'm-chart' ),
+	'column' => esc_html__( 'Column', 'm-chart' ),
+	'bar'    => esc_html__( 'Bar', 'm-chart' ),
+	'pie'    => esc_html__( 'Pie', 'm-chart' ),
+);
+
+$parse_option_names = array(
+	'columns' => esc_html__( 'Columns', 'm-chart' ),
+	'rows'    => esc_html__( 'Rows', 'm-chart' ),
+);
+
+?>
 <div class="settings">
 	<div class="row one">
 		<p>
@@ -7,7 +23,7 @@
 				foreach ( m_chart()->highcharts()->type_options as $type ) {
 					?>
 					<option value="<?php echo esc_attr( $type ); ?>"<?php selected( $type, $post_meta['type'] ); ?>>
-						<?php esc_html_e( ucfirst( $type ), 'm-chart' ); ?>
+						<?php echo esc_html( $type_option_names[ $type ] ); ?>
 					</option>
 					<?php
 				}
@@ -41,7 +57,7 @@
 				foreach ( m_chart()->parse_options as $parse_in ) {
 					?>
 					<option value="<?php echo esc_attr( $parse_in ); ?>"<?php selected( $parse_in, $post_meta['parse_in'] ); ?>>
-						<?php esc_html_e( ucfirst( $parse_in ), 'm-chart' ); ?>
+						<?php echo esc_html( $parse_option_names[ $parse_in ] ); ?>
 					</option>
 					<?php
 				}
