@@ -16,12 +16,19 @@ class M_Chart_Highcharts {
 		'bar',
 		'pie',
 	);
+	public $theme_directories;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		add_action( 'm_chart_update_post_meta', array( $this, 'm_chart_update_post_meta' ), 10, 2 );
+
+		$this->theme_directories = array(
+			get_stylesheet_directory() . '/m-chart-highcharts-themes/', // Child theme
+			get_template_directory() . '/m-chart-highcharts-themes/', // Parent theme
+			__DIR__ . '/highcharts-themes/',
+		);
 	}
 
 	/**
@@ -107,7 +114,7 @@ class M_Chart_Highcharts {
 				'enabled' => $this->post_meta['legend'] ? true : false,
 			),
 			'credits' => array(
-				'href' => $this->post_meta['source-url'],
+				'href' => $this->post_meta['source_url'],
 				'text' => $this->post_meta['source'],
 			),
 			'exporting' => array(
@@ -154,6 +161,11 @@ class M_Chart_Highcharts {
 		}
 
 		$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
+
+		// Apply the theme
+		if ( $theme = $this->get_theme( $this->post_meta['theme'] ) ) {
+			$chart_args = array_merge( $chart_args, $theme );
+		}
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
 
@@ -352,5 +364,69 @@ class M_Chart_Highcharts {
 		}
 
 		return $value;
+	}
+
+	public function get_themes() {
+		$themes = array();
+
+		foreach ( $this->theme_directories as $directory ) {
+			$themes = array_merge( $themes, $this->_get_themes_readdir( $directory ) );
+		}
+
+		return $themes;
+	}
+
+	private function get_theme( $slug ) {
+		foreach ( $this->theme_directories as $directory ) {
+			if ( ! $themes = $this->_get_themes_readdir( $directory ) ) {
+				continue;
+			} // END if
+
+			foreach ( $themes as $theme )
+			{
+				if ( $theme->slug == $slug )
+				{
+					return $theme->options;
+				} // END if
+			} // END foreach
+		} // END foreach
+
+		return false;
+	}
+
+	private function _get_themes_readdir( $theme_base ) {
+		// Sanity check to make sure we have a real directory
+		if ( ! is_dir( $theme_base ) ) {
+			return array();
+		}
+
+		$theme_dir = new DirectoryIterator( $theme_base );
+		$themes = array();
+
+		foreach ( $theme_dir as $file ) {
+			if ( ! $file->isFile() || 'php' != $file->getExtension() ) {
+				continue;
+			}
+
+			$theme_data = implode( '', file( $theme_base . $file ) );
+
+			if ( preg_match( '|Theme Name:(.*)$|mi', $theme_data, $name ) ) {
+				$name = trim( _cleanup_header_comment( $name[1] ) );
+			} // END if
+
+			if ( isset( $name ) && '' != $name )
+			{
+				$file = basename( $file );
+
+				$themes[ $file ] = (object) array(
+					'name'    => $name,
+					'slug'    => substr( $file, 0, -4 ),
+					'file'    => $file,
+					'options' => require $theme_base . $file,
+				);
+			} // END if
+		} // END foreach
+
+		return $themes;
 	}
 }

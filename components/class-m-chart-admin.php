@@ -1,6 +1,14 @@
 <?php
 
 class M_Chart_Admin {
+	private $safe_settings = array(
+		'performance' => array(
+			'default',
+			'no-images',
+			'no-preview',
+		),
+	);
+
 	/**
 	 * Constructor
 	 */
@@ -8,6 +16,7 @@ class M_Chart_Admin {
 		$this->plugin_url = m_chart()->plugin_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'wp_ajax_m_chart_export_csv', array( $this, 'ajax_export_csv' ) );
@@ -16,9 +25,11 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Register a Shortcake ui if we can
+	 * Register a Shortcake ui if we can and look for save settings submissions
 	 */
 	public function admin_init() {
+		$this->save_settings();
+
 		if ( ! function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
 			return;
 		}
@@ -44,61 +55,151 @@ class M_Chart_Admin {
 	}
 
 	/**
+	 * Add settings admin page
+	 */
+	public function admin_menu() {
+		add_submenu_page(
+			'edit.php?post_type=' . m_chart()->slug,
+			esc_html__( 'M Chart Settings', 'm-chart' ),
+			esc_html__( 'Settings', 'm-chart' ),
+			'edit_posts',
+			m_chart()->slug . '-settings',
+			array( $this, 'm_chart_settings' )
+		);
+	}
+
+	/**
+	 * Display the M Chart settings admin page
+	 */
+	public function m_chart_settings() {
+		$settings = m_chart()->get_settings();
+		require_once __DIR__ . '/templates/m-chart-settings.php';
+	}
+
+	/**
+	 * Check for and save M Chart settings
+	 */
+	public function save_settings() {
+		// Check the nonce
+		if (
+			   ! isset( $_POST[ m_chart()->slug ] )
+			|| ! wp_verify_nonce( $_POST[ m_chart()->slug ]['nonce'], m_chart()->slug . '-save-settings' )
+		) {
+			return;
+		}
+
+		$validated_settings = array();
+		$submitted_settings = $_POST[ m_chart()->slug ];
+
+		foreach ( m_chart()->settings as $setting => $default ) {
+			if ( ! isset( $submitted_settings[ $setting ] ) ) {
+				$validated_settings[ $setting ] = $default;
+				continue;
+			}
+
+			if ( isset( $safe_settings[ $setting ] ) ) {
+				// If we've got an array of valid values lets check against that
+				$safe_setting = $safe_settings[ $setting ];
+
+				if ( in_array( $submitted_settings[ $setting ], $safe_setting, true ) ) {
+					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
+				} else {
+					$validated_settings[ $setting ] = $default;
+				}
+			} else {
+				// Make sure the value is safe before attempting to save it
+				if ( preg_match('#^[a-zA-Z0-9-_]+$#', $submitted_settings[ $setting ] ) ) {
+					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
+				} else {
+					$validated_settings[ $setting ] = $default;
+				}
+			}
+		}
+
+		update_option( m_chart()->slug, $validated_settings );
+
+		add_action( 'admin_notices', array( $this, 'save_success' ) );
+	}
+
+	/**
+	 * Display an admin notice that the settings have been saved
+	 */
+	public function save_success() {
+		?>
+	    <div class="updated notice">
+	         <p><?php esc_html_e( 'Settings saved', 'm-chart' ); ?></p>
+	     </div>
+		<?php
+	}
+
+	/**
 	 * Load CSS/Javascript necessary for the interface
 	 *
 	 * @param object the current screen object as passed by the current_screen action hook
 	 */
 	public function current_screen( $screen ) {
-		if ( 'post' != $screen->base || m_chart()->slug != $screen->post_type ) {
+		if ( m_chart()->slug != $screen->post_type ) {
 			return;
 		}
 
-		$js_dir = m_chart()->dev ? 'lib' : 'min';
+		// Only load these if we are on a post page
+		if ( 'post' == $screen->base ) {
+			// Handsontable
+			wp_enqueue_style(
+				'handsontable',
+				$this->plugin_url . '/components/external/handsontable/handsontable.css'
+			);
 
-		// Handsontable
+			wp_enqueue_script(
+				'handsontable',
+				$this->plugin_url . '/components/external/handsontable/handsontable.js',
+				array( 'jquery' )
+			);
+
+			// Highcharts export.js is required for the image generation
+			wp_enqueue_script(
+				'highcharts-exporting',
+				$this->plugin_url . '/components/external/highcharts/exporting.js',
+				array( 'highcharts', 'jquery' )
+			);
+
+			// canvg and rgbcolo do the SVG -> Canvas conversion
+			wp_enqueue_script(
+				'rgbcolor',
+				$this->plugin_url . '/components/external/canvg/rgbcolor.js'
+			);
+
+			wp_enqueue_script(
+				'canvg',
+				$this->plugin_url . '/components/external/canvg/canvg.js',
+				array( 'rgbcolor' )
+			);
+
+			// Admin panel JS
+			wp_enqueue_script(
+				'm-chart-admin',
+				$this->plugin_url . '/components/js/m-chart-admin.js',
+				array( 'highcharts', 'jquery' )
+			);
+
+			$settings = m_chart()->get_settings();
+
+			wp_localize_script(
+				'm-chart-admin',
+				'm_chart_admin',
+				array(
+					'refresh_counter'       => 0,
+					'allow_form_submission' => false,
+					'request'               => false,
+					'performance'           => $settings['performance'],
+				)
+			);
+		}
+
+		// Admin panel CSS
 		wp_enqueue_style(
-			'handsontable-css',
-			$this->plugin_url . '/components/external/handsontable/handsontable.css'
-		);
-
-		wp_enqueue_script(
-			'handsontable-js',
-			$this->plugin_url . '/components/external/handsontable/handsontable.js',
-			array( 'jquery' )
-		);
-
-		// In the admin panel we need highcharts enqueued before we enqueue the exporting stuff
-		wp_enqueue_script( 'highcharts-js' );
-
-		// Highcharts export.js is required for the image generation
-		wp_enqueue_script(
-			'highcharts-exporting-js',
-			$this->plugin_url . '/components/external/highcharts/exporting.js',
-			array( 'jquery' )
-		);
-
-		// canvg and rgbcolo do the SVG -> Canvas conversion
-		wp_enqueue_script(
-			'rgbcolor-js',
-			$this->plugin_url . '/components/external/canvg/rgbcolor.js'
-		);
-
-		wp_enqueue_script(
-			'canvg-js',
-			$this->plugin_url . '/components/external/canvg/canvg.js',
-			array( 'rgbcolor-js' )
-		);
-
-		// Admin panel JS and CSS
-		wp_enqueue_style(
-			'm-chart-admin-css',
+			'm-chart-admin',
 			$this->plugin_url . '/components/css/m-chart-admin.css'
-		);
-
-		wp_enqueue_script(
-			'm-chart-admin-js',
-			$this->plugin_url . '/components/js/m-chart-admin.js',
-			array( 'jquery' )
 		);
 	}
 
@@ -268,6 +369,13 @@ class M_Chart_Admin {
 	 * @param string a base64 encoded string of the image we want to attach
 	 */
 	public function attach_image() {
+		$settings = m_chart()->get_settings();
+
+		// If the performance setting isn't turned to default we don't do this
+		if ( 'default' != $settings['performance'] ) {
+			return;
+		}
+
 		if ( ! is_numeric( $_POST['post_ID'] ) ) {
 			return;
 		}

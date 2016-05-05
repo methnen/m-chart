@@ -4,31 +4,23 @@
   display: none;
 }
 
+#m-chart-spreadsheet {
+  border-left: none;
+}
+#m-chart-spreadsheet h2.hndle {
+  border-bottom: none;
+  border-left: 1px solid #e5e5e5;
+}
 #m-chart-spreadsheet h3 {
   border-bottom: none;
+  border-left: 1px solid #e5e5e5;
+}
+#m-chart-spreadsheet .handlediv {
+  height: 35px;
 }
 #m-chart-spreadsheet .inside {
   margin: 0;
   padding: 0;
-}
-#m-chart-spreadsheet .hands-on-table-sheet {
-  height: 350px;
-}
-#m-chart-spreadsheet .hands-on-table-sheet thead tr .relative {
-  border-bottom: 1px solid #cccccc;
-}
-#m-chart-spreadsheet .hands-on-table-sheet table tbody tr td {
-  border-top: none;
-}
-#m-chart-spreadsheet .hands-on-table-sheet .handsontable table {
-  box-shadow: none;
-}
-#m-chart-spreadsheet .hands-on-table-sheet .handsontable table th {
-  border-left-style: none;
-}
-#m-chart-spreadsheet .hands-on-table-sheet .ht_clone_left tr:first-child th {
-  border-top: none;
-  padding-top: 1px;
 }
 
 #m-chart .inside {
@@ -54,30 +46,30 @@
 #m-chart .inside .settings .row p {
   margin-bottom: 0;
 }
-#m-chart .inside .settings .row.one p {
+#m-chart .inside .settings .row.one p, #m-chart .inside .settings .row.two p {
   float: left;
   margin-left: 1%;
-  width: 19%;
+  width: 32%;
 }
-#m-chart .inside .settings .row.one p:first-child {
+#m-chart .inside .settings .row.one p:first-child, #m-chart .inside .settings .row.two p:first-child {
   margin-left: 0;
 }
-#m-chart .inside .settings .row.two p, #m-chart .inside .settings .row.four p {
+#m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.five p {
   float: left;
   width: 73%;
 }
-#m-chart .inside .settings .row.two p.units, #m-chart .inside .settings .row.four p.units {
+#m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.five p.units {
   float: right;
   width: 25%;
 }
-#m-chart .inside .settings .row.three p {
+#m-chart .inside .settings .row.four p {
   margin: 0;
 }
-#m-chart .inside .settings .row.five p {
+#m-chart .inside .settings .row.six p {
   float: right;
   width: 49%;
 }
-#m-chart .inside .settings .row.five p:first-child {
+#m-chart .inside .settings .row.six p:first-child {
   float: left;
 }
 #m-chart .inside .row {
@@ -89,22 +81,22 @@
   content: '';
   display: table;
 }
-#m-chart .inside .row.six p {
+#m-chart .inside .row.seven p {
   float: right;
   margin-bottom: 0;
   width: 49%;
 }
-#m-chart .inside .row.six p:first-child {
+#m-chart .inside .row.seven p:first-child {
   float: left;
 }
-#m-chart .inside .row.six p.image {
+#m-chart .inside .row.seven p.image {
   position: relative;
 }
-#m-chart .inside .row.six p.image em {
+#m-chart .inside .row.seven p.image em {
   display: block;
   margin-top: 5px;
 }
-#m-chart .inside .row.six p.image .button {
+#m-chart .inside .row.seven p.image .button {
   height: 23px;
   line-height: 20px;
   position: absolute;
@@ -170,4 +162,8 @@
 #side-sortables #m-chart-csv .inside .export {
   border-top: 1px solid #dddddd;
   float: none;
+}
+
+#m-chart-settings-page span.description {
+  color: #666666;
 }

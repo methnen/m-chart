@@ -2,8 +2,8 @@
 **Contributors:** methnen  
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 4.2  
-**Stable tag:** 1.1.5  
+**Tested up to:** 4.5.1  
+**Stable tag:** 1.2  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -28,6 +28,25 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.2 ###
+
+* Added [themes](https://github.com/methnen/m-chart/wiki/Themes)
+	* Default themes:
+		* Highcharts 4.x (Default)
+		* Color Blind Safe ([Looking for suggestions on improvements](https://github.com/methnen/m-chart/issues))
+		* Highcharts 3.x
+		* Highcharts 2.x
+* Added a settings panel
+	* Turn off/on image generation and/or instant chart previews
+	* Set default Highcharts theme
+* Added full language support
+	* Now we just needs some translations
+* Simplified the admin panel CSS a bit
+* Fixed a display issue with the spreadsheet interface
+* Fixed a bug where the Source URL wasn't making into the charts
+* Updated Handsontable to the latest stable version (0.24.1)
+* Updated Highcharts to the latest stable version (4.2.1)
 
 ### 1.1.5 ###
 
