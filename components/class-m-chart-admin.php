@@ -80,6 +80,10 @@ class M_Chart_Admin {
 	 * Check for and save M Chart settings
 	 */
 	public function save_settings() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		
 		// Check the nonce
 		if (
 			   ! isset( $_POST[ m_chart()->slug ] )
