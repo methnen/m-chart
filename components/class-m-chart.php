@@ -225,6 +225,11 @@ class M_Chart {
 			$post_meta['theme'] = $settings['default_theme'];
 		}
 
+		// If there's no subtitle set we'll set an empty one
+		if ( ! isset( $post_meta['subtitle'] ) ) {
+			$post_meta['subtitle'] = '';
+		}
+
 		if ( $field && isset( $post_meta[ $field ] ) ) {
 			return $post_meta[ $field ];
 		}

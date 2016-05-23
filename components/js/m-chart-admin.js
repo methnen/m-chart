@@ -10,7 +10,8 @@
 
 		// Store the setting inputs and title input for use later
 		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
-		this.$title_input    = $( document.getElementById( 'titlediv' ) ).find( 'input' );
+		this.$title_input    = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
+		this.$subtitle_input = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
 
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
@@ -53,7 +54,7 @@
 		// Watch for clicks on the CSV tools
 		this.handle_csv_import();
 		this.handle_csv_export();
-		
+
 		// Do instant preview unless it's been turned off
 		if ( 'no-preview' !== this.performance ) {
 			this.watch_for_chart_changes();
@@ -263,6 +264,10 @@
 		this.$title_input.on( 'change', function() {
 			m_chart_admin.refresh_chart();
 		});
+
+		this.$subtitle_input.on( 'change', function() {
+			m_chart_admin.refresh_chart();
+		});
 	};
 
 	// Refresh chart
@@ -295,6 +300,8 @@
 				$post_meta[ $( this ).attr( 'name' ).replace( /^m-chart\[|\]$/g , '' ) ] = $( this ).attr( 'value' );
 			}
 		});
+
+		$post_meta[ 'subtitle' ] = this.$subtitle_input.attr( 'value' );
 
 		$post_meta.data = JSON.stringify( m_chart_admin.$spreadsheet.getData() );
 

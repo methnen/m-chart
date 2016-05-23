@@ -1,0 +1,1 @@
+<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'subtitle' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'subtitle' ) ); ?>" value="<?php echo esc_attr( $post_meta['subtitle'] ); ?>" placeholder="<?php esc_attr_e( 'Enter subtitle here', 'm-chart' ); ?>" style="width: 100%;" />

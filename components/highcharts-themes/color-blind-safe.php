@@ -8,7 +8,6 @@
 
 return array(
 	'colors' => array(
-		'#000000',
 		'#094949',
 		'#1b9392',
 		'#fc6fb6',

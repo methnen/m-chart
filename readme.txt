@@ -2,8 +2,8 @@
 Contributors: methnen
 Tags: highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
-Tested up to: 4.5.1
-Stable tag: 1.2.1
+Tested up to: 4.5.2
+Stable tag: 1.3
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -29,8 +29,9 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
-= 1.2.2 =
+= 1.3 =
 
+* Added a subtitle field which is used in the Highcharts subtitle attribute
 * Noting that PHP >= 5.3.6 is required in the readme
 * Also checking manage_options permission when saving settings
 * Added a Simplified Chinese (zh_CN) translation
@@ -45,7 +46,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added [themes](https://github.com/methnen/m-chart/wiki/Themes)
 	* Default themes:
 		* Highcharts 4.x (Default)
-		* Color Blind Safe ([Looking for suggestions on improvements](https://github.com/methnen/m-chart/issues))
+		* Color Blind Safe
 		* Highcharts 3.x
 		* Highcharts 2.x
 * Added a settings panel
