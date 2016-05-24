@@ -2,17 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "POT-Creation-Date: 2016-05-18 16:07-0700\n"
-"PO-Revision-Date: 2016-05-18 16:07-0700\n"
+"PO-Revision-Date: 2016-05-22 14:31-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: en_US\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.7\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-WPHeader: m-chart.php\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
@@ -22,485 +22,485 @@ msgstr ""
 
 #: components/array-default-unit-terms.php:8
 msgid "Time"
-msgstr "Time"
+msgstr "时间"
 
 #: components/array-default-unit-terms.php:9
 msgid "Seconds"
-msgstr "Seconds"
+msgstr "秒"
 
 #: components/array-default-unit-terms.php:10
 msgid "Minutes"
-msgstr "Minutes"
+msgstr "分"
 
 #: components/array-default-unit-terms.php:11
 msgid "Hours"
-msgstr "Hours"
+msgstr "时"
 
 #: components/array-default-unit-terms.php:12
 msgid "Days"
-msgstr "Days"
+msgstr "日"
 
 #: components/array-default-unit-terms.php:13
 msgid "Weeks"
-msgstr "Weeks"
+msgstr "星期"
 
 #: components/array-default-unit-terms.php:14
 msgid "Months"
-msgstr "Months"
+msgstr "月"
 
 #: components/array-default-unit-terms.php:15
 msgid "Quarter"
-msgstr "Quarter"
+msgstr "季度"
 
 #: components/array-default-unit-terms.php:16
 msgid "Years"
-msgstr "Years"
+msgstr "年"
 
 #: components/array-default-unit-terms.php:17
 msgid "Decades"
-msgstr "Decades"
+msgstr "十年"
 
 #: components/array-default-unit-terms.php:18
 msgid "Centuries"
-msgstr "Centuries"
+msgstr "世纪"
 
 #: components/array-default-unit-terms.php:20
 msgid "Money"
-msgstr "Money"
+msgstr "货币"
 
 #: components/array-default-unit-terms.php:21
 msgid "USD"
-msgstr "USD"
+msgstr "美元"
 
 #: components/array-default-unit-terms.php:22
 msgid "EUR"
-msgstr "EUR"
+msgstr "欧元"
 
 #: components/array-default-unit-terms.php:23
 msgid "GBP"
-msgstr "GBP"
+msgstr "英镑"
 
 #: components/array-default-unit-terms.php:24
 msgid "JPY"
-msgstr "JPY"
+msgstr "日元"
 
 #: components/array-default-unit-terms.php:25
 msgid "CNY"
-msgstr "CNY"
+msgstr "人民币"
 
 #: components/array-default-unit-terms.php:27
 msgid "Length"
-msgstr "Length"
+msgstr "长度"
 
 #: components/array-default-unit-terms.php:28
 msgid "Inch"
-msgstr "Inch"
+msgstr "英寸"
 
 #: components/array-default-unit-terms.php:29
 msgid "Foot"
-msgstr "Foot"
+msgstr "尺"
 
 #: components/array-default-unit-terms.php:30
 msgid "Yard"
-msgstr "Yard"
+msgstr "码"
 
 #: components/array-default-unit-terms.php:31
 msgid "Mile"
-msgstr "Mile"
+msgstr "英里"
 
 #: components/array-default-unit-terms.php:32
 msgid "Millimeter"
-msgstr "Millimeter"
+msgstr "毫米"
 
 #: components/array-default-unit-terms.php:33
 msgid "Centimeter"
-msgstr "Centimeter"
+msgstr "厘米"
 
 #: components/array-default-unit-terms.php:34
 msgid "Meter"
-msgstr "Meter"
+msgstr "米"
 
 #: components/array-default-unit-terms.php:35
 msgid "Kilometer"
-msgstr "Kilometer"
+msgstr "公里"
 
 #: components/array-default-unit-terms.php:37
 msgid "Other"
-msgstr "Other"
+msgstr "其他"
 
 #: components/array-default-unit-terms.php:38
 msgid "Percent"
-msgstr "Percent"
+msgstr "百分比"
 
 #: components/array-default-unit-terms.php:40
 msgid "Website/Traffic"
-msgstr "Website/Traffic"
+msgstr "网络流量"
 
 #: components/array-default-unit-terms.php:41
 msgid "Visitors"
-msgstr "Visitors"
+msgstr "访客"
 
 #: components/array-default-unit-terms.php:42
 msgid "Unique Visitors"
-msgstr "Unique Visitors"
+msgstr "独一访客"
 
 #: components/array-default-unit-terms.php:43
 msgid "Clicks"
-msgstr "Clicks"
+msgstr "点击"
 
 #: components/array-default-unit-terms.php:44
 msgid "Referrers"
-msgstr "Referrers"
+msgstr "引用"
 
 #: components/array-default-unit-terms.php:45
 msgid "Active Users"
-msgstr "Active Users"
+msgstr "激活的用户"
 
 #: components/array-default-unit-terms.php:46
 msgid "Pages"
-msgstr "Pages"
+msgstr "网页"
 
 #: components/array-default-unit-terms.php:48
 msgid "Sales"
-msgstr "Sales"
+msgstr "销售额"
 
 #: components/array-default-unit-terms.php:49
 #: components/templates/highcharts-settings.php:88
 #: components/templates/highcharts-settings.php:125
 msgid "Units"
-msgstr "Units"
+msgstr "单位"
 
 #: components/array-default-unit-terms.php:50
 msgid "CPM"
-msgstr "CPM"
+msgstr "每千人价格"
 
 #: components/class-m-chart-admin.php:41 components/class-m-chart.php:139
 msgid "Charts"
-msgstr "Charts"
+msgstr "图表"
 
 #: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:233
 #: components/class-m-chart.php:140
 msgid "Chart"
-msgstr "Chart"
+msgstr "图表"
 
 #: components/class-m-chart-admin.php:64
 #: components/templates/m-chart-settings.php:2
 msgid "M Chart Settings"
-msgstr "M Chart Settings"
+msgstr "M图表设置"
 
 #: components/class-m-chart-admin.php:65
 msgid "Settings"
-msgstr "Settings"
+msgstr "设置"
 
 #: components/class-m-chart-admin.php:135
 msgid "Settings saved"
-msgstr "Settings saved"
+msgstr "已保存的设置"
 
 #: components/class-m-chart-admin.php:224
 msgid "Data"
-msgstr "Data"
+msgstr "数据"
 
 #: components/class-m-chart-admin.php:244
 msgid "CSV Import/Export"
-msgstr "CSV Import/Export"
+msgstr "CSV 导入／导出"
 
 #: components/class-m-chart-admin.php:478
 #: components/class-m-chart-admin.php:488
 msgid "Wrong post type"
-msgstr "Wrong post type"
+msgstr "错误图表类型"
 
 #: components/class-m-chart-admin.php:483
 #: components/class-m-chart-admin.php:607
 msgid "Invalid nonce"
-msgstr "Invalid nonce"
+msgstr "无效随机值"
 
 #: components/class-m-chart-admin.php:493
 msgid "No file to import"
-msgstr "No file to import"
+msgstr "没有导入的文件"
 
 #: components/class-m-chart-admin.php:500
 msgid "Only CSV files can be imported "
-msgstr "Only CSV files can be imported "
+msgstr "只有CSV文档可以导入"
 
 #: components/class-m-chart-admin.php:507
 msgid "File path not found"
-msgstr "File path not found"
+msgstr "找不到文件路径"
 
 #: components/class-m-chart-admin.php:513
 msgid "CSV file was empty"
-msgstr "CSV file was empty"
+msgstr " CSV文档是空的"
 
 #: components/class-m-chart-admin.php:612
 msgid "Invalid post"
-msgstr "Invalid post"
+msgstr "无效图表"
 
 #: components/class-m-chart-admin.php:617
 msgid "Permission error"
-msgstr "Permission error"
+msgstr "权限错误"
 
 #: components/class-m-chart-admin.php:622
 msgid "Invalid library"
-msgstr "Invalid library"
+msgstr "无效编码库"
 
 #: components/class-m-chart.php:111 components/class-m-chart.php:121
 msgid "Chart Units"
-msgstr "Chart Units"
+msgstr "图表单位"
 
 #: components/class-m-chart.php:112
 msgid "Chart Unit"
-msgstr "Chart Unit"
+msgstr "图表单位"
 
 #: components/class-m-chart.php:113
 msgid "Search Chart Units"
-msgstr "Search Chart Units"
+msgstr "搜索图表单位"
 
 #: components/class-m-chart.php:114
 msgid "All Chart Units"
-msgstr "All Chart Units"
+msgstr "所有图表单位"
 
 #: components/class-m-chart.php:115
 msgid "Parent Chart Unit"
-msgstr "Parent Chart Unit"
+msgstr "父图单位"
 
 #: components/class-m-chart.php:116
 msgid "Parent Chart Unit:"
-msgstr "Parent Chart Unit:"
+msgstr "父表单位 ︰"
 
 #: components/class-m-chart.php:117
 msgid "Edit Chart Unit"
-msgstr "Edit Chart Unit"
+msgstr "编辑图表单位"
 
 #: components/class-m-chart.php:118
 msgid "Update Chart Unit"
-msgstr "Update Chart Unit"
+msgstr "更新图表单位"
 
 #: components/class-m-chart.php:119
 msgid "Add New Chart Unit"
-msgstr "Add New Chart Unit"
+msgstr "添加新的图表单位"
 
 #: components/class-m-chart.php:120
 msgid "Chart Unit Name"
-msgstr "Chart Unit Name"
+msgstr "图表单位名称"
 
 #: components/class-m-chart.php:141 components/class-m-chart.php:142
 msgid "Add Chart"
-msgstr "Add Chart"
+msgstr "添加图表"
 
 #: components/class-m-chart.php:143
 msgid "Edit"
-msgstr "Edit"
+msgstr "编辑"
 
 #: components/class-m-chart.php:144
 msgid "Edit Chart"
-msgstr "Edit Chart"
+msgstr "编辑图表"
 
 #: components/class-m-chart.php:145
 msgid "New Chart"
-msgstr "New Chart"
+msgstr "添加新的图表"
 
 #: components/class-m-chart.php:146
 #: components/templates/highcharts-settings.php:170
 msgid "View"
-msgstr "View"
+msgstr "查看"
 
 #: components/class-m-chart.php:147
 msgid "View Chart"
-msgstr "View Chart"
+msgstr "查看图表"
 
 #: components/class-m-chart.php:148
 msgid "Search Charts"
-msgstr "Search Charts"
+msgstr "搜索图表"
 
 #: components/class-m-chart.php:149
 msgid "No Charts found"
-msgstr "No Charts found"
+msgstr "没找到图表"
 
 #: components/class-m-chart.php:150
 msgid "No Charts found in the Trash"
-msgstr "No Charts found in the Trash"
+msgstr "没有在回收站找到图表"
 
 #. Description of the plugin/theme
 #: components/class-m-chart.php:161
 msgid "Manage data sets and display them as charts in WordPress."
-msgstr "Manage data sets and display them as charts in WordPress."
+msgstr "管理数据集并将它们在 WordPress 中显示为图表。"
 
 #: components/templates/csv-meta-box.php:2
 msgid "Export CSV"
-msgstr "Export CSV"
+msgstr "输出CSV"
 
 #: components/templates/csv-meta-box.php:2
 msgid "Export"
-msgstr "Export"
+msgstr "导出"
 
 #: components/templates/csv-meta-box.php:6
 msgid "Select CSV File"
-msgstr "Select CSV File"
+msgstr "选择CSV文件"
 
 #: components/templates/csv-meta-box.php:6
 msgid "Select File"
-msgstr "Select File"
+msgstr "选择文件"
 
 #: components/templates/csv-meta-box.php:7
 msgid "Import"
-msgstr "Import"
+msgstr "导入"
 
 #: components/templates/csv-meta-box.php:8
 msgid "You can only import CSV files"
-msgstr "You can only import CSV files"
+msgstr "只可以导入CSV格式的文档"
 
 #: components/templates/csv-meta-box.php:10
 msgid "Importing file"
-msgstr "Importing file"
+msgstr "正在導入文件"
 
 #: components/templates/csv-meta-box.php:12
 msgid "Cancel Import"
-msgstr "Cancel Import"
+msgstr "取消导入"
 
 #: components/templates/csv-meta-box.php:14
 msgid "Importing this file will replace all existing data"
-msgstr "Importing this file will replace all existing data"
+msgstr "导入此文档将替换现有数据"
 
 #: components/templates/highcharts-settings.php:3
 msgid "Line"
-msgstr "Line"
+msgstr "线型图"
 
 #: components/templates/highcharts-settings.php:4
 msgid "Spline"
-msgstr "Spline"
+msgstr "波浪型图"
 
 #: components/templates/highcharts-settings.php:5
 msgid "Area"
-msgstr "Area"
+msgstr "面积型图"
 
 #: components/templates/highcharts-settings.php:6
 msgid "Column"
-msgstr "Column"
+msgstr "柱型图"
 
 #: components/templates/highcharts-settings.php:7
 msgid "Bar"
-msgstr "Bar"
+msgstr "栏状图"
 
 #: components/templates/highcharts-settings.php:8
 msgid "Pie"
-msgstr "Pie"
+msgstr "扇形图"
 
 #: components/templates/highcharts-settings.php:12
 msgid "Columns"
-msgstr "Columns"
+msgstr "列"
 
 #: components/templates/highcharts-settings.php:13
 msgid "Rows"
-msgstr "Rows"
+msgstr "行"
 
 #: components/templates/highcharts-settings.php:20
 msgid "Type"
-msgstr "Type"
+msgstr "类型"
 
 #: components/templates/highcharts-settings.php:34
 msgid "Theme"
-msgstr "Theme"
+msgstr "主题"
 
 #: components/templates/highcharts-settings.php:48
 msgid "Height"
-msgstr "Height"
+msgstr "高度"
 
 #: components/templates/highcharts-settings.php:54
 msgid "Parse data in"
-msgstr "Parse data in"
+msgstr "排列数据的方式 （行／列）"
 
 #: components/templates/highcharts-settings.php:71
 msgid "Show labels"
-msgstr "Show labels"
+msgstr "显示标签"
 
 #: components/templates/highcharts-settings.php:78
 msgid "Show legend"
-msgstr "Show legend"
+msgstr "显示图例"
 
 #: components/templates/highcharts-settings.php:84
 msgid "Vertical axis title"
-msgstr "Vertical axis title"
+msgstr "纵坐标轴标题"
 
 #: components/templates/highcharts-settings.php:90
 #: components/templates/highcharts-settings.php:127
 msgid "N/A"
-msgstr "N/A"
+msgstr "不适用"
 
 #: components/templates/highcharts-settings.php:115
 msgid "Force vertical axis minimum to zero"
-msgstr "Force vertical axis minimum to zero"
+msgstr "制定纵坐标洲最小值为0"
 
 #: components/templates/highcharts-settings.php:121
 msgid "Horizontal axis title"
-msgstr "Horizontal axis title"
+msgstr "横坐标轴标题"
 
 #: components/templates/highcharts-settings.php:150
 msgid "Source"
-msgstr "Source"
+msgstr "数据来源"
 
 #: components/templates/highcharts-settings.php:154
 msgid "Source URL"
-msgstr "Source URL"
+msgstr "数据来源网址"
 
 #: components/templates/highcharts-settings.php:161
 msgid "Shortcode"
-msgstr "Shortcode"
+msgstr "短代码"
 
 #: components/templates/highcharts-settings.php:165
 msgid "Image"
-msgstr "Image"
+msgstr "图像"
 
 #: components/templates/highcharts-settings.php:173
 msgid "Image generation is disabled"
-msgstr "Image generation is disabled"
+msgstr "图像生成功能关闭"
 
 #: components/templates/highcharts-settings.php:175
 msgid "Save/Update this post to generate the image version"
-msgstr "Save/Update this post to generate the image version"
+msgstr "以图像文档格式储存／上传此图表"
 
 #: components/templates/m-chart-settings.php:8
 #: components/templates/m-chart-settings.php:12
 msgid "Performance"
-msgstr "Performance"
+msgstr "性能"
 
 #: components/templates/m-chart-settings.php:16
 msgid "Default"
-msgstr "Default"
+msgstr "默认"
 
 #: components/templates/m-chart-settings.php:17
 msgid "Provides all functionality"
-msgstr "Provides all functionality"
+msgstr "提供所有功能"
 
 #: components/templates/m-chart-settings.php:21
 msgid "No Images"
-msgstr "No Images"
+msgstr "无图像"
 
 #: components/templates/m-chart-settings.php:22
 msgid "No generation of chart images"
-msgstr "No generation of chart images"
+msgstr "没有生成图表图像"
 
 #: components/templates/m-chart-settings.php:26
 msgid "No Instant Preview"
-msgstr "No Instant Preview"
+msgstr "没有即时预览"
 
 #: components/templates/m-chart-settings.php:27
 msgid "No instant preview and no generation of chart images"
-msgstr "No instant preview and no generation of chart images"
+msgstr "没有即时预览和没有生成图表图像"
 
 #: components/templates/m-chart-settings.php:35
 msgid "Default Highcharts Theme"
-msgstr "Default Highcharts Theme"
+msgstr "默认的Highcharts 主题"
 
 #: components/templates/m-chart-settings.php:51
 msgid "See the M Chart documentation for more info on how to use themes:"
-msgstr "See the M Chart documentation for more info on how to use themes:"
+msgstr "有关如何使用主题，请参阅更多M Chart 说明 ︰"
 
 #: components/templates/m-chart-settings.php:59
 msgid "Save Changes"
-msgstr "Save Changes"
+msgstr "保存更改"
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
-msgstr "Enter subtitle here"
+msgstr "在此处输入子标题"
 
 #. Plugin Name of the plugin/theme
 msgid "M Chart"

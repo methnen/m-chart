@@ -366,6 +366,11 @@ class M_Chart_Highcharts {
 		return $value;
 	}
 
+	/**
+	 * Get all themes available from the various theme directories
+	 *
+	 * @return array an array of themes
+	 */
 	public function get_themes() {
 		$themes = array();
 
@@ -376,6 +381,13 @@ class M_Chart_Highcharts {
 		return $themes;
 	}
 
+	/**
+	 * Returns the theme options for a given theme
+	 *
+	 * @param string a theme slug
+	 *
+	 * @return string/boolean requested theme options or false if they could not be found
+	 */
 	private function get_theme( $slug ) {
 		foreach ( $this->theme_directories as $directory ) {
 			if ( ! $themes = $this->_get_themes_readdir( $directory ) ) {
@@ -394,6 +406,13 @@ class M_Chart_Highcharts {
 		return false;
 	}
 
+	/**
+	 * Get all themes from a given directory
+	 *
+	 * @param string a path to a server directory
+	 *
+	 * @return array an array of all the themes available in a given directory
+	 */
 	private function _get_themes_readdir( $theme_base ) {
 		// Sanity check to make sure we have a real directory
 		if ( ! is_dir( $theme_base ) ) {

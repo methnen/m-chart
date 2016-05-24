@@ -22,6 +22,7 @@ class M_Chart_Admin {
 		add_action( 'wp_ajax_m_chart_export_csv', array( $this, 'ajax_export_csv' ) );
 		add_action( 'wp_ajax_m_chart_get_chart_args', array( $this, 'ajax_get_chart_args' ) );
 		add_action( 'wp_ajax_m_chart_import_csv', array( $this, 'ajax_import_csv' ) );
+		add_action( 'edit_form_before_permalink', array( $this, 'edit_form_before_permalink' ) );
 	}
 
 	/**
@@ -80,6 +81,10 @@ class M_Chart_Admin {
 	 * Check for and save M Chart settings
 	 */
 	public function save_settings() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		// Check the nonce
 		if (
 			   ! isset( $_POST[ m_chart()->slug ] )
@@ -270,6 +275,7 @@ class M_Chart_Admin {
 		$chart     = m_chart()->get_chart( $post->ID );
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 		$image     = m_chart()->get_chart_image( $post->ID );
+		$settings  = m_chart()->get_settings();
 
 		require_once __DIR__ . '/templates/chart-meta-box.php';
 	}
@@ -308,6 +314,21 @@ class M_Chart_Admin {
 	}
 
 	/**
+	 * Inserts a subtitle field under the title field on the chart edit form
+	 *
+	 * @param object the WP post object as returned by the metabox API
+	 */
+	public function edit_form_before_permalink( $post ) {
+		if ( m_chart()->slug != $post->post_type ) {
+			return;
+		}
+
+		$post_meta = m_chart()->get_post_meta( $post->ID );
+
+		require_once __DIR__ . '/templates/subtitle-field.php';
+	}
+
+	/**
 	 * Hook to save_post action and save chart related post meta
 	 *
 	 * @param int the WP post ID of the post being saved
@@ -327,6 +348,11 @@ class M_Chart_Admin {
 
 		// Don't run on post revisions (almost always happens just before the real post is saved)
 		if ( wp_is_post_revision( $post->ID ) ) {
+			return;
+		}
+
+		// Make sure we've got some actual M Chart related data in the $_POST array
+		if ( ! isset( $_POST[ m_chart()->slug ] ) ) {
 			return;
 		}
 
