@@ -330,6 +330,11 @@ class M_Chart_Admin {
 			return;
 		}
 
+		// Make sure we've got some actual M Chart related data in the $_POST array
+		if ( ! isset( $_POST[ m_chart()->slug ] ) ) {
+			return;
+		}
+
 		// Check the nonce
 		if ( ! wp_verify_nonce( $_POST[ m_chart()->slug ]['nonce'], m_chart()->slug . '-save-post' ) ) {
 			return;
