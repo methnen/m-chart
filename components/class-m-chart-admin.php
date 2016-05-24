@@ -275,6 +275,7 @@ class M_Chart_Admin {
 		$chart     = m_chart()->get_chart( $post->ID );
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 		$image     = m_chart()->get_chart_image( $post->ID );
+		$settings  = m_chart()->get_settings();
 
 		require_once __DIR__ . '/templates/chart-meta-box.php';
 	}
