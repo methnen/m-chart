@@ -4,6 +4,10 @@
   display: none;
 }
 
+#m-chart-subtitle {
+  margin-left: 0;
+}
+
 #m-chart-spreadsheet {
   border-left: none;
 }

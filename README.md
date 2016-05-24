@@ -2,8 +2,8 @@
 **Contributors:** methnen  
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 4.5.1  
-**Stable tag:** 1.2.1  
+**Tested up to:** 4.5.2  
+**Stable tag:** 1.3  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -15,6 +15,8 @@ Allows you to manage data sets via a spreadsheet interface and present that data
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
+
+**Note:** PHP version 5.3.6 or greater is required to run this plugin.
 
 ## Installation ##
 
@@ -29,6 +31,14 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.3 ###
+
+* Added a subtitle field which is used in the Highcharts subtitle attribute
+* Noting that PHP >= 5.3.6 is required in the readme
+* Also checking manage_options permission when saving settings
+* Added a Simplified Chinese (zh_CN) translation
+* The Color Blind Safe theme is now based on a palette by [Martin Krzywinski](http://mkweb.bcgsc.ca/biovis2012/color-blindness-palette.png)
+
 ### 1.2.1 ###
 
 * Now using manage_options permissions for the settings panel
@@ -38,7 +48,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added [themes](https://github.com/methnen/m-chart/wiki/Themes)
 	* Default themes:
 		* Highcharts 4.x (Default)
-		* Color Blind Safe ([Looking for suggestions on improvements](https://github.com/methnen/m-chart/issues))
+		* Color Blind Safe
 		* Highcharts 3.x
 		* Highcharts 2.x
 * Added a settings panel
