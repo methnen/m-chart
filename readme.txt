@@ -31,7 +31,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.3.1 =
 
-* Upped the chart height limit to 1500
+* Upped the chart height limit to 1500px
 * Fixed an issue where notice errors were causing syntax errors in the Javascript when PHP errors are sent to screen
 
 = 1.3 =
