@@ -51,6 +51,10 @@ class M_Chart_Parse {
 	public function parse_value_labels() {
 		$this->value_labels = array();
 
+		if ( 'none' == $this->value_labels_position ) {
+			return $this->value_labels;
+		}
+
 		if ( 'first_column' == $this->value_labels_position ) {
 			foreach ( (array) $this->data as $columns ) {
 				if ( '' != trim( $columns[0] ) ) {
@@ -88,6 +92,10 @@ class M_Chart_Parse {
 	 * @return string the position of the labels in the given data set
 	 */
 	public function get_value_labels_position() {
+		if ( ! isset( $this->data[0][0] ) && ! isset( $this->data[1][0] ) ) {
+			return 'none';
+		}
+
 		if ( '' == $this->data[0][0] ) {
 			return 'both';
 		}
@@ -261,7 +269,7 @@ class M_Chart_Parse {
 				}
 			}
 		}
-		else
+		elseif( isset( $this->data[1] ) )
 		{
 			foreach ( $this->data[1] as $column ) {
 				$data_point = $this->clean_data_point( $column );
