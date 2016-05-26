@@ -3,7 +3,7 @@
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.5.2  
-**Stable tag:** 1.3  
+**Stable tag:** 1.3.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -30,6 +30,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.3.1 ###
+
+* Upped the chart height limit to 1500px
+* Fixed an issue where notice errors were causing syntax errors in the Javascript when PHP errors are sent to screen
 
 ### 1.3 ###
 

@@ -184,7 +184,6 @@
 
 			request.done( function( response ) {
 				if ( false == response.success ) {
-					console.log(response)
 					$import_error.text( response.data );
 					$import_error.removeClass( 'hide' );
 
@@ -321,7 +320,6 @@
 		});
 
 		this.request.done( function( response ) {
-			console.log( response );
 			if ( true !== response.success ) {
 				return false;
 			}
