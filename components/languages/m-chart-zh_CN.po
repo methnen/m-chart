@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "POT-Creation-Date: 2016-05-18 16:07-0700\n"
-"PO-Revision-Date: 2016-05-22 14:31-0700\n"
+"PO-Revision-Date: 2016-05-27 14:13-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -186,7 +186,7 @@ msgstr "图表"
 #: components/class-m-chart-admin.php:64
 #: components/templates/m-chart-settings.php:2
 msgid "M Chart Settings"
-msgstr "M图表设置"
+msgstr "M Chart 设置"
 
 #: components/class-m-chart-admin.php:65
 msgid "Settings"
