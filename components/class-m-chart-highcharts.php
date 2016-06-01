@@ -190,7 +190,7 @@ class M_Chart_Highcharts {
 	 */
 	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
 		// Refresh arg cache
-		$this->args = $this->get_chart_default_args;
+		$this->args = m_chart()->get_chart_default_args;
 		$this->post = (object) array(
 			'ID'         => $post_id,
 		);
