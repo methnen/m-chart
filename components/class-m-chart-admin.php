@@ -634,10 +634,8 @@ class M_Chart_Admin {
 
 		// Set these values so that get_chart_args has them already available before we call it
 		$library->args = m_chart()->get_chart_default_args;
-		$library->post = (object) array(
-			'ID'         => $post->ID,
-			'post_title' => sanitize_text_field( $_POST['title'] ),
-		);
+		$library->post = $post;
+		$library->post->post_title = sanitize_text_field( $_POST['title'] );
 
 		// validate_post_meta returns only valid post meta values and does data validation on each item
 		$library->post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] );

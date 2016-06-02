@@ -141,8 +141,14 @@ class M_Chart_Highcharts {
 		}
 
 		// Forcing a minimum value of 0 prevents the built in fudging which sometimes looks weird
-		if ( $this->post_meta['y_min'] ) {
-			$chart_args['yAxis']['min'] = 0;
+		if (
+			   $this->post_meta['y_min']
+			&& (
+				   'line' == $this->post_meta['type']
+				|| 'spline' == $this->post_meta['type']
+			)
+		) {
+			$chart_args['yAxis']['min'] = $this->post_meta['y_min_value'];
 		}
 
 		// The x axis values need to be set or else you end up with a single notch :P
@@ -191,9 +197,8 @@ class M_Chart_Highcharts {
 	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
 		// Refresh arg cache
 		$this->args = m_chart()->get_chart_default_args;
-		$this->post = (object) array(
-			'ID'         => $post_id,
-		);
+		$this->post = get_post( $post_id );
+
 		$this->post_meta = $parsed_meta;
 
 		$this->get_chart_args( $post_id, array(), true );
