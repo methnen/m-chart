@@ -12,6 +12,7 @@
 		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
 		this.$title_input    = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
 		this.$subtitle_input = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
+		this.$y_min_value    = $( document.getElementById( 'm-chart-y-min-value' ) );
 
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
@@ -40,6 +41,15 @@
 		if ( 'default' === this.performance ) {
 			$( '.m-chart' ).on( 'render_done', this.generate_image_from_chart );
 		}
+
+		// Watch for clicks on the y min toggle
+		$( document.getElementById( 'm-chart-y-min' ) ).on( 'click', function () {
+			if ( $( this ).attr( 'checked' ) ) {
+				m_chart_admin.$y_min_value.attr( 'disabled', false ).focus();
+			} else {
+				m_chart_admin.$y_min_value.attr( 'disabled', true );
+			}
+		});
 
 		// Watch for clicks on the shortcode input
 		$( document.getElementById( 'm-chart-shortcode' ) ).on( 'click', function () {

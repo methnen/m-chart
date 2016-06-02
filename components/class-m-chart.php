@@ -5,21 +5,22 @@ class M_Chart {
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
-		'library'    => 'highcharts',
-		'type'       => 'line',
-		'parse_in'   => 'rows',
-		'labels'     => true,
-		'subtitle'   => '',
-		'y_title'    => '',
-		'y_units'    => '',
-		'y_min'      => false,
-		'x_title'    => '',
-		'x_units'    => '',
-		'height'     => 400,
-		'legend'     => true,
-		'source'     => '',
-		'source_url' => '',
-		'data'       => array(),
+		'library'     => 'highcharts',
+		'type'        => 'line',
+		'parse_in'    => 'rows',
+		'labels'      => true,
+		'subtitle'    => '',
+		'y_title'     => '',
+		'y_units'     => '',
+		'y_min'       => false,
+		'y_min_value' => 0,
+		'x_title'     => '',
+		'x_units'     => '',
+		'height'      => 400,
+		'legend'      => true,
+		'source'      => '',
+		'source_url'  => '',
+		'data'        => array(),
 	);
 	public $get_chart_default_args = array(
 		'img'   => 'no',
@@ -230,6 +231,11 @@ class M_Chart {
 			$post_meta['subtitle'] = '';
 		}
 
+		// If there's no y min value set we'll set it to 0
+		if ( ! isset( $post_meta['y_min_value'] ) ) {
+			$post_meta['y_min_value'] = 0;
+		}
+
 		if ( $field && isset( $post_meta[ $field ] ) ) {
 			return $post_meta[ $field ];
 		}
@@ -298,6 +304,8 @@ class M_Chart {
 					} else if ( $chart_meta[ $field ] < 300 ) {
 						$chart_meta[ $field ] = 300;
 					}
+				} else if ( 'y_min_value' == $field ) {
+					$chart_meta[ $field ] = floatval( $meta[ $field ] );
 				} else {
 					$chart_meta[ $field ] = wp_filter_nohtml_kses( $meta[ $field ] );
 				}

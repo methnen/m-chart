@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2016-05-18 16:07-0700\n"
-"PO-Revision-Date: 2016-05-18 16:07-0700\n"
+"POT-Creation-Date: 2016-06-01 17:14-0700\n"
+"PO-Revision-Date: 2016-06-01 17:15-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -165,8 +165,8 @@ msgid "Sales"
 msgstr "Sales"
 
 #: components/array-default-unit-terms.php:49
-#: components/templates/highcharts-settings.php:88
-#: components/templates/highcharts-settings.php:125
+#: components/templates/highcharts-settings.php:93
+#: components/templates/highcharts-settings.php:131
 msgid "Units"
 msgstr "Units"
 
@@ -174,12 +174,12 @@ msgstr "Units"
 msgid "CPM"
 msgstr "CPM"
 
-#: components/class-m-chart-admin.php:41 components/class-m-chart.php:139
+#: components/class-m-chart-admin.php:41 components/class-m-chart.php:140
 msgid "Charts"
 msgstr "Charts"
 
 #: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:233
-#: components/class-m-chart.php:140
+#: components/class-m-chart.php:141
 msgid "Chart"
 msgstr "Chart"
 
@@ -204,123 +204,123 @@ msgstr "Data"
 msgid "CSV Import/Export"
 msgstr "CSV Import/Export"
 
-#: components/class-m-chart-admin.php:478
-#: components/class-m-chart-admin.php:488
+#: components/class-m-chart-admin.php:484
+#: components/class-m-chart-admin.php:494
 msgid "Wrong post type"
 msgstr "Wrong post type"
 
-#: components/class-m-chart-admin.php:483
-#: components/class-m-chart-admin.php:607
+#: components/class-m-chart-admin.php:489
+#: components/class-m-chart-admin.php:613
 msgid "Invalid nonce"
 msgstr "Invalid nonce"
 
-#: components/class-m-chart-admin.php:493
+#: components/class-m-chart-admin.php:499
 msgid "No file to import"
 msgstr "No file to import"
 
-#: components/class-m-chart-admin.php:500
+#: components/class-m-chart-admin.php:506
 msgid "Only CSV files can be imported "
 msgstr "Only CSV files can be imported "
 
-#: components/class-m-chart-admin.php:507
+#: components/class-m-chart-admin.php:513
 msgid "File path not found"
 msgstr "File path not found"
 
-#: components/class-m-chart-admin.php:513
+#: components/class-m-chart-admin.php:519
 msgid "CSV file was empty"
 msgstr "CSV file was empty"
 
-#: components/class-m-chart-admin.php:612
+#: components/class-m-chart-admin.php:618
 msgid "Invalid post"
 msgstr "Invalid post"
 
-#: components/class-m-chart-admin.php:617
+#: components/class-m-chart-admin.php:623
 msgid "Permission error"
 msgstr "Permission error"
 
-#: components/class-m-chart-admin.php:622
+#: components/class-m-chart-admin.php:628
 msgid "Invalid library"
 msgstr "Invalid library"
 
-#: components/class-m-chart.php:111 components/class-m-chart.php:121
+#: components/class-m-chart.php:112 components/class-m-chart.php:122
 msgid "Chart Units"
 msgstr "Chart Units"
 
-#: components/class-m-chart.php:112
+#: components/class-m-chart.php:113
 msgid "Chart Unit"
 msgstr "Chart Unit"
 
-#: components/class-m-chart.php:113
+#: components/class-m-chart.php:114
 msgid "Search Chart Units"
 msgstr "Search Chart Units"
 
-#: components/class-m-chart.php:114
+#: components/class-m-chart.php:115
 msgid "All Chart Units"
 msgstr "All Chart Units"
 
-#: components/class-m-chart.php:115
+#: components/class-m-chart.php:116
 msgid "Parent Chart Unit"
 msgstr "Parent Chart Unit"
 
-#: components/class-m-chart.php:116
+#: components/class-m-chart.php:117
 msgid "Parent Chart Unit:"
 msgstr "Parent Chart Unit:"
 
-#: components/class-m-chart.php:117
+#: components/class-m-chart.php:118
 msgid "Edit Chart Unit"
 msgstr "Edit Chart Unit"
 
-#: components/class-m-chart.php:118
+#: components/class-m-chart.php:119
 msgid "Update Chart Unit"
 msgstr "Update Chart Unit"
 
-#: components/class-m-chart.php:119
+#: components/class-m-chart.php:120
 msgid "Add New Chart Unit"
 msgstr "Add New Chart Unit"
 
-#: components/class-m-chart.php:120
+#: components/class-m-chart.php:121
 msgid "Chart Unit Name"
 msgstr "Chart Unit Name"
 
-#: components/class-m-chart.php:141 components/class-m-chart.php:142
+#: components/class-m-chart.php:142 components/class-m-chart.php:143
 msgid "Add Chart"
 msgstr "Add Chart"
 
-#: components/class-m-chart.php:143
+#: components/class-m-chart.php:144
 msgid "Edit"
 msgstr "Edit"
 
-#: components/class-m-chart.php:144
+#: components/class-m-chart.php:145
 msgid "Edit Chart"
 msgstr "Edit Chart"
 
-#: components/class-m-chart.php:145
+#: components/class-m-chart.php:146
 msgid "New Chart"
 msgstr "New Chart"
 
-#: components/class-m-chart.php:146
-#: components/templates/highcharts-settings.php:170
+#: components/class-m-chart.php:147
+#: components/templates/highcharts-settings.php:176
 msgid "View"
 msgstr "View"
 
-#: components/class-m-chart.php:147
+#: components/class-m-chart.php:148
 msgid "View Chart"
 msgstr "View Chart"
 
-#: components/class-m-chart.php:148
+#: components/class-m-chart.php:149
 msgid "Search Charts"
 msgstr "Search Charts"
 
-#: components/class-m-chart.php:149
+#: components/class-m-chart.php:150
 msgid "No Charts found"
 msgstr "No Charts found"
 
-#: components/class-m-chart.php:150
+#: components/class-m-chart.php:151
 msgid "No Charts found in the Trash"
 msgstr "No Charts found in the Trash"
 
 #. Description of the plugin/theme
-#: components/class-m-chart.php:161
+#: components/class-m-chart.php:162
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "Manage data sets and display them as charts in WordPress."
 
@@ -392,68 +392,68 @@ msgstr "Columns"
 msgid "Rows"
 msgstr "Rows"
 
-#: components/templates/highcharts-settings.php:20
+#: components/templates/highcharts-settings.php:25
 msgid "Type"
 msgstr "Type"
 
-#: components/templates/highcharts-settings.php:34
+#: components/templates/highcharts-settings.php:39
 msgid "Theme"
 msgstr "Theme"
 
-#: components/templates/highcharts-settings.php:48
+#: components/templates/highcharts-settings.php:53
 msgid "Height"
 msgstr "Height"
 
-#: components/templates/highcharts-settings.php:54
+#: components/templates/highcharts-settings.php:59
 msgid "Parse data in"
 msgstr "Parse data in"
 
-#: components/templates/highcharts-settings.php:71
+#: components/templates/highcharts-settings.php:76
 msgid "Show labels"
 msgstr "Show labels"
 
-#: components/templates/highcharts-settings.php:78
+#: components/templates/highcharts-settings.php:83
 msgid "Show legend"
 msgstr "Show legend"
 
-#: components/templates/highcharts-settings.php:84
+#: components/templates/highcharts-settings.php:89
 msgid "Vertical axis title"
 msgstr "Vertical axis title"
 
-#: components/templates/highcharts-settings.php:90
-#: components/templates/highcharts-settings.php:127
+#: components/templates/highcharts-settings.php:95
+#: components/templates/highcharts-settings.php:133
 msgid "N/A"
 msgstr "N/A"
 
-#: components/templates/highcharts-settings.php:115
-msgid "Force vertical axis minimum to zero"
-msgstr "Force vertical axis minimum to zero"
+#: components/templates/highcharts-settings.php:120
+msgid "Force vertical axis minimum: "
+msgstr "Force vertical axis minimum: "
 
-#: components/templates/highcharts-settings.php:121
+#: components/templates/highcharts-settings.php:127
 msgid "Horizontal axis title"
 msgstr "Horizontal axis title"
 
-#: components/templates/highcharts-settings.php:150
+#: components/templates/highcharts-settings.php:156
 msgid "Source"
 msgstr "Source"
 
-#: components/templates/highcharts-settings.php:154
+#: components/templates/highcharts-settings.php:160
 msgid "Source URL"
 msgstr "Source URL"
 
-#: components/templates/highcharts-settings.php:161
+#: components/templates/highcharts-settings.php:167
 msgid "Shortcode"
 msgstr "Shortcode"
 
-#: components/templates/highcharts-settings.php:165
+#: components/templates/highcharts-settings.php:171
 msgid "Image"
 msgstr "Image"
 
-#: components/templates/highcharts-settings.php:173
+#: components/templates/highcharts-settings.php:179
 msgid "Image generation is disabled"
 msgstr "Image generation is disabled"
 
-#: components/templates/highcharts-settings.php:175
+#: components/templates/highcharts-settings.php:181
 msgid "Save/Update this post to generate the image version"
 msgstr "Save/Update this post to generate the image version"
 
@@ -517,3 +517,6 @@ msgstr "Jamie Poitra"
 #. Author URI of the plugin/theme
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
+
+#~ msgid "Force vertical axis minimum to zero"
+#~ msgstr "Force vertical axis minimum to zero"

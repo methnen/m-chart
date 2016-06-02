@@ -3,7 +3,7 @@
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.5.2  
-**Stable tag:** 1.3.2  
+**Stable tag:** 1.4  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -22,14 +22,24 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 1. Put the m-chart directory into your plugins directory
 2. Click 'Activate' in the Plugins admin panel
+3. Adjust the M Chart Settings to your preference
+	- WordPress Admin -> Charts -> Settings
 
 ## Screenshots ##
 
 ### 1. M Chart UI ###
 ![M Chart UI](https://methnen.com/misc/m-chart/screenshot-1.png)
 
+### 2. M Chart Settings ###
+![M Chart Settings](https://methnen.com/misc/m-chart/screenshot-2.png)
+
 
 ## Changelog ##
+
+### 1.4 ###
+
+* Added [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
+* Fixed an issue where a notice error could occur when chart caches are being refreshed
 
 ### 1.3.2 ###
 
