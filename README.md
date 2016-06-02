@@ -22,6 +22,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 1. Put the m-chart directory into your plugins directory
 2. Click 'Activate' in the Plugins admin panel
+3. Adjust the M Chart Settings to your preference
+	- WordPress Admin -> Charts -> Settings
 
 ## Screenshots ##
 
