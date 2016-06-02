@@ -13,6 +13,11 @@ $parse_option_names = array(
 	'rows'    => esc_html__( 'Rows', 'm-chart' ),
 );
 
+$disabled = ' disabled="disabled"';
+
+if ( true == $post_meta['y_min'] ) {
+	$disabled = '';
+}
 ?>
 <div class="settings">
 	<div class="row one">
@@ -112,8 +117,9 @@ $parse_option_names = array(
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'y_min' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>" value="1"<?php checked( $post_meta['y_min'], true ); ?>/>
-				<?php esc_html_e( 'Force vertical axis minimum to zero', 'm-chart' ) ?>
+				<?php esc_html_e( 'Force vertical axis minimum: ', 'm-chart' ) ?>
 			</label>
+			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>"<?php echo $disabled; ?> />
 		</p>
 	</div>
 	<div class="row five horizontal-axis">

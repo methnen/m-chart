@@ -69,6 +69,10 @@
 #m-chart .inside .settings .row.four p {
   margin: 0;
 }
+#m-chart .inside .settings .row.four p label {
+  display: inline-block;
+  height: 23px;
+}
 #m-chart .inside .settings .row.six p {
   float: right;
   width: 49%;

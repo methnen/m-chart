@@ -51,6 +51,11 @@
 				&.four {
 					p {
 						margin: 0;
+						
+						label {
+							display: inline-block;
+							height: 23px;
+						}
 					}
 				}
 

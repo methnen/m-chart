@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2016-05-18 16:07-0700\n"
-"PO-Revision-Date: 2016-05-27 14:13-0700\n"
+"POT-Creation-Date: 2016-06-01 17:14-0700\n"
+"PO-Revision-Date: 2016-06-01 17:16-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -165,8 +165,8 @@ msgid "Sales"
 msgstr "销售额"
 
 #: components/array-default-unit-terms.php:49
-#: components/templates/highcharts-settings.php:88
-#: components/templates/highcharts-settings.php:125
+#: components/templates/highcharts-settings.php:93
+#: components/templates/highcharts-settings.php:131
 msgid "Units"
 msgstr "单位"
 
@@ -174,12 +174,12 @@ msgstr "单位"
 msgid "CPM"
 msgstr "每千人价格"
 
-#: components/class-m-chart-admin.php:41 components/class-m-chart.php:139
+#: components/class-m-chart-admin.php:41 components/class-m-chart.php:140
 msgid "Charts"
 msgstr "图表"
 
 #: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:233
-#: components/class-m-chart.php:140
+#: components/class-m-chart.php:141
 msgid "Chart"
 msgstr "图表"
 
@@ -204,123 +204,123 @@ msgstr "数据"
 msgid "CSV Import/Export"
 msgstr "CSV 导入／导出"
 
-#: components/class-m-chart-admin.php:478
-#: components/class-m-chart-admin.php:488
+#: components/class-m-chart-admin.php:484
+#: components/class-m-chart-admin.php:494
 msgid "Wrong post type"
 msgstr "错误图表类型"
 
-#: components/class-m-chart-admin.php:483
-#: components/class-m-chart-admin.php:607
+#: components/class-m-chart-admin.php:489
+#: components/class-m-chart-admin.php:613
 msgid "Invalid nonce"
 msgstr "无效随机值"
 
-#: components/class-m-chart-admin.php:493
+#: components/class-m-chart-admin.php:499
 msgid "No file to import"
 msgstr "没有导入的文件"
 
-#: components/class-m-chart-admin.php:500
+#: components/class-m-chart-admin.php:506
 msgid "Only CSV files can be imported "
 msgstr "只有CSV文档可以导入"
 
-#: components/class-m-chart-admin.php:507
+#: components/class-m-chart-admin.php:513
 msgid "File path not found"
 msgstr "找不到文件路径"
 
-#: components/class-m-chart-admin.php:513
+#: components/class-m-chart-admin.php:519
 msgid "CSV file was empty"
 msgstr " CSV文档是空的"
 
-#: components/class-m-chart-admin.php:612
+#: components/class-m-chart-admin.php:618
 msgid "Invalid post"
 msgstr "无效图表"
 
-#: components/class-m-chart-admin.php:617
+#: components/class-m-chart-admin.php:623
 msgid "Permission error"
 msgstr "权限错误"
 
-#: components/class-m-chart-admin.php:622
+#: components/class-m-chart-admin.php:628
 msgid "Invalid library"
 msgstr "无效编码库"
 
-#: components/class-m-chart.php:111 components/class-m-chart.php:121
+#: components/class-m-chart.php:112 components/class-m-chart.php:122
 msgid "Chart Units"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:112
+#: components/class-m-chart.php:113
 msgid "Chart Unit"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:113
+#: components/class-m-chart.php:114
 msgid "Search Chart Units"
 msgstr "搜索图表单位"
 
-#: components/class-m-chart.php:114
+#: components/class-m-chart.php:115
 msgid "All Chart Units"
 msgstr "所有图表单位"
 
-#: components/class-m-chart.php:115
+#: components/class-m-chart.php:116
 msgid "Parent Chart Unit"
 msgstr "父图单位"
 
-#: components/class-m-chart.php:116
+#: components/class-m-chart.php:117
 msgid "Parent Chart Unit:"
 msgstr "父表单位 ︰"
 
-#: components/class-m-chart.php:117
+#: components/class-m-chart.php:118
 msgid "Edit Chart Unit"
 msgstr "编辑图表单位"
 
-#: components/class-m-chart.php:118
+#: components/class-m-chart.php:119
 msgid "Update Chart Unit"
 msgstr "更新图表单位"
 
-#: components/class-m-chart.php:119
+#: components/class-m-chart.php:120
 msgid "Add New Chart Unit"
 msgstr "添加新的图表单位"
 
-#: components/class-m-chart.php:120
+#: components/class-m-chart.php:121
 msgid "Chart Unit Name"
 msgstr "图表单位名称"
 
-#: components/class-m-chart.php:141 components/class-m-chart.php:142
+#: components/class-m-chart.php:142 components/class-m-chart.php:143
 msgid "Add Chart"
 msgstr "添加图表"
 
-#: components/class-m-chart.php:143
+#: components/class-m-chart.php:144
 msgid "Edit"
 msgstr "编辑"
 
-#: components/class-m-chart.php:144
+#: components/class-m-chart.php:145
 msgid "Edit Chart"
 msgstr "编辑图表"
 
-#: components/class-m-chart.php:145
+#: components/class-m-chart.php:146
 msgid "New Chart"
 msgstr "添加新的图表"
 
-#: components/class-m-chart.php:146
-#: components/templates/highcharts-settings.php:170
+#: components/class-m-chart.php:147
+#: components/templates/highcharts-settings.php:176
 msgid "View"
 msgstr "查看"
 
-#: components/class-m-chart.php:147
+#: components/class-m-chart.php:148
 msgid "View Chart"
 msgstr "查看图表"
 
-#: components/class-m-chart.php:148
+#: components/class-m-chart.php:149
 msgid "Search Charts"
 msgstr "搜索图表"
 
-#: components/class-m-chart.php:149
+#: components/class-m-chart.php:150
 msgid "No Charts found"
 msgstr "没找到图表"
 
-#: components/class-m-chart.php:150
+#: components/class-m-chart.php:151
 msgid "No Charts found in the Trash"
 msgstr "没有在回收站找到图表"
 
 #. Description of the plugin/theme
-#: components/class-m-chart.php:161
+#: components/class-m-chart.php:162
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "管理数据集并将它们在 WordPress 中显示为图表。"
 
@@ -392,68 +392,68 @@ msgstr "列"
 msgid "Rows"
 msgstr "行"
 
-#: components/templates/highcharts-settings.php:20
+#: components/templates/highcharts-settings.php:25
 msgid "Type"
 msgstr "类型"
 
-#: components/templates/highcharts-settings.php:34
+#: components/templates/highcharts-settings.php:39
 msgid "Theme"
 msgstr "主题"
 
-#: components/templates/highcharts-settings.php:48
+#: components/templates/highcharts-settings.php:53
 msgid "Height"
 msgstr "高度"
 
-#: components/templates/highcharts-settings.php:54
+#: components/templates/highcharts-settings.php:59
 msgid "Parse data in"
 msgstr "排列数据的方式 （行／列）"
 
-#: components/templates/highcharts-settings.php:71
+#: components/templates/highcharts-settings.php:76
 msgid "Show labels"
 msgstr "显示标签"
 
-#: components/templates/highcharts-settings.php:78
+#: components/templates/highcharts-settings.php:83
 msgid "Show legend"
 msgstr "显示图例"
 
-#: components/templates/highcharts-settings.php:84
+#: components/templates/highcharts-settings.php:89
 msgid "Vertical axis title"
 msgstr "纵坐标轴标题"
 
-#: components/templates/highcharts-settings.php:90
-#: components/templates/highcharts-settings.php:127
+#: components/templates/highcharts-settings.php:95
+#: components/templates/highcharts-settings.php:133
 msgid "N/A"
 msgstr "不适用"
 
-#: components/templates/highcharts-settings.php:115
-msgid "Force vertical axis minimum to zero"
-msgstr "制定纵坐标洲最小值为0"
+#: components/templates/highcharts-settings.php:120
+msgid "Force vertical axis minimum: "
+msgstr "制定纵坐标洲最小值为: "
 
-#: components/templates/highcharts-settings.php:121
+#: components/templates/highcharts-settings.php:127
 msgid "Horizontal axis title"
 msgstr "横坐标轴标题"
 
-#: components/templates/highcharts-settings.php:150
+#: components/templates/highcharts-settings.php:156
 msgid "Source"
 msgstr "数据来源"
 
-#: components/templates/highcharts-settings.php:154
+#: components/templates/highcharts-settings.php:160
 msgid "Source URL"
 msgstr "数据来源网址"
 
-#: components/templates/highcharts-settings.php:161
+#: components/templates/highcharts-settings.php:167
 msgid "Shortcode"
 msgstr "短代码"
 
-#: components/templates/highcharts-settings.php:165
+#: components/templates/highcharts-settings.php:171
 msgid "Image"
 msgstr "图像"
 
-#: components/templates/highcharts-settings.php:173
+#: components/templates/highcharts-settings.php:179
 msgid "Image generation is disabled"
 msgstr "图像生成功能关闭"
 
-#: components/templates/highcharts-settings.php:175
+#: components/templates/highcharts-settings.php:181
 msgid "Save/Update this post to generate the image version"
 msgstr "以图像文档格式储存／上传此图表"
 
@@ -517,3 +517,6 @@ msgstr "Jamie Poitra"
 #. Author URI of the plugin/theme
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
+
+#~ msgid "Force vertical axis minimum to zero"
+#~ msgstr "制定纵坐标洲最小值为0"
