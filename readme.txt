@@ -26,6 +26,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 == Screenshots ==
 
 1. M Chart UI
+2. M Chart Settings
 
 == Changelog ==
 
