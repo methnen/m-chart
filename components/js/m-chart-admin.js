@@ -335,8 +335,8 @@
 			}
 
 			// Update active chart args and then rerender the chart
-			window[ 'm_chart_highcharts_' + m_chart_admin.post_id ].chart_args = response.data;
-			window[ 'm_chart_highcharts_' + m_chart_admin.post_id ].render_chart();
+			window[ 'm_chart_highcharts_' + m_chart_admin.post_id + '_1' ].chart_args = response.data;
+			window[ 'm_chart_highcharts_' + m_chart_admin.post_id + '_1' ].render_chart();
 		});
 	};
 
