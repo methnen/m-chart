@@ -44,6 +44,7 @@ class M_Chart {
 	private $valid_libraries = array(
 		'highcharts',
 	);
+	public $instance = 1;
 
 	/**
 	 * Constructor
@@ -410,6 +411,7 @@ class M_Chart {
 
 		ob_start();
 		require __DIR__ . '/templates/' . $library . '-chart.php';
+		$this->instance++;
 		return ob_get_clean();
 	}
 

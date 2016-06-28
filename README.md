@@ -2,8 +2,8 @@
 **Contributors:** methnen  
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 4.5.2  
-**Stable tag:** 1.4  
+**Tested up to:** 4.5.3  
+**Stable tag:** 1.4.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.4.1 ###
+
+* You can now display the same chart more than once on a single page
 
 ### 1.4 ###
 
