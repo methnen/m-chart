@@ -452,8 +452,6 @@ class M_Chart {
 		ob_start();
 		require __DIR__ . '/templates/table.php';
 		return ob_get_clean();
-
-		print_r($post_meta); exit();
 	}
 
 	/**
