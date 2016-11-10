@@ -34,7 +34,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.5.1 =
 
-* Fix for image genreation due to changes in Highcharts 5.0
+* Fix for image generation due to changes in Highcharts 5.0
 
 = 1.5 =
 
