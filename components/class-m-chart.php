@@ -168,7 +168,7 @@ class M_Chart {
 				'taxonomies' => array(
 					'category',
 					'post_tag',
-					'm-chart-units',
+					$this->slug . '-units',
 				),
 			)
 		);
