@@ -38,6 +38,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Shortcode can now output a [HTML table](https://github.com/methnen/m-chart/wiki/Chart-shortcode#html-table) instead of a chart
 * Updated Handsontable to the latest stable version (0.29)
 * Updated Highcharts to the latest stable version (5.0.2)
+* Tweaked how taxonomies are assigned so we don't unintentionally inherit them from other plugins
 
 = 1.4.1 =
 

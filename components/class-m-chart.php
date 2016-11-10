@@ -130,9 +130,6 @@ class M_Chart {
 			)
 		);
 
-		// Get the public taxonomies so the custom post type can use them
-		$taxonomies = get_taxonomies( array( 'public' => true ) );
-
 		// Register the charts custom post type
 		register_post_type(
 			$this->slug,
@@ -168,7 +165,11 @@ class M_Chart {
 					'excerpt',
 					'comments',
 				),
-				'taxonomies' => $taxonomies,
+				'taxonomies' => array(
+					'category',
+					'post_tag',
+					'm-chart-units',
+				),
 			)
 		);
 
