@@ -133,11 +133,18 @@
 }
 /* line 98, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image .button {
-  height: 23px;
-  line-height: 20px;
+  height: 20px;
+  line-height: 18px;
   position: absolute;
   right: 1px;
   top: 23px;
+}
+@media screen and (max-width: 782px) {
+  /* line 107, ../sass/_chart-settings.scss */
+  #m-chart .inside .row.seven p.image .button {
+    height: 27px;
+    line-height: 14px;
+  }
 }
 
 /* line 4, ../sass/_global-mixins-and-variables.scss */

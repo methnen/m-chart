@@ -96,11 +96,18 @@
 						}
 
 						.button {
-							height: 23px;
-							line-height: 20px;
+							height: 20px;
+							line-height: 18px;
 							position: absolute;
 							right: 1px;
 							top: 23px;
+						}
+
+						@media screen and ( max-width:782px ) {
+							.button {
+								height: 27px;
+								line-height: 14px;
+							}
 						}
 					}
 				}

@@ -2,7 +2,7 @@
 **Contributors:** methnen  
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 4.5.3  
+**Tested up to:** 4.6.1  
 **Stable tag:** 1.4.1  
 **License:** MIT  
 
@@ -35,6 +35,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.5 ###
+
+* Added support for the [AMP plugin](https://wordpress.org/plugins/amp/)
+* Shortcode can now output a [HTML table](https://github.com/methnen/m-chart/wiki/Chart-shortcode#html-table) instead of a chart
+* Updated Handsontable to the latest stable version (0.29)
+* Updated Highcharts to the latest stable version (5.0.2)
 
 ### 1.4.1 ###
 
