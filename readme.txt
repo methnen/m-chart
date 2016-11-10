@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.6.1
-Stable tag: 1.4.1
+Stable tag: 1.5
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
