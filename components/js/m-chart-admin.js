@@ -279,6 +279,10 @@
 
 	// Refresh chart
 	m_chart_admin.refresh_chart = function() {
+		if ( 'no-preview' === m_chart_admin.performance ) {
+			return false;
+		}
+
 		m_chart_admin.refresh_counter++;
 
 		// Handsontable calls afterChange on the first render for some silly reason
@@ -335,6 +339,10 @@
 			// Update active chart args and then rerender the chart
 			window[ 'm_chart_highcharts_' + m_chart_admin.post_id + '_1' ].chart_args = response.data;
 			window[ 'm_chart_highcharts_' + m_chart_admin.post_id + '_1' ].render_chart();
+
+			if ( 'no-images' === m_chart_admin.performance ) {
+				m_chart_admin.form_submission( true );
+			}
 		});
 	};
 
