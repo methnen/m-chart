@@ -23,7 +23,7 @@ class M_Chart {
 		'data'        => array(),
 	);
 	public $get_chart_default_args = array(
-		'img'   => 'no',
+		'show'  => 'chart',
 		'width' => 'responsive',
 	);
 	public $parse_options = array(
@@ -130,9 +130,6 @@ class M_Chart {
 			)
 		);
 
-		// Get the public taxonomies so the custom post type can use them
-		$taxonomies = get_taxonomies( array( 'public' => true ) );
-
 		// Register the charts custom post type
 		register_post_type(
 			$this->slug,
@@ -168,7 +165,11 @@ class M_Chart {
 					'excerpt',
 					'comments',
 				),
-				'taxonomies' => $taxonomies,
+				'taxonomies' => array(
+					'category',
+					'post_tag',
+					$this->slug . '-units',
+				),
 			)
 		);
 
@@ -300,8 +301,8 @@ class M_Chart {
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );
 
-					if ( $chart_meta[ $field ] > 900 ) {
-						$chart_meta[ $field ] = 900;
+					if ( $chart_meta[ $field ] > 1500 ) {
+						$chart_meta[ $field ] = 1500;
 					} else if ( $chart_meta[ $field ] < 300 ) {
 						$chart_meta[ $field ] = 300;
 					}
@@ -376,11 +377,26 @@ class M_Chart {
 	 *
 	 * @return string HTML and Javascript needed to display a chart (or if appropriate an HTML image tag)
 	 */
-	public function get_chart( $post_id, $args = array() ) {
+	public function get_chart( $post_id = null, $args = array() ) {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		// Normalize historic usage of 'img' argument
+		if ( isset( $args['img'] ) && 'yes' == $args['img'] ) {
+			$args['show'] = 'image';
+			unset( $args['img'] );
+		}
+
 		$args = wp_parse_args( $args, $this->get_chart_default_args );
 
+		// If they want the table of data we'll return that
+		if ( 'table' == $args['show'] ) {
+			return $this->build_table( $post_id );
+		}
+
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 'yes' == $args['img'] || is_feed() || $this->is_shortcake ) {
+		if ( 'image' == $args['show'] || is_feed() || $this->is_shortcake || $this->is_amp_endpoint() ) {
 			$image = $this->get_chart_image( $post_id );
 
 			// Default behavior is to return the full size image but with the width/height values halved
@@ -390,11 +406,21 @@ class M_Chart {
 
 			$image = apply_filters( 'm_chart_get_chart_image_tag', $image, $post_id, $args );
 
-			ob_start();
-			?>
-			<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>" width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>" />
-			<?php
-			return ob_get_clean();
+			$classes = $this->slug . ' ' . $this->slug . '-' . $post_id;
+
+			if ( $this->is_amp_endpoint() ) {
+				ob_start();
+				?>
+				<amp-img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>" width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>" class="<?php echo esc_attr( $classes ); ?>"></amp-img>
+				<?php
+				return ob_get_clean();
+			} else {
+				ob_start();
+				?>
+				<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>" width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>" alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" class="<?php echo esc_attr( $classes ); ?>" />
+				<?php
+				return ob_get_clean();
+			}
 		}
 
 		$library = $this->get_post_meta( $post_id, 'library' );
@@ -412,6 +438,19 @@ class M_Chart {
 		ob_start();
 		require __DIR__ . '/templates/' . $library . '-chart.php';
 		$this->instance++;
+		return ob_get_clean();
+	}
+
+	public function build_table( $post_id ) {
+		$post = get_post( $post_id );
+		$post_meta = $this->get_post_meta( $post_id );
+
+		m_chart()->parse()->parse_data( $post_meta['data'], $post_meta['parse_in'] );
+
+		$classes = $this->slug . '-table ' . $this->slug . '-table-' . $post_id;
+
+		ob_start();
+		require __DIR__ . '/templates/table.php';
 		return ob_get_clean();
 	}
 
@@ -610,6 +649,19 @@ class M_Chart {
 		}
 
 		return true;
+	}
+
+	/**
+	 * If current page is an AMP page returns true
+	 *
+	 * @return bool
+	 */
+	public function is_amp_endpoint() {
+		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

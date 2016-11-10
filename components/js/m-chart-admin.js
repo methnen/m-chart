@@ -85,6 +85,7 @@
 			minSpareRows: 1,
 			minSpareCols: 1,
 			contextMenu:  true,
+			stretchH:     'all',
 			afterChange:  function() {
 				// If a value changes update the chart
 				m_chart_admin.refresh_chart();
