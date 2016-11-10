@@ -240,14 +240,11 @@
 	    svg = svg.replace( 'width="' + width + '"', 'width="' + ( width * 2 ) + '"' );
 	    svg = svg.replace( 'height="' + height + '"', 'height="' + ( height * 2 ) + '"' );
 
-		// Scale the SVG object
-		svg = svg.replace( '<svg ', '<svg transform="scale(2, 2)" ' );
-
 		// Create a Canvas object out of the SVG
 		var $canvas = $( '#m-chart-canvas-render-' + event.post_id );
 		m_chart_admin.canvas = $canvas.get( 0 );
 
-		canvg( m_chart_admin.canvas, svg );
+		canvg( m_chart_admin.canvas, svg, { scaleWidth: ( width * 2 ), scaleHeight: ( height * 2 ) } );
 
 		// Create Canvas context so we can play with it before saving
 		m_chart_admin.canvas_context = m_chart_admin.canvas.getContext( '2d' );
