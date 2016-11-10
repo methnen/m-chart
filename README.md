@@ -3,7 +3,7 @@
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.6.1  
-**Stable tag:** 1.5  
+**Stable tag:** 1.5.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.5.1 ###
+
+* Fix for image genreation due to changes in Highcharts 5.0
 
 ### 1.5 ###
 
