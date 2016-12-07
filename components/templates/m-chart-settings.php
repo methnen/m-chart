@@ -25,8 +25,18 @@
 								<input type="radio" name="<?php echo $this->get_field_name( 'performance' ); ?>" value="no-preview"<?php checked( $settings['performance'], 'no-preview' ); ?> />
 								<span><?php esc_html_e( 'No Instant Preview', 'm-chart' ); ?></span><br />
 								<span class="description"><?php esc_html_e( 'No instant preview and no generation of chart images', 'm-chart' ); ?></span>
-							</label><br />
+							</label>
 						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Embeds', 'm-chart' ); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="<?php echo $this->get_field_name( 'embeds' ); ?>" value="enabled"<?php checked( $settings['embeds'], 'enabled' ); ?> />
+							<span><?php esc_html_e( 'Enable iframe embeds', 'm-chart' ); ?></span><br />
+							<span class="description"><?php esc_html_e( 'Allow charts to be remotely embedded via iframes', 'm-chart' ); ?></span>
+						</label>
 					</td>
 				</tr>
 				<tr>

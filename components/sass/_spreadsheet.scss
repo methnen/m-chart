@@ -23,4 +23,150 @@
 		margin: 0;
 		padding: 0;
 	}
+
+	.nav-tab-wrapper {
+		border-left: 1px solid $wp-admin-meta-border-color;
+		border-top: 1px solid $wp-admin-meta-border-color;
+		max-height: 45px; //52px
+		overflow-x: scroll;
+		overflow-y: hidden;
+		padding-top: 7px;
+		white-space: nowrap;
+
+		&.hide {
+			display: none;
+		}
+
+		.add-sheet {
+			color: $wp-admin-inactive-icon-color;
+			float: left;
+			margin-bottom: 0;
+			margin-left: 7px;
+			text-decoration: none;
+
+			&:hover {
+				color: $wp-admin-black;
+			}
+
+			span {
+				line-height: 38px;
+
+				@media ( max-width:782px ) {
+					line-height: 46px;
+				}
+			}
+		}
+
+		.nav-tab {
+			display: inline-block;
+			float: none;
+
+			span {
+				color: $wp-admin-inactive-text-color;
+				margin-top: 3px;
+
+				@media ( max-width:782px ) {
+					margin-top: 7px;
+				}
+
+				&:hover {
+					color: $wp-admin-red;
+				}
+			}
+
+			input {
+				min-width: 30px;
+
+				&[disabled="disabled"] {
+					background: transparent;
+					border: 1px solid transparent;
+					box-shadow: none;
+					color: $wp-admin-inactive-text-color;
+					-webkit-text-fill-color: $wp-admin-inactive-text-color;
+				}
+			}
+
+			&.nav-tab-active {
+				span {
+					color: $wp-admin-black;
+
+					&:hover {
+						color: $wp-admin-red;
+					}
+				}
+
+				input {
+					&[disabled="disabled"] {
+						color: $wp-admin-black;
+						-webkit-text-fill-color: $wp-admin-black;
+					}
+				}
+			}
+
+			&:last-of-type {
+				margin-right: 10px;
+			}
+		}
+	}
+
+	#m-chart-csv {
+		@include clearfix;
+		background-color: $wp-admin-dark-background-color;
+		border-bottom: 1px solid $wp-admin-meta-border-color;
+		border-left: 1px solid $wp-admin-meta-border-color;
+		border-right: 1px solid $wp-admin-meta-border-color;
+		border-top: 1px solid $wp-admin-border-color;
+		padding: 15px 10px 10px;
+
+		&::after {
+			clear: both;
+	    }
+
+		.button {
+			margin-top: 6px;
+
+			&.select {
+				margin-right: 10px;
+			}
+
+			&.import {
+				float: left;
+				margin-right: 10px;
+			}
+		}
+
+		div {
+			&.import {
+				margin-right: 65px;
+			}
+
+			&.export {
+				float: right;
+			}
+		}
+
+		.warning,
+		.error {
+			color: $wp-admin-error-color;
+		}
+
+		.error,
+		.in-progress {
+			margin: 10px 0 0 5px;
+
+			&:not( .hide ) {
+				display: inline-block;
+			}
+		}
+
+		a {
+			&.dashicons {
+				color: $wp-admin-icon-color;
+
+				&:hover {
+					color: $wp-admin-error-color;
+				}
+			}
+		}
+	}
 }

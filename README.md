@@ -3,7 +3,7 @@
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.6.1  
-**Stable tag:** 1.5.2  
+**Stable tag:** 1.6  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.6 ###
+
+* Added support for [scatter](https://github.com/methnen/m-chart/wiki/Scatter-chart) and [bubble](https://github.com/methnen/m-chart/wiki/Bubble-chart) charts
+* Charts can now be loaded via iFrames
+* Switched to internal array_merge method in the theme code so we can recursively merge settings
 
 ### 1.5.2 ###
 

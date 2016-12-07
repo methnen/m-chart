@@ -6,18 +6,21 @@
 		this.post_id = $( document.getElementById( 'post_ID' ) ).attr( 'value' );
 		this.nonce   = $( 'input[name="m-chart[nonce]"]' ).attr( 'value' );
 
-		this.create_spreadsheet();
+		this.build_spreadsheets();
 
 		// Store the setting inputs and title input for use later
-		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
-		this.$title_input    = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
-		this.$subtitle_input = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
-		this.$y_min_value    = $( document.getElementById( 'm-chart-y-min-value' ) );
+		this.$setting_inputs   = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
+		this.$title_input      = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
+		this.$subtitle_input   = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
+		this.$y_min_value      = $( document.getElementById( 'm-chart-y-min-value' ) );
 
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
 		$chart_type_select.on( 'load, change', this.handle_chart_type );
 		$chart_type_select.trigger( 'change' );
+
+		// Handle the spreadsheet controls
+		this.handle_sheet_controls();
 
 		// Set the form encoding type to multipart/form-data so that the CSV import will work
 		var $form = $( 'form#post' );
@@ -25,11 +28,12 @@
 
 		// Watch form submissions and stop them if necessary or update data value
 		$form.on( 'submit', function( event ) {
+			event.preventDefault();
 			if ( false === m_chart_admin.allow_form_submission ) {
 				event.preventDefault();
 			} else {
 				$( document.getElementById( 'm-chart-spreadsheet' ) ).find( '.data' ).val(
-					JSON.stringify( m_chart_admin.$spreadsheet.getData() )
+					JSON.stringify( m_chart_admin.get_data() )
 				);
 			}
 		})
@@ -71,12 +75,45 @@
 		}
 	};
 
-	// Instantiate the spreedsheet
-	m_chart_admin.create_spreadsheet = function() {
-		var $spreadsheet_div = document.getElementById( 'hands-on-table-sheet-' + this.post_id );
+	// Get data from the spreadsheets
+	m_chart_admin.get_data = function() {
+		var $data = {};
 
-		this.$spreadsheet = new Handsontable( $spreadsheet_div, {
-			data:         hands_on_table_data,
+		this.$spreadsheets.each( function( i ) {
+			data[ i ] = $( this ).getData();
+		});
+
+		return $data;
+	}
+
+	// Instantiate the spreedsheets
+	m_chart_admin.build_spreadsheets = function() {
+		this.$spreadsheet_divs  = $( document.getElementById( 'hands-on-table-sheets' ) );
+		this.$spreadsheet_tabs  = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
+		this.sheet_div_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-div' ) ).html() );
+		this.sheet_tab_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-tab' ) ).html() );
+
+		this.$spreadsheets = {};
+
+		// hands_on_table_data is an array of data sets so we cycle through them and build a spreadsheet object for each one
+		$.each( hands_on_table_data, function( i, data ) {
+			m_chart_admin.create_spreadsheet( i, data );
+		});
+	}
+
+	// Instantiate a spreedsheet
+	m_chart_admin.create_spreadsheet = function( i, data ) {
+		this.$spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: ( i + 1 ) } ) );
+		// Note we're purposely not getting a jQuery version of this object because handsontable likes it that way
+		var $spreadsheet_div = document.getElementById( 'hands-on-table-sheet-' + this.post_id + '-' + ( i + 1 ) );
+
+		// New charts won't actually have data so we'll pass something handsontable understands
+		if ( '' == data ) {
+			data = [[]];
+		}
+
+		this.$spreadsheets[i] = new Handsontable( $spreadsheet_div, {
+			data:         data,
 			colHeaders:   true,
 			rowHeaders:   true,
 			height:       350,
@@ -88,15 +125,44 @@
 			stretchH:     'all',
 			afterChange:  function() {
 				// If a value changes update the chart
-				m_chart_admin.refresh_chart();
+				//m_chart_admin.refresh_chart();
 			}
 		});
+
+		// Built tab for sheet this sheet (it's only visible if the user selects an appropriate chart type but we build it now anyway)
+		var $template_vars = {
+			post_id: m_chart_admin.post_id,
+			instance: ( i + 1 )
+		};
+
+		if ( i > 0 ) {
+			$( $spreadsheet_div ).addClass( 'hide' );
+			$template_vars.class = 'nav-tab';
+		} else {
+			this.active_set = i + 1;
+			$template_vars.class = 'nav-tab nav-tab-active';
+		}
+
+		if ( 'undefined' !== typeof this.set_names[ ( i + 1 ) ] ) {
+			$template_vars.value = this.set_names[ ( i + 1 ) ];
+		} else {
+			$template_vars.value = 'Sheet ' + ( i + 1 );
+		}
+
+		this.$spreadsheet_tabs.append( this.sheet_tab_template( $template_vars ) );
+
+		// Set the tab input width
+		var $tab_input = $( '#hands-on-table-sheet-tab-' + this.post_id + '-' + ( i + 1 ) + ' input' );
+		m_chart_admin.resize_input( $tab_input );
+
+		this.last_set = i + 1;
 	}
 
 	// Handle chart type input changes so the settings UI only reflects appropriate options
 	m_chart_admin.handle_chart_type = function( event ) {
-		var chart_type      = $( this ).attr( 'value' );
-		var $chart_meta_box = $( document.getElementById( 'm-chart' ) );
+		var chart_type        = $( this ).attr( 'value' );
+		var $chart_meta_box   = $( document.getElementById( 'm-chart' ) );
+		var $spreadsheet_tabs = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
 
 		// Show everything before hiding the options we don't want
 		$chart_meta_box.find( '.row' ).removeClass( 'hide' );
@@ -107,25 +173,124 @@
 			|| 'bar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
 		if ( 'pie' === chart_type ) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+			$spreadsheet_tabs.addClass( 'hide' );
+		}
+
+		if (
+			   'scatter' === chart_type
+			|| 'bubble' === chart_type
+		) {
+			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 	};
 
 	// Handle CSV import functionality
+	m_chart_admin.handle_sheet_controls = function() {
+		// Add a spreedsheet
+		this.$spreadsheet_tabs.find( '.add-sheet' ).on( 'click', function( event ) {
+			event.preventDefault();
+			m_chart_admin.create_spreadsheet( m_chart_admin.last_set, '' );
+			$( document.getElementById( 'hands-on-table-sheet-tab-' + m_chart_admin.post_id + '-' + m_chart_admin.last_set ) ).click();
+		});
+
+		// Handle regular clicks on the tabs
+		this.$spreadsheet_tabs.on( 'click', '.nav-tab', function( event ) {
+			event.preventDefault();
+
+			if ( $( this ).hasClass( 'nav-tab-active' ) ) {
+				return;
+			}
+
+			m_chart_admin.$spreadsheet_divs.find( '.hands-on-table-sheet' ).addClass( 'hide' );
+			$( document.getElementById( 'hands-on-table-sheet-' + m_chart_admin.post_id + '-' + $(this).data( 'instance' ) ) ).removeClass( 'hide' );
+
+			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).removeClass( 'nav-tab-active' );
+			$( this ).addClass( 'nav-tab-active' );
+			m_chart_admin.active_set = $(this).data( 'instance' );
+		});
+
+		// Handle double clicks and long presses on the tabs
+		this.$spreadsheet_tabs.on( 'dblclick, taphold', '.nav-tab', function( event ) {
+			event.preventDefault();
+
+			var $input = $( this ).find( 'input' );
+			$input.attr( 'disabled', false ).focus();
+		});
+
+		// Set input back to disabled on blur
+		this.$spreadsheet_tabs.on( 'blur', 'input', function( event ) {
+			$( this ).attr( 'disabled', true );
+		});
+
+		// Set input back to disabled on return/enter
+		this.$spreadsheet_tabs.on( 'keydown', 'input', function( event ) {
+			if ( 13 === event.keyCode ) {
+				event.preventDefault();
+				$( this ).attr( 'disabled', true );
+			}
+		});
+
+		// Resize the input based on it's value
+		this.$spreadsheet_tabs.on( 'keydown keyup input propertychange change', 'input', function( event ) {
+			m_chart_admin.resize_input( $( this ) );
+		});
+
+		// Remove a tab/spreadsheet
+		this.$spreadsheet_tabs.on( 'click', '.dashicons-dismiss', function( event ) {
+			if ( ! confirm( m_chart_admin.delete_comfirm ) ) {
+				return;
+			}
+
+			var instance = $( this ).closest( '.nav-tab' ).data( 'instance' );
+
+			delete m_chart_admin.$spreadsheets[ ( instance - 1 ) ];
+			$( this ).closest( '.nav-tab' ).remove();
+			$( document.getElementById( 'hands-on-table-sheet-' + m_chart_admin.post_id + '-' + instance ) ).remove();
+			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).first().click();
+			// @TODO will need to update the chart after this
+		});
+	};
+
+	// Resize an input based on it's value
+	m_chart_admin.resize_input = function( $input ) {
+		// Get what we need to calculate the value width
+		var font = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).font;
+		var text = $input.val();
+
+		// Get what we need to properly size the input with the value width
+		var border_width  = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'border-width' ).replace( 'px', '' );
+		var padding_left  = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'padding-left' ).replace( 'px', '' );
+		var padding_right = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'padding-right' ).replace( 'px', '' );
+
+		// Calculate width of the input value
+		var input_canvas  = document.createElement( 'canvas' );
+	    var input_context = input_canvas.getContext( '2d' );
+
+		input_context.font = font;
+
+		var metrics = input_context.measureText( text );
+		var width   = Math.ceil( metrics.width );
+
+		$input.css( 'width', ( border_width * 2 ) + parseInt( padding_left ) + width + parseInt( padding_right ) + 'px' );
+	};
+
+	// Handle CSV import functionality
 	m_chart_admin.handle_csv_import = function() {
-		var $csv_meta_box = $( document.getElementById( 'm-chart-csv' ) );
-		var $select       = $csv_meta_box.find( '.import .select.button' );
-		var $import       = $csv_meta_box.find( '.import .import.button' );
-		var $import_form  = $( document.getElementById( 'm-chart-csv-import-form' ) );
-		var $file_input   = $import_form.find( 'input[type=file]' );
-		var $file_info    = $csv_meta_box.find( '.file-info' );
-		var $file_error   = $csv_meta_box.find( '.file.error' );
-		var $file_import  = $csv_meta_box.find( '.import.in-progress' );
-		var $import_error = $csv_meta_box.find( '.import.error' );
-		var $cancel       = $csv_meta_box.find( '.dashicons-dismiss' );
+		var $csv_container = $( document.getElementById( 'm-chart-csv' ) );
+		var $select        = $csv_container.find( '.import .select.button' );
+		var $import        = $csv_container.find( '.import .import.button' );
+		var $import_form   = $( document.getElementById( 'm-chart-csv-import-form' ) );
+		var $file_input    = $import_form.find( 'input[type=file]' );
+		var $file_info     = $csv_container.find( '.file-info' );
+		var $file_error    = $csv_container.find( '.file.error' );
+		var $file_import   = $csv_container.find( '.import.in-progress' );
+		var $import_error  = $csv_container.find( '.import.error' );
+		var $cancel        = $csv_container.find( '.dashicons-dismiss' );
 
 		// Watch for clicks on the select button
 		$select.on( 'click', function( event ) {
@@ -206,7 +371,7 @@
 				}
 
 				// Update the spreadsheet with the new data
-				m_chart_admin.$spreadsheet.loadData( response.data );
+				m_chart_admin.$spreadsheets[ m_chart_admin.active_set - 1 ].loadData( response.data );
 
 				$file_input.attr( 'value', '' );
 				$select.removeClass( 'hide' );
@@ -221,10 +386,14 @@
 			event.preventDefault();
 
 			var $form = $( document.getElementById( 'm-chart-csv-export-form' ) );
+			var $data = m_chart_admin.$spreadsheets[ m_chart_admin.active_set - 1 ].getData();
+
+			var set_name = m_chart_admin.$spreadsheet_tabs.find( '.nav-tab-active input' ).val();
 
 			$( document.getElementById( 'm-chart-csv-post-id' ) ).val( m_chart_admin.post_id );
-			$( document.getElementById( 'm-chart-csv-data' ) ).val( JSON.stringify( m_chart_admin.$spreadsheet.getData() ) );
+			$( document.getElementById( 'm-chart-csv-data' ) ).val( JSON.stringify( $data ) );
 			$( document.getElementById( 'm-chart-csv-title' ) ).val( m_chart_admin.$title_input.attr( 'value' ) );
+			$( document.getElementById( 'm-chart-csv-set-name' ) ).val( set_name );
 
 			$form.trigger( 'submit' );
 		});
@@ -314,7 +483,7 @@
 
 		$post_meta[ 'subtitle' ] = this.$subtitle_input.attr( 'value' );
 
-		$post_meta.data = JSON.stringify( m_chart_admin.$spreadsheet.getData() );
+		$post_meta.data = JSON.stringify( m_chart_admin.get_data() );
 
 		// Request a new chart_args object so we can rerender the chart with the changes
 		this.request = $.ajax({

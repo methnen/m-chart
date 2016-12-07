@@ -1,6 +1,8 @@
 License info for libraries found in `components/external`:
 - [canvg](https://github.com/gabelerner/canvg/)
 	- License at the time of writing: MIT
+- [handlebars](https://github.com/wycats/handlebars.js/)
+	- License at the time of writing: MIT
 - [handsontable](https://github.com/handsontable/handsontable)
 	- License at the time of writing: MIT
 - [highcharts](https://github.com/highslide-software/highcharts.com)
@@ -12,7 +14,7 @@ License for M Charts:
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Jamie Poitra
+Copyright (c) 2015-2016 Jamie Poitra
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

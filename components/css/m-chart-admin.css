@@ -1,4 +1,4 @@
-/* line 24, ../sass/_global-mixins-and-variables.scss */
+/* line 29, ../sass/_global-mixins-and-variables.scss */
 #m-chart .inside .hide,
 #m-chart-spreadsheet .inside .hide,
 #m-chart-csv .inside .hide {
@@ -32,6 +32,154 @@
 #m-chart-spreadsheet .inside {
   margin: 0;
   padding: 0;
+}
+/* line 27, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper {
+  border-left: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
+  max-height: 45px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-top: 7px;
+  white-space: nowrap;
+}
+/* line 36, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper.hide {
+  display: none;
+}
+/* line 40, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .add-sheet {
+  color: #82878c;
+  float: left;
+  margin-bottom: 0;
+  margin-left: 7px;
+  text-decoration: none;
+}
+/* line 47, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .add-sheet:hover {
+  color: #000000;
+}
+/* line 51, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .add-sheet span {
+  line-height: 38px;
+}
+@media (max-width: 782px) {
+  /* line 51, ../sass/_spreadsheet.scss */
+  #m-chart-spreadsheet .nav-tab-wrapper .add-sheet span {
+    line-height: 46px;
+  }
+}
+/* line 60, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab {
+  display: inline-block;
+  float: none;
+}
+/* line 64, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab span {
+  color: #555555;
+  margin-top: 3px;
+}
+@media (max-width: 782px) {
+  /* line 64, ../sass/_spreadsheet.scss */
+  #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span {
+    margin-top: 7px;
+  }
+}
+/* line 72, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab span:hover {
+  color: #c80011;
+}
+/* line 77, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab input {
+  min-width: 30px;
+}
+/* line 80, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab input[disabled="disabled"] {
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  color: #555555;
+  -webkit-text-fill-color: #555555;
+}
+/* line 90, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active span {
+  color: #000000;
+}
+/* line 93, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active span:hover {
+  color: #c80011;
+}
+/* line 99, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active input[disabled="disabled"] {
+  color: #000000;
+  -webkit-text-fill-color: #000000;
+}
+/* line 106, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab:last-of-type {
+  margin-right: 10px;
+}
+/* line 112, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e5e5e5;
+  border-left: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+  border-top: 1px solid #dddddd;
+  padding: 15px 10px 10px;
+}
+/* line 4, ../sass/_global-mixins-and-variables.scss */
+#m-chart-spreadsheet #m-chart-csv::after {
+  clear: both;
+  content: '';
+  display: table;
+}
+/* line 121, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv::after {
+  clear: both;
+}
+/* line 125, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv .button {
+  margin-top: 6px;
+}
+/* line 128, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv .button.select {
+  margin-right: 10px;
+}
+/* line 132, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv .button.import {
+  float: left;
+  margin-right: 10px;
+}
+/* line 139, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv div.import {
+  margin-right: 65px;
+}
+/* line 143, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv div.export {
+  float: right;
+}
+/* line 148, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv .warning,
+#m-chart-spreadsheet #m-chart-csv .error {
+  color: #b00000;
+}
+/* line 153, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv .error,
+#m-chart-spreadsheet #m-chart-csv .in-progress {
+  margin: 10px 0 0 5px;
+}
+/* line 157, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv .error:not(.hide),
+#m-chart-spreadsheet #m-chart-csv .in-progress:not(.hide) {
+  display: inline-block;
+}
+/* line 163, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv a.dashicons {
+  color: #b8b8b8;
+}
+/* line 166, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet #m-chart-csv a.dashicons:hover {
+  color: #b00000;
 }
 
 /* line 4, ../sass/_chart-settings.scss */
@@ -145,82 +293,6 @@
     height: 27px;
     line-height: 14px;
   }
-}
-
-/* line 4, ../sass/_global-mixins-and-variables.scss */
-#m-chart-csv .inside::after {
-  clear: both;
-  content: '';
-  display: table;
-}
-/* line 7, ../sass/_csv.scss */
-#m-chart-csv .inside::after {
-  clear: both;
-}
-/* line 11, ../sass/_csv.scss */
-#m-chart-csv .inside .button {
-  margin-top: 6px;
-}
-/* line 14, ../sass/_csv.scss */
-#m-chart-csv .inside .button.select {
-  margin-right: 10px;
-}
-/* line 18, ../sass/_csv.scss */
-#m-chart-csv .inside .button.import {
-  float: left;
-  margin-right: 10px;
-}
-/* line 25, ../sass/_csv.scss */
-#m-chart-csv .inside div.import {
-  margin-right: 65px;
-}
-/* line 29, ../sass/_csv.scss */
-#m-chart-csv .inside div.export {
-  float: right;
-}
-/* line 34, ../sass/_csv.scss */
-#m-chart-csv .inside .warning,
-#m-chart-csv .inside .error {
-  color: #b00000;
-}
-/* line 39, ../sass/_csv.scss */
-#m-chart-csv .inside .error,
-#m-chart-csv .inside .in-progress {
-  margin: 10px 0 0 5px;
-}
-/* line 43, ../sass/_csv.scss */
-#m-chart-csv .inside .error:not(.hide),
-#m-chart-csv .inside .in-progress:not(.hide) {
-  display: inline-block;
-}
-/* line 49, ../sass/_csv.scss */
-#m-chart-csv .inside a.dashicons {
-  color: #b8b8b8;
-}
-/* line 52, ../sass/_csv.scss */
-#m-chart-csv .inside a.dashicons:hover {
-  color: #b00000;
-}
-
-/* line 62, ../sass/_csv.scss */
-#side-sortables #m-chart-csv .inside {
-  padding: 0;
-}
-/* line 65, ../sass/_csv.scss */
-#side-sortables #m-chart-csv .inside .select,
-#side-sortables #m-chart-csv .inside .import,
-#side-sortables #m-chart-csv .inside .export {
-  float: none;
-  padding: 7px 12px 10px;
-}
-/* line 72, ../sass/_csv.scss */
-#side-sortables #m-chart-csv .inside .import {
-  padding-top: 0;
-}
-/* line 76, ../sass/_csv.scss */
-#side-sortables #m-chart-csv .inside .export {
-  border-top: 1px solid #dddddd;
-  float: none;
 }
 
 /* line 3, ../sass/_settings.scss */

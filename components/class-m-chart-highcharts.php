@@ -15,6 +15,8 @@ class M_Chart_Highcharts {
 		'column',
 		'bar',
 		'pie',
+		'scatter',
+		'bubble',
 	);
 	public $theme_directories;
 
@@ -95,7 +97,7 @@ class M_Chart_Highcharts {
 		}
 
 		// Run the parse class on the data
-		m_chart()->parse()->parse_data( $this->post_meta['data'], $this->post_meta['parse_in'] );
+		m_chart()->parse()->parse_data( $this->post_meta['data']['sets'][0], $this->post_meta['parse_in'] );
 
 		$chart_args = array(
 			'chart' => array(
@@ -166,12 +168,17 @@ class M_Chart_Highcharts {
 			$chart_args['tooltip']['valueSuffix'] = m_chart()->parse()->data_suffix;
 		}
 
-		$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
+		if ( 'scatter' == $this->post_meta['type'] ) {
+			$labels = $this->get_value_labels_array();
 
-		// Apply the theme
-		if ( $theme = $this->get_theme( $this->post_meta['theme'] ) ) {
-			$chart_args = array_merge( $chart_args, $theme );
+			$tooltip_function = "function() { return '<b>"  . $labels[0] . "</b>: ' + this.x + '<br /><b>" . $labels[1] . "</b>: ' + this.y; }";
+
+			$chart_args['tooltip']['formatter'] = sha1( $tooltip_function );
+			$chart_args['m-chart-functions']['hashed'][] = '"' . sha1( $tooltip_function ) . '"';
+			$chart_args['m-chart-functions']['original'][] = $tooltip_function;
 		}
+
+		$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
 
@@ -272,26 +279,14 @@ class M_Chart_Highcharts {
 		// When Highcharts encounters an empty data value it stops so we set them to NULL
 		$data_array = array_map( array( $this, 'fix_null_values' ), m_chart()->parse()->set_data );
 
-		if ( 'pie' != $this->post_meta['type'] && 'both' == m_chart()->parse()->value_labels_position ) {
-			$set_data = array();
-
-			$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
-
-			foreach ( $data_array as $key => $data_chunk ) {
-				$set_data[ $key ] = array(
-					'name' => m_chart()->parse()->value_labels[ $label_key ][ $key ],
-					'data' => array(),
-				);
-
-				foreach ( $data_chunk as $data ) {
-					$set_data[ $key ]['data'][] = $data;
-				}
-			}
-
-			$chart_args['series'] = $set_data;
-		}
-		else
-		{
+		if (
+			   'pie' == $this->post_meta['type']
+			|| 'both' != m_chart()->parse()->value_labels_position
+			&& (
+				   'scatter' != $this->post_meta['type']
+				&& 'bubble' != $this->post_meta['type']
+			)
+		) {
 			$new_data_array = array();
 
 			foreach ( $chart_args['xAxis']['categories'] as $key => $label ) {
@@ -317,6 +312,65 @@ class M_Chart_Highcharts {
 			$chart_args['tooltip'] = array(
 				'pointFormat' => '<b>{point.y}</b>',
 			);
+		} else if ( 'scatter' == $this->post_meta['type'] ) {
+			foreach ( $this->post_meta['data']['sets'] as $data ) {
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+
+				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
+
+				$new_data_array = array();
+
+				foreach ( $data_array as $key => $data ) {
+					if ( $key % 2 ) {
+						continue;
+					}
+
+					$new_data_array[] = array(
+						$data,
+						$data_array[ $key + 1 ],
+					);
+				}
+
+				$chart_args['series'][] = array(
+					'data' => $new_data_array,
+				);
+			}
+		} else if ( 'bubble' == $this->post_meta['type'] ) {
+			$new_data_array = array();
+
+			foreach ( $data_array as $key => $data ) {
+				if ( $key % 2 ) {
+					continue;
+				}
+
+				$new_data_array[] = array(
+					$data,
+					$data_array[ $key + 1 ],
+				);
+			}
+
+			$chart_args['series'] = array(
+				array(
+					'data' => $new_data_array,
+				),
+			);
+		} else {
+			$set_data = array();
+
+			$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+
+			foreach ( $data_array as $key => $data_chunk ) {
+				$set_data[ $key ] = array(
+					'name' => m_chart()->parse()->value_labels[ $label_key ][ $key ],
+					'data' => array(),
+				);
+
+				foreach ( $data_chunk as $data ) {
+					$set_data[ $key ]['data'][] = $data;
+				}
+			}
+
+			$chart_args['series'] = $set_data;
 		}
 
 		return $chart_args;

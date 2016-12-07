@@ -147,6 +147,12 @@ class M_Chart_Admin {
 			return;
 		}
 
+		// jQuery Mobile Touch Events
+		wp_enqueue_script(
+			'jquery-mobile-touch-events',
+			$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js'
+		);
+
 		// Only load these if we are on a post page
 		if ( 'post' == $screen->base ) {
 			// Handsontable
@@ -159,6 +165,12 @@ class M_Chart_Admin {
 				'handsontable',
 				$this->plugin_url . '/components/external/handsontable/handsontable.js',
 				array( 'jquery' )
+			);
+
+			// Handlebars
+			wp_enqueue_script(
+				'handlebars',
+				$this->plugin_url . '/components/external/handlebars/handlebars.js'
 			);
 
 			// Highcharts export.js is required for the image generation
@@ -197,6 +209,8 @@ class M_Chart_Admin {
 					'allow_form_submission' => false,
 					'request'               => false,
 					'performance'           => $settings['performance'],
+					'set_names'             => array(),
+					'delete_comfirm'        => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				)
 			);
 		}
@@ -239,15 +253,6 @@ class M_Chart_Admin {
 
 		$wp_meta_boxes[ m_chart()->slug ]['normal']['high']['postexcerpt'] = $excerpt;
 
-		add_meta_box(
-			m_chart()->slug . '-csv',
-			esc_html__( 'CSV Import/Export', 'm-chart' ),
-			array( $this, 'csv_meta_box' ),
-			m_chart()->slug,
-			'normal',
-			'high'
-		);
-
 		// We are using our own interface for the units so we can remove the units taxonomy metabox
 		remove_meta_box( m_chart()->slug . '-unitsdiv', m_chart()->slug, 'side' );
 	}
@@ -261,7 +266,7 @@ class M_Chart_Admin {
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 
 		// Setup default empty sheet data if needed
-		$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data'];
+		$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
 
 		require_once __DIR__ . '/templates/spreadsheet-meta-box.php';
 	}
@@ -281,15 +286,6 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Displays the CSV Import/Export controls
-	 *
-	 * @param object the WP post object as returned by the metabox API
-	 */
-	public function csv_meta_box( $post ) {
-		require_once __DIR__ . '/templates/csv-meta-box.php';
-	}
-
-	/**
 	 * Insert CSV Import and Export forms into the footer when editing charts
 	 */
 	public function admin_footer() {
@@ -306,6 +302,7 @@ class M_Chart_Admin {
 			<input type="hidden" name="post_id" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-post-id' ) ); ?>" />
 			<input type="hidden" name="data" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-data' ) ); ?>" />
 			<input type="hidden" name="title" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-title' ) ); ?>" />
+			<input type="hidden" name="set_name" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-set-name' ) ); ?>" />
 		</form>
 		<script type="text/javascript">
 			<?php do_action( 'm_chart_admin_footer_javascript' ); ?>
@@ -314,7 +311,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Inserts a subtitle field under the title field on the chart edit form
+	 * Inserts a subtitle field under the title field on the chart edit form and includes the handlebars templates we'll need
 	 *
 	 * @param object the WP post object as returned by the metabox API
 	 */
@@ -326,6 +323,7 @@ class M_Chart_Admin {
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 
 		require_once __DIR__ . '/templates/subtitle-field.php';
+		require_once __DIR__ . '/templates/handlebars.php';
 	}
 
 	/**
@@ -591,6 +589,8 @@ class M_Chart_Admin {
 			$file_name = sanitize_title( get_the_title( $post->ID ) );
 		}
 
+		$set_name = sanitize_title( $_REQUEST['set_name'] );
+
 		if ( empty( $data ) ) {
 			return;
 		}
@@ -598,7 +598,7 @@ class M_Chart_Admin {
 		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
 		$parse_csv = new parseCSV();
 
-		$parse_csv->output( $file_name . '.csv', $data );
+		$parse_csv->output( $file_name . '-' . $set_name . '.csv', $data );
 		die;
 	}
 
@@ -650,7 +650,11 @@ class M_Chart_Admin {
 	 *
 	 * @param string a name spaced field name
 	 */
-	public function get_field_name( $field_name ) {
+	public function get_field_name( $field_name, $parent_field_name = '' ) {
+		if ( '' != $parent_field_name ) {
+			return m_chart()->slug . '[' . $parent_field_name . ']' . '[' . $field_name . ']';
+		}
+
 		return m_chart()->slug . '[' . $field_name . ']';
 	}
 

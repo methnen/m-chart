@@ -41,6 +41,7 @@ class M_Chart_Parse {
 		$this->value_labels_position = $this->get_value_labels_position();
 		$this->parse_value_labels();
 		$this->parse_set_data();
+		return $this;
 	}
 
 	/**
@@ -199,9 +200,13 @@ class M_Chart_Parse {
 		$set_data_array	= array();
 
 		if ( 'rows' == $this->parse_in && 'first_column' == $this->value_labels_position ) {
-			foreach ( $this->data as $columns ) {
-				if ( isset( $columns[1] ) ) {
-					$data_point = $this->clean_data_point( $columns[1] );
+			foreach ( $this->data as $row ) {
+				foreach ( $row as $key => $column ) {
+					if ( '' == $column || 0 == $key ) {
+						continue;
+					}
+
+					$data_point = $this->clean_data_point( $column );
 
 					$set_data_array[] = $data_point;
 				}
@@ -271,10 +276,16 @@ class M_Chart_Parse {
 		}
 		elseif( isset( $this->data[1] ) )
 		{
-			foreach ( $this->data[1] as $column ) {
-				$data_point = $this->clean_data_point( $column );
+			foreach ( $this->data as $key => $columns ) {
+				foreach ( $columns as $column ) {
+					if ( '' == $column || 0 == $key ) {
+						continue;
+					}
 
-				$set_data_array[] = $data_point;
+					$data_point = $this->clean_data_point( $column );
+
+					$set_data_array[] = $data_point;
+				}
 			}
 		}
 
@@ -313,16 +324,16 @@ class M_Chart_Parse {
 				}
 			}
 		}
-		else
-		{
-			$label_count = count( $this->value_labels ) - 1;
-
-			foreach ( $data_array as $key => $data ) {
-				if ( $key > $label_count ) {
-					unset( $data_array[ $key ] );
-				}
-			}
-		}
+		//else
+		//{
+		//	$label_count = count( $this->value_labels ) - 1;
+        //
+		//	foreach ( $data_array as $key => $data ) {
+		//		if ( $key > $label_count ) {
+		//			unset( $data_array[ $key ] );
+		//		}
+		//	}
+		//}
 
 		return $data_array;
 	}

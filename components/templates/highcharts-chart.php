@@ -1,12 +1,11 @@
 <?php
 // If there's multiple instances of a chart on the page we don't want to redeclare this
-// @TODO if the embeds end up being done via iframes this conditional won't be necessary anymore
 if ( ! $this->options_set ) {
 	?>
 	<script type="text/javascript">
 	(function( $ ) {
 		$( function() {
-			Highcharts.setOptions( <?php echo $this->unicode_aware_stripslashes( json_encode( $this->highcharts()->get_chart_options() ) ); ?>);
+			Highcharts.setOptions( <?php echo $this->unicode_aware_stripslashes( $this->json_encode( $this->highcharts()->get_chart_options() ) ); ?>);
 		} );
 	})( jQuery );
 	</script>
@@ -19,10 +18,12 @@ if ( ! $this->options_set ) {
 </div>
 <script type="text/javascript">
 	var m_chart_highcharts_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?> = {
-		chart_args: <?php echo $this->unicode_aware_stripslashes( json_encode( $this->highcharts()->get_chart_args( $post_id, $args ) ) ); ?>,
+		chart_args: <?php echo $this->unicode_aware_stripslashes( $this->json_encode( $this->highcharts()->get_chart_args( $post_id, $args ) ) ); ?>,
 		post_id: <?php echo absint( $post_id ); ?>,
 		instance: <?php echo absint( $this->instance ); ?>
 	};
+
+	<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
 
 	(function( $ ) {
 		m_chart_highcharts_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart = function( ) {
