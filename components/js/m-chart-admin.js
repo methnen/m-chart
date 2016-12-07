@@ -215,7 +215,7 @@
 		});
 
 		// Handle double clicks and long presses on the tabs
-		this.$spreadsheet_tabs.on( 'dblclick, taphold', '.nav-tab', function( event ) {
+		this.$spreadsheet_tabs.on( 'dblclick taphold', '.nav-tab', function( event ) {
 			event.preventDefault();
 
 			var $input = $( this ).find( 'input' );
@@ -242,6 +242,8 @@
 
 		// Remove a tab/spreadsheet
 		this.$spreadsheet_tabs.on( 'click', '.dashicons-dismiss', function( event ) {
+			event.preventDefault();
+
 			if ( ! confirm( m_chart_admin.delete_comfirm ) ) {
 				return;
 			}
