@@ -21,6 +21,7 @@ class M_Chart {
 		'source'      => '',
 		'source_url'  => '',
 		'data'        => array(),
+		'set_names'   => array(),
 	);
 	public $get_chart_default_args = array(
 		'show'  => 'chart',
@@ -253,6 +254,11 @@ class M_Chart {
 			$post_meta['data']['sets'][] = $data;
 		}
 
+		// If there's no set_names value set we'll set it to an empty array
+		if ( ! isset( $post_meta['set_names'] ) ) {
+			$post_meta['set_names'] = array();
+		}
+
 		if ( $field && isset( $post_meta[ $field ] ) ) {
 			return $post_meta[ $field ];
 		}
@@ -310,7 +316,9 @@ class M_Chart {
 				if ( 'source_url' == $field && '' != $meta[ $field ] ) {
 					$chart_meta[ $field ] = esc_url_raw( $meta[ $field ] );
 				} elseif ( 'data' == $field ) {
-					$chart_meta[ $field ] = $meta[ $field ];
+					$chart_meta[ $field ]['sets'] = $meta[ $field ];
+				} elseif ( 'set_names' == $field ) {
+					$chart_meta[ $field ] = array_values( $meta[ $field ] );
 				} elseif ( in_array( $field, array( 'labels', 'y_min', 'legend' ) ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
@@ -339,12 +347,14 @@ class M_Chart {
 		}
 
 		// If the data value is not an array we asume it is JSON encoded (i.e. from Handsontable)
-		if ( ! is_array( $chart_meta['data'] ) && '' != $chart_meta['data'] ) {
-			$chart_meta['data'] = json_decode( stripslashes( $chart_meta['data'] ) );
+		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
+			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 		}
 
 		// Validate the data array
-		$chart_meta['data'] = $this->validate_data( $chart_meta['data'] );
+		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
+			$chart_meta['data'][ $key ] = $this->validate_data( $data );
+		}
 
 		return $chart_meta;
 	}
@@ -768,24 +778,6 @@ class M_Chart {
 		$settings = wp_parse_args( $settings, $this->settings );
 
 		return $settings;
-	}
-
-	/**
-	 * Returns a json encoded string for use in a chart
-	 *
-	 * @param object/array of chart args
-	 *
-	 * @return JSON string
-	 */
-	public function json_encode( $chart_args ) {
-		if ( ! isset( $chart_args['m-chart-functions'] ) ) {
-			return json_encode( $chart_args );
-		}
-
-		$chart_functions = $chart_args['m-chart-functions'];
-		unset( $chart_args['m-chart-functions'] );
-
-		return str_replace( $chart_functions['hashed'], $chart_functions['original'], json_encode( $chart_args ) );
 	}
 }
 

@@ -35,9 +35,9 @@
 }
 /* line 27, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper {
+  border-bottom: none;
   border-left: 1px solid #e5e5e5;
   border-top: 1px solid #e5e5e5;
-  max-height: 45px;
   overflow-x: scroll;
   overflow-y: hidden;
   padding-top: 7px;

@@ -6,8 +6,6 @@
 		this.post_id = $( document.getElementById( 'post_ID' ) ).attr( 'value' );
 		this.nonce   = $( 'input[name="m-chart[nonce]"]' ).attr( 'value' );
 
-		this.build_spreadsheets();
-
 		// Store the setting inputs and title input for use later
 		this.$setting_inputs   = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
 		this.$title_input      = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
@@ -19,6 +17,15 @@
 		$chart_type_select.on( 'load, change', this.handle_chart_type );
 		$chart_type_select.trigger( 'change' );
 
+		// Store these for later
+		this.$form_buttons = $( '#save-post, #wp-preview, #post-preview, #publish' );
+
+		// Build the spreadsheets
+		this.build_spreadsheets();
+
+		// Store this so we don't keep looking for it
+		this.$sheet_tab_inputs = $( '.hands-on-table-sheet-tab-input' );
+
 		// Handle the spreadsheet controls
 		this.handle_sheet_controls();
 
@@ -28,18 +35,16 @@
 
 		// Watch form submissions and stop them if necessary or update data value
 		$form.on( 'submit', function( event ) {
-			event.preventDefault();
 			if ( false === m_chart_admin.allow_form_submission ) {
 				event.preventDefault();
 			} else {
 				$( document.getElementById( 'm-chart-spreadsheet' ) ).find( '.data' ).val(
 					JSON.stringify( m_chart_admin.get_data() )
 				);
-			}
-		})
 
-		// Store these for later
-		this.$form_buttons = $( '#save-post, #wp-preview, #post-preview, #publish' );
+				m_chart_admin.$sheet_tab_inputs.attr( 'disabled', false );
+			}
+		});
 
 		// Watch for a new chart to be built
 		if ( 'default' === this.performance ) {
@@ -77,16 +82,16 @@
 
 	// Get data from the spreadsheets
 	m_chart_admin.get_data = function() {
-		var $data = {};
+		var $data = [];
 
-		this.$spreadsheets.each( function( i ) {
-			data[ i ] = $( this ).getData();
+		$.each( this.$spreadsheets, function( i ) {
+			$data[ i ] = m_chart_admin.$spreadsheets[ i ].getData();
 		});
 
 		return $data;
 	}
 
-	// Instantiate the spreedsheets
+	// Instantiate the spreadsheets
 	m_chart_admin.build_spreadsheets = function() {
 		this.$spreadsheet_divs  = $( document.getElementById( 'hands-on-table-sheets' ) );
 		this.$spreadsheet_tabs  = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
@@ -98,6 +103,13 @@
 		// hands_on_table_data is an array of data sets so we cycle through them and build a spreadsheet object for each one
 		$.each( hands_on_table_data, function( i, data ) {
 			m_chart_admin.create_spreadsheet( i, data );
+		});
+
+		// Add change event so we update on spreadsheet changes
+		$.each( this.$spreadsheets, function( i ) {
+			m_chart_admin.$spreadsheets[ i ].addHook( 'afterChange', function() {
+				m_chart_admin.refresh_chart();
+			});
 		});
 	}
 
@@ -122,11 +134,7 @@
 			minSpareRows: 1,
 			minSpareCols: 1,
 			contextMenu:  true,
-			stretchH:     'all',
-			afterChange:  function() {
-				// If a value changes update the chart
-				//m_chart_admin.refresh_chart();
-			}
+			stretchH:     'all'
 		});
 
 		// Built tab for sheet this sheet (it's only visible if the user selects an appropriate chart type but we build it now anyway)
@@ -143,8 +151,8 @@
 			$template_vars.class = 'nav-tab nav-tab-active';
 		}
 
-		if ( 'undefined' !== typeof this.set_names[ ( i + 1 ) ] ) {
-			$template_vars.value = this.set_names[ ( i + 1 ) ];
+		if ( 'undefined' !== typeof this.set_names[ i ] ) {
+			$template_vars.value = this.set_names[ i ];
 		} else {
 			$template_vars.value = 'Sheet ' + ( i + 1 );
 		}
@@ -196,6 +204,7 @@
 			event.preventDefault();
 			m_chart_admin.create_spreadsheet( m_chart_admin.last_set, '' );
 			$( document.getElementById( 'hands-on-table-sheet-tab-' + m_chart_admin.post_id + '-' + m_chart_admin.last_set ) ).click();
+			m_chart_admin.refresh_chart();
 		});
 
 		// Handle regular clicks on the tabs
@@ -225,6 +234,7 @@
 		// Set input back to disabled on blur
 		this.$spreadsheet_tabs.on( 'blur', 'input', function( event ) {
 			$( this ).attr( 'disabled', true );
+			m_chart_admin.refresh_chart();
 		});
 
 		// Set input back to disabled on return/enter
@@ -232,6 +242,7 @@
 			if ( 13 === event.keyCode ) {
 				event.preventDefault();
 				$( this ).attr( 'disabled', true );
+				m_chart_admin.refresh_chart();
 			}
 		});
 
@@ -242,8 +253,6 @@
 
 		// Remove a tab/spreadsheet
 		this.$spreadsheet_tabs.on( 'click', '.dashicons-dismiss', function( event ) {
-			event.preventDefault();
-
 			if ( ! confirm( m_chart_admin.delete_comfirm ) ) {
 				return;
 			}
@@ -253,8 +262,9 @@
 			delete m_chart_admin.$spreadsheets[ ( instance - 1 ) ];
 			$( this ).closest( '.nav-tab' ).remove();
 			$( document.getElementById( 'hands-on-table-sheet-' + m_chart_admin.post_id + '-' + instance ) ).remove();
+			// @TODO figure out why this fails when you remove a sheet while another tab is selected
 			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).first().click();
-			// @TODO will need to update the chart after this
+			m_chart_admin.refresh_chart();
 		});
 	};
 

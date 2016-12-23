@@ -5,7 +5,7 @@ if ( ! $this->options_set ) {
 	<script type="text/javascript">
 	(function( $ ) {
 		$( function() {
-			Highcharts.setOptions( <?php echo $this->unicode_aware_stripslashes( $this->json_encode( $this->highcharts()->get_chart_options() ) ); ?>);
+			Highcharts.setOptions( <?php echo $this->unicode_aware_stripslashes( json_encode( $this->highcharts()->get_chart_options() ) ); ?>);
 		} );
 	})( jQuery );
 	</script>
@@ -18,7 +18,7 @@ if ( ! $this->options_set ) {
 </div>
 <script type="text/javascript">
 	var m_chart_highcharts_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?> = {
-		chart_args: <?php echo $this->unicode_aware_stripslashes( $this->json_encode( $this->highcharts()->get_chart_args( $post_id, $args ) ) ); ?>,
+		chart_args: <?php echo $this->unicode_aware_stripslashes( json_encode( $this->highcharts()->get_chart_args( $post_id, $args ) ) ); ?>,
 		post_id: <?php echo absint( $post_id ); ?>,
 		instance: <?php echo absint( $this->instance ); ?>
 	};

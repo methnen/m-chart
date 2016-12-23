@@ -25,9 +25,9 @@
 	}
 
 	.nav-tab-wrapper {
+		border-bottom: none;
 		border-left: 1px solid $wp-admin-meta-border-color;
 		border-top: 1px solid $wp-admin-meta-border-color;
-		max-height: 45px; //52px
 		overflow-x: scroll;
 		overflow-y: hidden;
 		padding-top: 7px;

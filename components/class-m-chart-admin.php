@@ -200,6 +200,7 @@ class M_Chart_Admin {
 			);
 
 			$settings = m_chart()->get_settings();
+			$post_id  = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : '';
 
 			wp_localize_script(
 				'm-chart-admin',
@@ -209,7 +210,7 @@ class M_Chart_Admin {
 					'allow_form_submission' => false,
 					'request'               => false,
 					'performance'           => $settings['performance'],
-					'set_names'             => array(),
+					'set_names'             => m_chart()->get_post_meta( $post_id, 'set_names' ),
 					'delete_comfirm'        => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				)
 			);

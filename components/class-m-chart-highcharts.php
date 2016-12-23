@@ -170,12 +170,7 @@ class M_Chart_Highcharts {
 
 		if ( 'scatter' == $this->post_meta['type'] ) {
 			$labels = $this->get_value_labels_array();
-
-			$tooltip_function = "function() { return '<b>"  . $labels[0] . "</b>: ' + this.x + '<br /><b>" . $labels[1] . "</b>: ' + this.y; }";
-
-			$chart_args['tooltip']['formatter'] = sha1( $tooltip_function );
-			$chart_args['m-chart-functions']['hashed'][] = '"' . sha1( $tooltip_function ) . '"';
-			$chart_args['m-chart-functions']['original'][] = $tooltip_function;
+			$chart_args['tooltip']['pointFormat'] = '<b>'  . $labels[0] . '</b>: {point.x} <br /><b>'. $labels[1] . '</b>: {point.y}';
 		}
 
 		$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
@@ -313,25 +308,28 @@ class M_Chart_Highcharts {
 				'pointFormat' => '<b>{point.y}</b>',
 			);
 		} else if ( 'scatter' == $this->post_meta['type'] ) {
-			foreach ( $this->post_meta['data']['sets'] as $data ) {
+			$set_names = m_chart()->get_post_meta( $this->post->ID, 'set_names' );
+
+			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
 				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
 
 				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
 
 				$new_data_array = array();
 
-				foreach ( $data_array as $key => $data ) {
-					if ( $key % 2 ) {
+				foreach ( $data_array as $data_key => $data ) {
+					if ( $data_key % 2 ) {
 						continue;
 					}
 
 					$new_data_array[] = array(
 						$data,
-						$data_array[ $key + 1 ],
+						$data_array[ $data_key + 1 ],
 					);
 				}
 
 				$chart_args['series'][] = array(
+					'name' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
 					'data' => $new_data_array,
 				);
 			}
