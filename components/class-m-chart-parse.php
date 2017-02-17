@@ -211,8 +211,7 @@ class M_Chart_Parse {
 					$set_data_array[] = $data_point;
 				}
 			}
-		}
-		elseif ( 'rows' == $this->parse_in && 'both' == $this->value_labels_position ) {
+		} elseif ( 'rows' == $this->parse_in && 'both' == $this->value_labels_position ) {
 			$limit     = count( $this->data );
 			$this_sets = array();
 
@@ -242,8 +241,7 @@ class M_Chart_Parse {
 					$set_data_array[ $key ] = $set['data'];
 				}
 			}
-		}
-		elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
+		} elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
 			$limit		= count( $this->data );
 			$this_sets	= array();
 
@@ -273,9 +271,7 @@ class M_Chart_Parse {
 					$set_data_array[ $key ] = $set['data'];
 				}
 			}
-		}
-		elseif( isset( $this->data[1] ) )
-		{
+		} elseif( isset( $this->data[1] ) ) {
 			foreach ( $this->data as $key => $columns ) {
 				foreach ( $columns as $column ) {
 					if ( '' == $column || 0 == $key ) {

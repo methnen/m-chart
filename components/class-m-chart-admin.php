@@ -102,14 +102,41 @@ class M_Chart_Admin {
 				continue;
 			}
 
-			if ( isset( $safe_settings[ $setting ] ) ) {
+			if ( isset( $this->safe_settings[ $setting ] ) ) {
 				// If we've got an array of valid values lets check against that
-				$safe_setting = $safe_settings[ $setting ];
+				$safe_setting = $this->safe_settings[ $setting ];
 
 				if ( in_array( $submitted_settings[ $setting ], $safe_setting, true ) ) {
 					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
 				} else {
 					$validated_settings[ $setting ] = $default;
+				}
+			} elseif ( 'lang_settings' == $setting ) {
+				// The language settinsg require a bit more checking
+				foreach ( m_chart()->settings['lang_settings'] as $lang_setting => $lang_default ) {
+					$lang_value = $submitted_settings['lang_settings'][ $lang_setting ];
+
+					if ( 'numericSymbols' == $lang_setting ) {
+						// The numeric symbols are input as a comma seperated string so we'll deal with that here
+						$numeric_symbols = explode( ',', $lang_value );
+						$safe_symbols = array();
+
+						foreach ( $numeric_symbols as $symbol ) {
+							$safe_symbols[] = trim( $symbol );
+						}
+
+						$validated_settings[ $setting ][ $lang_setting ] = $safe_symbols;
+					} elseif ( 'numericSymbolMagnitude' == $lang_setting ) {
+						// Only want positive numbers for the numericSymbolMagnitude value
+						if ( is_numeric( $lang_value ) && 0 < $lang_value ) {
+							$validated_settings[ $setting ][ $lang_setting ] = absint( $lang_value );
+						} else {
+							$validated_settings[ $setting ][ $lang_setting ] = $lang_default;
+						}
+					} else {
+						// The rest of the language settings are all single character values
+						$validated_settings[ $setting ][ $lang_setting ] = sanitize_text_field( substr( $lang_value, 0, 1 ) );
+					}
 				}
 			} else {
 				// Make sure the value is safe before attempting to save it
@@ -147,56 +174,68 @@ class M_Chart_Admin {
 			return;
 		}
 
-		// jQuery Mobile Touch Events
-		wp_enqueue_script(
-			'jquery-mobile-touch-events',
-			$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js'
-		);
-
 		// Only load these if we are on a post page
 		if ( 'post' == $screen->base ) {
+			// jQuery Mobile Touch Events
+			wp_enqueue_script(
+				'jquery-mobile-touch-events',
+				$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js',
+				array(),
+				m_chart()->version
+			);
+
 			// Handsontable
 			wp_enqueue_style(
 				'handsontable',
-				$this->plugin_url . '/components/external/handsontable/handsontable.css'
+				$this->plugin_url . '/components/external/handsontable/handsontable.css',
+				array(),
+				m_chart()->version
 			);
 
 			wp_enqueue_script(
 				'handsontable',
 				$this->plugin_url . '/components/external/handsontable/handsontable.js',
-				array( 'jquery' )
+				array( 'jquery' ),
+				m_chart()->version
 			);
 
 			// Handlebars
 			wp_enqueue_script(
 				'handlebars',
-				$this->plugin_url . '/components/external/handlebars/handlebars.js'
+				$this->plugin_url . '/components/external/handlebars/handlebars.js',
+				array(),
+				m_chart()->version
 			);
 
 			// Highcharts export.js is required for the image generation
 			wp_enqueue_script(
 				'highcharts-exporting',
 				$this->plugin_url . '/components/external/highcharts/exporting.js',
-				array( 'highcharts', 'jquery' )
+				array( 'highcharts', 'jquery' ),
+				m_chart()->version
 			);
 
 			// canvg and rgbcolo do the SVG -> Canvas conversion
 			wp_enqueue_script(
 				'rgbcolor',
-				$this->plugin_url . '/components/external/canvg/rgbcolor.js'
+				$this->plugin_url . '/components/external/canvg/rgbcolor.js',
+				array(),
+				m_chart()->version
 			);
 
 			wp_enqueue_script(
 				'canvg',
 				$this->plugin_url . '/components/external/canvg/canvg.js',
-				array( 'rgbcolor' )
+				array( 'rgbcolor' ),
+				m_chart()->version
 			);
 
 			// Admin panel JS
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'highcharts', 'jquery' )
+				array( 'highcharts', 'jquery' ),
+				m_chart()->version
 			);
 
 			$settings = m_chart()->get_settings();
@@ -219,7 +258,9 @@ class M_Chart_Admin {
 		// Admin panel CSS
 		wp_enqueue_style(
 			'm-chart-admin',
-			$this->plugin_url . '/components/css/m-chart-admin.css'
+			$this->plugin_url . '/components/css/m-chart-admin.css',
+			array(),
+			m_chart()->version
 		);
 	}
 

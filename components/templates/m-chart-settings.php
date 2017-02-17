@@ -2,6 +2,7 @@
 	<h1><?php esc_html_e( 'M Chart Settings', 'm-chart' ); ?></h1>
 	<form method="post">
 		<?php wp_nonce_field( m_chart()->slug . '-save-settings', $this->get_field_name( 'nonce' ) ); ?>
+		<h2><?php esc_html_e( 'General Settings', 'm-chart' ); ?></h2>
 		<table class="form-table">
 			<tbody>
 				<tr>
@@ -60,6 +61,41 @@
 						<p class="description">
 							<?php esc_html_e( 'See the M Chart documentation for more info on how to use themes:', 'm-chart' ); ?>
 							<a href="https://github.com/methnen/m-chart/wiki/Themes">https://github.com/methnen/m-chart/wiki/Themes</a>
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<h2><?php esc_html_e( 'Language Settings', 'm-chart' ); ?></h2>
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Decimal Indicator', 'm-chart' ); ?></th>
+					<td>
+						<input type="text" name="<?php echo $this->get_field_name( 'decimalPoint', 'lang_settings' ); ?>" value="<?php echo esc_attr( $settings['lang_settings']['decimalPoint'] ); ?>" maxlength="1" size="1" />
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Thousands Separator', 'm-chart' ); ?></th>
+					<td>
+						<input type="text" name="<?php echo $this->get_field_name( 'thousandsSep', 'lang_settings' ); ?>" value="<?php echo esc_attr( $settings['lang_settings']['thousandsSep'] ); ?>" maxlength="1" size="1" />
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Numeric Symbols', 'm-chart' ); ?></th>
+					<td>
+						<input type="text" name="<?php echo $this->get_field_name( 'numericSymbols', 'lang_settings' ); ?>" value="<?php echo esc_attr( implode( ', ', $settings['lang_settings']['numericSymbols'] ) ); ?>" />
+						<p class="description">
+							<?php esc_html_e( 'Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)', 'm-chart' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Numeric Symbol Magnitude', 'm-chart' ); ?></th>
+					<td>
+						<input type="number" name="<?php echo $this->get_field_name( 'numericSymbolMagnitude', 'lang_settings' ); ?>" value="<?php echo absint( $settings['lang_settings']['numericSymbolMagnitude'] ); ?>" />
+						<p class="description">
+							<?php esc_html_e( 'Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)', 'm-chart' ); ?>
 						</p>
 					</td>
 				</tr>

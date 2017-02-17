@@ -2,6 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
+	public $version = 1.6;
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -9,6 +10,7 @@ class M_Chart {
 		'type'        => 'line',
 		'parse_in'    => 'rows',
 		'labels'      => true,
+		'shared'      => false,
 		'subtitle'    => '',
 		'y_title'     => '',
 		'y_units'     => '',
@@ -41,6 +43,19 @@ class M_Chart {
 		'performance'   => 'default',
 		'embeds'        => '',
 		'default_theme' => '_default',
+		'lang_settings' => array(
+			'decimalPoint'   => '.',
+			'thousandsSep'   => ',',
+			'numericSymbols' => array(
+				'K', // Thousands
+				'M', // Millions
+				'B', // Billions
+				'T', // Trillions
+				'P', // Quadrillions
+				'E', // Quintillions
+			),
+			'numericSymbolMagnitude' => 1000,
+		),
 	);
 
 	private $admin;
@@ -181,9 +196,17 @@ class M_Chart {
 
 		// Register the graphing library scripts
 		wp_register_script(
+			'highcharts-more',
+			$this->plugin_url . '/components/external/highcharts/highcharts-more.js',
+			array( 'jquery', 'highcharts' ),
+			$this->version
+		);
+
+		wp_register_script(
 			'highcharts',
 			$this->plugin_url . '/components/external/highcharts/highcharts.js',
-			array( 'jquery' )
+			array( 'jquery' ),
+			$this->version
 		);
 
 		// Add endpoint needed for iframe embed support
@@ -483,13 +506,21 @@ class M_Chart {
 		$post = get_post( $post_id );
 		$post_meta = $this->get_post_meta( $post_id );
 
-		m_chart()->parse()->parse_data( $post_meta['data'], $post_meta['parse_in'] );
+		$table = '';
 
-		$classes = $this->slug . '-table ' . $this->slug . '-table-' . $post_id;
+		$multiple = count( $post_meta['data']['sets'] ) > 1 ? true : false;
 
-		ob_start();
-		require __DIR__ . '/templates/table.php';
-		return ob_get_clean();
+		foreach ( $post_meta['data']['sets'] as $set => $data ) {
+			$classes = $this->slug . '-table ' . $this->slug . '-table-' . $post_id . '-' . $set;
+
+			m_chart()->parse()->parse_data( $data, $post_meta['parse_in'] );
+
+			ob_start();
+			require __DIR__ . '/templates/table.php';
+			$table .= ob_get_clean();
+		}
+
+		return $table;
 	}
 
 	/**
@@ -777,7 +808,36 @@ class M_Chart {
 		$settings = (array) get_option( $this->slug, $this->settings );
 		$settings = wp_parse_args( $settings, $this->settings );
 
+		// Make sure the lang_settings aren't missing anything we'll be expecting later on
+		$settings['lang_settings'] = wp_parse_args( $settings['lang_settings'], $this->settings['lang_settings'] );
+
 		return $settings;
+	}
+
+	/**
+	 * Return a recursively merged array out of the two given
+	 *
+	 * @param array a multi dimensional array that will be merged into
+	 * @param array a multi dimensional array that will be merged recursively into the first one
+	 *
+	 * @return array the merged array
+	 */
+	public function array_merge_recursive( &$a, $b ) {
+	    foreach ( $b as $child => $value ) {
+	        if ( isset( $a[ $child ] ) ) {
+				// New value exists so we'll need to move a level down
+	            if ( is_array( $a[ $child ] ) && is_array( $value ) ) {
+	                $this->array_merge_recursive( $a[ $child ], $value );
+	            }
+	            // @TODO This ignores cases where both values aren't arrays this seems bad, need to look into what cold happen here
+	        } else {
+				// New value doesn't exist so we can just add it
+	        	$a[ $child ] = $value;
+	        }
+
+	    }
+
+	    return $a;
 	}
 }
 

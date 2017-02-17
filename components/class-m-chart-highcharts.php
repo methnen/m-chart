@@ -43,6 +43,10 @@ class M_Chart_Highcharts {
 		$this->args = wp_parse_args( $args, m_chart()->get_chart_default_args );
 		$this->post = get_post( $post_id );
 		$this->post_meta = m_chart()->get_post_meta( $this->post->ID );
+
+		if ( 'bubble' == $this->post_meta['type'] ) {
+			wp_enqueue_script( 'highcharts-more' );
+		}
 	}
 
 	/**
@@ -51,22 +55,10 @@ class M_Chart_Highcharts {
 	 * @return array an array of Highcharts wide options we want to set
 	 */
 	public function get_chart_options() {
+		$settings = m_chart()->get_settings( 'lang_settings' );
+
 		$chart_options = array(
-			'lang' => array(
-				'numericSymbols' => array(
-					/* Thousands */
-					'K',
-					/* Millions */
-					'M',
-					/* Billions */
-					'B',
-					/* Trillions */
-					'T',
-				),
-				'thousandsSep' => array(
-					',',
-				),
-			),
+			'lang' => $settings['lang_settings'],
 		);
 
 		return apply_filters( 'm_chart_chart_options', $chart_options, $this->library );
@@ -153,8 +145,16 @@ class M_Chart_Highcharts {
 			$chart_args['yAxis']['min'] = $this->post_meta['y_min_value'];
 		}
 
-		// The x axis values need to be set or else you end up with a single notch :P
-		$chart_args['xAxis']['categories'] = $this->get_value_labels_array();
+		if ( 'bubble' != $this->post_meta['type'] ) {
+			// The x axis values need to be set or else you end up with a single notch :P
+			$chart_args['xAxis']['categories'] = $this->get_value_labels_array();
+		} else {
+			// Bubble charts need a little massaging to look better by default
+			$chart_args['yAxis']['startOnTick'] = false;
+			$chart_args['yAxis']['endOnTick'] = false;
+			$chart_args['xAxis']['startOnTick'] = false;
+			$chart_args['xAxis']['endOnTick'] = false;
+		}
 
 		$chart_args = $this->add_axis_labels( $chart_args );
 		$chart_args = $this->add_data_sets( $chart_args );
@@ -170,10 +170,32 @@ class M_Chart_Highcharts {
 
 		if ( 'scatter' == $this->post_meta['type'] ) {
 			$labels = $this->get_value_labels_array();
-			$chart_args['tooltip']['pointFormat'] = '<b>'  . $labels[0] . '</b>: {point.x} <br /><b>'. $labels[1] . '</b>: {point.y}';
+			$chart_args['tooltip']['pointFormat'] = '<b>' . $labels[0] . '</b>: {point.x} <br /><b>' . $labels[1] . '</b>: {point.y}';
+		} elseif ( 'bubble' == $this->post_meta['type'] ) {
+			$labels = $this->get_value_labels_array();
+			$chart_args['tooltip']['pointFormat'] = '<b>' . $labels[0] . '</b>: {point.x}<br /><b>' . $labels[1] . '</b>: {point.y}<br /><b>' . $labels[2] . '</b>: {point.z}';
 		}
 
-		$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
+		if (
+			'both' == m_chart()->parse()->value_labels_position
+			&& (
+				   'scatter' == $this->post_meta['type']
+				|| 'bubble' == $this->post_meta['type']
+			)
+		) {
+			$chart_args['plotOptions']['series']['dataLabels']['format'] = '{point.name}';
+		} else {
+			$chart_args['plotOptions']['series']['dataLabels']['format'] = m_chart()->parse()->data_prefix . '{y:,f}' . m_chart()->parse()->data_suffix;
+		}
+
+		if ( $this->post_meta['shared'] ) {
+			$chart_args['tooltip']['shared'] = true;
+		}
+
+		// Apply the theme
+		if ( $theme = $this->get_theme( $this->post_meta['theme'] ) ) {
+			$chart_args = m_chart()->array_merge_recursive( $chart_args, $theme );
+		}
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
 
@@ -308,7 +330,7 @@ class M_Chart_Highcharts {
 				'pointFormat' => '<b>{point.y}</b>',
 			);
 		} else if ( 'scatter' == $this->post_meta['type'] ) {
-			$set_names = m_chart()->get_post_meta( $this->post->ID, 'set_names' );
+			$set_names = $this->post_meta['set_names'];
 
 			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
 				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
@@ -317,15 +339,27 @@ class M_Chart_Highcharts {
 
 				$new_data_array = array();
 
-				foreach ( $data_array as $data_key => $data ) {
-					if ( $data_key % 2 ) {
-						continue;
-					}
+				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
 
-					$new_data_array[] = array(
-						$data,
-						$data_array[ $data_key + 1 ],
-					);
+				if ( 'both' == $parse->value_labels_position ) {
+					foreach ( $data_array as $data_key => $data ) {
+						$new_data_array[] = array(
+							'x'    => $data[0],
+							'y'    => $data[1],
+							'name' => $parse->value_labels[ $label_key ][ $data_key ],
+						);
+					}
+				} else {
+					foreach ( $data_array as $data_key => $data ) {
+						if ( $data_key % 2 ) {
+							continue;
+						}
+
+						$new_data_array[] = array(
+							$data,
+							$data_array[ $data_key + 1 ],
+						);
+					}
 				}
 
 				$chart_args['series'][] = array(
@@ -333,25 +367,79 @@ class M_Chart_Highcharts {
 					'data' => $new_data_array,
 				);
 			}
-		} else if ( 'bubble' == $this->post_meta['type'] ) {
-			$new_data_array = array();
 
-			foreach ( $data_array as $key => $data ) {
-				if ( $key % 2 ) {
-					continue;
+			// When there's only one data set the header is redundent
+			if ( 1 == count( $this->post_meta['data']['sets'] ) ) {
+				// When there's only one data set the default header is redundent and doesn't include the point label
+				if ( 'both' == m_chart()->parse()->value_labels_position ) {
+					$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{point.key}</span><br/>";
+				} else {
+					$chart_args['tooltip']['headerFormat'] = '';
+				}
+			} else {
+				// When there's more than one data set the default header doesn't include the point label
+				if ( 'both' == m_chart()->parse()->value_labels_position ) {
+					$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{series.name}: {point.key}</span><br/>";
+				} else {
+					$chart_args['tooltip']['headerFormat'] =  "<span style='font-size: 10px;'>{series.name}</span><br/>";
+				}
+			}
+		} else if ( 'bubble' == $this->post_meta['type'] ) {
+			$set_names = $this->post_meta['set_names'];
+
+			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+
+				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
+
+				$new_data_array = array();
+
+				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+
+				if ( 'both' == $parse->value_labels_position ) {
+					foreach ( $data_array as $data_key => $data ) {
+						$new_data_array[] = array(
+							'x'    => $data[0],
+							'y'    => $data[1],
+							'z'    => $data[2],
+							'name' => $parse->value_labels[ $label_key ][ $data_key ],
+						);
+					}
+				} else {
+					foreach ( $data_array as $data_key => $data ) {
+						if ( $data_key % 2 ) {
+							continue;
+						}
+
+						$new_data_array[] = array(
+							$data,
+							$data_array[ $data_key + 1 ],
+							$data_array[ $data_key + 2 ],
+						);
+					}
 				}
 
-				$new_data_array[] = array(
-					$data,
-					$data_array[ $key + 1 ],
+				$chart_args['series'][] = array(
+					'name' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data' => $new_data_array,
 				);
 			}
 
-			$chart_args['series'] = array(
-				array(
-					'data' => $new_data_array,
-				),
-			);
+			if ( 1 == count( $this->post_meta['data']['sets'] ) ) {
+				// When there's only one data set the default header is redundent and doesn't include the point label
+				if ( 'both' == m_chart()->parse()->value_labels_position ) {
+					$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{point.key}</span><br/>";
+				} else {
+					$chart_args['tooltip']['headerFormat'] = '';
+				}
+			} else {
+				// When there's more than one data set the default header doesn't include the point label
+				if ( 'both' == m_chart()->parse()->value_labels_position ) {
+					$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{series.name}: {point.key}</span><br/>";
+				} else {
+					$chart_args['tooltip']['headerFormat'] =  "<span style='font-size: 10px;'>{series.name}</span><br/>";
+				}
+			}
 		} else {
 			$set_data = array();
 
@@ -451,16 +539,14 @@ class M_Chart_Highcharts {
 		foreach ( $this->theme_directories as $directory ) {
 			if ( ! $themes = $this->_get_themes_readdir( $directory ) ) {
 				continue;
-			} // END if
+			}
 
-			foreach ( $themes as $theme )
-			{
-				if ( $theme->slug == $slug )
-				{
+			foreach ( $themes as $theme ) {
+				if ( $theme->slug == $slug ) {
 					return $theme->options;
-				} // END if
-			} // END foreach
-		} // END foreach
+				}
+			}
+		}
 
 		return false;
 	}
@@ -490,10 +576,9 @@ class M_Chart_Highcharts {
 
 			if ( preg_match( '|Theme Name:(.*)$|mi', $theme_data, $name ) ) {
 				$name = trim( _cleanup_header_comment( $name[1] ) );
-			} // END if
+			}
 
-			if ( isset( $name ) && '' != $name )
-			{
+			if ( isset( $name ) && '' != $name ) {
 				$file = basename( $file );
 
 				$themes[ $file ] = (object) array(
@@ -502,8 +587,8 @@ class M_Chart_Highcharts {
 					'file'    => $file,
 					'options' => require $theme_base . $file,
 				);
-			} // END if
-		} // END foreach
+			}
+		}
 
 		return $themes;
 	}

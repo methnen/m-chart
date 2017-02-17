@@ -22,12 +22,23 @@
 					margin-bottom: 0;
 				}
 
-				&.one,
-				&.two {
+				&.one {
 					p {
 						float: left;
 						margin-left: 1%;
 						width: 32%;
+
+						&:first-child {
+							margin-left: 0;
+						}
+					}
+				}
+				
+				&.two {
+					p {
+						float: left;
+						margin-left: 1%;
+						width: 24%;
 
 						&:first-child {
 							margin-left: 0;

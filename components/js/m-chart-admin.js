@@ -84,10 +84,13 @@
 	m_chart_admin.get_data = function() {
 		var $data = [];
 
-		$.each( this.$spreadsheets, function( i ) {
-			$data[ i ] = m_chart_admin.$spreadsheets[ i ].getData();
-		});
+		var spreadsheet = 0;
 
+		$.each( this.$spreadsheets, function( i ) {
+			$data[ spreadsheet ] = m_chart_admin.$spreadsheets[ i ].getData();
+			spreadsheet++;
+		});
+		console.log($data);
 		return $data;
 	}
 
@@ -102,7 +105,9 @@
 
 		// hands_on_table_data is an array of data sets so we cycle through them and build a spreadsheet object for each one
 		$.each( hands_on_table_data, function( i, data ) {
-			m_chart_admin.create_spreadsheet( i, data );
+			var instance = Number( i ) + 1;
+
+			m_chart_admin.create_spreadsheet( instance, data );
 		});
 
 		// Add change event so we update on spreadsheet changes
@@ -115,9 +120,9 @@
 
 	// Instantiate a spreedsheet
 	m_chart_admin.create_spreadsheet = function( i, data ) {
-		this.$spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: ( i + 1 ) } ) );
+		this.$spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: i } ) );
 		// Note we're purposely not getting a jQuery version of this object because handsontable likes it that way
-		var $spreadsheet_div = document.getElementById( 'hands-on-table-sheet-' + this.post_id + '-' + ( i + 1 ) );
+		var $spreadsheet_div = document.getElementById( 'hands-on-table-sheet-' + this.post_id + '-' + i );
 
 		// New charts won't actually have data so we'll pass something handsontable understands
 		if ( '' == data ) {
@@ -140,30 +145,30 @@
 		// Built tab for sheet this sheet (it's only visible if the user selects an appropriate chart type but we build it now anyway)
 		var $template_vars = {
 			post_id: m_chart_admin.post_id,
-			instance: ( i + 1 )
+			instance: i
 		};
 
 		if ( i > 0 ) {
 			$( $spreadsheet_div ).addClass( 'hide' );
 			$template_vars.class = 'nav-tab';
 		} else {
-			this.active_set = i + 1;
+			this.active_set = i;
 			$template_vars.class = 'nav-tab nav-tab-active';
 		}
 
-		if ( 'undefined' !== typeof this.set_names[ i ] ) {
-			$template_vars.value = this.set_names[ i ];
+		if ( 'undefined' !== typeof this.set_names[ i - 1 ] ) {
+			$template_vars.value = this.set_names[ i - 1 ];
 		} else {
-			$template_vars.value = 'Sheet ' + ( i + 1 );
+			$template_vars.value = 'Sheet ' + i;
 		}
 
 		this.$spreadsheet_tabs.append( this.sheet_tab_template( $template_vars ) );
 
 		// Set the tab input width
-		var $tab_input = $( '#hands-on-table-sheet-tab-' + this.post_id + '-' + ( i + 1 ) + ' input' );
+		var $tab_input = $( '#hands-on-table-sheet-tab-' + this.post_id + '-' + i + ' input' );
 		m_chart_admin.resize_input( $tab_input );
 
-		this.last_set = i + 1;
+		this.last_set = i;
 	}
 
 	// Handle chart type input changes so the settings UI only reflects appropriate options
@@ -173,7 +178,7 @@
 		var $spreadsheet_tabs = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
 
 		// Show everything before hiding the options we don't want
-		$chart_meta_box.find( '.row' ).removeClass( 'hide' );
+		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
 
 		if (
 			   'area' === chart_type
@@ -184,8 +189,22 @@
 			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
+		if (
+			   'column' === chart_type
+			|| 'bar' === chart_type
+		) {
+			$chart_meta_box.find( '.shared' ).addClass( 'hide' );
+		}
+
+		if (
+			   'line' === chart_type
+			|| 'spline' === chart_type
+		) {
+			$spreadsheet_tabs.addClass( 'hide' );
+		}
+
 		if ( 'pie' === chart_type ) {
-			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min, .shared' ).addClass( 'hide' );
 			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
@@ -193,6 +212,7 @@
 			   'scatter' === chart_type
 			|| 'bubble' === chart_type
 		) {
+			$chart_meta_box.find( '.row.y-min, .shared' ).addClass( 'hide' );
 			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 	};
@@ -202,8 +222,9 @@
 		// Add a spreedsheet
 		this.$spreadsheet_tabs.find( '.add-sheet' ).on( 'click', function( event ) {
 			event.preventDefault();
-			m_chart_admin.create_spreadsheet( m_chart_admin.last_set, '' );
-			$( document.getElementById( 'hands-on-table-sheet-tab-' + m_chart_admin.post_id + '-' + m_chart_admin.last_set ) ).click();
+			m_chart_admin.create_spreadsheet( m_chart_admin.last_set + 1, '' );
+			var new_tab = document.getElementById( 'hands-on-table-sheet-tab-' + m_chart_admin.post_id + '-' + m_chart_admin.last_set );
+			$( new_tab ).click().find( 'input' ).trigger( 'dblclick' );
 			m_chart_admin.refresh_chart();
 		});
 
@@ -222,6 +243,9 @@
 			$( this ).addClass( 'nav-tab-active' );
 			m_chart_admin.active_set = $(this).data( 'instance' );
 		});
+
+		// On the initial load of the interface we shoudl select the initial tab
+		this.$spreadsheet_tabs.find( '.nav-tab' ).first().click();
 
 		// Handle double clicks and long presses on the tabs
 		this.$spreadsheet_tabs.on( 'dblclick taphold', '.nav-tab', function( event ) {
@@ -257,12 +281,25 @@
 				return;
 			}
 
+			var $tab = $( this ).closest( '.nav-tab' );
+
+			// Select the tab we're working with if necessary
+			if ( ! $tab.hasClass( 'nav-tab-active' ) ) {
+				$tab.click();
+			}
+
 			var instance = $( this ).closest( '.nav-tab' ).data( 'instance' );
 
-			delete m_chart_admin.$spreadsheets[ ( instance - 1 ) ];
-			$( this ).closest( '.nav-tab' ).remove();
+			// Delete the spreedsheet
+			delete m_chart_admin.$spreadsheets[ instance ];
+
+			// Remove the tab
+			$tab.remove();
+
+			// Remove the spreedsheet div
 			$( document.getElementById( 'hands-on-table-sheet-' + m_chart_admin.post_id + '-' + instance ) ).remove();
-			// @TODO figure out why this fails when you remove a sheet while another tab is selected
+
+			// Select the first tab and refresh the chart to reflect the changes
 			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).first().click();
 			m_chart_admin.refresh_chart();
 		});
@@ -417,15 +454,21 @@
 		var width  = svg.match(/^<svg[^>]*width\s*=\s*\"?(\d+)\"?[^>]*>/)[1];
 		var height = svg.match(/^<svg[^>]*height\s*=\s*\"?(\d+)\"?[^>]*>/)[1];
 
-		// Double the width/height values in SVG
+		// Double the width/height values in the SVG
 	    svg = svg.replace( 'width="' + width + '"', 'width="' + ( width * 2 ) + '"' );
 	    svg = svg.replace( 'height="' + height + '"', 'height="' + ( height * 2 ) + '"' );
+
+		// Scaling continues to be a disaster in canvg so we'll scale manually here
+		svg = svg.replace(
+			'<svg ',
+		    '<svg transform="scale(2)" '
+		);
 
 		// Create a Canvas object out of the SVG
 		var $canvas = $( '#m-chart-canvas-render-' + event.post_id );
 		m_chart_admin.canvas = $canvas.get( 0 );
 
-		canvg( m_chart_admin.canvas, svg, { scaleWidth: ( width * 2 ), scaleHeight: ( height * 2 ) } );
+		canvg( m_chart_admin.canvas, svg );
 
 		// Create Canvas context so we can play with it before saving
 		m_chart_admin.canvas_context = m_chart_admin.canvas.getContext( '2d' );
@@ -464,13 +507,6 @@
 			return false;
 		}
 
-		m_chart_admin.refresh_counter++;
-
-		// Handsontable calls afterChange on the first render for some silly reason
-		if ( 1 === m_chart_admin.refresh_counter ) {
-			return false;
-		}
-
 		// Stop any existing requests so we don't just pile them up
 		if ( this.request ) {
 			this.request.abort();
@@ -482,7 +518,7 @@
 		// Build an object with all fo the post_meta values
 		var $post_meta = {};
 
-		this.$setting_inputs.each( function() {
+		$.each( this.$setting_inputs, function() {
 			// Don't record unselected/unchecked radio/checkboxes
 			if (
 				   'radio' !== $( this ).attr( 'type' )
@@ -496,6 +532,12 @@
 		$post_meta[ 'subtitle' ] = this.$subtitle_input.attr( 'value' );
 
 		$post_meta.data = JSON.stringify( m_chart_admin.get_data() );
+
+		$post_meta['set_names'] = [];
+
+		$.each( this.$spreadsheet_tabs.find( '.nav-tab' ), function( i ) {
+			$post_meta['set_names'][ i ] = $( this ).find( 'input' ).val();
+		});
 
 		// Request a new chart_args object so we can rerender the chart with the changes
 		this.request = $.ajax({
