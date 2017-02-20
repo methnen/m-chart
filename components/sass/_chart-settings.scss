@@ -33,15 +33,29 @@
 						}
 					}
 				}
-				
+
 				&.two {
 					p {
 						float: left;
 						margin-left: 1%;
-						width: 24%;
+						width: 32%;
 
 						&:first-child {
 							margin-left: 0;
+						}
+
+						&.shared {
+							display: none;
+						}
+					}
+
+					&.show-shared {
+						p {
+							width: 24%;
+
+							&.shared {
+								display: block;
+							}
 						}
 					}
 				}

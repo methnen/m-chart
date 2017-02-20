@@ -568,7 +568,7 @@ class M_Chart_Highcharts {
 		$themes = array();
 
 		foreach ( $theme_dir as $file ) {
-			if ( ! $file->isFile() || 'php' != $file->getExtension() ) {
+			if ( ! $file->isFile() || ! preg_match( '#.php$#i', $file->getFilename() ) ) {
 				continue;
 			}
 

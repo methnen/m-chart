@@ -179,6 +179,7 @@
 
 		// Show everything before hiding the options we don't want
 		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
+		$chart_meta_box.find( '.row.two' ).addClass( 'show-shared' );
 
 		if (
 			   'area' === chart_type
@@ -194,6 +195,7 @@
 			|| 'bar' === chart_type
 		) {
 			$chart_meta_box.find( '.shared' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
 		}
 
 		if (
@@ -204,7 +206,8 @@
 		}
 
 		if ( 'pie' === chart_type ) {
-			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min, .shared' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
 			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
@@ -212,7 +215,8 @@
 			   'scatter' === chart_type
 			|| 'bubble' === chart_type
 		) {
-			$chart_meta_box.find( '.row.y-min, .shared' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
 			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 	};
@@ -224,6 +228,10 @@
 			event.preventDefault();
 			m_chart_admin.create_spreadsheet( m_chart_admin.last_set + 1, '' );
 			var new_tab = document.getElementById( 'hands-on-table-sheet-tab-' + m_chart_admin.post_id + '-' + m_chart_admin.last_set );
+
+			// Check tab count
+			m_chart_admin.check_tab_count();
+
 			$( new_tab ).click().find( 'input' ).trigger( 'dblclick' );
 			m_chart_admin.refresh_chart();
 		});
@@ -299,10 +307,22 @@
 			// Remove the spreedsheet div
 			$( document.getElementById( 'hands-on-table-sheet-' + m_chart_admin.post_id + '-' + instance ) ).remove();
 
+			// Check tab count
+			m_chart_admin.check_tab_count();
+
 			// Select the first tab and refresh the chart to reflect the changes
 			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).first().click();
 			m_chart_admin.refresh_chart();
 		});
+	};
+
+	// Set last tab as do-not-delete if tab count is 1
+	m_chart_admin.check_tab_count = function() {
+		if ( 1 == this.$spreadsheet_tabs.find( '.nav-tab' ).length ) {
+			this.$spreadsheet_tabs.find( '.nav-tab' ).addClass( 'do-not-delete' );
+		} else {
+			this.$spreadsheet_tabs.find( '.nav-tab' ).removeClass( 'do-not-delete' );
+		}
 	};
 
 	// Resize an input based on it's value
@@ -420,7 +440,7 @@
 				}
 
 				// Update the spreadsheet with the new data
-				m_chart_admin.$spreadsheets[ m_chart_admin.active_set - 1 ].loadData( response.data );
+				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].loadData( response.data );
 
 				$file_input.attr( 'value', '' );
 				$select.removeClass( 'hide' );
@@ -435,7 +455,7 @@
 			event.preventDefault();
 
 			var $form = $( document.getElementById( 'm-chart-csv-export-form' ) );
-			var $data = m_chart_admin.$spreadsheets[ m_chart_admin.active_set - 1 ].getData();
+			var $data = m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].getData();
 
 			var set_name = m_chart_admin.$spreadsheet_tabs.find( '.nav-tab-active input' ).val();
 

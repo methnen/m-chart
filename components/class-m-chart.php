@@ -79,6 +79,7 @@ class M_Chart {
 
 		// Doing this before the default so it's already done before anything else
 		add_filter( 'm_chart_get_chart_image_tag', array( $this, 'm_chart_get_chart_image_tag' ), 9, 3 );
+		add_filter( 'the_content', array( $this, 'the_content' ) );
 
 		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
 		add_shortcode( 'chart-share', array( $this, 'share_shortcode' ) );
@@ -556,7 +557,7 @@ class M_Chart {
 	}
 
 	/**
-	 * Filter the m_chart_get_chart_image_tag and return a plaecholder if appropriate
+	 * Filter the m_chart_get_chart_image_tag hook and return a plaecholder if appropriate
 	 *
 	 * @param array|bool an array of image values or false if no image could be found
 	 * @param int $post_id WP post ID of the chart you want an image for
@@ -577,6 +578,24 @@ class M_Chart {
 			'height' => 480,
 			'name'   => get_the_title( $post_id ),
 		);
+	}
+
+	/**
+	 * Filter the the_content hook and return chart code if this is a chart
+	 *
+	 * @param string $content content from the current post
+	 *
+	 * @return string original content or chart code
+	 */
+	public function the_content( $content ) {
+		// Make sure we're dealing with a chart
+		if ( get_post_type() != $this->slug ) {
+			// We aren't dealing with a chart so we'll just stop here
+			return $content;
+		}
+
+		// Call the get_chart method and let it do it's thing
+		return $this->get_chart();
 	}
 
 	/**
