@@ -21,7 +21,7 @@
 			<div class="file-info hide">
 				<a href="#cancel" title="<?php esc_attr_e( 'Cancel Import', 'm-chart' ); ?>" class="dashicons dashicons-dismiss"></a>
 				File: <span class="file-name"></span><br />
-				<span class="warning"><?php esc_html_e( 'Importing this file will replace all existing data', 'm-chart' ); ?></span>
+				<span class="warning"><?php esc_html_e( 'Importing this file will replace all existing data in this sheet', 'm-chart' ); ?></span>
 			</div>
 		</div>
 	</div>
