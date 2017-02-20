@@ -40,7 +40,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Added support for [scatter](https://github.com/methnen/m-chart/wiki/Scatter-chart) and [bubble](https://github.com/methnen/m-chart/wiki/Bubble-chart) charts
 * Charts can now be loaded via iFrames
+* Line, spline and area charts can now use shared tool tips
+* Added language settings to allow things like setting the thousands seperator and decimal symbols
 * Switched to internal array_merge method in the theme code so we can recursively merge settings
+* Tweaked the theme code a bit so we can support older versions of PHP
+* Filtering `the_content` to now return chart code when appropriate
+* Updated Highcharts to the latest stable version (5.0.6)
+* Updated Handsontable to the latest stable version (0.29.2)
 
 ### 1.5.2 ###
 
