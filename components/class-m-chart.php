@@ -847,8 +847,10 @@ class M_Chart {
 				// New value exists so we'll need to move a level down
 	            if ( is_array( $a[ $child ] ) && is_array( $value ) ) {
 	                $this->array_merge_recursive( $a[ $child ], $value );
+	            } else {
+					// New value is not an array so we override the old value with the new one
+	            	$a[ $child ] = $value;
 	            }
-	            // @TODO This ignores cases where both values aren't arrays this seems bad, need to look into what cold happen here
 	        } else {
 				// New value doesn't exist so we can just add it
 	        	$a[ $child ] = $value;
