@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "POT-Creation-Date: 2017-02-21 15:52-0800\n"
-"PO-Revision-Date: 2017-02-21 15:52-0800\n"
+"PO-Revision-Date: 2017-02-22 08:37-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -198,7 +198,7 @@ msgstr "已保存的设置"
 
 #: components/class-m-chart-admin.php:253
 msgid "Are you sure you want to delete this spreadsheet?"
-msgstr ""
+msgstr "你确定你要删掉这个电子表格吗?"
 
 #: components/class-m-chart-admin.php:280
 msgid "Data"
@@ -326,23 +326,23 @@ msgstr "管理数据集并将它们在 WordPress 中显示为图表。"
 
 #: components/class-m-chart.php:765
 msgid "The chart could not be found"
-msgstr ""
+msgstr "无法找到此图表"
 
 #: components/class-m-chart.php:766
 msgid "Chart not found"
-msgstr ""
+msgstr "无法找到图表"
 
 #: components/class-m-chart.php:775
 msgid "Embeds of this type are not enabled"
-msgstr ""
+msgstr "这种类型的嵌入无法被执行"
 
 #: components/class-m-chart.php:776
 msgid "Embeds disabled"
-msgstr ""
+msgstr "嵌入无法被执行"
 
 #: components/templates/handlebars.php:5
 msgid "Double click or long press tab to edit name"
-msgstr ""
+msgstr "按两下或是长压标签来更改姓名"
 
 #: components/templates/highcharts-settings.php:3
 msgid "Line"
@@ -370,11 +370,11 @@ msgstr "扇形图"
 
 #: components/templates/highcharts-settings.php:9
 msgid "Scatter"
-msgstr ""
+msgstr "散点图"
 
 #: components/templates/highcharts-settings.php:10
 msgid "Bubble"
-msgstr ""
+msgstr "气泡图"
 
 #: components/templates/highcharts-settings.php:14
 msgid "Columns"
@@ -410,7 +410,7 @@ msgstr "显示图例"
 
 #: components/templates/highcharts-settings.php:91
 msgid "Shared tooltip"
-msgstr ""
+msgstr "共享数据提示框"
 
 #: components/templates/highcharts-settings.php:98
 msgid "Vertical axis title"
@@ -455,7 +455,7 @@ msgstr "以图像文档格式储存／上传此图表"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
-msgstr ""
+msgstr "一般设置"
 
 #: components/templates/m-chart-settings.php:9
 #: components/templates/m-chart-settings.php:13
@@ -488,15 +488,15 @@ msgstr "没有即时预览和没有生成图表图像"
 
 #: components/templates/m-chart-settings.php:34
 msgid "Embeds"
-msgstr ""
+msgstr "嵌入"
 
 #: components/templates/m-chart-settings.php:38
 msgid "Enable iframe embeds"
-msgstr ""
+msgstr "启用内嵌网页框架(iframe)嵌入"
 
 #: components/templates/m-chart-settings.php:39
 msgid "Allow charts to be remotely embedded via iframes"
-msgstr ""
+msgstr "允许图表能够远端透过内嵌网页框架(iframe)嵌入"
 
 #: components/templates/m-chart-settings.php:46
 msgid "Default Highcharts Theme"
@@ -508,35 +508,35 @@ msgstr "有关如何使用主题，请参阅更多M Chart 说明 ︰"
 
 #: components/templates/m-chart-settings.php:69
 msgid "Language Settings"
-msgstr ""
+msgstr "语言设定"
 
 #: components/templates/m-chart-settings.php:73
 msgid "Decimal Indicator"
-msgstr ""
+msgstr "十进制指示器"
 
 #: components/templates/m-chart-settings.php:79
 msgid "Thousands Separator"
-msgstr ""
+msgstr "十进制指示器"
 
 #: components/templates/m-chart-settings.php:85
 msgid "Numeric Symbols"
-msgstr ""
+msgstr "数字符号"
 
 #: components/templates/m-chart-settings.php:89
 msgid ""
 "Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, "
 "Quintillions...)"
-msgstr ""
+msgstr "用逗号分隔（千，百万，十亿，万亿，四万亿，五百万...）"
 
 #: components/templates/m-chart-settings.php:94
 msgid "Numeric Symbol Magnitude"
-msgstr ""
+msgstr "数字符号的幅度"
 
 #: components/templates/m-chart-settings.php:98
 msgid ""
 "Allows adjustment for languages that use symbols at different intervals "
 "(Japanese, Korean, etc...)"
-msgstr ""
+msgstr "允许调整一些会在不同间隔间使用符号的语言（日语，韩语等）"
 
 #: components/templates/m-chart-settings.php:105
 msgid "Save Changes"
@@ -544,11 +544,11 @@ msgstr "保存更改"
 
 #: components/templates/share.php:24
 msgid "Share:"
-msgstr ""
+msgstr "分享："
 
 #: components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
-msgstr ""
+msgstr "添加工作表"
 
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export CSV"
@@ -588,7 +588,7 @@ msgstr "取消导入"
 
 #: components/templates/spreadsheet-meta-box.php:24
 msgid "Importing this file will replace all existing data in this sheet"
-msgstr ""
+msgstr "导入此文件将替换此工作表中的所有现有数据"
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
