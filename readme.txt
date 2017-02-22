@@ -16,8 +16,6 @@ For full documentation please see the [Wiki](https://github.com/methnen/m-chart/
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
 
-**Note:** PHP version 5.3.6 or greater is required to run this plugin.
-
 == Installation ==
 
 1. Put the m-chart directory into your plugins directory

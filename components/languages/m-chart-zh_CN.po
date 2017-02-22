@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2016-06-01 17:14-0700\n"
-"PO-Revision-Date: 2016-06-01 17:16-0700\n"
+"POT-Creation-Date: 2017-02-21 15:52-0800\n"
+"PO-Revision-Date: 2017-02-21 15:52-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-WPHeader: m-chart.php\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -165,8 +165,8 @@ msgid "Sales"
 msgstr "销售额"
 
 #: components/array-default-unit-terms.php:49
-#: components/templates/highcharts-settings.php:93
-#: components/templates/highcharts-settings.php:131
+#: components/templates/highcharts-settings.php:102
+#: components/templates/highcharts-settings.php:140
 msgid "Units"
 msgstr "单位"
 
@@ -174,12 +174,12 @@ msgstr "单位"
 msgid "CPM"
 msgstr "每千人价格"
 
-#: components/class-m-chart-admin.php:41 components/class-m-chart.php:140
+#: components/class-m-chart-admin.php:41 components/class-m-chart.php:160
 msgid "Charts"
 msgstr "图表"
 
-#: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:233
-#: components/class-m-chart.php:141
+#: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:289
+#: components/class-m-chart.php:161
 msgid "Chart"
 msgstr "图表"
 
@@ -192,173 +192,157 @@ msgstr "M Chart 设置"
 msgid "Settings"
 msgstr "设置"
 
-#: components/class-m-chart-admin.php:135
+#: components/class-m-chart-admin.php:162
 msgid "Settings saved"
 msgstr "已保存的设置"
 
-#: components/class-m-chart-admin.php:224
+#: components/class-m-chart-admin.php:253
+msgid "Are you sure you want to delete this spreadsheet?"
+msgstr ""
+
+#: components/class-m-chart-admin.php:280
 msgid "Data"
 msgstr "数据"
 
-#: components/class-m-chart-admin.php:244
-msgid "CSV Import/Export"
-msgstr "CSV 导入／导出"
-
-#: components/class-m-chart-admin.php:484
-#: components/class-m-chart-admin.php:494
+#: components/class-m-chart-admin.php:524
+#: components/class-m-chart-admin.php:534
 msgid "Wrong post type"
 msgstr "错误图表类型"
 
-#: components/class-m-chart-admin.php:489
-#: components/class-m-chart-admin.php:613
+#: components/class-m-chart-admin.php:529
+#: components/class-m-chart-admin.php:655
 msgid "Invalid nonce"
 msgstr "无效随机值"
 
-#: components/class-m-chart-admin.php:499
+#: components/class-m-chart-admin.php:539
 msgid "No file to import"
 msgstr "没有导入的文件"
 
-#: components/class-m-chart-admin.php:506
+#: components/class-m-chart-admin.php:546
 msgid "Only CSV files can be imported "
 msgstr "只有CSV文档可以导入"
 
-#: components/class-m-chart-admin.php:513
+#: components/class-m-chart-admin.php:553
 msgid "File path not found"
 msgstr "找不到文件路径"
 
-#: components/class-m-chart-admin.php:519
+#: components/class-m-chart-admin.php:559
 msgid "CSV file was empty"
 msgstr " CSV文档是空的"
 
-#: components/class-m-chart-admin.php:618
+#: components/class-m-chart-admin.php:660
 msgid "Invalid post"
 msgstr "无效图表"
 
-#: components/class-m-chart-admin.php:623
+#: components/class-m-chart-admin.php:665
 msgid "Permission error"
 msgstr "权限错误"
 
-#: components/class-m-chart-admin.php:628
+#: components/class-m-chart-admin.php:670
 msgid "Invalid library"
 msgstr "无效编码库"
 
-#: components/class-m-chart.php:112 components/class-m-chart.php:122
+#: components/class-m-chart.php:135 components/class-m-chart.php:145
 msgid "Chart Units"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:113
+#: components/class-m-chart.php:136
 msgid "Chart Unit"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:114
+#: components/class-m-chart.php:137
 msgid "Search Chart Units"
 msgstr "搜索图表单位"
 
-#: components/class-m-chart.php:115
+#: components/class-m-chart.php:138
 msgid "All Chart Units"
 msgstr "所有图表单位"
 
-#: components/class-m-chart.php:116
+#: components/class-m-chart.php:139
 msgid "Parent Chart Unit"
 msgstr "父图单位"
 
-#: components/class-m-chart.php:117
+#: components/class-m-chart.php:140
 msgid "Parent Chart Unit:"
 msgstr "父表单位 ︰"
 
-#: components/class-m-chart.php:118
+#: components/class-m-chart.php:141
 msgid "Edit Chart Unit"
 msgstr "编辑图表单位"
 
-#: components/class-m-chart.php:119
+#: components/class-m-chart.php:142
 msgid "Update Chart Unit"
 msgstr "更新图表单位"
 
-#: components/class-m-chart.php:120
+#: components/class-m-chart.php:143
 msgid "Add New Chart Unit"
 msgstr "添加新的图表单位"
 
-#: components/class-m-chart.php:121
+#: components/class-m-chart.php:144
 msgid "Chart Unit Name"
 msgstr "图表单位名称"
 
-#: components/class-m-chart.php:142 components/class-m-chart.php:143
+#: components/class-m-chart.php:162 components/class-m-chart.php:163
 msgid "Add Chart"
 msgstr "添加图表"
 
-#: components/class-m-chart.php:144
+#: components/class-m-chart.php:164
 msgid "Edit"
 msgstr "编辑"
 
-#: components/class-m-chart.php:145
+#: components/class-m-chart.php:165
 msgid "Edit Chart"
 msgstr "编辑图表"
 
-#: components/class-m-chart.php:146
+#: components/class-m-chart.php:166
 msgid "New Chart"
 msgstr "添加新的图表"
 
-#: components/class-m-chart.php:147
-#: components/templates/highcharts-settings.php:176
+#: components/class-m-chart.php:167
+#: components/templates/highcharts-settings.php:185
 msgid "View"
 msgstr "查看"
 
-#: components/class-m-chart.php:148
+#: components/class-m-chart.php:168
 msgid "View Chart"
 msgstr "查看图表"
 
-#: components/class-m-chart.php:149
+#: components/class-m-chart.php:169
 msgid "Search Charts"
 msgstr "搜索图表"
 
-#: components/class-m-chart.php:150
+#: components/class-m-chart.php:170
 msgid "No Charts found"
 msgstr "没找到图表"
 
-#: components/class-m-chart.php:151
+#: components/class-m-chart.php:171
 msgid "No Charts found in the Trash"
 msgstr "没有在回收站找到图表"
 
 #. Description of the plugin/theme
-#: components/class-m-chart.php:162
+#: components/class-m-chart.php:182
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "管理数据集并将它们在 WordPress 中显示为图表。"
 
-#: components/templates/csv-meta-box.php:2
-msgid "Export CSV"
-msgstr "输出CSV"
+#: components/class-m-chart.php:765
+msgid "The chart could not be found"
+msgstr ""
 
-#: components/templates/csv-meta-box.php:2
-msgid "Export"
-msgstr "导出"
+#: components/class-m-chart.php:766
+msgid "Chart not found"
+msgstr ""
 
-#: components/templates/csv-meta-box.php:6
-msgid "Select CSV File"
-msgstr "选择CSV文件"
+#: components/class-m-chart.php:775
+msgid "Embeds of this type are not enabled"
+msgstr ""
 
-#: components/templates/csv-meta-box.php:6
-msgid "Select File"
-msgstr "选择文件"
+#: components/class-m-chart.php:776
+msgid "Embeds disabled"
+msgstr ""
 
-#: components/templates/csv-meta-box.php:7
-msgid "Import"
-msgstr "导入"
-
-#: components/templates/csv-meta-box.php:8
-msgid "You can only import CSV files"
-msgstr "只可以导入CSV格式的文档"
-
-#: components/templates/csv-meta-box.php:10
-msgid "Importing file"
-msgstr "正在導入文件"
-
-#: components/templates/csv-meta-box.php:12
-msgid "Cancel Import"
-msgstr "取消导入"
-
-#: components/templates/csv-meta-box.php:14
-msgid "Importing this file will replace all existing data"
-msgstr "导入此文档将替换现有数据"
+#: components/templates/handlebars.php:5
+msgid "Double click or long press tab to edit name"
+msgstr ""
 
 #: components/templates/highcharts-settings.php:3
 msgid "Line"
@@ -384,119 +368,227 @@ msgstr "栏状图"
 msgid "Pie"
 msgstr "扇形图"
 
-#: components/templates/highcharts-settings.php:12
+#: components/templates/highcharts-settings.php:9
+msgid "Scatter"
+msgstr ""
+
+#: components/templates/highcharts-settings.php:10
+msgid "Bubble"
+msgstr ""
+
+#: components/templates/highcharts-settings.php:14
 msgid "Columns"
 msgstr "列"
 
-#: components/templates/highcharts-settings.php:13
+#: components/templates/highcharts-settings.php:15
 msgid "Rows"
 msgstr "行"
 
-#: components/templates/highcharts-settings.php:25
+#: components/templates/highcharts-settings.php:27
 msgid "Type"
 msgstr "类型"
 
-#: components/templates/highcharts-settings.php:39
+#: components/templates/highcharts-settings.php:41
 msgid "Theme"
 msgstr "主题"
 
-#: components/templates/highcharts-settings.php:53
+#: components/templates/highcharts-settings.php:55
 msgid "Height"
 msgstr "高度"
 
-#: components/templates/highcharts-settings.php:59
+#: components/templates/highcharts-settings.php:61
 msgid "Parse data in"
 msgstr "排列数据的方式 （行／列）"
 
-#: components/templates/highcharts-settings.php:76
+#: components/templates/highcharts-settings.php:78
 msgid "Show labels"
 msgstr "显示标签"
 
-#: components/templates/highcharts-settings.php:83
+#: components/templates/highcharts-settings.php:85
 msgid "Show legend"
 msgstr "显示图例"
 
-#: components/templates/highcharts-settings.php:89
+#: components/templates/highcharts-settings.php:91
+msgid "Shared tooltip"
+msgstr ""
+
+#: components/templates/highcharts-settings.php:98
 msgid "Vertical axis title"
 msgstr "纵坐标轴标题"
 
-#: components/templates/highcharts-settings.php:95
-#: components/templates/highcharts-settings.php:133
+#: components/templates/highcharts-settings.php:104
+#: components/templates/highcharts-settings.php:142
 msgid "N/A"
 msgstr "不适用"
 
-#: components/templates/highcharts-settings.php:120
+#: components/templates/highcharts-settings.php:129
 msgid "Force vertical axis minimum: "
 msgstr "制定纵坐标洲最小值为: "
 
-#: components/templates/highcharts-settings.php:127
+#: components/templates/highcharts-settings.php:136
 msgid "Horizontal axis title"
 msgstr "横坐标轴标题"
 
-#: components/templates/highcharts-settings.php:156
+#: components/templates/highcharts-settings.php:165
 msgid "Source"
 msgstr "数据来源"
 
-#: components/templates/highcharts-settings.php:160
+#: components/templates/highcharts-settings.php:169
 msgid "Source URL"
 msgstr "数据来源网址"
 
-#: components/templates/highcharts-settings.php:167
+#: components/templates/highcharts-settings.php:176
 msgid "Shortcode"
 msgstr "短代码"
 
-#: components/templates/highcharts-settings.php:171
+#: components/templates/highcharts-settings.php:180
 msgid "Image"
 msgstr "图像"
 
-#: components/templates/highcharts-settings.php:179
+#: components/templates/highcharts-settings.php:188
 msgid "Image generation is disabled"
 msgstr "图像生成功能关闭"
 
-#: components/templates/highcharts-settings.php:181
+#: components/templates/highcharts-settings.php:190
 msgid "Save/Update this post to generate the image version"
 msgstr "以图像文档格式储存／上传此图表"
 
-#: components/templates/m-chart-settings.php:8
-#: components/templates/m-chart-settings.php:12
+#: components/templates/m-chart-settings.php:5
+msgid "General Settings"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:9
+#: components/templates/m-chart-settings.php:13
 msgid "Performance"
 msgstr "性能"
 
-#: components/templates/m-chart-settings.php:16
+#: components/templates/m-chart-settings.php:17
 msgid "Default"
 msgstr "默认"
 
-#: components/templates/m-chart-settings.php:17
+#: components/templates/m-chart-settings.php:18
 msgid "Provides all functionality"
 msgstr "提供所有功能"
 
-#: components/templates/m-chart-settings.php:21
+#: components/templates/m-chart-settings.php:22
 msgid "No Images"
 msgstr "无图像"
 
-#: components/templates/m-chart-settings.php:22
+#: components/templates/m-chart-settings.php:23
 msgid "No generation of chart images"
 msgstr "没有生成图表图像"
 
-#: components/templates/m-chart-settings.php:26
+#: components/templates/m-chart-settings.php:27
 msgid "No Instant Preview"
 msgstr "没有即时预览"
 
-#: components/templates/m-chart-settings.php:27
+#: components/templates/m-chart-settings.php:28
 msgid "No instant preview and no generation of chart images"
 msgstr "没有即时预览和没有生成图表图像"
 
-#: components/templates/m-chart-settings.php:35
+#: components/templates/m-chart-settings.php:34
+msgid "Embeds"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:38
+msgid "Enable iframe embeds"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:39
+msgid "Allow charts to be remotely embedded via iframes"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:46
 msgid "Default Highcharts Theme"
 msgstr "默认的Highcharts 主题"
 
-#: components/templates/m-chart-settings.php:51
+#: components/templates/m-chart-settings.php:62
 msgid "See the M Chart documentation for more info on how to use themes:"
 msgstr "有关如何使用主题，请参阅更多M Chart 说明 ︰"
 
-#: components/templates/m-chart-settings.php:59
+#: components/templates/m-chart-settings.php:69
+msgid "Language Settings"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:73
+msgid "Decimal Indicator"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:79
+msgid "Thousands Separator"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:85
+msgid "Numeric Symbols"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:89
+msgid ""
+"Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, "
+"Quintillions...)"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:94
+msgid "Numeric Symbol Magnitude"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:98
+msgid ""
+"Allows adjustment for languages that use symbols at different intervals "
+"(Japanese, Korean, etc...)"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:105
 msgid "Save Changes"
 msgstr "保存更改"
+
+#: components/templates/share.php:24
+msgid "Share:"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:5
+msgid "Add Sheet"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:11
+msgid "Export CSV"
+msgstr "输出CSV"
+
+#: components/templates/spreadsheet-meta-box.php:11
+msgid "Export"
+msgstr "导出"
+
+#: components/templates/spreadsheet-meta-box.php:14
+msgid "CSV Import/Export"
+msgstr "CSV 导入／导出"
+
+#: components/templates/spreadsheet-meta-box.php:16
+msgid "Select CSV File"
+msgstr "选择CSV文件"
+
+#: components/templates/spreadsheet-meta-box.php:16
+msgid "Select File"
+msgstr "选择文件"
+
+#: components/templates/spreadsheet-meta-box.php:17
+msgid "Import"
+msgstr "导入"
+
+#: components/templates/spreadsheet-meta-box.php:18
+msgid "You can only import CSV files"
+msgstr "只可以导入CSV格式的文档"
+
+#: components/templates/spreadsheet-meta-box.php:20
+msgid "Importing file"
+msgstr "正在導入文件"
+
+#: components/templates/spreadsheet-meta-box.php:22
+msgid "Cancel Import"
+msgstr "取消导入"
+
+#: components/templates/spreadsheet-meta-box.php:24
+msgid "Importing this file will replace all existing data in this sheet"
+msgstr ""
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
@@ -517,6 +609,9 @@ msgstr "Jamie Poitra"
 #. Author URI of the plugin/theme
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
+
+#~ msgid "Importing this file will replace all existing data"
+#~ msgstr "导入此文档将替换现有数据"
 
 #~ msgid "Force vertical axis minimum to zero"
 #~ msgstr "制定纵坐标洲最小值为0"
