@@ -3,7 +3,7 @@
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.6.1  
-**Stable tag:** 1.5.2  
+**Stable tag:** 1.6  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -15,8 +15,6 @@ Allows you to manage data sets via a spreadsheet interface and present that data
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
-
-**Note:** PHP version 5.3.6 or greater is required to run this plugin.
 
 ## Installation ##
 
@@ -35,6 +33,18 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.6 ###
+
+* Added support for [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter) and [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble) charts
+* Charts can now be loaded via iframes (this enables remote embedding among other things)
+* Line, spline and area charts can now use shared tool tips
+* Added language settings to allow things like setting the thousands seperator and decimal symbols
+* Switched to internal array_merge method in the theme code so we can recursively merge settings
+* Tweaked the theme code a bit so we can support older versions of PHP
+* Filtering `the_content` to now return chart code when appropriate
+* Updated Highcharts to the latest stable version (5.0.7)
+* Updated Handsontable to the latest stable version (0.31)
 
 ### 1.5.2 ###
 

@@ -1,6 +1,5 @@
 <?php
 // If there's multiple instances of a chart on the page we don't want to redeclare this
-// @TODO if the embeds end up being done via iframes this conditional won't be necessary anymore
 if ( ! $this->options_set ) {
 	?>
 	<script type="text/javascript">
@@ -23,6 +22,8 @@ if ( ! $this->options_set ) {
 		post_id: <?php echo absint( $post_id ); ?>,
 		instance: <?php echo absint( $this->instance ); ?>
 	};
+
+	<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
 
 	(function( $ ) {
 		m_chart_highcharts_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart = function( ) {

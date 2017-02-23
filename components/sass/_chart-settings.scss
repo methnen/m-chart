@@ -22,7 +22,18 @@
 					margin-bottom: 0;
 				}
 
-				&.one,
+				&.one {
+					p {
+						float: left;
+						margin-left: 1%;
+						width: 32%;
+
+						&:first-child {
+							margin-left: 0;
+						}
+					}
+				}
+
 				&.two {
 					p {
 						float: left;
@@ -31,6 +42,20 @@
 
 						&:first-child {
 							margin-left: 0;
+						}
+
+						&.shared {
+							display: none;
+						}
+					}
+
+					&.show-shared {
+						p {
+							width: 24%;
+
+							&.shared {
+								display: block;
+							}
 						}
 					}
 				}

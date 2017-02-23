@@ -1,11 +1,13 @@
 <?php
 $type_option_names = array(
-	'line'   => esc_html__( 'Line', 'm-chart' ),
-	'spline' => esc_html__( 'Spline', 'm-chart' ),
-	'area'   => esc_html__( 'Area', 'm-chart' ),
-	'column' => esc_html__( 'Column', 'm-chart' ),
-	'bar'    => esc_html__( 'Bar', 'm-chart' ),
-	'pie'    => esc_html__( 'Pie', 'm-chart' ),
+	'line'    => esc_html__( 'Line', 'm-chart' ),
+	'spline'  => esc_html__( 'Spline', 'm-chart' ),
+	'area'    => esc_html__( 'Area', 'm-chart' ),
+	'column'  => esc_html__( 'Column', 'm-chart' ),
+	'bar'     => esc_html__( 'Bar', 'm-chart' ),
+	'pie'     => esc_html__( 'Pie', 'm-chart' ),
+	'scatter' => esc_html__( 'Scatter', 'm-chart' ),
+	'bubble'  => esc_html__( 'Bubble', 'm-chart' ),
 );
 
 $parse_option_names = array(
@@ -76,14 +78,21 @@ if ( true == $post_meta['y_min'] ) {
 				<?php esc_html_e( 'Show labels', 'm-chart' ); ?>
 			</label>
 		</p>
-		<p>
+		<p class="legend">
 			&nbsp;<br />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'legend' ) ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'legend' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'legend' ) ); ?>" value="1"<?php checked( $post_meta['legend'], true ); ?>/>
 				<?php esc_html_e( 'Show legend', 'm-chart' ); ?>
 			</label>
 		</p>
+		<p class="shared">&nbsp;<br />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'shared' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'shared' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'shared' ) ); ?>" value="1"<?php checked( $post_meta['shared'], true ); ?>/>
+				<?php esc_html_e( 'Shared tooltip', 'm-chart' ); ?>
+			</label>
+		</p>
 	</div>
+
 	<div class="row three vertical-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'y-title' ) ); ?>"><?php esc_html_e( 'Vertical axis title', 'm-chart' ); ?></label><br />

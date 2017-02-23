@@ -102,14 +102,41 @@ class M_Chart_Admin {
 				continue;
 			}
 
-			if ( isset( $safe_settings[ $setting ] ) ) {
+			if ( isset( $this->safe_settings[ $setting ] ) ) {
 				// If we've got an array of valid values lets check against that
-				$safe_setting = $safe_settings[ $setting ];
+				$safe_setting = $this->safe_settings[ $setting ];
 
 				if ( in_array( $submitted_settings[ $setting ], $safe_setting, true ) ) {
 					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
 				} else {
 					$validated_settings[ $setting ] = $default;
+				}
+			} elseif ( 'lang_settings' == $setting ) {
+				// The language settinsg require a bit more checking
+				foreach ( m_chart()->settings['lang_settings'] as $lang_setting => $lang_default ) {
+					$lang_value = $submitted_settings['lang_settings'][ $lang_setting ];
+
+					if ( 'numericSymbols' == $lang_setting ) {
+						// The numeric symbols are input as a comma seperated string so we'll deal with that here
+						$numeric_symbols = explode( ',', $lang_value );
+						$safe_symbols = array();
+
+						foreach ( $numeric_symbols as $symbol ) {
+							$safe_symbols[] = trim( $symbol );
+						}
+
+						$validated_settings[ $setting ][ $lang_setting ] = $safe_symbols;
+					} elseif ( 'numericSymbolMagnitude' == $lang_setting ) {
+						// Only want positive numbers for the numericSymbolMagnitude value
+						if ( is_numeric( $lang_value ) && 0 < $lang_value ) {
+							$validated_settings[ $setting ][ $lang_setting ] = absint( $lang_value );
+						} else {
+							$validated_settings[ $setting ][ $lang_setting ] = $lang_default;
+						}
+					} else {
+						// The rest of the language settings are all single character values
+						$validated_settings[ $setting ][ $lang_setting ] = sanitize_text_field( substr( $lang_value, 0, 1 ) );
+					}
 				}
 			} else {
 				// Make sure the value is safe before attempting to save it
@@ -149,45 +176,70 @@ class M_Chart_Admin {
 
 		// Only load these if we are on a post page
 		if ( 'post' == $screen->base ) {
+			// jQuery Mobile Touch Events
+			wp_enqueue_script(
+				'jquery-mobile-touch-events',
+				$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js',
+				array(),
+				m_chart()->version
+			);
+
 			// Handsontable
 			wp_enqueue_style(
 				'handsontable',
-				$this->plugin_url . '/components/external/handsontable/handsontable.css'
+				$this->plugin_url . '/components/external/handsontable/handsontable.css',
+				array(),
+				m_chart()->version
 			);
 
 			wp_enqueue_script(
 				'handsontable',
 				$this->plugin_url . '/components/external/handsontable/handsontable.js',
-				array( 'jquery' )
+				array( 'jquery' ),
+				m_chart()->version
+			);
+
+			// Handlebars
+			wp_enqueue_script(
+				'handlebars',
+				$this->plugin_url . '/components/external/handlebars/handlebars.js',
+				array(),
+				m_chart()->version
 			);
 
 			// Highcharts export.js is required for the image generation
 			wp_enqueue_script(
 				'highcharts-exporting',
 				$this->plugin_url . '/components/external/highcharts/exporting.js',
-				array( 'highcharts', 'jquery' )
+				array( 'highcharts', 'jquery' ),
+				m_chart()->version
 			);
 
 			// canvg and rgbcolo do the SVG -> Canvas conversion
 			wp_enqueue_script(
 				'rgbcolor',
-				$this->plugin_url . '/components/external/canvg/rgbcolor.js'
+				$this->plugin_url . '/components/external/canvg/rgbcolor.js',
+				array(),
+				m_chart()->version
 			);
 
 			wp_enqueue_script(
 				'canvg',
 				$this->plugin_url . '/components/external/canvg/canvg.js',
-				array( 'rgbcolor' )
+				array( 'rgbcolor' ),
+				m_chart()->version
 			);
 
 			// Admin panel JS
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'highcharts', 'jquery' )
+				array( 'highcharts', 'jquery' ),
+				m_chart()->version
 			);
 
 			$settings = m_chart()->get_settings();
+			$post_id  = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : '';
 
 			wp_localize_script(
 				'm-chart-admin',
@@ -197,6 +249,8 @@ class M_Chart_Admin {
 					'allow_form_submission' => false,
 					'request'               => false,
 					'performance'           => $settings['performance'],
+					'set_names'             => m_chart()->get_post_meta( $post_id, 'set_names' ),
+					'delete_comfirm'        => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				)
 			);
 		}
@@ -204,7 +258,9 @@ class M_Chart_Admin {
 		// Admin panel CSS
 		wp_enqueue_style(
 			'm-chart-admin',
-			$this->plugin_url . '/components/css/m-chart-admin.css'
+			$this->plugin_url . '/components/css/m-chart-admin.css',
+			array(),
+			m_chart()->version
 		);
 	}
 
@@ -239,15 +295,6 @@ class M_Chart_Admin {
 
 		$wp_meta_boxes[ m_chart()->slug ]['normal']['high']['postexcerpt'] = $excerpt;
 
-		add_meta_box(
-			m_chart()->slug . '-csv',
-			esc_html__( 'CSV Import/Export', 'm-chart' ),
-			array( $this, 'csv_meta_box' ),
-			m_chart()->slug,
-			'normal',
-			'high'
-		);
-
 		// We are using our own interface for the units so we can remove the units taxonomy metabox
 		remove_meta_box( m_chart()->slug . '-unitsdiv', m_chart()->slug, 'side' );
 	}
@@ -261,7 +308,7 @@ class M_Chart_Admin {
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 
 		// Setup default empty sheet data if needed
-		$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data'];
+		$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
 
 		require_once __DIR__ . '/templates/spreadsheet-meta-box.php';
 	}
@@ -281,15 +328,6 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Displays the CSV Import/Export controls
-	 *
-	 * @param object the WP post object as returned by the metabox API
-	 */
-	public function csv_meta_box( $post ) {
-		require_once __DIR__ . '/templates/csv-meta-box.php';
-	}
-
-	/**
 	 * Insert CSV Import and Export forms into the footer when editing charts
 	 */
 	public function admin_footer() {
@@ -306,6 +344,7 @@ class M_Chart_Admin {
 			<input type="hidden" name="post_id" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-post-id' ) ); ?>" />
 			<input type="hidden" name="data" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-data' ) ); ?>" />
 			<input type="hidden" name="title" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-title' ) ); ?>" />
+			<input type="hidden" name="set_name" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-set-name' ) ); ?>" />
 		</form>
 		<script type="text/javascript">
 			<?php do_action( 'm_chart_admin_footer_javascript' ); ?>
@@ -314,7 +353,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Inserts a subtitle field under the title field on the chart edit form
+	 * Inserts a subtitle field under the title field on the chart edit form and includes the handlebars templates we'll need
 	 *
 	 * @param object the WP post object as returned by the metabox API
 	 */
@@ -326,6 +365,7 @@ class M_Chart_Admin {
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 
 		require_once __DIR__ . '/templates/subtitle-field.php';
+		require_once __DIR__ . '/templates/handlebars.php';
 	}
 
 	/**
@@ -591,6 +631,8 @@ class M_Chart_Admin {
 			$file_name = sanitize_title( get_the_title( $post->ID ) );
 		}
 
+		$set_name = sanitize_title( $_REQUEST['set_name'] );
+
 		if ( empty( $data ) ) {
 			return;
 		}
@@ -598,7 +640,7 @@ class M_Chart_Admin {
 		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
 		$parse_csv = new parseCSV();
 
-		$parse_csv->output( $file_name . '.csv', $data );
+		$parse_csv->output( $file_name . '-' . $set_name . '.csv', $data );
 		die;
 	}
 
@@ -650,7 +692,11 @@ class M_Chart_Admin {
 	 *
 	 * @param string a name spaced field name
 	 */
-	public function get_field_name( $field_name ) {
+	public function get_field_name( $field_name, $parent_field_name = '' ) {
+		if ( '' != $parent_field_name ) {
+			return m_chart()->slug . '[' . $parent_field_name . ']' . '[' . $field_name . ']';
+		}
+
 		return m_chart()->slug . '[' . $field_name . ']';
 	}
 

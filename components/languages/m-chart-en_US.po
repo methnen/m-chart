@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2016-06-01 17:14-0700\n"
-"PO-Revision-Date: 2016-06-01 17:15-0700\n"
+"POT-Creation-Date: 2017-02-20 15:25-0800\n"
+"PO-Revision-Date: 2017-02-20 15:25-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-WPHeader: m-chart.php\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -165,8 +165,8 @@ msgid "Sales"
 msgstr "Sales"
 
 #: components/array-default-unit-terms.php:49
-#: components/templates/highcharts-settings.php:93
-#: components/templates/highcharts-settings.php:131
+#: components/templates/highcharts-settings.php:102
+#: components/templates/highcharts-settings.php:140
 msgid "Units"
 msgstr "Units"
 
@@ -174,12 +174,12 @@ msgstr "Units"
 msgid "CPM"
 msgstr "CPM"
 
-#: components/class-m-chart-admin.php:41 components/class-m-chart.php:140
+#: components/class-m-chart-admin.php:41 components/class-m-chart.php:160
 msgid "Charts"
 msgstr "Charts"
 
-#: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:233
-#: components/class-m-chart.php:141
+#: components/class-m-chart-admin.php:45 components/class-m-chart-admin.php:289
+#: components/class-m-chart.php:161
 msgid "Chart"
 msgstr "Chart"
 
@@ -192,173 +192,157 @@ msgstr "M Chart Settings"
 msgid "Settings"
 msgstr "Settings"
 
-#: components/class-m-chart-admin.php:135
+#: components/class-m-chart-admin.php:162
 msgid "Settings saved"
 msgstr "Settings saved"
 
-#: components/class-m-chart-admin.php:224
+#: components/class-m-chart-admin.php:253
+msgid "Are you sure you want to delete this spreadsheet?"
+msgstr "Are you sure you want to delete this spreadsheet?"
+
+#: components/class-m-chart-admin.php:280
 msgid "Data"
 msgstr "Data"
 
-#: components/class-m-chart-admin.php:244
-msgid "CSV Import/Export"
-msgstr "CSV Import/Export"
-
-#: components/class-m-chart-admin.php:484
-#: components/class-m-chart-admin.php:494
+#: components/class-m-chart-admin.php:524
+#: components/class-m-chart-admin.php:534
 msgid "Wrong post type"
 msgstr "Wrong post type"
 
-#: components/class-m-chart-admin.php:489
-#: components/class-m-chart-admin.php:613
+#: components/class-m-chart-admin.php:529
+#: components/class-m-chart-admin.php:655
 msgid "Invalid nonce"
 msgstr "Invalid nonce"
 
-#: components/class-m-chart-admin.php:499
+#: components/class-m-chart-admin.php:539
 msgid "No file to import"
 msgstr "No file to import"
 
-#: components/class-m-chart-admin.php:506
+#: components/class-m-chart-admin.php:546
 msgid "Only CSV files can be imported "
 msgstr "Only CSV files can be imported "
 
-#: components/class-m-chart-admin.php:513
+#: components/class-m-chart-admin.php:553
 msgid "File path not found"
 msgstr "File path not found"
 
-#: components/class-m-chart-admin.php:519
+#: components/class-m-chart-admin.php:559
 msgid "CSV file was empty"
 msgstr "CSV file was empty"
 
-#: components/class-m-chart-admin.php:618
+#: components/class-m-chart-admin.php:660
 msgid "Invalid post"
 msgstr "Invalid post"
 
-#: components/class-m-chart-admin.php:623
+#: components/class-m-chart-admin.php:665
 msgid "Permission error"
 msgstr "Permission error"
 
-#: components/class-m-chart-admin.php:628
+#: components/class-m-chart-admin.php:670
 msgid "Invalid library"
 msgstr "Invalid library"
 
-#: components/class-m-chart.php:112 components/class-m-chart.php:122
+#: components/class-m-chart.php:135 components/class-m-chart.php:145
 msgid "Chart Units"
 msgstr "Chart Units"
 
-#: components/class-m-chart.php:113
+#: components/class-m-chart.php:136
 msgid "Chart Unit"
 msgstr "Chart Unit"
 
-#: components/class-m-chart.php:114
+#: components/class-m-chart.php:137
 msgid "Search Chart Units"
 msgstr "Search Chart Units"
 
-#: components/class-m-chart.php:115
+#: components/class-m-chart.php:138
 msgid "All Chart Units"
 msgstr "All Chart Units"
 
-#: components/class-m-chart.php:116
+#: components/class-m-chart.php:139
 msgid "Parent Chart Unit"
 msgstr "Parent Chart Unit"
 
-#: components/class-m-chart.php:117
+#: components/class-m-chart.php:140
 msgid "Parent Chart Unit:"
 msgstr "Parent Chart Unit:"
 
-#: components/class-m-chart.php:118
+#: components/class-m-chart.php:141
 msgid "Edit Chart Unit"
 msgstr "Edit Chart Unit"
 
-#: components/class-m-chart.php:119
+#: components/class-m-chart.php:142
 msgid "Update Chart Unit"
 msgstr "Update Chart Unit"
 
-#: components/class-m-chart.php:120
+#: components/class-m-chart.php:143
 msgid "Add New Chart Unit"
 msgstr "Add New Chart Unit"
 
-#: components/class-m-chart.php:121
+#: components/class-m-chart.php:144
 msgid "Chart Unit Name"
 msgstr "Chart Unit Name"
 
-#: components/class-m-chart.php:142 components/class-m-chart.php:143
+#: components/class-m-chart.php:162 components/class-m-chart.php:163
 msgid "Add Chart"
 msgstr "Add Chart"
 
-#: components/class-m-chart.php:144
+#: components/class-m-chart.php:164
 msgid "Edit"
 msgstr "Edit"
 
-#: components/class-m-chart.php:145
+#: components/class-m-chart.php:165
 msgid "Edit Chart"
 msgstr "Edit Chart"
 
-#: components/class-m-chart.php:146
+#: components/class-m-chart.php:166
 msgid "New Chart"
 msgstr "New Chart"
 
-#: components/class-m-chart.php:147
-#: components/templates/highcharts-settings.php:176
+#: components/class-m-chart.php:167
+#: components/templates/highcharts-settings.php:185
 msgid "View"
 msgstr "View"
 
-#: components/class-m-chart.php:148
+#: components/class-m-chart.php:168
 msgid "View Chart"
 msgstr "View Chart"
 
-#: components/class-m-chart.php:149
+#: components/class-m-chart.php:169
 msgid "Search Charts"
 msgstr "Search Charts"
 
-#: components/class-m-chart.php:150
+#: components/class-m-chart.php:170
 msgid "No Charts found"
 msgstr "No Charts found"
 
-#: components/class-m-chart.php:151
+#: components/class-m-chart.php:171
 msgid "No Charts found in the Trash"
 msgstr "No Charts found in the Trash"
 
 #. Description of the plugin/theme
-#: components/class-m-chart.php:162
+#: components/class-m-chart.php:182
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "Manage data sets and display them as charts in WordPress."
 
-#: components/templates/csv-meta-box.php:2
-msgid "Export CSV"
-msgstr "Export CSV"
+#: components/class-m-chart.php:765
+msgid "The chart could not be found"
+msgstr "The chart could not be found"
 
-#: components/templates/csv-meta-box.php:2
-msgid "Export"
-msgstr "Export"
+#: components/class-m-chart.php:766
+msgid "Chart not found"
+msgstr "No Charts found"
 
-#: components/templates/csv-meta-box.php:6
-msgid "Select CSV File"
-msgstr "Select CSV File"
+#: components/class-m-chart.php:775
+msgid "Embeds of this type are not enabled"
+msgstr "Embeds of this type are not enabled"
 
-#: components/templates/csv-meta-box.php:6
-msgid "Select File"
-msgstr "Select File"
+#: components/class-m-chart.php:776
+msgid "Embeds disabled"
+msgstr "Embeds disabled"
 
-#: components/templates/csv-meta-box.php:7
-msgid "Import"
-msgstr "Import"
-
-#: components/templates/csv-meta-box.php:8
-msgid "You can only import CSV files"
-msgstr "You can only import CSV files"
-
-#: components/templates/csv-meta-box.php:10
-msgid "Importing file"
-msgstr "Importing file"
-
-#: components/templates/csv-meta-box.php:12
-msgid "Cancel Import"
-msgstr "Cancel Import"
-
-#: components/templates/csv-meta-box.php:14
-msgid "Importing this file will replace all existing data"
-msgstr "Importing this file will replace all existing data"
+#: components/templates/handlebars.php:5
+msgid "Double click or long press tab to edit name"
+msgstr "Double click or long press tab to edit name"
 
 #: components/templates/highcharts-settings.php:3
 msgid "Line"
@@ -384,119 +368,231 @@ msgstr "Bar"
 msgid "Pie"
 msgstr "Pie"
 
-#: components/templates/highcharts-settings.php:12
+#: components/templates/highcharts-settings.php:9
+msgid "Scatter"
+msgstr "Scatter"
+
+#: components/templates/highcharts-settings.php:10
+msgid "Bubble"
+msgstr "Bubble"
+
+#: components/templates/highcharts-settings.php:14
 msgid "Columns"
 msgstr "Columns"
 
-#: components/templates/highcharts-settings.php:13
+#: components/templates/highcharts-settings.php:15
 msgid "Rows"
 msgstr "Rows"
 
-#: components/templates/highcharts-settings.php:25
+#: components/templates/highcharts-settings.php:27
 msgid "Type"
 msgstr "Type"
 
-#: components/templates/highcharts-settings.php:39
+#: components/templates/highcharts-settings.php:41
 msgid "Theme"
 msgstr "Theme"
 
-#: components/templates/highcharts-settings.php:53
+#: components/templates/highcharts-settings.php:55
 msgid "Height"
 msgstr "Height"
 
-#: components/templates/highcharts-settings.php:59
+#: components/templates/highcharts-settings.php:61
 msgid "Parse data in"
 msgstr "Parse data in"
 
-#: components/templates/highcharts-settings.php:76
+#: components/templates/highcharts-settings.php:78
 msgid "Show labels"
 msgstr "Show labels"
 
-#: components/templates/highcharts-settings.php:83
+#: components/templates/highcharts-settings.php:85
 msgid "Show legend"
 msgstr "Show legend"
 
-#: components/templates/highcharts-settings.php:89
+#: components/templates/highcharts-settings.php:91
+msgid "Shared tooltip"
+msgstr "Shared tooltip"
+
+#: components/templates/highcharts-settings.php:98
 msgid "Vertical axis title"
 msgstr "Vertical axis title"
 
-#: components/templates/highcharts-settings.php:95
-#: components/templates/highcharts-settings.php:133
+#: components/templates/highcharts-settings.php:104
+#: components/templates/highcharts-settings.php:142
 msgid "N/A"
 msgstr "N/A"
 
-#: components/templates/highcharts-settings.php:120
+#: components/templates/highcharts-settings.php:129
 msgid "Force vertical axis minimum: "
 msgstr "Force vertical axis minimum: "
 
-#: components/templates/highcharts-settings.php:127
+#: components/templates/highcharts-settings.php:136
 msgid "Horizontal axis title"
 msgstr "Horizontal axis title"
 
-#: components/templates/highcharts-settings.php:156
+#: components/templates/highcharts-settings.php:165
 msgid "Source"
 msgstr "Source"
 
-#: components/templates/highcharts-settings.php:160
+#: components/templates/highcharts-settings.php:169
 msgid "Source URL"
 msgstr "Source URL"
 
-#: components/templates/highcharts-settings.php:167
+#: components/templates/highcharts-settings.php:176
 msgid "Shortcode"
 msgstr "Shortcode"
 
-#: components/templates/highcharts-settings.php:171
+#: components/templates/highcharts-settings.php:180
 msgid "Image"
 msgstr "Image"
 
-#: components/templates/highcharts-settings.php:179
+#: components/templates/highcharts-settings.php:188
 msgid "Image generation is disabled"
 msgstr "Image generation is disabled"
 
-#: components/templates/highcharts-settings.php:181
+#: components/templates/highcharts-settings.php:190
 msgid "Save/Update this post to generate the image version"
 msgstr "Save/Update this post to generate the image version"
 
-#: components/templates/m-chart-settings.php:8
-#: components/templates/m-chart-settings.php:12
+#: components/templates/m-chart-settings.php:5
+msgid "General Settings"
+msgstr "General Settings"
+
+#: components/templates/m-chart-settings.php:9
+#: components/templates/m-chart-settings.php:13
 msgid "Performance"
 msgstr "Performance"
 
-#: components/templates/m-chart-settings.php:16
+#: components/templates/m-chart-settings.php:17
 msgid "Default"
 msgstr "Default"
 
-#: components/templates/m-chart-settings.php:17
+#: components/templates/m-chart-settings.php:18
 msgid "Provides all functionality"
 msgstr "Provides all functionality"
 
-#: components/templates/m-chart-settings.php:21
+#: components/templates/m-chart-settings.php:22
 msgid "No Images"
 msgstr "No Images"
 
-#: components/templates/m-chart-settings.php:22
+#: components/templates/m-chart-settings.php:23
 msgid "No generation of chart images"
 msgstr "No generation of chart images"
 
-#: components/templates/m-chart-settings.php:26
+#: components/templates/m-chart-settings.php:27
 msgid "No Instant Preview"
 msgstr "No Instant Preview"
 
-#: components/templates/m-chart-settings.php:27
+#: components/templates/m-chart-settings.php:28
 msgid "No instant preview and no generation of chart images"
 msgstr "No instant preview and no generation of chart images"
 
-#: components/templates/m-chart-settings.php:35
+#: components/templates/m-chart-settings.php:34
+msgid "Embeds"
+msgstr "Embeds"
+
+#: components/templates/m-chart-settings.php:38
+msgid "Enable iframe embeds"
+msgstr "Enable iframe embeds"
+
+#: components/templates/m-chart-settings.php:39
+msgid "Allow charts to be remotely embedded via iframes"
+msgstr "Allow charts to be remotely embedded via iframes"
+
+#: components/templates/m-chart-settings.php:46
 msgid "Default Highcharts Theme"
 msgstr "Default Highcharts Theme"
 
-#: components/templates/m-chart-settings.php:51
+#: components/templates/m-chart-settings.php:62
 msgid "See the M Chart documentation for more info on how to use themes:"
 msgstr "See the M Chart documentation for more info on how to use themes:"
 
-#: components/templates/m-chart-settings.php:59
+#: components/templates/m-chart-settings.php:69
+msgid "Language Settings"
+msgstr "Language Settings"
+
+#: components/templates/m-chart-settings.php:73
+msgid "Decimal Indicator"
+msgstr "Decimal Indicator"
+
+#: components/templates/m-chart-settings.php:79
+msgid "Thousands Separator"
+msgstr "Thousands Separator"
+
+#: components/templates/m-chart-settings.php:85
+msgid "Numeric Symbols"
+msgstr "Numeric Symbols"
+
+#: components/templates/m-chart-settings.php:89
+msgid ""
+"Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, "
+"Quintillions...)"
+msgstr ""
+"Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, "
+"Quintillions...)"
+
+#: components/templates/m-chart-settings.php:94
+msgid "Numeric Symbol Magnitude"
+msgstr "Numeric Symbol Magnitude"
+
+#: components/templates/m-chart-settings.php:98
+msgid ""
+"Allows adjustment for languages that use symbols at different intervals "
+"(Japanese, Korean, etc...)"
+msgstr ""
+"Allows adjustment for languages that use symbols at different intervals "
+"(Japanese, Korean, etc...)"
+
+#: components/templates/m-chart-settings.php:105
 msgid "Save Changes"
 msgstr "Save Changes"
+
+#: components/templates/share.php:24
+msgid "Share:"
+msgstr "Share:"
+
+#: components/templates/spreadsheet-meta-box.php:5
+msgid "Add Sheet"
+msgstr "Add Sheet"
+
+#: components/templates/spreadsheet-meta-box.php:11
+msgid "Export CSV"
+msgstr "Export CSV"
+
+#: components/templates/spreadsheet-meta-box.php:11
+msgid "Export"
+msgstr "Export"
+
+#: components/templates/spreadsheet-meta-box.php:14
+msgid "CSV Import/Export"
+msgstr "CSV Import/Export"
+
+#: components/templates/spreadsheet-meta-box.php:16
+msgid "Select CSV File"
+msgstr "Select CSV File"
+
+#: components/templates/spreadsheet-meta-box.php:16
+msgid "Select File"
+msgstr "Select File"
+
+#: components/templates/spreadsheet-meta-box.php:17
+msgid "Import"
+msgstr "Import"
+
+#: components/templates/spreadsheet-meta-box.php:18
+msgid "You can only import CSV files"
+msgstr "You can only import CSV files"
+
+#: components/templates/spreadsheet-meta-box.php:20
+msgid "Importing file"
+msgstr "Importing file"
+
+#: components/templates/spreadsheet-meta-box.php:22
+msgid "Cancel Import"
+msgstr "Cancel Import"
+
+#: components/templates/spreadsheet-meta-box.php:24
+msgid "Importing this file will replace all existing data in this sheet"
+msgstr "Importing this file will replace all existing data in this sheet"
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
@@ -517,6 +613,9 @@ msgstr "Jamie Poitra"
 #. Author URI of the plugin/theme
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
+
+#~ msgid "Importing this file will replace all existing data"
+#~ msgstr "Importing this file will replace all existing data"
 
 #~ msgid "Force vertical axis minimum to zero"
 #~ msgstr "Force vertical axis minimum to zero"
