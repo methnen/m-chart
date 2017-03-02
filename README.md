@@ -2,7 +2,7 @@
 **Contributors:** methnen  
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 4.6.1  
+**Tested up to:** 4.7.2  
 **Stable tag:** 1.6.1  
 **License:** MIT  
 
