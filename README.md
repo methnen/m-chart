@@ -3,7 +3,7 @@
 **Tags:** highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.6.1  
-**Stable tag:** 1.6  
+**Stable tag:** 1.6.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -33,6 +33,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.6.1 ###
+
+* Fixed an issue where the placeholder image was used when a valid image existed
 
 ### 1.6 ###
 

@@ -564,9 +564,9 @@ class M_Chart {
 	 *
 	 * @return array an array of image values url, width, height, etc...
 	 */
-	public function m_chart_get_chart_image_tag( $img, $post_id ) {
-		if ( ! $img ) {
-			return $img;
+	public function m_chart_get_chart_image_tag( $image, $post_id ) {
+		if ( $image ) {
+			return $image;
 		}
 
 		$url = $this->plugin_url . '/components/images/chart-placeholder.png';
