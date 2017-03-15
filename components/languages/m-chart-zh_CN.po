@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "POT-Creation-Date: 2017-02-21 15:52-0800\n"
-"PO-Revision-Date: 2017-02-22 08:37-0800\n"
+"PO-Revision-Date: 2017-03-15 09:36-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -342,7 +342,7 @@ msgstr "嵌入无法被执行"
 
 #: components/templates/handlebars.php:5
 msgid "Double click or long press tab to edit name"
-msgstr "按两下或是长压标签来更改姓名"
+msgstr "按两下或是长按标签来更改姓名"
 
 #: components/templates/highcharts-settings.php:3
 msgid "Line"
@@ -410,7 +410,7 @@ msgstr "显示图例"
 
 #: components/templates/highcharts-settings.php:91
 msgid "Shared tooltip"
-msgstr "共享数据提示框"
+msgstr "共享工具提示框"
 
 #: components/templates/highcharts-settings.php:98
 msgid "Vertical axis title"
@@ -455,7 +455,7 @@ msgstr "以图像文档格式储存／上传此图表"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
-msgstr "一般设置"
+msgstr "一般设定"
 
 #: components/templates/m-chart-settings.php:9
 #: components/templates/m-chart-settings.php:13
@@ -492,11 +492,11 @@ msgstr "嵌入"
 
 #: components/templates/m-chart-settings.php:38
 msgid "Enable iframe embeds"
-msgstr "启用内嵌网页框架(iframe)嵌入"
+msgstr "启用内嵌网页框架(iframe)"
 
 #: components/templates/m-chart-settings.php:39
 msgid "Allow charts to be remotely embedded via iframes"
-msgstr "允许图表能够远端透过内嵌网页框架(iframe)嵌入"
+msgstr "允许图表能够远端内嵌网页框架(iframe)"
 
 #: components/templates/m-chart-settings.php:46
 msgid "Default Highcharts Theme"
@@ -512,11 +512,11 @@ msgstr "语言设定"
 
 #: components/templates/m-chart-settings.php:73
 msgid "Decimal Indicator"
-msgstr "十进制指示器"
+msgstr "小数点指示器"
 
 #: components/templates/m-chart-settings.php:79
 msgid "Thousands Separator"
-msgstr "十进制指示器"
+msgstr "千进制分隔符"
 
 #: components/templates/m-chart-settings.php:85
 msgid "Numeric Symbols"
