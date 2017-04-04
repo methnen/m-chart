@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.6.1';
+	public $version = '1.6.2';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -274,7 +274,7 @@ class M_Chart {
 		// If the data has the old legacy format we need to update it
 		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
 			$data = $post_meta['data'];
-			$post_meta['data'] = '';
+			$post_meta['data'] = array();
 			$post_meta['data']['sets'][] = $data;
 		}
 
@@ -564,9 +564,9 @@ class M_Chart {
 	 *
 	 * @return array an array of image values url, width, height, etc...
 	 */
-	public function m_chart_get_chart_image_tag( $image, $post_id ) {
-		if ( $image ) {
-			return $image;
+	public function m_chart_get_chart_image_tag( $img, $post_id ) {
+		if ( ! $img ) {
+			return $img;
 		}
 
 		$url = $this->plugin_url . '/components/images/chart-placeholder.png';
