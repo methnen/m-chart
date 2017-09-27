@@ -754,7 +754,7 @@ class M_Chart {
 	 * Looks for the embed endpoint and serves up the requested chart if appropriate
 	 */
 	public function template_redirect() {
-		global $wp_query, $wp_rewrite;
+		global $wp_query;
 
 		// Make sure this is a chart with the embed endpoint in the URL
 		if ( ! isset( $wp_query->query['post_type'] ) || ! isset( $wp_query->query['embed'] ) || 'm-chart' != $wp_query->query['post_type'] ) {
