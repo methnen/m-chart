@@ -30,6 +30,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.6.3 =
+
+* Reworked the iframe embed code so differences in themes shouldn't cause issues anymore
+
 = 1.6.2 =
 
 * Simplified Chinese (zh_CN) translation corrections
