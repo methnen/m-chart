@@ -150,6 +150,9 @@ class M_Chart_Admin {
 
 		update_option( m_chart()->slug, $validated_settings );
 
+		// Make sure the embed endpoint makes it into the rewrite rules
+		flush_rewrite_rules();
+
 		add_action( 'admin_notices', array( $this, 'save_success' ) );
 	}
 

@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.6.2';
+	public $version = '1.6.3';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -179,8 +179,11 @@ class M_Chart {
 				'query_var'            => true,
 				'can_export'           => true,
 				'has_archive'          => 'charts',
-				'description'          => esc_html__( 'Manage data sets and display them as charts in WordPress.', $this->slug ),
-				'rewrite'              => array( 'slug' => 'chart' ),
+				'description'          => esc_html__( 'Manage data sets and display them as charts in WordPress.', 'm-chart' ),
+				'rewrite'              => array(
+					'slug' => 'chart',
+					'ep_mask' => 'm-chart'
+				),
 				'supports'             => array(
 					'author',
 					'title',
@@ -211,7 +214,7 @@ class M_Chart {
 		);
 
 		// Add endpoint needed for iframe embed support
-		add_rewrite_endpoint( 'chart-embed', EP_NONE );
+		add_rewrite_endpoint( 'embed', $this->slug );
 	}
 
 	/**
@@ -609,8 +612,7 @@ class M_Chart {
 	public function get_chart_iframe( $post_id, $args = array() ) {
 		$post_meta = $this->get_post_meta( $post_id );
 
-		$args['post_id'] = $post_id;
-		$src_url = add_query_arg( $args, site_url( 'chart-embed/' ) );
+		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
 
 		ob_start();
 		?><iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] ); ?>" src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe><?php
@@ -749,16 +751,17 @@ class M_Chart {
 	}
 
 	/**
-	 * Looks for the chart-embed endpoint and serves up the requested chart if appropriate
+	 * Looks for the embed endpoint and serves up the requested chart if appropriate
 	 */
 	public function template_redirect() {
-		global $wp_query;
+		global $wp_query, $wp_rewrite;
 
-		if ( ! isset( $wp_query->query['pagename'] ) || 'chart-embed' != $wp_query->query['pagename'] ) {
+		// Make sure this is a chart with the embed endpoint in the URL
+		if ( ! isset( $wp_query->query['post_type'] ) || ! isset( $wp_query->query['embed'] ) || 'm-chart' != $wp_query->query['post_type'] ) {
 			return;
 		}
 
-		$post = get_post( absint( $_GET['post_id'] ) );
+		$post = get_post();
 
 		if ( ! $post ) {
 			wp_die(
@@ -781,7 +784,10 @@ class M_Chart {
 
 		$this->is_iframe = true;
 
-		unset( $_GET['post_id'], $_GET['action'], $_GET['share'] );
+		unset( $_GET['action'], $_GET['share'] );
+
+		// This prevents issues when embedding with outside sites
+		header_remove( 'X-Frame-Options' );
 
 		status_header( 200 );
 
