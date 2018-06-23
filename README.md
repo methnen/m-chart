@@ -37,10 +37,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 ### 1.7 ###
 
 * Updated Handsontable to the latest stable version (4.0.0)
-* Major restructuring changes to meet WordPress Plugin directory
-	* Removed Highcharts completely from core plugin
-		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/releases) plugin
+* Major restructuring changes to meet [WordPress Plugins directory requirements](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#the-guidelines)
 	* Switched default graphing library to [Chart.js](https://www.chartjs.org) (2.7.2)
+		* Chart.js is more limited in functionality than Highcharts and the features of the core plugin as scaled back to reflect this
+			* Chart types are reduced and customizability is limited
+	* Removed Highcharts completely from the core plugin
+		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/releases) plugin
+			* This plugin reinstates ALL of the previous functionality found in M Chart
 
 ### 1.6.3 ###
 
