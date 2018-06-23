@@ -34,6 +34,14 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.7 ###
+
+* Updated Handsontable to the latest stable version (4.0.0)
+* Major restructuring changes to meet WordPress Plugin directory
+	* Removed Highcharts completely from core plugin
+		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/releases) plugin
+	* Switched default graphing library to [Chart.js](https://www.chartjs.org) (2.7.2)
+
 ### 1.6.3 ###
 
 * Reworked the iframe embed code so differences in themes shouldn't cause issues anymore

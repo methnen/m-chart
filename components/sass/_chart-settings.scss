@@ -12,7 +12,7 @@
 			background-color: $wp-admin-dark-background-color;
 			border-top: 1px solid $wp-admin-border-color;
 			padding: 0 10px 10px;
-
+			
 			.row {
 				@include clearfix;
 				border-top: none;
@@ -21,47 +21,22 @@
 				p {
 					margin-bottom: 0;
 				}
-
-				&.one {
-					p {
-						float: left;
-						margin-left: 1%;
-						width: 32%;
-
-						&:first-child {
-							margin-left: 0;
-						}
-					}
-				}
-
+				
+				&.one,
 				&.two {
 					p {
 						float: left;
 						margin-left: 1%;
-						width: 32%;
+						width: 49%;
 
 						&:first-child {
 							margin-left: 0;
 						}
-
-						&.shared {
-							display: none;
-						}
-					}
-
-					&.show-shared {
-						p {
-							width: 24%;
-
-							&.shared {
-								display: block;
-							}
-						}
 					}
 				}
-
+				
 				&.three,
-				&.five {
+				&.four {
 					p {
 						float: left;
 						width: 73%;
@@ -69,28 +44,6 @@
 						&.units {
 							float: right;
 							width: 25%;
-						}
-					}
-				}
-
-				&.four {
-					p {
-						margin: 0;
-
-						label {
-							display: inline-block;
-							height: 23px;
-						}
-					}
-				}
-
-				&.six {
-					p {
-						float: right;
-						width: 49%;
-
-						&:first-child {
-							float: left;
 						}
 					}
 				}

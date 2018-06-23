@@ -211,14 +211,9 @@ class M_Chart_Admin {
 			);
 
 			// Highcharts export.js is required for the image generation
-			wp_enqueue_script(
-				'highcharts-exporting',
-				$this->plugin_url . '/components/external/highcharts/exporting.js',
-				array( 'highcharts', 'jquery' ),
-				m_chart()->version
-			);
+			wp_enqueue_script( 'highcharts-exporting' );
 
-			// canvg and rgbcolo do the SVG -> Canvas conversion
+			// canvg and rgbcolo are useful for SVG -> Canvas conversions
 			wp_enqueue_script(
 				'rgbcolor',
 				$this->plugin_url . '/components/external/canvg/rgbcolor.js',
@@ -237,23 +232,38 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'highcharts', 'jquery' ),
+				array( 'jquery' ),
 				m_chart()->version
 			);
+			
+			// Only load this if we are on an appropriate post page
+			$library = isset( $_GET['post'] ) ? m_chart()->get_post_meta( $_GET['post'], 'library' ) : m_chart()->get_library();
+		
+			if ( 'post' == $screen->base && 'chartjs' == $library ) {
+				wp_enqueue_script(
+					'm-chart-chartjs-admin',
+					$this->plugin_url . '/components/js/m-chart-chartjs-admin.js',
+					array( 'm-chart-admin', 'chartjs', 'jquery' ),
+					$this->version
+				);
+			}
 
-			$settings = m_chart()->get_settings();
-			$post_id  = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : '';
+			$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : '';
+			$library = m_chart()->get_post_meta( $post_id, 'library' );
 
 			wp_localize_script(
 				'm-chart-admin',
 				'm_chart_admin',
 				array(
-					'refresh_counter'       => 0,
-					'allow_form_submission' => false,
-					'request'               => false,
-					'performance'           => $settings['performance'],
-					'set_names'             => m_chart()->get_post_meta( $post_id, 'set_names' ),
-					'delete_comfirm'        => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
+					'refresh_counter'         => 0,
+					'allow_form_submission'   => false,
+					'request'                 => false,
+					'performance'             => m_chart()->get_settings( 'performance' ),
+					'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
+					'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
+					'library'                 => $library,
+					'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
+					'delete_comfirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				)
 			);
 		}
@@ -265,6 +275,8 @@ class M_Chart_Admin {
 			array(),
 			m_chart()->version
 		);
+
+		do_action( 'm_chart_admin_scripts', $library, $post_id );
 	}
 
 	/**
@@ -421,9 +433,7 @@ class M_Chart_Admin {
 			&& m_chart()->is_valid_library( $_POST[ m_chart()->slug ]['library'] )
 		) {
 			// Load the library in question in case there's a filter/action we'll need
-			if ( 'highcharts' == $_POST[ m_chart()->slug ]['library'] ) {
-				m_chart()->highcharts();
-			}
+			m_chart()->library( $_POST[ m_chart()->slug ]['library'] );
 
 			// update_post_meta passes the $_POST values directly to validate_post_meta
 			// validate_post_meta returns only valid post meta values and does data validation on each item
@@ -450,6 +460,11 @@ class M_Chart_Admin {
 		}
 
 		$post_id = absint( $_POST['post_ID'] );
+
+		// Make sure the library used on this post supports images
+		if ( 'no' == apply_filters( 'm_chart_image_support', 'no', m_chart()->get_post_meta( $post_id, 'library' ) ) ) {
+			return;
+		}
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return false;
@@ -628,8 +643,7 @@ class M_Chart_Admin {
 		if ( isset( $_POST['data'] ) && isset( $_POST['title'] ) ) {
 			$data      = m_chart()->validate_data( json_decode( stripslashes( $_POST['data'] ) ) );
 			$file_name = sanitize_title( $_POST['title'] );
-		}
-		else {
+		} else {
 			$data      = m_chart()->get_post_meta( $post->ID, 'data' );
 			$file_name = sanitize_title( get_the_title( $post->ID ) );
 		}
@@ -674,8 +688,10 @@ class M_Chart_Admin {
 		}
 
 		if ( 'highcharts' == $_POST['library'] ) {
-			$library = m_chart()->highcharts();
+			$library = m_chart()->library( $_POST['library'] );
 		}
+
+		$library = apply_filters( 'm_chart_library_class', m_chart()->library_class, $_POST['library'] );
 
 		// Set these values so that get_chart_args has them already available before we call it
 		$library->args = m_chart()->get_chart_default_args;

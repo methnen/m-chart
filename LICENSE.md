@@ -1,20 +1,6 @@
-License info for libraries found in `components/external`:
-- [canvg](https://github.com/gabelerner/canvg/)
-	- License at the time of writing: MIT
-- [handlebars](https://github.com/wycats/handlebars.js/)
-	- License at the time of writing: MIT
-- [handsontable](https://github.com/handsontable/handsontable)
-	- License at the time of writing: MIT
-- [highcharts](https://github.com/highslide-software/highcharts.com)
-	- License at the time of writing: CC Attribution-NonCommercial 3.0 Unported
-- [parsecsv](https://github.com/parsecsv/parsecsv-for-php)
-	- License at the time of writing: MIT
-
-License for M Charts:
-
 The MIT License (MIT)
 
-Copyright (c) 2015-2017 Jamie Poitra
+Copyright (c) 2015-2018 Jamie Poitra
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,3 +19,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+License info for libraries found in `components/external`:
+- [canvg](https://github.com/gabelerner/canvg/)
+	- License at the time of writing: MIT
+- [handlebars](https://github.com/wycats/handlebars.js/)
+	- License at the time of writing: MIT
+- [handsontable](https://github.com/handsontable/handsontable)
+	- License at the time of writing: MIT
+- [Chart.js](https://github.com/chartjs/Chart.js)
+	- License at the time of writing: MIT
+- [parsecsv](https://github.com/parsecsv/parsecsv-for-php)
+	- License at the time of writing: MIT
