@@ -114,17 +114,13 @@ var m_chart_chartjs_admin = {
 				});
 			}
 		};
+		
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
 
 		if ( 'no-images' === m_chart_admin.performance ) {
 			m_chart_admin.form_submission( true );
 		}
 	};
-
-	// Get data from the spreadsheets
-	m_chart_chartjs_admin.get_data = function() {
-
-	}
 
 	$( function() {
 		m_chart_chartjs_admin.init();
