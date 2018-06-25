@@ -7,8 +7,9 @@ var m_chart_chartjs_admin = {
 
 	// Start things up
 	m_chart_chartjs_admin.init = function() {
-		// Hide the subtitle field
+		// Hide the subtitle and $y_min_value fields
 		m_chart_admin.$y_min_value.hide();
+		m_chart_admin.$subtitle_input.hide();
 
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
@@ -114,6 +115,10 @@ var m_chart_chartjs_admin = {
 				});
 			}
 		};
+		
+		// Height is set via the container
+		var height = $( document.getElementById( 'm-chart-height' ) ).attr( 'value' );
+		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
 		
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
 
