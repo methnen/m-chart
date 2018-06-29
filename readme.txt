@@ -1,6 +1,6 @@
 === M Chart ===
 Contributors: methnen
-Tags: highcharts, graphs, charts, data, wordpress
+Tags: chartjs, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.9.6
 Stable tag: 1.7

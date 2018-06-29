@@ -2,11 +2,11 @@
 /*
 Plugin Name: M Chart
 Version: 1.7
-Plugin URI: http://github.com/methnen/m-charts
+Plugin URI: http://github.com/methnen/m-chart
 Description: Manage data sets and display them as charts in WordPress.
 Author: Jamie Poitra
 Author URI: http://methnen.com
-Tags: highcharts, graphs, charts, data, wordpress
+Tags: chartjs, graphs, charts, data, wordpress
 Text Domain: m-chart
 Domain Path: /components/languages
 License: MIT
