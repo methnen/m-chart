@@ -235,10 +235,10 @@ class M_Chart_Admin {
 				array( 'jquery' ),
 				m_chart()->version
 			);
-			
+
 			// Only load this if we are on an appropriate post page
 			$library = isset( $_GET['post'] ) ? m_chart()->get_post_meta( $_GET['post'], 'library' ) : m_chart()->get_library();
-		
+
 			if ( 'post' == $screen->base && 'chartjs' == $library ) {
 				wp_enqueue_script(
 					'm-chart-chartjs-admin',

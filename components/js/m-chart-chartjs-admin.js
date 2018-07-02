@@ -66,7 +66,7 @@ var m_chart_chartjs_admin = {
 			// Give the target canvas a white background
 			target_context.fillStyle = 'white';
 			target_context.fillRect(0, 0, 1200, $canvas_source.height);
-			
+
 			// Copy the chart over to a new canvas object
 			target_context.drawImage( $canvas_source, 0, 0, 1200, $canvas_source.height );
 
@@ -115,11 +115,11 @@ var m_chart_chartjs_admin = {
 				});
 			}
 		};
-		
+
 		// Height is set via the container
 		var height = $( document.getElementById( 'm-chart-height' ) ).attr( 'value' );
 		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
-		
+
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
 
 		if ( 'no-images' === m_chart_admin.performance ) {
