@@ -32,7 +32,6 @@ class M_Chart_Chartjs {
 		'bar'    => 'horizontalBar',
 		'pie'    => 'pie',
 		'line'   => 'line',
-		'area'   => 'area',
 	);
 
 	/**
@@ -52,21 +51,6 @@ class M_Chart_Chartjs {
 		$this->args = wp_parse_args( $args, m_chart()->get_chart_default_args );
 		$this->post = get_post( $post_id );
 		$this->post_meta = m_chart()->get_post_meta( $this->post->ID );
-
-		if ( 'bubble' == $this->post_meta['type'] ) {
-			wp_enqueue_script( 'highcharts-more' );
-		}
-	}
-
-	/**
-	 * Get the chart options
-	 *
-	 * @return array an array of Highcharts wide options we want to set
-	 */
-	public function get_chart_options() {
-		$chart_options = array();
-
-		return apply_filters( 'm_chart_chart_options', $chart_options, $this->library );
 	}
 
 	/**
@@ -185,7 +169,7 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Hook to the m_chart_image_support filter and indicate that Highcharts supports images
+	 * Hook to the m_chart_image_support filter and indicate that Chart.js supports images
 	 *
 	 * @param string $supports_images yes/no whether the library supports image generation
 	 * @param string $library the library in question
@@ -251,14 +235,6 @@ class M_Chart_Chartjs {
 			$chart_args['options']['scales']['yAxes'][0]['scaleLabel']['labelString'] .= $y_units;
 		}
 
-		// Bar charts are just rotated column charts in Highcharts so we flip things around to keep the UI consistent
-		//if ( 'bar' == $this->post_meta['type'] ) {
-		//	$x_title = $chart_args['xAxis']['title']['text'];
-        //
-		//	$chart_args['xAxis']['title']['text'] = $chart_args['yAxis']['title']['text'];
-		//	$chart_args['yAxis']['title']['text'] = $x_title;
-		//}
-
 		return $chart_args;
 	}
 
@@ -300,7 +276,7 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Helper function escapes and modifies text/title values so they work in Highcharts
+	 * Helper function escapes and modifies text/title values
 	 *
 	 * @param string an string you want to use in Highcharts
 	 *
@@ -332,7 +308,7 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Helper function sets empty values to NULL so that Highcharts handles them correctly.
+	 * Helper function sets empty values to NULL so that Chart.js handles them correctly.
 	 *
 	 * @param string/int a data value
 	 *
