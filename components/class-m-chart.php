@@ -372,10 +372,10 @@ class M_Chart {
 
 					if ( $chart_meta[ $field ] > 1500 ) {
 						$chart_meta[ $field ] = 1500;
-					} else if ( $chart_meta[ $field ] < 300 ) {
+					} elseif ( $chart_meta[ $field ] < 300 ) {
 						$chart_meta[ $field ] = 300;
 					}
-				} else if ( 'y_min_value' == $field ) {
+				} elseif ( 'y_min_value' == $field ) {
 					$chart_meta[ $field ] = floatval( $meta[ $field ] );
 				} else {
 					$chart_meta[ $field ] = wp_filter_nohtml_kses( $meta[ $field ] );
@@ -984,7 +984,7 @@ class M_Chart {
 function m_chart() {
 	global $m_chart;
 
-	if ( ! is_a( $m_chart, 'M_Chart' ) ) {
+	if ( ! $m_chart instanceof M_Chart ) {
 		$m_chart = new M_Chart;
 	}
 

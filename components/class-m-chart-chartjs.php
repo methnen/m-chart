@@ -38,7 +38,7 @@ class M_Chart_Chartjs {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support'), 10, 2 );
+		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
 	}
 
 	/**
@@ -50,6 +50,12 @@ class M_Chart_Chartjs {
 	public function get_chart_data( $post_id, $args ) {
 		$this->args = wp_parse_args( $args, m_chart()->get_chart_default_args );
 		$this->post = get_post( $post_id );
+
+		// If the post wasn't valid might as well stop here
+		if ( ! $this->post ) {
+			return;
+		}
+
 		$this->post_meta = m_chart()->get_post_meta( $this->post->ID );
 	}
 
@@ -111,7 +117,7 @@ class M_Chart_Chartjs {
 
 		if ( 'horizontalBar' == $chart_args['type'] ) {
 			$chart_args['options']['scales']['yAxes'][0]['gridLines']['display'] = false;
-		} else if ( 'pie' != $chart_args['type'] ) {
+		} elseif ( 'pie' != $chart_args['type'] ) {
 			$chart_args['options']['scales']['xAxes'][0]['gridLines']['display'] = false;
 		}
 
@@ -122,7 +128,7 @@ class M_Chart_Chartjs {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % count( $this->colors ) ];
 			}
-		} else if ( 'pie' == $chart_args['type'] ) {
+		} elseif ( 'pie' == $chart_args['type'] ) {
 			foreach ( $chart_args['data']['datasets'][0]['data'] as $key => $data ) {
 				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key ];
 			}
@@ -138,7 +144,7 @@ class M_Chart_Chartjs {
 		}
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
-		//print_r($chart_args); exit();
+
 		// Set the cache, we'll regenerate this when someone updates the post
 		if ( $cache ) {
 			wp_cache_set( $cache_key, $chart_args, m_chart()->slug );
@@ -173,6 +179,8 @@ class M_Chart_Chartjs {
 	 *
 	 * @param string $supports_images yes/no whether the library supports image generation
 	 * @param string $library the library in question
+	 *
+	 * @return string $supports_images yes/no whether the library supports image generation
 	 */
 	public function m_chart_image_support( $supports_images, $library ) {
 		if ( $library != $this->library ) {
