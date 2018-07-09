@@ -6,7 +6,7 @@
         <title><?php echo get_the_title( $post->ID ); ?></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<?php wp_print_scripts( array( 'highcharts', 'jquery' )); ?>
+		<?php wp_print_scripts( apply_filters( 'm_chart_iframe_scripts', $scripts ) ); ?>
     </head>
 	<!-- overflow: hidden; prevents the iframe from scrolling -->
     <body style="overflow: hidden;">

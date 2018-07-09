@@ -859,6 +859,11 @@ class M_Chart {
 
 		$this->is_iframe = true;
 
+		$scripts = array( 
+			'jquery',
+			$this->get_post_meta( $post->ID, 'library' ),
+		);
+
 		unset( $_GET['action'], $_GET['share'] );
 
 		// This prevents issues when embedding with outside sites
