@@ -8,7 +8,7 @@
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Library', 'm-chart' ); ?></th>
 					<td>
-						<select name="<?php echo esc_ttr( $this->get_field_name( 'library' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
+						<select name="<?php echo esc_attr( $this->get_field_name( 'library' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
 							<?php
 							foreach ( m_chart()->get_libraries() as $library => $library_name ) {
 								?>
