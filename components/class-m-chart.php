@@ -859,7 +859,7 @@ class M_Chart {
 
 		$this->is_iframe = true;
 
-		$scripts = array( 
+		$scripts = array(
 			'jquery',
 			$this->get_post_meta( $post->ID, 'library' ),
 		);
