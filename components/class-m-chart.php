@@ -206,27 +206,6 @@ class M_Chart {
 
 		// Register the graphing library scripts
 		wp_register_script(
-			'highcharts-more',
-			$this->plugin_url . '/components/external/highcharts/highcharts-more.js',
-			array( 'jquery', 'highcharts' ),
-			$this->version
-		);
-
-		wp_register_script(
-			'highcharts',
-			$this->plugin_url . '/components/external/highcharts/highcharts.js',
-			array( 'jquery' ),
-			$this->version
-		);
-
-		wp_register_script(
-			'highcharts-exporting',
-			$this->plugin_url . '/components/external/highcharts/exporting.js',
-			array( 'highcharts', 'jquery' ),
-			$this->version
-		);
-
-		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart-bundle.js',
 			array( 'highcharts', 'jquery' ),
@@ -668,7 +647,7 @@ class M_Chart {
 			return $library_class;
 		}
 
-		if ( ! is_a( $this->library_class, 'M_Chart_Chartjs' ) ) {
+		if ( ! $this->library_class instanceof M_Chart_Chartjs ) {
 			require_once __DIR__ . '/class-m-chart-chartjs.php';
 			$this->library_class = new M_Chart_Chartjs;
 		}
