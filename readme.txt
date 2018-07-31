@@ -34,7 +34,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.7 =
 
-* Updated Handsontable to the latest stable version (4.0.0)
+* Updated Handsontable to the latest stable version (5.0.0)
 * Major restructuring changes to meet [WordPress Plugins directory requirements](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#the-guidelines)
 	* Switched default graphing library to [Chart.js](https://www.chartjs.org) (2.7.2)
 		* Chart.js is more limited in functionality than Highcharts and the features of the core plugin as scaled back to reflect this

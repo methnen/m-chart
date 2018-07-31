@@ -236,9 +236,16 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
-			// Only load this if we are on an appropriate post page
-			$library = isset( $_GET['post'] ) ? m_chart()->get_post_meta( $_GET['post'], 'library' ) : m_chart()->get_library();
+			// We need the library and post ID for some bunch of stuff below
+			$post_id = (int) $_GET['post'];
 
+			if ( empty( $post_id ) ) {
+			  $library = m_chart()->get_library();
+			} else {
+			  $library = m_chart()->get_post_meta( absint( $post_id ), 'library' );
+			}
+
+			// Only load this if we are on an appropriate post page
 			if ( 'post' == $screen->base && 'chartjs' == $library ) {
 				wp_enqueue_script(
 					'm-chart-chartjs-admin',
@@ -247,9 +254,6 @@ class M_Chart_Admin {
 					$this->version
 				);
 			}
-
-			$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : '';
-			$library = m_chart()->get_post_meta( $post_id, 'library' );
 
 			wp_localize_script(
 				'm-chart-admin',
@@ -426,14 +430,14 @@ class M_Chart_Admin {
 		// If there's an image being passed attach it to the chart post
 		$this->attach_image();
 
-		// Make sure we don't overrwrite existing settings in the case someone hits update too quickly
+		// Make sure we don't overwrite existing settings in the case someone hits update too quickly
 		if (
 			   isset( $_POST[ m_chart()->slug ]['library'] )
 			// Make sure the library value is clean and valid before trying to use it
-			&& m_chart()->is_valid_library( $_POST[ m_chart()->slug ]['library'] )
+			&& $library = m_chart()->is_valid_library( $_POST[ m_chart()->slug ]['library'] )
 		) {
 			// Load the library in question in case there's a filter/action we'll need
-			m_chart()->library( $_POST[ m_chart()->slug ]['library'] );
+			m_chart()->library( $library );
 
 			// update_post_meta passes the $_POST values directly to validate_post_meta
 			// validate_post_meta returns only valid post meta values and does data validation on each item
@@ -628,7 +632,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Converts data array into CSV outputs it to the browser
+	 * Converts data array into CSV and outputs it to the browser
 	 */
 	public function ajax_export_csv() {
 		// Purposely using $_REQUEST here since this method can work via a GET and POST request

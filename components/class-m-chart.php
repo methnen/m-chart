@@ -432,6 +432,8 @@ class M_Chart {
 			$post_id = get_the_ID();
 		}
 
+		do_action( 'm_chart_get_chart_start', $post_id, $args );
+
 		// Normalize historic usage of 'img' argument
 		if ( isset( $args['img'] ) && 'yes' == $args['img'] ) {
 			$args['show'] = 'image';
@@ -493,8 +495,11 @@ class M_Chart {
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
+
+
 		ob_start();
 		require apply_filters( 'm_chart_chart_template', $template, $library );
+		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
 		return ob_get_clean();
 	}
@@ -875,7 +880,7 @@ class M_Chart {
 		$libraries = $this->get_libraries();
 
 		if ( ! isset( $libraries[ $library ] ) ) {
-			return false;
+			return $library;
 		}
 
 		return true;
