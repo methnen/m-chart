@@ -978,7 +978,7 @@ class M_Chart {
 	 * Do things needed for version 1.7
 	 */
 	public function upgrade_to_1_7() {
-		// Add highcharts post_tag to all charts
+		// Get all charts
 		$charts = get_posts(
 			array(
 				'post_type' => m_chart()->slug,
@@ -995,10 +995,12 @@ class M_Chart {
 			)
 		);
 
+		// Add highcharts post_tag to all charts
 		foreach ( $charts as $chart ) {
 			wp_set_object_terms( $chart->ID, 'highcharts', 'post_tag' );
 		}
 
+		// Update version
 		update_site_option( 'm_chart_version', '1.7' );
 	}
 }
