@@ -31,6 +31,8 @@ class M_Chart_Admin {
 	public function admin_init() {
 		$this->save_settings();
 
+		add_action( 'admin_notices', array( $this, 'library_warning' ) );
+
 		if ( ! function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
 			return;
 		}
@@ -161,8 +163,51 @@ class M_Chart_Admin {
 	 */
 	public function save_success() {
 		?>
-	    <div class="updated notice">
+	    <div class="updated notice notice-success">
 	         <p><?php esc_html_e( 'Settings saved', 'm-chart' ); ?></p>
+	     </div>
+		<?php
+	}
+
+	/**
+	 * Display an admin notice when the site has charts that use Highcharts but M Chart Highcharts Library is not active/installed
+	 */
+	public function library_warning() {
+		if ( is_plugin_active( 'm-chart-highcharts-library/m-chart-highcharts-library.php' ) ) {
+			return;
+		}
+
+		$highcharts_check = get_posts(
+			array(
+				'post_type' => m_chart()->slug,
+				'posts_per_page' => 1,
+				'post_status' => 'any',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'post_tag',
+						'field' => 'slug',
+						'terms' => 'highcharts'
+					),
+				),
+			)
+		);
+
+		if ( ! $highcharts_check ) {
+			return;
+		}
+		?>
+	    <div class="warning notice notice-warning">
+	         <p>
+				 <?php
+				 echo str_replace(
+				 	esc_html__( 'M Chart Highcharts Library', 'm-chart' ),
+					'<strong>' . esc_html__( 'M Chart Highcharts Library', 'm-chart' ) . '</strong>',
+					esc_html__( 'You have charts that require the M Chart Highcharts Library plugin.', 'm-chart' )
+				);
+				?>
+			</p>
+			 <p><?php esc_html_e( 'These charts will no longer display unless you install the plugin:', 'm-chart' ); ?></p>
+			 <p><a href="https://github.com/methnen/m-chart-highcharts-library/" class="button-primary"><?php esc_html_e( 'Learn More', 'm-chart' ); ?></a></p>
 	     </div>
 		<?php
 	}

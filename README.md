@@ -44,7 +44,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 		* Chart.js is more limited in functionality than Highcharts and the features of the core plugin as scaled back to reflect this
 			* Chart types are reduced and customizability is limited
 	* Removed Highcharts completely from the core plugin
-		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/releases) plugin
+		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin
 			* This plugin reinstates ALL of the previous functionality found in M Chart
 
 ### 1.6.3 ###

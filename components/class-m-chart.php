@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.6.3';
+	public $version = '1.7';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -221,6 +221,11 @@ class M_Chart {
 	 */
 	public function plugins_loaded() {
 		load_plugin_textdomain( 'm-chart', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
+
+		// Check if we need to run any upgrades
+		if ( version_compare( get_site_option( 'm_chart_version' ), '1.7', 'lt' ) ) {
+			$this->upgrade_to_1_7();
+		}
 	}
 
 	/**
@@ -316,6 +321,9 @@ class M_Chart {
 		}
 
 		wp_set_object_terms( $post_id, $terms, $this->slug . '-units' );
+
+		// Set library as a post_tag
+		wp_set_object_terms( $post_id, $parsed_meta['library'], 'post_tag' );
 
 		// Save meta to the post
 		update_post_meta( $post_id, $this->slug, $parsed_meta );
@@ -964,6 +972,34 @@ class M_Chart {
 	    }
 
 	    return $a;
+	}
+
+	/**
+	 * Do things needed for version 1.7
+	 */
+	public function upgrade_to_1_7() {
+		// Add highcharts post_tag to all charts
+		$charts = get_posts(
+			array(
+				'post_type' => m_chart()->slug,
+				'posts_per_page' => -1,
+				'post_status' => 'any',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'post_tag',
+						'field' => 'slug',
+						'terms' => 'highcharts',
+						'operator' => 'NOT IN',
+					),
+				),
+			)
+		);
+
+		foreach ( $charts as $chart ) {
+			wp_set_object_terms( $chart->ID, 'highcharts', 'post_tag' );
+		}
+
+		update_site_option( 'm_chart_version', '1.7' );
 	}
 }
 
