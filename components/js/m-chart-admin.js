@@ -7,15 +7,10 @@
 		this.nonce   = $( 'input[name="m-chart[nonce]"]' ).attr( 'value' );
 
 		// Store the setting inputs and title input for use later
-		this.$setting_inputs   = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
-		this.$title_input      = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
-		this.$subtitle_input   = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
-		this.$y_min_value      = $( document.getElementById( 'm-chart-y-min-value' ) );
-
-		// Only show fields/inputs that are appropriate for the current chart type
-		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
-		$chart_type_select.on( 'load, change', this.handle_chart_type );
-		$chart_type_select.trigger( 'change' );
+		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
+		this.$title_input    = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
+		this.$subtitle_input = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
+		this.$y_min_value    = $( document.getElementById( 'm-chart-y-min-value' ) );
 
 		// Store these for later
 		this.$form_buttons = $( '#save-post, #wp-preview, #post-preview, #publish' );
@@ -45,11 +40,6 @@
 				m_chart_admin.$sheet_tab_inputs.attr( 'disabled', false );
 			}
 		});
-
-		// Watch for a new chart to be built
-		if ( 'default' === this.performance ) {
-			$( '.m-chart' ).on( 'render_done', this.generate_image_from_chart );
-		}
 
 		// Watch for clicks on the y min toggle
 		$( document.getElementById( 'm-chart-y-min' ) ).on( 'click', function () {
@@ -90,7 +80,7 @@
 			$data[ spreadsheet ] = m_chart_admin.$spreadsheets[ i ].getData();
 			spreadsheet++;
 		});
-		console.log($data);
+
 		return $data;
 	}
 
@@ -171,57 +161,7 @@
 		this.last_set = i;
 	}
 
-	// Handle chart type input changes so the settings UI only reflects appropriate options
-	m_chart_admin.handle_chart_type = function( event ) {
-		var chart_type        = $( this ).attr( 'value' );
-		var $chart_meta_box   = $( document.getElementById( 'm-chart' ) );
-		var $spreadsheet_tabs = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
-
-		// Show everything before hiding the options we don't want
-		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
-		$chart_meta_box.find( '.row.two' ).addClass( 'show-shared' );
-
-		if (
-			   'area' === chart_type
-			|| 'column' === chart_type
-			|| 'bar' === chart_type
-		) {
-			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
-			$spreadsheet_tabs.addClass( 'hide' );
-		}
-
-		if (
-			   'column' === chart_type
-			|| 'bar' === chart_type
-		) {
-			$chart_meta_box.find( '.shared' ).addClass( 'hide' );
-			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
-		}
-
-		if (
-			   'line' === chart_type
-			|| 'spline' === chart_type
-		) {
-			$spreadsheet_tabs.addClass( 'hide' );
-		}
-
-		if ( 'pie' === chart_type ) {
-			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
-			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
-			$spreadsheet_tabs.addClass( 'hide' );
-		}
-
-		if (
-			   'scatter' === chart_type
-			|| 'bubble' === chart_type
-		) {
-			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
-			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
-			$spreadsheet_tabs.removeClass( 'hide' );
-		}
-	};
-
-	// Handle CSV import functionality
+	// Handle spreadsheet functionality
 	m_chart_admin.handle_sheet_controls = function() {
 		// Add a spreedsheet
 		this.$spreadsheet_tabs.find( '.add-sheet' ).on( 'click', function( event ) {
@@ -252,7 +192,7 @@
 			m_chart_admin.active_set = $(this).data( 'instance' );
 		});
 
-		// On the initial load of the interface we shoudl select the initial tab
+		// On the initial load of the interface we should select the initial tab
 		this.$spreadsheet_tabs.find( '.nav-tab' ).first().click();
 
 		// Handle double clicks and long presses on the tabs
@@ -468,44 +408,6 @@
 		});
 	};
 
-	// Generate a PNG image out of a rendered chart
-	m_chart_admin.generate_image_from_chart = function( event ) {
-		var svg    = event.chart.getSVG();
-		var width  = svg.match(/^<svg[^>]*width\s*=\s*\"?(\d+)\"?[^>]*>/)[1];
-		var height = svg.match(/^<svg[^>]*height\s*=\s*\"?(\d+)\"?[^>]*>/)[1];
-
-		// Double the width/height values in the SVG
-	    svg = svg.replace( 'width="' + width + '"', 'width="' + ( width * 2 ) + '"' );
-	    svg = svg.replace( 'height="' + height + '"', 'height="' + ( height * 2 ) + '"' );
-
-		// Scaling continues to be a disaster in canvg so we'll scale manually here
-		svg = svg.replace(
-			'<svg ',
-		    '<svg transform="scale(2)" '
-		);
-
-		// Create a Canvas object out of the SVG
-		var $canvas = $( '#m-chart-canvas-render-' + event.post_id );
-		m_chart_admin.canvas = $canvas.get( 0 );
-
-		canvg( m_chart_admin.canvas, svg );
-
-		// Create Canvas context so we can play with it before saving
-		m_chart_admin.canvas_context = m_chart_admin.canvas.getContext( '2d' );
-
-		$( '.m-chart' ).trigger({
-			type: 'canvas_done'
-		});
-
-		var img = m_chart_admin.canvas.toDataURL( 'image/png' );
-
-		// Save the image string to the text area so we can save it on update/publish
-		$( document.getElementById( 'm-chart-img' ) ).attr( 'value', img );
-
-		// Allow form submission now that we've got a valid img value set
-		m_chart_admin.form_submission( true );
-	};
-
 	// Watch for changes to the chart settings or title
 	m_chart_admin.watch_for_chart_changes = function() {
 		this.$setting_inputs.on( 'change', function() {
@@ -523,7 +425,7 @@
 
 	// Refresh chart
 	m_chart_admin.refresh_chart = function() {
-		if ( 'no-preview' === m_chart_admin.performance ) {
+		if ( 'no-preview' === this.performance || 'yes' !== this.instant_preview_support ) {
 			return false;
 		}
 
@@ -566,7 +468,7 @@
 			data: {
 				post_id:   m_chart_admin.post_id,
 				nonce:     m_chart_admin.nonce,
-				library:   'highcharts',
+				library:   m_chart_admin.library,
 				title:     this.$title_input.attr( 'value' ),
 				post_meta: $post_meta
 			},
@@ -579,13 +481,10 @@
 				return false;
 			}
 
-			// Update active chart args and then rerender the chart
-			window[ 'm_chart_highcharts_' + m_chart_admin.post_id + '_1' ].chart_args = response.data;
-			window[ 'm_chart_highcharts_' + m_chart_admin.post_id + '_1' ].render_chart();
-
-			if ( 'no-images' === m_chart_admin.performance ) {
-				m_chart_admin.form_submission( true );
-			}
+			$( '.m-chart' ).trigger({
+				type:     'chart_args_success',
+				response: response
+			});
 		});
 	};
 

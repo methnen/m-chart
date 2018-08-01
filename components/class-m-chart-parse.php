@@ -291,7 +291,7 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Helper function normalizes the data array so that the number of data values data matches the number of value labels
+	 * Helper function normalizes the data array so that the number of data values matches the number of value labels
 	 *
 	 * @param array $data_array an already parsed array of data
 	 *

@@ -1,9 +1,9 @@
 === M Chart ===
 Contributors: methnen
-Tags: highcharts, graphs, charts, data, wordpress
+Tags: chartjs, graphs, charts, data, wordpress
 Requires at least: 4.2
-Tested up to: 4.7.2
-Stable tag: 1.6.3
+Tested up to: 4.9.6
+Stable tag: 1.7
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -11,6 +11,8 @@ Manage data sets and display them as charts in WordPress.
 == Description ==
 
 Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Highcharts chart library.  The charts can then be embedded into a regular post via a handy shortcode.
+
+**Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
 
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
@@ -29,6 +31,17 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.7 =
+
+* Updated Handsontable to the latest stable version (5.0.0)
+* Major restructuring changes to meet [WordPress Plugins directory requirements](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#the-guidelines)
+	* Switched default graphing library to [Chart.js](https://www.chartjs.org) (2.7.2)
+		* Chart.js is more limited in functionality than Highcharts and the features of the core plugin as scaled back to reflect this
+			* Chart types are reduced and customizability is limited
+	* Removed Highcharts completely from the core plugin
+		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin
+			* This plugin reinstates ALL of the previous functionality found in M Chart
 
 = 1.6.3 =
 

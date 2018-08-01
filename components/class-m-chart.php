@@ -2,11 +2,11 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.6.3';
+	public $version = '1.7';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
-		'library'     => 'highcharts',
+		'library'     => 'chartjs',
 		'type'        => 'line',
 		'parse_in'    => 'rows',
 		'labels'      => true,
@@ -40,6 +40,7 @@ class M_Chart {
 	public $is_iframe = false;
 	public $instance = 1;
 	public $settings = array(
+		'library'       => 'chartjs',
 		'performance'   => 'default',
 		'embeds'        => '',
 		'default_theme' => '_default',
@@ -57,12 +58,14 @@ class M_Chart {
 			'numericSymbolMagnitude' => 1000,
 		),
 	);
+	public $library_class;
 
 	private $admin;
 	private $highcharts;
+	private $chartjs;
 	private $parse;
-	private $valid_libraries = array(
-		'highcharts',
+	private $libraries = array(
+		'chartjs' => 'Chart.js',
 	);
 
 	/**
@@ -76,10 +79,14 @@ class M_Chart {
 		add_action( 'save_post', array( $this, 'save_post' ) );
 		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
+		add_action( 'm_chart_update_post_meta', array( $this, 'm_chart_update_post_meta' ), 10, 2 );
 
 		// Doing this before the default so it's already done before anything else
 		add_filter( 'm_chart_get_chart_image_tag', array( $this, 'm_chart_get_chart_image_tag' ), 9, 3 );
 		add_filter( 'the_content', array( $this, 'the_content' ) );
+		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support'), 10, 2 );
+		add_filter( 'm_chart_instant_preview_support', array( $this, 'm_chart_instant_preview_support'), 10, 2 );
+		add_filter( 'm_chart_library_class', array( $this, 'm_chart_library_class'), 10, 2 );
 
 		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
 		add_shortcode( 'chart-share', array( $this, 'share_shortcode' ) );
@@ -98,15 +105,14 @@ class M_Chart {
 	}
 
 	/**
-	 * Highcharts object accessor
+	 * Library object accessor
 	 */
-	public function highcharts() {
-		if ( ! $this->highcharts ) {
-			require_once __DIR__ . '/class-m-chart-highcharts.php';
-			$this->highcharts = new M_Chart_Highcharts;
+	public function library( $library = false ) {
+		if ( ! $library ) {
+			$library = $this->get_library();
 		}
 
-		return $this->highcharts;
+		return apply_filters( 'm_chart_library_class', $this->library_class, $library );
 	}
 
 	/**
@@ -200,16 +206,9 @@ class M_Chart {
 
 		// Register the graphing library scripts
 		wp_register_script(
-			'highcharts-more',
-			$this->plugin_url . '/components/external/highcharts/highcharts-more.js',
-			array( 'jquery', 'highcharts' ),
-			$this->version
-		);
-
-		wp_register_script(
-			'highcharts',
-			$this->plugin_url . '/components/external/highcharts/highcharts.js',
-			array( 'jquery' ),
+			'chartjs',
+			$this->plugin_url . '/components/external/chartjs/chart-bundle.js',
+			array( 'highcharts', 'jquery' ),
 			$this->version
 		);
 
@@ -222,6 +221,11 @@ class M_Chart {
 	 */
 	public function plugins_loaded() {
 		load_plugin_textdomain( 'm-chart', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
+
+		// Check if we need to run any upgrades
+		if ( version_compare( get_site_option( 'm_chart_version' ), '1.7', 'lt' ) ) {
+			$this->upgrade_to_1_7();
+		}
 	}
 
 	/**
@@ -288,8 +292,7 @@ class M_Chart {
 
 		if ( $field && isset( $post_meta[ $field ] ) ) {
 			return $post_meta[ $field ];
-		}
-		elseif ( $field ) {
+		} elseif ( $field ) {
 			return null;
 		}
 
@@ -318,6 +321,9 @@ class M_Chart {
 		}
 
 		wp_set_object_terms( $post_id, $terms, $this->slug . '-units' );
+
+		// Set library as a post_tag
+		wp_set_object_terms( $post_id, $parsed_meta['library'], 'post_tag' );
 
 		// Save meta to the post
 		update_post_meta( $post_id, $this->slug, $parsed_meta );
@@ -353,10 +359,10 @@ class M_Chart {
 
 					if ( $chart_meta[ $field ] > 1500 ) {
 						$chart_meta[ $field ] = 1500;
-					} else if ( $chart_meta[ $field ] < 300 ) {
+					} elseif ( $chart_meta[ $field ] < 300 ) {
 						$chart_meta[ $field ] = 300;
 					}
-				} else if ( 'y_min_value' == $field ) {
+				} elseif ( 'y_min_value' == $field ) {
 					$chart_meta[ $field ] = floatval( $meta[ $field ] );
 				} else {
 					$chart_meta[ $field ] = wp_filter_nohtml_kses( $meta[ $field ] );
@@ -434,6 +440,8 @@ class M_Chart {
 			$post_id = get_the_ID();
 		}
 
+		do_action( 'm_chart_get_chart_start', $post_id, $args );
+
 		// Normalize historic usage of 'img' argument
 		if ( isset( $args['img'] ) && 'yes' == $args['img'] ) {
 			$args['show'] = 'image';
@@ -493,8 +501,13 @@ class M_Chart {
 			wp_enqueue_script( $library );
 		}
 
+		$template = __DIR__ . '/templates/' . $library . '-chart.php';
+
+
+
 		ob_start();
-		require __DIR__ . '/templates/' . $library . '-chart.php';
+		require apply_filters( 'm_chart_chart_template', $template, $library );
+		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
 		return ob_get_clean();
 	}
@@ -599,6 +612,60 @@ class M_Chart {
 
 		// Call the get_chart method and let it do it's thing
 		return $this->get_chart();
+	}
+
+	/**
+	 * Hook to the m_chart_image_support filter and indicate that Chart.js supports images
+	 *
+	 * @param string $supports_images yes/no whether the library supports image generation
+	 * @param string $library the library in question
+	 *
+	 * @return string yes/no whether the library supports images
+	 */
+	public function m_chart_image_support( $supports_images, $library ) {
+		if ( $library != $this->chart_meta_fields['library'] ) {
+			return $supports_images;
+		}
+
+		return 'yes';
+	}
+
+	/**
+	 * Hook to the m_chart_instant_preview_support filter and indicate that Chart.js supports instant previews
+	 *
+	 * @param string $supports_images yes/no whether the library supports instant previews
+	 * @param string $library the library in question
+	 *
+	 * @return string yes/no whether the library supports instant previews
+	 */
+	public function m_chart_instant_preview_support( $supports_instant_preview, $library ) {
+		if ( $library != $this->chart_meta_fields['library'] ) {
+			return $supports_instant_preview;
+		}
+
+		return 'yes';
+	}
+
+	/**
+	 * Hook to the m_chart_library_class filter and return the library class if appropriate
+	 *
+	 * @param string $library_class the library class
+	 * @param string $library the library in question
+	 *
+	 * @return class the library class for this library
+	 */
+	public function m_chart_library_class( $library_class, $library ) {
+		// If Chart.js wasn't requested we'll stop here ()
+		if ( $library != $this->chart_meta_fields['library'] ) {
+			return $library_class;
+		}
+
+		if ( ! $this->library_class instanceof M_Chart_Chartjs ) {
+			require_once __DIR__ . '/class-m-chart-chartjs.php';
+			$this->library_class = new M_Chart_Chartjs;
+		}
+
+		return $this->library_class;
 	}
 
 	/**
@@ -784,6 +851,11 @@ class M_Chart {
 
 		$this->is_iframe = true;
 
+		$scripts = array(
+			'jquery',
+			$this->get_post_meta( $post->ID, 'library' ),
+		);
+
 		unset( $_GET['action'], $_GET['share'] );
 
 		// This prevents issues when embedding with outside sites
@@ -795,6 +867,15 @@ class M_Chart {
 		exit;
 	}
 
+	/**
+	 * Hook to the m_chart_update_post_meta action and call the required library specific function
+	 *
+	 * @param int $post_id WP post ID of the post you want chart args for
+	 * @param array $parsed_meta the parsed chart meta passed by the action hook
+	 */
+	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
+		$this->library( $parsed_meta['library'] )->m_chart_update_post_meta( $post_id, $parsed_meta );
+	}
 
 	/**
 	 * If the passed library is valid return TRUE otherwise FALSE
@@ -804,8 +885,10 @@ class M_Chart {
 	 * @return bool
 	 */
 	public function is_valid_library( $library ) {
-		if ( ! in_array( $library, $this->valid_libraries ) ) {
-			return false;
+		$libraries = $this->get_libraries();
+
+		if ( ! isset( $libraries[ $library ] ) ) {
+			return $library;
 		}
 
 		return true;
@@ -825,18 +908,42 @@ class M_Chart {
 	}
 
 	/**
-	 * Return the M Chart settings as an object
+	 * Return the M Chart settings
 	 *
 	 * @return array current settings
 	 */
-	public function get_settings() {
+	public function get_settings( $setting = false ) {
 		$settings = (array) get_option( $this->slug, $this->settings );
 		$settings = wp_parse_args( $settings, $this->settings );
 
 		// Make sure the lang_settings aren't missing anything we'll be expecting later on
 		$settings['lang_settings'] = wp_parse_args( $settings['lang_settings'], $this->settings['lang_settings'] );
 
+		if ( $setting && isset( $settings[ $setting ] ) ) {
+			return $settings[ $setting ];
+		} elseif ( $setting ) {
+			return null;
+		}
+
 		return $settings;
+	}
+
+	/**
+	 * Return an array of available charting libraries
+	 *
+	 * @return array current settings
+	 */
+	public function get_libraries() {
+		return apply_filters( 'm_chart_get_libraries', $this->libraries );
+	}
+
+	/**
+	 * Return the current library
+	 *
+	 * @return string current library
+	 */
+	public function get_library() {
+		return $this->get_settings( 'library' );
 	}
 
 	/**
@@ -866,6 +973,36 @@ class M_Chart {
 
 	    return $a;
 	}
+
+	/**
+	 * Do things needed for version 1.7
+	 */
+	public function upgrade_to_1_7() {
+		// Get all charts
+		$charts = get_posts(
+			array(
+				'post_type' => m_chart()->slug,
+				'posts_per_page' => -1,
+				'post_status' => 'any',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'post_tag',
+						'field' => 'slug',
+						'terms' => 'highcharts',
+						'operator' => 'NOT IN',
+					),
+				),
+			)
+		);
+
+		// Add highcharts post_tag to all charts
+		foreach ( $charts as $chart ) {
+			wp_set_object_terms( $chart->ID, 'highcharts', 'post_tag' );
+		}
+
+		// Update version
+		update_site_option( 'm_chart_version', '1.7' );
+	}
 }
 
 /**
@@ -874,7 +1011,7 @@ class M_Chart {
 function m_chart() {
 	global $m_chart;
 
-	if ( ! $m_chart ) {
+	if ( ! $m_chart instanceof M_Chart ) {
 		$m_chart = new M_Chart;
 	}
 
