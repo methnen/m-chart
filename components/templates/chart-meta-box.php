@@ -6,4 +6,4 @@ echo $chart;
 <textarea name="<?php echo esc_attr( $this->get_field_name( 'img' ) ); ?>" rows="8" cols="40" id="<?php echo esc_attr( $this->get_field_id( 'img' ) ); ?>" class="hide"></textarea>
 <?php
 // Load the various settings and controls this chart's library
-require __DIR__ . '/' . $post_meta['library'] . '-settings.php';
+require apply_filters( 'm_chart_settings_template', __DIR__ . '/' . $post_meta['library'] . '-settings.php', $post_meta['library'] );

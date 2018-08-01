@@ -215,67 +215,27 @@
 #m-chart .inside .settings .row p {
   margin-bottom: 0;
 }
-/* line 26, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.one p {
+/* line 27, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.one p, #m-chart .inside .settings .row.two p {
   float: left;
   margin-left: 1%;
-  width: 32%;
+  width: 49%;
 }
-/* line 31, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.one p:first-child {
+/* line 32, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.one p:first-child, #m-chart .inside .settings .row.two p:first-child {
   margin-left: 0;
 }
-/* line 38, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.two p {
-  float: left;
-  margin-left: 1%;
-  width: 32%;
-}
-/* line 43, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.two p:first-child {
-  margin-left: 0;
-}
-/* line 47, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.two p.shared {
-  display: none;
-}
-/* line 53, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.two.show-shared p {
-  width: 24%;
-}
-/* line 56, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.two.show-shared p.shared {
-  display: block;
-}
-/* line 65, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.five p {
+/* line 40, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.four p {
   float: left;
   width: 73%;
 }
-/* line 69, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.five p.units {
+/* line 44, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.four p.units {
   float: right;
   width: 25%;
 }
-/* line 77, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.four p {
-  margin: 0;
-}
-/* line 80, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.four p label {
-  display: inline-block;
-  height: 23px;
-}
-/* line 88, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.six p {
-  float: right;
-  width: 49%;
-}
-/* line 92, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.six p:first-child {
-  float: left;
-}
-/* line 100, ../sass/_chart-settings.scss */
+/* line 53, ../sass/_chart-settings.scss */
 #m-chart .inside .row {
   border-top: 1px solid #dddddd;
   padding: 0 10px 10px;
@@ -286,26 +246,26 @@
   content: '';
   display: table;
 }
-/* line 106, ../sass/_chart-settings.scss */
+/* line 59, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p {
   float: right;
   margin-bottom: 0;
   width: 49%;
 }
-/* line 111, ../sass/_chart-settings.scss */
+/* line 64, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p:first-child {
   float: left;
 }
-/* line 115, ../sass/_chart-settings.scss */
+/* line 68, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image {
   position: relative;
 }
-/* line 118, ../sass/_chart-settings.scss */
+/* line 71, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image em {
   display: block;
   margin-top: 5px;
 }
-/* line 123, ../sass/_chart-settings.scss */
+/* line 76, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image .button {
   height: 20px;
   line-height: 18px;
@@ -314,7 +274,7 @@
   top: 23px;
 }
 @media screen and (max-width: 782px) {
-  /* line 132, ../sass/_chart-settings.scss */
+  /* line 85, ../sass/_chart-settings.scss */
   #m-chart .inside .row.seven p.image .button {
     height: 27px;
     line-height: 14px;
