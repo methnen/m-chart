@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7';
+	public $version = '1.7.1';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -260,7 +260,15 @@ class M_Chart {
 	 */
 	public function get_post_meta( $post_id, $field = false ) {
 		$post_meta = get_post_meta( $post_id, $this->slug, true );
-		$post_meta = wp_parse_args( $post_meta, $this->chart_meta_fields );
+
+		$defaults = $this->chart_meta_fields;
+
+		// Make sure the correct library is set in the default chart meta fields
+		if ( ! $post_meta ) {
+			$defaults['library'] = $this->get_library();
+		}
+
+		$post_meta = wp_parse_args( $post_meta, $defaults );
 
 		// Theme default is based off of an option so we'll handle that here
 		if ( ! isset( $post_meta['theme'] ) ) {
@@ -502,8 +510,6 @@ class M_Chart {
 		}
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
-
-
 
 		ob_start();
 		require apply_filters( 'm_chart_chart_template', $template, $library );
