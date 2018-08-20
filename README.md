@@ -1,16 +1,16 @@
 # M Chart #
 **Contributors:** methnen  
-**Tags:** chartjs, graphs, charts, data, wordpress  
+**Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.9.6  
-**Stable tag:** 1.7  
+**Stable tag:** 1.7.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
 
 ## Description ##
 
-Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Highcharts chart library.  The charts can then be embedded into a regular post via a handy shortcode.
+Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or Highcharts chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
 
 **Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
 
@@ -35,6 +35,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.7.1 ###
+
+* Fixed an issue that could prevent new charts from being created when using Highcharts
 
 ### 1.7 ###
 
