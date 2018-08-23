@@ -272,8 +272,12 @@ class M_Chart_Chartjs {
 					'data' => array(),
 				);
 
-				foreach ( $data_chunk as $data ) {
-					$set_data[ $key ]['data'][] = $data;
+				if ( is_array( $data_chunk ) ) {
+					foreach ( $data_chunk as $data ) {
+						$set_data[ $key ]['data'][] = $data;
+					}
+				} else {
+					$set_data[ $key ]['data'] = [];
 				}
 			}
 

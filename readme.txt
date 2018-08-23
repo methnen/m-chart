@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.9.8
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -31,6 +31,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.7.2 =
+
+* Added styles for the Dark Mode plugin
+* Fixed an issue where new charts couldn't be saved after making changes when there was an empty data set
 
 = 1.7.1 =
 

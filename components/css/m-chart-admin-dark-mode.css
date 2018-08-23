@@ -1,0 +1,56 @@
+/* line 35, ../sass/_global-mixins-and-variables.scss */
+#m-chart .inside .hide,
+#m-chart-spreadsheet .inside .hide,
+#m-chart-csv .inside .hide {
+  display: none;
+}
+
+/* line 3, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet {
+  border-left: 1px solid #1a1f24;
+}
+/* line 7, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet h2.hndle {
+  border-left: none;
+  border-bottom: 1px solid #1a1f24;
+}
+/* line 13, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet .nav-tab-wrapper {
+  border: none;
+  border-bottom: 1px solid #1a1f24 !important;
+}
+/* line 18, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab span {
+  color: #bdc8d3;
+}
+/* line 23, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab input[disabled="disabled"] {
+  color: white;
+  -webkit-text-fill-color: white;
+}
+/* line 32, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet .handsontable th {
+  background-color: #1a1f24;
+  border-color: #34373c;
+}
+/* line 37, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet .handsontable td {
+  border-color: #34373c;
+}
+/* line 42, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart-spreadsheet #m-chart-csv {
+  background-color: #33373c;
+  border: none;
+  border-top: 1px solid #1a1f24;
+}
+
+/* line 51, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart .inside .settings {
+  background-color: #33373c;
+  border-top: 1px solid #1a1f24;
+}
+/* line 57, ../sass/m-chart-admin-dark-mode.scss */
+#m-chart .inside .row.seven {
+  background-color: #53616e;
+  border-top: 1px solid #1a1f24;
+}
