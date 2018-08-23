@@ -16,6 +16,7 @@ class M_Chart_Admin {
 		$this->plugin_url = m_chart()->plugin_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'doing_dark_mode', array( $this, 'doing_dark_mode' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
@@ -54,6 +55,15 @@ class M_Chart_Admin {
 					),
 				),
 			)
+		);
+	}
+
+	public function doing_dark_mode( $user_id ) {
+		wp_enqueue_style(
+			'm-chart-admin-dark-mode',
+			$this->plugin_url . '/components/css/m-chart-admin-dark-mode.css',
+			array( 'dark_mode', 'm-chart-admin' ),
+			m_chart()->version
 		);
 	}
 
