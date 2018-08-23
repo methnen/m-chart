@@ -107,7 +107,6 @@ var m_chart_chartjs_admin = {
 		}
 
 		// Update active chart options and then rerender the chart
-		console.log( event.response );
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.data = event.response.data.data;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.config.type = event.response.data.type;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.options = event.response.data.options;
