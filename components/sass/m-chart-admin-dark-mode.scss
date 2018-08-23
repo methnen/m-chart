@@ -1,0 +1,63 @@
+@import 'global-mixins-and-variables';
+
+#m-chart-spreadsheet {
+	border-left: 1px solid $wp-admin-dark-mode-meta-border-color;
+
+	h2 {
+		&.hndle {
+			border-left: none;
+			border-bottom: 1px solid $wp-admin-dark-mode-meta-border-color;
+		}
+	}
+
+	.nav-tab-wrapper {
+		border: none;
+		border-bottom: 1px solid $wp-admin-dark-mode-meta-border-color !important;
+
+		.nav-tab {
+			span {
+				color: $wp-admin-dark-mode-tab-text-color;
+			}
+
+			input {
+				&[disabled="disabled"] {
+					color: lighten( $wp-admin-dark-mode-tab-text-color, 33% );
+					-webkit-text-fill-color: lighten( $wp-admin-dark-mode-tab-text-color, 33% );
+				}
+			}
+		}
+	}
+
+	.handsontable {
+		th {
+			background-color: #1a1f24;
+			border-color: #34373c;
+		}
+
+		td {
+			border-color: #34373c;
+		}
+	}
+
+	#m-chart-csv {
+		background-color: $wp-admin-dark-mode-meta-background-color;
+		border: none;
+		border-top: 1px solid $wp-admin-dark-mode-meta-border-color;
+	}
+}
+
+#m-chart {
+	.inside {
+		.settings {
+			background-color: $wp-admin-dark-mode-meta-background-color;
+			border-top: 1px solid $wp-admin-dark-mode-meta-border-color;
+		}
+
+		.row {
+			&.seven {
+				background-color: $wp-admin-dark-mode-field-background-color;
+				border-top: 1px solid $wp-admin-dark-mode-meta-border-color;
+			}
+		}
+	}
+}
