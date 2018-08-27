@@ -32,10 +32,14 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.7.3 =
+
+* Fixed an issue where charts couldn't be saved if the data didn't yet include labels that M Chart could find (when using Chart.js)
+
 = 1.7.2 =
 
 * Added styles for the Dark Mode plugin
-* Fixed an issue where new charts couldn't be saved after making changes when there was an empty data set
+* Fixed an issue where new charts couldn't be saved after making changes when there was an empty data set (when using Chart.js)
 
 = 1.7.1 =
 
