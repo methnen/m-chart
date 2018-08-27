@@ -106,6 +106,11 @@ var m_chart_chartjs_admin = {
 			event.response.data.data.datasets = [];
 		}
 
+		// Similarly Chart.js doesn't deal well with an empty value for the labels
+		if ( null === event.response.data.data.labels ) {
+			event.response.data.data.labels = [];
+		}
+
 		// Update active chart options and then rerender the chart
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.data = event.response.data.data;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.config.type = event.response.data.type;
