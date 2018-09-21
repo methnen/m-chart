@@ -3,7 +3,7 @@
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.9.8  
-**Stable tag:** 1.7.3  
+**Stable tag:** 1.7.4  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.7.4 ###
+
+* Moved chart type tracking from the post_tag taxonomy to a specific m-chart-library taxonomy
+* Fixed an issue where the `get_chart` method would still try to load the template file for an invalid or non active chart type
+	* Also better handling in general when a chart requires the Highcharts library and it is either not installed or inactive
+* Fixed an issue where Chart.js sometimes wasn't enqueued because of an erroneous dependency
 
 ### 1.7.3 ###
 
