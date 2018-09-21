@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 4.9.8
-Stable tag: 1.7.3
+Stable tag: 1.7.4
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -32,6 +32,15 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.7.4 =
+
+* Improved data handling for non pie charts (when using Chart.js)
+* Moved chart type tracking from the post_tag taxonomy to a specific m-chart-library taxonomy
+* Updated Handsontable to the latest stable version (5.0.2)
+* Fixed an issue where the `get_chart` method would still try to load the template file for an invalid or non active chart type
+	* Also better handling in general when a chart requires the Highcharts library and it is either not installed or inactive
+* Fixed an issue where Chart.js sometimes wasn't enqueued because of an erroneous dependency
+
 = 1.7.3 =
 
 * Fixed an issue where charts couldn't be saved if the data didn't yet include labels that M Chart could find (when using Chart.js)
@@ -50,7 +59,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Updated Handsontable to the latest stable version (5.0.0)
 * Major restructuring changes to meet [WordPress Plugins directory requirements](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#the-guidelines)
 	* Switched default graphing library to [Chart.js](https://www.chartjs.org) (2.7.2)
-		* Chart.js is more limited in functionality than Highcharts and the features of the core plugin as scaled back to reflect this
+		* Chart.js is more limited in functionality than Highcharts and the features of the core plugin are scaled back to reflect this
 			* Chart types are reduced and customizability is limited
 	* Removed Highcharts completely from the core plugin
 		* To continue using Highcharts install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin

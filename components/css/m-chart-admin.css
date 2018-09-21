@@ -285,3 +285,9 @@
 #m-chart-settings-page span.description {
   color: #666666;
 }
+
+/* line 9, ../sass/_settings.scss */
+#m-chart-settings-error {
+  padding-left: 10px;
+  padding-right: 10px;
+}

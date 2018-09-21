@@ -257,7 +257,10 @@ class M_Chart_Chartjs {
 		// When Chart.js encounters an empty data value it stops so we set them to NULL
 		$data_array = array_map( array( $this, 'fix_null_values' ), m_chart()->parse()->set_data );
 
-		if ( 'pie' == $this->post_meta['type'] ) {
+		if (
+			   'pie' == $this->post_meta['type']
+			|| 'both' != m_chart()->parse()->value_labels_position
+		) {
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
 				$chart_args['data']['datasets'][0]['data'][] = $data_array[ $key ];
 			}
