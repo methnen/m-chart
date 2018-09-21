@@ -194,7 +194,7 @@ class M_Chart_Admin {
 				'post_status' => 'any',
 				'tax_query' => array(
 					array(
-						'taxonomy' => 'post_tag',
+						'taxonomy' => m_chart()->slug . '-library',
 						'field' => 'slug',
 						'terms' => 'highcharts'
 					),
@@ -206,19 +206,19 @@ class M_Chart_Admin {
 			return;
 		}
 		?>
-	    <div class="warning notice notice-warning">
-	         <p>
-				 <?php
-				 echo str_replace(
-				 	esc_html__( 'M Chart Highcharts Library', 'm-chart' ),
+		<div class="warning notice notice-warning">
+			<p>
+				<?php
+				echo str_replace(
+					esc_html__( 'M Chart Highcharts Library', 'm-chart' ),
 					'<strong>' . esc_html__( 'M Chart Highcharts Library', 'm-chart' ) . '</strong>',
 					esc_html__( 'You have charts that require the M Chart Highcharts Library plugin.', 'm-chart' )
 				);
 				?>
 			</p>
-			 <p><?php esc_html_e( 'These charts will no longer display unless you install the plugin:', 'm-chart' ); ?></p>
-			 <p><a href="https://github.com/methnen/m-chart-highcharts-library/" class="button-primary"><?php esc_html_e( 'Learn More', 'm-chart' ); ?></a></p>
-	     </div>
+			<p><?php esc_html_e( 'These charts will no longer display unless you install the plugin:', 'm-chart' ); ?></p>
+			<p><a href="https://github.com/methnen/m-chart-highcharts-library/" class="button-primary"><?php esc_html_e( 'Learn More', 'm-chart' ); ?></a></p>
+		</div>
 		<?php
 	}
 

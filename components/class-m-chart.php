@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.3';
+	public $version = '1.7.4';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -158,6 +158,20 @@ class M_Chart {
 			)
 		);
 
+		// Register the library taxonomy
+		register_taxonomy(
+			$this->slug . '-library',
+			array( $this->slug ),
+			array(
+				'hierarchical' => false,
+				'show_ui'      => false,
+				'query_var'    => true,
+				'rewrite'      => array(
+					'slug'         => $this->slug . '-library',
+				),
+			)
+		);
+
 		// Register the charts custom post type
 		register_post_type(
 			$this->slug,
@@ -208,7 +222,7 @@ class M_Chart {
 		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart-bundle.js',
-			array( 'highcharts', 'jquery' ),
+			array( 'jquery' ),
 			$this->version
 		);
 
@@ -225,6 +239,11 @@ class M_Chart {
 		// Check if we need to run any upgrades
 		if ( version_compare( get_site_option( 'm_chart_version' ), '1.7', 'lt' ) ) {
 			$this->upgrade_to_1_7();
+		}
+
+		// Check if we need to run any upgrades
+		if ( version_compare( get_site_option( 'm_chart_version' ), '1.7.4', 'lt' ) ) {
+			$this->upgrade_to_1_7_4();
 		}
 	}
 
@@ -331,7 +350,7 @@ class M_Chart {
 		wp_set_object_terms( $post_id, $terms, $this->slug . '-units' );
 
 		// Set library as a post_tag
-		wp_set_object_terms( $post_id, $parsed_meta['library'], 'post_tag' );
+		wp_set_object_terms( $post_id, $parsed_meta['library'], $this->slug . '-library' );
 
 		// Save meta to the post
 		update_post_meta( $post_id, $this->slug, $parsed_meta );
@@ -503,7 +522,7 @@ class M_Chart {
 		if ( ! $this->is_valid_library( $library ) ) {
 			return;
 		}
-
+		print_r('stop!'); exit();
 		// If we haven't enqueued the right library yet lets do it
 		if ( ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
@@ -894,7 +913,7 @@ class M_Chart {
 		$libraries = $this->get_libraries();
 
 		if ( ! isset( $libraries[ $library ] ) ) {
-			return $library;
+			return false;
 		}
 
 		return true;
@@ -1008,6 +1027,62 @@ class M_Chart {
 
 		// Update version
 		update_site_option( 'm_chart_version', '1.7' );
+	}
+
+	/**
+	 * Do things needed for version 1.7.4
+	 */
+	public function upgrade_to_1_7_4() {
+		// Get all charts tagged with highcharts
+		$highcharts_charts = get_posts(
+			array(
+				'post_type' => m_chart()->slug,
+				'posts_per_page' => -1,
+				'post_status' => 'any',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'post_tag',
+						'field' => 'slug',
+						'terms' => 'highcharts',
+						'operator' => 'IN',
+					),
+				),
+			)
+		);
+
+		foreach ( $highcharts_charts as $chart ) {
+			// Add highcharts as a term to the m-chart-library taxonomy
+			wp_set_object_terms( $chart->ID, 'highcharts', m_chart()->slug . '-library' );
+			// Remove highcharts as a term from the post_tag taxonomy
+			wp_remove_object_terms( $chart->ID, 'highcharts', 'post_tag' );
+		}
+
+		// Get all charts tagged with chartjs
+		$chartjs_charts = get_posts(
+			array(
+				'post_type' => m_chart()->slug,
+				'posts_per_page' => -1,
+				'post_status' => 'any',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'post_tag',
+						'field' => 'slug',
+						'terms' => 'chartjs',
+						'operator' => 'IN',
+					),
+				),
+			)
+		);
+
+		foreach ( $chartjs_charts as $chart ) {
+			// Add chartjs as a term to the m-chart-library taxonomy
+			wp_set_object_terms( $chart->ID, 'chartjs', m_chart()->slug . '-library' );
+			// Remove chartjs as a term from the post_tag taxonomy
+			wp_remove_object_terms( $chart->ID, 'chartjs', 'post_tag' );
+		}
+
+		// Update version
+		update_site_option( 'm_chart_version', '1.7.4' );
 	}
 }
 
