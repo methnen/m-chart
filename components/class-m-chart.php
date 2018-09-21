@@ -944,6 +944,11 @@ class M_Chart {
 		// Make sure the lang_settings aren't missing anything we'll be expecting later on
 		$settings['lang_settings'] = wp_parse_args( $settings['lang_settings'], $this->settings['lang_settings'] );
 
+		// Make sure the set library is still valid
+		if ( ! $this->is_valid_library( $settings['library'] ) ) {
+			$settings['library'] = 'chartjs';
+		}
+
 		if ( $setting && isset( $settings[ $setting ] ) ) {
 			return $settings[ $setting ];
 		} elseif ( $setting ) {
@@ -1054,7 +1059,7 @@ class M_Chart {
 			// Add highcharts as a term to the m-chart-library taxonomy
 			wp_set_object_terms( $chart->ID, 'highcharts', m_chart()->slug . '-library' );
 			// Remove highcharts as a term from the post_tag taxonomy
-			wp_remove_object_terms( $chart->ID, 'highcharts', 'post_tag' );
+			//wp_remove_object_terms( $chart->ID, 'highcharts', 'post_tag' );
 		}
 
 		// Get all charts tagged with chartjs
@@ -1078,7 +1083,7 @@ class M_Chart {
 			// Add chartjs as a term to the m-chart-library taxonomy
 			wp_set_object_terms( $chart->ID, 'chartjs', m_chart()->slug . '-library' );
 			// Remove chartjs as a term from the post_tag taxonomy
-			wp_remove_object_terms( $chart->ID, 'chartjs', 'post_tag' );
+			//wp_remove_object_terms( $chart->ID, 'chartjs', 'post_tag' );
 		}
 
 		// Update version
