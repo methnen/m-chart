@@ -522,7 +522,7 @@ class M_Chart {
 		if ( ! $this->is_valid_library( $library ) ) {
 			return;
 		}
-		print_r('stop!'); exit();
+
 		// If we haven't enqueued the right library yet lets do it
 		if ( ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
