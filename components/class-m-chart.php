@@ -228,6 +228,17 @@ class M_Chart {
 
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', $this->slug );
+
+		// Check if we need to run any upgrades
+		$current_version = get_site_option( 'm_chart_version' );
+
+		if ( version_compare( $current_version, '1.7', 'lt' ) ) {
+			$this->upgrade_to_1_7();
+		}
+
+		if ( version_compare( $current_version, '1.7.4', 'lt' ) ) {
+			$this->upgrade_to_1_7_4();
+		}
 	}
 
 	/**
@@ -235,16 +246,6 @@ class M_Chart {
 	 */
 	public function plugins_loaded() {
 		load_plugin_textdomain( 'm-chart', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
-
-		// Check if we need to run any upgrades
-		if ( version_compare( get_site_option( 'm_chart_version' ), '1.7', 'lt' ) ) {
-			$this->upgrade_to_1_7();
-		}
-
-		// Check if we need to run any upgrades
-		if ( version_compare( get_site_option( 'm_chart_version' ), '1.7.4', 'lt' ) ) {
-			$this->upgrade_to_1_7_4();
-		}
 	}
 
 	/**
@@ -1059,7 +1060,7 @@ class M_Chart {
 			// Add highcharts as a term to the m-chart-library taxonomy
 			wp_set_object_terms( $chart->ID, 'highcharts', m_chart()->slug . '-library' );
 			// Remove highcharts as a term from the post_tag taxonomy
-			//wp_remove_object_terms( $chart->ID, 'highcharts', 'post_tag' );
+			wp_remove_object_terms( $chart->ID, 'highcharts', 'post_tag' );
 		}
 
 		// Get all charts tagged with chartjs
@@ -1083,7 +1084,7 @@ class M_Chart {
 			// Add chartjs as a term to the m-chart-library taxonomy
 			wp_set_object_terms( $chart->ID, 'chartjs', m_chart()->slug . '-library' );
 			// Remove chartjs as a term from the post_tag taxonomy
-			//wp_remove_object_terms( $chart->ID, 'chartjs', 'post_tag' );
+			wp_remove_object_terms( $chart->ID, 'chartjs', 'post_tag' );
 		}
 
 		// Update version
