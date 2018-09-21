@@ -34,7 +34,9 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.7.4 =
 
+* Improved data handling for non pie charts (when using Chart.js)
 * Moved chart type tracking from the post_tag taxonomy to a specific m-chart-library taxonomy
+* Updated Handsontable to the latest stable version (5.0.2)
 * Fixed an issue where the `get_chart` method would still try to load the template file for an invalid or non active chart type
 	* Also better handling in general when a chart requires the Highcharts library and it is either not installed or inactive
 * Fixed an issue where Chart.js sometimes wasn't enqueued because of an erroneous dependency
