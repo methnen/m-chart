@@ -3,7 +3,7 @@
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 4.9.8  
-**Stable tag:** 1.7.4  
+**Stable tag:** 1.7.5  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -37,6 +37,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 ## Changelog ##
 
 ### 1.7.5 ###
+
 * Added an additional check for the post id value in the edit interface
 * Added an additional check for datasets data in the Chart.js code when adding colors
 * Fixed an incorrect reference to the plugin version
