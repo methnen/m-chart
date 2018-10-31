@@ -32,6 +32,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.7.5 =
+* Added an additional check for the post id value in the edit interface
+* Added an additional check for datasets data in the Chart.js code when adding colors
+* Fixed an incorrect reference to the plugin version
+
 = 1.7.4 =
 
 * Improved data handling for non pie charts (when using Chart.js)
