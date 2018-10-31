@@ -124,15 +124,21 @@ class M_Chart_Chartjs {
 		$chart_args = $this->add_data_sets( $chart_args );
 
 		// Apply colors, yes this kind of sucks, but so does the Chart.js color system
-		if ( 'bar' == $chart_args['type'] || 'horizontalBar' == $chart_args['type'] ) {
+		if (
+			   isset( $chart_args['data']['datasets'] )
+			&& ( 'bar' == $chart_args['type'] || 'horizontalBar' == $chart_args['type'] )
+		) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % count( $this->colors ) ];
 			}
-		} elseif ( 'pie' == $chart_args['type'] ) {
+		} elseif (
+			   isset( $chart_args['data']['datasets'] )
+			&& 'pie' == $chart_args['type']
+		) {
 			foreach ( $chart_args['data']['datasets'][0]['data'] as $key => $data ) {
 				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key ];
 			}
-		} else {
+		} elseif( isset( $chart_args['data']['datasets'] ) ) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$color = $this->colors[ $key % count( $this->colors ) ];
 

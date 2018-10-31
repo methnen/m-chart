@@ -292,7 +292,7 @@ class M_Chart_Admin {
 			);
 
 			// We need the library and post ID for some bunch of stuff below
-			$post_id = (int) $_GET['post'];
+			$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : '';
 
 			if ( empty( $post_id ) ) {
 			  $library = m_chart()->get_library();
@@ -306,7 +306,7 @@ class M_Chart_Admin {
 					'm-chart-chartjs-admin',
 					$this->plugin_url . '/components/js/m-chart-chartjs-admin.js',
 					array( 'm-chart-admin', 'chartjs', 'jquery' ),
-					$this->version
+					m_chart()->version
 				);
 			}
 
