@@ -2,8 +2,8 @@
 **Contributors:** methnen  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 4.9.8  
-**Stable tag:** 1.7.5  
+**Tested up to:** 5.0.1  
+**Stable tag:** 1.7.6  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.7.6 ###
+
+* A few PHP notice fixes
+* Updated Chart.js to the latest stable version (2.7.3)
+* Updated Handsontable to the latest stable version (6.2.1)
 
 ### 1.7.5 ###
 
