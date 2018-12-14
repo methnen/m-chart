@@ -293,10 +293,9 @@ class M_Chart_Admin {
 
 			// We need the library and post ID for some bunch of stuff below
 			$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : '';
+			$library = m_chart()->get_library();
 
-			if ( empty( $post_id ) ) {
-			  $library = m_chart()->get_library();
-			} else {
+			if ( ! empty( $post_id ) ) {
 			  $library = m_chart()->get_post_meta( absint( $post_id ), 'library' );
 			}
 
