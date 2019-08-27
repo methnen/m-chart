@@ -2,7 +2,7 @@
 Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
-Tested up to: 5.0.1
+Tested up to: 5.2.2
 Stable tag: 1.7.7
 License: MIT
 
