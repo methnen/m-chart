@@ -1,9 +1,9 @@
 # M Chart #
-**Contributors:** methnen  
+**Contributors:** [methnen](https://profiles.wordpress.org/methnen)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 5.0.1  
-**Stable tag:** 1.7.6  
+**Tested up to:** 5.2.2  
+**Stable tag:** 1.7.7  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.7.7 ###
+
+* Fixed an issue that caused a PHP warning about a non-numeric value in class-wp-rewrite.php
 
 ### 1.7.6 ###
 
