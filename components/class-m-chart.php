@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.6';
+	public $version = '1.7.7';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -202,7 +202,6 @@ class M_Chart {
 				'description'          => esc_html__( 'Manage data sets and display them as charts in WordPress.', 'm-chart' ),
 				'rewrite'              => array(
 					'slug' => 'chart',
-					'ep_mask' => 'm-chart'
 				),
 				'supports'             => array(
 					'author',
@@ -227,7 +226,7 @@ class M_Chart {
 		);
 
 		// Add endpoint needed for iframe embed support
-		add_rewrite_endpoint( 'embed', $this->slug );
+		add_rewrite_endpoint( 'embed', EP_PERMALINK );
 
 		// Check if we need to run any upgrades
 		$current_version = get_site_option( 'm_chart_version' );
