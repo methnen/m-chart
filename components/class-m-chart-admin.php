@@ -324,6 +324,8 @@ class M_Chart_Admin {
 					'delete_comfirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				)
 			);
+
+			do_action( 'm_chart_admin_scripts', $library, $post_id );
 		}
 
 		// Admin panel CSS
@@ -333,8 +335,6 @@ class M_Chart_Admin {
 			array(),
 			m_chart()->version
 		);
-
-		do_action( 'm_chart_admin_scripts', $library, $post_id );
 	}
 
 	/**
