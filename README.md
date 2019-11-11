@@ -3,7 +3,7 @@
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 5.2.2  
-**Stable tag:** 1.7.7  
+**Stable tag:** 1.7.8  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -35,6 +35,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.7.8 ###
+
+* Fixed an issue that caused a few PHP warnings on the Charts page of the admin panel
 
 ### 1.7.7 ###
 

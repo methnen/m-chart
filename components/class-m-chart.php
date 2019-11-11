@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.7';
+	public $version = '1.7.8';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
