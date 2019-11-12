@@ -32,6 +32,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.7.9 =
+
+* Changed the priority of the `template_redirect` filter hook call so that `m_chart()->is_iframe` get's set earlier
+
 = 1.7.8 =
 
 * Fixed an issue that caused a few PHP warnings on the Charts page of the admin panel

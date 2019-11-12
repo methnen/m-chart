@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.8';
+	public $version = '1.7.9';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -78,7 +78,8 @@ class M_Chart {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
-		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
+		// Doing this early as possible because it sets is_iframe which we might need to use for other things
+		add_action( 'template_redirect', array( $this, 'template_redirect' ), 0 );
 		add_action( 'm_chart_update_post_meta', array( $this, 'm_chart_update_post_meta' ), 10, 2 );
 
 		// Doing this before the default so it's already done before anything else
