@@ -1,9 +1,12 @@
 <?php
 $type_option_names = array(
 	'line'    => esc_html__( 'Line', 'm-chart' ),
+	'spline'  => esc_html__( 'Spline', 'm-chart' ),
+	'area'    => esc_html__( 'Area', 'm-chart' ),
 	'column'  => esc_html__( 'Column', 'm-chart' ),
 	'bar'     => esc_html__( 'Bar', 'm-chart' ),
 	'pie'     => esc_html__( 'Pie', 'm-chart' ),
+	'scatter' => esc_html__( 'Scatter', 'm-chart' ),
 );
 
 $parse_option_names = array(
@@ -55,7 +58,6 @@ $parse_option_names = array(
 			</label>
 		</p>
 	</div>
-
 	<div class="row three vertical-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'y-title' ) ); ?>"><?php esc_html_e( 'Vertical axis title', 'm-chart' ); ?></label><br />
@@ -85,7 +87,16 @@ $parse_option_names = array(
 			</select>
 		</p>
 	</div>
-	<div class="row four horizontal-axis">
+	<div class="row four y-min">
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'y_min' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>" value="1"<?php checked( $post_meta['y_min'], true ); ?>/>
+				<?php esc_html_e( 'Force vertical axis minimum: ', 'm-chart' ) ?>
+			</label>
+			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>" size="7"<?php echo $disabled; ?> />
+		</p>
+	</div>
+	<div class="row five horizontal-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'x-title' ) ); ?>"><?php esc_html_e( 'Horizontal axis title', 'm-chart' ); ?></label><br />
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'x_title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'x-title' ) ); ?>" value="<?php echo esc_attr( $post_meta['x_title'] ); ?>" style="width: 100%;" />
