@@ -7,8 +7,7 @@ var m_chart_chartjs_admin = {
 
 	// Start things up
 	m_chart_chartjs_admin.init = function() {
-		// Hide the subtitle and $y_min_value fields
-		m_chart_admin.$y_min_value.hide();
+		// Hide the $y_min_value field
 		m_chart_admin.$subtitle_input.hide();
 
 		// Only show fields/inputs that are appropriate for the current chart type
@@ -34,11 +33,30 @@ var m_chart_chartjs_admin = {
 		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
 		$chart_meta_box.find( '.row.two' ).addClass( 'show-shared' );
 
-		// Chart.js will never need the tabs
-		$spreadsheet_tabs.addClass( 'hide' );
+		if (
+			   'area' === chart_type
+			|| 'column' === chart_type
+			|| 'bar' === chart_type
+		) {
+			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$spreadsheet_tabs.addClass( 'hide' );
+		}
+
+		if (
+			   'column' === chart_type
+			|| 'bar' === chart_type
+		) {
+			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$spreadsheet_tabs.addClass( 'hide' );
+		}
 
 		if ( 'pie' === chart_type ) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+		}
+
+		if ( 'scatter' === chart_type ) {
+			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 	};
 

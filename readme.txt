@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 5.2.2
-Stable tag: 1.7.9
+Stable tag: 1.8
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -31,6 +31,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.8 =
+
+* Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
+* UI tweaks to support WordPress 5.3 changes
+* Updated Chart.js to the latest stable version (2.9.3)
+* Updated Handsontable to the latest stable version with an MIT license (6.2.2)
 
 = 1.7.9 =
 

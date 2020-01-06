@@ -10,9 +10,12 @@ class M_Chart_Chartjs {
 	public $args;
 	public $type_options = array(
 		'line',
+		'spline',
+		'area',
 		'column',
 		'bar',
 		'pie',
+		'scatter',
 	);
 	public $theme_directories;
 	public $colors = array(
@@ -28,10 +31,13 @@ class M_Chart_Chartjs {
 		'#91e8e1',
 	);
 	public $chart_types = array(
-		'column' => 'bar',
-		'bar'    => 'horizontalBar',
-		'pie'    => 'pie',
-		'line'   => 'line',
+		'column'  => 'bar',
+		'bar'     => 'horizontalBar',
+		'pie'     => 'pie',
+		'line'    => 'line',
+		'spline'  => 'line',
+		'area'    => 'line',
+		'scatter' => 'scatter',
 	);
 
 	/**
@@ -106,8 +112,22 @@ class M_Chart_Chartjs {
 				),
 				'responsive' => true,
 				'maintainAspectRatio' => false,
+				'tooltips' => array(
+					'enabled' => true,
+				),
 			),
 		);
+
+		// Forcing a minimum value of 0 prevents the built in fudging which sometimes looks weird
+		if (
+			$this->post_meta['y_min']
+			&& (
+				   'line' == $this->post_meta['type']
+				|| 'spline' == $this->post_meta['type']
+			)
+		) {
+			$chart_args['options']['scales']['yAxes'][]['ticks']['min'] = $this->post_meta['y_min_value'];
+		}
 
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
 
@@ -142,10 +162,23 @@ class M_Chart_Chartjs {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$color = $this->colors[ $key % count( $this->colors ) ];
 
-				$chart_args['data']['datasets'][ $key ]['fill'] = false;
 				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $color;
 				$chart_args['data']['datasets'][ $key ]['borderColor'] = $color;
-				$chart_args['data']['datasets'][ $key ]['lineTension'] = 0;
+
+				if ( 'spline' == $this->post_meta['type'] ) {
+					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0.25;
+				} else {
+					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0;
+				}
+
+				if ( 'area' == $this->post_meta['type'] ) {
+					$rgb = $this->hex_to_rgb( $color );
+
+					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
+					$chart_args['data']['datasets'][ $key ]['fill'] = true;
+				} else {
+					$chart_args['data']['datasets'][ $key ]['fill'] = false;
+				}
 			}
 		}
 
@@ -266,10 +299,69 @@ class M_Chart_Chartjs {
 		if (
 			   'pie' == $this->post_meta['type']
 			|| 'both' != m_chart()->parse()->value_labels_position
+   			&& (
+   				   'scatter' != $this->post_meta['type']
+   				&& 'bubble' != $this->post_meta['type']
+   			)
 		) {
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
 				$chart_args['data']['datasets'][0]['data'][] = $data_array[ $key ];
 			}
+		} elseif ( 'scatter' == $this->post_meta['type'] ) {
+			$set_names = $this->post_meta['set_names'];
+
+			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+
+				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
+
+				$new_data_array = array();
+
+				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+
+				if ( 'both' == $parse->value_labels_position ) {
+					foreach ( $data_array as $data_key => $data ) {
+						$new_data_array[] = array(
+							'x'    => $data[0],
+							'y'    => $data[1],
+							'name' => $parse->value_labels[ $label_key ][ $data_key ],
+						);
+					}
+				} else {
+					foreach ( $data_array as $data_key => $data ) {
+						if ( $data_key % 2 ) {
+							continue;
+						}
+
+						$new_data_array[] = array(
+							'x' => $data,
+							'y' => $data_array[ $data_key + 1 ],
+						);
+					}
+				}
+
+				$chart_args['data']['datasets'][$key] = array(
+					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data' => $new_data_array,
+				);
+			}
+
+			// When there's only one data set the header is redundent
+			//if ( 1 == count( $this->post_meta['data']['sets'] ) ) {
+			//	// When there's only one data set the default header is redundent and doesn't include the point label
+			//	if ( 'both' == m_chart()->parse()->value_labels_position ) {
+			//		$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{point.key}</span><br/>";
+			//	} else {
+			//		$chart_args['tooltip']['headerFormat'] = '';
+			//	}
+			//} else {
+			//	// When there's more than one data set the default header doesn't include the point label
+			//	if ( 'both' == m_chart()->parse()->value_labels_position ) {
+			//		$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{series.name}: {point.key}</span><br/>";
+			//	} else {
+			//		$chart_args['tooltip']['headerFormat'] =  "<span style='font-size: 10px;'>{series.name}</span><br/>";
+			//	}
+			//}
 		} else {
 			$set_data = array();
 
@@ -345,5 +437,31 @@ class M_Chart_Chartjs {
 		}
 
 		return $value;
+	}
+
+	public function hex_to_rgb( $hex ) {
+		// Make sure the hex string is a proper hex string
+	    $hex = preg_replace( '#[^0-9A-Fa-f]#', '', $hex );
+	    $rgb = array();
+
+		if ( 6 === strlen( $hex ) ) {
+			// If a proper hex code, convert using bitwise operation, no overhead... faster
+	        $color_value = hexdec( $hex );
+
+	        $rgb['red']   = 0xFF & ( $color_value >> 0x10 );
+	        $rgb['green'] = 0xFF & ( $color_value >> 0x8 );
+	        $rgb['blue']  = 0xFF & $color_value;
+	    } elseif ( 3 == strlen( $hex ) ) {
+			// If shorthand notation we need to do some string manipulations
+	        $rgb['red']   = hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) );
+	        $rgb['green'] = hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) );
+	        $rgb['blue']  = hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) );
+	    } else {
+			// Invalid hex color code so we return false
+	        return false;
+	    }
+
+	   	// Returns the rgb array
+	    return $rgb;
 	}
 }
