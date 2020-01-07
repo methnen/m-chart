@@ -322,9 +322,9 @@ class M_Chart_Chartjs {
 				if ( 'both' == $parse->value_labels_position ) {
 					foreach ( $data_array as $data_key => $data ) {
 						$new_data_array[] = array(
-							'x'    => $data[0],
-							'y'    => $data[1],
-							'name' => $parse->value_labels[ $label_key ][ $data_key ],
+							'x'     => $data[0],
+							'y'     => $data[1],
+							'label' => $parse->value_labels[ $label_key ][ $data_key ],
 						);
 					}
 				} else {
@@ -345,23 +345,6 @@ class M_Chart_Chartjs {
 					'data' => $new_data_array,
 				);
 			}
-
-			// When there's only one data set the header is redundent
-			//if ( 1 == count( $this->post_meta['data']['sets'] ) ) {
-			//	// When there's only one data set the default header is redundent and doesn't include the point label
-			//	if ( 'both' == m_chart()->parse()->value_labels_position ) {
-			//		$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{point.key}</span><br/>";
-			//	} else {
-			//		$chart_args['tooltip']['headerFormat'] = '';
-			//	}
-			//} else {
-			//	// When there's more than one data set the default header doesn't include the point label
-			//	if ( 'both' == m_chart()->parse()->value_labels_position ) {
-			//		$chart_args['tooltip']['headerFormat'] = "<span style='font-size: 10px;'>{series.name}: {point.key}</span><br/>";
-			//	} else {
-			//		$chart_args['tooltip']['headerFormat'] =  "<span style='font-size: 10px;'>{series.name}</span><br/>";
-			//	}
-			//}
 		} else {
 			$set_data = array();
 
@@ -421,7 +404,7 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Helper function sets empty values to NULL so that Chart.js handles them correctly.
+	 * Helper function sets empty values to NULL so that Chart.js handles them correctly
 	 *
 	 * @param string/int a data value
 	 *
@@ -439,6 +422,13 @@ class M_Chart_Chartjs {
 		return $value;
 	}
 
+	/**
+	 * Helper function takes a hex color value and returns an array of RGB values to match
+	 *
+	 * @param string a hex color value
+	 *
+	 * @return array the color as seperate RGB values
+	 */
 	public function hex_to_rgb( $hex ) {
 		// Make sure the hex string is a proper hex string
 	    $hex = preg_replace( '#[^0-9A-Fa-f]#', '', $hex );
@@ -461,7 +451,6 @@ class M_Chart_Chartjs {
 	        return false;
 	    }
 
-	   	// Returns the rgb array
 	    return $rgb;
 	}
 }

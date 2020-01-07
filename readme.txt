@@ -37,6 +37,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), and [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter) charts when using Chart.js
 * Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
 * Some minor UI tweaks to support WordPress 5.3 changes
+* Fixed an issue where chart didn't update when changes were made to a new spreadsheet
 * Updated Chart.js to the latest stable version (2.9.3)
 * Updated Handsontable to the latest stable version with an MIT license (6.2.2)
 

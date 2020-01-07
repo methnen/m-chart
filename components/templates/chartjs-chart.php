@@ -37,15 +37,6 @@ if ( '' != $args['width'] ) {
 				}
 			}
 
-			this.chart_args.options.tooltips.callbacks = {
-                label: function( tooltipItem, data ) {
-                    console.log(tooltipItem);
-					console.log(data);
-					
-                    return 'test';
-                }
-	        }
-
 			this.chart = new Chart(
 				m_chart_container_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>_canvas,
 				this.chart_args
