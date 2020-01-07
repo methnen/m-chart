@@ -99,13 +99,6 @@
 
 			m_chart_admin.create_spreadsheet( instance, data );
 		});
-
-		// Add change event so we update on spreadsheet changes
-		$.each( this.$spreadsheets, function( i ) {
-			m_chart_admin.$spreadsheets[ i ].addHook( 'afterChange', function() {
-				m_chart_admin.refresh_chart();
-			});
-		});
 	}
 
 	// Instantiate a spreedsheet
@@ -157,6 +150,11 @@
 		// Set the tab input width
 		var $tab_input = $( '#hands-on-table-sheet-tab-' + this.post_id + '-' + i + ' input' );
 		m_chart_admin.resize_input( $tab_input );
+
+		// Add change event so we update on spreadsheet changes
+		m_chart_admin.$spreadsheets[ i ].addHook( 'afterChange', function() {
+			m_chart_admin.refresh_chart();
+		});
 
 		this.last_set = i;
 	}
