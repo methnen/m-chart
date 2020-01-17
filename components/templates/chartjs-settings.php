@@ -7,6 +7,7 @@ $type_option_names = array(
 	'bar'     => esc_html__( 'Bar', 'm-chart' ),
 	'pie'     => esc_html__( 'Pie', 'm-chart' ),
 	'scatter' => esc_html__( 'Scatter', 'm-chart' ),
+	'bubble'  => esc_html__( 'Bubble', 'm-chart' ),
 );
 
 $parse_option_names = array(

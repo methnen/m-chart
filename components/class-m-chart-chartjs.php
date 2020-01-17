@@ -16,6 +16,7 @@ class M_Chart_Chartjs {
 		'bar',
 		'pie',
 		'scatter',
+		'bubble',
 	);
 	public $theme_directories;
 	public $colors = array(
@@ -38,6 +39,7 @@ class M_Chart_Chartjs {
 		'spline'  => 'line',
 		'area'    => 'line',
 		'scatter' => 'scatter',
+		'bubble'  => 'bubble',
 	);
 
 	/**
@@ -171,7 +173,10 @@ class M_Chart_Chartjs {
 					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0;
 				}
 
-				if ( 'area' == $this->post_meta['type'] ) {
+				if (
+					   'area' == $this->post_meta['type']
+					|| 'bubble' == $this->post_meta['type']
+				) {
 					$rgb = $this->hex_to_rgb( $color );
 
 					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
@@ -340,7 +345,47 @@ class M_Chart_Chartjs {
 					}
 				}
 
-				$chart_args['data']['datasets'][$key] = array(
+				$chart_args['data']['datasets'][ $key ] = array(
+					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data' => $new_data_array,
+				);
+			}
+		} elseif ( 'bubble' == $this->post_meta['type'] ) {
+			$set_names = $this->post_meta['set_names'];
+
+			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+
+				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
+
+				$new_data_array = array();
+
+				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+
+				if ( 'both' == $parse->value_labels_position ) {
+					foreach ( $data_array as $data_key => $data ) {
+						$new_data_array[] = array(
+							'x'     => $data[0],
+							'y'     => $data[1],
+							'r'     => $data[2],
+							'label' => $parse->value_labels[ $label_key ][ $data_key ],
+						);
+					}
+				} else {
+					foreach ( $data_array as $data_key => $data ) {
+						if ( $data_key % 2 ) {
+							continue;
+						}
+
+						$new_data_array[] = array(
+							'x' => $data,
+							'y' => $data_array[ $data_key + 1 ],
+							'r' => $data_array[ $data_key + 2 ],
+						);
+					}
+				}
+
+				$chart_args['data']['datasets'][ $key ] = array(
 					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
 					'data' => $new_data_array,
 				);
