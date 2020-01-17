@@ -54,7 +54,10 @@ var m_chart_chartjs_admin = {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
 		}
 
-		if ( 'scatter' === chart_type ) {
+		if (
+			   'scatter' === chart_type
+			|| 'bubble' === chart_type
+		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
 			$spreadsheet_tabs.removeClass( 'hide' );
 		}
