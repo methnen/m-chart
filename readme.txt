@@ -34,7 +34,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.8 =
 
-* Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), and [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), and [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble) charts when using Chart.js
+* Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
 * Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
 * Some minor UI tweaks to support WordPress 5.3 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet

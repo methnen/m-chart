@@ -1,13 +1,16 @@
 <?php
 $type_option_names = array(
-	'line'    => esc_html__( 'Line', 'm-chart' ),
-	'spline'  => esc_html__( 'Spline', 'm-chart' ),
-	'area'    => esc_html__( 'Area', 'm-chart' ),
-	'column'  => esc_html__( 'Column', 'm-chart' ),
-	'bar'     => esc_html__( 'Bar', 'm-chart' ),
-	'pie'     => esc_html__( 'Pie', 'm-chart' ),
-	'scatter' => esc_html__( 'Scatter', 'm-chart' ),
-	'bubble'  => esc_html__( 'Bubble', 'm-chart' ),
+	'line'       => esc_html__( 'Line', 'm-chart' ),
+	'spline'     => esc_html__( 'Spline', 'm-chart' ),
+	'area'       => esc_html__( 'Area', 'm-chart' ),
+	'column'     => esc_html__( 'Column', 'm-chart' ),
+	'bar'        => esc_html__( 'Bar', 'm-chart' ),
+	'pie'        => esc_html__( 'Pie', 'm-chart' ),
+	'scatter'    => esc_html__( 'Scatter', 'm-chart' ),
+	'bubble'     => esc_html__( 'Bubble', 'm-chart' ),
+	'radar'      => esc_html__( 'Radar', 'm-chart' ),
+	'radar-area' => esc_html__( 'Radar Area', 'm-chart' ),
+	'polar'      => esc_html__( 'Polar', 'm-chart' ),
 );
 
 $parse_option_names = array(
