@@ -17,6 +17,9 @@ class M_Chart_Chartjs {
 		'pie',
 		'scatter',
 		'bubble',
+		'radar',
+		'radar-area',
+		'polar',
 	);
 	public $theme_directories;
 	public $colors = array(
@@ -32,14 +35,17 @@ class M_Chart_Chartjs {
 		'#91e8e1',
 	);
 	public $chart_types = array(
-		'column'  => 'bar',
-		'bar'     => 'horizontalBar',
-		'pie'     => 'pie',
-		'line'    => 'line',
-		'spline'  => 'line',
-		'area'    => 'line',
-		'scatter' => 'scatter',
-		'bubble'  => 'bubble',
+		'column'     => 'bar',
+		'bar'        => 'horizontalBar',
+		'pie'        => 'pie',
+		'line'       => 'line',
+		'spline'     => 'line',
+		'area'       => 'line',
+		'scatter'    => 'scatter',
+		'bubble'     => 'bubble',
+		'radar'      => 'radar',
+		'radar-area' => 'radar',
+		'polar'      => 'polarArea',
 	);
 
 	/**
@@ -133,13 +139,21 @@ class M_Chart_Chartjs {
 
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
 
-		if ( 'pie' != $chart_args['type'] ) {
+		if ( 
+			   'pie' != $chart_args['type']
+			&& 'radar' != $chart_args['type']
+			&& 'polarArea' != $chart_args['type']
+		) {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
 
 		if ( 'horizontalBar' == $chart_args['type'] ) {
 			$chart_args['options']['scales']['yAxes'][0]['gridLines']['display'] = false;
-		} elseif ( 'pie' != $chart_args['type'] ) {
+		} elseif ( 
+			   'pie' != $chart_args['type']
+			&& 'radar' != $chart_args['type']
+			&& 'polarArea' != $chart_args['type']
+		) {
 			$chart_args['options']['scales']['xAxes'][0]['gridLines']['display'] = false;
 		}
 
@@ -160,6 +174,11 @@ class M_Chart_Chartjs {
 			foreach ( $chart_args['data']['datasets'][0]['data'] as $key => $data ) {
 				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key ];
 			}
+		} elseif (
+			   isset( $chart_args['data']['datasets'] )
+			&& 'polarArea' == $chart_args['type']
+		) {
+			$chart_args['data']['datasets'][0]['backgroundColor'] = $this->colors;
 		} elseif( isset( $chart_args['data']['datasets'] ) ) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$color = $this->colors[ $key % count( $this->colors ) ];
@@ -176,6 +195,7 @@ class M_Chart_Chartjs {
 				if (
 					   'area' == $this->post_meta['type']
 					|| 'bubble' == $this->post_meta['type']
+					|| 'radar-area' == $this->post_meta['type']
 				) {
 					$rgb = $this->hex_to_rgb( $color );
 
@@ -303,14 +323,33 @@ class M_Chart_Chartjs {
 
 		if (
 			   'pie' == $this->post_meta['type']
+			|| 'polar' == $this->post_meta['type']
 			|| 'both' != m_chart()->parse()->value_labels_position
    			&& (
    				   'scatter' != $this->post_meta['type']
    				&& 'bubble' != $this->post_meta['type']
+				&& 'radar' != $this->post_meta['type']
+				&& 'radar-area' != $this->post_meta['type']
    			)
 		) {
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
 				$chart_args['data']['datasets'][0]['data'][] = $data_array[ $key ];
+			}
+		} elseif (
+			   'radar' == $this->post_meta['type']
+			|| 'radar-area' == $this->post_meta['type']
+		) {
+			$set_names = $this->post_meta['set_names'];
+
+			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+
+				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
+
+				$chart_args['data']['datasets'][ $key ] = array(
+					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data' => $data_array,
+				);
 			}
 		} elseif ( 'scatter' == $this->post_meta['type'] ) {
 			$set_names = $this->post_meta['set_names'];
