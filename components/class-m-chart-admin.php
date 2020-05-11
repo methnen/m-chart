@@ -392,6 +392,9 @@ class M_Chart_Admin {
 	 * @param object the WP post object as returned by the metabox API
 	 */
 	public function chart_meta_box( $post ) {
+		// Force an instance of 1 since we NEVER show more than one chart at a time inside the admin panel
+		m_chart()->instance = 1;
+		
 		$chart     = m_chart()->get_chart( $post->ID );
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 		$image     = m_chart()->get_chart_image( $post->ID );

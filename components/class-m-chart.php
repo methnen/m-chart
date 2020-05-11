@@ -607,7 +607,7 @@ class M_Chart {
 	 * @return array an array of image values url, width, height, etc...
 	 */
 	public function m_chart_get_chart_image_tag( $img, $post_id ) {
-		if ( ! $img ) {
+		if ( $img ) {
 			return $img;
 		}
 
