@@ -36,7 +36,7 @@
 				}
 
 				&.three,
-				&.four {
+				&.five {
 					p {
 						float: left;
 						width: 73%;
@@ -44,6 +44,17 @@
 						&.units {
 							float: right;
 							width: 25%;
+						}
+					}
+				}
+				
+				&.four {
+					p {
+						margin-top: 5px;
+
+						label {
+							display: inline-block;
+							height: 23px;
 						}
 					}
 				}
@@ -74,17 +85,17 @@
 						}
 
 						.button {
-							height: 20px;
-							line-height: 18px;
+							min-height: 24px;
+							line-height: 21px;
 							position: absolute;
-							right: 1px;
+							right: 2px;
 							top: 23px;
 						}
 
 						@media screen and ( max-width:782px ) {
 							.button {
-								height: 27px;
-								line-height: 14px;
+								min-height: 34px;
+								line-height: 31px;
 							}
 						}
 					}

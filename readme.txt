@@ -34,6 +34,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.7.9 =
 
+* Fixed some minor style issues in WordPress 5.5
+* Fixed some issues with the admin Javascript when the plugin is used in WordPress 5.5
+* Updated Chart.js to the latest stable version (2.7.3)
+
+= 1.7.9 =
+
 * Changed the priority of the `template_redirect` filter hook call so that `m_chart()->is_iframe` get's set earlier
 
 = 1.7.8 =
