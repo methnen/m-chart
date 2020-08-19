@@ -26,7 +26,7 @@ var m_chart_chartjs_admin = {
 
 	// Handle chart type input changes so the settings UI only reflects appropriate options
 	m_chart_chartjs_admin.handle_chart_type = function( event ) {
-		var chart_type        = $( this ).attr( 'value' );
+		var chart_type        = $( this ).val();
 		var $chart_meta_box   = $( document.getElementById( 'm-chart' ) );
 		var $spreadsheet_tabs = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
 
@@ -89,7 +89,7 @@ var m_chart_chartjs_admin = {
 			var img = $target_canvas.get(0).toDataURL( 'image/png' );
 
 			// Save the image string to the text area so we can save it on update/publish
-			$( document.getElementById( 'm-chart-img' ) ).attr( 'value', img );
+			$( document.getElementById( 'm-chart-img' ) ).val( img );
 
 			// Allow form submission now that we've got a valid img value set
 			m_chart_admin.form_submission( true );
@@ -127,7 +127,7 @@ var m_chart_chartjs_admin = {
 		};
 
 		// Height is set via the container
-		var height = $( document.getElementById( 'm-chart-height' ) ).attr( 'value' );
+		var height = $( document.getElementById( 'm-chart-height' ) ).val();
 		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
 
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
