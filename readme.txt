@@ -34,7 +34,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.7.11 =
 
-* Fixed an dissue in WP 5.5 where jQuery sometimes wasn't available in time for embedded charts
+* Fixed an issue in WP 5.5 where jQuery sometimes wasn't available in time for embedded charts
 
 = 1.7.10 =
 
