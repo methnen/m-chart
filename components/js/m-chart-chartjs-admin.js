@@ -52,7 +52,7 @@ var m_chart_chartjs_admin = {
 
 		if ( 1 === m_chart_chartjs_admin.image_step ) {
 			// Set some constraints on the chart to get it into the a good size for image generation
-			$target_canvas.attr( 'width', 1200 ).attr( 'height', $canvas_source.height );
+			$target_canvas.attr( 'width', $canvas_source.width ).attr( 'height', $canvas_source.height );
 			$( '.m-chart-container' ).attr( 'width', 1200 ).css( 'width', 600 );
 
 			// Need to force the chart to resize
@@ -65,10 +65,10 @@ var m_chart_chartjs_admin = {
 		if ( 2 === m_chart_chartjs_admin.image_step ) {
 			// Give the target canvas a white background
 			target_context.fillStyle = 'white';
-			target_context.fillRect(0, 0, 1200, $canvas_source.height);
+			target_context.fillRect(0, 0, $canvas_source.width, $canvas_source.height);
 
 			// Copy the chart over to a new canvas object
-			target_context.drawImage( $canvas_source, 0, 0, 1200, $canvas_source.height );
+			target_context.drawImage( $canvas_source, 0, 0, $canvas_source.width, $canvas_source.height );
 
 			// Iterate the step count
 			m_chart_chartjs_admin.image_step++;
