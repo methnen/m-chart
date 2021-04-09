@@ -2,8 +2,13 @@
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
+<<<<<<< HEAD
 **Tested up to:** 5.2.2  
 **Stable tag:** 1.8  
+=======
+**Tested up to:** 5.5  
+**Stable tag:** 1.7.11  
+>>>>>>> 885aef58a6be66d4cce406a5597fcfb0310290ae
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -40,11 +45,21 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
 * Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
-* Some minor UI tweaks to support WordPress 5.3 changes
+* Some minor UI tweaks to support WordPress 5.7 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
 * Updated Chart.js to the latest stable version (2.9.3)
 * Updated Handsontable to the latest stable version with an MIT license (6.2.2)
 	* Since I can't get any bug fixes going forward I'll be looking into alternatives for future versions
+
+### 1.7.11 ###
+
+* Fixed an issue in WordPress 5.5 where jQuery sometimes wasn't available in time for embedded charts
+
+### 1.7.10 ###
+
+* Fixed some minor style issues in WordPress 5.5
+* Fixed some issues with the admin Javascript when the plugin is used in WordPress 5.5
+* Updated Chart.js to the latest stable version (2.7.3)
 
 ### 1.7.9 ###
 
