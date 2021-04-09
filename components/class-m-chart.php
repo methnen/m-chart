@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.9';
+	public $version = '1.7.11';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -225,6 +225,9 @@ class M_Chart {
 			array( 'jquery' ),
 			$this->version
 		);
+
+		// jQuery needs to be in the header since the charts are inline
+		wp_enqueue_script( 'jquery', false, array(), false, false );
 
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', EP_PERMALINK );

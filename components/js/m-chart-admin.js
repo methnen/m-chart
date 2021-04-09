@@ -309,7 +309,7 @@
 
 		// Watch for changes to the file input
 		$file_input.on( 'change', function( event ) {
-			var file_name = $( this ).attr( 'value' ).replace( /C:\\fakepath\\/i, '' );
+			var file_name = $( this ).val().replace( /C:\\fakepath\\/i, '' );
 
 			if ( -1 === file_name.search( /.+(\.csv)$/ ) ) {
 				$file_error.removeClass( 'hide' );
@@ -327,7 +327,7 @@
 		$cancel.on( 'click', function( event ) {
 			event.preventDefault();
 			$file_info.addClass( 'hide' );
-			$file_input.attr( 'value', '' );
+			$file_input.val( '' );
 			$select.removeClass( 'hide' );
 			$import.addClass( 'hide' );
 		});
@@ -370,7 +370,7 @@
 					$import_error.text( response.data );
 					$import_error.removeClass( 'hide' );
 
-					$file_input.attr( 'value', '' );
+					$file_input.val( '' );
 					$select.removeClass( 'hide' );
 					$file_import.addClass( 'hide' );
 
@@ -380,7 +380,7 @@
 				// Update the spreadsheet with the new data
 				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].loadData( response.data );
 
-				$file_input.attr( 'value', '' );
+				$file_input.val( '' );
 				$select.removeClass( 'hide' );
 				$file_import.addClass( 'hide' );
 			});
@@ -399,7 +399,7 @@
 
 			$( document.getElementById( 'm-chart-csv-post-id' ) ).val( m_chart_admin.post_id );
 			$( document.getElementById( 'm-chart-csv-data' ) ).val( JSON.stringify( $data ) );
-			$( document.getElementById( 'm-chart-csv-title' ) ).val( m_chart_admin.$title_input.attr( 'value' ) );
+			$( document.getElementById( 'm-chart-csv-title' ) ).val( m_chart_admin.$title_input.val() );
 			$( document.getElementById( 'm-chart-csv-set-name' ) ).val( set_name );
 
 			$form.trigger( 'submit' );
@@ -445,11 +445,11 @@
 				&& 'checkbox' !== $( this ).attr( 'type' )
 				|| true === $( this ).is( ':checked' )
 			 ) {
-				$post_meta[ $( this ).attr( 'name' ).replace( /^m-chart\[|\]$/g , '' ) ] = $( this ).attr( 'value' );
+				$post_meta[ $( this ).attr( 'name' ).replace( /^m-chart\[|\]$/g , '' ) ] = $( this ).val();
 			}
 		});
 
-		$post_meta[ 'subtitle' ] = this.$subtitle_input.attr( 'value' );
+		$post_meta[ 'subtitle' ] = this.$subtitle_input.val();
 
 		$post_meta.data = JSON.stringify( m_chart_admin.get_data() );
 
@@ -467,7 +467,7 @@
 				post_id:   m_chart_admin.post_id,
 				nonce:     m_chart_admin.nonce,
 				library:   m_chart_admin.library,
-				title:     this.$title_input.attr( 'value' ),
+				title:     this.$title_input.val(),
 				post_meta: $post_meta
 			},
 			cache: false,
