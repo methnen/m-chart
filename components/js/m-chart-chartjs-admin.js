@@ -65,7 +65,7 @@ var m_chart_chartjs_admin = {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
 			$spreadsheet_tabs.removeClass( 'hide' );
 		}
-		
+
 		if (
 			   'radar' === chart_type
 			|| 'radar-area' === chart_type
@@ -148,9 +148,28 @@ var m_chart_chartjs_admin = {
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.data = event.response.data.data;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.config.type = event.response.data.type;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.options = event.response.data.options;
+
+		// Height is set via the container
+		var height = $( document.getElementById( 'm-chart-height' ) ).val();
+		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
+
+		// This deals with an issue in Chart.js 3.1.0 where onComplete can run too many times
+		// We only want to trigger on the first render anyway so we'll just check every time
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 = true;
+
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
+
 		// Need to make sure the onComplete callback gets reattached on chart refreshes
+		// This is intentionally done after the chart.update() line above
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.options.animation = {
 			onComplete: function() {
+				if ( false === window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 ) {
+					return;
+				}
+
+				window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 = false;
+
+				console.log('render_done_on_refresh');
 				$( '.m-chart' ).trigger({
 					type:     'render_done',
 					post_id:  m_chart_admin.post_id,
@@ -158,12 +177,6 @@ var m_chart_chartjs_admin = {
 				});
 			}
 		};
-
-		// Height is set via the container
-		var height = $( document.getElementById( 'm-chart-height' ) ).val();
-		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
-
-		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
 
 		if ( 'no-images' === m_chart_admin.performance ) {
 			m_chart_admin.form_submission( true );
