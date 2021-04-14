@@ -2,20 +2,17 @@
 Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
-<<<<<<< HEAD
-Tested up to: 5.2.2
+Tested up to: 5.7
 Stable tag: 1.8
-=======
-Tested up to: 5.5
-Stable tag: 1.7.11
->>>>>>> 885aef58a6be66d4cce406a5597fcfb0310290ae
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
 
 == Description ==
 
-Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or Highcharts chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
+Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or [Highcharts](https://github.com/methnen/m-chart-highcharts-library/) chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
+
+**Note:** Starting with version 1.8 the Chart.js library is no longer on the 2.x.x branch which introduces some [breaking changes](https://www.chartjs.org/docs/latest/getting-started/v3-migration.html). This will probably only affect you if you were modifying the default Chart.js behavior in some way.
 
 **Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
 
@@ -43,7 +40,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
 * Some minor UI tweaks to support WordPress 5.7 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
-* Updated Chart.js to the latest stable version (2.9.3)
+* Removed Dark Mode plugin support
+* Removed Shortcake shortcode ui
+	* Shortcake hasn't been updated in over 2 years
+* Updated Chart.js to the latest stable version (3.1.0)
 * Updated Handsontable to the latest stable version with an MIT license (6.2.2)
 	* Since I can't get any bug fixes going forward I'll be looking into alternatives for future versions
 

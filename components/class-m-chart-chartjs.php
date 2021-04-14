@@ -2,6 +2,7 @@
 
 class M_Chart_Chartjs {
 	public $library = 'chartjs';
+	public $library_name = 'Chart.js';
 	public $value_labels_limit = 15;
 	public $value_labels_div = 10;
 	public $original_labels;
@@ -21,6 +22,7 @@ class M_Chart_Chartjs {
 		'radar-area',
 		'polar',
 	);
+	public $type_option_names = array();
 	public $theme_directories;
 	public $colors = array(
 		'#7cb5ec',
@@ -34,9 +36,37 @@ class M_Chart_Chartjs {
 		'#f45b5b',
 		'#91e8e1',
 	);
+	public $points = array(
+		array(
+			'point' => array(
+				'pointStyle' => 'circle',
+			),
+		),
+		array(
+			'point' => array(
+				'pointStyle' => 'rectRot',
+			),
+		),
+		array(
+			'point' => array(
+				'pointStyle' => 'rect',
+			),
+		),
+		array(
+			'point' => array(
+				'pointStyle' => 'triangle',
+			),
+		),
+		array(
+			'point' => array(
+				'pointStyle' => 'triangle',
+				'rotation'   => 180,
+			),
+		),
+	);
 	public $chart_types = array(
 		'column'     => 'bar',
-		'bar'        => 'horizontalBar',
+		'bar'        => 'bar',
 		'pie'        => 'pie',
 		'line'       => 'line',
 		'spline'     => 'line',
@@ -53,6 +83,20 @@ class M_Chart_Chartjs {
 	 */
 	public function __construct() {
 		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
+
+		$this->type_option_names = array(
+			'line'       => esc_html__( 'Line', 'm-chart' ),
+			'spline'     => esc_html__( 'Spline', 'm-chart' ),
+			'area'       => esc_html__( 'Area', 'm-chart' ),
+			'column'     => esc_html__( 'Column', 'm-chart' ),
+			'bar'        => esc_html__( 'Bar', 'm-chart' ),
+			'pie'        => esc_html__( 'Pie', 'm-chart' ),
+			'scatter'    => esc_html__( 'Scatter', 'm-chart' ),
+			'bubble'     => esc_html__( 'Bubble', 'm-chart' ),
+			'radar'      => esc_html__( 'Radar', 'm-chart' ),
+			'radar-area' => esc_html__( 'Radar Area', 'm-chart' ),
+			'polar'      => esc_html__( 'Polar', 'm-chart' ),
+		);
 	}
 
 	/**
@@ -105,24 +149,32 @@ class M_Chart_Chartjs {
 		$chart_args = array(
 			'type' => $this->chart_types[ $this->post_meta['type'] ],
 			'options' => array(
-			    'title' => array(
-			    	'display'   => true,
-					'text'      => $this->esc_title( apply_filters( 'the_title', $this->post->post_title ) ),
-					'fontSize'  => 21,
-					'fontStyle' => 'normal',
-			    ),
-				'legend' => array(
-					'display'  => $this->post_meta['legend'] ? true : false,
-					'position' => 'bottom',
-					'labels' => array(
-						'fontStyle' => 'bold',
+			    'plugins' => array(
+					// @TODO Figure out how to support subtitles in Chart.js
+				    'title' => array(
+				    	'display'   => true,
+						'text'      => $this->esc_title( apply_filters( 'the_title', $this->post->post_title ) ),
+						'font' => array(
+							'size'  => 21,
+							'weight' => 'normal',
+						),
+				    ),
+					'legend' => array(
+						'display'  => $this->post_meta['legend'] ? true : false,
+						'position' => 'bottom',
+						'labels' => array(
+							'font' => array(
+								'weight' => 'bold',
+							),
+							'usePointStyle' => true,
+						),
 					),
-				),
+					'tooltip' => array(
+						'enabled' => true,
+					),
+			    ),
 				'responsive' => true,
 				'maintainAspectRatio' => false,
-				'tooltips' => array(
-					'enabled' => true,
-				),
 			),
 		);
 
@@ -134,12 +186,12 @@ class M_Chart_Chartjs {
 				|| 'spline' == $this->post_meta['type']
 			)
 		) {
-			$chart_args['options']['scales']['yAxes'][]['ticks']['min'] = $this->post_meta['y_min_value'];
+			$chart_args['options']['scales']['y']['min'] = $this->post_meta['y_min_value'];
 		}
 
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
 
-		if ( 
+		if (
 			   'pie' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
@@ -147,32 +199,40 @@ class M_Chart_Chartjs {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
 
-		if ( 'horizontalBar' == $chart_args['type'] ) {
-			$chart_args['options']['scales']['yAxes'][0]['gridLines']['display'] = false;
-		} elseif ( 
+		if ( 'bar' == $this->post_meta['type'] ) {
+			$chart_args['options']['indexAxis'] = 'y';
+			$chart_args['options']['scales']['y']['grid']['display'] = false;
+		} elseif (
 			   'pie' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 		) {
-			$chart_args['options']['scales']['xAxes'][0]['gridLines']['display'] = false;
+			$chart_args['options']['scales']['x']['grid']['display'] = false;
 		}
 
 		$chart_args = $this->add_data_sets( $chart_args );
 
-		// Apply colors, yes this kind of sucks, but so does the Chart.js color system
+		$this->colors = apply_filters( 'm_chart_chartjs_colors', $this->colors, $this->post );
+		$this->colors = apply_filters( 'm_chart_chartjs_points', $this->colors, $this->post );
+
+		// It's possible to have more data points/sets than colors or point styles so we need to perform a modulo operation when iterating through them
+		$color_count = count( $this->colors );
+		$point_count = count( $this->points );
+
+		// Apply colors and point styles, yes this kind of sucks, but so does the Chart.js color system
 		if (
 			   isset( $chart_args['data']['datasets'] )
 			&& ( 'bar' == $chart_args['type'] || 'horizontalBar' == $chart_args['type'] )
 		) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
-				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % count( $this->colors ) ];
+				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % $color_count ];
 			}
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
 			&& 'pie' == $chart_args['type']
 		) {
 			foreach ( $chart_args['data']['datasets'][0]['data'] as $key => $data ) {
-				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key ];
+				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key % $color_count ];
 			}
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
@@ -181,7 +241,7 @@ class M_Chart_Chartjs {
 			$chart_args['data']['datasets'][0]['backgroundColor'] = $this->colors;
 		} elseif( isset( $chart_args['data']['datasets'] ) ) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
-				$color = $this->colors[ $key % count( $this->colors ) ];
+				$color = $this->colors[ $key % $color_count ];
 
 				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $color;
 				$chart_args['data']['datasets'][ $key ]['borderColor'] = $color;
@@ -190,6 +250,14 @@ class M_Chart_Chartjs {
 					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0.25;
 				} else {
 					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0;
+				}
+
+				if (
+					   'line' == $this->post_meta['type']
+					|| 'spline' == $this->post_meta['type']
+					|| 'area' == $this->post_meta['type']
+				) {
+					$chart_args['data']['datasets'][ $key ]['elements'] = $this->points[ $key % $point_count ];;
 				}
 
 				if (
@@ -281,9 +349,9 @@ class M_Chart_Chartjs {
 	 */
 	public function add_axis_labels( $chart_args ) {
 		// Note the additional layer in the array: [0] its needed for Chart.js to see the label settings
-		$chart_args['options']['scales']['xAxes'][0]['scaleLabel'] = array(
-			'display'     => '' == $this->post_meta['x_title'] ? false : true,
-			'labelString' => $this->esc_title( $this->post_meta['x_title'] ),
+		$chart_args['options']['scales']['x']['title'] = array(
+			'display' => '' == $this->post_meta['x_title'] ? false : true,
+			'text'    => $this->esc_title( $this->post_meta['x_title'] ),
 		);
 
 		// We've got x axis units so we'll add them to the axis label
@@ -291,12 +359,12 @@ class M_Chart_Chartjs {
 			$units   = get_term_by( 'slug', $this->post_meta['x_units'], m_chart()->slug . '-units' );
 			$x_units = '' != $this->post_meta['x_title'] ? ' (' . $units->name . ')' : $units->name;
 
-			$chart_args['options']['scales']['xAxes'][0]['scaleLabel']['labelString'] .= $x_units;
+			$chart_args['options']['scales']['x']['title']['text'] .= $x_units;
 		}
 
-		$chart_args['options']['scales']['yAxes'][0]['scaleLabel'] = array(
-			'display'     => '' == $this->post_meta['y_title'] ? false : true,
-			'labelString' => $this->esc_title( $this->post_meta['y_title'] ),
+		$chart_args['options']['scales']['y']['title'] = array(
+			'display' => '' == $this->post_meta['y_title'] ? false : true,
+			'text'    => $this->esc_title( $this->post_meta['y_title'] ),
 		);
 
 		// We've got y axis units so we'll add them to the axis label
@@ -304,7 +372,7 @@ class M_Chart_Chartjs {
 			$units   = get_term_by( 'slug', $this->post_meta['y_units'], m_chart()->slug . '-units' );
 			$y_units = '' != $this->post_meta['y_title'] ? ' (' . $units->name . ')' : $units->name;
 
-			$chart_args['options']['scales']['yAxes'][0]['scaleLabel']['labelString'] .= $y_units;
+			$chart_args['options']['scales']['y']['title']['text'] .= $y_units;
 		}
 
 		return $chart_args;

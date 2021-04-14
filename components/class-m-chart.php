@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.11';
+	public $version = '1.8';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -221,7 +221,7 @@ class M_Chart {
 		// Register the graphing library scripts
 		wp_register_script(
 			'chartjs',
-			$this->plugin_url . '/components/external/chartjs/chart-bundle.js',
+			$this->plugin_url . '/components/external/chartjs/chart.js',
 			array( 'jquery' ),
 			$this->version
 		);

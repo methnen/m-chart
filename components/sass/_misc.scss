@@ -3,3 +3,128 @@
 #m-chart-subtitle {
 	margin-left: 0;
 }
+
+.wp-list-table {
+	#m-chart-type {
+		width: rem-calc(32);
+	}
+	
+	#m-chart-library {
+		width: rem-calc(45);
+	}
+}
+
+.column-m-chart-type {
+	span.type {
+		text-indent: -999rem;
+		display: block;
+		width: 100%;
+		position: relative;
+				
+		&:after {
+			content: '';
+			background-repeat: no-repeat;
+			background-position: center center;
+		    position: absolute;
+		    left: 0;
+		    right: 0;
+			top: 0;
+			bottom: 0;
+		}
+				
+		&.line {
+			&:after {
+				background-image: url(../images/types/line.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.spline {
+			&:after {
+				background-image: url(../images/types/spline.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.area {
+			&:after {
+				background-image: url(../images/types/area.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.column {
+			&:after {
+				background-image: url(../images/types/column.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.bar {
+			background-color: transparent;
+			
+			&:after {
+				background-image: url(../images/types/bar.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.pie {
+			&:after {
+				background-image: url(../images/types/pie.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.scatter {
+			&:after {
+				background-image: url(../images/types/scatter.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.bubble {
+			&:after {
+				background-image: url(../images/types/bubble.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.radar {
+			&:after {
+				background-image: url(../images/types/radar.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.radar-area {
+			&:after {
+				background-image: url(../images/types/radar-area.svg);
+				background-size: contain;
+			}
+		}
+		
+		&.polar {
+			&:after {
+				background-image: url(../images/types/polar.svg);
+				background-size: contain;
+			}
+		}
+	}
+}
+
+.column-m-chart-library {
+	span.library {
+		text-indent: -999rem;
+		display: block;
+		width: 100%;
+		background-repeat: no-repeat;
+		background-position: center center;
+		filter: grayscale(100%);
+		
+		&.chartjs {
+			background-image: url(../external/chartjs/chartjs-logo.svg);
+			background-size: contain;
+		}
+	}
+}
