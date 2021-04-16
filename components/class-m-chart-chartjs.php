@@ -25,16 +25,12 @@ class M_Chart_Chartjs {
 	public $type_option_names = array();
 	public $theme_directories;
 	public $colors = array(
-		'#7cb5ec',
-		'#434348',
-		'#90ed7d',
-		'#f7a35c',
-		'#8085e9',
-		'#f15c80',
-		'#e4d354',
-		'#2b908f',
-		'#f45b5b',
-		'#91e8e1',
+		'#ed6d85', // Pink
+		'#f7d06b', // Yellow
+		'#f2a354', // Orange
+		'#56a0e5', // Blue
+		'#6cbebf', // Turquoise
+		'#47494b', // Gray
 	);
 	public $points = array(
 		array(
@@ -212,6 +208,16 @@ class M_Chart_Chartjs {
 
 		$chart_args = $this->add_data_sets( $chart_args );
 
+		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
+		if ( ! isset( $chart_args['data']['datasets'] ) ) {
+			$chart_args['data']['datasets'] = array(
+				array(
+					'label' => '',
+					'data'  => array(),
+				),
+			);
+		}
+
 		$this->colors = apply_filters( 'm_chart_chartjs_colors', $this->colors, $this->post );
 		$this->colors = apply_filters( 'm_chart_chartjs_points', $this->colors, $this->post );
 
@@ -256,6 +262,9 @@ class M_Chart_Chartjs {
 					   'line' == $this->post_meta['type']
 					|| 'spline' == $this->post_meta['type']
 					|| 'area' == $this->post_meta['type']
+					|| 'radar' == $this->post_meta['type']
+					|| 'radar-area' == $this->post_meta['type']
+					|| 'scatter' == $this->post_meta['type']
 				) {
 					$chart_args['data']['datasets'][ $key ]['elements'] = $this->points[ $key % $point_count ];;
 				}
