@@ -41,6 +41,7 @@ class M_Chart {
 	public $instance = 1;
 	public $settings = array(
 		'library'       => 'chartjs',
+		'show-library'  => 'no',
 		'performance'   => 'default',
 		'embeds'        => '',
 		'default_theme' => '_default',

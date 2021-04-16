@@ -33,6 +33,8 @@ var m_chart_chartjs_admin = {
 		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
 		$chart_meta_box.find( '.row.two' ).addClass( 'show-shared' );
 
+		console.log( chart_type );
+
 		if (
 			   'area' === chart_type
 			|| 'column' === chart_type
@@ -64,6 +66,10 @@ var m_chart_chartjs_admin = {
 		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
 			$spreadsheet_tabs.removeClass( 'hide' );
+		}
+
+		if ( 'polar' === chart_type ) {
+			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
 		if (

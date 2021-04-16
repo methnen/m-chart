@@ -20,9 +20,19 @@
 							?>
 						</select>
 						<p class="description">
-							<?php esc_html_e( 'Chart.js is the GPL compatible default library; For additional features and chart types you can use Highcharts:', 'm-chart' ); ?>
+							<?php esc_html_e( 'Chart.js is the GPL compatible default library; Highcharts is more fully featured and extensible but has much tighter licensing restrictions:', 'm-chart' ); ?>
 							<a href="https://github.com/methnen/m-chart/wiki/Libraries">https://github.com/methnen/m-chart/wiki/Libraries</a>
 						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"></th>
+					<td>
+						<label>
+							<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show-library' ) ); ?>" value="yes"<?php checked( $settings['show-library'], 'yes' ); ?> />
+							<span><?php esc_html_e( 'Show Library in Edit Posts Screen', 'm-chart' ); ?></span><br />
+							<span class="description"><?php esc_html_e( 'Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin', 'm-chart' ); ?></span>
+						</label>
 					</td>
 				</tr>
 				<tr>

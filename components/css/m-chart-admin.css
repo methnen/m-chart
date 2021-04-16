@@ -30,7 +30,7 @@
 .column-m-chart-type span.type:after {
   content: '';
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: left center;
   position: absolute;
   left: 0;
   right: 0;
@@ -103,7 +103,7 @@
   display: block;
   width: 100%;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: left center;
   filter: grayscale(100%);
 }
 /* line 125, ../sass/_misc.scss */

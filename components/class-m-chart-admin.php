@@ -258,18 +258,11 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
-			// canvg and rgbcolo are useful for SVG -> Canvas conversions
-			wp_enqueue_script(
-				'rgbcolor',
-				$this->plugin_url . '/components/external/canvg/rgbcolor.js',
-				array(),
-				m_chart()->version
-			);
-
+			// canvg is useful for SVG -> Canvas conversions
 			wp_enqueue_script(
 				'canvg',
-				$this->plugin_url . '/components/external/canvg/canvg.js',
-				array( 'rgbcolor' ),
+				$this->plugin_url . '/components/external/canvg/umd.js',
+				array(),
 				m_chart()->version
 			);
 
@@ -490,7 +483,10 @@ class M_Chart_Admin {
 
 			if ( 'author' == $column || 'coauthors' == $column ) {
 				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
-				$new_columns[ m_chart()->slug . '-library' ] = 'Library';
+				
+				if ( 'yes' == m_chart()->get_settings( 'show-library' ) ) {
+					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
+				}
 			}
 		}
 

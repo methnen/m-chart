@@ -18,9 +18,6 @@
 		// Build the spreadsheets
 		this.build_spreadsheets();
 
-		// Store this so we don't keep looking for it
-		this.$sheet_tab_inputs = $( '.hands-on-table-sheet-tab-input' );
-
 		// Handle the spreadsheet controls
 		this.handle_sheet_controls();
 
@@ -37,7 +34,7 @@
 					JSON.stringify( m_chart_admin.get_data() )
 				);
 
-				m_chart_admin.$sheet_tab_inputs.attr( 'disabled', false );
+				$( '.hands-on-table-sheet-tab-input' ).attr( 'disabled', false );
 			}
 		});
 
