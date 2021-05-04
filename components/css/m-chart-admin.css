@@ -319,36 +319,58 @@
 #m-chart .inside .settings .row p {
   margin-bottom: 0;
 }
-/* line 27, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.one p, #m-chart .inside .settings .row.two p {
+/* line 26, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.one p {
   float: left;
   margin-left: 1%;
-  width: 49%;
+  width: 32%;
 }
-/* line 32, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.one p:first-child, #m-chart .inside .settings .row.two p:first-child {
+/* line 31, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.one p:first-child {
   margin-left: 0;
 }
-/* line 40, ../sass/_chart-settings.scss */
+/* line 38, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.two p {
+  float: left;
+  margin-left: 1%;
+  width: 32%;
+}
+/* line 43, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.two p:first-child {
+  margin-left: 0;
+}
+/* line 47, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.two p.shared {
+  display: none;
+}
+/* line 53, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.two.show-shared p {
+  width: 24%;
+}
+/* line 56, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.two.show-shared p.shared {
+  display: block;
+}
+/* line 65, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.five p {
   float: left;
   width: 73%;
 }
-/* line 44, ../sass/_chart-settings.scss */
+/* line 69, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.five p.units {
   float: right;
   width: 25%;
 }
-/* line 52, ../sass/_chart-settings.scss */
+/* line 77, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.four p {
   margin-top: 5px;
 }
-/* line 55, ../sass/_chart-settings.scss */
+/* line 80, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.four p label {
   display: inline-block;
   height: 23px;
 }
-/* line 64, ../sass/_chart-settings.scss */
+/* line 89, ../sass/_chart-settings.scss */
 #m-chart .inside .row {
   border-top: 1px solid #dddddd;
   padding: 0 10px 10px;
@@ -359,26 +381,26 @@
   content: '';
   display: table;
 }
-/* line 70, ../sass/_chart-settings.scss */
+/* line 95, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p {
   float: right;
   margin-bottom: 0;
   width: 49%;
 }
-/* line 75, ../sass/_chart-settings.scss */
+/* line 100, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p:first-child {
   float: left;
 }
-/* line 79, ../sass/_chart-settings.scss */
+/* line 104, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image {
   position: relative;
 }
-/* line 82, ../sass/_chart-settings.scss */
+/* line 107, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image em {
   display: block;
   margin-top: 5px;
 }
-/* line 87, ../sass/_chart-settings.scss */
+/* line 112, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image .button {
   min-height: 24px;
   line-height: 21px;
@@ -387,7 +409,7 @@
   top: 23px;
 }
 @media screen and (max-width: 782px) {
-  /* line 96, ../sass/_chart-settings.scss */
+  /* line 121, ../sass/_chart-settings.scss */
   #m-chart .inside .row.seven p.image .button {
     min-height: 34px;
     line-height: 31px;

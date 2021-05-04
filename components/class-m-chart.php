@@ -221,9 +221,16 @@ class M_Chart {
 
 		// Register the graphing library scripts
 		wp_register_script(
+			'chartjs-helpers',
+			$this->plugin_url . '/components/js/m-chart-chartjs-helpers.js',
+			array( 'jquery' ),
+			$this->version
+		);
+		
+		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart.js',
-			array( 'jquery' ),
+			array( 'jquery', 'chartjs-helpers' ),
 			$this->version
 		);
 

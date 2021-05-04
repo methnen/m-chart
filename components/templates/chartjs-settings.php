@@ -21,6 +21,20 @@ $parse_option_names = array(
 			</select>
 		</p>
 		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'theme' ) ); ?>"><?php esc_html_e( 'Theme', 'm-chart' ); ?></label><br />
+			<select name="<?php echo esc_attr( $this->get_field_name( 'theme' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'theme' ) ); ?>">
+				<?php
+				foreach ( m_chart()->library( 'chartjs' )->get_themes() as $theme ) {
+					?>
+					<option value="<?php echo esc_attr( $theme->slug ); ?>"<?php selected( $theme->slug, $post_meta['theme'] ); ?>>
+						<?php esc_html_e( $theme->name, 'm-chart' ); ?>
+					</option>
+					<?php
+				}
+				?>
+			</select>
+		</p>
+		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_html_e( 'Height', 'm-chart' ); ?></label><br />
 			<input type="number" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" value="<?php echo absint( $post_meta['height'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" min="300" max="1500" />
 		</p>
@@ -45,6 +59,12 @@ $parse_option_names = array(
 			<label for="<?php echo esc_attr( $this->get_field_id( 'legend' ) ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'legend' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'legend' ) ); ?>" value="1"<?php checked( $post_meta['legend'], true ); ?>/>
 				<?php esc_html_e( 'Show legend', 'm-chart' ); ?>
+			</label>
+		</p>
+		<p class="shared">&nbsp;<br />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'shared' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'shared' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'shared' ) ); ?>" value="1"<?php checked( $post_meta['shared'], true ); ?>/>
+				<?php esc_html_e( 'Shared tooltip', 'm-chart' ); ?>
 			</label>
 		</p>
 	</div>

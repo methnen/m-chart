@@ -2,7 +2,7 @@
 Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
-Tested up to: 5.7
+Tested up to: 5.7.1
 Stable tag: 1.8
 License: MIT
 
@@ -37,13 +37,31 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.8 =
 
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
-* Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
+* Chart.js can now use[themes](https://github.com/methnen/m-chart/wiki/Themes)
+	* Default themes:
+		* Chart.js (Default)
+			* Based on the Chart.js homepage colors
+		* Color Blind Safe
+		* Highcharts 4.x
+* Many additions/tweaks to Chart.js support
+	* Charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
+	* Charts can now use the Shared tooltip setting
+	* Chart.js charts use different symbols for each data set when possible
+		* Circle, Diamond, Square, Triangle, etc...
+	* Tooltips have been tweaked to include more information
+* Added two columns to the admin panel chart posts page
+	* Chart Type
+	* Chart Library (optional)
 * Some minor UI tweaks to support WordPress 5.7 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
+* Fixed an issue where axis units weren't displayed in Chart.js when there was no axis title
 * Removed Dark Mode plugin support
+	* The scope/purpose of this plugin changed drastically
 * Removed Shortcake shortcode ui
 	* Shortcake hasn't been updated in over 2 years
-* Updated Chart.js to the latest stable version (3.1.0)
+* Updated canvg to the latest stable version (3.0.7)
+	* This fixes an issue with image generation when using Highcharts
+* Updated Chart.js to the latest stable version (3.2.0)
 * Updated Handsontable to the latest stable version with an MIT license (6.2.2)
 	* Since I can't get any bug fixes going forward I'll be looking into alternatives for future versions
 
