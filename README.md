@@ -2,20 +2,17 @@
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-<<<<<<< HEAD
-**Tested up to:** 5.2.2  
+**Tested up to:** 5.7.1  
 **Stable tag:** 1.8  
-=======
-**Tested up to:** 5.5  
-**Stable tag:** 1.7.11  
->>>>>>> 885aef58a6be66d4cce406a5597fcfb0310290ae
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
 
 ## Description ##
 
-Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or Highcharts chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
+Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or [Highcharts](https://github.com/methnen/m-chart-highcharts-library/) chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
+
+**Note:** Starting with version 1.8 the Chart.js library is no longer on the 2.x.x branch which introduces some [breaking changes](https://www.chartjs.org/docs/latest/getting-started/v3-migration.html). This will probably only affect you if you were modifying the default Chart.js behavior in some way.
 
 **Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
 
@@ -44,10 +41,32 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 ### 1.8 ###
 
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
-* Chart.js charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
+* Chart.js can now use[themes](https://github.com/methnen/m-chart/wiki/Themes)
+	* Default themes:
+		* Chart.js (Default)
+			* Based on the Chart.js homepage colors
+		* Color Blind Safe
+		* Highcharts 4.x
+* Many additions/tweaks to Chart.js support
+	* Charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
+	* Charts can now use the Shared tooltip setting
+	* Chart.js charts use different symbols for each data set when possible
+		* Circle, Diamond, Square, Triangle, etc...
+	* Tooltips have been tweaked to include more information
+* Added two columns to the admin panel chart posts page
+	* Chart Type
+	* Chart Library (optional)
 * Some minor UI tweaks to support WordPress 5.7 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
-* Updated Chart.js to the latest stable version (2.9.3)
+* Fixed an issue where axis units weren't displayed in Chart.js when there was no axis title
+* Fixed an issue where the auto generated chart images could end up distorted
+* Removed Dark Mode plugin support
+	* The scope/purpose of this plugin changed drastically
+* Removed Shortcake shortcode ui
+	* Shortcake hasn't been updated in over 2 years
+* Updated canvg to the latest stable version (3.0.7)
+	* This fixes an issue with image generation when using Highcharts
+* Updated Chart.js to the latest stable version (3.2.0)
 * Updated Handsontable to the latest stable version with an MIT license (6.2.2)
 	* Since I can't get any bug fixes going forward I'll be looking into alternatives for future versions
 
