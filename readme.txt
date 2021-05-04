@@ -55,6 +55,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Some minor UI tweaks to support WordPress 5.7 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
 * Fixed an issue where axis units weren't displayed in Chart.js when there was no axis title
+* Fixed an issue where the auto generated chart images could end up distorted
 * Removed Dark Mode plugin support
 	* The scope/purpose of this plugin changed drastically
 * Removed Shortcake shortcode ui
