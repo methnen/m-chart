@@ -35,29 +35,6 @@ class M_Chart_Admin {
 		$this->save_settings();
 
 		add_action( 'admin_notices', array( $this, 'library_warning' ) );
-
-		if ( ! function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
-			return;
-		}
-
-		shortcode_ui_register_for_shortcode(
-			'chart',
-			array(
-				'label'         => esc_html__( 'Charts', 'm-chart' ),
-				'listItemImage' => 'dashicons-chart-pie',
-				'attrs'         => array(
-					array(
-						'label' => esc_html__( 'Chart', 'm-chart' ),
-						'attr'  => 'id',
-						'type'  => 'post_select',
-						'query' => array(
-							'post_type'   => m_chart()->slug,
-							'post_status' => 'publish',
-						),
-					),
-				),
-			)
-		);
 	}
 
 	/**
@@ -302,6 +279,7 @@ class M_Chart_Admin {
 					'performance'             => m_chart()->get_settings( 'performance' ),
 					'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
 					'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
+					'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
 					'library'                 => $library,
 					'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
 					'delete_comfirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
@@ -484,7 +462,7 @@ class M_Chart_Admin {
 			if ( 'author' == $column || 'coauthors' == $column ) {
 				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
 
-				if ( 'yes' == m_chart()->get_settings( 'show-library' ) ) {
+				if ( 'yes' == m_chart()->get_settings( 'show_library' ) ) {
 					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
 				}
 			}

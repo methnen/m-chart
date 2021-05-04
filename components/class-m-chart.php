@@ -40,9 +40,10 @@ class M_Chart {
 	public $is_iframe = false;
 	public $instance = 1;
 	public $settings = array(
-		'library'       => 'chartjs',
-		'show-library'  => 'no',
-		'performance'   => 'default',
+		'library'          => 'chartjs',
+		'show_library'     => 'no',
+		'performance'      => 'default',
+		'image_multiplier' => '2',
 		'embeds'        => '',
 		'default_theme' => '_default',
 		'lang_settings' => array(

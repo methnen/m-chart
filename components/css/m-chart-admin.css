@@ -343,34 +343,30 @@
 #m-chart .inside .settings .row.two p.shared {
   display: none;
 }
-/* line 53, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.two.show-shared p {
-  width: 24%;
-}
-/* line 56, ../sass/_chart-settings.scss */
+/* line 54, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.two.show-shared p.shared {
   display: block;
 }
-/* line 65, ../sass/_chart-settings.scss */
+/* line 63, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.five p {
   float: left;
   width: 73%;
 }
-/* line 69, ../sass/_chart-settings.scss */
+/* line 67, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.five p.units {
   float: right;
   width: 25%;
 }
-/* line 77, ../sass/_chart-settings.scss */
+/* line 75, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.four p {
   margin-top: 5px;
 }
-/* line 80, ../sass/_chart-settings.scss */
+/* line 78, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.four p label {
   display: inline-block;
   height: 23px;
 }
-/* line 89, ../sass/_chart-settings.scss */
+/* line 87, ../sass/_chart-settings.scss */
 #m-chart .inside .row {
   border-top: 1px solid #dddddd;
   padding: 0 10px 10px;
@@ -381,26 +377,26 @@
   content: '';
   display: table;
 }
-/* line 95, ../sass/_chart-settings.scss */
+/* line 93, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p {
   float: right;
   margin-bottom: 0;
   width: 49%;
 }
-/* line 100, ../sass/_chart-settings.scss */
+/* line 98, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p:first-child {
   float: left;
 }
-/* line 104, ../sass/_chart-settings.scss */
+/* line 102, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image {
   position: relative;
 }
-/* line 107, ../sass/_chart-settings.scss */
+/* line 105, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image em {
   display: block;
   margin-top: 5px;
 }
-/* line 112, ../sass/_chart-settings.scss */
+/* line 110, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image .button {
   min-height: 24px;
   line-height: 21px;
@@ -409,7 +405,7 @@
   top: 23px;
 }
 @media screen and (max-width: 782px) {
-  /* line 121, ../sass/_chart-settings.scss */
+  /* line 119, ../sass/_chart-settings.scss */
   #m-chart .inside .row.seven p.image .button {
     min-height: 34px;
     line-height: 31px;

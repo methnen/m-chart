@@ -185,6 +185,11 @@ class M_Chart_Chartjs {
 			),
 		);
 
+		// If we're in the admin panel we need to bump up the devicePixelRatio to get a better image
+		if ( is_admin() ) {        
+			$chart_args['options']['devicePixelRatio'] = m_chart()->get_settings( 'image_multiplier' );
+		}
+
 		if (
 			   'pie' != $chart_args['type']
 			&& 'radar' != $chart_args['type']

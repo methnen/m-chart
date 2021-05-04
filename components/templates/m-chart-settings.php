@@ -29,7 +29,7 @@
 					<th scope="row"></th>
 					<td>
 						<label>
-							<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show-library' ) ); ?>" value="yes"<?php checked( $settings['show-library'], 'yes' ); ?> />
+							<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show_library' ) ); ?>" value="yes"<?php checked( $settings['show_library'], 'yes' ); ?> />
 							<span><?php esc_html_e( 'Show Library in Edit Posts Screen', 'm-chart' ); ?></span><br />
 							<span class="description"><?php esc_html_e( 'Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin', 'm-chart' ); ?></span>
 						</label>
@@ -48,15 +48,42 @@
 								<span class="description"><?php esc_html_e( 'Provides all functionality', 'm-chart' ); ?></span>
 							</label><br />
 							<label>
-								<input type="radio" name="<?php echo $this->get_field_name( 'performance' ); ?>" value="no-images"<?php checked( $settings['performance'], 'no-images' ); ?> />
+								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'performance' ) ); ?>" value="no-images"<?php checked( $settings['performance'], 'no-images' ); ?> />
 								<span><?php esc_html_e( 'No Images', 'm-chart' ); ?></span><br />
 								<span class="description"><?php esc_html_e( 'No generation of chart images', 'm-chart' ); ?></span>
 							</label><br />
 							<label>
-								<input type="radio" name="<?php echo $this->get_field_name( 'performance' ); ?>" value="no-preview"<?php checked( $settings['performance'], 'no-preview' ); ?> />
+								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'performance' ) ); ?>" value="no-preview"<?php checked( $settings['performance'], 'no-preview' ); ?> />
 								<span><?php esc_html_e( 'No Instant Preview', 'm-chart' ); ?></span><br />
 								<span class="description"><?php esc_html_e( 'No instant preview and no generation of chart images', 'm-chart' ); ?></span>
 							</label>
+						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Image Multiplier', 'm-chart' ); ?></th>
+					<td>
+						<fieldset>
+							<legend class="screen-reader-text">
+								<span><?php esc_html_e( 'Image Multiplier', 'm-chart' ); ?></span>
+							</legend>
+							<label>
+								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'image_multiplier' ) ); ?>" value="1"<?php checked( $settings['image_multiplier'], '1' ); ?> />
+								<span><?php esc_html_e( '1x', 'm-chart' ); ?></span><br />
+							</label><br />
+							<label>
+								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'image_multiplier' ) ); ?>" value="2"<?php checked( $settings['image_multiplier'], '2' ); ?> />
+								<span><?php esc_html_e( '2x', 'm-chart' ); ?></span><br />
+							</label><br />
+							<label>
+								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'image_multiplier' ) ); ?>" value="3"<?php checked( $settings['image_multiplier'], '3' ); ?> />
+								<span><?php esc_html_e( '3x', 'm-chart' ); ?></span><br />
+							</label><br />
+							<label>
+								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'image_multiplier' ) ); ?>" value="4"<?php checked( $settings['image_multiplier'], '4' ); ?> />
+								<span><?php esc_html_e( '4x', 'm-chart' ); ?></span><br />
+							</label><br />
+							<span class="description"><?php esc_html_e( 'The higher the multiplier the better the images will look on high DPI screens', 'm-chart' ); ?></span>
 						</fieldset>
 					</td>
 				</tr>
