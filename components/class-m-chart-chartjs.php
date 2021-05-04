@@ -80,6 +80,12 @@ class M_Chart_Chartjs {
 	public function __construct() {
 		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
 
+		$this->theme_directories = array(
+			get_stylesheet_directory() . '/m-chart-chartjs-themes/', // Child theme
+			get_template_directory() . '/m-chart-chartjs-themes/', // Parent theme
+			__DIR__ . '/chartjs-themes/',
+		);
+
 		$this->type_option_names = array(
 			'line'       => esc_html__( 'Line', 'm-chart' ),
 			'spline'     => esc_html__( 'Spline', 'm-chart' ),
@@ -169,10 +175,29 @@ class M_Chart_Chartjs {
 						'enabled' => true,
 					),
 			    ),
+				'elements' => array(
+					'point' => array(
+						'hoverRadius' => 7,
+					),
+				),
 				'responsive' => true,
 				'maintainAspectRatio' => false,
 			),
 		);
+
+		if (
+			   'pie' != $chart_args['type']
+			&& 'radar' != $chart_args['type']
+			&& 'polarArea' != $chart_args['type']
+		) {
+			$chart_args['options']['scales']['x']['grid']['borderWidth'] = 0;
+			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
+		}
+
+		if ( $this->post_meta['shared'] ) {
+			$chart_args['options']['plugins']['tooltip']['mode'] = 'index';
+			$chart_args['options']['interaction']['mode'] = 'index';
+		}
 
 		// Forcing a minimum value of 0 prevents the built in fudging which sometimes looks weird
 		if (
@@ -180,9 +205,16 @@ class M_Chart_Chartjs {
 			&& (
 				   'line' == $this->post_meta['type']
 				|| 'spline' == $this->post_meta['type']
+				|| 'area' == $this->post_meta['type']
 			)
 		) {
 			$chart_args['options']['scales']['y']['min'] = $this->post_meta['y_min_value'];
+		}
+
+		// @TODO: Bubble charts need a little massaging to look better by default (not sure how to properly do this yet)
+		if ( 'bubble' == $this->post_meta['type'] ) {
+			//$chart_args['options']['scales']['x']['min'] = -15;
+			//$chart_args['options']['scales']['y']['min'] = -15;
 		}
 
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
@@ -198,6 +230,7 @@ class M_Chart_Chartjs {
 		if ( 'bar' == $this->post_meta['type'] ) {
 			$chart_args['options']['indexAxis'] = 'y';
 			$chart_args['options']['scales']['y']['grid']['display'] = false;
+			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
 		} elseif (
 			   'pie' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
@@ -208,6 +241,10 @@ class M_Chart_Chartjs {
 
 		$chart_args = $this->add_data_sets( $chart_args );
 
+		// Add prefix/suffix if appropriate
+		$chart_args['value_prefix'] = m_chart()->parse()->data_prefix;
+		$chart_args['value_suffix'] = m_chart()->parse()->data_suffix;
+
 		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
 		if ( ! isset( $chart_args['data']['datasets'] ) ) {
 			$chart_args['data']['datasets'] = array(
@@ -216,6 +253,19 @@ class M_Chart_Chartjs {
 					'data'  => array(),
 				),
 			);
+		}
+
+		// Apply the theme
+		if ( $theme = $this->get_theme( $this->post_meta['theme'] ) ) {
+			if ( isset( $theme['colors'] ) ) {
+				$this->colors = $theme['colors'];
+				unset( $theme['colors'] );
+			}
+
+			if ( isset( $theme['points'] ) ) {
+				$this->points = $theme['points'];
+				unset( $theme['points'] );
+			}
 		}
 
 		$this->colors = apply_filters( 'm_chart_chartjs_colors', $this->colors, $this->post );
@@ -277,11 +327,16 @@ class M_Chart_Chartjs {
 					$rgb = $this->hex_to_rgb( $color );
 
 					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
+					$chart_args['data']['datasets'][ $key ]['elements']['point']['backgroundColor'] = $color;
 					$chart_args['data']['datasets'][ $key ]['fill'] = true;
 				} else {
 					$chart_args['data']['datasets'][ $key ]['fill'] = false;
 				}
 			}
+		}
+
+		if ( $theme ) {
+			$chart_args = m_chart()->array_merge_recursive( $chart_args, $theme );
 		}
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
@@ -365,6 +420,8 @@ class M_Chart_Chartjs {
 
 		// We've got x axis units so we'll add them to the axis label
 		if ( '' != $this->post_meta['x_units'] ) {
+			$chart_args['options']['scales']['x']['title']['display'] = true;
+
 			$units   = get_term_by( 'slug', $this->post_meta['x_units'], m_chart()->slug . '-units' );
 			$x_units = '' != $this->post_meta['x_title'] ? ' (' . $units->name . ')' : $units->name;
 
@@ -377,7 +434,9 @@ class M_Chart_Chartjs {
 		);
 
 		// We've got y axis units so we'll add them to the axis label
-		if ( $this->post_meta['y_units'] != '' ) {
+		if ( '' != $this->post_meta['y_units'] ) {
+			$chart_args['options']['scales']['y']['title']['display'] = true;
+
 			$units   = get_term_by( 'slug', $this->post_meta['y_units'], m_chart()->slug . '-units' );
 			$y_units = '' != $this->post_meta['y_title'] ? ' (' . $units->name . ')' : $units->name;
 
@@ -613,5 +672,87 @@ class M_Chart_Chartjs {
 	    }
 
 	    return $rgb;
+	}
+
+	/**
+	 * Get all themes available from the various theme directories
+	 *
+	 * @return array an array of themes
+	 */
+	public function get_themes() {
+		$themes = array();
+
+		foreach ( $this->theme_directories as $directory ) {
+			$themes = array_merge( $themes, $this->_get_themes_readdir( $directory ) );
+		}
+
+		return $themes;
+	}
+
+	/**
+	 * Returns the theme options for a given theme
+	 *
+	 * @param string a theme slug
+	 *
+	 * @return string/boolean requested theme options or false if they could not be found
+	 */
+	private function get_theme( $slug ) {
+		foreach ( $this->theme_directories as $directory ) {
+			if ( ! $themes = $this->_get_themes_readdir( $directory ) ) {
+				continue;
+			}
+
+			foreach ( $themes as $theme ) {
+				if ( $theme->slug == $slug ) {
+					return $theme->options;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get all themes from a given directory
+	 *
+	 * @param string a path to a server directory
+	 *
+	 * @return array an array of all the themes available in a given directory
+	 */
+	private function _get_themes_readdir( $theme_base ) {
+		// Sanity check to make sure we have a real directory
+		if ( ! is_dir( $theme_base ) ) {
+			return array();
+		}
+
+		$theme_dir = new DirectoryIterator( $theme_base );
+		$themes = array();
+
+		foreach ( $theme_dir as $file ) {
+			if ( ! $file->isFile() || ! preg_match( '#.php$#i', $file->getFilename() ) ) {
+				continue;
+			}
+
+			$theme_data = implode( '', file( $theme_base . $file ) );
+
+			if ( preg_match( '|Theme Name:(.*)$|mi', $theme_data, $name ) ) {
+				$name = trim( _cleanup_header_comment( $name[1] ) );
+			}
+
+			if ( isset( $name ) && '' != $name ) {
+				$file = basename( $file );
+
+				$themes[ $file ] = (object) array(
+					'slug'    => substr( $file, 0, -4 ),
+					'name'    => $name,
+					'file'    => $file,
+					'options' => require $theme_base . $file,
+				);
+			}
+		}
+
+		asort( $themes );
+
+		return $themes;
 	}
 }

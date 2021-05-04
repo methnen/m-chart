@@ -377,7 +377,7 @@ class M_Chart_Admin {
 	public function chart_meta_box( $post ) {
 		// Force an instance of 1 since we NEVER show more than one chart at a time inside the admin panel
 		m_chart()->instance = 1;
-		
+
 		$chart     = m_chart()->get_chart( $post->ID );
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 		$image     = m_chart()->get_chart_image( $post->ID );
@@ -439,7 +439,7 @@ class M_Chart_Admin {
 		}
 
 		$library = m_chart()->get_post_meta( $post_id, 'library' );
-		
+
 		if ( m_chart()->library( $library )->library != $library ) {
 			?>
 			<span aria-hidden="true">—</span>
@@ -448,7 +448,7 @@ class M_Chart_Admin {
 			return;
 		}
 
-		if ( m_chart()->slug . '-type' == $column ) {					
+		if ( m_chart()->slug . '-type' == $column ) {
 			$type      = m_chart()->get_post_meta( $post_id, 'type' );
 			$type_name = m_chart()->library( $library )->type_option_names[ $type ];
 			?>
@@ -457,7 +457,7 @@ class M_Chart_Admin {
 			</span>
 			<?php
 		}
-		
+
 		if ( m_chart()->slug . '-library' == $column ) {
 			$library_name = m_chart()->library( $library )->library_name;
 			?>
@@ -467,7 +467,7 @@ class M_Chart_Admin {
 			<?php
 		}
 	}
-	
+
 	/**
 	 * Add our custom column to the array of columns for charts
 	 *
@@ -483,7 +483,7 @@ class M_Chart_Admin {
 
 			if ( 'author' == $column || 'coauthors' == $column ) {
 				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
-				
+
 				if ( 'yes' == m_chart()->get_settings( 'show-library' ) ) {
 					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
 				}

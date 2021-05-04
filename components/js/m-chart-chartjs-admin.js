@@ -33,14 +33,11 @@ var m_chart_chartjs_admin = {
 		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
 		$chart_meta_box.find( '.row.two' ).addClass( 'show-shared' );
 
-		console.log( chart_type );
-
 		if (
 			   'area' === chart_type
 			|| 'column' === chart_type
 			|| 'bar' === chart_type
 		) {
-			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
 			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
@@ -49,15 +46,16 @@ var m_chart_chartjs_admin = {
 			|| 'bar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
-			$spreadsheet_tabs.addClass( 'hide' );
+			// In Chart.js this behavior appears to be a default and I can't seem to override it
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
 		}
 
 		if (
 			   'pie' === chart_type
-			|| 'radar' === chart_type
 			|| 'polar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
 		}
 
 		if (
@@ -65,6 +63,7 @@ var m_chart_chartjs_admin = {
 			|| 'bubble' === chart_type
 		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
 			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 
@@ -87,12 +86,13 @@ var m_chart_chartjs_admin = {
 		var $target_canvas = $( '#m-chart-canvas-render-' + event.post_id );
 		var target_context = document.getElementById( 'm-chart-canvas-render-' + event.post_id ).getContext('2d');
 
-		// Need to do this in steps because we have to resize the chart which triggers a redraw thus a potential infinite loop
+		var chart_height = $( document.getElementById( 'm-chart-height' ) ).val();
 
+		// Need to do this in steps because we have to resize the chart which triggers a redraw thus a potential infinite loop
 		if ( 1 === m_chart_chartjs_admin.image_step ) {
 			// Set some constraints on the chart to get it into the a good size for image generation
-			$target_canvas.attr( 'width', 1200 ).attr( 'height', $canvas_source.height );
-			$( '.m-chart-container' ).attr( 'width', 1200 ).css( 'width', 600 );
+			$target_canvas.attr( 'width', 1200 ).attr( 'height', chart_height * 2 );
+			$( '.m-chart-container' ).attr( 'width', 600 ).css( 'width', 600 );
 
 			// Need to force the chart to resize
 			window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
@@ -104,10 +104,10 @@ var m_chart_chartjs_admin = {
 		if ( 2 === m_chart_chartjs_admin.image_step ) {
 			// Give the target canvas a white background
 			target_context.fillStyle = 'white';
-			target_context.fillRect(0, 0, 1200, $canvas_source.height);
+			target_context.fillRect(0, 0, 1200, chart_height * 2 );
 
 			// Copy the chart over to a new canvas object
-			target_context.drawImage( $canvas_source, 0, 0, 1200, $canvas_source.height );
+			target_context.drawImage( $canvas_source, 0, 0, 1200, chart_height * 2  );
 
 			// Iterate the step count
 			m_chart_chartjs_admin.image_step++;
@@ -155,13 +155,22 @@ var m_chart_chartjs_admin = {
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.config.type = event.response.data.type;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.options = event.response.data.options;
 
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart_args.value_prefix = event.response.data.value_prefix;
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart_args.value_suffix = event.response.data.value_suffix;
+
 		// Height is set via the container
 		var height = $( document.getElementById( 'm-chart-height' ) ).val();
-		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
+		$( '.m-chart-container' ).attr( 'height', height ).css( 'height', height );
 
 		// This deals with an issue in Chart.js 3.1.0 where onComplete can run too many times
 		// We only want to trigger on the first render anyway so we'll just check every time
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 = true;
+
+		$( '.m-chart' ).trigger({
+			type:     'render_start',
+			post_id:  m_chart_admin.post_id,
+			instance: 1
+		});
 
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
 
@@ -175,7 +184,6 @@ var m_chart_chartjs_admin = {
 
 				window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 = false;
 
-				console.log('render_done_on_refresh');
 				$( '.m-chart' ).trigger({
 					type:     'render_done',
 					post_id:  m_chart_admin.post_id,
