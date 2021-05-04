@@ -17,7 +17,7 @@ var m_chart_chartjs_admin = {
 
 		// Watch for a new chart to be built
 		if ( 'default' === m_chart_admin.performance && 'yes' === m_chart_admin.image_support ) {
-			$( '.m-chart' ).on( 'render_done', this.generate_image_from_chart );
+			$( '.m-chart' ).on( 'render_done', this.generate_image_from_chart_2 );
 		}
 
 		$( '.m-chart' ).on( 'chart_args_success', this.refresh_chart );
@@ -86,17 +86,21 @@ var m_chart_chartjs_admin = {
 		var $target_canvas = $( '#m-chart-canvas-render-' + event.post_id );
 		var target_context = document.getElementById( 'm-chart-canvas-render-' + event.post_id ).getContext('2d');
 
+		var chart_width  = 600;
 		var chart_height = $( document.getElementById( 'm-chart-height' ) ).val();
+		
+		var image_width  = chart_width * m_chart_admin.image_multiplier;
+		var image_height = chart_height * m_chart_admin.image_multiplier;
 
 		// Need to do this in steps because we have to resize the chart which triggers a redraw thus a potential infinite loop
 		if ( 1 === m_chart_chartjs_admin.image_step ) {
 			// Set some constraints on the chart to get it into the a good size for image generation
-			$target_canvas.attr( 'width', 1200 ).attr( 'height', chart_height * 2 );
-			$( '.m-chart-container' ).attr( 'width', 600 ).css( 'width', 600 );
+			$target_canvas.attr( 'width', image_width ).attr( 'height', image_height );
+			$( '.m-chart-container' ).attr( 'width', chart_width ).css( 'width', chart_width + 'px' ).css( 'height', chart_height + 'px' );
 
 			// Need to force the chart to resize
 			window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
-
+			
 			// Iterate the step count
 			m_chart_chartjs_admin.image_step++;
 		}
@@ -104,17 +108,17 @@ var m_chart_chartjs_admin = {
 		if ( 2 === m_chart_chartjs_admin.image_step ) {
 			// Give the target canvas a white background
 			target_context.fillStyle = 'white';
-			target_context.fillRect(0, 0, 1200, chart_height * 2 );
+			target_context.fillRect(0, 0, image_width, image_height );
 
 			// Copy the chart over to a new canvas object
-			target_context.drawImage( $canvas_source, 0, 0, 1200, chart_height * 2  );
+			target_context.drawImage( $canvas_source, 0, 0, image_width, image_height  );
 
 			// Iterate the step count
 			m_chart_chartjs_admin.image_step++;
 		}
 
 		if ( 3 === m_chart_chartjs_admin.image_step ) {
-			$( '.m-chart-container' ).removeAttr( 'width' ).css( 'width', '' );
+			$( '.m-chart-container' ).removeAttr( 'width' ).css( 'width', '' ).css( 'height', '' );
 
 			// Put the chart back into it's normal state
 			window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
@@ -137,6 +141,52 @@ var m_chart_chartjs_admin = {
 			m_chart_chartjs_admin.image_step = 1;
 		}
 	};
+
+	// Generate a PNG image out of a rendered chart
+	m_chart_chartjs_admin.generate_image_from_chart_2 = function( event ) {
+		m_chart_admin.form_submission(false);
+		
+		var $canvas_source = document.getElementById( 'm-chart-' + event.post_id + '-' + event.instance );
+		var $target_canvas = $( '#m-chart-canvas-render-' + event.post_id );
+		var target_context = document.getElementById( 'm-chart-canvas-render-' + event.post_id ).getContext('2d');
+
+		var chart_width  = 600;
+		var chart_height = $( document.getElementById( 'm-chart-height' ) ).val();
+		
+		var image_width  = chart_width * m_chart_admin.image_multiplier;
+		var image_height = chart_height * m_chart_admin.image_multiplier;
+
+		// Set some constraints on the chart to get it into the right size for image generation
+		$( '.m-chart-container' ).attr( 'width', chart_width ).css( 'width', chart_width + 'px' ).css( 'height', chart_height + 'px' );
+
+		// Resize the chart
+		window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
+
+		// Set the background to a solid white color (we don't need to reset this explicitly as it's undone by the later chart.resize() call)
+		var $chart_context = window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.canvas.getContext( '2d' );
+		
+		$chart_context.save();
+		$chart_context.globalCompositeOperation = 'destination-over';
+		$chart_context.fillStyle = 'white';
+		$chart_context.fillRect(0, 0, window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.width, window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.height );
+		$chart_context.restore();
+
+		// Get a PNG of the chart
+		var img = window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.toBase64Image( 'image/png', 1 );
+
+		// Remove the restraints
+		$( '.m-chart-container' ).removeAttr( 'width' ).css( 'width', '' ).css( 'height', '' );
+
+		// Put the chart back into it's normal state
+		window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
+
+		// Save the image string to the text area so we can save it on update/publish
+		$( document.getElementById( 'm-chart-img' ) ).val( img );
+
+		// Allow form submission now that we've got a valid img value set
+		m_chart_admin.form_submission( true );
+	};
+	
 
 	// Refresh the chart arguments
 	m_chart_chartjs_admin.refresh_chart = function( event ) {
