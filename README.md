@@ -56,7 +56,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added two columns to the admin panel chart posts page
 	* Chart Type
 	* Chart Library (optional)
-* Added an Image Multiplier setting to allow for higher or lower quality images than the existing 2x default
+* Added an Image Multiplier setting to allow for higher or lower quality images (1x, 2x, 3x, or 4x)
+	* A 2x multiplier has been the existing behavior
 * Some minor UI tweaks to support WordPress 5.7 changes
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
 * Fixed an issue where axis units weren't displayed in Chart.js when there was no axis title
