@@ -98,6 +98,35 @@
 					</td>
 				</tr>
 				<?php
+				if ( 'chartjs' == $settings['library'] ) {
+					?>
+					<tr>
+						<th scope="row">
+							<label for="<?php echo esc_attr( $this->get_field_id( 'default_theme' ) ); ?>">
+								<?php esc_html_e( 'Default Chart.js Theme', 'm-chart' ); ?>
+							</label>
+						</th>
+						<td>
+							<select name="<?php echo esc_attr( $this->get_field_name( 'default_theme' ) ); ?>" id="<?php echo $this->get_field_id( 'default_theme' ); ?>">
+								<?php
+								foreach ( m_chart()->library( 'chartjs' )->get_themes() as $theme ) {
+									?>
+									<option value="<?php echo esc_attr( $theme->slug ); ?>"<?php selected( $theme->slug, $settings['default_theme'] ); ?>>
+										<?php esc_html_e( $theme->name, 'm-chart' ); ?>
+									</option>
+									<?php
+								}
+								?>
+							</select>
+							<p class="description">
+								<?php esc_html_e( 'See the M Chart documentation for more info on how to use themes:', 'm-chart' ); ?>
+								<a href="https://github.com/methnen/m-chart/wiki/Themes">https://github.com/methnen/m-chart/wiki/Themes</a>
+							</p>
+						</td>
+					</tr>
+					<?php
+				}
+
 				if ( 'highcharts' == $settings['library'] ) {
 					?>
 					<tr>
