@@ -5,15 +5,26 @@ module.exports = function( grunt ) {
 
 	// Project configuration.
 	grunt.initConfig({
-		compass: {
-			prod: {
-				config: 'config.rb',
-				debugInfo: false
+		sass: {
+			options: {
+				implementation: require('dart-sass'),
+				sourceMap: true,
+				indentType: 'tab',
+				indentWidth: 1,
+				outputStyle: 'expanded',
+			},
+			dist: {
+				files: {
+					'components/css/m-chart-admin.css': 'components/sass/m-chart-admin.scss'
+				}
 			}
 		},
-		watch: {
-			files: [ 'components/sass/*.scss' ],
-			tasks: [ 'compass:prod' ]
+		scsslint: {
+			allFiles: [ 'components/sass/*.scss' ],
+			options: {
+				config: '.scss-lint.yml',
+				colorizeOutput: true
+			}
 		},
 		wp_readme_to_markdown: {
 			your_target: {
@@ -24,9 +35,6 @@ module.exports = function( grunt ) {
 					screenshot_url: 'https://methnen.com/misc/m-chart/{screenshot}.png',
 				}
 			}
-		},
-		scsslint: {
-			allFiles: [ 'components/sass/*.scss' ]
 		},
 		copy: {
 			deploy: {
@@ -43,6 +51,7 @@ module.exports = function( grunt ) {
 						'!config.rb',
 						'!Gruntfile.js',
 						'!package.json',
+						'!package-lock.json',
 						'!phpunit.xml',
 						'!README.md'
 					],
@@ -64,6 +73,6 @@ module.exports = function( grunt ) {
 
 	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
-	grunt.registerTask( 'default', [ 'compass:prod', 'wp_readme_to_markdown', 'scsslint' ] );
+	grunt.registerTask( 'default', [ 'sass', 'wp_readme_to_markdown', 'scsslint' ] );
 	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy', 'clean' ] );
 };
