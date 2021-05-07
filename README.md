@@ -50,7 +50,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Many additions/tweaks to Chart.js support
 	* Charts can now use the [Vertical axis minimum value field](https://github.com/methnen/m-chart/wiki/Creating-a-chart#user-content-vertical-axis-minimum-note)
 	* Charts can now use the Shared tooltip setting
-	* Chart.js charts use different symbols for each data set when possible
+	* Charts use different symbols for each data set when possible
 		* Circle, Diamond, Square, Triangle, etc...
 	* Tooltips have been tweaked to include more information
 * Added two columns to the admin panel chart posts page
