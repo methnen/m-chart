@@ -68,7 +68,11 @@ module.exports = function( grunt ) {
 				},
 			}
 		},
-		clean: [ 'deploy' ]
+		clean: [ 'deploy' ],
+		watch: {
+			files: [ 'components/sass/*.scss' ],
+			tasks: [ 'sass', 'scsslint' ]
+		}
 	});
 
 	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
