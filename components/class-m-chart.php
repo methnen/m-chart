@@ -227,7 +227,7 @@ class M_Chart {
 			array( 'jquery' ),
 			$this->version
 		);
-		
+
 		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart.js',
@@ -544,7 +544,7 @@ class M_Chart {
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
 		ob_start();
-		require apply_filters( 'm_chart_chart_template', $template, $library );
+		require apply_filters( 'm_chart_chart_template', $template, $library, $post_id );
 		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
 		return ob_get_clean();
@@ -570,8 +570,10 @@ class M_Chart {
 
 			m_chart()->parse()->parse_data( $data, $post_meta['parse_in'] );
 
+			$template = __DIR__ . '/templates/' . $library . '-chart.php';
+
 			ob_start();
-			require __DIR__ . '/templates/table.php';
+			require apply_filters( 'm_chart_table_template', $template, $library, $post->ID );
 			$table .= ob_get_clean();
 		}
 
