@@ -1,11 +1,4 @@
 <?php
-$type_option_names = array(
-	'line'    => esc_html__( 'Line', 'm-chart' ),
-	'column'  => esc_html__( 'Column', 'm-chart' ),
-	'bar'     => esc_html__( 'Bar', 'm-chart' ),
-	'pie'     => esc_html__( 'Pie', 'm-chart' ),
-);
-
 $parse_option_names = array(
 	'columns' => esc_html__( 'Columns', 'm-chart' ),
 	'rows'    => esc_html__( 'Rows', 'm-chart' ),
@@ -20,7 +13,21 @@ $parse_option_names = array(
 				foreach ( m_chart()->library( 'chartjs' )->type_options as $type ) {
 					?>
 					<option value="<?php echo esc_attr( $type ); ?>"<?php selected( $type, $post_meta['type'] ); ?>>
-						<?php echo esc_html( $type_option_names[ $type ] ); ?>
+						<?php echo esc_html( m_chart()->library( 'chartjs' )->type_option_names[ $type ] ); ?>
+					</option>
+					<?php
+				}
+				?>
+			</select>
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'theme' ) ); ?>"><?php esc_html_e( 'Theme', 'm-chart' ); ?></label><br />
+			<select name="<?php echo esc_attr( $this->get_field_name( 'theme' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'theme' ) ); ?>">
+				<?php
+				foreach ( m_chart()->library( 'chartjs' )->get_themes() as $theme ) {
+					?>
+					<option value="<?php echo esc_attr( $theme->slug ); ?>"<?php selected( $theme->slug, $post_meta['theme'] ); ?>>
+						<?php esc_html_e( $theme->name, 'm-chart' ); ?>
 					</option>
 					<?php
 				}
@@ -54,8 +61,13 @@ $parse_option_names = array(
 				<?php esc_html_e( 'Show legend', 'm-chart' ); ?>
 			</label>
 		</p>
+		<p class="shared">&nbsp;<br />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'shared' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'shared' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'shared' ) ); ?>" value="1"<?php checked( $post_meta['shared'], true ); ?>/>
+				<?php esc_html_e( 'Shared tooltip', 'm-chart' ); ?>
+			</label>
+		</p>
 	</div>
-
 	<div class="row three vertical-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'y-title' ) ); ?>"><?php esc_html_e( 'Vertical axis title', 'm-chart' ); ?></label><br />
@@ -85,7 +97,16 @@ $parse_option_names = array(
 			</select>
 		</p>
 	</div>
-	<div class="row four horizontal-axis">
+	<div class="row four y-min">
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'y_min' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>" value="1"<?php checked( $post_meta['y_min'], true ); ?>/>
+				<?php esc_html_e( 'Force vertical axis minimum: ', 'm-chart' ) ?>
+			</label>
+			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>" size="7"<?php echo $disabled; ?> />
+		</p>
+	</div>
+	<div class="row five horizontal-axis">
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'x-title' ) ); ?>"><?php esc_html_e( 'Horizontal axis title', 'm-chart' ); ?></label><br />
 			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'x_title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'x-title' ) ); ?>" value="<?php echo esc_attr( $post_meta['x_title'] ); ?>" style="width: 100%;" />

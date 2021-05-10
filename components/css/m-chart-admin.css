@@ -1,300 +1,344 @@
-/* line 35, ../sass/_global-mixins-and-variables.scss */
 #m-chart .inside .hide,
 #m-chart-spreadsheet .inside .hide,
 #m-chart-csv .inside .hide {
-  display: none;
+	display: none;
 }
 
-/* line 3, ../sass/_misc.scss */
 #m-chart-subtitle {
-  margin-left: 0;
+	margin-left: 0;
 }
 
-/* line 3, ../sass/_spreadsheet.scss */
+.wp-list-table #m-chart-type {
+	width: 2rem;
+}
+.wp-list-table #m-chart-library {
+	width: 2.8125rem;
+}
+
+.column-m-chart-type span.type {
+	text-indent: -999rem;
+	display: block;
+	width: 100%;
+	position: relative;
+}
+.column-m-chart-type span.type:after {
+	content: "";
+	background-repeat: no-repeat;
+	background-position: left center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+.column-m-chart-type span.type.line:after {
+	background-image: url(../images/types/line.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.spline:after {
+	background-image: url(../images/types/spline.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.area:after {
+	background-image: url(../images/types/area.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.column:after {
+	background-image: url(../images/types/column.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.bar {
+	background-color: transparent;
+}
+.column-m-chart-type span.type.bar:after {
+	background-image: url(../images/types/bar.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.pie:after {
+	background-image: url(../images/types/pie.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.scatter:after {
+	background-image: url(../images/types/scatter.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.bubble:after {
+	background-image: url(../images/types/bubble.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.radar:after {
+	background-image: url(../images/types/radar.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.radar-area:after {
+	background-image: url(../images/types/radar-area.svg);
+	background-size: contain;
+}
+.column-m-chart-type span.type.polar:after {
+	background-image: url(../images/types/polar.svg);
+	background-size: contain;
+}
+
+.column-m-chart-library span.library {
+	text-indent: -999rem;
+	display: block;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-position: left center;
+	filter: grayscale(100%);
+}
+.column-m-chart-library span.library.chartjs {
+	background-image: url(../external/chartjs/chartjs-logo.svg);
+	background-size: contain;
+}
+
 #m-chart-spreadsheet {
-  border-left: none;
+	border-left: none;
 }
-/* line 7, ../sass/_spreadsheet.scss */
-#m-chart-spreadsheet h2.hndle {
-  border-bottom: none;
-  border-left: 1px solid #cdd0d4;
+#m-chart-spreadsheet .postbox-header {
+	border-bottom: none;
 }
-/* line 13, ../sass/_spreadsheet.scss */
+#m-chart-spreadsheet .postbox-header h2.hndle {
+	border-bottom: none;
+	border-left: 1px solid #cdd0d4;
+}
 #m-chart-spreadsheet h3 {
-  border-bottom: none;
-  border-left: 1px solid #cdd0d4;
+	border-bottom: none;
+	border-left: 1px solid #cdd0d4;
 }
-/* line 18, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .handlediv {
-  height: 35px;
+	height: 35px;
 }
-/* line 22, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .inside {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
-/* line 27, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper {
-  border-bottom: none;
-  border-left: 1px solid #cdd0d4;
-  border-top: 1px solid #cdd0d4;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding-top: 7px;
-  white-space: nowrap;
+	border-bottom: none;
+	border-left: 1px solid #cdd0d4;
+	border-top: 1px solid #cdd0d4;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	padding-top: 7px;
+	white-space: nowrap;
 }
-/* line 36, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper.hide {
-  display: none;
+	display: none;
 }
-/* line 40, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .add-sheet {
-  color: #82878c;
-  float: left;
-  margin-bottom: 0;
-  margin-left: 7px;
-  text-decoration: none;
+	color: #82878c;
+	float: left;
+	margin-bottom: 0;
+	margin-left: 7px;
+	text-decoration: none;
 }
-/* line 47, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .add-sheet:hover {
-  color: #000000;
+	color: #000000;
 }
-/* line 51, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .add-sheet span {
-  line-height: 38px;
+	line-height: 38px;
 }
 @media (max-width: 782px) {
-  /* line 51, ../sass/_spreadsheet.scss */
-  #m-chart-spreadsheet .nav-tab-wrapper .add-sheet span {
-    line-height: 46px;
-  }
+	#m-chart-spreadsheet .nav-tab-wrapper .add-sheet span {
+		line-height: 46px;
+	}
 }
-/* line 60, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab {
-  display: inline-block;
-  float: none;
+	display: inline-block;
+	float: none;
 }
-/* line 64, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span {
-  color: #555555;
-  margin-top: 3px;
+	color: #555555;
+	margin-top: 3px;
 }
 @media (max-width: 782px) {
-  /* line 64, ../sass/_spreadsheet.scss */
-  #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span {
-    margin-top: 7px;
-  }
+	#m-chart-spreadsheet .nav-tab-wrapper .nav-tab span {
+		margin-top: 7px;
+	}
 }
-/* line 72, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span:hover {
-  color: #c80011;
+	color: #c80011;
 }
-/* line 77, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab input {
-  min-width: 30px;
+	min-width: 30px;
 }
-/* line 80, ../sass/_spreadsheet.scss */
-#m-chart-spreadsheet .nav-tab-wrapper .nav-tab input[disabled="disabled"] {
-  background: transparent;
-  border: 1px solid transparent;
-  box-shadow: none;
-  color: #555555;
-  -webkit-text-fill-color: #555555;
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab input[disabled=disabled] {
+	background: transparent;
+	border: 1px solid transparent;
+	box-shadow: none;
+	color: #555555;
+	-webkit-text-fill-color: #555555;
 }
-/* line 90, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active span {
-  color: #000000;
+	color: #000000;
 }
-/* line 93, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active span:hover {
-  color: #c80011;
+	color: #c80011;
 }
-/* line 99, ../sass/_spreadsheet.scss */
-#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active input[disabled="disabled"] {
-  color: #000000;
-  -webkit-text-fill-color: #000000;
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active input[disabled=disabled] {
+	color: #000000;
+	-webkit-text-fill-color: #000000;
 }
-/* line 106, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab:last-of-type {
-  margin-right: 10px;
+	margin-right: 10px;
 }
-/* line 111, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab.do-not-delete span {
-  display: none;
+	display: none;
 }
-/* line 118, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv {
-  background-color: #f5f5f5;
-  border-left: 1px solid #cdd0d4;
-  border-top: 1px solid #dddddd;
-  padding: 15px 10px 10px;
+	background-color: #f5f5f5;
+	border-left: 1px solid #cdd0d4;
+	border-top: 1px solid #dddddd;
+	padding: 15px 10px 10px;
 }
-/* line 4, ../sass/_global-mixins-and-variables.scss */
 #m-chart-spreadsheet #m-chart-csv::after {
-  clear: both;
-  content: '';
-  display: table;
+	clear: both;
+	content: "";
+	display: table;
 }
-/* line 125, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv::after {
-  clear: both;
+	clear: both;
 }
-/* line 129, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv .button {
-  margin-top: 6px;
+	margin-top: 6px;
 }
-/* line 132, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv .button.select {
-  margin-right: 10px;
+	margin-right: 10px;
 }
-/* line 136, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv .button.import {
-  float: left;
-  margin-right: 10px;
+	float: left;
+	margin-right: 10px;
 }
-/* line 143, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv div.import {
-  margin-right: 65px;
+	margin-right: 65px;
 }
-/* line 147, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv div.export {
-  float: right;
+	float: right;
 }
-/* line 152, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv .warning,
 #m-chart-spreadsheet #m-chart-csv .error {
-  color: #b00000;
+	color: #b00000;
 }
-/* line 157, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv .error,
 #m-chart-spreadsheet #m-chart-csv .in-progress {
-  margin: 10px 0 0 5px;
+	margin: 10px 0 0 5px;
 }
-/* line 161, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv .error:not(.hide),
 #m-chart-spreadsheet #m-chart-csv .in-progress:not(.hide) {
-  display: inline-block;
+	display: inline-block;
 }
-/* line 167, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv a.dashicons {
-  color: #b8b8b8;
+	color: #b8b8b8;
 }
-/* line 170, ../sass/_spreadsheet.scss */
 #m-chart-spreadsheet #m-chart-csv a.dashicons:hover {
-  color: #b00000;
+	color: #b00000;
 }
 
-/* line 4, ../sass/_chart-settings.scss */
 #m-chart .inside {
-  padding: 0;
+	padding: 0;
 }
-/* line 7, ../sass/_chart-settings.scss */
 #m-chart .inside .m-chart-container {
-  padding: 7px 10px 10px;
+	padding: 7px 10px 10px;
 }
-/* line 11, ../sass/_chart-settings.scss */
 #m-chart .inside .settings {
-  background-color: #f5f5f5;
-  border-top: 1px solid #dddddd;
-  padding: 0 10px 10px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #dddddd;
+	padding: 0 10px 10px;
 }
-/* line 16, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row {
-  border-top: none;
-  padding: 0;
+	border-top: none;
+	padding: 0;
 }
-/* line 4, ../sass/_global-mixins-and-variables.scss */
 #m-chart .inside .settings .row::after {
-  clear: both;
-  content: '';
-  display: table;
+	clear: both;
+	content: "";
+	display: table;
 }
-/* line 21, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row p {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
-/* line 27, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.one p, #m-chart .inside .settings .row.two p {
-  float: left;
-  margin-left: 1%;
-  width: 49%;
+#m-chart .inside .settings .row.one p {
+	float: left;
+	margin-left: 1%;
+	width: 32%;
 }
-/* line 32, ../sass/_chart-settings.scss */
-#m-chart .inside .settings .row.one p:first-child, #m-chart .inside .settings .row.two p:first-child {
-  margin-left: 0;
+#m-chart .inside .settings .row.one p:first-child {
+	margin-left: 0;
 }
-/* line 40, ../sass/_chart-settings.scss */
+#m-chart .inside .settings .row.two p {
+	float: left;
+	margin-left: 1%;
+	width: 32%;
+}
+#m-chart .inside .settings .row.two p:first-child {
+	margin-left: 0;
+}
+#m-chart .inside .settings .row.two p.shared {
+	display: none;
+}
+#m-chart .inside .settings .row.two.show-shared p.shared {
+	display: block;
+}
 #m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.five p {
-  float: left;
-  width: 73%;
+	float: left;
+	width: 73%;
 }
-/* line 44, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.five p.units {
-  float: right;
-  width: 25%;
+	float: right;
+	width: 25%;
 }
-/* line 52, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.four p {
-  margin-top: 5px;
+	margin-top: 5px;
 }
-/* line 55, ../sass/_chart-settings.scss */
 #m-chart .inside .settings .row.four p label {
-  display: inline-block;
-  height: 23px;
+	display: inline-block;
+	height: 23px;
 }
-/* line 64, ../sass/_chart-settings.scss */
 #m-chart .inside .row {
-  border-top: 1px solid #dddddd;
-  padding: 0 10px 10px;
+	border-top: 1px solid #dddddd;
+	padding: 0 10px 10px;
 }
-/* line 4, ../sass/_global-mixins-and-variables.scss */
 #m-chart .inside .row::after {
-  clear: both;
-  content: '';
-  display: table;
+	clear: both;
+	content: "";
+	display: table;
 }
-/* line 70, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p {
-  float: right;
-  margin-bottom: 0;
-  width: 49%;
+	float: right;
+	margin-bottom: 0;
+	width: 49%;
 }
-/* line 75, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p:first-child {
-  float: left;
+	float: left;
 }
-/* line 79, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image {
-  position: relative;
+	position: relative;
 }
-/* line 82, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image em {
-  display: block;
-  margin-top: 5px;
+	display: block;
+	margin-top: 5px;
 }
-/* line 87, ../sass/_chart-settings.scss */
 #m-chart .inside .row.seven p.image .button {
-  min-height: 24px;
-  line-height: 21px;
-  position: absolute;
-  right: 2px;
-  top: 23px;
+	min-height: 24px;
+	line-height: 21px;
+	position: absolute;
+	right: 2px;
+	top: 23px;
 }
 @media screen and (max-width: 782px) {
-  /* line 96, ../sass/_chart-settings.scss */
-  #m-chart .inside .row.seven p.image .button {
-    min-height: 34px;
-    line-height: 31px;
-  }
+	#m-chart .inside .row.seven p.image .button {
+		min-height: 34px;
+		line-height: 31px;
+	}
 }
 
-/* line 3, ../sass/_settings.scss */
 #m-chart-settings-page span.description {
-  color: #666666;
+	color: #666666;
 }
 
-/* line 9, ../sass/_settings.scss */
 #m-chart-settings-error {
-  padding-left: 10px;
-  padding-right: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
+
+/*# sourceMappingURL=m-chart-admin.css.map */

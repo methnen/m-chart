@@ -1,7 +1,7 @@
 <?php
 $height = m_chart()->get_post_meta( $post_id, 'height' );
 
-if ( '' != $args['width'] ) {
+if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 	$width = ' width="' . absint( $args['width'] ) . '"';
 }
 ?>
@@ -14,7 +14,8 @@ if ( '' != $args['width'] ) {
 	var m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?> = {
 		chart_args: <?php echo $this->unicode_aware_stripslashes( json_encode( $this->library( 'chartjs' )->get_chart_args( $post_id, $args ) ) ); ?>,
 		post_id: <?php echo absint( $post_id ); ?>,
-		instance: <?php echo absint( $this->instance ); ?>
+		instance: <?php echo absint( $this->instance ); ?>,
+		render_1: true
 	};
 
 	<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
@@ -29,6 +30,14 @@ if ( '' != $args['width'] ) {
 
 			this.chart_args.options.animation = {
 				onComplete: function() {
+					// This deals with an issue in Chart.js 3.1.0 where onComplete can run too many times
+					// We only want to trigger on the first render anyway so we'll just check
+					if ( false === m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_1 ) {
+						return;
+					}
+
+					m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_1 = false;
+
 					$( '.m-chart' ).trigger({
 						type:     'render_done',
 						post_id:  m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.post_id,

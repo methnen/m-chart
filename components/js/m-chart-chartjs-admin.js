@@ -1,14 +1,11 @@
-var m_chart_chartjs_admin = {
-	image_step: 1
-};
+var m_chart_chartjs_admin = {};
 
 (function( $ ) {
 	'use strict';
 
 	// Start things up
 	m_chart_chartjs_admin.init = function() {
-		// Hide the subtitle and $y_min_value fields
-		m_chart_admin.$y_min_value.hide();
+		// Hide the subtitle field
 		m_chart_admin.$subtitle_input.hide();
 
 		// Only show fields/inputs that are appropriate for the current chart type
@@ -34,70 +31,98 @@ var m_chart_chartjs_admin = {
 		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
 		$chart_meta_box.find( '.row.two' ).addClass( 'show-shared' );
 
-		// Chart.js will never need the tabs
-		$spreadsheet_tabs.addClass( 'hide' );
+		if (
+			   'area' === chart_type
+			|| 'column' === chart_type
+			|| 'bar' === chart_type
+		) {
+			$spreadsheet_tabs.addClass( 'hide' );
+		}
 
-		if ( 'pie' === chart_type ) {
+		if (
+			   'column' === chart_type
+			|| 'bar' === chart_type
+		) {
+			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			// In Chart.js this behavior appears to be a default and I can't seem to override it
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
+		}
+
+		if (
+			   'pie' === chart_type
+			|| 'polar' === chart_type
+		) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
+		}
+
+		if (
+			   'scatter' === chart_type
+			|| 'bubble' === chart_type
+		) {
+			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
+			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
+			$spreadsheet_tabs.removeClass( 'hide' );
+		}
+
+		if ( 'polar' === chart_type ) {
+			$spreadsheet_tabs.addClass( 'hide' );
+		}
+
+		if (
+			   'radar' === chart_type
+			|| 'radar-area' === chart_type
+		) {
+			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
+			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 	};
 
 	// Generate a PNG image out of a rendered chart
 	m_chart_chartjs_admin.generate_image_from_chart = function( event ) {
+		m_chart_admin.form_submission(false);
+
 		var $canvas_source = document.getElementById( 'm-chart-' + event.post_id + '-' + event.instance );
 		var $target_canvas = $( '#m-chart-canvas-render-' + event.post_id );
 		var target_context = document.getElementById( 'm-chart-canvas-render-' + event.post_id ).getContext('2d');
 
-		// Need to do this in steps because we have to resize the chart which triggers a redraw thus a potential infinite loop
+		var chart_width  = 600;
+		var chart_height = $( document.getElementById( 'm-chart-height' ) ).val();
 
-		if ( 1 === m_chart_chartjs_admin.image_step ) {
-			// Set some constraints on the chart to get it into the a good size for image generation
-			$target_canvas.attr( 'width', 1200 ).attr( 'height', $canvas_source.height );
-			$( '.m-chart-container' ).attr( 'width', 1200 ).css( 'width', 600 );
+		var image_width  = chart_width * m_chart_admin.image_multiplier;
+		var image_height = chart_height * m_chart_admin.image_multiplier;
 
-			// Need to force the chart to resize
-			window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
+		// Set some constraints on the chart to get it into the right size for image generation
+		$( '.m-chart-container' ).attr( 'width', chart_width ).css( 'width', chart_width + 'px' ).css( 'height', chart_height + 'px' );
 
-			// Iterate the step count
-			m_chart_chartjs_admin.image_step++;
-		}
+		// Resize the chart
+		window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
 
-		if ( 2 === m_chart_chartjs_admin.image_step ) {
-			// Give the target canvas a white background
-			target_context.fillStyle = 'white';
-			target_context.fillRect(0, 0, 1200, $canvas_source.height);
+		// Set the background to a solid white color (we don't need to reset this explicitly as it's undone by the later chart.resize() call)
+		var $chart_context = window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.canvas.getContext( '2d' );
 
-			// Copy the chart over to a new canvas object
-			target_context.drawImage( $canvas_source, 0, 0, 1200, $canvas_source.height );
+		$chart_context.save();
+		$chart_context.globalCompositeOperation = 'destination-over';
+		$chart_context.fillStyle = 'white';
+		$chart_context.fillRect(0, 0, window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.width, window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.height );
+		$chart_context.restore();
 
-			// Iterate the step count
-			m_chart_chartjs_admin.image_step++;
-		}
+		// Get a PNG of the chart
+		var img = window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.toBase64Image( 'image/png', 1 );
 
-		if ( 3 === m_chart_chartjs_admin.image_step ) {
-			$( '.m-chart-container' ).removeAttr( 'width' ).css( 'width', '' );
+		// Remove the restraints
+		$( '.m-chart-container' ).removeAttr( 'width' ).css( 'width', '' ).css( 'height', '' );
 
-			// Put the chart back into it's normal state
-			window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
+		// Put the chart back into it's normal state
+		window[ 'm_chart_chartjs_' + event.post_id + '_1' ].chart.resize();
 
-			// Iterate the step count
-			m_chart_chartjs_admin.image_step++;
-		}
+		// Save the image string to the text area so we can save it on update/publish
+		$( document.getElementById( 'm-chart-img' ) ).val( img );
 
-		if ( 4 === m_chart_chartjs_admin.image_step ) {
-			// Get the a PNG of the chart
-			var img = $target_canvas.get(0).toDataURL( 'image/png' );
-
-			// Save the image string to the text area so we can save it on update/publish
-			$( document.getElementById( 'm-chart-img' ) ).val( img );
-
-			// Allow form submission now that we've got a valid img value set
-			m_chart_admin.form_submission( true );
-
-			// Set the step count back to 1
-			m_chart_chartjs_admin.image_step = 1;
-		}
+		// Allow form submission now that we've got a valid img value set
+		m_chart_admin.form_submission( true );
 	};
+
 
 	// Refresh the chart arguments
 	m_chart_chartjs_admin.refresh_chart = function( event ) {
@@ -115,9 +140,36 @@ var m_chart_chartjs_admin = {
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.data = event.response.data.data;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.config.type = event.response.data.type;
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.options = event.response.data.options;
+
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart_args.value_prefix = event.response.data.value_prefix;
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart_args.value_suffix = event.response.data.value_suffix;
+
+		// Height is set via the container
+		var height = $( document.getElementById( 'm-chart-height' ) ).val();
+		$( '.m-chart-container' ).attr( 'height', height ).css( 'height', height );
+
+		// This deals with an issue in Chart.js 3.1.0 where onComplete can run too many times
+		// We only want to trigger on the first render anyway so we'll just check every time
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 = true;
+
+		$( '.m-chart' ).trigger({
+			type:     'render_start',
+			post_id:  m_chart_admin.post_id,
+			instance: 1
+		});
+
+		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
+
 		// Need to make sure the onComplete callback gets reattached on chart refreshes
+		// This is intentionally done after the chart.update() line above
 		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.options.animation = {
 			onComplete: function() {
+				if ( false === window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 ) {
+					return;
+				}
+
+				window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].render_1 = false;
+
 				$( '.m-chart' ).trigger({
 					type:     'render_done',
 					post_id:  m_chart_admin.post_id,
@@ -125,12 +177,6 @@ var m_chart_chartjs_admin = {
 				});
 			}
 		};
-
-		// Height is set via the container
-		var height = $( document.getElementById( 'm-chart-height' ) ).val();
-		$( '.m-chart-container' ).attr( 'height', height* 2 ).css( 'height', height );
-
-		window[ 'm_chart_chartjs_' + m_chart_admin.post_id + '_1' ].chart.update();
 
 		if ( 'no-images' === m_chart_admin.performance ) {
 			m_chart_admin.form_submission( true );
