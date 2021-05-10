@@ -178,6 +178,7 @@ class M_Chart_Chartjs {
 				'elements' => array(
 					'point' => array(
 						'hoverRadius' => 7,
+						'hitRadius'   => 13,
 					),
 				),
 				'responsive' => true,
