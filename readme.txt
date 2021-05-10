@@ -37,7 +37,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.8 =
 
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
-* Chart.js can now use[themes](https://github.com/methnen/m-chart/wiki/Themes)
+* Chart.js can now use [themes](https://github.com/methnen/m-chart/wiki/Themes)
 	* Default themes:
 		* Chart.js (Default)
 			* Based on the Chart.js homepage colors
