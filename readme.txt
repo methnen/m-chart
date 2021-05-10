@@ -58,7 +58,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Fixed an issue where chart didn't update when changes were made to a new spreadsheet
 * Fixed an issue where axis units weren't displayed in Chart.js when there was no axis title
 * Fixed an issue where the auto generated chart images could end up distorted
-* Fixed an issue where the author generated chart images were blurry when using Chart.js
+* Fixed an issue where the auto generated chart images were blurry when using Chart.js
 * Removed Dark Mode plugin support
 	* The scope/purpose of this plugin changed drastically
 * Removed Shortcake shortcode ui
