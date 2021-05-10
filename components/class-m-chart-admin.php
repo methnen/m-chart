@@ -16,7 +16,6 @@ class M_Chart_Admin {
 		$this->plugin_url = m_chart()->plugin_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		add_action( 'doing_dark_mode', array( $this, 'doing_dark_mode' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'current_screen', array( $this, 'current_screen' ) );
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
@@ -24,6 +23,9 @@ class M_Chart_Admin {
 		add_action( 'wp_ajax_m_chart_get_chart_args', array( $this, 'ajax_get_chart_args' ) );
 		add_action( 'wp_ajax_m_chart_import_csv', array( $this, 'ajax_import_csv' ) );
 		add_action( 'edit_form_before_permalink', array( $this, 'edit_form_before_permalink' ) );
+		add_action( 'manage_' . m_chart()->slug . '_posts_custom_column', array( $this, 'manage_posts_custom_column' ), 10, 2 );
+
+		add_filter( 'manage_' . m_chart()->slug . '_posts_columns', array( $this, 'manage_posts_columns' ) );
 	}
 
 	/**
@@ -33,38 +35,6 @@ class M_Chart_Admin {
 		$this->save_settings();
 
 		add_action( 'admin_notices', array( $this, 'library_warning' ) );
-
-		if ( ! function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
-			return;
-		}
-
-		shortcode_ui_register_for_shortcode(
-			'chart',
-			array(
-				'label'         => esc_html__( 'Charts', 'm-chart' ),
-				'listItemImage' => 'dashicons-chart-pie',
-				'attrs'         => array(
-					array(
-						'label' => esc_html__( 'Chart', 'm-chart' ),
-						'attr'  => 'id',
-						'type'  => 'post_select',
-						'query' => array(
-							'post_type'   => m_chart()->slug,
-							'post_status' => 'publish',
-						),
-					),
-				),
-			)
-		);
-	}
-
-	public function doing_dark_mode( $user_id ) {
-		wp_enqueue_style(
-			'm-chart-admin-dark-mode',
-			$this->plugin_url . '/components/css/m-chart-admin-dark-mode.css',
-			array( 'dark_mode', 'm-chart-admin' ),
-			m_chart()->version
-		);
 	}
 
 	/**
@@ -265,21 +235,11 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
-			// Highcharts export.js is required for the image generation
-			wp_enqueue_script( 'highcharts-exporting' );
-
-			// canvg and rgbcolo are useful for SVG -> Canvas conversions
-			wp_enqueue_script(
-				'rgbcolor',
-				$this->plugin_url . '/components/external/canvg/rgbcolor.js',
-				array(),
-				m_chart()->version
-			);
-
+			// canvg is useful for SVG -> Canvas conversions
 			wp_enqueue_script(
 				'canvg',
-				$this->plugin_url . '/components/external/canvg/canvg.js',
-				array( 'rgbcolor' ),
+				$this->plugin_url . '/components/external/canvg/umd.js',
+				array(),
 				m_chart()->version
 			);
 
@@ -319,6 +279,7 @@ class M_Chart_Admin {
 					'performance'             => m_chart()->get_settings( 'performance' ),
 					'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
 					'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
+					'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
 					'library'                 => $library,
 					'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
 					'delete_comfirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
@@ -392,6 +353,9 @@ class M_Chart_Admin {
 	 * @param object the WP post object as returned by the metabox API
 	 */
 	public function chart_meta_box( $post ) {
+		// Force an instance of 1 since we NEVER show more than one chart at a time inside the admin panel
+		m_chart()->instance = 1;
+
 		$chart     = m_chart()->get_chart( $post->ID );
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 		$image     = m_chart()->get_chart_image( $post->ID );
@@ -439,6 +403,72 @@ class M_Chart_Admin {
 
 		require_once __DIR__ . '/templates/subtitle-field.php';
 		require_once __DIR__ . '/templates/handlebars.php';
+	}
+
+	/**
+	 * Display some additional information about a chart
+	 *
+	 * @param string the name of the custom column being displayed
+	 * @param string the $post_id of the post being displayed in this row
+	 */
+	public function manage_posts_custom_column( $column, $post_id ) {
+		if ( m_chart()->slug . '-type' != $column && m_chart()->slug . '-library' != $column ) {
+			return;
+		}
+
+		$library = m_chart()->get_post_meta( $post_id, 'library' );
+
+		if ( m_chart()->library( $library )->library != $library ) {
+			?>
+			<span aria-hidden="true">—</span>
+			<span class="screen-reader-text"><?php echo esc_html__( 'Library not found', 'm-chart' ); ?></span>
+			<?php
+			return;
+		}
+
+		if ( m_chart()->slug . '-type' == $column ) {
+			$type      = m_chart()->get_post_meta( $post_id, 'type' );
+			$type_name = m_chart()->library( $library )->type_option_names[ $type ];
+			?>
+			<span class="type <?php echo esc_attr( $type ) ?>" title="<?php echo esc_attr( $type_name ); ?>">
+				<?php echo esc_html( $type_name ); ?>
+			</span>
+			<?php
+		}
+
+		if ( m_chart()->slug . '-library' == $column ) {
+			$library_name = m_chart()->library( $library )->library_name;
+			?>
+			<span class="library <?php echo esc_attr( $library ) ?>" title="<?php echo esc_attr( $library_name ); ?>">
+				<?php echo esc_html( $library_name ); ?>
+			</span>
+			<?php
+		}
+	}
+
+	/**
+	 * Add our custom column to the array of columns for charts
+	 *
+	 * @param array the array of columns
+	 *
+	 * @return array array of columns with the custom column added
+	 */
+	public function manage_posts_columns( $columns ) {
+		$new_columns = array();
+
+		foreach ( $columns as $column => $name ) {
+			$new_columns[ $column ] = $name;
+
+			if ( 'author' == $column || 'coauthors' == $column ) {
+				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
+
+				if ( 'yes' == m_chart()->get_settings( 'show_library' ) ) {
+					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
+				}
+			}
+		}
+
+		return $new_columns;
 	}
 
 	/**

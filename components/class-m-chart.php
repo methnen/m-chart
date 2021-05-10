@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.7.11';
+	public $version = '1.8';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -40,8 +40,10 @@ class M_Chart {
 	public $is_iframe = false;
 	public $instance = 1;
 	public $settings = array(
-		'library'       => 'chartjs',
-		'performance'   => 'default',
+		'library'          => 'chartjs',
+		'show_library'     => 'no',
+		'performance'      => 'default',
+		'image_multiplier' => '2',
 		'embeds'        => '',
 		'default_theme' => '_default',
 		'lang_settings' => array(
@@ -220,9 +222,16 @@ class M_Chart {
 
 		// Register the graphing library scripts
 		wp_register_script(
-			'chartjs',
-			$this->plugin_url . '/components/external/chartjs/chart-bundle.js',
+			'chartjs-helpers',
+			$this->plugin_url . '/components/js/m-chart-chartjs-helpers.js',
 			array( 'jquery' ),
+			$this->version
+		);
+
+		wp_register_script(
+			'chartjs',
+			$this->plugin_url . '/components/external/chartjs/chart.js',
+			array( 'jquery', 'chartjs-helpers' ),
 			$this->version
 		);
 
@@ -535,7 +544,7 @@ class M_Chart {
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
 		ob_start();
-		require apply_filters( 'm_chart_chart_template', $template, $library );
+		require apply_filters( 'm_chart_chart_template', $template, $library, $post_id );
 		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
 		return ob_get_clean();
@@ -561,8 +570,10 @@ class M_Chart {
 
 			m_chart()->parse()->parse_data( $data, $post_meta['parse_in'] );
 
+			$template = __DIR__ . '/templates/' . $library . '-chart.php';
+
 			ob_start();
-			require __DIR__ . '/templates/table.php';
+			require apply_filters( 'm_chart_table_template', $template, $library, $post->ID );
 			$table .= ob_get_clean();
 		}
 
@@ -610,7 +621,7 @@ class M_Chart {
 	 * @return array an array of image values url, width, height, etc...
 	 */
 	public function m_chart_get_chart_image_tag( $img, $post_id ) {
-		if ( ! $img ) {
+		if ( $img ) {
 			return $img;
 		}
 
