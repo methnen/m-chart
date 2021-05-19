@@ -38,6 +38,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.9 ###
+
+* Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), [multi-series pie](https://github.com/methnen/m-chart/wiki/Types-of-charts#multi-series-pie), and [donut](https://github.com/methnen/m-chart/wiki/Types-of-charts#donut) charts when using Chart.js
+* Updated Chart.js to the latest stable version (3.2.1)
+
 ### 1.8 ###
 
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
