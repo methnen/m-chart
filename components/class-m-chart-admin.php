@@ -213,13 +213,6 @@ class M_Chart_Admin {
 			);
 
 			// Handsontable
-			wp_enqueue_style(
-				'handsontable',
-				$this->plugin_url . '/components/external/handsontable/handsontable.css',
-				array(),
-				m_chart()->version
-			);
-
 			wp_enqueue_script(
 				'handsontable',
 				$this->plugin_url . '/components/external/handsontable/handsontable.js',
@@ -247,7 +240,7 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'jquery' ),
+				array( 'jquery', 'handsontable', 'handlebars' ),
 				m_chart()->version
 			);
 
