@@ -2,7 +2,7 @@
 Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
-Tested up to: 5.7.1
+Tested up to: 5.7.2
 Stable tag: 1.8
 License: MIT
 
@@ -33,6 +33,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.9 =
+
+* Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), [multi-series pie](https://github.com/methnen/m-chart/wiki/Types-of-charts#multi-series-pie), and [donut](https://github.com/methnen/m-chart/wiki/Types-of-charts#donut) charts when using Chart.js
+* Updated Chart.js to the latest stable version (3.2.1)
 
 = 1.8 =
 

@@ -34,14 +34,18 @@ var m_chart_chartjs_admin = {};
 		if (
 			   'area' === chart_type
 			|| 'column' === chart_type
+			|| 'stacked-column' === chart_type
 			|| 'bar' === chart_type
+			|| 'stacked-bar' === chart_type
 		) {
 			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
 		if (
 			   'column' === chart_type
+			|| 'stacked-column' === chart_type
 			|| 'bar' === chart_type
+			|| 'stacked-bar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
 			// In Chart.js this behavior appears to be a default and I can't seem to override it
@@ -54,6 +58,10 @@ var m_chart_chartjs_admin = {};
 		) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
 			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
+		}
+
+		if ( 'pie' === chart_type ) {
+			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 
 		if (

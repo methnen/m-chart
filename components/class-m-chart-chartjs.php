@@ -14,8 +14,12 @@ class M_Chart_Chartjs {
 		'spline',
 		'area',
 		'column',
+		'stacked-column',
 		'bar',
+		'stacked-bar',
 		'pie',
+		'doughnut',
+		'polar',
 		'scatter',
 		'bubble',
 		'radar',
@@ -61,17 +65,20 @@ class M_Chart_Chartjs {
 		),
 	);
 	public $chart_types = array(
-		'column'     => 'bar',
-		'bar'        => 'bar',
-		'pie'        => 'pie',
-		'line'       => 'line',
-		'spline'     => 'line',
-		'area'       => 'line',
-		'scatter'    => 'scatter',
-		'bubble'     => 'bubble',
-		'radar'      => 'radar',
-		'radar-area' => 'radar',
-		'polar'      => 'polarArea',
+		'column'         => 'bar',
+		'stacked-column' => 'bar',
+		'bar'            => 'bar',
+		'stacked-bar'    => 'bar',
+		'pie'            => 'pie',
+		'doughnut'       => 'doughnut',
+		'line'           => 'line',
+		'spline'         => 'line',
+		'area'           => 'line',
+		'scatter'        => 'scatter',
+		'bubble'         => 'bubble',
+		'radar'          => 'radar',
+		'radar-area'     => 'radar',
+		'polar'          => 'polarArea',
 	);
 
 	/**
@@ -87,17 +94,20 @@ class M_Chart_Chartjs {
 		);
 
 		$this->type_option_names = array(
-			'line'       => esc_html__( 'Line', 'm-chart' ),
-			'spline'     => esc_html__( 'Spline', 'm-chart' ),
-			'area'       => esc_html__( 'Area', 'm-chart' ),
-			'column'     => esc_html__( 'Column', 'm-chart' ),
-			'bar'        => esc_html__( 'Bar', 'm-chart' ),
-			'pie'        => esc_html__( 'Pie', 'm-chart' ),
-			'scatter'    => esc_html__( 'Scatter', 'm-chart' ),
-			'bubble'     => esc_html__( 'Bubble', 'm-chart' ),
-			'radar'      => esc_html__( 'Radar', 'm-chart' ),
-			'radar-area' => esc_html__( 'Radar Area', 'm-chart' ),
-			'polar'      => esc_html__( 'Polar', 'm-chart' ),
+			'line'           => esc_html__( 'Line', 'm-chart' ),
+			'spline'         => esc_html__( 'Spline', 'm-chart' ),
+			'area'           => esc_html__( 'Area', 'm-chart' ),
+			'column'         => esc_html__( 'Column', 'm-chart' ),
+			'stacked-column' => esc_html__( 'Stacked Column', 'm-chart' ),
+			'bar'            => esc_html__( 'Bar', 'm-chart' ),
+			'stacked-bar'    => esc_html__( 'Stacked Bar', 'm-chart' ),
+			'pie'            => esc_html__( 'Pie', 'm-chart' ),
+			'doughnut'       => esc_html__( 'Doughnut', 'm-chart' ),
+			'scatter'        => esc_html__( 'Scatter', 'm-chart' ),
+			'bubble'         => esc_html__( 'Bubble', 'm-chart' ),
+			'radar'          => esc_html__( 'Radar', 'm-chart' ),
+			'radar-area'     => esc_html__( 'Radar Area', 'm-chart' ),
+			'polar'          => esc_html__( 'Polar', 'm-chart' ),
 		);
 	}
 
@@ -193,6 +203,7 @@ class M_Chart_Chartjs {
 
 		if (
 			   'pie' != $chart_args['type']
+			&& 'doughnut' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 		) {
@@ -227,22 +238,35 @@ class M_Chart_Chartjs {
 
 		if (
 			   'pie' != $chart_args['type']
+			&& 'doughnut' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 		) {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
 
-		if ( 'bar' == $this->post_meta['type'] ) {
+		if ( 
+			   'bar' == $this->post_meta['type']
+			|| 'stacked-bar' == $this->post_meta['type']
+		) {
 			$chart_args['options']['indexAxis'] = 'y';
 			$chart_args['options']['scales']['y']['grid']['display'] = false;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
 		} elseif (
 			   'pie' != $chart_args['type']
+			&& 'doughnut' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 		) {
 			$chart_args['options']['scales']['x']['grid']['display'] = false;
+		}
+
+		if ( 
+			   'stacked-bar' == $this->post_meta['type']
+			|| 'stacked-column' == $this->post_meta['type']
+		) {
+			$chart_args['options']['scales']['x']['stacked'] = true;
+			$chart_args['options']['scales']['y']['stacked'] = true;
 		}
 
 		$chart_args = $this->add_data_sets( $chart_args );
@@ -291,7 +315,10 @@ class M_Chart_Chartjs {
 			}
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
-			&& 'pie' == $chart_args['type']
+			&& (
+			      'pie' == $chart_args['type']
+			   || 'doughnut' == $chart_args['type']
+			)
 		) {
 			foreach ( $chart_args['data']['datasets'][0]['data'] as $key => $data ) {
 				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key % $color_count ];
@@ -465,6 +492,7 @@ class M_Chart_Chartjs {
 
 		if (
 			   'pie' == $this->post_meta['type']
+			|| 'doughnut' == $chart_args['type']
 			|| 'polar' == $this->post_meta['type']
 			|| 'both' != m_chart()->parse()->value_labels_position
    			&& (
