@@ -155,7 +155,7 @@ class M_Chart_Chartjs {
 					// @TODO Figure out how to support subtitles in Chart.js
 				    'title' => array(
 				    	'display'   => true,
-						'text'      => $this->esc_title( apply_filters( 'the_title', $this->post->post_title ) ),
+						'text'      => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
 						'font' => array(
 							'size'  => 21,
 							'weight' => 'normal',

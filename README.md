@@ -2,8 +2,8 @@
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 5.7.1  
-**Stable tag:** 1.8  
+**Tested up to:** 5.7.2  
+**Stable tag:** 1.8.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -37,6 +37,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.8.1 ###
+
+* Fixed an issue where not all of the arguments were being fed to functions attached to the_title filter hook
+* Fixed an issue where handlebars wasn't always enqueued when needed
 
 ### 1.8 ###
 
