@@ -38,6 +38,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.8.1 ###
+
+* Fixed an issue where not all of the arguments were being fed to functions attached to the_title filter hook
+* Fixed an issue where handlebars wasn't always enqueued when needed
+
 ### 1.8 ###
 
 * Added support for [spline](https://github.com/methnen/m-chart/wiki/Types-of-charts#spline), [area](https://github.com/methnen/m-chart/wiki/Types-of-charts#area), [scatter](https://github.com/methnen/m-chart/wiki/Types-of-charts#scatter), [bubble](https://github.com/methnen/m-chart/wiki/Types-of-charts#bubble), [radar](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar), [radar area](https://github.com/methnen/m-chart/wiki/Types-of-charts#radar-area), and [polar](https://github.com/methnen/m-chart/wiki/Types-of-charts#polar) charts when using Chart.js
