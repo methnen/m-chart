@@ -1,4 +1,9 @@
-var m_chart_chartjs_helpers = {};
+var m_chart_chartjs_helpers = {
+	number_format_locale: 'en-US',
+	number_format_options: {
+		maximumFractionDigits: 2,
+	}
+};
 
 (function( $ ) {
 	'use strict';
@@ -37,6 +42,10 @@ var m_chart_chartjs_helpers = {};
 	                }
 				}
 			}
+			
+			window[chart_object].chart_args.options.plugins.datalabels.formatter = function( label ) {
+				return Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( label );
+			};
 		});
 	};
 
@@ -63,9 +72,9 @@ var m_chart_chartjs_helpers = {};
 	m_chart_chartjs_helpers.bubble_chart_tooltip_label = function( item, type, prefix, suffix ) {
 		var tooltip_label = [
 			item.raw.label,
-			item.chart.data.labels[0] + ': ' + new Intl.NumberFormat( 'en-US' ).format( item.parsed.x ),
-			item.chart.data.labels[1] + ': ' + new Intl.NumberFormat( 'en-US' ).format( item.parsed.y ),
-			item.chart.data.labels[2] + ': ' + new Intl.NumberFormat( 'en-US' ).format( item.raw.original),
+			item.chart.data.labels[0] + ': ' + new Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( item.parsed.x ),
+			item.chart.data.labels[1] + ': ' + new Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( item.parsed.y ),
+			item.chart.data.labels[2] + ': ' + new Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( item.raw.original),
 		];
 
 		return tooltip_label;
@@ -74,8 +83,8 @@ var m_chart_chartjs_helpers = {};
 	m_chart_chartjs_helpers.scatter_chart_tooltip_label = function( item, type, prefix, suffix ) {
 		var tooltip_label = [
 			item.dataset.label,
-			item.chart.data.labels[0] + ': ' + new Intl.NumberFormat( 'en-US' ).format( item.parsed.x ),
-			item.chart.data.labels[1] + ': ' + new Intl.NumberFormat( 'en-US' ).format( item.parsed.y ),
+			item.chart.data.labels[0] + ': ' + new Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( item.parsed.x ),
+			item.chart.data.labels[1] + ': ' + new Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( item.parsed.y ),
 		];
 
 		return tooltip_label;
@@ -108,7 +117,7 @@ var m_chart_chartjs_helpers = {};
 			label += ': ';
 		}
 
-		var tooltip_label = label + prefix + item.formattedValue + suffix;
+		var tooltip_label = label + prefix + new Intl.NumberFormat( m_chart_chartjs_helpers.number_format_locale, m_chart_chartjs_helpers.number_format_options ).format( item.formattedValue ) + suffix;
 
 		return tooltip_label;
 	};

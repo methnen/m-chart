@@ -36,8 +36,15 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.9 =
 
-* Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), [multi-series pie](https://github.com/methnen/m-chart/wiki/Types-of-charts#multi-series-pie), and [donut](https://github.com/methnen/m-chart/wiki/Types-of-charts#donut) charts when using Chart.js
+* Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), and [donut](https://github.com/methnen/m-chart/wiki/Types-of-charts#donut) charts when using Chart.js
+* Added support for labels when using Chart.js
+* Fixed an issue where double quotes in a label could cause Javascript errors
 * Updated Chart.js to the latest stable version (3.2.1)
+
+= 1.8.1 = 
+
+* Fixed an issue where not all of the arguments were being fed to functions attached to the_title filter hook
+* Fixed an issue where handlebars wasn't always enqueued when needed
 
 = 1.8 =
 

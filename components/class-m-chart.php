@@ -234,6 +234,13 @@ class M_Chart {
 			array( 'jquery', 'chartjs-helpers' ),
 			$this->version
 		);
+		
+		wp_register_script(
+			'chartjs-datalabels',
+			$this->plugin_url . '/components/external/chartjs/chartjs-plugin-datalabels.js',
+			array( 'jquery', 'chartjs', 'chartjs-helpers' ),
+			$this->version
+		);
 
 		// jQuery needs to be in the header since the charts are inline
 		wp_enqueue_script( 'jquery', false, array(), false, false );

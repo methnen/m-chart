@@ -276,6 +276,9 @@
 #m-chart .inside .settings .row.two p.shared {
 	display: none;
 }
+#m-chart .inside .settings .row.two.show-shared p {
+	width: 24%;
+}
 #m-chart .inside .settings .row.two.show-shared p.shared {
 	display: block;
 }
@@ -293,6 +296,13 @@
 #m-chart .inside .settings .row.four p label {
 	display: inline-block;
 	height: 23px;
+}
+#m-chart .inside .settings .row.six p {
+	float: right;
+	width: 49%;
+}
+#m-chart .inside .settings .row.six p:first-child {
+	float: left;
 }
 #m-chart .inside .row {
 	border-top: 1px solid #dddddd;

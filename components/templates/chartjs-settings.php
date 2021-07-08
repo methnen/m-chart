@@ -54,6 +54,13 @@ $parse_option_names = array(
 				?>
 			</select>
 		</p>
+		<p class="labels">
+			&nbsp;<br />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'labels' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'labels' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'labels' ) ); ?>" value="1"<?php checked( $post_meta['labels'], true ); ?>/>
+				<?php esc_html_e( 'Show labels', 'm-chart' ); ?>
+			</label>
+		</p>
 		<p class="legend">
 			&nbsp;<br />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'legend' ) ); ?>">
@@ -133,6 +140,16 @@ $parse_option_names = array(
 				}
 				?>
 			</select>
+		</p>
+	</div>
+	<div class="row six">
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'source' ) ); ?>"><?php esc_html_e( 'Source', 'm-chart' ); ?></label><br />
+			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'source' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'source' ) ); ?>" value="<?php echo esc_attr( $post_meta['source'] ); ?>" style="width: 100%;" placeholder="Name of the source of this data" />
+		</p>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>"><?php esc_html_e( 'Source URL', 'm-chart' ); ?></label><br />
+			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'source_url' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>" value="<?php echo esc_attr( $post_meta['source_url'] ); ?>" style="width: 100%;" placeholder="URL to the source of this data" />
 		</p>
 	</div>
 </div>
