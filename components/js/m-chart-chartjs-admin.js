@@ -5,9 +5,6 @@ var m_chart_chartjs_admin = {};
 
 	// Start things up
 	m_chart_chartjs_admin.init = function() {
-		// Hide the subtitle field
-		m_chart_admin.$subtitle_input.hide();
-
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
 		$chart_type_select.on( 'load, change', this.handle_chart_type );
@@ -58,10 +55,6 @@ var m_chart_chartjs_admin = {};
 		) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
 			$chart_meta_box.find( '.row.two' ).removeClass( 'show-shared' );
-		}
-
-		if ( 'pie' === chart_type ) {
-			$spreadsheet_tabs.removeClass( 'hide' );
 		}
 
 		if (

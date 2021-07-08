@@ -51,6 +51,8 @@
 
 					&.show-shared {
 						p {
+							width: 24%;
+							
 							&.shared {
 								display: block;
 							}
@@ -78,6 +80,17 @@
 						label {
 							display: inline-block;
 							height: 23px;
+						}
+					}
+				}
+				
+				&.six {
+					p {
+						float: right;
+						width: 49%;
+
+						&:first-child {
+							float: left;
 						}
 					}
 				}

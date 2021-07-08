@@ -86,6 +86,7 @@ class M_Chart_Chartjs {
 	 */
 	public function __construct() {
 		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
+		add_filter( 'm_chart_iframe_scripts', array( $this, 'm_chart_iframe_scripts' ), 10, 2 );
 
 		$this->theme_directories = array(
 			get_stylesheet_directory() . '/m-chart-chartjs-themes/', // Child theme
@@ -127,6 +128,9 @@ class M_Chart_Chartjs {
 		}
 
 		$this->post_meta = m_chart()->get_post_meta( $this->post->ID );
+		
+		// Enqueue Chart.js plugins
+		wp_enqueue_script( 'chartjs-datalabels' );
 	}
 
 	/**
@@ -170,6 +174,9 @@ class M_Chart_Chartjs {
 							'size'  => 21,
 							'weight' => 'normal',
 						),
+						'padding' => array(
+							'bottom' => 15,
+						),
 				    ),
 					'legend' => array(
 						'display'  => $this->post_meta['legend'] ? true : false,
@@ -195,6 +202,23 @@ class M_Chart_Chartjs {
 				'maintainAspectRatio' => false,
 			),
 		);
+		
+		// Subtitles are handled by a plugin so we have to conditionally set these values
+		if ( '' != $this->post_meta['subtitle'] ) {
+			$chart_args['options']['plugins']['title']['padding']['bottom'] = 10;
+			
+		    $chart_args['options']['plugins']['subtitle'] = array(
+		    	'display'   => true,
+				'text'      => $this->esc_title( $this->post_meta['subtitle'] ),
+				'font' => array(
+					'size'  => 18,
+					'weight' => 'normal',
+				),
+				'padding' => array(
+					'bottom' => 15,
+				),
+			);
+		}
 
 		// If we're in the admin panel we need to bump up the devicePixelRatio to get a better image
 		if ( is_admin() ) {        
@@ -271,6 +295,12 @@ class M_Chart_Chartjs {
 
 		$chart_args = $this->add_data_sets( $chart_args );
 
+		// This doesn't do anything unless the datalabels plugin is active but we need to set it later
+		//$chart_args['data']['datasets']['datalabels'] = array(
+		//	'align'  => 'end',
+		//	'anchor' => 'end',
+		//);
+
 		// Add prefix/suffix if appropriate
 		$chart_args['value_prefix'] = m_chart()->parse()->data_prefix;
 		$chart_args['value_suffix'] = m_chart()->parse()->data_suffix;
@@ -312,6 +342,23 @@ class M_Chart_Chartjs {
 		) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % $color_count ];
+				
+				if ( true == $this->post_meta['labels'] ) {	
+					if (
+						   'stacked-column' == $this->post_meta['type']
+						|| 'stacked-bar' == $this->post_meta['type']
+					) {
+						$chart_args['data']['datasets'][ $key ]['datalabels'] = array(
+							'align'  => 'center',
+							'anchor' => 'center',
+						);
+					} else {
+						$chart_args['data']['datasets'][ $key ]['datalabels'] = array(
+							'align'  => 'end',
+							'anchor' => 'end',
+						);
+					}
+				}
 			}
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
@@ -322,12 +369,26 @@ class M_Chart_Chartjs {
 		) {
 			foreach ( $chart_args['data']['datasets'][0]['data'] as $key => $data ) {
 				$chart_args['data']['datasets'][0]['backgroundColor'][ $key ] = $this->colors[ $key % $color_count ];
+				
+				if ( true == $this->post_meta['labels'] ) {	
+					$chart_args['data']['datasets'][0]['datalabels'] = array(
+						'align'  => 'end',
+						'anchor' => 'end',
+					);
+				}
 			}
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
 			&& 'polarArea' == $chart_args['type']
 		) {
 			$chart_args['data']['datasets'][0]['backgroundColor'] = $this->colors;
+			
+			if ( true == $this->post_meta['labels'] ) {	
+				$chart_args['data']['datasets'][0]['datalabels'] = array(
+					'align'  => 'end',
+					'anchor' => 'end',
+				);
+			}
 		} elseif( isset( $chart_args['data']['datasets'] ) ) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$color = $this->colors[ $key % $color_count ];
@@ -365,7 +426,28 @@ class M_Chart_Chartjs {
 				} else {
 					$chart_args['data']['datasets'][ $key ]['fill'] = false;
 				}
+				
+				if ( true == $this->post_meta['labels'] ) {	
+					$chart_args['data']['datasets'][ $key ]['datalabels'] = array(
+						'align'  => 'end',
+						'anchor' => 'end',
+					);
+				}
 			}
+		}
+
+		// Data labels are handled by a plugin so we have to conditionally set these values
+		$chart_args['options']['plugins']['datalabels']['display'] = false;
+		
+		if ( true == $this->post_meta['labels'] ) {			
+		    $chart_args['options']['plugins']['datalabels'] = array(
+				'color'     => 'black',
+				'font' => array(
+					'weight' => 'bold',
+				),
+				'offset' => 3,
+				'display' => 'auto',
+			);
 		}
 
 		if ( $theme ) {
@@ -623,6 +705,30 @@ class M_Chart_Chartjs {
 		}
 
 		return $chart_args;
+	}
+	
+	/**
+	 * Hook to the m_chart_iframe_scripts filter and add highcharts-more if needed
+	 *
+	 * @param array $scripts an array of scripts needed for the iframe to render the chart
+	 * @param int $post_id WP post ID of the chart being displayed
+	 *
+	 * @return array $scripts an array of scripts needed for the iframe to render the chart
+	 */
+	public function m_chart_iframe_scripts( $scripts, $post_id ) {
+		$library = m_chart()->get_post_meta( $post_id, 'library' );
+
+		// If Highcharts isn't the library type we'll stop here
+		if ( $library != $this->library ) {
+			return $scripts;
+		}
+
+		$type = m_chart()->get_post_meta( $post_id, 'type' );
+
+		$scripts[] = 'chartjs-datalabels';
+
+		// Return the scripts
+		return $scripts;
 	}
 
 	/**
