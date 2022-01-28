@@ -1,6 +1,8 @@
 <?php
 $height = m_chart()->get_post_meta( $post_id, 'height' );
 
+$width = '';
+
 if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 	$width = ' width="' . absint( $args['width'] ) . '"';
 }

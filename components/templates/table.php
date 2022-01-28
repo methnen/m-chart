@@ -7,13 +7,8 @@
 	}
 
 	if ( isset( m_chart()->parse()->value_labels['first_row'] ) ) {
-		if ( count( m_chart()->parse()->value_labels['first_row'] ) > count( m_chart()->parse()->value_labels['first_column'] ) ) {
-			$first_row = m_chart()->parse()->value_labels['first_column'];
-			$labels    = m_chart()->parse()->value_labels['first_row'];
-		} else {
-			$first_row = m_chart()->parse()->value_labels['first_row'];
-			$labels    = m_chart()->parse()->value_labels['first_column'];
-		}
+		$first_row = m_chart()->parse()->value_labels['first_row'];
+		$labels    = m_chart()->parse()->value_labels['first_column'];
 
 		$row_column = false;
 
@@ -45,8 +40,10 @@
 						$value = m_chart()->parse()->set_data[ $column ][ $row ];
 					}
 
-					$value = number_format_i18n( $value, strlen( substr( strrchr( $value, '.'), 1 ) ) );
-					$value = '' != $value ? m_chart()->parse()->data_prefix . $value . m_chart()->parse()->data_suffix : '';
+					if ( is_numeric( $value ) ) {
+						$value = number_format_i18n( $value, strlen( substr( strrchr( $value, '.'), 1 ) ) );
+						$value = '' != $value ? m_chart()->parse()->data_prefix . $value . m_chart()->parse()->data_suffix : '';
+					}
 					?>
 					<td><?php echo esc_html( $value ); ?></td>
 					<?php
@@ -74,8 +71,10 @@
 			$total_rows = count( m_chart()->parse()->set_data ) / count( $first_row );
 
 			foreach ( m_chart()->parse()->set_data as $key => $value ) {
-				$value = number_format_i18n( $value, strlen( substr( strrchr( $value, '.'), 1 ) ) );
-				$value = '' != $value ? m_chart()->parse()->data_prefix . $value . m_chart()->parse()->data_suffix : '';
+				if ( is_numeric( $value ) ) {
+					$value = number_format_i18n( $value, strlen( substr( strrchr( $value, '.'), 1 ) ) );
+					$value = '' != $value ? m_chart()->parse()->data_prefix . $value . m_chart()->parse()->data_suffix : '';
+				}
 				?>
 				<td><?php echo esc_html( $value ); ?></td>
 				<?php
