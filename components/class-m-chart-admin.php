@@ -24,6 +24,7 @@ class M_Chart_Admin {
 		add_action( 'wp_ajax_m_chart_import_csv', array( $this, 'ajax_import_csv' ) );
 		add_action( 'edit_form_before_permalink', array( $this, 'edit_form_before_permalink' ) );
 		add_action( 'manage_' . m_chart()->slug . '_posts_custom_column', array( $this, 'manage_posts_custom_column' ), 10, 2 );
+		add_action( 'm_chart_settings_admin', array( $this, 'm_chart_settings_admin' ) );
 
 		add_filter( 'manage_' . m_chart()->slug . '_posts_columns', array( $this, 'manage_posts_columns' ) );
 	}
@@ -49,6 +50,52 @@ class M_Chart_Admin {
 			m_chart()->slug . '-settings',
 			array( $this, 'm_chart_settings' )
 		);
+
+		// If multiple libraries are active we'll give you the option of using each one
+		// @TODO As written this will break if there's ever more than 10 active libraries... so yeah
+		global $submenu;
+		
+		$libraries = m_chart()->get_libraries();
+		
+		// If there's only one library we stop here as it's unecessary
+		if ( 1 === count( $libraries ) ) {
+			return;
+		}
+		
+		// Put the default library into the admin menu first
+		$args = array(
+			'post_type' => m_chart()->slug,
+			'library'   => m_chart()->get_library(),
+		);
+		
+		$submenu[ 'edit.php?post_type=' . m_chart()->slug ][10] = array(
+			'Add ' . $libraries[ m_chart()->get_library() ] . ' Chart',
+			'edit_posts',
+			add_query_arg( $args, admin_url( 'post-new.php' ) )
+		);
+		
+		unset( $libraries[ m_chart()->get_library() ] );
+
+		// Add a Add Chart option for each active library that isn't the current default
+		$key = 11;
+		
+		foreach ( $libraries as $library => $library_name ) {
+			$args = array(
+				'post_type' => m_chart()->slug,
+				'library'   => $library,
+			);
+		
+			$submenu[ 'edit.php?post_type=' . m_chart()->slug ][ $key ] = array(
+				'Add ' . $library_name . ' Chart',
+				'edit_posts',
+				add_query_arg( $args, admin_url( 'post-new.php' ) )
+			);
+			
+			$key++;
+		}
+
+		// Gotta sort them so they're in the right order
+		ksort( $submenu[ 'edit.php?post_type=' . m_chart()->slug ] );
 	}
 
 	/**
@@ -78,7 +125,9 @@ class M_Chart_Admin {
 		$validated_settings = array();
 		$submitted_settings = $_POST[ m_chart()->slug ];
 
-		foreach ( m_chart()->settings as $setting => $default ) {
+		$default_settings = apply_filters( 'm_chart_default_settings', m_chart()->settings );
+
+		foreach ( $default_settings as $setting => $default ) {
 			if ( ! isset( $submitted_settings[ $setting ] ) ) {
 				$validated_settings[ $setting ] = $default;
 				continue;
@@ -95,7 +144,7 @@ class M_Chart_Admin {
 				}
 			} elseif ( 'lang_settings' == $setting ) {
 				// The language settinsg require a bit more checking
-				foreach ( m_chart()->settings['lang_settings'] as $lang_setting => $lang_default ) {
+				foreach ( $default_settings['lang_settings'] as $lang_setting => $lang_default ) {
 					$lang_value = $submitted_settings['lang_settings'][ $lang_setting ];
 
 					if ( 'numericSymbols' == $lang_setting ) {
@@ -129,6 +178,9 @@ class M_Chart_Admin {
 				}
 			}
 		}
+
+		// Allow third party libraries to further validate the settings
+		$validated_settings = apply_filters( 'm_chart_validated_settings', $validated_settings, $submitted_settings );
 
 		update_option( m_chart()->slug, $validated_settings );
 
@@ -257,6 +309,13 @@ class M_Chart_Admin {
 
 			if ( ! empty( $post_id ) ) {
 			  $library = m_chart()->get_post_meta( absint( $post_id ), 'library' );
+			} elseif ( 
+				   'post' == $screen->base
+				&& 'add' == $screen->action
+				&& isset( $_GET['library'] )
+				&& m_chart()->is_valid_library( $_GET['library'] )
+			) {
+				$library = $_GET['library'];
 			}
 
 			// Only load this if we are on an appropriate post page
@@ -444,6 +503,14 @@ class M_Chart_Admin {
 			</span>
 			<?php
 		}
+	}
+	
+	/**
+	 * Add the Chart.js admin settings to the M Chart Settings page
+	 */
+	public function m_chart_settings_admin() {
+		$settings = m_chart()->get_settings();
+		require __DIR__ . '/templates/m-chart-settings-chartjs.php';
 	}
 
 	/**

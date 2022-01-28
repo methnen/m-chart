@@ -3,6 +3,8 @@ $parse_option_names = array(
 	'columns' => esc_html__( 'Columns', 'm-chart' ),
 	'rows'    => esc_html__( 'Rows', 'm-chart' ),
 );
+
+$y_min_disabled = $post_meta['y_min'] ? '' : 'disabled="disabled" ';
 ?>
 <div class="settings">
 	<div class="row one">
@@ -110,7 +112,7 @@ $parse_option_names = array(
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'y_min' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>" value="1"<?php checked( $post_meta['y_min'], true ); ?>/>
 				<?php esc_html_e( 'Force vertical axis minimum: ', 'm-chart' ) ?>
 			</label>
-			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>" size="7"<?php echo $disabled; ?> />
+			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>" size="7" <?php echo esc_html( $y_min_disabled ); ?>/>
 		</p>
 	</div>
 	<div class="row five horizontal-axis">
@@ -140,16 +142,6 @@ $parse_option_names = array(
 				}
 				?>
 			</select>
-		</p>
-	</div>
-	<div class="row six">
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'source' ) ); ?>"><?php esc_html_e( 'Source', 'm-chart' ); ?></label><br />
-			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'source' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'source' ) ); ?>" value="<?php echo esc_attr( $post_meta['source'] ); ?>" style="width: 100%;" placeholder="Name of the source of this data" />
-		</p>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>"><?php esc_html_e( 'Source URL', 'm-chart' ); ?></label><br />
-			<input class="input" type="text" name="<?php echo esc_attr( $this->get_field_name( 'source_url' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'source-url' ) ); ?>" value="<?php echo esc_attr( $post_meta['source_url'] ); ?>" style="width: 100%;" placeholder="URL to the source of this data" />
 		</p>
 	</div>
 </div>

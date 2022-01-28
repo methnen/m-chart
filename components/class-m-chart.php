@@ -46,6 +46,7 @@ class M_Chart {
 		'image_multiplier' => '2',
 		'embeds'        => '',
 		'default_theme' => '_default',
+		'locale'        => 'en-US',
 		'lang_settings' => array(
 			'decimalPoint'   => '.',
 			'thousandsSep'   => ',',
@@ -63,8 +64,6 @@ class M_Chart {
 	public $library_class;
 
 	private $admin;
-	private $highcharts;
-	private $chartjs;
 	private $parse;
 	private $libraries = array(
 		'chartjs' => 'Chart.js',
@@ -231,14 +230,14 @@ class M_Chart {
 		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart.js',
-			array( 'jquery', 'chartjs-helpers' ),
+			array( 'jquery' ),
 			$this->version
 		);
 		
 		wp_register_script(
 			'chartjs-datalabels',
 			$this->plugin_url . '/components/external/chartjs/chartjs-plugin-datalabels.js',
-			array( 'jquery', 'chartjs', 'chartjs-helpers' ),
+			array( 'jquery', 'chartjs' ),
 			$this->version
 		);
 
@@ -304,7 +303,20 @@ class M_Chart {
 
 		// Make sure the correct library is set in the default chart meta fields
 		if ( ! $post_meta ) {
-			$defaults['library'] = $this->get_library();
+			$current_screen = get_current_screen();
+
+			// If we're we're adding a new chart and a library is specified in the get vars we use it
+			if ( 
+				   is_admin()
+				&& 'post' == $current_screen->base
+				&& 'add' == $current_screen->action
+				&& isset( $_GET['library'] )
+				&& $this->is_valid_library( $_GET['library'] )
+			) {
+				$defaults['library'] = $_GET['library'];
+			} else {
+				$defaults['library'] = $this->get_library();
+			}
 		}
 
 		$post_meta = wp_parse_args( $post_meta, $defaults );
@@ -497,6 +509,16 @@ class M_Chart {
 
 		$args = wp_parse_args( $args, $this->get_chart_default_args );
 
+		$library = $this->get_post_meta( $post_id, 'library' );
+
+		// If it's not a valid library we don't proceed
+		if ( ! $this->is_valid_library( $library ) ) {
+			return;
+		}
+		
+		// Make sure we isntantiate the library so any library specific filters/setup get run
+		$this->library( $library );
+
 		// If they want the table of data we'll return that
 		if ( 'table' == $args['show'] ) {
 			return $this->build_table( $post_id );
@@ -536,13 +558,6 @@ class M_Chart {
 			return $this->get_chart_iframe( $post_id, $args );
 		}
 
-		$library = $this->get_post_meta( $post_id, 'library' );
-
-		// If it's not a valid library we don't proceed
-		if ( ! $this->is_valid_library( $library ) ) {
-			return;
-		}
-
 		// If we haven't enqueued the right library yet lets do it
 		if ( ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
@@ -551,6 +566,7 @@ class M_Chart {
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
 		ob_start();
+		do_action( 'm_chart_get_chart_begin', $post_id, $args );
 		require apply_filters( 'm_chart_chart_template', $template, $library, $post_id );
 		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
@@ -567,6 +583,7 @@ class M_Chart {
 	public function build_table( $post_id ) {
 		$post = get_post( $post_id );
 		$post_meta = $this->get_post_meta( $post_id );
+		$library = $this->get_library( $post_id );
 
 		$table = '';
 
@@ -577,7 +594,7 @@ class M_Chart {
 
 			m_chart()->parse()->parse_data( $data, $post_meta['parse_in'] );
 
-			$template = __DIR__ . '/templates/' . $library . '-chart.php';
+			$template = __DIR__ . '/templates/table.php';
 
 			ob_start();
 			require apply_filters( 'm_chart_table_template', $template, $library, $post->ID );
@@ -729,7 +746,7 @@ class M_Chart {
 		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
 
 		ob_start();
-		?><iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] ); ?>" src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe><?php
+		?><iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>" src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe><?php
 		if ( 'show' == $args['share'] ) {
 			unset( $args['share'] );
 			require apply_filters( 'm_chart_share_template', __DIR__ . '/templates/share.php' );
@@ -960,8 +977,11 @@ class M_Chart {
 	 * @return array current settings
 	 */
 	public function get_settings( $setting = false ) {
-		$settings = (array) get_option( $this->slug, $this->settings );
-		$settings = wp_parse_args( $settings, $this->settings );
+		// Allow third party libraries to modify the default settings
+		$default_settings = apply_filters( 'm_chart_default_settings', $this->settings );
+		
+		$settings = (array) get_option( $this->slug, $default_settings );
+		$settings = wp_parse_args( $settings, $default_settings );
 
 		// Make sure the lang_settings aren't missing anything we'll be expecting later on
 		$settings['lang_settings'] = wp_parse_args( $settings['lang_settings'], $this->settings['lang_settings'] );
@@ -970,6 +990,8 @@ class M_Chart {
 		if ( ! $this->is_valid_library( $settings['library'] ) ) {
 			$settings['library'] = 'chartjs';
 		}
+
+		$settings = apply_filters( 'm_chart_get_settings', $settings );
 
 		if ( $setting && isset( $settings[ $setting ] ) ) {
 			return $settings[ $setting ];
@@ -996,6 +1018,15 @@ class M_Chart {
 	 */
 	public function get_library() {
 		return $this->get_settings( 'library' );
+	}
+	
+	/**
+	 * Return the locale array
+	 *
+	 * @return array locales as used by Intl.NumberFormat
+	 */
+	public function get_locales() {
+		return require __DIR__ .'/array-locale-codes.php';
 	}
 
 	/**

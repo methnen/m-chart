@@ -3,7 +3,7 @@
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 5.7.2  
-**Stable tag:** 1.8  
+**Stable tag:** 1.9  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -42,9 +42,14 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), and [donut](https://github.com/methnen/m-chart/wiki/Types-of-charts#donut) charts when using Chart.js
 * Added support for labels when using Chart.js
+	* Uses the [chartjs-plugin-datalabels](https://github.com/chartjs/chartjs-plugin-datalabels) plugin
+* Added better number formatting for Chart.js
+	* Uses Intl.NumberFormat and a locale set in the M Chart Settings panel to properly format numbers when possible
+* Made some tweaks to how tables are rendered so the results are more sensible
 * Fixed an issue where double quotes in a label could cause Javascript errors
-* Fixed an issue where double quotes in a label could cause Javascript errors
-* Updated Chart.js to the latest stable version (3.2.1)
+* Fixed a few PHP warnings that could occur when editing a chart
+* Updated Chart.js to the latest stable version (3.7.0)
+* Updated ParseCsv to the latest stable version (1.3.2)
 
 ### 1.8.1 ###
 
