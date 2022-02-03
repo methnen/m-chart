@@ -42,7 +42,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added better number formatting for Chart.js
 	* Uses Intl.NumberFormat and a locale set in the M Chart Settings panel to properly format numbers when possible
 * Made some tweaks to how tables are rendered so the results are more sensible
-* Tweaked plugin behavior when multiple libraires are installed
+* Tweaked plugin behavior when multiple libraries are installed
 	* You can now add a new chart in both the default and other installed libraries
 	* You can now update the settings for all of the installed libraries instead of just the default
 * Fixed an issue where double quotes in a label could cause Javascript errors
