@@ -51,7 +51,7 @@ var m_chart_chartjs_admin = {};
 
 		if (
 			   'pie' === chart_type
-			|| 'donut' === chart_type
+			|| 'doughnut' === chart_type
 			|| 'polar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
