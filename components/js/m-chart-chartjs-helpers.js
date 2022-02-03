@@ -52,9 +52,11 @@ var m_chart_chartjs_helpers = {
 				if ( null === label ) {
 					return label;
 				}
-				
+
 				// Handling for Bubble/Scatter Charts
-				if ( 'undefined' !== typeof label.r ) {
+				if ( 'undefined' !== typeof label.label ) {
+					label = label.label;
+				} else if ( 'undefined' !== typeof label.r ) {
 					label = label.r;
 				} else if ( 'undefined' !== typeof label.y ) {
 					label = label.y;
@@ -157,7 +159,7 @@ var m_chart_chartjs_helpers = {
 			callback: function( value, index, values ) {
 				if ( this.getLabelForValue(value) ) {
 					var label = this.getLabelForValue(value);
-					
+
 					if ( ! m_chart_chartjs_helpers.is_numeric( label )  ) {
 						value = label;
 					}
@@ -183,7 +185,7 @@ var m_chart_chartjs_helpers = {
 		window[chart_object].chart_args.options.scales.x.ticks =  Object.assign( window[chart_object].chart_args.options.scales.x.ticks, $ticks_callback );
 		window[chart_object].chart_args.options.scales.y.ticks =  Object.assign( window[chart_object].chart_args.options.scales.y.ticks, $ticks_callback );
 	};
-	
+
 	m_chart_chartjs_helpers.number_format = function( number ) {
 		return new Intl.NumberFormat( this.number_format_locale, this.number_format_options ).format( number );
 	};

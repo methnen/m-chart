@@ -1,8 +1,8 @@
 # M Chart #
-**Contributors:** [methnen](https://profiles.wordpress.org/methnen)  
+**Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 5.7.2  
+**Tested up to:** 5.9  
 **Stable tag:** 1.9  
 **License:** MIT  
 
@@ -40,12 +40,15 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ### 1.9 ###
 
-* Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), and [donut](https://github.com/methnen/m-chart/wiki/Types-of-charts#donut) charts when using Chart.js
-* Added support for labels when using Chart.js
+* Added support for [stacked column](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-column), [stacked bar](https://github.com/methnen/m-chart/wiki/Types-of-charts#stacked-bar), and [doughnut](https://github.com/methnen/m-chart/wiki/Types-of-charts#doughnut) charts when using Chart.js
+* Added support for data point labels when using Chart.js
 	* Uses the [chartjs-plugin-datalabels](https://github.com/chartjs/chartjs-plugin-datalabels) plugin
 * Added better number formatting for Chart.js
 	* Uses Intl.NumberFormat and a locale set in the M Chart Settings panel to properly format numbers when possible
 * Made some tweaks to how tables are rendered so the results are more sensible
+* Tweaked plugin behavior when multiple libraires are installed
+	* You can now add a new chart in both the default and other installed libraries
+	* You can now update the settings for all of the installed libraries instead of just the default
 * Fixed an issue where double quotes in a label could cause Javascript errors
 * Fixed a few PHP warnings that could occur when editing a chart
 * Updated Chart.js to the latest stable version (3.7.0)

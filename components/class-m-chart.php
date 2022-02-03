@@ -222,7 +222,7 @@ class M_Chart {
 		// Register the graphing library scripts
 		wp_register_script(
 			'chartjs-helpers',
-			$this->plugin_url . '/components/js/m-chart-chartjs-helpers.js',
+			$this->plugin_url . '/components/js/m-chart-chartjs-helpers.min.js',
 			array( 'jquery' ),
 			$this->version
 		);
