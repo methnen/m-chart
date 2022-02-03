@@ -299,7 +299,7 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'jquery' ),
+				array( 'jquery', 'handsontable', 'handlebars' ),
 				m_chart()->version
 			);
 
