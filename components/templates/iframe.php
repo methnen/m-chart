@@ -1,3 +1,8 @@
+<?php
+// Make sure we isntantiate the library so any library specific filters/setup get run
+$library = $this->get_post_meta( $post->ID, 'library' );
+$this->library( $library );
+?>
 <!doctype html>
 <html>
     <head>

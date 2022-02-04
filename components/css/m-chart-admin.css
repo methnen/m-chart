@@ -16,79 +16,97 @@
 }
 
 .column-m-chart-type span.type {
-	text-indent: -999rem;
 	display: block;
-	width: 100%;
 	position: relative;
+	text-indent: -999rem;
+	width: 100%;
 }
-.column-m-chart-type span.type:after {
-	content: "";
-	background-repeat: no-repeat;
+.column-m-chart-type span.type::after {
 	background-position: left center;
-	position: absolute;
+	background-repeat: no-repeat;
+	bottom: 0;
+	content: "";
 	left: 0;
+	position: absolute;
 	right: 0;
 	top: 0;
-	bottom: 0;
 }
-.column-m-chart-type span.type.line:after {
-	background-image: url(../images/types/line.svg);
+.column-m-chart-type span.type.line::after {
+	background-image: url("../images/types/line.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.spline:after {
-	background-image: url(../images/types/spline.svg);
+.column-m-chart-type span.type.spline::after {
+	background-image: url("../images/types/spline.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.area:after {
-	background-image: url(../images/types/area.svg);
+.column-m-chart-type span.type.area::after {
+	background-image: url("../images/types/area.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.column:after {
-	background-image: url(../images/types/column.svg);
+.column-m-chart-type span.type.column::after {
+	background-image: url("../images/types/column.svg");
+	background-size: contain;
+}
+.column-m-chart-type span.type.stacked-column {
+	background-color: transparent;
+}
+.column-m-chart-type span.type.stacked-column::after {
+	background-image: url("../images/types/stacked-column.svg");
 	background-size: contain;
 }
 .column-m-chart-type span.type.bar {
 	background-color: transparent;
 }
-.column-m-chart-type span.type.bar:after {
-	background-image: url(../images/types/bar.svg);
+.column-m-chart-type span.type.bar::after {
+	background-image: url("../images/types/bar.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.pie:after {
-	background-image: url(../images/types/pie.svg);
+.column-m-chart-type span.type.stacked-bar {
+	background-color: transparent;
+}
+.column-m-chart-type span.type.stacked-bar::after {
+	background-image: url("../images/types/stacked-bar.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.scatter:after {
-	background-image: url(../images/types/scatter.svg);
+.column-m-chart-type span.type.pie::after {
+	background-image: url("../images/types/pie.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.bubble:after {
-	background-image: url(../images/types/bubble.svg);
+.column-m-chart-type span.type.doughnut::after {
+	background-image: url("../images/types/doughnut.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.radar:after {
-	background-image: url(../images/types/radar.svg);
+.column-m-chart-type span.type.scatter::after {
+	background-image: url("../images/types/scatter.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.radar-area:after {
-	background-image: url(../images/types/radar-area.svg);
+.column-m-chart-type span.type.bubble::after {
+	background-image: url("../images/types/bubble.svg");
 	background-size: contain;
 }
-.column-m-chart-type span.type.polar:after {
-	background-image: url(../images/types/polar.svg);
+.column-m-chart-type span.type.radar::after {
+	background-image: url("../images/types/radar.svg");
+	background-size: contain;
+}
+.column-m-chart-type span.type.radar-area::after {
+	background-image: url("../images/types/radar-area.svg");
+	background-size: contain;
+}
+.column-m-chart-type span.type.polar::after {
+	background-image: url("../images/types/polar.svg");
 	background-size: contain;
 }
 
 .column-m-chart-library span.library {
-	text-indent: -999rem;
-	display: block;
-	width: 100%;
-	background-repeat: no-repeat;
 	background-position: left center;
+	background-repeat: no-repeat;
+	display: block;
 	filter: grayscale(100%);
+	text-indent: -999rem;
+	width: 100%;
 }
 .column-m-chart-library span.library.chartjs {
-	background-image: url(../external/chartjs/chartjs-logo.svg);
+	background-image: url("../external/chartjs/chartjs-logo.svg");
 	background-size: contain;
 }
 
@@ -276,6 +294,9 @@
 #m-chart .inside .settings .row.two p.shared {
 	display: none;
 }
+#m-chart .inside .settings .row.two.show-shared p {
+	width: 24%;
+}
 #m-chart .inside .settings .row.two.show-shared p.shared {
 	display: block;
 }
@@ -293,6 +314,13 @@
 #m-chart .inside .settings .row.four p label {
 	display: inline-block;
 	height: 23px;
+}
+#m-chart .inside .settings .row.six p {
+	float: right;
+	width: 49%;
+}
+#m-chart .inside .settings .row.six p:first-child {
+	float: left;
 }
 #m-chart .inside .row {
 	border-top: 1px solid #dddddd;
@@ -319,16 +347,17 @@
 	margin-top: 5px;
 }
 #m-chart .inside .row.seven p.image .button {
+	bottom: 3px;
+	line-height: 22px;
 	min-height: 24px;
-	line-height: 21px;
 	position: absolute;
 	right: 2px;
-	top: 23px;
 }
 @media screen and (max-width: 782px) {
 	#m-chart .inside .row.seven p.image .button {
-		min-height: 34px;
-		line-height: 31px;
+		bottom: 0;
+		line-height: 30px;
+		min-height: 32px;
 	}
 }
 

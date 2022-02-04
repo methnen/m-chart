@@ -33,7 +33,7 @@
 						}
 					}
 				}
-				
+
 				&.two {
 					p {
 						float: left;
@@ -51,6 +51,8 @@
 
 					&.show-shared {
 						p {
+							width: 24%;
+
 							&.shared {
 								display: block;
 							}
@@ -70,7 +72,7 @@
 						}
 					}
 				}
-				
+
 				&.four {
 					p {
 						margin-top: 5px;
@@ -78,6 +80,17 @@
 						label {
 							display: inline-block;
 							height: 23px;
+						}
+					}
+				}
+
+				&.six {
+					p {
+						float: right;
+						width: 49%;
+
+						&:first-child {
+							float: left;
 						}
 					}
 				}
@@ -108,17 +121,18 @@
 						}
 
 						.button {
+							bottom: 3px;
+							line-height: 22px;
 							min-height: 24px;
-							line-height: 21px;
 							position: absolute;
 							right: 2px;
-							top: 23px;
 						}
 
 						@media screen and ( max-width:782px ) {
 							.button {
-								min-height: 34px;
-								line-height: 31px;
+								bottom: 0;
+								line-height: 30px;
+								min-height: 32px;
 							}
 						}
 					}

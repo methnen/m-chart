@@ -5,15 +5,14 @@ module.exports = function( grunt ) {
 
 	// Project configuration.
 	grunt.initConfig({
-		sass: {
-			options: {
-				implementation: require('dart-sass'),
-				sourceMap: true,
-				indentType: 'tab',
-				indentWidth: 1,
-				outputStyle: 'expanded',
-			},
-			dist: {
+		'dart-sass': {
+			target: {
+				options: {
+					sourceMap: true,
+					indentType: 'tab',
+					indentWidth: 1,
+					outputStyle: 'expanded',
+				},
 				files: {
 					'components/css/m-chart-admin.css': 'components/sass/m-chart-admin.scss'
 				}
@@ -25,6 +24,13 @@ module.exports = function( grunt ) {
 				config: '.scss-lint.yml',
 				colorizeOutput: true
 			}
+		},
+		uglify: {
+			my_target: {
+				files: {
+					'components/js/m-chart-chartjs-helpers.min.js': ['components/js/m-chart-chartjs-helpers.js'],
+				},
+			},
 		},
 		wp_readme_to_markdown: {
 			your_target: {
@@ -48,6 +54,7 @@ module.exports = function( grunt ) {
 						'!**/sass/**',
 						'!**/node_modules/**',
 						'!**/tests/**',
+						'!components/js/m-chart-chartjs-helpers.js',
 						'!config.rb',
 						'!Gruntfile.js',
 						'!package.json',
@@ -70,13 +77,13 @@ module.exports = function( grunt ) {
 		},
 		clean: [ 'deploy' ],
 		watch: {
-			files: [ 'components/sass/*.scss' ],
-			tasks: [ 'sass', 'scsslint' ]
+			files: [ 'components/sass/*.scss', 'components/js/m-chart-chartjs-helpers.js' ],
+			tasks: [ 'dart-sass', 'uglify' ]
 		}
 	});
 
 	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
-	grunt.registerTask( 'default', [ 'sass', 'wp_readme_to_markdown', 'scsslint' ] );
+	grunt.registerTask( 'default', [ 'dart-sass', 'wp_readme_to_markdown', 'uglify' ] );
 	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy', 'clean' ] );
 };

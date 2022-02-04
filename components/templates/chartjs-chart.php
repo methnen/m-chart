@@ -1,6 +1,8 @@
 <?php
 $height = m_chart()->get_post_meta( $post_id, 'height' );
 
+$width = '';
+
 if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 	$width = ' width="' . absint( $args['width'] ) . '"';
 }
@@ -12,7 +14,7 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 	var m_chart_container_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>_canvas = document.getElementById( 'm-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>' ).getContext('2d');
 
 	var m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?> = {
-		chart_args: <?php echo $this->unicode_aware_stripslashes( json_encode( $this->library( 'chartjs' )->get_chart_args( $post_id, $args ) ) ); ?>,
+		chart_args: <?php echo $this->unicode_aware_stripslashes( json_encode( $this->library( 'chartjs' )->get_chart_args( $post_id, $args ), JSON_HEX_QUOT ) ); ?>,
 		post_id: <?php echo absint( $post_id ); ?>,
 		instance: <?php echo absint( $this->instance ); ?>,
 		render_1: true
@@ -20,7 +22,7 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 
 	<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
 
-	(function( $ ) {
+	(function( $ ) {		
 		m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart = function() {
 			$( '.m-chart' ).trigger({
 				type:     'render_start',
@@ -45,6 +47,8 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 					});
 				}
 			}
+
+			Chart.register(ChartDataLabels);
 
 			this.chart = new Chart(
 				m_chart_container_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>_canvas,

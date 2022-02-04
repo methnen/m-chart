@@ -5,9 +5,6 @@ var m_chart_chartjs_admin = {};
 
 	// Start things up
 	m_chart_chartjs_admin.init = function() {
-		// Hide the subtitle field
-		m_chart_admin.$subtitle_input.hide();
-
 		// Only show fields/inputs that are appropriate for the current chart type
 		var $chart_type_select = $( document.getElementById( 'm-chart-type' ) );
 		$chart_type_select.on( 'load, change', this.handle_chart_type );
@@ -34,14 +31,18 @@ var m_chart_chartjs_admin = {};
 		if (
 			   'area' === chart_type
 			|| 'column' === chart_type
+			|| 'stacked-column' === chart_type
 			|| 'bar' === chart_type
+			|| 'stacked-bar' === chart_type
 		) {
 			$spreadsheet_tabs.addClass( 'hide' );
 		}
 
 		if (
 			   'column' === chart_type
+			|| 'stacked-column' === chart_type
 			|| 'bar' === chart_type
+			|| 'stacked-bar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.y-min' ).addClass( 'hide' );
 			// In Chart.js this behavior appears to be a default and I can't seem to override it
@@ -50,6 +51,7 @@ var m_chart_chartjs_admin = {};
 
 		if (
 			   'pie' === chart_type
+			|| 'doughnut' === chart_type
 			|| 'polar' === chart_type
 		) {
 			$chart_meta_box.find( '.row.vertical-axis, .row.horizontal-axis, .row.y-min' ).addClass( 'hide' );
