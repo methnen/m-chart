@@ -297,7 +297,9 @@ class M_Chart {
 	 * @return string URL to the plugin directory with path if parameter was passed
 	 */
 	public function get_post_meta( $post_id, $field = false ) {
-		$post_meta = get_post_meta( $post_id, $this->slug, true );
+		$raw_post_meta = get_post_meta( $post_id, $this->slug, true );
+
+		$post_meta = $raw_post_meta;
 
 		$defaults = $this->chart_meta_fields;
 
@@ -348,6 +350,8 @@ class M_Chart {
 		if ( ! isset( $post_meta['set_names'] ) ) {
 			$post_meta['set_names'] = array();
 		}
+
+		$post_meta = apply_filters( 'm_chart_get_post_meta', $post_meta, $raw_post_meta, $post_id );
 
 		if ( $field && isset( $post_meta[ $field ] ) ) {
 			return $post_meta[ $field ];
