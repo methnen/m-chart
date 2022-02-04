@@ -22,7 +22,7 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 
 	<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
 
-	(function( $ ) {		
+	(function( $ ) {
 		m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart = function() {
 			$( '.m-chart' ).trigger({
 				type:     'render_start',
@@ -57,7 +57,9 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 		};
 
 		$( function() {
-			m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart();
+			$.when( m_chart_chartjs_helpers.init() ).done(function() {
+				m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart();
+			});
 		} );
 	})( jQuery );
 </script>
