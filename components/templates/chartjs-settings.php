@@ -3,6 +3,8 @@ $parse_option_names = array(
 	'columns' => esc_html__( 'Columns', 'm-chart' ),
 	'rows'    => esc_html__( 'Rows', 'm-chart' ),
 );
+
+$y_min_disabled = $post_meta['y_min'] ? '' : 'disabled="disabled" ';
 ?>
 <div class="settings">
 	<div class="row one">
@@ -54,6 +56,13 @@ $parse_option_names = array(
 				?>
 			</select>
 		</p>
+		<p class="labels">
+			&nbsp;<br />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'labels' ) ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'labels' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'labels' ) ); ?>" value="1"<?php checked( $post_meta['labels'], true ); ?>/>
+				<?php esc_html_e( 'Show labels', 'm-chart' ); ?>
+			</label>
+		</p>
 		<p class="legend">
 			&nbsp;<br />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'legend' ) ); ?>">
@@ -103,7 +112,7 @@ $parse_option_names = array(
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'y_min' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min' ) ); ?>" value="1"<?php checked( $post_meta['y_min'], true ); ?>/>
 				<?php esc_html_e( 'Force vertical axis minimum: ', 'm-chart' ) ?>
 			</label>
-			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>" size="7"<?php echo $disabled; ?> />
+			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'y_min_value' ) ); ?>" value="<?php echo floatval( $post_meta['y_min_value'] ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-min-value' ) ); ?>" size="7" <?php echo esc_html( $y_min_disabled ); ?>/>
 		</p>
 	</div>
 	<div class="row five horizontal-axis">

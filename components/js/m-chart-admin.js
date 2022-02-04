@@ -40,7 +40,7 @@
 
 		// Watch for clicks on the y min toggle
 		$( document.getElementById( 'm-chart-y-min' ) ).on( 'click', function () {
-			if ( $( this ).attr( 'checked' ) ) {
+			if ( $( this ).is( ':checked' ) ) {
 				m_chart_admin.$y_min_value.attr( 'disabled', false ).focus();
 			} else {
 				m_chart_admin.$y_min_value.attr( 'disabled', true );

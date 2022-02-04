@@ -6,7 +6,7 @@
 		<table class="form-table">
 			<tbody>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Library', 'm-chart' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Default Library', 'm-chart' ); ?></th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'library' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
 							<?php
@@ -20,7 +20,7 @@
 							?>
 						</select>
 						<p class="description">
-							<?php esc_html_e( 'Chart.js is the GPL compatible default library; Highcharts is more fully featured and extensible but has much tighter licensing restrictions:', 'm-chart' ); ?>
+							<?php esc_html_e( 'Chart.js is the GPL compatible default library:', 'm-chart' ); ?>
 							<a href="https://github.com/methnen/m-chart/wiki/Libraries">https://github.com/methnen/m-chart/wiki/Libraries</a>
 						</p>
 					</td>
@@ -97,108 +97,9 @@
 						</label>
 					</td>
 				</tr>
-				<?php
-				if ( 'chartjs' == $settings['library'] ) {
-					?>
-					<tr>
-						<th scope="row">
-							<label for="<?php echo esc_attr( $this->get_field_id( 'default_theme' ) ); ?>">
-								<?php esc_html_e( 'Default Chart.js Theme', 'm-chart' ); ?>
-							</label>
-						</th>
-						<td>
-							<select name="<?php echo esc_attr( $this->get_field_name( 'default_theme' ) ); ?>" id="<?php echo $this->get_field_id( 'default_theme' ); ?>">
-								<?php
-								foreach ( m_chart()->library( 'chartjs' )->get_themes() as $theme ) {
-									?>
-									<option value="<?php echo esc_attr( $theme->slug ); ?>"<?php selected( $theme->slug, $settings['default_theme'] ); ?>>
-										<?php esc_html_e( $theme->name, 'm-chart' ); ?>
-									</option>
-									<?php
-								}
-								?>
-							</select>
-							<p class="description">
-								<?php esc_html_e( 'See the M Chart documentation for more info on how to use themes:', 'm-chart' ); ?>
-								<a href="https://github.com/methnen/m-chart/wiki/Themes">https://github.com/methnen/m-chart/wiki/Themes</a>
-							</p>
-						</td>
-					</tr>
-					<?php
-				}
-
-				if ( 'highcharts' == $settings['library'] ) {
-					?>
-					<tr>
-						<th scope="row">
-							<label for="<?php echo esc_attr( $this->get_field_id( 'default_theme' ) ); ?>">
-								<?php esc_html_e( 'Default Highcharts Theme', 'm-chart' ); ?>
-							</label>
-						</th>
-						<td>
-							<select name="<?php echo esc_attr( $this->get_field_name( 'default_theme' ) ); ?>" id="<?php echo $this->get_field_id( 'default_theme' ); ?>">
-								<?php
-								foreach ( m_chart()->library( 'highcharts' )->get_themes() as $theme ) {
-									?>
-									<option value="<?php echo esc_attr( $theme->slug ); ?>"<?php selected( $theme->slug, $settings['default_theme'] ); ?>>
-										<?php esc_html_e( $theme->name, 'm-chart' ); ?>
-									</option>
-									<?php
-								}
-								?>
-							</select>
-							<p class="description">
-								<?php esc_html_e( 'See the M Chart documentation for more info on how to use themes:', 'm-chart' ); ?>
-								<a href="https://github.com/methnen/m-chart/wiki/Themes">https://github.com/methnen/m-chart/wiki/Themes</a>
-							</p>
-						</td>
-					</tr>
-					<?php
-				}
-				?>
 			</tbody>
 		</table>
-		<?php
-		if ( 'highcharts' == $settings['library'] ) {
-			?>
-			<h2><?php esc_html_e( 'Language Settings', 'm-chart' ); ?></h2>
-			<table class="form-table">
-				<tbody>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Decimal Indicator', 'm-chart' ); ?></th>
-						<td>
-							<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'decimalPoint', 'lang_settings' ) ); ?>" value="<?php echo esc_attr( $settings['lang_settings']['decimalPoint'] ); ?>" maxlength="1" size="1" />
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Thousands Separator', 'm-chart' ); ?></th>
-						<td>
-							<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'thousandsSep', 'lang_settings' ) ); ?>" value="<?php echo esc_attr( $settings['lang_settings']['thousandsSep'] ); ?>" maxlength="1" size="1" />
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Numeric Symbols', 'm-chart' ); ?></th>
-						<td>
-							<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'numericSymbols', 'lang_settings' ) ); ?>" value="<?php echo esc_attr( implode( ', ', $settings['lang_settings']['numericSymbols'] ) ); ?>" />
-							<p class="description">
-								<?php esc_html_e( 'Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)', 'm-chart' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Numeric Symbol Magnitude', 'm-chart' ); ?></th>
-						<td>
-							<input type="number" name="<?php echo esc_attr( $this->get_field_name( 'numericSymbolMagnitude', 'lang_settings' ) ); ?>" value="<?php echo absint( $settings['lang_settings']['numericSymbolMagnitude'] ); ?>" />
-							<p class="description">
-								<?php esc_html_e( 'Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)', 'm-chart' ); ?>
-							</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<?php
-		}
-		?>
+		<?php do_action( 'm_chart_settings_admin' ); ?>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr_e( 'Save Changes', 'm-chart' ); ?>">
 		</p>
