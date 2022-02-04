@@ -85,8 +85,6 @@ class M_Chart_Chartjs {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_action( 'm_chart_get_chart_begin', array( $this, 'm_chart_get_chart_begin' ) );
-
 		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
 		add_filter( 'm_chart_iframe_scripts', array( $this, 'm_chart_iframe_scripts' ), 10, 2 );
 
@@ -713,27 +711,6 @@ class M_Chart_Chartjs {
 		}
 
 		return $chart_args;
-	}
-
-	/**
-	 * Hook to the m_chart_after_chart_args action and print out the helper script so it loads before we need it
-	 *
-	 * @param int $post_id WP post ID of the chart being displayed
-	 */
-	public function m_chart_get_chart_begin( $post_id ) {
-		$library = m_chart()->get_post_meta( $post_id, 'library' );
-
-		// If Chart.js isn't the library type we'll stop here
-		if ( $library != $this->library ) {
-			return;
-		}
-
-		if ( $this->helpers_loaded ) {
-			return;
-		}
-
-		wp_print_scripts( array( 'chartjs-helpers' ) );
-		$this->helpers_loaded = true;
 	}
 
 	/**

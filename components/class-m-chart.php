@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.9';
+	public $version = '1.9.1';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -230,10 +230,10 @@ class M_Chart {
 		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart.js',
-			array( 'jquery' ),
+			array( 'jquery', 'chartjs-helpers' ),
 			$this->version
 		);
-		
+
 		wp_register_script(
 			'chartjs-datalabels',
 			$this->plugin_url . '/components/external/chartjs/chartjs-plugin-datalabels.js',
@@ -306,7 +306,7 @@ class M_Chart {
 			$current_screen = get_current_screen();
 
 			// If we're we're adding a new chart and a library is specified in the get vars we use it
-			if ( 
+			if (
 				   is_admin()
 				&& 'post' == $current_screen->base
 				&& 'add' == $current_screen->action
@@ -515,7 +515,7 @@ class M_Chart {
 		if ( ! $this->is_valid_library( $library ) ) {
 			return;
 		}
-		
+
 		// Make sure we isntantiate the library so any library specific filters/setup get run
 		$this->library( $library );
 
@@ -979,7 +979,7 @@ class M_Chart {
 	public function get_settings( $setting = false ) {
 		// Allow third party libraries to modify the default settings
 		$default_settings = apply_filters( 'm_chart_default_settings', $this->settings );
-		
+
 		$settings = (array) get_option( $this->slug, $default_settings );
 		$settings = wp_parse_args( $settings, $default_settings );
 
@@ -1019,7 +1019,7 @@ class M_Chart {
 	public function get_library() {
 		return $this->get_settings( 'library' );
 	}
-	
+
 	/**
 	 * Return the locale array
 	 *
