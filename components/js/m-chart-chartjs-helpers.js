@@ -10,9 +10,7 @@ var m_chart_chartjs_helpers = {
 
 	// Start things up
 	m_chart_chartjs_helpers.init = function() {
-		console.log('init');
 		$( '.m-chart' ).on( 'render_start', function( event ) {
-			console.log('start!');
 			var chart_object = 'm_chart_chartjs_' + event.post_id + '_' + event.instance;
 
 			if ( 'undefined' === typeof window[chart_object] ) {
@@ -25,7 +23,7 @@ var m_chart_chartjs_helpers = {
 			var value_suffix = window[chart_object].chart_args.value_suffix;
 
 			m_chart_chartjs_helpers.number_format_locale = window[chart_object].chart_args.locale;
-			console.log(m_chart_chartjs_helpers.number_format_locale);
+
 			if ( 'bubble' == window[chart_object].chart_args.type ) {
 				window[chart_object].chart_args.data = m_chart_chartjs_helpers.preprocess_bubble_data( window[chart_object].chart_args.data );
 				window[chart_object].chart_args.options.plugins.tooltip.callbacks = {
