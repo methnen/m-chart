@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 5.9
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -33,6 +33,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.9.2 =
+
+* Fixed an issue where the default theme was overwritten by the first library when multiple libraries are installed
+* Fixed some issues with M Chart Settings that were introduced in M Chart 1.9
+* Fixed an issue where the number formatting code is not always ready before a Chart.js chart renders
 
 = 1.9.1 =
 
