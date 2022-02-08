@@ -156,11 +156,7 @@ var m_chart_chartjs_helpers = {
 		var $ticks_callback = {
 			callback: function( value, index, values ) {
 				if ( this.getLabelForValue(value) ) {
-					var label = this.getLabelForValue(value);
-
-					if ( ! m_chart_chartjs_helpers.is_numeric( label )  ) {
-						value = label;
-					}
+					value = this.getLabelForValue(value);
 				}
 
 				if ( m_chart_chartjs_helpers.is_numeric( value ) ) {
@@ -192,11 +188,11 @@ var m_chart_chartjs_helpers = {
 	// It accepts numbers that have commas so the tick formatting can work correctly
 	m_chart_chartjs_helpers.is_numeric = function( string ) {
 		// Dates in XXXX format are super common so we're just going to ignore all 4 digit numbers
-		if ( /\d{4}/.test( string ) ) {
+		if ( /^\d{4}$/.test( string ) ) {
 			return false;
 		}
 
-		return /^[0-9,.]*$/.test( string );
+		return /^[0-9.]*$/.test( string );
 	};
 
 	$( function() {
