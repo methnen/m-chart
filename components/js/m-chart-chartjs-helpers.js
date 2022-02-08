@@ -185,7 +185,6 @@ var m_chart_chartjs_helpers = {
 	};
 
 	// This is purposely more inclusive than you would normally want
-	// It accepts numbers that have commas so the tick formatting can work correctly
 	m_chart_chartjs_helpers.is_numeric = function( string ) {
 		// Dates in XXXX format are super common so we're just going to ignore all 4 digit numbers
 		if ( /^\d{4}$/.test( string ) ) {
