@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.9.3';
+	public $version = '1.9.4';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -44,6 +44,7 @@ class M_Chart {
 		'show_library'     => 'no',
 		'performance'      => 'default',
 		'image_multiplier' => '2',
+		'image_width'      => '600',
 		'embeds'        => '',
 		'default_theme' => '_default',
 		'locale'        => 'en-US',
