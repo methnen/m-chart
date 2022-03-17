@@ -41,6 +41,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 ### 1.9.4 ###
 
 * Added a setting to control the width of the image generation
+* Updated canvg to the latest stable version (3.1.0)
 
 ### 1.9.3 ###
 

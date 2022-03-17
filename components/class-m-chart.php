@@ -447,11 +447,14 @@ class M_Chart {
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
 			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 		}
-
+	
 		// Validate the data array
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
 			$chart_meta['data'][ $key ] = $this->validate_data( $data );
 		}
+		
+		// Allow plugins to validate their own custom meta
+		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta );
 
 		return $chart_meta;
 	}
@@ -535,8 +538,8 @@ class M_Chart {
 
 			// Default behavior is to return the full size image but with the width/height values halved
 			// This should result in an image that looks nice on retina or better screens
-			$image['width']  = $image['width'] / 2;
-			$image['height'] = $image['height'] / 2;
+			$image['width']  = $image['width'] / $this->get_settings( 'image_multiplier' );
+			$image['height'] = $image['height'] / $this->get_settings( 'image_multiplier' );
 
 			$image = apply_filters( 'm_chart_get_chart_image_tag', $image, $post_id, $args );
 
