@@ -581,7 +581,7 @@ class M_Chart_Admin {
 
 		// If there's an image being passed attach it to the chart post
 		$this->attach_image();
-		//print_r($_POST[ m_chart()->slug ]); exit();
+
 		// Make sure we don't overwrite existing settings in the case someone hits update too quickly
 		if (
 			   isset( $_POST[ m_chart()->slug ]['library'] )
