@@ -34,6 +34,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 1.10 =
+
+* Added a setting to control the width of the image generation
+* Updated Chart.js to the latest stable version (3.7.1)
+* Updated canvg to the latest stable version (3.1.0)
+
 = 1.9.4 =
 
 * Added a setting to control the width of the image generation
