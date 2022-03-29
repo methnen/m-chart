@@ -391,7 +391,7 @@ class M_Chart {
 
 		// Save meta to the post
 		update_post_meta( $post_id, $this->slug, $parsed_meta );
-		do_action( 'm_chart_update_post_meta', $post_id, $parsed_meta );
+		do_action( 'm_chart_update_post_meta', $post_id, $parsed_meta, $meta );
 	}
 
 	/**
