@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 5.9
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -33,6 +33,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.9.4 =
+
+* Added a setting to control the width of the image generation
+* Updated Chart.js to the latest stable version (3.7.1)
+* Updated canvg to the latest stable version (3.1.0)
 
 = 1.9.3 =
 

@@ -88,6 +88,15 @@
 					</td>
 				</tr>
 				<tr>
+					<th scope="row"><?php esc_html_e( 'Image Width', 'm-chart' ); ?></th>
+					<td>
+						<input type="number" name="<?php echo esc_attr( m_chart()->admin()->get_field_name( 'image_width' ) ); ?>" value="<?php echo absint( $settings['image_width'] ); ?>" />
+						<p class="description">
+							<?php esc_html_e( 'The width of the image generated from your chart', 'm-chart' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
 					<th scope="row"><?php esc_html_e( 'Embeds', 'm-chart' ); ?></th>
 					<td>
 						<label>

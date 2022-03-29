@@ -88,7 +88,7 @@ var m_chart_chartjs_admin = {};
 		var $target_canvas = $( '#m-chart-canvas-render-' + event.post_id );
 		var target_context = document.getElementById( 'm-chart-canvas-render-' + event.post_id ).getContext('2d');
 
-		var chart_width  = 600;
+		var chart_width  = m_chart_admin.image_width;
 		var chart_height = $( document.getElementById( 'm-chart-height' ) ).val();
 
 		var image_width  = chart_width * m_chart_admin.image_multiplier;
