@@ -339,6 +339,7 @@ class M_Chart_Admin {
 					'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
 					'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
 					'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
+					'image_width'             => m_chart()->get_settings( 'image_width' ),
 					'library'                 => $library,
 					'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
 					'delete_comfirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
