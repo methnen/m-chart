@@ -591,7 +591,7 @@ class M_Chart {
 	public function build_table( $post_id ) {
 		$post = get_post( $post_id );
 		$post_meta = $this->get_post_meta( $post_id );
-		$library = $this->get_library( $post_id );
+		$library = m_chart()->get_post_meta( $post->ID, 'library' );
 
 		$table = '';
 
@@ -1025,6 +1025,10 @@ class M_Chart {
 	 * @return string current library
 	 */
 	public function get_library() {
+		if ( isset( $_GET['library'] ) && $this->is_valid_library( $_GET['library'] ) ) {
+			return $_GET['library'];
+		}
+		
 		return $this->get_settings( 'library' );
 	}
 
