@@ -36,7 +36,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.10 =
 
-
+* Fixed an issue where the correct library wasn't set when using multiple libraries
 
 = 1.9.4 =
 
