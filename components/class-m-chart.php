@@ -286,7 +286,7 @@ class M_Chart {
 
 		$url_path = parse_url( plugins_url( $path, __DIR__ ) );
 
-		return $url_base['scheme'] . '://' . $url_base['host'] . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
+		return $url_base['scheme'] . '://' . $url_base['host'] . ($url_base['port'] != 80 ? ':' . $url_base['port'] : '') . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
 	}
 
 	/**
@@ -447,12 +447,12 @@ class M_Chart {
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
 			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 		}
-	
+
 		// Validate the data array
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
 			$chart_meta['data'][ $key ] = $this->validate_data( $data );
 		}
-		
+
 		// Allow plugins to validate their own custom meta
 		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta );
 
