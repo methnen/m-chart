@@ -533,13 +533,19 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 'image' == $args['show'] || is_feed() || $this->is_shortcake || $this->is_amp_endpoint() ) {
+		if ( 
+			   'image' == $args['show'] 
+			|| is_feed() 
+			|| $this->is_shortcake 
+			|| $this->is_amp_endpoint() 
+			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
+		) {
 			$image = $this->get_chart_image( $post_id );
 
 			// Default behavior is to return the full size image but with the width/height values halved
 			// This should result in an image that looks nice on retina or better screens
-			$image['width']  = $image['width'] / $this->get_settings( 'image_multiplier' );
-			$image['height'] = $image['height'] / $this->get_settings( 'image_multiplier' );
+			$image['width']  = $image['width'] / 2;
+			$image['height'] = $image['height'] / 2;
 
 			$image = apply_filters( 'm_chart_get_chart_image_tag', $image, $post_id, $args );
 
