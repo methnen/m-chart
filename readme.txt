@@ -37,7 +37,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.10 =
 
 * Fixed an issue where the correct library wasn't set when using multiple libraries
-* Fixed an issue where object caches could result in some Chart.js plugins not loading
+* Fixed an issue where the object cache could result in some Chart.js plugins not loading
 * Fixed an issue where the port value wasn't being handled by the `plugin_url` method (@turicasturicas)
 
 = 1.9.4 =

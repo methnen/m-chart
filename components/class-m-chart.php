@@ -286,7 +286,14 @@ class M_Chart {
 
 		$url_path = parse_url( plugins_url( $path, __DIR__ ) );
 
-		return $url_base['scheme'] . '://' . $url_base['host'] . ($url_base['port'] != 80 ? ':' . $url_base['port'] : '') . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
+		// Check for a port value if one exists we make sure it's honored
+		$port = '';
+
+		if ( isset( $url_base['port'] ) && 80 != $url_base['port'] ) {
+			$port = ':' . $url_base['port'];
+		}
+
+		return $url_base['scheme'] . '://' . $url_base['host'] . $port . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
 	}
 
 	/**
@@ -533,11 +540,11 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 
-			   'image' == $args['show'] 
-			|| is_feed() 
-			|| $this->is_shortcake 
-			|| $this->is_amp_endpoint() 
+		if (
+			   'image' == $args['show']
+			|| is_feed()
+			|| $this->is_shortcake
+			|| $this->is_amp_endpoint()
 			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
 		) {
 			$image = $this->get_chart_image( $post_id );
@@ -1034,7 +1041,7 @@ class M_Chart {
 		if ( isset( $_GET['library'] ) && $this->is_valid_library( $_GET['library'] ) ) {
 			return $_GET['library'];
 		}
-		
+
 		return $this->get_settings( 'library' );
 	}
 
