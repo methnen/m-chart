@@ -540,11 +540,11 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if (
-			   'image' == $args['show']
-			|| is_feed()
-			|| $this->is_shortcake
-			|| $this->is_amp_endpoint()
+		if ( 
+			   'image' == $args['show'] 
+			|| is_feed() 
+			|| $this->is_shortcake 
+			|| $this->is_amp_endpoint() 
 			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
 		) {
 			$image = $this->get_chart_image( $post_id );
@@ -1041,7 +1041,7 @@ class M_Chart {
 		if ( isset( $_GET['library'] ) && $this->is_valid_library( $_GET['library'] ) ) {
 			return $_GET['library'];
 		}
-
+		
 		return $this->get_settings( 'library' );
 	}
 

@@ -178,15 +178,21 @@ class M_Chart_Parse {
 	 * @return string the label string cleaned of any problem content
 	 */
 	public function clean_labels( $label ) {
+		$label = esc_html( $label );
+		
 		$find = array(
-			'&nbsp;'
+			'&nbsp;',
+			'&quot;',
 		);
 
 		$replace = array(
-			' '
+			' ',
+			'"',
 		);
 
-		return trim( str_replace( $find, $replace, $label ) );
+		$label = trim( str_replace( $find, $replace, $label ) );
+
+		return $label;
 	}
 
 	/**
