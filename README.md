@@ -49,6 +49,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Fixed an issue where the correct library wasn't set when using multiple libraries
 * Fixed an issue where the object cache could result in some Chart.js plugins not loading
 * Fixed an issue where the port value wasn't being handled by the `plugin_url` method (@turicasturicas)
+* Fixed an issue where custom Chart.js animations could be overwritten (@fcFn)
 * Updated Chart.js to the latest stable version (4.2.1)
 	* If you've customized some Chart.js behaviors note that version 4.x includes [a few breaking changes](https://www.chartjs.org/docs/4.2.0/migration/v4-migration.html)
 * Updated chartjs-plugin-datalabels to the latest stable version (2.2.0)
