@@ -29,8 +29,10 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 				post_id:  this.post_id,
 				instance: this.instance
 			});
-
-			this.chart_args.options.animation = {
+			
+			var target = this.chart_args.options.animation;
+            
+			var source = {
 				onComplete: function() {
 					// This deals with an issue in Chart.js 3.1.0 where onComplete can run too many times
 					// We only want to trigger on the first render anyway so we'll just check
@@ -47,8 +49,15 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 					});
 				}
 			}
+           
+			if ( ! target ) {
+				source = {animation: source};
+				target = this.chart_args.options;
+			}
+			
+			Object.assign( target, source );
 
-			Chart.register(ChartDataLabels);
+			Chart.register( ChartDataLabels );
 
 			this.chart = new Chart(
 				m_chart_container_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>_canvas,

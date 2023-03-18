@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.9.4';
+	public $version = '1.10';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -286,7 +286,14 @@ class M_Chart {
 
 		$url_path = parse_url( plugins_url( $path, __DIR__ ) );
 
-		return $url_base['scheme'] . '://' . $url_base['host'] . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
+		// Check for a port value if one exists we make sure it's honored
+		$port = '';
+
+		if ( isset( $url_base['port'] ) && 80 != $url_base['port'] ) {
+			$port = ':' . $url_base['port'];
+		}
+
+		return $url_base['scheme'] . '://' . $url_base['host'] . $port . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
 	}
 
 	/**
@@ -447,12 +454,12 @@ class M_Chart {
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
 			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 		}
-	
+
 		// Validate the data array
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
 			$chart_meta['data'][ $key ] = $this->validate_data( $data );
 		}
-		
+
 		// Allow plugins to validate their own custom meta
 		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta );
 
@@ -533,13 +540,19 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 'image' == $args['show'] || is_feed() || $this->is_shortcake || $this->is_amp_endpoint() ) {
+		if ( 
+			   'image' == $args['show'] 
+			|| is_feed() 
+			|| $this->is_shortcake 
+			|| $this->is_amp_endpoint() 
+			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
+		) {
 			$image = $this->get_chart_image( $post_id );
 
 			// Default behavior is to return the full size image but with the width/height values halved
 			// This should result in an image that looks nice on retina or better screens
-			$image['width']  = $image['width'] / $this->get_settings( 'image_multiplier' );
-			$image['height'] = $image['height'] / $this->get_settings( 'image_multiplier' );
+			$image['width']  = $image['width'] / 2;
+			$image['height'] = $image['height'] / 2;
 
 			$image = apply_filters( 'm_chart_get_chart_image_tag', $image, $post_id, $args );
 
@@ -591,7 +604,7 @@ class M_Chart {
 	public function build_table( $post_id ) {
 		$post = get_post( $post_id );
 		$post_meta = $this->get_post_meta( $post_id );
-		$library = $this->get_library( $post_id );
+		$library = m_chart()->get_post_meta( $post->ID, 'library' );
 
 		$table = '';
 
@@ -1025,6 +1038,10 @@ class M_Chart {
 	 * @return string current library
 	 */
 	public function get_library() {
+		if ( isset( $_GET['library'] ) && $this->is_valid_library( $_GET['library'] ) ) {
+			return $_GET['library'];
+		}
+		
 		return $this->get_settings( 'library' );
 	}
 

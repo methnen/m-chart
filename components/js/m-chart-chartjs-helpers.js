@@ -1,8 +1,5 @@
 var m_chart_chartjs_helpers = {
-	number_format_locale: 'en-US',
-	number_format_options: {
-		maximumFractionDigits: 2,
-	}
+	locale: 'en-US'
 };
 
 (function( $ ) {
@@ -17,12 +14,12 @@ var m_chart_chartjs_helpers = {
 				return;
 			}
 
+			m_chart_chartjs_helpers.locale = window[chart_object].chart_args.options.locale;
+
 			var type = window[chart_object].chart_args.type;
 
 			var value_prefix = window[chart_object].chart_args.value_prefix;
 			var value_suffix = window[chart_object].chart_args.value_suffix;
-
-			m_chart_chartjs_helpers.number_format_locale = window[chart_object].chart_args.locale;
 
 			if ( 'bubble' == window[chart_object].chart_args.type ) {
 				window[chart_object].chart_args.data = m_chart_chartjs_helpers.preprocess_bubble_data( window[chart_object].chart_args.data );
@@ -66,15 +63,6 @@ var m_chart_chartjs_helpers = {
 					return label;
 				}
 			};
-
-			if (
-				   'pie' != window[chart_object].chart_args.type
-				&& 'doughnut' != window[chart_object].chart_args.type
-				&& 'polarArea' != window[chart_object].chart_args.type
-				&& 'radar' != window[chart_object].chart_args.type
-			) {
-				m_chart_chartjs_helpers.start_tick_formatting( chart_object );
-			}
 		});
 	};
 
@@ -151,47 +139,8 @@ var m_chart_chartjs_helpers = {
 		return tooltip_label;
 	};
 
-	// This is super roundabout, someone better at Javascript might know a better way to handle this but this is what I ended up with
-	m_chart_chartjs_helpers.start_tick_formatting = function( chart_object ) {
-		var $ticks_callback = {
-			callback: function( value, index, values ) {
-				if ( this.getLabelForValue(value) ) {
-					value = this.getLabelForValue(value);
-				}
-
-				if ( m_chart_chartjs_helpers.is_numeric( value ) ) {
-					return m_chart_chartjs_helpers.number_format( value );
-				} else {
-					return value;
-				}
-			}
-		}
-
-		// Need to set the necessary ticks objects if one doesn't already exist, scales should already exist as far as I can tell, not sure why ticks doesn't honestly
-		if ( 'undefined' === typeof window[chart_object].chart_args.options.scales.x.ticks ) {
-			window[chart_object].chart_args.options.scales.x.ticks = {};
-		}
-
-		if ( 'undefined' === typeof window[chart_object].chart_args.options.scales.y.ticks ) {
-			window[chart_object].chart_args.options.scales.y.ticks = {};
-		}
-
-		window[chart_object].chart_args.options.scales.x.ticks =  Object.assign( window[chart_object].chart_args.options.scales.x.ticks, $ticks_callback );
-		window[chart_object].chart_args.options.scales.y.ticks =  Object.assign( window[chart_object].chart_args.options.scales.y.ticks, $ticks_callback );
-	};
-
 	m_chart_chartjs_helpers.number_format = function( number ) {
-		return new Intl.NumberFormat( this.number_format_locale, this.number_format_options ).format( number );
-	};
-
-	// This is purposely more inclusive than you would normally want
-	m_chart_chartjs_helpers.is_numeric = function( string ) {
-		// Dates in XXXX format are super common so we're just going to ignore all 4 digit numbers
-		if ( /^\d{4}$/.test( string ) ) {
-			return false;
-		}
-
-		return /^[0-9.]*$/.test( string );
+		return Chart.helpers.formatNumber( number, m_chart_chartjs_helpers.locale );
 	};
 
 	$( function() {
