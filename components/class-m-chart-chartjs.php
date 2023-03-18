@@ -129,7 +129,13 @@ class M_Chart_Chartjs {
 
 		$this->post_meta = m_chart()->get_post_meta( $this->post->ID );
 
-		// Enqueue Chart.js plugins
+		$this->enqueue_chartjs_plugins();
+	}
+	
+	/**
+	 * Enqueue any Chart.js plugins that we'll need
+	 */
+	public function enqueue_chartjs_plugins() {
 		wp_enqueue_script( 'chartjs-datalabels' );
 	}
 
@@ -148,6 +154,8 @@ class M_Chart_Chartjs {
 		$cache_key = $post_id . '-chart-args';
 
 		if ( ! $force && $chart_args = wp_cache_get( $cache_key, m_chart()->slug ) ) {
+			$this->enqueue_chartjs_plugins();
+			
 			// The width can be set via the args so we'll override whatever the cache has with the arg value
 			$chart_args['graph']['width'] = isset( $this->args['width'] ) && is_numeric( $this->args['width'] ) ? $this->args['width'] : '';
 			return $chart_args;
@@ -200,6 +208,7 @@ class M_Chart_Chartjs {
 				),
 				'responsive' => true,
 				'maintainAspectRatio' => false,
+				'locale' => m_chart()->get_settings( 'locale' ),
 			),
 		);
 
@@ -591,7 +600,9 @@ class M_Chart_Chartjs {
    			)
 		) {
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
-				$chart_args['data']['datasets'][0]['data'][] = $data_array[ $key ];
+				if ( isset( $data_array[ $key ] ) ) {
+					$chart_args['data']['datasets'][0]['data'][] = $data_array[ $key ];
+				}
 			}
 		} elseif (
 			   'radar' == $this->post_meta['type']

@@ -2,8 +2,8 @@
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 5.9  
-**Stable tag:** 1.9.4  
+**Tested up to:** 6.1.1  
+**Stable tag:** 1.10  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -37,6 +37,22 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.10.0 ###
+
+* The default Chart.js theme now uses the [default color pallette](https://www.chartjs.org/docs/latest/general/colors.html#default-color-palette) introduced in version 4.0.0
+	* If you preferred the older colors they've been moved to the Chart.js v3 theme
+* Number formatting is now always handled by the native locale formating functionality in Chart.js
+	* Fixes an issue where large numbers sometimes didn't display properly
+* Fixed an issue where some missing output sanitation could allow for some [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) injection in a chart
+	* Thank you to [Ngo Thien](https://twitter.com/thienbg93) for reporting this
+* Fixed an issue where the correct library wasn't set when using multiple libraries
+* Fixed an issue where the object cache could result in some Chart.js plugins not loading
+* Fixed an issue where the port value wasn't being handled by the `plugin_url` method (@turicasturicas)
+* Fixed an issue where custom Chart.js animations could be overwritten (@fcFn)
+* Updated Chart.js to the latest stable version (4.2.1)
+	* If you've customized some Chart.js behaviors note that version 4.x includes [a few breaking changes](https://www.chartjs.org/docs/4.2.0/migration/v4-migration.html)
+* Updated chartjs-plugin-datalabels to the latest stable version (2.2.0)
 
 ### 1.9.4 ###
 

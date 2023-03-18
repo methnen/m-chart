@@ -1,18 +1,17 @@
 <?php
 
 /**
- * Theme Name: Chart.js
+ * Theme Name: Chart.js 3.x
  */
 
 return array(
 	'colors' => array(
-		'#56a0e5', // Blue
 		'#ed6d85', // Pink
-		'#6cbdbf', // Turquoise
-		'#f1a354', // Orange
-		'#9169f6', // Purple
-		'#f7cf6b', // Yellow
-		'#c9cbce', // Gray
+		'#f7d06b', // Yellow
+		'#f2a354', // Orange
+		'#56a0e5', // Blue
+		'#6cbebf', // Turquoise
+		'#47494b', // Gray
 	),
 	'points' => array(
 		array(
