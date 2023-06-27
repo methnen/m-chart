@@ -58,27 +58,27 @@ class M_Chart_Parse {
 
 		if ( 'first_column' == $this->value_labels_position ) {
 			foreach ( (array) $this->data as $columns ) {
-				if ( '' != trim( $columns[0] ) ) {
+				if ( '' != trim((string) $columns[0] ) ) {
 					$this->value_labels[] = $this->clean_labels( $columns[0] );
 				}
 			}
 		}
 		elseif ( 'first_row' == $this->value_labels_position ) {
 			foreach ( (array) $this->data[0] as $column ) {
-				if ( '' != trim( $column ) ) {
+				if ( '' != trim((string) $column ) ) {
 					$this->value_labels[] = $this->clean_labels( $column );
 				}
 			}
 		}
 		elseif ( 'both' == $this->value_labels_position ) {
 			foreach ( (array) $this->data as $columns ) {
-				if ( '' != trim( $columns[0] ) ) {
+				if ( '' != trim((string) $columns[0] ) ) {
 					$this->value_labels['first_column'][] = $this->clean_labels( $columns[0] );
 				}
 			}
 
 			foreach ( (array) $this->data[0] as $column ) {
-				if ( '' != trim( $column ) ) {
+				if ( '' != trim((string) $column ) ) {
 					$this->value_labels['first_row'][] = $this->clean_labels( $column );
 				}
 			}
