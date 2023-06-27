@@ -38,6 +38,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.10.1 ###
+
+* Fixed a few issues where some PHP warnings could occur when a Chart had no data (@webconstructor)
+
 ### 1.10 ###
 
 * The default Chart.js theme now uses the [default color pallette](https://www.chartjs.org/docs/latest/general/colors.html#default-color-palette) introduced in version 4.0.0
