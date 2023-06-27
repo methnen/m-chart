@@ -483,6 +483,7 @@ class M_Chart {
                 $data[ $key ] = $this->validate_data( $value );
             }
             else {
+            	$value        = $value ?? '';
                 $data[ $key ] = wp_filter_nohtml_kses( $value );
             }
         }
