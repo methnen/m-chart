@@ -58,27 +58,27 @@ class M_Chart_Parse {
 
 		if ( 'first_column' == $this->value_labels_position ) {
 			foreach ( (array) $this->data as $columns ) {
-				if ( '' != trim( $columns[0] ) ) {
+				if ( '' != trim( (string) $columns[0] ) ) {
 					$this->value_labels[] = $this->clean_labels( $columns[0] );
 				}
 			}
 		}
 		elseif ( 'first_row' == $this->value_labels_position ) {
 			foreach ( (array) $this->data[0] as $column ) {
-				if ( '' != trim( $column ) ) {
+				if ( '' != trim( (string) $column ) ) {
 					$this->value_labels[] = $this->clean_labels( $column );
 				}
 			}
 		}
 		elseif ( 'both' == $this->value_labels_position ) {
 			foreach ( (array) $this->data as $columns ) {
-				if ( '' != trim( $columns[0] ) ) {
+				if ( '' != trim( (string) $columns[0] ) ) {
 					$this->value_labels['first_column'][] = $this->clean_labels( $columns[0] );
 				}
 			}
 
 			foreach ( (array) $this->data[0] as $column ) {
-				if ( '' != trim( $column ) ) {
+				if ( '' != trim( (string) $column ) ) {
 					$this->value_labels['first_row'][] = $this->clean_labels( $column );
 				}
 			}
@@ -99,8 +99,7 @@ class M_Chart_Parse {
 
 		if ( '' == $this->data[0][0] ) {
 			return 'both';
-		}
-		elseif (
+		} elseif (
 			   ! is_numeric( $this->clean_data_point( $this->data[0][0], false ) )
 			&& ! is_numeric( $this->clean_data_point( $this->data[1][0], false ) )
 		) {
@@ -277,7 +276,7 @@ class M_Chart_Parse {
 					$set_data_array[ $key ] = $set['data'];
 				}
 			}
-		} elseif( isset( $this->data[1] ) ) {
+		} elseif ( isset( $this->data[1] ) ) {
 			foreach ( $this->data as $key => $columns ) {
 				foreach ( $columns as $column ) {
 					if ( '' == $column || 0 == $key ) {
@@ -314,8 +313,7 @@ class M_Chart_Parse {
 					}
 				}
 			}
-		}
-		elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
+		} elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
 			$label_count = count( $this->value_labels['first_column'] ) - 1;
 
 			foreach ( $data_array as $key => $data ) {
@@ -326,8 +324,7 @@ class M_Chart_Parse {
 				}
 			}
 		}
-		//else
-		//{
+		//else {
 		//	$label_count = count( $this->value_labels ) - 1;
         //
 		//	foreach ( $data_array as $key => $data ) {
