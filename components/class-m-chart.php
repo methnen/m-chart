@@ -2,7 +2,7 @@
 
 class M_Chart {
 	public $dev = true;
-	public $version = '1.10';
+	public $version = '1.10.1';
 	public $slug = 'm-chart';
 	public $plugin_name = 'Chart';
 	public $chart_meta_fields = array(
@@ -481,8 +481,7 @@ class M_Chart {
         foreach ( $data as $key => $value ) {
             if ( is_array( $value ) ) {
                 $data[ $key ] = $this->validate_data( $value );
-            }
-            else {
+            } else {
             	$value        = $value ?? '';
                 $data[ $key ] = wp_filter_nohtml_kses( $value );
             }
