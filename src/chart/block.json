@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "m-chart/chart",
+	"title": "Chart selector",
+	"category": "layout",
+	"icon": "chart-pie",
+	"description": "Select a chart to be shown out of all available charts.",
+	"textdomain": "m-chart",
+	"attributes": {
+		"charts": {
+			"type": "array",
+			"default": []
+		},
+		"chartId": {
+			"type": "string",
+			"default": ""
+		},
+		"chartTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"subtitle": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"editorScript": "m-chart_editor",
+	"editorStyle": "m-chart-editor-style",
+	"style": "m-chart-style",
+	"render": "file:./render.php"
+}

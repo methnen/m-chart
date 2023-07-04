@@ -36,8 +36,8 @@ class M_Chart_Parse {
 	 * @return array an array of value labels filtered out of the data set
 	 */
 	public function parse_data( $data, $parse_in ) {
-		$this->data = $data;
-		$this->parse_in = $parse_in;
+		$this->data                  = $data;
+		$this->parse_in              = $parse_in;
 		$this->value_labels_position = $this->get_value_labels_position();
 		$this->parse_value_labels();
 		$this->parse_set_data();
@@ -62,15 +62,13 @@ class M_Chart_Parse {
 					$this->value_labels[] = $this->clean_labels( $columns[0] );
 				}
 			}
-		}
-		elseif ( 'first_row' == $this->value_labels_position ) {
+		} elseif ( 'first_row' == $this->value_labels_position ) {
 			foreach ( (array) $this->data[0] as $column ) {
 				if ( '' != trim( (string) $column ) ) {
 					$this->value_labels[] = $this->clean_labels( $column );
 				}
 			}
-		}
-		elseif ( 'both' == $this->value_labels_position ) {
+		} elseif ( 'both' == $this->value_labels_position ) {
 			foreach ( (array) $this->data as $columns ) {
 				if ( '' != trim( (string) $columns[0] ) ) {
 					$this->value_labels['first_column'][] = $this->clean_labels( $columns[0] );
@@ -117,7 +115,7 @@ class M_Chart_Parse {
 	 * @return int/string an integer of the cleaned data point or string if the cleaned value was not numeric
 	 */
 	public function clean_data_point( $data_point ) {
-		$data_point = trim( $data_point );
+		$data_point = trim( (string) $data_point );
 
 		// Find any prefixes/suffixes in the data
 		if ( '' == $this->data_prefix && '' == $this->data_suffix ) {
@@ -178,7 +176,7 @@ class M_Chart_Parse {
 	 */
 	public function clean_labels( $label ) {
 		$label = esc_html( $label );
-		
+
 		$find = array(
 			'&nbsp;',
 			'&quot;',
@@ -199,10 +197,10 @@ class M_Chart_Parse {
 	 */
 	public function parse_set_data() {
 		// Reset these values in case a previous data set has altered them
-		$this->data_prefix   = '';
-		$this->data_suffix   = '';
+		$this->data_prefix = '';
+		$this->data_suffix = '';
 
-		$set_data_array	= array();
+		$set_data_array = array();
 
 		if ( 'rows' == $this->parse_in && 'first_column' == $this->value_labels_position ) {
 			foreach ( $this->data as $row ) {
@@ -235,7 +233,7 @@ class M_Chart_Parse {
 							$this_sets[ $key ]['is_null'] = false;
 						}
 
-						$this_sets[ $key ]['data'][]  = $data_point;
+						$this_sets[ $key ]['data'][] = $data_point;
 					}
 				}
 			}
@@ -247,8 +245,8 @@ class M_Chart_Parse {
 				}
 			}
 		} elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$limit		= count( $this->data );
-			$this_sets	= array();
+			$limit     = count( $this->data );
+			$this_sets = array();
 
 			for ( $i = 1; $i < $limit; $i++ ) {
 				foreach ( $this->data[ $i ] as $key => $column ) {
@@ -256,7 +254,7 @@ class M_Chart_Parse {
 						continue;
 					}
 
-					$data_point	= $this->clean_data_point( $column );
+					$data_point = $this->clean_data_point( $column );
 					$a_key      = $key - 1;
 
 					if ( ! isset( $this_sets[ $a_key ]['is_null'] ) ) {
@@ -267,7 +265,7 @@ class M_Chart_Parse {
 						$this_sets[ $a_key ]['is_null'] = false;
 					}
 
-					$this_sets[ $a_key ]['data'][]  = $data_point;
+					$this_sets[ $a_key ]['data'][] = $data_point;
 				}
 			}
 
@@ -326,7 +324,7 @@ class M_Chart_Parse {
 		}
 		//else {
 		//	$label_count = count( $this->value_labels ) - 1;
-        //
+		//
 		//	foreach ( $data_array as $key => $data ) {
 		//		if ( $key > $label_count ) {
 		//			unset( $data_array[ $key ] );
