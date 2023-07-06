@@ -17,14 +17,18 @@ class M_Chart_Block {
 	}
 
 
-
-	function set_custom_max_post_per_page( $args, $request ) {
-		// Default only 100 items per request can be fetcht, we set it to 1000
+	/**
+	 * Set custom query param to fetch max 1000 post per page
+	 */
+	public function set_custom_max_post_per_page( $args, $request ) {
 		$max                    = max( (int) $request->get_param( 'all_charts' ), 1000 );
 		$args['posts_per_page'] = $max;
 		return $args;
 	}
 
+	/**
+	 * Register block type
+	 */
 	public function register_m_chart_block_support() {
 		register_block_type( $this->build_folder_path . 'chart/block.json' );
 		$asset_file = require_once $this->build_folder_path . 'index.asset.php';
@@ -56,7 +60,9 @@ class M_Chart_Block {
 
 	}
 
-	// Morph the api request response to fit our needs: e.g. a preview url and subtitle to search through.
+	/**
+	 * Morph the api request response to fit our needs: e.g. a preview url and subtitle to search through.
+	 */
 	public function filter_m_chart_json( $data, $post, $context ) {
 		$post_meta              = get_post_meta( $post->ID, 'm-chart', true );
 		$data->data['id']       = strval( $data->data['id'] );
@@ -67,7 +73,9 @@ class M_Chart_Block {
 		return $data;
 	}
 
-	// Create a version string to add to the loaded script & style files, but refresh if in develop mode.
+	/**
+	 * Create a version string to add to the loaded script & style files, but refresh if in develop mode.
+	 */
 	public function version_str() {
 		$plugin_file    = plugin_dir_path( __DIR__ ) . ( 'm-chart.php' );
 		$plugin_data    = get_file_data( $plugin_file, array( 'Version' => 'Version' ) );
