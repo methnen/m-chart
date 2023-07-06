@@ -8,23 +8,7 @@
 	"description": "Select a chart to be shown out of all available charts.",
 	"textdomain": "m-chart",
 	"attributes": {
-		"charts": {
-			"type": "array",
-			"default": []
-		},
 		"chartId": {
-			"type": "string",
-			"default": ""
-		},
-		"chartTitle": {
-			"type": "string",
-			"default": ""
-		},
-		"title": {
-			"type": "string",
-			"default": ""
-		},
-		"subtitle": {
 			"type": "string",
 			"default": ""
 		}
