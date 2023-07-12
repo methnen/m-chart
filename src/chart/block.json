@@ -5,7 +5,7 @@
 	"title": "Chart selector",
 	"category": "layout",
 	"icon": "chart-pie",
-	"description": "Select a chart to be shown out of all available charts.",
+	"description": "Select out of all available charts a chart for presentation. Either visual or with search term in the title or subtitle.",
 	"textdomain": "m-chart",
 	"attributes": {
 		"chartId": {
