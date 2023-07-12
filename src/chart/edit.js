@@ -60,20 +60,41 @@ export default function edit( { attributes, setAttributes } ) {
     return (
         <div { ...blockProps }>
             <div className="wp-block m-chart-selector-container">
-                <TextControl
-                    value={ search }
-                    placeholder={ __( 'Search by title or subtitle', 'm-chart' ) }
-                    onChange={ ( value ) => handleFilter( value ) }
-                />
-
                 { optionsList.length > 0 &&
-                    <div className="m-chart-block-instructions">
-                        { !attributes.chartId && <span>{ __( 'Click on a chart to select & insert', 'm-chart' ) }</span> }
-                        { attributes.chartId && <span>{ __( 'Click on the chart to make a new selection', 'm-chart' ) }</span> }
-                    </div>
+                    <>
+                        <TextControl
+                            value={ search }
+                            placeholder={ __( 'Search by title or subtitle', 'm-chart' ) }
+                            onChange={ ( value ) => handleFilter( value ) }
+                        />
+                        <div className="m-chart-block-instructions">
+                            { attributes.chartId ?
+                                <span>{ __( 'Click on the chart to make a new selection', 'm-chart' ) }</span>
+                                :
+                                <span>{ __( 'Click on a chart to select & insert', 'm-chart' ) }</span>
+                            }
+                        </div>
+                    </>
                 }
 
-                { pluginActive === false &&
+                { pluginActive ?
+                    <div className="m-chart-centralizer">
+                        { loaded ?
+                            charts.length === 0 ?
+                                <p>{ __( 'no charts found', 'm-chart' ) }
+                                    <a href="/wp-admin/post-new.php?post_type=m-chart">{ __( 'create a new chart', 'm-chart' ) }</a>
+                                </p>
+
+                                :
+                                optionsList.length === 0 && search.length > 1 ?
+                                    <p>{ __( 'no charts found using this search string', 'm-chart' ) }</p>
+                                    :
+                                    null
+                            :
+                            <Spinner />
+                        }
+                    </div>
+                    :
                     <div className="m-chart-centralizer">
                         <p>{ __( 'Chart plugin not available or not active', 'm-chart' ) }
                             <a href="/wp-admin/plugins.php">{ __( 'to plugins page', 'm-chart' ) }</a>
@@ -81,34 +102,15 @@ export default function edit( { attributes, setAttributes } ) {
                     </div>
                 }
 
-                { pluginActive === true &&
-                    <div className="m-chart-centralizer">
-                        { !loaded &&
-                            <Spinner />
-                        }
-                        { loaded && charts.length === 0 &&
-                            <p>{ __( 'no charts found', 'm-chart' ) }
-                                <a href="/wp-admin/post-new.php?post_type=m-chart">{ __( 'create a new chart', 'm-chart' ) }</a>
-                            </p>
-                        }
-                        {
-                            loaded && charts.length > 0 && optionsList.length === 0 && search.length > 1 &&
-                            <p>{ __( 'no charts found using this search string', 'm-chart' ) }</p>
-                        }
-                    </div>
-                }
 
-
-                { !attributes.chartId &&
-                    <ul className="m-chart-containerlist">
-                        { optionsList }
-                    </ul>
-                }
-
-                { attributes.chartId &&
+                { attributes.chartId ?
                     <div className="selected-chart" onClick={ () => handleClick( '' ) }>
                         <img className={ selected?.src.includes( 'icon-256x256' ) ? 'default-img' : 'preview' } src={ selected?.src } />
                     </div>
+                    :
+                    <ul className="m-chart-containerlist">
+                        { optionsList }
+                    </ul>
                 }
             </div>
         </div>

@@ -30,19 +30,26 @@ class M_Chart_Block {
 	 * Register block type
 	 */
 	public function register_m_chart_block_support() {
-		register_block_type( $this->build_folder_path . 'chart/block.json' );
+
 		$asset_file = require_once $this->build_folder_path . 'index.asset.php';
 
 		//Register editor script
 		wp_register_script(
 			'm-chart_editor',
 			$this->build_folder_url . 'index.js',
-			array(),
+			array( 'wp-i18n' ),
 			$this->version_str(),
 			true
 		);
 
-		// Register block styles
+		// Set editor script translation
+		wp_set_script_translations(
+			'm-chart_editor',
+			'm-chart',
+			plugin_dir_path( __DIR__ ) . 'components/languages'
+		);
+
+		// Register block styles.
 		wp_register_style(
 			'm-chart-style',
 			$this->build_folder_url . 'index.css',
@@ -50,13 +57,15 @@ class M_Chart_Block {
 			$this->version_str()
 		);
 
-		//Regist ereditor styles
+		// Registereditor styles.
 		wp_register_style(
 			'm-chart-editor-style',
 			$this->build_folder_url . 'index.css',
 			array( 'wp-edit-blocks' ),
 			$this->version_str()
 		);
+
+		register_block_type( $this->build_folder_path . 'chart/block.json' );
 
 	}
 
