@@ -12,6 +12,8 @@ class M_Chart_Block {
 		$this->build_folder_url  = plugin_dir_url( __DIR__ ) . 'build/';
 		$this->build_folder_path = plugin_dir_path( __DIR__ ) . 'build/';
 		add_action( 'init', array( $this, 'register_m_chart_block_support' ) );
+		add_action( 'plugins_loaded', array( $this, 'wt_m_chart_load_textdomain' ) );
+		add_action( 'rest_api_init', array( $this, 'register_fetch_m_chart_options' ) );
 		add_filter( 'rest_prepare_m-chart', array( $this, 'filter_m_chart_json' ), 10, 3 );
 		add_filter( 'rest_m-chart_query', array( $this, 'set_custom_max_post_per_page' ), 10, 2 );
 	}
@@ -57,7 +59,7 @@ class M_Chart_Block {
 			$this->version_str()
 		);
 
-		// Registereditor styles.
+		// Register editor styles.
 		wp_register_style(
 			'm-chart-editor-style',
 			$this->build_folder_url . 'index.css',
@@ -70,14 +72,14 @@ class M_Chart_Block {
 	}
 
 	/**
-	 * Morph the api request response to fit our needs: e.g. a preview url and subtitle to search through.
+	 * Morph the api request response to fit our needs: e.g. a preview url and subtitle to show.
 	 */
 	public function filter_m_chart_json( $data, $post, $context ) {
 		$post_meta              = get_post_meta( $post->ID, 'm-chart', true );
 		$data->data['id']       = strval( $data->data['id'] );
-		$data->data['title']    = strtolower( $data->data['title']['rendered'] ) ?? '';
+		$data->data['title']    = $data->data['title']['rendered'] ?? '';
 		$data->data['url']      = get_the_post_thumbnail_url( $post->ID );
-		$data->data['subtitle'] = isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? strtolower( $post_meta['subtitle'] ) : '';
+		$data->data['subtitle'] = isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '';
 
 		return $data;
 	}
@@ -90,5 +92,35 @@ class M_Chart_Block {
 		$plugin_data    = get_file_data( $plugin_file, array( 'Version' => 'Version' ) );
 		$plugin_version = $plugin_data['Version'];
 		return WP_DEBUG ? $plugin_version . ' - ' . substr( hash( 'sha256', current_time( 'timestamp' ) ), 0, 12 ) : $plugin_version;
+	}
+
+	/**
+	* Load the plugin's text domain
+	*/
+	public function wt_m_chart_load_textdomain() {
+		load_plugin_textdomain( 'm-chart', false, basename( __DIR__ ) . '/languages' );
+	}
+
+
+
+	public function register_fetch_m_chart_options() {
+			register_rest_route(
+				'm-chart/v1',
+				'/mchart_options/',
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( $this, 'image_support_active' ),
+					'permission_callback' => function () {
+						return true;
+						return current_user_can( 'administrator' );
+					},
+				)
+			);
+	}
+	public function image_support_active() {
+		return array(
+			'siteurl'              => get_option( 'siteurl' ),
+			'image_support_active' => get_option( 'm-chart' )['performance'] === 'default',
+		);
 	}
 }
