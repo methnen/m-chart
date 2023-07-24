@@ -23,6 +23,8 @@ export default function edit( { attributes, setAttributes } ) {
     const chartFetchUrl = `/wp/v2/m-chart?all_charts&status=publish&_fields=id,title,subtitle,url`;
     // Blockprops.
     const blockProps = useBlockProps( { className: 'm-chart-block-chart-selector' } );
+    // Miscellaneous
+    const random = `?random=${ Math.round( Math.random() * ( 999999, 100000 ) ) }`;
 
     // On load we fetch all charts if none available we set a constant to show an error message.
     // We then check if a chart is already chosen. If so we show that one else show all.
@@ -48,7 +50,6 @@ export default function edit( { attributes, setAttributes } ) {
     // Compose preview list.
     const optionsList = options.map( ( x ) => {
         if ( imageSupport ) {
-            let random = `?random=${ Math.round( Math.random() * ( 999999, 100000 ) ) }`;
             return <li className={ x.src ? 'img' : 'dashicons dashicons-chart-pie' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } /> : <h6>{ x.title }</h6> }</li>;
         } else {
             return <li key={ x.id } onClick={ () => handleClick( x.id ) }> { x.title }</li>;
@@ -112,7 +113,7 @@ export default function edit( { attributes, setAttributes } ) {
                                                     { selected?.src === '' ?
                                                         <h4 className="no-title dashicons-before dashicons-chart-pie">{ selected?.title }</h4>
                                                         :
-                                                        <img className="preview" src={ selected?.src } />
+                                                        <img className="preview" src={ selected?.src + random } />
                                                     }
                                                 </>
                                                 :
