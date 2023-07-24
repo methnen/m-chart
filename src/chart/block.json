@@ -2,10 +2,10 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
 	"name": "m-chart/chart",
-	"title": "Chart selector",
+	"title": "M Chart",
 	"category": "layout",
 	"icon": "chart-pie",
-	"description": "Select out of all available charts a chart for presentation. Either visual or with search term in the title or subtitle.",
+	"description": "Embed a chart made with M Chart into your posts and pages",
 	"textdomain": "m-chart",
 	"attributes": {
 		"chartId": {
@@ -18,6 +18,5 @@
 	},
 	"editorScript": "m-chart_editor",
 	"editorStyle": "m-chart-editor-style",
-	"style": "m-chart-style",
 	"render": "file:./render.php"
 }
