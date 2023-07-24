@@ -24,7 +24,7 @@ export default function edit( { attributes, setAttributes } ) {
     // Blockprops.
     const blockProps = useBlockProps( { className: 'm-chart-block-chart-selector' } );
     // Miscellaneous
-    const random = `?random=${ Math.round( Math.random() * ( 999999, 100000 ) ) }`;
+    const random = `?random=${ Math.round( Math.random() * 1000000 ) }`;
 
     // On load we fetch all charts if none available we set a constant to show an error message.
     // We then check if a chart is already chosen. If so we show that one else show all.
