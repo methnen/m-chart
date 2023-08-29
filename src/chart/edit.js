@@ -33,7 +33,6 @@ export default function edit( { attributes, setAttributes } ) {
             setImageSupport( result.image_support_active );
             setSiteUrl( result.siteurl );
         } );
-
         apiFetch( { path: chartFetchUrl } ).then( result => {
             let charts = [];
             result.map( x => charts.push( { id: x.id, title: x.title || '-', subtitle: x.subtitle, src: x.url || '' } ) );
