@@ -106,21 +106,25 @@ class M_Chart_Block {
 	public function register_fetch_m_chart_options() {
 			register_rest_route(
 				'm-chart/v1',
-				'/mchart_options/',
+				'/options/',
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'image_support_active' ),
+					'callback'            => array( $this, 'fetch_options' ),
 					'permission_callback' => function () {
 						return true;
-						return current_user_can( 'administrator' );
 					},
 				)
 			);
 	}
-	public function image_support_active() {
+
+	// Retrieve from the saved options the siteurl & whether to show preview images,  default show
+	public function fetch_options() {
+		$mchart_options = get_option( 'm-chart' );
+		$image_support  = $mchart_options && is_array( $mchart_options ) ? $mchart_options['performance'] === 'default' : true;
+
 		return array(
 			'siteurl'              => get_option( 'siteurl' ),
-			'image_support_active' => get_option( 'm-chart' )['performance'] === 'default',
+			'image_support_active' => $image_support,
 		);
 	}
 }
