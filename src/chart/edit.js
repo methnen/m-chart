@@ -78,11 +78,11 @@ export default function edit( { attributes, setAttributes } ) {
         <div { ...blockProps }>
             <BlockControls>
                 <ToolbarGroup>
-                    <ToolbarButton onClick={ () => window.location.href = newUrl } icon="external">{ __( 'New Chart', 'wt-m-chart-addon' ) }</ToolbarButton>
+                    <ToolbarButton onClick={ () => window.location.href = newUrl } icon="external">{ __( 'New Chart', 'm-chart' ) }</ToolbarButton>
                     { attributes.chartId &&
                         <>
-                            <ToolbarButton onClick={ () => window.location.href = editUrl } icon="external" >{ __( 'Edit Chart', 'wt-m-chart-addon' ) }</ToolbarButton>
-                            <ToolbarButton onClick={ () => handleClick( '' ) } >{ __( 'Replace', 'wt-m-chart-addon' ) }</ToolbarButton>
+                            <ToolbarButton onClick={ () => window.location.href = editUrl } icon="external" >{ __( 'Edit Chart', 'm-chart' ) }</ToolbarButton>
+                            <ToolbarButton onClick={ () => handleClick( '' ) } >{ __( 'Replace', 'm-chart' ) }</ToolbarButton>
                         </>
                     }
                 </ToolbarGroup>
@@ -92,7 +92,7 @@ export default function edit( { attributes, setAttributes } ) {
                 <h6 className="branding"><span className="dashicons dashicons-chart-pie"></span>M Chart</h6>
                 <div className="m-chart-viewbox">
                     { loadProblem ?
-                        <p>{ __( 'There is a problem fetching charts', 'wt-m-chart-addon' ) }</p>
+                        <p>{ __( 'There is a problem fetching charts', 'm-chart' ) }</p>
                         :
                         <>
                             { !loaded ?
@@ -101,8 +101,8 @@ export default function edit( { attributes, setAttributes } ) {
                                 </p>
                                 :
                                 charts.length === 0 ?
-                                    <p className="center">{ __( 'no charts found', 'wt-m-chart-addon' ) }
-                                        <a href={ newUrl }>{ __( 'create a new chart', 'wt-m-chart-addon' ) }</a>
+                                    <p className="center">{ __( 'No Charts found', 'm-chart' ) }
+                                        <a href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</a>
                                     </p>
                                     :
                                     attributes.chartId ?
@@ -126,11 +126,11 @@ export default function edit( { attributes, setAttributes } ) {
                                         <>
                                             <TextControl
                                                 value={ search }
-                                                placeholder={ __( 'Search by title', 'wt-m-chart-addon' ) }
+                                                placeholder={ __( 'Search by title', 'm-chart' ) }
                                                 onChange={ ( value ) => handleFilter( value ) }
                                             />
                                             { optionsList.length === 0 && search.length > 1 ?
-                                                <p className="center">{ __( 'no charts found using this search string', 'wt-m-chart-addon' ) }</p>
+                                                <p className="center">{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
                                                 :
                                                 <ul className={ `m-chart-containerlist ${ imageSupport ? 'image-support' : '' }` }>
                                                     { optionsList }
