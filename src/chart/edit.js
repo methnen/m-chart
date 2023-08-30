@@ -19,7 +19,7 @@ export default function edit( { attributes, setAttributes } ) {
     // Url constants.
     const newUrl = `${ siteUrl }/wp-admin/post-new.php?post_type=m-chart`;
     const editUrl = `${ siteUrl }/wp-admin/post.php?post=${ attributes.chartId }&action=edit`;
-    const imageSupportUrl = `/m-chart/v1/mchart_options`;
+    const optionsUrl = `/m-chart/v1/options`;
     const chartFetchUrl = `/wp/v2/m-chart?all_charts&status=publish&_fields=id,title,subtitle,url`;
     // Blockprops.
     const blockProps = useBlockProps( { className: 'm-chart-block-chart-selector' } );
@@ -29,7 +29,7 @@ export default function edit( { attributes, setAttributes } ) {
     // On load we fetch all charts if none available we set a constant to show an error message.
     // We then check if a chart is already chosen. If so we show that one else show all.
     useEffect( () => {
-        apiFetch( { path: imageSupportUrl } ).then( result => {
+        apiFetch( { path: optionsUrl } ).then( result => {
             setImageSupport( result.image_support_active );
             setSiteUrl( result.siteurl );
         } );
