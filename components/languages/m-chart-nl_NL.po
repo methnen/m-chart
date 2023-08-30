@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart 1.10.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
-"POT-Creation-Date: 2023-07-11T14:52:46+00:00\n"
-"PO-Revision-Date: 2023-07-12 10:16+0200\n"
+"POT-Creation-Date: 2023-08-30T10:43:11+00:00\n"
+"PO-Revision-Date: 2023-08-30 12:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -180,7 +180,8 @@ msgstr "Pagina’s"
 msgid "Sales"
 msgstr "Verkoop"
 
-#: components/array-default-unit-terms.php:49 components/templates/chartjs-settings.php:86
+#: components/array-default-unit-terms.php:49
+#: components/templates/chartjs-settings.php:86
 #: components/templates/chartjs-settings.php:124
 msgid "Units"
 msgstr "Eenheden"
@@ -189,7 +190,8 @@ msgstr "Eenheden"
 msgid "CPM"
 msgstr "Kosten per mijl"
 
-#: components/class-m-chart-admin.php:47 components/templates/m-chart-settings.php:2
+#: components/class-m-chart-admin.php:47
+#: components/templates/m-chart-settings.php:2
 msgid "M Chart Settings"
 msgstr "M chart instellingen"
 
@@ -201,7 +203,9 @@ msgstr "Instellingen"
 msgid "Settings saved"
 msgstr "Instellingen opgeslagen"
 
-#: components/class-m-chart-admin.php:235 components/class-m-chart-admin.php:236 components/templates/chart-meta-box.php:14
+#: components/class-m-chart-admin.php:235
+#: components/class-m-chart-admin.php:236
+#: components/templates/chart-meta-box.php:14
 #: components/templates/chart-meta-box.php:15
 msgid "M Chart Highcharts Library"
 msgstr "M Chart Highcharts Bibliotheek"
@@ -212,9 +216,11 @@ msgstr "U hebt grafieken waarvoor de M Chart Highcharts plugin vereist is."
 
 #: components/class-m-chart-admin.php:241
 msgid "These charts will no longer display unless you install the plugin:"
-msgstr "Deze grafieken kunnen niet getoond worden tenzij u deze plugin installeert:"
+msgstr ""
+"Deze grafieken kunnen niet getoond worden tenzij u deze plugin installeert:"
 
-#: components/class-m-chart-admin.php:243 components/templates/chart-meta-box.php:21
+#: components/class-m-chart-admin.php:243
+#: components/templates/chart-meta-box.php:21
 msgid "Learn More"
 msgstr "Kom meer te weten"
 
@@ -234,11 +240,13 @@ msgstr "Grafiek"
 msgid "Library not found"
 msgstr "Bibliotheek niet gevonden"
 
-#: components/class-m-chart-admin.php:702 components/class-m-chart-admin.php:712
+#: components/class-m-chart-admin.php:702
+#: components/class-m-chart-admin.php:712
 msgid "Wrong post type"
 msgstr "Verkeerd bericht type"
 
-#: components/class-m-chart-admin.php:707 components/class-m-chart-admin.php:832
+#: components/class-m-chart-admin.php:707
+#: components/class-m-chart-admin.php:832
 msgid "Invalid nonce"
 msgstr "Ongeldige beveiligingssleutel"
 
@@ -378,15 +386,16 @@ msgstr "Grafiek toevoegen"
 msgid "Edit"
 msgstr "Berwerken"
 
-#: components/class-m-chart.php:188
+#: components/class-m-chart.php:188 build/index.js:138 build/index.js:84
 msgid "Edit Chart"
 msgstr "Grafiek bewerken"
 
-#: components/class-m-chart.php:189
+#: components/class-m-chart.php:189 build/index.js:135 build/index.js:81
 msgid "New Chart"
 msgstr "Nieuwe grafiek"
 
-#: components/class-m-chart.php:190 components/templates/chartjs-settings.php:159
+#: components/class-m-chart.php:190
+#: components/templates/chartjs-settings.php:159
 msgid "View"
 msgstr "Bekijken"
 
@@ -398,7 +407,7 @@ msgstr "Grafiek bekijken"
 msgid "Search Charts"
 msgstr "Grafieken doorzoeken"
 
-#: components/class-m-chart.php:193
+#: components/class-m-chart.php:193 build/index.js:152 build/index.js:104
 msgid "No Charts found"
 msgstr "Geen grafieken gevonden"
 
@@ -470,7 +479,8 @@ msgstr "Gezamenlijke knopinfo"
 msgid "Vertical axis title"
 msgstr "Verticale as titel"
 
-#: components/templates/chartjs-settings.php:88 components/templates/chartjs-settings.php:126
+#: components/templates/chartjs-settings.php:88
+#: components/templates/chartjs-settings.php:126
 msgid "N/A"
 msgstr "Niet beschikbaar"
 
@@ -512,15 +522,20 @@ msgstr "Standaard Chart.js Thema"
 
 #: components/templates/m-chart-settings-chartjs.php:23
 msgid "See the M Chart documentation for more info on how to use themes:"
-msgstr "Lees de M Chart documentatie voor meer informatie over hoe de thema’s te gebruiken:"
+msgstr ""
+"Lees de M Chart documentatie voor meer informatie over hoe de thema’s te "
+"gebruiken:"
 
 #: components/templates/m-chart-settings-chartjs.php:29
 msgid "Number Format Locale"
 msgstr "Regio nummer weergave"
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
-msgstr "De gewenste landinstelling bij het weergeven van de getallen in het diagram"
+msgid ""
+"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
+"chart"
+msgstr ""
+"De gewenste landinstelling bij het weergeven van de getallen in het diagram"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
@@ -539,10 +554,15 @@ msgid "Show Library in Edit Posts Screen"
 msgstr "Toon de bibliotheek in bewerk schermen"
 
 #: components/templates/m-chart-settings.php:34
-msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
-msgstr "Toont een icoon dat de gebruikte grafiek bibliotheek aangeeft in het bewerk bericht scherm van WP Admin"
+msgid ""
+"Displays an icon indicating the library used for a chart in Edit Posts "
+"Screen of the WP Admin"
+msgstr ""
+"Toont een icoon dat de gebruikte grafiek bibliotheek aangeeft in het bewerk "
+"bericht scherm van WP Admin"
 
-#: components/templates/m-chart-settings.php:39 components/templates/m-chart-settings.php:43
+#: components/templates/m-chart-settings.php:39
+#: components/templates/m-chart-settings.php:43
 msgid "Performance"
 msgstr "Uitvoering"
 
@@ -570,7 +590,8 @@ msgstr "Geen voorbeeld weergave"
 msgid "No instant preview and no generation of chart images"
 msgstr "Geen voorbeeld weergave en geen grafiek beeld"
 
-#: components/templates/m-chart-settings.php:64 components/templates/m-chart-settings.php:68
+#: components/templates/m-chart-settings.php:64
+#: components/templates/m-chart-settings.php:68
 msgid "Image Multiplier"
 msgstr "Beeld vergroter"
 
@@ -591,8 +612,11 @@ msgid "4x"
 msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
-msgid "The higher the multiplier the better the images will look on high DPI screens"
-msgstr "Hoe hoger de factor, des te beter de afbeeldingen er op schermen met een hoge resolutie uit zullen zien"
+msgid ""
+"The higher the multiplier the better the images will look on high DPI screens"
+msgstr ""
+"Hoe hoger de factor, des te beter de afbeeldingen er op schermen met een "
+"hoge resolutie uit zullen zien"
 
 #: components/templates/m-chart-settings.php:91
 msgid "Image Width"
@@ -664,51 +688,66 @@ msgstr "Importeren annuleren"
 
 #: components/templates/spreadsheet-meta-box.php:24
 msgid "Importing this file will replace all existing data in this sheet"
-msgstr "Dit bestand importeren zal alle bestaande data in dit werkblad overschrijven"
+msgstr ""
+"Dit bestand importeren zal alle bestaande data in dit werkblad overschrijven"
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
 msgstr "Ondertitel"
 
-#: build/index.js:1
-msgid "Search by title or subtitle"
-msgstr "Doorzoek op titel of ondertitel"
+#: build/index.js:140 build/index.js:85
+msgid "Replace"
+msgstr "Vervang"
 
-#: build/index.js:1
-msgid "Click on the chart to make a new selection"
-msgstr "Klik op de grafiek om een nieuwe keuze te maken"
+#: build/index.js:148 build/index.js:95
+msgid "There is a problem fetching charts"
+msgstr "Er is een probleem met het ophalen van grafieken"
 
-#: build/index.js:1
-msgid "Click on a chart to select & insert"
-msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
+#: build/index.js:154 build/index.js:105
+msgid "Create a new chart"
+msgstr "Maak een nieuwe grafiek"
 
-#: build/index.js:1
-msgid "no charts found"
-msgstr "geen grafieken gevonden"
+#: build/index.js:163 build/index.js:129
+msgid "Search by title"
+msgstr "Doorzoek op titel"
 
-#: build/index.js:1
-msgid "create a new chart"
-msgstr "maak een nieuwe grafiek"
-
-#: build/index.js:1
-msgid "no charts found using this search string"
-msgstr "geen grafieken gevonden met deze zoekterm"
-
-#: build/index.js:1
-msgid "Chart plugin not available or not active"
-msgstr "M Chart is niet aanwezig of niet actief"
-
-#: build/index.js:1
-msgid "to plugins page"
-msgstr "naar de plugin pagina"
+#: build/index.js:167 build/index.js:133
+msgid "No Charts found using this search string"
+msgstr "Geen grafieken gevonden met deze zoekterm"
 
 #: build/chart/block.json
 msgctxt "block title"
-msgid "Chart selector"
-msgstr "Grafiek kiezer"
+msgid "M Chart"
+msgstr "M Chart"
 
 #: build/chart/block.json
 msgctxt "block description"
-msgid "Select out of all available charts a chart for presentation. Either visual or with search term in the title or subtitle."
-msgstr ""
-"Kies uit alle beschikbare grafieken een grafiek voor presentatie. Visueel of m.b.v. het doorzoeken van titel en ondertitel."
+msgid "Embed a chart made with M Chart into your posts and pages"
+msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
+
+#~ msgid "Click on the chart to make a new selection"
+#~ msgstr "Klik op de grafiek om een nieuwe keuze te maken"
+
+#~ msgid "Click on a chart to select & insert"
+#~ msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
+
+#~ msgid "no charts found"
+#~ msgstr "geen grafieken gevonden"
+
+#~ msgid "Chart plugin not available or not active"
+#~ msgstr "M Chart is niet aanwezig of niet actief"
+
+#~ msgid "to plugins page"
+#~ msgstr "naar de plugin pagina"
+
+#~ msgctxt "block title"
+#~ msgid "Chart selector"
+#~ msgstr "Grafiek kiezer"
+
+#~ msgctxt "block description"
+#~ msgid ""
+#~ "Select out of all available charts a chart for presentation. Either "
+#~ "visual or with search term in the title or subtitle."
+#~ msgstr ""
+#~ "Kies uit alle beschikbare grafieken een grafiek voor presentatie. Visueel "
+#~ "of m.b.v. het doorzoeken van titel en ondertitel."

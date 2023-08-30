@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-11T14:52:46+00:00\n"
+"POT-Creation-Date: 2023-08-30T10:43:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: m-chart\n"
@@ -388,10 +388,14 @@ msgid "Edit"
 msgstr ""
 
 #: components/class-m-chart.php:188
+#: build/index.js:138
+#: build/index.js:84
 msgid "Edit Chart"
 msgstr ""
 
 #: components/class-m-chart.php:189
+#: build/index.js:135
+#: build/index.js:81
 msgid "New Chart"
 msgstr ""
 
@@ -409,6 +413,8 @@ msgid "Search Charts"
 msgstr ""
 
 #: components/class-m-chart.php:193
+#: build/index.js:152
+#: build/index.js:104
 msgid "No Charts found"
 msgstr ""
 
@@ -683,44 +689,37 @@ msgstr ""
 msgid "Enter subtitle here"
 msgstr ""
 
-#: build/index.js:1
-msgid "Search by title or subtitle"
+#: build/index.js:140
+#: build/index.js:85
+msgid "Replace"
 msgstr ""
 
-#: build/index.js:1
-msgid "Click on the chart to make a new selection"
+#: build/index.js:148
+#: build/index.js:95
+msgid "There is a problem fetching charts"
 msgstr ""
 
-#: build/index.js:1
-msgid "Click on a chart to select & insert"
+#: build/index.js:154
+#: build/index.js:105
+msgid "Create a new chart"
 msgstr ""
 
-#: build/index.js:1
-msgid "no charts found"
+#: build/index.js:163
+#: build/index.js:129
+msgid "Search by title"
 msgstr ""
 
-#: build/index.js:1
-msgid "create a new chart"
-msgstr ""
-
-#: build/index.js:1
-msgid "no charts found using this search string"
-msgstr ""
-
-#: build/index.js:1
-msgid "Chart plugin not available or not active"
-msgstr ""
-
-#: build/index.js:1
-msgid "to plugins page"
+#: build/index.js:167
+#: build/index.js:133
+msgid "No Charts found using this search string"
 msgstr ""
 
 #: build/chart/block.json
 msgctxt "block title"
-msgid "Chart selector"
+msgid "M Chart"
 msgstr ""
 
 #: build/chart/block.json
 msgctxt "block description"
-msgid "Select out of all available charts a chart for presentation. Either visual or with search term in the title or subtitle."
+msgid "Embed a chart made with M Chart into your posts and pages"
 msgstr ""
