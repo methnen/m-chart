@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: M Chart
-Version: 1.10.1
+Version: 1.10.2
 Plugin URI: http://github.com/methnen/m-chart
 Description: Manage data sets and display them as charts in WordPress.
 Author: Jamie Poitra

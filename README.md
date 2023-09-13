@@ -2,8 +2,8 @@
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
-**Tested up to:** 6.2.2  
-**Stable tag:** 1.10.1  
+**Tested up to:** 6.3.1  
+**Stable tag:** 1.10.2  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -37,6 +37,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.10.2 ###
+
+* Fixed another PHP warning that occured when trim was passed an untyped value (@webconstructor)
 
 ### 1.10.1 ###
 
