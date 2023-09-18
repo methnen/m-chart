@@ -76,10 +76,14 @@ class M_Chart_Block {
 	 */
 	public function filter_m_chart_json( $data, $post, $context ) {
 		$post_meta              = get_post_meta( $post->ID, 'm-chart', true );
+		$post_thumbnail_id      = get_post_meta( $post->ID, '_thumbnail_id', true );
 		$data->data['id']       = strval( $data->data['id'] );
 		$data->data['title']    = $data->data['title']['rendered'] ?? '';
-		$data->data['url']      = get_the_post_thumbnail_url( $post->ID );
 		$data->data['subtitle'] = isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '';
+		$data->data['url']      = get_the_post_thumbnail_url( $post->ID );
+		$data->data['type']     = isset( $post_meta ) && isset( $post_meta['type'] ) ? $post_meta['type'] : '';
+		$data->data['height']   = wp_get_attachment_metadata( $post_thumbnail_id )['height'] ?? 800;
+		$data->data['width']    = wp_get_attachment_metadata( $post_thumbnail_id )['width'] ?? 1200;
 
 		return $data;
 	}
