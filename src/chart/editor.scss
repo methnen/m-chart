@@ -1,4 +1,4 @@
-.block-editor__container .components-toolbar-group button {
+.block-editor__container .m-chart-block button {
 	flex-direction: row-reverse;
 }
 
@@ -18,16 +18,12 @@
 		}
 	}
 
-	.m-chart-selector-container {
+	.m-chart-selector {
 		background-color: #fff;
 		box-shadow: inset 0 0 0 1px #1e1e1e;
 		outline: 1px solid transparent;
 		padding: 1.5rem;
 		margin-bottom: 1.5rem;
-
-		.center {
-			text-align: center;
-		}
 
 		label {
 			margin-bottom: 2rem;
@@ -58,7 +54,7 @@
 			color: silver;
 		}
 
-		.m-chart-viewbox {
+		.viewbox {
 			display: flex;
 			color: #696969;
 			flex-direction: column;
@@ -68,113 +64,204 @@
 				margin-bottom: 1rem;
 			}
 
-			a {
-				display: block;
-			}
-
-			svg {
-				height: 5rem;
-				width: 2rem;
-			}
-
 			p,
 			a {
+				display: block;
+				text-align: center;
 				font-size: 1rem;
 			}
-		}
 
-		.m-chart-block-instructions {
-			font-style: italic;
-			font-size: .9rem;
-			padding: 1rem;
-			text-align: center;
-			color: #696969;
-		}
+			.no-chart-selected ul {
+				max-height: 15rem;
+				overflow-y: scroll;
+				overflow-x: hidden;
+				position: relative;
+				padding-left: 0;
 
-		.selected-chart {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			padding: 1rem;
+				&::-webkit-scrollbar {
+					width: 5px;
+					background-color: #F5F5F5;
+					position: absolute;
+					left: 0;
+				}
 
-			h4 {
-				margin: 0.5rem 0;
+				&::-webkit-scrollbar-thumb {
+					background-color: #444;
+				}
 
-				&.dashicons-chart-pie {
-					color: #696969;
-					font-weight: normal;
+				&.image-support {
+					display: flex;
+					flex-wrap: wrap;
+					list-style: none;
+					gap: .5rem;
+					padding: 2rem !important;
 
-					&:before {
-						position: relative;
-						left: -.25rem
+					li {
+						border: 1px solid #ededed;
+						width: 10.4rem;
+						height: auto;
+						text-align: center;
+						transition: all .2s ease-in-out;
+						z-index: 10;
+						background-color: white;
+						margin: 0;
+
+						&.dashicons-chart-pie {
+							font-size: 1.5rem;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							flex-direction: column;
+
+							h6 {
+								font-weight: normal;
+								color: #696969;
+								font-size: .5rem;
+							}
+						}
+
+						&:hover {
+							transform: scale(1.5);
+						}
+					}
+				}
+
+				&.no-image-support {
+					li {
+						padding-left: 2rem;
+						list-style: none;
+
+						&:before {
+							left: 0;
+							top: 0.3rem;
+							width: 1em;
+							height: 1em;
+						}
+
+						&:hover {
+							cursor: pointer;
+						}
 					}
 				}
 			}
 
-			p {
-				margin-bottom: 0;
-			}
-		}
-
-		.m-chart-containerlist {
-			max-height: 15rem;
-			overflow-y: scroll;
-			overflow-x: hidden;
-
-			&::-webkit-scrollbar {
-				width: 5px;
-				background-color: #F5F5F5;
-				position: absolute;
-				left: 0;
-			}
-
-			&::-webkit-scrollbar-thumb {
-				background-color: #444;
-			}
-
-			li {
-				&:hover {
-					cursor: pointer;
-				}
-			}
-
-			&.image-support {
+			.chart-selected {
 				display: flex;
-				flex-wrap: wrap;
-				list-style: none;
-				gap: .5rem;
-				padding: 2rem !important;
+				flex-direction: column;
+				align-items: center;
+				padding: 1rem;
 
-				li {
-					border: 1px solid #ededed;
-					width: 10.4rem;
-					height: auto;
-					text-align: center;
-					transition: all .2s ease-in-out;
-					z-index: 10;
-					background-color: white;
-					margin: 0;
+				.no-image-support {
+					width: 100%;
+					background: aliceblue;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
 
-					&.dashicons-chart-pie {
-						font-size: 1.5rem;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						flex-direction: column;
 
-						h6 {
-							font-weight: normal;
+					h4 {
+						margin: 0.5rem 0;
+
+						&.dashicons-chart-pie {
 							color: #696969;
-							font-size: .5rem;
+							font-weight: normal;
+
+							&:before {
+								position: relative;
+								left: -.25rem
+							}
 						}
 					}
 
-					&:hover {
-						transform: scale(1.5);
+					p {
+						margin-bottom: 0;
+					}
+
+					.type {
+						height: 3rem;
+						text-align: center;
+						width: 3rem;
+
+						&:before {
+							top: 0;
+							left: 0.5rem;
+							width: 2em;
+							height: 2em;
+						}
 					}
 				}
 			}
 		}
+
+
+		.no-image-support {
+
+			li,
+			.type {
+				position: relative;
+
+				&:before {
+					content: '';
+					position: absolute;
+					background-repeat: no-repeat;
+					background-size: contain;
+				}
+
+				&.line:before {
+					background-image: url('../../components/images/types/line.svg');
+				}
+
+				&.spline:before {
+					background-image: url('../../components/images/types/spline.svg');
+				}
+
+				&.area:before {
+					background-image: url('../../components/images/types/area.svg');
+				}
+
+				&.column:before {
+					background-image: url('../../components/images/types/column.svg');
+				}
+
+				&.stacked-column:before {
+					background-image: url('../../components/images/types/stacked-column.svg');
+				}
+
+				&.bar:before {
+					background-image: url('../../components/images/types/bar.svg');
+				}
+
+				&.stacked-bar:before {
+					background-image: url('../../components/images/types/stacked-bar.svg');
+				}
+
+				&.pie:before {
+					background-image: url('../../components/images/types/pie.svg');
+				}
+
+				&.doughnut:before {
+					background-image: url('../../components/images/types/doughnut.svg');
+				}
+
+				&.scatter:before {
+					background-image: url('../../components/images/types/scatter.svg');
+				}
+
+				&.bubble:before {
+					background-image: url('../../components/images/types/bubble.svg');
+				}
+
+				&.radar:before {
+					background-image: url('../../components/images/types/radar.svg');
+				}
+
+				&.polar:before {
+					background-image: url('../../components/images/types/polar.svg');
+				}
+			}
+		}
+
 	}
 
 	.components-placeholder__label:hover {
