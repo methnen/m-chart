@@ -1,0 +1,725 @@
+# Copyright (C) 2023 Jamie Poitra
+# This file is distributed under the MIT.
+msgid ""
+msgstr ""
+"Project-Id-Version: M Chart 1.10.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-08-30T10:43:11+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: m-chart\n"
+
+#. Plugin Name of the plugin
+msgid "M Chart"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "http://github.com/methnen/m-chart"
+msgstr ""
+
+#. Description of the plugin
+#: components/class-m-chart.php:206
+msgid "Manage data sets and display them as charts in WordPress."
+msgstr ""
+
+#. Author of the plugin
+msgid "Jamie Poitra"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://methnen.com"
+msgstr ""
+
+#: components/array-default-unit-terms.php:8
+msgid "Time"
+msgstr ""
+
+#: components/array-default-unit-terms.php:9
+msgid "Seconds"
+msgstr ""
+
+#: components/array-default-unit-terms.php:10
+msgid "Minutes"
+msgstr ""
+
+#: components/array-default-unit-terms.php:11
+msgid "Hours"
+msgstr ""
+
+#: components/array-default-unit-terms.php:12
+msgid "Days"
+msgstr ""
+
+#: components/array-default-unit-terms.php:13
+msgid "Weeks"
+msgstr ""
+
+#: components/array-default-unit-terms.php:14
+msgid "Months"
+msgstr ""
+
+#: components/array-default-unit-terms.php:15
+msgid "Quarter"
+msgstr ""
+
+#: components/array-default-unit-terms.php:16
+msgid "Years"
+msgstr ""
+
+#: components/array-default-unit-terms.php:17
+msgid "Decades"
+msgstr ""
+
+#: components/array-default-unit-terms.php:18
+msgid "Centuries"
+msgstr ""
+
+#: components/array-default-unit-terms.php:20
+msgid "Money"
+msgstr ""
+
+#: components/array-default-unit-terms.php:21
+msgid "USD"
+msgstr ""
+
+#: components/array-default-unit-terms.php:22
+msgid "EUR"
+msgstr ""
+
+#: components/array-default-unit-terms.php:23
+msgid "GBP"
+msgstr ""
+
+#: components/array-default-unit-terms.php:24
+msgid "JPY"
+msgstr ""
+
+#: components/array-default-unit-terms.php:25
+msgid "CNY"
+msgstr ""
+
+#: components/array-default-unit-terms.php:27
+msgid "Length"
+msgstr ""
+
+#: components/array-default-unit-terms.php:28
+msgid "Inch"
+msgstr ""
+
+#: components/array-default-unit-terms.php:29
+msgid "Foot"
+msgstr ""
+
+#: components/array-default-unit-terms.php:30
+msgid "Yard"
+msgstr ""
+
+#: components/array-default-unit-terms.php:31
+msgid "Mile"
+msgstr ""
+
+#: components/array-default-unit-terms.php:32
+msgid "Millimeter"
+msgstr ""
+
+#: components/array-default-unit-terms.php:33
+msgid "Centimeter"
+msgstr ""
+
+#: components/array-default-unit-terms.php:34
+msgid "Meter"
+msgstr ""
+
+#: components/array-default-unit-terms.php:35
+msgid "Kilometer"
+msgstr ""
+
+#: components/array-default-unit-terms.php:37
+msgid "Other"
+msgstr ""
+
+#: components/array-default-unit-terms.php:38
+msgid "Percent"
+msgstr ""
+
+#: components/array-default-unit-terms.php:40
+msgid "Website/Traffic"
+msgstr ""
+
+#: components/array-default-unit-terms.php:41
+msgid "Visitors"
+msgstr ""
+
+#: components/array-default-unit-terms.php:42
+msgid "Unique Visitors"
+msgstr ""
+
+#: components/array-default-unit-terms.php:43
+msgid "Clicks"
+msgstr ""
+
+#: components/array-default-unit-terms.php:44
+msgid "Referrers"
+msgstr ""
+
+#: components/array-default-unit-terms.php:45
+msgid "Active Users"
+msgstr ""
+
+#: components/array-default-unit-terms.php:46
+msgid "Pages"
+msgstr ""
+
+#: components/array-default-unit-terms.php:48
+msgid "Sales"
+msgstr ""
+
+#: components/array-default-unit-terms.php:49
+#: components/templates/chartjs-settings.php:86
+#: components/templates/chartjs-settings.php:124
+msgid "Units"
+msgstr ""
+
+#: components/array-default-unit-terms.php:50
+msgid "CPM"
+msgstr ""
+
+#: components/class-m-chart-admin.php:47
+#: components/templates/m-chart-settings.php:2
+msgid "M Chart Settings"
+msgstr ""
+
+#: components/class-m-chart-admin.php:48
+msgid "Settings"
+msgstr ""
+
+#: components/class-m-chart-admin.php:199
+msgid "Settings saved"
+msgstr ""
+
+#: components/class-m-chart-admin.php:235
+#: components/class-m-chart-admin.php:236
+#: components/templates/chart-meta-box.php:14
+#: components/templates/chart-meta-box.php:15
+msgid "M Chart Highcharts Library"
+msgstr ""
+
+#: components/class-m-chart-admin.php:237
+msgid "You have charts that require the M Chart Highcharts Library plugin."
+msgstr ""
+
+#: components/class-m-chart-admin.php:241
+msgid "These charts will no longer display unless you install the plugin:"
+msgstr ""
+
+#: components/class-m-chart-admin.php:243
+#: components/templates/chart-meta-box.php:21
+msgid "Learn More"
+msgstr ""
+
+#: components/class-m-chart-admin.php:346
+msgid "Are you sure you want to delete this spreadsheet?"
+msgstr ""
+
+#: components/class-m-chart-admin.php:375
+msgid "Data"
+msgstr ""
+
+#: components/class-m-chart-admin.php:384
+#: components/class-m-chart.php:184
+msgid "Chart"
+msgstr ""
+
+#: components/class-m-chart-admin.php:488
+msgid "Library not found"
+msgstr ""
+
+#: components/class-m-chart-admin.php:702
+#: components/class-m-chart-admin.php:712
+msgid "Wrong post type"
+msgstr ""
+
+#: components/class-m-chart-admin.php:707
+#: components/class-m-chart-admin.php:832
+msgid "Invalid nonce"
+msgstr ""
+
+#: components/class-m-chart-admin.php:717
+msgid "No file to import"
+msgstr ""
+
+#: components/class-m-chart-admin.php:724
+msgid "Only CSV files can be imported "
+msgstr ""
+
+#: components/class-m-chart-admin.php:731
+msgid "File path not found"
+msgstr ""
+
+#: components/class-m-chart-admin.php:737
+msgid "CSV file was empty"
+msgstr ""
+
+#: components/class-m-chart-admin.php:837
+msgid "Invalid post"
+msgstr ""
+
+#: components/class-m-chart-admin.php:842
+msgid "Permission error"
+msgstr ""
+
+#: components/class-m-chart-admin.php:847
+msgid "Invalid library"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:98
+msgid "Line"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:99
+msgid "Spline"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:100
+msgid "Area"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:101
+msgid "Column"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:102
+msgid "Stacked Column"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:103
+msgid "Bar"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:104
+msgid "Stacked Bar"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:105
+msgid "Pie"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:106
+msgid "Doughnut"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:107
+msgid "Scatter"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:108
+msgid "Bubble"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:109
+msgid "Radar"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:110
+msgid "Radar Area"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:111
+msgid "Polar"
+msgstr ""
+
+#: components/class-m-chart.php:144
+#: components/class-m-chart.php:154
+msgid "Chart Units"
+msgstr ""
+
+#: components/class-m-chart.php:145
+msgid "Chart Unit"
+msgstr ""
+
+#: components/class-m-chart.php:146
+msgid "Search Chart Units"
+msgstr ""
+
+#: components/class-m-chart.php:147
+msgid "All Chart Units"
+msgstr ""
+
+#: components/class-m-chart.php:148
+msgid "Parent Chart Unit"
+msgstr ""
+
+#: components/class-m-chart.php:149
+msgid "Parent Chart Unit:"
+msgstr ""
+
+#: components/class-m-chart.php:150
+msgid "Edit Chart Unit"
+msgstr ""
+
+#: components/class-m-chart.php:151
+msgid "Update Chart Unit"
+msgstr ""
+
+#: components/class-m-chart.php:152
+msgid "Add New Chart Unit"
+msgstr ""
+
+#: components/class-m-chart.php:153
+msgid "Chart Unit Name"
+msgstr ""
+
+#: components/class-m-chart.php:183
+msgid "Charts"
+msgstr ""
+
+#: components/class-m-chart.php:185
+#: components/class-m-chart.php:186
+msgid "Add Chart"
+msgstr ""
+
+#: components/class-m-chart.php:187
+msgid "Edit"
+msgstr ""
+
+#: components/class-m-chart.php:188
+#: build/index.js:138
+#: build/index.js:84
+msgid "Edit Chart"
+msgstr ""
+
+#: components/class-m-chart.php:189
+#: build/index.js:135
+#: build/index.js:81
+msgid "New Chart"
+msgstr ""
+
+#: components/class-m-chart.php:190
+#: components/templates/chartjs-settings.php:159
+msgid "View"
+msgstr ""
+
+#: components/class-m-chart.php:191
+msgid "View Chart"
+msgstr ""
+
+#: components/class-m-chart.php:192
+msgid "Search Charts"
+msgstr ""
+
+#: components/class-m-chart.php:193
+#: build/index.js:152
+#: build/index.js:104
+msgid "No Charts found"
+msgstr ""
+
+#: components/class-m-chart.php:194
+msgid "No Charts found in the Trash"
+msgstr ""
+
+#: components/class-m-chart.php:928
+msgid "The chart could not be found"
+msgstr ""
+
+#: components/class-m-chart.php:929
+msgid "Chart not found"
+msgstr ""
+
+#: components/class-m-chart.php:938
+msgid "Embeds of this type are not enabled"
+msgstr ""
+
+#: components/class-m-chart.php:939
+msgid "Embeds disabled"
+msgstr ""
+
+#: components/templates/chart-meta-box.php:16
+msgid "This chart requires the M Chart Highcharts Library plugin."
+msgstr ""
+
+#: components/templates/chart-meta-box.php:20
+msgid "This chart will no longer display unless you install the plugin:"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:3
+msgid "Columns"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:4
+msgid "Rows"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:12
+msgid "Type"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:26
+msgid "Theme"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:40
+msgid "Height"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:46
+msgid "Parse data in"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:63
+msgid "Show labels"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:70
+msgid "Show legend"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:76
+msgid "Shared tooltip"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:82
+msgid "Vertical axis title"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:88
+#: components/templates/chartjs-settings.php:126
+msgid "N/A"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:113
+msgid "Force vertical axis minimum: "
+msgstr ""
+
+#: components/templates/chartjs-settings.php:120
+msgid "Horizontal axis title"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:150
+msgid "Shortcode"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:154
+msgid "Image"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:162
+msgid "Image generation is disabled"
+msgstr ""
+
+#: components/templates/chartjs-settings.php:164
+msgid "Save/Update this post to generate the image version"
+msgstr ""
+
+#: components/templates/handlebars.php:5
+msgid "Double click or long press tab to edit name"
+msgstr ""
+
+#: components/templates/m-chart-settings-chartjs.php:1
+msgid "Chart.js Settings"
+msgstr ""
+
+#: components/templates/m-chart-settings-chartjs.php:7
+msgid "Default Chart.js Theme"
+msgstr ""
+
+#: components/templates/m-chart-settings-chartjs.php:23
+msgid "See the M Chart documentation for more info on how to use themes:"
+msgstr ""
+
+#: components/templates/m-chart-settings-chartjs.php:29
+msgid "Number Format Locale"
+msgstr ""
+
+#: components/templates/m-chart-settings-chartjs.php:43
+msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:5
+msgid "General Settings"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:9
+msgid "Default Library"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:23
+msgid "Chart.js is the GPL compatible default library:"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:33
+msgid "Show Library in Edit Posts Screen"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:34
+msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:39
+#: components/templates/m-chart-settings.php:43
+msgid "Performance"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:47
+msgid "Default"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:48
+msgid "Provides all functionality"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:52
+msgid "No Images"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:53
+msgid "No generation of chart images"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:57
+msgid "No Instant Preview"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:58
+msgid "No instant preview and no generation of chart images"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:64
+#: components/templates/m-chart-settings.php:68
+msgid "Image Multiplier"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:72
+msgid "1x"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:76
+msgid "2x"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:80
+msgid "3x"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:84
+msgid "4x"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:86
+msgid "The higher the multiplier the better the images will look on high DPI screens"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:91
+msgid "Image Width"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:95
+msgid "The width of the image generated from your chart"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:100
+msgid "Embeds"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:104
+msgid "Enable iframe embeds"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:105
+msgid "Allow charts to be remotely embedded via iframes"
+msgstr ""
+
+#: components/templates/m-chart-settings.php:113
+msgid "Save Changes"
+msgstr ""
+
+#: components/templates/share.php:24
+msgid "Share:"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:5
+msgid "Add Sheet"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:11
+msgid "Export CSV"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:11
+msgid "Export"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:14
+msgid "CSV Import/Export"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:16
+msgid "Select CSV File"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:16
+msgid "Select File"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:17
+msgid "Import"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:18
+msgid "You can only import CSV files"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:20
+msgid "Importing file"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:22
+msgid "Cancel Import"
+msgstr ""
+
+#: components/templates/spreadsheet-meta-box.php:24
+msgid "Importing this file will replace all existing data in this sheet"
+msgstr ""
+
+#: components/templates/subtitle-field.php:1
+msgid "Enter subtitle here"
+msgstr ""
+
+#: build/index.js:140
+#: build/index.js:85
+msgid "Replace"
+msgstr ""
+
+#: build/index.js:148
+#: build/index.js:95
+msgid "There is a problem fetching charts"
+msgstr ""
+
+#: build/index.js:154
+#: build/index.js:105
+msgid "Create a new chart"
+msgstr ""
+
+#: build/index.js:163
+#: build/index.js:129
+msgid "Search by title"
+msgstr ""
+
+#: build/index.js:167
+#: build/index.js:133
+msgid "No Charts found using this search string"
+msgstr ""
+
+#: build/chart/block.json
+msgctxt "block title"
+msgid "M Chart"
+msgstr ""
+
+#: build/chart/block.json
+msgctxt "block description"
+msgid "Embed a chart made with M Chart into your posts and pages"
+msgstr ""

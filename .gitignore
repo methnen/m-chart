@@ -1,5 +1,8 @@
 .DS_Store
+**/.DS_Store
 .sass-cache/
 node_modules/
 deploy/
+build/
 package-lock.json
+.vscode/
