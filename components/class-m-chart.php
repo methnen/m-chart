@@ -1,10 +1,10 @@
 <?php
 
 class M_Chart {
-	public $dev = true;
-	public $version = '1.10.2';
-	public $slug = 'm-chart';
-	public $plugin_name = 'Chart';
+	public $dev               = true;
+	public $version           = '1.10.2';
+	public $slug              = 'm-chart';
+	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = array(
 		'library'     => 'chartjs',
 		'type'        => 'line',
@@ -37,18 +37,18 @@ class M_Chart {
 	public $options_set;
 	public $plugin_url;
 	public $is_shortcake = false;
-	public $is_iframe = false;
-	public $instance = 1;
-	public $settings = array(
+	public $is_iframe    = false;
+	public $instance     = 1;
+	public $settings     = array(
 		'library'          => 'chartjs',
 		'show_library'     => 'no',
 		'performance'      => 'default',
 		'image_multiplier' => '2',
 		'image_width'      => '600',
-		'embeds'        => '',
-		'default_theme' => '_default',
-		'locale'        => 'en-US',
-		'lang_settings' => array(
+		'embeds'           => '',
+		'default_theme'    => '_default',
+		'locale'           => 'en-US',
+		'lang_settings'    => array(
 			'decimalPoint'   => '.',
 			'thousandsSep'   => ',',
 			'numericSymbols' => array(
@@ -66,6 +66,7 @@ class M_Chart {
 
 	private $admin;
 	private $parse;
+	private $block;
 	private $libraries = array(
 		'chartjs' => 'Chart.js',
 	);
@@ -87,12 +88,14 @@ class M_Chart {
 		// Doing this before the default so it's already done before anything else
 		add_filter( 'm_chart_get_chart_image_tag', array( $this, 'm_chart_get_chart_image_tag' ), 9, 3 );
 		add_filter( 'the_content', array( $this, 'the_content' ) );
-		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support'), 10, 2 );
-		add_filter( 'm_chart_instant_preview_support', array( $this, 'm_chart_instant_preview_support'), 10, 2 );
-		add_filter( 'm_chart_library_class', array( $this, 'm_chart_library_class'), 10, 2 );
+		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
+		add_filter( 'm_chart_instant_preview_support', array( $this, 'm_chart_instant_preview_support' ), 10, 2 );
+		add_filter( 'm_chart_library_class', array( $this, 'm_chart_library_class' ), 10, 2 );
 
 		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
 		add_shortcode( 'chart-share', array( $this, 'share_shortcode' ) );
+		
+		$this->block();
 	}
 
 	/**
@@ -101,10 +104,22 @@ class M_Chart {
 	public function admin() {
 		if ( ! $this->admin ) {
 			require_once __DIR__ . '/class-m-chart-admin.php';
-			$this->admin = new M_Chart_Admin;
+			$this->admin = new M_Chart_Admin();
 		}
 
 		return $this->admin;
+	}
+	
+	/**
+	 * Block object accessor
+	 */
+	public function block() {
+		if ( ! $this->block ) {
+			require_once __DIR__ . '/class-m-chart-block.php';
+			$this->block = new M_Chart_Block();
+		}
+
+		return $this->block;
 	}
 
 	/**
@@ -124,7 +139,7 @@ class M_Chart {
 	public function parse() {
 		if ( ! $this->parse ) {
 			require_once __DIR__ . '/class-m-chart-parse.php';
-			$this->parse = new M_Chart_Parse;
+			$this->parse = new M_Chart_Parse();
 		}
 
 		return $this->parse;
@@ -153,10 +168,10 @@ class M_Chart {
 					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
 					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
 				),
-				'show_ui'      => true,
-				'query_var'    => true,
-				'rewrite'      => array(
-					'slug'         => $this->slug . '-units',
+				'show_ui'   => true,
+				'query_var' => true,
+				'rewrite'   => array(
+					'slug' => $this->slug . '-units',
 				),
 			)
 		);
@@ -170,7 +185,7 @@ class M_Chart {
 				'show_ui'      => false,
 				'query_var'    => true,
 				'rewrite'      => array(
-					'slug'         => $this->slug . '-library',
+					'slug' => $this->slug . '-library',
 				),
 			)
 		);
@@ -195,6 +210,7 @@ class M_Chart {
 				),
 				'register_meta_box_cb' => is_admin() ? array( $this->admin(), 'meta_boxes' ) : null,
 				'public'               => true,
+				'show_in_rest'         => true,
 				'hierarchical'         => false,
 				'exclude_from_search'  => false,
 				'menu_position'        => 9,
@@ -206,7 +222,7 @@ class M_Chart {
 				'rewrite'              => array(
 					'slug' => 'chart',
 				),
-				'supports'             => array(
+				'supports' => array(
 					'author',
 					'title',
 					'excerpt',
@@ -278,9 +294,7 @@ class M_Chart {
 	public function plugin_url( $path = '' ) {
 		if ( is_admin() ) {
 			$url_base = parse_url( admin_url() );
-		}
-		else
-		{
+		} else {
 			$url_base = parse_url( home_url() );
 		}
 
@@ -333,7 +347,7 @@ class M_Chart {
 
 		// Theme default is based off of an option so we'll handle that here
 		if ( ! isset( $post_meta['theme'] ) ) {
-			$settings = $this->get_settings();
+			$settings           = $this->get_settings();
 			$post_meta['theme'] = $settings['default_theme'];
 		}
 
@@ -349,8 +363,8 @@ class M_Chart {
 
 		// If the data has the old legacy format we need to update it
 		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
-			$data = $post_meta['data'];
-			$post_meta['data'] = array();
+			$data                        = $post_meta['data'];
+			$post_meta['data']           = array();
 			$post_meta['data']['sets'][] = $data;
 		}
 
@@ -438,15 +452,14 @@ class M_Chart {
 				} else {
 					$chart_meta[ $field ] = wp_filter_nohtml_kses( $meta[ $field ] );
 				}
-			}
-			elseif ( ! isset( $chart_meta[ $field ] ) ) {
+			} elseif ( ! isset( $chart_meta[ $field ] ) ) {
 				// Fall back on the default value if there wasn't one in the given meta
 				$chart_meta[ $field ] = $default;
 			}
 		}
 
 		// The theme meta it isn't included in the chart_meta_fields class var so we handle it here
-		if ( isset( $meta['theme'] ) && preg_match('#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
+		if ( isset( $meta['theme'] ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
@@ -478,17 +491,17 @@ class M_Chart {
 			return wp_filter_nohtml_kses( $data );
 		}
 
-        foreach ( $data as $key => $value ) {
-            if ( is_array( $value ) ) {
-                $data[ $key ] = $this->validate_data( $value );
-            } else {
-            	$value        = $value ?? '';
-                $data[ $key ] = wp_filter_nohtml_kses( $value );
-            }
-        }
+		foreach ( $data as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$data[ $key ] = $this->validate_data( $value );
+			} else {
+				$value        = $value ?? '';
+				$data[ $key ] = wp_filter_nohtml_kses( $value );
+			}
+		}
 
-        return $data;
-    }
+		return $data;
+	}
 
 
 	/**
@@ -540,11 +553,10 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 
-			   'image' == $args['show'] 
-			|| is_feed() 
-			|| $this->is_shortcake 
-			|| $this->is_amp_endpoint() 
+		if ( 'image' == $args['show']
+			|| is_feed()
+			|| $this->is_shortcake
+			|| $this->is_amp_endpoint()
 			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
 		) {
 			$image = $this->get_chart_image( $post_id );
@@ -560,11 +572,18 @@ class M_Chart {
 
 			if ( $this->is_amp_endpoint() ) {
 				ob_start();
-				?><amp-img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>" width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>" class="<?php echo esc_attr( $classes ); ?>"></amp-img><?php
+				?><amp-img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>"
+	width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
+	class="<?php echo esc_attr( $classes ); ?>"></amp-img>
+				<?php
 				return ob_get_clean();
 			} else {
 				ob_start();
-				?><img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>" width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>" alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" class="<?php echo esc_attr( $classes ); ?>" /><?php
+				?>
+<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>"
+	width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
+	alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" class="<?php echo esc_attr( $classes ); ?>" />
+				<?php
 				return ob_get_clean();
 			}
 		}
@@ -602,9 +621,9 @@ class M_Chart {
 	 * @return string HTML table
 	 */
 	public function build_table( $post_id ) {
-		$post = get_post( $post_id );
+		$post      = get_post( $post_id );
 		$post_meta = $this->get_post_meta( $post_id );
-		$library = m_chart()->get_post_meta( $post->ID, 'library' );
+		$library   = m_chart()->get_post_meta( $post->ID, 'library' );
 
 		$table = '';
 
@@ -747,7 +766,7 @@ class M_Chart {
 
 		if ( ! $this->library_class instanceof M_Chart_Chartjs ) {
 			require_once __DIR__ . '/class-m-chart-chartjs.php';
-			$this->library_class = new M_Chart_Chartjs;
+			$this->library_class = new M_Chart_Chartjs();
 		}
 
 		return $this->library_class;
@@ -767,7 +786,11 @@ class M_Chart {
 		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
 
 		ob_start();
-		?><iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>" src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe><?php
+		?>
+<iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
+	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
+	src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe>
+		<?php
 		if ( 'show' == $args['share'] ) {
 			unset( $args['share'] );
 			require apply_filters( 'm_chart_share_template', __DIR__ . '/templates/share.php' );
@@ -784,7 +807,7 @@ class M_Chart {
 	 * @return string the chart requested in Javascript or HTML form
 	 */
 	public function chart_shortcode( $args ) {
-		$default_args = $this->get_chart_default_args;
+		$default_args       = $this->get_chart_default_args;
 		$default_args['id'] = '';
 
 		$args = shortcode_atts( $default_args, $args );
@@ -846,7 +869,7 @@ class M_Chart {
 	 */
 	public function compile_unit_terms( $terms ) {
 		$compiled_terms = array();
-		$parents = array();
+		$parents        = array();
 
 		foreach ( $terms as $unit ) {
 			if ( 0 == $unit->parent ) {
@@ -872,7 +895,7 @@ class M_Chart {
 	 */
 	public function generate_unit_terms() {
 		// Load the default terms array
-		$default_terms = require __DIR__ .'/array-default-unit-terms.php';
+		$default_terms = require __DIR__ . '/array-default-unit-terms.php';
 
 		$terms = array();
 
@@ -1041,7 +1064,7 @@ class M_Chart {
 		if ( isset( $_GET['library'] ) && $this->is_valid_library( $_GET['library'] ) ) {
 			return $_GET['library'];
 		}
-		
+
 		return $this->get_settings( 'library' );
 	}
 
@@ -1051,7 +1074,7 @@ class M_Chart {
 	 * @return array locales as used by Intl.NumberFormat
 	 */
 	public function get_locales() {
-		return require __DIR__ .'/array-locale-codes.php';
+		return require __DIR__ . '/array-locale-codes.php';
 	}
 
 	/**
@@ -1063,23 +1086,22 @@ class M_Chart {
 	 * @return array the merged array
 	 */
 	public function array_merge_recursive( &$a, $b ) {
-	    foreach ( $b as $child => $value ) {
-	        if ( isset( $a[ $child ] ) ) {
+		foreach ( $b as $child => $value ) {
+			if ( isset( $a[ $child ] ) ) {
 				// New value exists so we'll need to move a level down
-	            if ( is_array( $a[ $child ] ) && is_array( $value ) ) {
-	                $this->array_merge_recursive( $a[ $child ], $value );
-	            } else {
+				if ( is_array( $a[ $child ] ) && is_array( $value ) ) {
+					$this->array_merge_recursive( $a[ $child ], $value );
+				} else {
 					// New value is not an array so we override the old value with the new one
-	            	$a[ $child ] = $value;
-	            }
-	        } else {
+					$a[ $child ] = $value;
+				}
+			} else {
 				// New value doesn't exist so we can just add it
-	        	$a[ $child ] = $value;
-	        }
+				$a[ $child ] = $value;
+			}
+		}
 
-	    }
-
-	    return $a;
+		return $a;
 	}
 
 	/**
@@ -1089,14 +1111,14 @@ class M_Chart {
 		// Get all charts
 		$charts = get_posts(
 			array(
-				'post_type' => m_chart()->slug,
+				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
-				'post_status' => 'any',
-				'tax_query' => array(
+				'post_status'    => 'any',
+				'tax_query'      => array(
 					array(
 						'taxonomy' => 'post_tag',
-						'field' => 'slug',
-						'terms' => 'highcharts',
+						'field'    => 'slug',
+						'terms'    => 'highcharts',
 						'operator' => 'NOT IN',
 					),
 				),
@@ -1119,14 +1141,14 @@ class M_Chart {
 		// Get all charts tagged with highcharts
 		$highcharts_charts = get_posts(
 			array(
-				'post_type' => m_chart()->slug,
+				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
-				'post_status' => 'any',
-				'tax_query' => array(
+				'post_status'    => 'any',
+				'tax_query'      => array(
 					array(
 						'taxonomy' => 'post_tag',
-						'field' => 'slug',
-						'terms' => 'highcharts',
+						'field'    => 'slug',
+						'terms'    => 'highcharts',
 						'operator' => 'IN',
 					),
 				),
@@ -1143,14 +1165,14 @@ class M_Chart {
 		// Get all charts tagged with chartjs
 		$chartjs_charts = get_posts(
 			array(
-				'post_type' => m_chart()->slug,
+				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
-				'post_status' => 'any',
-				'tax_query' => array(
+				'post_status'    => 'any',
+				'tax_query'      => array(
 					array(
 						'taxonomy' => 'post_tag',
-						'field' => 'slug',
-						'terms' => 'chartjs',
+						'field'    => 'slug',
+						'terms'    => 'chartjs',
 						'operator' => 'IN',
 					),
 				),
@@ -1176,7 +1198,7 @@ function m_chart() {
 	global $m_chart;
 
 	if ( ! $m_chart instanceof M_Chart ) {
-		$m_chart = new M_Chart;
+		$m_chart = new M_Chart();
 	}
 
 	return $m_chart;

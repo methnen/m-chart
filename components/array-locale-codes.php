@@ -569,4 +569,4 @@ return array(
 	'yo-NG' => esc_html__( 'Yoruba (Nigeria)' ),
 	'zu' => esc_html__( 'Zulu' ),
 	'zu-ZA' => esc_html__( 'Zulu (South Africa)' ),
-); 
+);
