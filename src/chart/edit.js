@@ -20,7 +20,7 @@ export default function edit( { attributes, setAttributes } ) {
     const newUrl = `${ siteUrl }/wp-admin/post-new.php?post_type=m-chart`;
     const editUrl = `${ siteUrl }/wp-admin/post.php?post=${ attributes.chartId }&action=edit`;
     const optionsUrl = `/m-chart/v1/options`;
-    const chartFetchUrl = `/wp/v2/m-chart?all_charts&status=publish&_fields=id,title,subtitle,url`;
+    const chartFetchUrl = `/wp/v2/m-chart?all_charts&status=publish&_fields=id,title,subtitle,url,type,width,height`;
     // Blockprops.
     const blockProps = useBlockProps( { className: 'm-chart-block-chart-selector' } );
     // Miscellaneous
@@ -35,7 +35,14 @@ export default function edit( { attributes, setAttributes } ) {
         } );
         apiFetch( { path: chartFetchUrl } ).then( result => {
             let charts = [];
-            result.map( x => charts.push( { id: x.id, title: x.title || '-', subtitle: x.subtitle, src: x.url || '' } ) );
+            result.map( x => charts.push( {
+                id: x.id,
+                title: x.title || '-',
+                subtitle: x.subtitle,
+                width: x.width,
+                height: x.height,
+                type: x.type || '',
+                src: x.url || '' } ) );
             setCharts( charts );
             setOptions( charts );
             setLoaded( true );
@@ -51,7 +58,7 @@ export default function edit( { attributes, setAttributes } ) {
         if ( imageSupport ) {
             return <li className={ x.src ? 'img' : 'dashicons dashicons-chart-pie' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } /> : <h6>{ x.title }</h6> }</li>;
         } else {
-            return <li key={ x.id } onClick={ () => handleClick( x.id ) }> { x.title }</li>;
+            return <li className={ x.type } key={ x.id } onClick={ () => handleClick( x.id ) }> { x.title }</li>;
         }
     } );
 
@@ -77,7 +84,7 @@ export default function edit( { attributes, setAttributes } ) {
     return (
         <div { ...blockProps }>
             <BlockControls>
-                <ToolbarGroup>
+                <ToolbarGroup className="m-chart-block">
                     <ToolbarButton onClick={ () => window.location.href = newUrl } icon="external">{ __( 'New Chart', 'm-chart' ) }</ToolbarButton>
                     { attributes.chartId &&
                         <>
@@ -88,9 +95,9 @@ export default function edit( { attributes, setAttributes } ) {
                 </ToolbarGroup>
             </BlockControls>
 
-            <div className="wp-block m-chart-selector-container">
+            <div className="wp-block m-chart-selector">
                 <h6 className="branding"><span className="dashicons dashicons-chart-pie"></span>M Chart</h6>
-                <div className="m-chart-viewbox">
+                <div className="viewbox">
                     { loadProblem ?
                         <p>{ __( 'There is a problem fetching charts', 'm-chart' ) }</p>
                         :
@@ -106,37 +113,38 @@ export default function edit( { attributes, setAttributes } ) {
                                     </p>
                                     :
                                     attributes.chartId ?
-                                        <div className="selected-chart">
+                                        <div className="chart-selected">
                                             { imageSupport ?
-                                                <>
+                                                <div className="image-support">
                                                     { selected?.src === '' ?
                                                         <h4 className="no-title dashicons-before dashicons-chart-pie">{ selected?.title }</h4>
                                                         :
                                                         <img className="preview" src={ selected?.src + random } />
                                                     }
-                                                </>
+                                                </div>
                                                 :
-                                                <>
+                                                <div className="no-image-support" style={ { aspectRatio: selected.width / selected.height } }>
+                                                    <span className={ 'type ' + selected.type }></span>
                                                     <h4>{ selected?.title }</h4>
                                                     <p>{ selected?.subtitle }</p>
-                                                </>
+                                                </div>
                                             }
                                         </div>
                                         :
-                                        <>
+                                        <div className="no-chart-selected">
                                             <TextControl
                                                 value={ search }
                                                 placeholder={ __( 'Search by title', 'm-chart' ) }
                                                 onChange={ ( value ) => handleFilter( value ) }
                                             />
                                             { optionsList.length === 0 && search.length > 1 ?
-                                                <p className="center">{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
+                                                <p>{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
                                                 :
-                                                <ul className={ `m-chart-containerlist ${ imageSupport ? 'image-support' : '' }` }>
+                                                <ul className={ imageSupport ? 'image-support' : 'no-image-support' }>
                                                     { optionsList }
                                                 </ul>
                                             }
-                                        </>
+                                        </div>
                             }
                         </>
                     }
