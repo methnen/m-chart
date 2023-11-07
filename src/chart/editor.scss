@@ -94,14 +94,14 @@
 					flex-wrap: wrap;
 					list-style: none;
 					gap: .5rem;
-					padding: 2rem !important;
+					padding: 0 !important;
+
 
 					li {
 						border: 1px solid #ededed;
-						width: 10.4rem;
+						flex-basis: calc(33.3% - 0.5rem);
 						height: auto;
 						text-align: center;
-						transition: all .2s ease-in-out;
 						z-index: 10;
 						background-color: white;
 						margin: 0;
@@ -121,7 +121,14 @@
 						}
 
 						&:hover {
-							transform: scale(1.5);
+							cursor: pointer;
+							border: 1px solid var(--wp-admin-theme-color);
+						}
+					}
+
+					@media (max-width: 782px) {
+						li {
+							flex-basis: 100%;
 						}
 					}
 				}

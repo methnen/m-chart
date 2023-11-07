@@ -42,7 +42,8 @@ export default function edit( { attributes, setAttributes } ) {
                 width: x.width,
                 height: x.height,
                 type: x.type || '',
-                src: x.url || '' } ) );
+                src: x.url || ''
+            } ) );
             setCharts( charts );
             setOptions( charts );
             setLoaded( true );
@@ -141,7 +142,7 @@ export default function edit( { attributes, setAttributes } ) {
                                                 <p>{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
                                                 :
                                                 <ul className={ imageSupport ? 'image-support' : 'no-image-support' }>
-                                                    { optionsList }
+                                                    { optionsList.slice( 0, 24 ) }
                                                 </ul>
                                             }
                                         </div>
