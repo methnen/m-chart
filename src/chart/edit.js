@@ -55,7 +55,7 @@ export default function edit( { attributes, setAttributes } ) {
     }, [] );
 
     // Compose preview list.
-    const optionsList = options.map( ( x ) => {
+    const optionsList = options.slice( 0, 24 ).map( ( x ) => {
         if ( imageSupport ) {
             return <li className={ x.src ? 'img' : 'dashicons dashicons-chart-pie' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } /> : <h6>{ x.title }</h6> }</li>;
         } else {
@@ -70,7 +70,7 @@ export default function edit( { attributes, setAttributes } ) {
         setTemp( id );
     };
 
-    const handleFilter = ( value ) => {
+    const handleSearch = ( value ) => {
         setSearch( value );
         if ( value.length === 0 ) {
             if ( temp ) { setAttributes( { chartId: temp } ); }
@@ -136,13 +136,13 @@ export default function edit( { attributes, setAttributes } ) {
                                             <TextControl
                                                 value={ search }
                                                 placeholder={ __( 'Search by title', 'm-chart' ) }
-                                                onChange={ ( value ) => handleFilter( value ) }
+                                                onChange={ ( value ) => handleSearch( value ) }
                                             />
                                             { optionsList.length === 0 && search.length > 1 ?
                                                 <p>{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
                                                 :
                                                 <ul className={ imageSupport ? 'image-support' : 'no-image-support' }>
-                                                    { optionsList.slice( 0, 24 ) }
+                                                    { optionsList }
                                                 </ul>
                                             }
                                         </div>
