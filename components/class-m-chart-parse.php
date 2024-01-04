@@ -123,13 +123,8 @@ class M_Chart_Parse {
 		}
 
 		// Remove prefixes and suffixes
-		if ( '' != $this->data_prefix ) {
-			$data_point = str_replace( $this->data_prefix, '', $data_point );
-		}
-
-		if ( '' != $this->data_suffix ) {
-			$data_point = str_replace( $this->data_suffix, '', $data_point );
-		}
+		$data_point = preg_replace( $this->prefix_patterns, '', $data_point );
+		$data_point = preg_replace( $this->suffix_patterns, '', $data_point );
 
 		// Remove commas
 		$data_point = str_replace( ',', '', $data_point );

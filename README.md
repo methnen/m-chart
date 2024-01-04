@@ -38,6 +38,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 1.11 ###
+
+* Fixed an issue where data points were being cleaned well enough and it could confuse Chart.js
+
 ### 1.10.2 ###
 
 * Fixed another PHP warning that occured when trim was passed an untyped value (@webconstructor)

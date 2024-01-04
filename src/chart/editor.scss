@@ -3,27 +3,15 @@
 }
 
 .editor-styles-wrapper {
-
-	.branding {
-		width: 100%;
-		text-align: center;
-		margin-bottom: 1rem;
-		color: #ccc;
-		font-weight: normal;
-		font-size: 0.7rem;
-
-		span {
-			margin: -0.125rem 0.1rem 0 0;
-			font-size: 1rem;
-		}
-	}
-
 	.m-chart-selector {
 		background-color: #fff;
-		box-shadow: inset 0 0 0 1px #1e1e1e;
-		outline: 1px solid transparent;
-		padding: 1.5rem;
-		margin-bottom: 1.5rem;
+
+		.dashicons-chart-pie {
+			color: #1e1e1e;
+			font-size: 20px;
+			margin-top: 2px;
+			margin-right: 12px;
+		}
 
 		label {
 			margin-bottom: 2rem;
@@ -50,10 +38,6 @@
 			font-weight: normal;
 		}
 
-		.dashicons-chart-pie {
-			color: silver;
-		}
-
 		.viewbox {
 			display: flex;
 			color: #696969;
@@ -62,6 +46,7 @@
 			input {
 				width: 100%;
 				margin-bottom: 1rem;
+				padding: 6px 8px;
 			}
 
 			p,
@@ -96,9 +81,7 @@
 					gap: .5rem;
 					padding: 0 !important;
 
-
 					li {
-						border: 1px solid #ededed;
 						flex-basis: calc(33.3% - 0.5rem);
 						height: auto;
 						text-align: center;
@@ -120,9 +103,15 @@
 							}
 						}
 
+						img {
+							border: 1.5px solid #ededed;
+						}
+
 						&:hover {
-							cursor: pointer;
-							border: 1px solid var(--wp-admin-theme-color);
+							img {
+								cursor: pointer;
+								border: 1.5px solid var(--wp-admin-theme-color);
+							}
 						}
 					}
 
