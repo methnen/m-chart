@@ -97,60 +97,62 @@ export default function edit( { attributes, setAttributes } ) {
             </BlockControls>
 
             <div className="wp-block m-chart-selector">
-                <h6 className="branding"><span className="dashicons dashicons-chart-pie"></span>M Chart</h6>
-                <div className="viewbox">
-                    { loadProblem ?
-                        <p>{ __( 'There is a problem fetching charts', 'm-chart' ) }</p>
-                        :
-                        <>
-                            { !loaded ?
-                                <p className="center">
-                                    <Spinner />
-                                </p>
-                                :
-                                charts.length === 0 ?
-                                    <p className="center">{ __( 'No Charts found', 'm-chart' ) }
-                                        <a href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</a>
-                                    </p>
-                                    :
-                                    attributes.chartId ?
-                                        <div className="chart-selected">
-                                            { imageSupport ?
-                                                <div className="image-support">
-                                                    { selected?.src === '' ?
-                                                        <h4 className="no-title dashicons-before dashicons-chart-pie">{ selected?.title }</h4>
-                                                        :
-                                                        <img className="preview" src={ selected?.src + random } />
-                                                    }
-                                                </div>
-                                                :
-                                                <div className="no-image-support" style={ { aspectRatio: selected.width / selected.height } }>
-                                                    <span className={ 'type ' + selected.type }></span>
-                                                    <h4>{ selected?.title }</h4>
-                                                    <p>{ selected?.subtitle }</p>
-                                                </div>
-                                            }
-                                        </div>
-                                        :
-                                        <div className="no-chart-selected">
-                                            <TextControl
-                                                value={ search }
-                                                placeholder={ __( 'Search by title', 'm-chart' ) }
-                                                onChange={ ( value ) => handleFilter( value ) }
-                                            />
-                                            { optionsList.length === 0 && search.length > 1 ?
-                                                <p>{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
-                                                :
-                                                <ul className={ imageSupport ? 'image-support' : 'no-image-support' }>
-                                                    { optionsList.slice( 0, 24 ) }
-                                                </ul>
-                                            }
-                                        </div>
-                            }
-                        </>
-                    }
-                </div>
-            </div>
+					<div className="components-placeholder block-editor-m-chart-placeholder is-large">
+		                <div className="components-placeholder__label"><span className="dashicons dashicons-chart-pie"></span> Chart</div>
+		                <div className="viewbox">
+		                    { loadProblem ?
+		                        <p>{ __( 'There is a problem fetching charts', 'm-chart' ) }</p>
+		                        :
+		                        <>
+		                            { !loaded ?
+		                                <p className="center">
+		                                    <Spinner />
+		                                </p>
+		                                :
+		                                charts.length === 0 ?
+		                                    <p className="center">{ __( 'No Charts found', 'm-chart' ) }
+		                                        <a href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</a>
+		                                    </p>
+		                                    :
+		                                    attributes.chartId ?
+		                                        <div className="chart-selected">
+		                                            { imageSupport ?
+		                                                <div className="image-support">
+		                                                    { selected?.src === '' ?
+		                                                        <h4 className="no-title dashicons-before dashicons-chart-pie">{ selected?.title }</h4>
+		                                                        :
+		                                                        <img className="preview" src={ selected?.src + random } />
+		                                                    }
+		                                                </div>
+		                                                :
+		                                                <div className="no-image-support" style={ { aspectRatio: selected.width / selected.height } }>
+		                                                    <span className={ 'type ' + selected.type }></span>
+		                                                    <h4>{ selected?.title }</h4>
+		                                                    <p>{ selected?.subtitle }</p>
+		                                                </div>
+		                                            }
+		                                        </div>
+		                                        :
+		                                        <div className="no-chart-selected">
+		                                            <TextControl
+		                                                value={ search }
+		                                                placeholder={ __( 'Search by title', 'm-chart' ) }
+		                                                onChange={ ( value ) => handleFilter( value ) }
+		                                            />
+		                                            { optionsList.length === 0 && search.length > 1 ?
+		                                                <p>{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
+		                                                :
+		                                                <ul className={ imageSupport ? 'image-support' : 'no-image-support' }>
+		                                                    { optionsList.slice( 0, 24 ) }
+		                                                </ul>
+		                                            }
+		                                        </div>
+		                            }
+		                        </>
+		                    }
+		                </div>
+		            </div>
+				</div>
         </div >
     );
 }
