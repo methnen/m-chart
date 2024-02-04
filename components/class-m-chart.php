@@ -48,6 +48,7 @@ class M_Chart {
 		'embeds'           => '',
 		'default_theme'    => '_default',
 		'locale'           => 'en-US',
+		'csv_delimiter'    => ',',
 		'lang_settings'    => array(
 			'decimalPoint'   => '.',
 			'thousandsSep'   => ',',
@@ -61,6 +62,12 @@ class M_Chart {
 			),
 			'numericSymbolMagnitude' => 1000,
 		),
+	);
+	public $csv_delimiters = array(
+		','  => 'Comma',
+		"\t" => 'Tab',
+		' '  => 'Space',
+		';'  => 'Semicolon',
 	);
 	public $library_class;
 

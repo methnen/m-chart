@@ -7,6 +7,12 @@ class M_Chart_Admin {
 			'no-images',
 			'no-preview',
 		),
+		'csv_delimiter' => array(
+			',',
+			"\t",
+			' ',
+			';',
+		),
 	);
 
 	/**
@@ -745,7 +751,13 @@ class M_Chart_Admin {
 
 		// The "\n" before and after is to deal with CSV files that don't have line breaks above and below the data
 		// Which then seems to confuse parseCSV occasionally
-		$parse_csv->parse( "\n" . trim( $csv_data ) . "\n" );
+		$csv_data = "\n" . trim( $csv_data ) . "\n";
+
+		// Set delimiter
+		$parse_csv->delimiter = m_chart()->get_settings( 'csv_delimiter' );
+		
+		// Parse the CSV 
+		$parse_csv->parse( $csv_data );
 
 		// This deals with Google Doc's crappy CSV exports which don't include columns at the end of a row if they are empty
 		$data_array = $this->fix_csv_data_array( $parse_csv->data );
@@ -816,6 +828,9 @@ class M_Chart_Admin {
 
 		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
 		$parse_csv = new parseCSV();
+
+		// Set delimiter
+		$parse_csv->output_delimiter = m_chart()->get_settings( 'csv_delimiter' );
 
 		$parse_csv->output( $file_name . '-' . $set_name . '.csv', $data );
 		die;
