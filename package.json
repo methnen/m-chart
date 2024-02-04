@@ -12,8 +12,9 @@
     "matchdep": "^2.0.0"
   },
   "dependencies": {
+    "@wordpress/icons": "9.18.0",
     "grunt": "^1.4.0",
-    "@wordpress/icons": "9.18.0"
+    "lodash": "^4.17.21"
   },
   "scripts": {
     "build": "wp-scripts build",
