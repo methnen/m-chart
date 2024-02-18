@@ -54,13 +54,15 @@ module.exports = function( grunt ) {
 						'!**/sass/**',
 						'!**/node_modules/**',
 						'!**/tests/**',
+						'!**/block-src/**',
 						'!components/js/m-chart-chartjs-helpers.js',
 						'!config.rb',
 						'!Gruntfile.js',
 						'!package.json',
 						'!package-lock.json',
 						'!phpunit.xml',
-						'!README.md'
+						'!README.md',
+						'!DEVELOPERS.md'
 					],
 					dest: 'deploy/'
 				}],
@@ -85,5 +87,5 @@ module.exports = function( grunt ) {
 	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
 	grunt.registerTask( 'default', [ 'dart-sass', 'wp_readme_to_markdown', 'uglify' ] );
-	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy', 'clean' ] );
+	grunt.registerTask( 'deploy', [ 'copy:deploy' ] );//, 'wp_deploy:deploy', 'clean' ] );
 };

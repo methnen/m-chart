@@ -40,9 +40,9 @@ export default function edit( { attributes, setAttributes } ) {
     // Compose preview list.
     const optionsList = options.map( ( x ) => {
         if ( imageSupport ) {
-            return <li className={ x.src ? 'img' : 'dashicons dashicons-chart-pie' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } /> : <h6>{ x.title }</h6> }</li>;
+            return <li className={ x.src ? 'item img' : 'item no-image' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } /> : <div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div> }</li>;
         } else {
-            return <li className={ x.type } key={ x.id } onClick={ () => handleClick( x.id ) }> { x.title }</li>;
+            return <li className="no-image" key={ x.id } onClick={ () => handleClick( x.id ) }><div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div></li>;
         }
     } );
 
@@ -116,7 +116,7 @@ export default function edit( { attributes, setAttributes } ) {
 	                <div className="components-placeholder__label"><span className="dashicons dashicons-chart-pie"></span>Chart</div>
 	                <div className="viewbox">
 	                    { loadProblem ?
-	                        <p>{ __( 'There is a problem fetching charts', 'm-chart' ) }</p>
+	                        <p>{ __( 'There was a problem fetching charts', 'm-chart' ) }</p>
 	                        :
 	                        <>
 	                            { !loaded ?
@@ -129,7 +129,10 @@ export default function edit( { attributes, setAttributes } ) {
 	                                        { imageSupport ?
 	                                            <div className="image-support">
 	                                                { selected?.src === '' ?
-	                                                    <h4 className="no-title dashicons-before dashicons-chart-pie">{ selected?.title }</h4>
+														<div className="type">
+															<span className={ 'icon ' + selected.type }></span>
+															<h4 className="title">{ selected.title }</h4>
+														</div>
 	                                                    :
 	                                                    <img className="preview" src={ selected?.src + random } />
 	                                                }
@@ -137,7 +140,7 @@ export default function edit( { attributes, setAttributes } ) {
 	                                            :
 	                                            <div className="no-image-support" style={ { aspectRatio: selected.width / selected.height } }>
 	                                                <span className={ 'type ' + selected.type }></span>
-	                                                <h4>{ selected?.title }</h4>
+	                                                <h4 className="title">{ selected?.title }</h4>
 	                                                <p>{ selected?.subtitle }</p>
 	                                            </div>
 	                                        }
@@ -156,12 +159,12 @@ export default function edit( { attributes, setAttributes } ) {
 	                                                    onChange={ ( value ) => handleSearch( value ) }
 	                                                    autoFocus
 	                                                />
-	                                                <p>{ optionsList.length } { __( ' of ', 'm-chart' ) }{ available }</p>
+	                                                <p className="count">{ optionsList.length } { __( ' of ', 'm-chart' ) }{ available }</p>
 	                                            </div>
 	                                            { optionsList.length === 0 && search.length > 1 ?
 	                                                <p>{ __( 'No Charts found using this search string', 'm-chart' ) }</p>
 	                                                :
-	                                                <ul className={ imageSupport ? 'image-support' : 'no-image-support' }>
+	                                                <ul className={ imageSupport ? 'results image-support' : 'results no-image-support' }>
 	                                                    { optionsList }
 	                                                </ul>
 	                                            }

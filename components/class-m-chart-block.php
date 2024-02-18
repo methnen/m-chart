@@ -1,44 +1,26 @@
 <?php
 
 class M_Chart_Block {
-
-	/**
-	 * Url to the build folder.
-	 *
-	 * @var build_folder_url
-	 */
-	private $build_folder_url;
-	/**
-	 * Path to the build folder.
-	 *
-	 * @var build_folder_path
-	 */
-	private $build_folder_path;
-
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->build_folder_url  = plugin_dir_url( __DIR__ ) . 'build/';
-		$this->build_folder_path = plugin_dir_path( __DIR__ ) . 'build/';
 		add_action( 'init', [ $this, 'register_m_chart_block_support' ] );
 		add_action( 'plugins_loaded', [ $this, 'wt_m_chart_load_textdomain' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_m_chart_options' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_graphs' ] );
 	}
 
-
 	/**
 	 * Register block type
 	 */
 	public function register_m_chart_block_support() {
-
-		$asset_file = require_once $this->build_folder_path . 'index.asset.php';
+		$asset_file = require_once __DIR__ . '/block/index.asset.php';
 
 		// Register editor script.
 		wp_register_script(
 			'm-chart_editor',
-			$this->build_folder_url . 'index.js',
+			m_chart()->plugin_url . '/components/block/index.js',
 			[ 'wp-i18n' ],
 			$this->version_str(),
 			true
@@ -48,13 +30,13 @@ class M_Chart_Block {
 		wp_set_script_translations(
 			'm-chart_editor',
 			'm-chart',
-			plugin_dir_path( __DIR__ ) . 'components/languages'
+			plugin_dir_path( __DIR__ ) . 'languages'
 		);
 
 		// Register block styles.
 		wp_register_style(
 			'm-chart-style',
-			$this->build_folder_url . 'index.css',
+			m_chart()->plugin_url . '/components/block/index.css',
 			[],
 			$this->version_str()
 		);
@@ -62,12 +44,12 @@ class M_Chart_Block {
 		// Register editor styles.
 		wp_register_style(
 			'm-chart-editor-style',
-			$this->build_folder_url . 'index.css',
+			m_chart()->plugin_url . '/components/block/index.css',
 			[ 'wp-edit-blocks' ],
 			$this->version_str()
 		);
 
-		register_block_type( $this->build_folder_path . 'chart/block.json' );
+		register_block_type( __DIR__ . '/block/chart/block.json' );
 	}
 
 	/**
@@ -77,6 +59,7 @@ class M_Chart_Block {
 		$plugin_file    = plugin_dir_path( __DIR__ ) . ( 'm-chart.php' );
 		$plugin_data    = get_file_data( $plugin_file, [ 'Version' => 'Version' ] );
 		$plugin_version = $plugin_data['Version'];
+	
 		return WP_DEBUG ? $plugin_version . ' - ' . substr( hash( 'sha256', current_time( 'timestamp' ) ), 0, 12 ) : $plugin_version;
 	}
 
@@ -158,12 +141,13 @@ class M_Chart_Block {
 		$posts               = get_posts( $args );
 
 		$results = [];
+		
 		foreach ( $posts as $post ) {
 			$result             = [];
 			$post_meta          = get_post_meta( $post->ID, 'm-chart', true );
 			$post_thumbnail_id  = get_post_meta( $post->ID, '_thumbnail_id', true );
 			$result['id']       = strval( $post->ID );
-			$result['title']    = get_the_title( $post->ID );
+			$result['title']    = html_entity_decode( get_the_title( $post->ID ) );
 			$result['subtitle'] = isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '';
 			$result['url']      = get_the_post_thumbnail_url( $post->ID );
 			$result['type']     = isset( $post_meta ) && isset( $post_meta['type'] ) ? $post_meta['type'] : '';
@@ -171,6 +155,7 @@ class M_Chart_Block {
 			$result['width']    = wp_get_attachment_metadata( $post_thumbnail_id )['width'] ?? 1200;
 			$results[]          = $result;
 		}
+		
 		return [$total_number_of_possible_results, $results];
 	}
 }
