@@ -102,6 +102,7 @@ class M_Chart {
 		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
 		add_shortcode( 'chart-share', array( $this, 'share_shortcode' ) );
 		
+		// Initiate the block class
 		$this->block();
 	}
 

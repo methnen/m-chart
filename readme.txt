@@ -37,9 +37,9 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.11 =
 
 * Added a Chart Block for the WordPress Block Editor
-	* Send your thanks to [webconstructor](https://github.com/webconstructor) for all of the work on this
+	* Send your thanks to [webconstructor](https://github.com/webconstructor) for lion's share of the work on this
 * Added a CSV Delimiter setting to allow for differences in CSV files for different regions
-* Fixed an issue where data points were being cleaned well enough and it could confuse Chart.js
+* Fixed an issue where data points weren't being cleaned well enough and it could confuse Chart.js
 
 = 1.10.2 =
 

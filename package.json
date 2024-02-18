@@ -17,8 +17,8 @@
     "lodash": "^4.17.21"
   },
   "scripts": {
-    "build": "wp-scripts build",
-    "watch": "wp-scripts start",
+    "build": "wp-scripts build --output-path=components/block --webpack-src-dir=components/block-src",
+    "watch": "wp-scripts start --output-path=components/block --webpack-src-dir=components/block-src",
     "postinstall": "npm run build"
   },
   "repository": {
