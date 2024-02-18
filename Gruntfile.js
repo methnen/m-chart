@@ -87,5 +87,5 @@ module.exports = function( grunt ) {
 	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
 	grunt.registerTask( 'default', [ 'dart-sass', 'wp_readme_to_markdown', 'uglify' ] );
-	grunt.registerTask( 'deploy', [ 'copy:deploy' ] );//, 'wp_deploy:deploy', 'clean' ] );
+	grunt.registerTask( 'deploy', [ 'copy:deploy', 'wp_deploy:deploy', 'clean' ] );
 };
