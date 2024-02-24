@@ -754,7 +754,7 @@ class M_Chart_Admin {
 		$csv_data = "\n" . trim( $csv_data ) . "\n";
 
 		// Set delimiter
-		$parse_csv->delimiter = m_chart()->get_settings( 'csv_delimiter' );
+		$parse_csv->delimiter = isset( $_POST['csv_delimiter'] ) ? $_POST['csv_delimiter'] : m_chart()->get_settings( 'csv_delimiter' );
 		
 		// Parse the CSV 
 		$parse_csv->parse( $csv_data );

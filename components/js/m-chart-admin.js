@@ -287,7 +287,7 @@
 	m_chart_admin.handle_csv_import = function() {
 		var $csv_container = $( document.getElementById( 'm-chart-csv' ) );
 		var $select        = $csv_container.find( '.import .select.button' );
-		var $import        = $csv_container.find( '.import .import.button' );
+		var $confirmation  = $csv_container.find( '.import .confirmation' );
 		var $import_form   = $( document.getElementById( 'm-chart-csv-import-form' ) );
 		var $file_input    = $import_form.find( 'input[type=file]' );
 		var $file_info     = $csv_container.find( '.file-info' );
@@ -316,7 +316,7 @@
 			$file_info.find( '.file-name' ).text( file_name );
 
 			$select.addClass( 'hide' );
-			$import.removeClass( 'hide' );
+			$confirmation.removeClass( 'hide' );
 			$file_info.removeClass( 'hide' );
 		});
 
@@ -326,15 +326,15 @@
 			$file_info.addClass( 'hide' );
 			$file_input.val( '' );
 			$select.removeClass( 'hide' );
-			$import.addClass( 'hide' );
+			$confirmation.addClass( 'hide' );
 		});
 
 		// Watch for clicks on import button
-		$import.on( 'click', function( event ) {
+		$confirmation.find( '.button' ).on( 'click', function( event ) {
 			event.preventDefault();
 
 			$file_info.addClass( 'hide' );
-			$import.addClass( 'hide' );
+			$confirmation.addClass( 'hide' );
 			$import_error.addClass( 'hide' );
 			$file_import.removeClass( 'hide' );
 
@@ -348,6 +348,7 @@
 			var $form_data = new FormData( this );
 
 			$form_data.append( 'post_id', m_chart_admin.post_id );
+			$form_data.append( 'csv_delimiter', $confirmation.find( 'select' ).val() );
 			$form_data.append( 'nonce', m_chart_admin.nonce );
 
 			var request = $.ajax({

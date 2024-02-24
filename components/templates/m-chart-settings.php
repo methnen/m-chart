@@ -107,7 +107,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'CSV Delimiter', 'm-chart' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?></th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'csv_delimiter' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">
 							<?php
@@ -120,7 +120,7 @@
 							}
 							?>
 						</select>
-						<span class="description"><?php esc_html_e( 'Used when importing/exporting CSV files', 'm-chart' ); ?></span>
+						<span class="description"><?php esc_html_e( 'Default used when importing/exporting CSV files', 'm-chart' ); ?></span>
 					</td>
 				</tr>
 			</tbody>
