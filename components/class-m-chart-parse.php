@@ -297,7 +297,7 @@ class M_Chart_Parse {
 	 */
 	public function normalize_data_array( $data_array ) {
 		if ( 'rows' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$label_count = count( $this->value_labels['first_row'] ) - 1;
+			$label_count = is_array( $this->value_labels['first_row'] ) ? count( $this->value_labels['first_row'] ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
 				foreach ( $data as $t_key => $value ) {
@@ -307,7 +307,7 @@ class M_Chart_Parse {
 				}
 			}
 		} elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$label_count = count( $this->value_labels['first_column'] ) - 1;
+			$label_count = is_array( $this->value_labels['first_column'] ) ? count( $this->value_labels['first_column'] ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
 				foreach ( $data as $t_key => $value ) {

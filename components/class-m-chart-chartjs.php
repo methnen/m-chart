@@ -314,6 +314,7 @@ class M_Chart_Chartjs {
 		$chart_args['value_prefix'] = m_chart()->parse()->data_prefix;
 		$chart_args['value_suffix'] = m_chart()->parse()->data_suffix;
 		$chart_args['locale']       = m_chart()->get_settings( 'locale' );
+		$chart_args['labels_pos']   = m_chart()->parse()->value_labels_position;
 
 		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
 		if ( ! isset( $chart_args['data']['datasets'] ) ) {

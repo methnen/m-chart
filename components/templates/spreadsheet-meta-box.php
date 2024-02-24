@@ -14,7 +14,22 @@
 		<?php esc_html_e( 'CSV Import/Export', 'm-chart' ); ?><br />
 		<div class="controls">
 			<a href="#select-csv" title="<?php esc_attr_e( 'Select CSV File', 'm-chart' ); ?>" class="button select"><?php esc_html_e( 'Select File', 'm-chart' ); ?></a>
-			<a href="#import-csv" title="<?php esc_attr_e( 'Import', 'm-chart' ); ?>" class="button import hide"><?php esc_html_e( 'Import', 'm-chart' ); ?></a>
+			<div class="confirmation hide">
+				<a href="#import-csv" title="<?php esc_attr_e( 'Import', 'm-chart' ); ?>" class="button"><?php esc_html_e( 'Import', 'm-chart' ); ?></a>
+				<select name="<?php echo esc_attr( $this->get_field_name( 'csv_delimiter' ) ); ?>">
+					<?php
+					$csv_delimiter = m_chart()->get_settings( 'csv_delimiter' );
+				
+					foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
+						?>
+						<option value="<?php echo esc_attr( $delimiter ); ?>"<?php selected( $delimiter, $csv_delimiter ); ?>>
+							<?php esc_html_e( $delimiter_name . ' Delimited', 'm-chart' ); ?>
+						</option>
+						<?php
+					}
+					?>
+				</select>
+			</div>
 			<p class="file error hide"><?php esc_html_e( 'You can only import CSV files', 'm-chart' ); ?></p>
 			<p class="import error hide"></p>
 			<p class="import in-progress hide"><?php esc_html_e( 'Importing file', 'm-chart' ); ?></p>
