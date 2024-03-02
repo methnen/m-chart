@@ -35,7 +35,6 @@ class M_Chart {
 	);
 	public $options_set;
 	public $plugin_url;
-	public $is_shortcake = false;
 	public $is_iframe    = false;
 	public $instance     = 1;
 	public $settings     = array(
@@ -562,7 +561,6 @@ class M_Chart {
 		// If they want the image version or the request is happening from a feed we return the image tag
 		if ( 'image' == $args['show']
 			|| is_feed()
-			|| $this->is_shortcake
 			|| $this->is_amp_endpoint()
 			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
 		) {
@@ -917,19 +915,6 @@ class M_Chart {
 		}
 
 		return $terms;
-	}
-
-	/**
-	 * Detect Shortcake usage and set is_shortcake to true
-	 *
-	 * @param string The shortcode being rendered
-	 */
-	public function shortcode_ui_before_do_shortcode( $shortcode ) {
-		if ( ! preg_match( '#\[chart*.*?\]#', $shortcode ) ) {
-			return;
-		}
-
-		$this->is_shortcake = true;
 	}
 
 	/**
