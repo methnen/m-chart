@@ -45,6 +45,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added a [CSV Delimiter](https://github.com/methnen/m-chart/wiki/csv-importing-exporting) contro and setting to allow for differences in CSV files from different regions
 * Fixed an issue where data points weren't being cleaned well enough and it could confuse Chart.js
 * Fixed an issue where Chart.js tooltips sometimes duplicated a label
+* Fixed an issue with entities inside of labels
 
 ### 1.10.2 ###
 

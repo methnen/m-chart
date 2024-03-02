@@ -172,17 +172,7 @@ class M_Chart_Parse {
 	public function clean_labels( $label ) {
 		$label = esc_html( $label );
 
-		$find = array(
-			'&nbsp;',
-			'&quot;',
-		);
-
-		$replace = array(
-			' ',
-			'"',
-		);
-
-		$label = trim( str_replace( $find, $replace, $label ) );
+		$label = trim( html_entity_decode( $label, ENT_QUOTES ) );
 
 		return $label;
 	}
