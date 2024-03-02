@@ -36,7 +36,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Register a Shortcake ui if we can and look for save settings submissions
+	 * Look for save settings submissions
 	 */
 	public function admin_init() {
 		$this->save_settings();
