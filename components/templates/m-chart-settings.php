@@ -106,6 +106,23 @@
 						</label>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?></th>
+					<td>
+						<select name="<?php echo esc_attr( $this->get_field_name( 'csv_delimiter' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">
+							<?php
+							foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
+								?>
+								<option value="<?php echo esc_attr( $delimiter ); ?>"<?php selected( $delimiter, $settings['csv_delimiter'] ); ?>>
+									<?php esc_html_e( $delimiter_name, 'm-chart' ); ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
+						<span class="description"><?php esc_html_e( 'Default used when importing/exporting CSV files', 'm-chart' ); ?></span>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<?php do_action( 'm_chart_settings_admin' ); ?>

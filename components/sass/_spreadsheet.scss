@@ -136,11 +136,6 @@
 			&.select {
 				margin-right: 10px;
 			}
-
-			&.import {
-				float: left;
-				margin-right: 10px;
-			}
 		}
 
 		div {
@@ -150,6 +145,26 @@
 
 			&.export {
 				float: right;
+			}
+			
+			&.confirmation {
+				float: left;
+				margin-right: 10px;
+			
+				select {
+					margin-top: 6px;
+					margin-bottom: 4px;
+					
+					// Stop export button and select input from colliding on small screens
+					@media (max-width: 600px) {
+						display: block;
+					}
+				}
+			}
+			
+			&.file-info {
+				clear: left;
+				padding-top: 10px;
 			}
 		}
 
