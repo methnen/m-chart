@@ -54,13 +54,15 @@ module.exports = function( grunt ) {
 						'!**/sass/**',
 						'!**/node_modules/**',
 						'!**/tests/**',
+						'!**/block-src/**',
 						'!components/js/m-chart-chartjs-helpers.js',
 						'!config.rb',
 						'!Gruntfile.js',
 						'!package.json',
 						'!package-lock.json',
 						'!phpunit.xml',
-						'!README.md'
+						'!README.md',
+						'!DEVELOPERS.md'
 					],
 					dest: 'deploy/'
 				}],

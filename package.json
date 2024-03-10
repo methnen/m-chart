@@ -1,6 +1,7 @@
 {
   "name": "m-chart",
   "devDependencies": {
+    "@wordpress/scripts": "26.9.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^5.0.1",
@@ -11,6 +12,17 @@
     "matchdep": "^2.0.0"
   },
   "dependencies": {
-    "grunt": "^1.4.0"
+    "@wordpress/icons": "9.18.0",
+    "grunt": "^1.4.0",
+    "lodash": "^4.17.21"
+  },
+  "scripts": {
+    "build": "wp-scripts build --output-path=components/block --webpack-src-dir=components/block-src",
+    "watch": "wp-scripts start --output-path=components/block --webpack-src-dir=components/block-src",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:methnen/m-chart.git"
   }
 }

@@ -1,15 +1,15 @@
 <?php
 
 class M_Chart_Chartjs {
-	public $library = 'chartjs';
-	public $library_name = 'Chart.js';
+	public $library            = 'chartjs';
+	public $library_name       = 'Chart.js';
 	public $value_labels_limit = 15;
-	public $value_labels_div = 10;
+	public $value_labels_div   = 10;
 	public $original_labels;
 	public $post;
 	public $post_meta;
 	public $args;
-	public $type_options = array(
+	public $type_options      = array(
 		'line',
 		'spline',
 		'area',
@@ -27,7 +27,7 @@ class M_Chart_Chartjs {
 	);
 	public $type_option_names = array();
 	public $theme_directories;
-	public $colors = array(
+	public $colors         = array(
 		'#ed6d85', // Pink
 		'#f7d06b', // Yellow
 		'#f2a354', // Orange
@@ -35,7 +35,7 @@ class M_Chart_Chartjs {
 		'#6cbebf', // Turquoise
 		'#47494b', // Gray
 	);
-	public $points = array(
+	public $points         = array(
 		array(
 			'point' => array(
 				'pointStyle' => 'circle',
@@ -63,7 +63,7 @@ class M_Chart_Chartjs {
 			),
 		),
 	);
-	public $chart_types = array(
+	public $chart_types    = array(
 		'column'         => 'bar',
 		'stacked-column' => 'bar',
 		'bar'            => 'bar',
@@ -131,7 +131,7 @@ class M_Chart_Chartjs {
 
 		$this->enqueue_chartjs_plugins();
 	}
-	
+
 	/**
 	 * Enqueue any Chart.js plugins that we'll need
 	 */
@@ -155,7 +155,7 @@ class M_Chart_Chartjs {
 
 		if ( ! $force && $chart_args = wp_cache_get( $cache_key, m_chart()->slug ) ) {
 			$this->enqueue_chartjs_plugins();
-			
+
 			// The width can be set via the args so we'll override whatever the cache has with the arg value
 			$chart_args['graph']['width'] = isset( $this->args['width'] ) && is_numeric( $this->args['width'] ) ? $this->args['width'] : '';
 			return $chart_args;
@@ -171,26 +171,26 @@ class M_Chart_Chartjs {
 		$type = $this->post_meta['type'];
 
 		$chart_args = array(
-			'type' => $this->chart_types[ $this->post_meta['type'] ],
+			'type'    => $this->chart_types[ $this->post_meta['type'] ],
 			'options' => array(
-			    'plugins' => array(
+				'plugins'             => array(
 					// @TODO Figure out how to support subtitles in Chart.js
-				    'title' => array(
-				    	'display'   => true,
-						'text'      => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
-						'font' => array(
-							'size'  => 21,
+					'title'   => array(
+						'display' => true,
+						'text'    => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
+						'font'    => array(
+							'size'   => 21,
 							'weight' => 'normal',
 						),
 						'padding' => array(
 							'bottom' => 15,
 						),
-				    ),
-					'legend' => array(
+					),
+					'legend'  => array(
 						'display'  => $this->post_meta['legend'] ? true : false,
 						'position' => 'bottom',
-						'labels' => array(
-							'font' => array(
+						'labels'   => array(
+							'font'          => array(
 								'weight' => 'bold',
 							),
 							'usePointStyle' => true,
@@ -199,16 +199,16 @@ class M_Chart_Chartjs {
 					'tooltip' => array(
 						'enabled' => true,
 					),
-			    ),
-				'elements' => array(
+				),
+				'elements'            => array(
 					'point' => array(
 						'hoverRadius' => 7,
 						'hitRadius'   => 13,
 					),
 				),
-				'responsive' => true,
+				'responsive'          => true,
 				'maintainAspectRatio' => false,
-				'locale' => m_chart()->get_settings( 'locale' ),
+				'locale'              => m_chart()->get_settings( 'locale' ),
 			),
 		);
 
@@ -216,11 +216,11 @@ class M_Chart_Chartjs {
 		if ( '' != $this->post_meta['subtitle'] ) {
 			$chart_args['options']['plugins']['title']['padding']['bottom'] = 10;
 
-		    $chart_args['options']['plugins']['subtitle'] = array(
-		    	'display'   => true,
-				'text'      => $this->esc_title( $this->post_meta['subtitle'] ),
-				'font' => array(
-					'size'  => 18,
+			$chart_args['options']['plugins']['subtitle'] = array(
+				'display' => true,
+				'text'    => $this->esc_title( $this->post_meta['subtitle'] ),
+				'font'    => array(
+					'size'   => 18,
 					'weight' => 'normal',
 				),
 				'padding' => array(
@@ -246,7 +246,7 @@ class M_Chart_Chartjs {
 
 		if ( $this->post_meta['shared'] ) {
 			$chart_args['options']['plugins']['tooltip']['mode'] = 'index';
-			$chart_args['options']['interaction']['mode'] = 'index';
+			$chart_args['options']['interaction']['mode']        = 'index';
 		}
 
 		// Forcing a minimum value of 0 prevents the built in fudging which sometimes looks weird
@@ -282,8 +282,8 @@ class M_Chart_Chartjs {
 			   'bar' == $this->post_meta['type']
 			|| 'stacked-bar' == $this->post_meta['type']
 		) {
-			$chart_args['options']['indexAxis'] = 'y';
-			$chart_args['options']['scales']['y']['grid']['display'] = false;
+			$chart_args['options']['indexAxis']                          = 'y';
+			$chart_args['options']['scales']['y']['grid']['display']     = false;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
 		} elseif (
 			   'pie' != $chart_args['type']
@@ -314,6 +314,7 @@ class M_Chart_Chartjs {
 		$chart_args['value_prefix'] = m_chart()->parse()->data_prefix;
 		$chart_args['value_suffix'] = m_chart()->parse()->data_suffix;
 		$chart_args['locale']       = m_chart()->get_settings( 'locale' );
+		$chart_args['labels_pos']   = m_chart()->parse()->value_labels_position;
 
 		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
 		if ( ! isset( $chart_args['data']['datasets'] ) ) {
@@ -375,7 +376,7 @@ class M_Chart_Chartjs {
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
 			&& (
-			      'pie' == $chart_args['type']
+				  'pie' == $chart_args['type']
 			   || 'doughnut' == $chart_args['type']
 			)
 		) {
@@ -403,12 +404,12 @@ class M_Chart_Chartjs {
 					'color'  => $this->colors,
 				);
 			}
-		} elseif( isset( $chart_args['data']['datasets'] ) ) {
+		} elseif ( isset( $chart_args['data']['datasets'] ) ) {
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
 				$color = $this->colors[ $key % $color_count ];
 
 				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $color;
-				$chart_args['data']['datasets'][ $key ]['borderColor'] = $color;
+				$chart_args['data']['datasets'][ $key ]['borderColor']     = $color;
 
 				if ( 'spline' == $this->post_meta['type'] ) {
 					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0.25;
@@ -434,9 +435,9 @@ class M_Chart_Chartjs {
 				) {
 					$rgb = $this->hex_to_rgb( $color );
 
-					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
+					$chart_args['data']['datasets'][ $key ]['backgroundColor']                      = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
 					$chart_args['data']['datasets'][ $key ]['elements']['point']['backgroundColor'] = $color;
-					$chart_args['data']['datasets'][ $key ]['fill'] = true;
+					$chart_args['data']['datasets'][ $key ]['fill']                                 = true;
 				} else {
 					$chart_args['data']['datasets'][ $key ]['fill'] = false;
 				}
@@ -455,12 +456,12 @@ class M_Chart_Chartjs {
 		$chart_args['options']['plugins']['datalabels']['display'] = false;
 
 		if ( true == $this->post_meta['labels'] ) {
-		    $chart_args['options']['plugins']['datalabels'] = array(
-				'color'     => 'black',
-				'font' => array(
+			$chart_args['options']['plugins']['datalabels'] = array(
+				'color'   => 'black',
+				'font'    => array(
 					'weight' => 'bold',
 				),
-				'offset' => 3,
+				'offset'  => 3,
 				'display' => 'auto',
 			);
 		}
@@ -477,8 +478,8 @@ class M_Chart_Chartjs {
 		}
 
 		// Clear out all of the class vars so the next chart instance starts fresh
-		$this->args = null;
-		$this->post = null;
+		$this->args      = null;
+		$this->post      = null;
 		$this->post_meta = null;
 
 		return $chart_args;
@@ -592,12 +593,12 @@ class M_Chart_Chartjs {
 			|| 'doughnut' == $chart_args['type']
 			|| 'polar' == $this->post_meta['type']
 			|| 'both' != m_chart()->parse()->value_labels_position
-   			&& (
-   				   'scatter' != $this->post_meta['type']
-   				&& 'bubble' != $this->post_meta['type']
+			&& (
+				   'scatter' != $this->post_meta['type']
+				&& 'bubble' != $this->post_meta['type']
 				&& 'radar' != $this->post_meta['type']
 				&& 'radar-area' != $this->post_meta['type']
-   			)
+			)
 		) {
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
 				if ( isset( $data_array[ $key ] ) ) {
@@ -617,7 +618,7 @@ class M_Chart_Chartjs {
 
 				$chart_args['data']['datasets'][ $key ] = array(
 					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data' => $data_array,
+					'data'  => $data_array,
 				);
 			}
 		} elseif ( 'scatter' == $this->post_meta['type'] ) {
@@ -655,7 +656,7 @@ class M_Chart_Chartjs {
 
 				$chart_args['data']['datasets'][ $key ] = array(
 					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data' => $new_data_array,
+					'data'  => $new_data_array,
 				);
 			}
 		} elseif ( 'bubble' == $this->post_meta['type'] ) {
@@ -695,7 +696,7 @@ class M_Chart_Chartjs {
 
 				$chart_args['data']['datasets'][ $key ] = array(
 					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data' => $new_data_array,
+					'data'  => $new_data_array,
 				);
 			}
 		} else {
@@ -706,7 +707,7 @@ class M_Chart_Chartjs {
 			foreach ( $data_array as $key => $data_chunk ) {
 				$set_data[ $key ] = array(
 					'label' => m_chart()->parse()->value_labels[ $label_key ][ $key ],
-					'data' => array(),
+					'data'  => array(),
 				);
 
 				if ( is_array( $data_chunk ) ) {
@@ -714,7 +715,7 @@ class M_Chart_Chartjs {
 						$set_data[ $key ]['data'][] = $data;
 					}
 				} else {
-					$set_data[ $key ]['data'] = [];
+					$set_data[ $key ]['data'] = array();
 				}
 			}
 
@@ -808,27 +809,27 @@ class M_Chart_Chartjs {
 	 */
 	public function hex_to_rgb( $hex ) {
 		// Make sure the hex string is a proper hex string
-	    $hex = preg_replace( '#[^0-9A-Fa-f]#', '', $hex );
-	    $rgb = array();
+		$hex = preg_replace( '#[^0-9A-Fa-f]#', '', $hex );
+		$rgb = array();
 
 		if ( 6 === strlen( $hex ) ) {
 			// If a proper hex code, convert using bitwise operation, no overhead... faster
-	        $color_value = hexdec( $hex );
+			$color_value = hexdec( $hex );
 
-	        $rgb['red']   = 0xFF & ( $color_value >> 0x10 );
-	        $rgb['green'] = 0xFF & ( $color_value >> 0x8 );
-	        $rgb['blue']  = 0xFF & $color_value;
-	    } elseif ( 3 == strlen( $hex ) ) {
+			$rgb['red']   = 0xFF & ( $color_value >> 0x10 );
+			$rgb['green'] = 0xFF & ( $color_value >> 0x8 );
+			$rgb['blue']  = 0xFF & $color_value;
+		} elseif ( 3 == strlen( $hex ) ) {
 			// If shorthand notation we need to do some string manipulations
-	        $rgb['red']   = hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) );
-	        $rgb['green'] = hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) );
-	        $rgb['blue']  = hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) );
-	    } else {
+			$rgb['red']   = hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) );
+			$rgb['green'] = hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) );
+			$rgb['blue']  = hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) );
+		} else {
 			// Invalid hex color code so we return false
-	        return false;
-	    }
+			return false;
+		}
 
-	    return $rgb;
+		return $rgb;
 	}
 
 	/**
@@ -883,7 +884,7 @@ class M_Chart_Chartjs {
 		}
 
 		$theme_dir = new DirectoryIterator( $theme_base );
-		$themes = array();
+		$themes    = array();
 
 		foreach ( $theme_dir as $file ) {
 			if ( ! $file->isFile() || ! preg_match( '#.php$#i', $file->getFilename() ) ) {

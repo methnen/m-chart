@@ -223,15 +223,28 @@
 #m-chart-spreadsheet #m-chart-csv .button.select {
 	margin-right: 10px;
 }
-#m-chart-spreadsheet #m-chart-csv .button.import {
-	float: left;
-	margin-right: 10px;
-}
 #m-chart-spreadsheet #m-chart-csv div.import {
 	margin-right: 65px;
 }
 #m-chart-spreadsheet #m-chart-csv div.export {
 	float: right;
+}
+#m-chart-spreadsheet #m-chart-csv div.confirmation {
+	float: left;
+	margin-right: 10px;
+}
+#m-chart-spreadsheet #m-chart-csv div.confirmation select {
+	margin-top: 6px;
+	margin-bottom: 4px;
+}
+@media (max-width: 600px) {
+	#m-chart-spreadsheet #m-chart-csv div.confirmation select {
+		display: block;
+	}
+}
+#m-chart-spreadsheet #m-chart-csv div.file-info {
+	clear: left;
+	padding-top: 10px;
 }
 #m-chart-spreadsheet #m-chart-csv .warning,
 #m-chart-spreadsheet #m-chart-csv .error {

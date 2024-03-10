@@ -5,7 +5,7 @@
  */
 
 return array(
-	esc_html__( 'Time', 'm-chart' ) => array(
+	esc_html__( 'Time', 'm-chart' )            => array(
 		esc_html__( 'Seconds', 'm-chart' ),
 		esc_html__( 'Minutes', 'm-chart' ),
 		esc_html__( 'Hours', 'm-chart' ),
@@ -17,14 +17,14 @@ return array(
 		esc_html__( 'Decades', 'm-chart' ),
 		esc_html__( 'Centuries', 'm-chart' ),
 	),
-	esc_html__( 'Money', 'm-chart' ) => array(
+	esc_html__( 'Money', 'm-chart' )           => array(
 		esc_html__( 'USD', 'm-chart' ),
 		esc_html__( 'EUR', 'm-chart' ),
 		esc_html__( 'GBP', 'm-chart' ),
 		esc_html__( 'JPY', 'm-chart' ),
 		esc_html__( 'CNY', 'm-chart' ),
 	),
-	esc_html__( 'Length', 'm-chart' ) => array(
+	esc_html__( 'Length', 'm-chart' )          => array(
 		esc_html__( 'Inch', 'm-chart' ),
 		esc_html__( 'Foot', 'm-chart' ),
 		esc_html__( 'Yard', 'm-chart' ),
@@ -34,7 +34,7 @@ return array(
 		esc_html__( 'Meter', 'm-chart' ),
 		esc_html__( 'Kilometer', 'm-chart' ),
 	),
-	esc_html__( 'Other', 'm-chart' ) => array(
+	esc_html__( 'Other', 'm-chart' )           => array(
 		esc_html__( 'Percent', 'm-chart' ),
 	),
 	esc_html__( 'Website/Traffic', 'm-chart' ) => array(
@@ -45,7 +45,7 @@ return array(
 		esc_html__( 'Active Users', 'm-chart' ),
 		esc_html__( 'Pages', 'm-chart' ),
 	),
-	esc_html__( 'Sales', 'm-chart' ) => array(
+	esc_html__( 'Sales', 'm-chart' )           => array(
 		esc_html__( 'Units', 'm-chart' ),
 		esc_html__( 'CPM', 'm-chart' ),
 	),
