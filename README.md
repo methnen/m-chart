@@ -3,7 +3,7 @@
 **Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
 **Requires at least:** 4.2  
 **Tested up to:** 6.4.3  
-**Stable tag:** 1.11  
+**Stable tag:** 1.11.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -37,6 +37,13 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 1.11.1 ###
+
+* Added titles to the Chart Block (NOT DONE YET)
+* Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
+* Fixed an issue with translation text not making it into the Block interface (NOT DONE YET)
+* Fixed an issue where Chart.js tooltips were sometimes missing a label
 
 ### 1.11 ###
 
