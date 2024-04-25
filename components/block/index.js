@@ -999,7 +999,7 @@ module.exports = window["wp"]["i18n"];
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"m-chart/chart","title":"M Chart","category":"layout","icon":"chart-pie","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"string","default":""}},"supports":{"html":false},"editorScript":"m-chart_editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"m-chart/chart","title":"M Chart","category":"layout","icon":"chart-pie","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"string","default":""}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
 
 /***/ })
 
