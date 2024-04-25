@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, data, wordpress
 Requires at least: 4.2
 Tested up to: 6.4.3
-Stable tag: 1.11
+Stable tag: 1.11.1
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -33,6 +33,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 2. M Chart Settings
 
 == Changelog ==
+
+= 1.11.1 =
+
+* Added titles to the Chart Block
+* Fixed an issue with translation text not making it into the Block interface
+* Fixed an issue where Chart.js tooltips were sometimes missing a label
 
 = 1.11 =
 
