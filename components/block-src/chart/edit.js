@@ -40,7 +40,7 @@ export default function edit( { attributes, setAttributes } ) {
     // Compose preview list.
     const optionsList = options.map( ( x ) => {
         if ( imageSupport ) {
-            return <li className={ x.src ? 'item img' : 'item no-image' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } /> : <div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div> }</li>;
+            return <li className={ x.src ? 'item img' : 'item no-image' } key={ x.id } onClick={ () => handleClick( x.id ) }>{ x.src ? <img src={ x.src + random } data-test="test" /> : <div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div> }</li>;
         } else {
             return <li className="no-image" key={ x.id } onClick={ () => handleClick( x.id ) }><div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div></li>;
         }

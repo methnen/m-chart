@@ -78,7 +78,8 @@ function edit({
         key: x.id,
         onClick: () => handleClick(x.id)
       }, x.src ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-        src: x.src + random
+        src: x.src + random,
+        "data-test": "test"
       }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "type"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
