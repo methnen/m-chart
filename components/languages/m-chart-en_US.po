@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2024-04-25 15:40-0700\n"
-"PO-Revision-Date: 2024-04-25 15:59-0700\n"
+"POT-Creation-Date: 2024-04-29 15:04-0700\n"
+"PO-Revision-Date: 2024-04-29 15:25-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -2434,11 +2434,11 @@ msgstr "New Chart"
 msgid "Edit Chart"
 msgstr "Edit Chart"
 
-#: components/block-src/chart/edit.js:107 components/block/index.js:165
+#: components/block-src/chart/edit.js:107
 msgid "Replace"
 msgstr ""
 
-#: components/block-src/chart/edit.js:119 components/block/index.js:175
+#: components/block-src/chart/edit.js:119
 msgid "There was a problem fetching charts"
 msgstr ""
 
@@ -2446,11 +2446,11 @@ msgstr ""
 msgid "No Charts found"
 msgstr "No Charts found"
 
-#: components/block-src/chart/edit.js:151 build/index.js:203
+#: components/block-src/chart/edit.js:151
 msgid "Create a new chart"
 msgstr ""
 
-#: components/block-src/chart/edit.js:158 build/index.js:209
+#: components/block-src/chart/edit.js:158
 #, fuzzy
 #| msgid "Search Chart Units"
 msgid "Search by title"
@@ -3051,23 +3051,6 @@ msgstr "Importing this file will replace all existing data in this sheet"
 msgid "Enter subtitle here"
 msgstr "Enter subtitle here"
 
-#: build/index.js:201
-#, fuzzy
-#| msgid "No Charts found"
-msgid "No charts found"
-msgstr "No Charts found"
-
-#: build/index.js:214
-#, fuzzy
-#| msgid "No Charts found in the Trash"
-msgid "No charts were found using this search string"
-msgstr "No Charts found in the Trash"
-
-#: build/chart/block.json:8
-msgctxt "block description"
-msgid "Embed a chart made with M Chart into your content"
-msgstr ""
-
 #. Plugin Name of the plugin/theme
 msgid "M Chart"
 msgstr "M Chart"
@@ -3085,6 +3068,16 @@ msgstr "Jamie Poitra"
 #. Author URI of the plugin/theme
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
+
+#, fuzzy
+#~| msgid "No Charts found"
+#~ msgid "No charts found"
+#~ msgstr "No Charts found"
+
+#, fuzzy
+#~| msgid "No Charts found in the Trash"
+#~ msgid "No charts were found using this search string"
+#~ msgstr "No Charts found in the Trash"
 
 #~ msgid "Source"
 #~ msgstr "Source"

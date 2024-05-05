@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart 1.10.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
-"POT-Creation-Date: 2024-04-25 15:40-0700\n"
-"PO-Revision-Date: 2024-04-25 16:00-0700\n"
+"POT-Creation-Date: 2024-04-29 15:04-0700\n"
+"PO-Revision-Date: 2024-04-29 15:24-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -2429,11 +2429,11 @@ msgstr "Nieuwe grafiek"
 msgid "Edit Chart"
 msgstr "Grafiek bewerken"
 
-#: components/block-src/chart/edit.js:107 components/block/index.js:165
+#: components/block-src/chart/edit.js:107
 msgid "Replace"
 msgstr "Vervang"
 
-#: components/block-src/chart/edit.js:119 components/block/index.js:175
+#: components/block-src/chart/edit.js:119
 #, fuzzy
 #| msgid "There is a problem fetching charts"
 msgid "There was a problem fetching charts"
@@ -2443,11 +2443,11 @@ msgstr "Er is een probleem met het ophalen van grafieken"
 msgid "No Charts found"
 msgstr "Geen grafieken gevonden"
 
-#: components/block-src/chart/edit.js:151 build/index.js:203
+#: components/block-src/chart/edit.js:151
 msgid "Create a new chart"
 msgstr "Maak een nieuwe grafiek"
 
-#: components/block-src/chart/edit.js:158 build/index.js:209
+#: components/block-src/chart/edit.js:158
 msgid "Search by title"
 msgstr "Doorzoek op titel"
 
@@ -3043,26 +3043,6 @@ msgstr ""
 msgid "Enter subtitle here"
 msgstr "Ondertitel"
 
-#: build/index.js:201
-#, fuzzy
-#| msgid "no charts found"
-msgid "No charts found"
-msgstr "geen grafieken gevonden"
-
-#: build/index.js:214
-#, fuzzy
-#| msgid "No Charts found using this search string"
-msgid "No charts were found using this search string"
-msgstr "Geen grafieken gevonden met deze zoekterm"
-
-#: build/chart/block.json:8
-#, fuzzy
-#| msgctxt "block description"
-#| msgid "Embed a chart made with M Chart into your posts and pages"
-msgctxt "block description"
-msgid "Embed a chart made with M Chart into your content"
-msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
-
 #. Plugin Name of the plugin/theme
 msgid "M Chart"
 msgstr "M Chart"
@@ -3078,6 +3058,23 @@ msgstr "Jamie Poitra"
 #. Author URI of the plugin/theme
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
+
+#, fuzzy
+#~| msgid "no charts found"
+#~ msgid "No charts found"
+#~ msgstr "geen grafieken gevonden"
+
+#, fuzzy
+#~| msgid "No Charts found using this search string"
+#~ msgid "No charts were found using this search string"
+#~ msgstr "Geen grafieken gevonden met deze zoekterm"
+
+#, fuzzy
+#~| msgctxt "block description"
+#~| msgid "Embed a chart made with M Chart into your posts and pages"
+#~ msgctxt "block description"
+#~ msgid "Embed a chart made with M Chart into your content"
+#~ msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
 
 #~ msgctxt "block title"
 #~ msgid "M Chart"
