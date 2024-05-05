@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2024-04-25 15:40-0700\n"
-"PO-Revision-Date: 2024-04-25 15:29-0700\n"
+"POT-Creation-Date: 2024-04-29 15:04-0700\n"
+"PO-Revision-Date: 2024-04-29 15:03-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -3031,35 +3031,6 @@ msgstr ""
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
-msgstr ""
-
-#: components/block/index.js:165
-msgid "Replace"
-msgstr ""
-
-#: components/block/index.js:175
-msgid "There was a problem fetching charts"
-msgstr ""
-
-#: build/index.js:201
-msgid "No charts found"
-msgstr ""
-
-#: build/index.js:203
-msgid "Create a new chart"
-msgstr ""
-
-#: build/index.js:209
-msgid "Search by title"
-msgstr ""
-
-#: build/index.js:214
-msgid "No charts were found using this search string"
-msgstr ""
-
-#: build/chart/block.json:8
-msgctxt "block description"
-msgid "Embed a chart made with M Chart into your content"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

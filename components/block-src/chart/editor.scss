@@ -81,6 +81,14 @@
 				}
 			}
 			
+			h6.title {
+				font-weight: normal;
+				font-size: .8rem;
+				text-transform: none;
+				margin-top: 1rem;
+				margin-bottom: 0;
+			}
+			
 			.type {
 				position: relative;
 				padding-top: 2rem;
@@ -149,14 +157,6 @@
 					&.polar:before {
 						background-image: url('../../images/types/polar.svg');
 					}
-				}
-				
-				h6.title {
-					font-weight: normal;
-					font-size: .8rem;
-					text-transform: none;
-					margin-top: 1rem;
-					margin-bottom: 0;
 				}
 			}
 		}

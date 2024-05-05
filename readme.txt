@@ -36,7 +36,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.11.1 =
 
-* Added titles to the Chart Block (NOT DONE YET)
+* Added alt text to the image version of ac hart in the Block editor for better accessibility
 * Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
 * Fixed an issue with translation text not making it into the Block interface (NOT DONE YET)
 * Fixed an issue where Chart.js tooltips were sometimes missing a label

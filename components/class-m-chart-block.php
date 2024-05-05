@@ -6,7 +6,6 @@ class M_Chart_Block {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_m_chart_block_support' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ], 999 );
 		add_action( 'plugins_loaded', [ $this, 'wt_m_chart_load_textdomain' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_m_chart_options' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_graphs' ] );
@@ -26,6 +25,13 @@ class M_Chart_Block {
 			$this->version_str(),
 			true
 		);
+		
+		// Set editor script translation.
+		wp_set_script_translations(
+			'm-chart-editor',
+			'm-chart',
+			plugin_dir_path( __DIR__ ) . 'components/languages/'
+		);
 
 		// Register block styles.
 		wp_register_style(
@@ -44,18 +50,6 @@ class M_Chart_Block {
 		);
 
 		register_block_type( __DIR__ . '/block/chart/block.json' );
-	}
-	
-	/**
-	 * Load translations after everything else needed is loaded
-	 */
-	public function admin_enqueue_scripts() {
-		// Set editor script translation.
-		wp_set_script_translations(
-			'm-chart-editor',
-			'm-chart',
-			plugin_dir_path( __DIR__ ) . 'components/languages/'
-		);
 	}
 
 	/**
