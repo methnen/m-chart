@@ -1,6 +1,6 @@
 # M Chart #
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
-**Tags:** chartjs, highcharts, graphs, charts, data, wordpress  
+**Tags:** chartjs, highcharts, graphs, charts, data  
 **Requires at least:** 4.2  
 **Tested up to:** 6.4.3  
 **Stable tag:** 1.11.1  
@@ -35,14 +35,17 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 ### 2. M Chart Settings ###
 ![M Chart Settings](https://methnen.com/misc/m-chart/screenshot-2.png)
 
+### 3. M Chart Block UI ###
+![M Chart Block UI](https://methnen.com/misc/m-chart/screenshot-3.png)
+
 
 ## Changelog ##
 
 ### 1.11.1 ###
 
-* Added alt text to the image version of ac hart in the Block editor for better accessibility
+* Added alt text to the image version of ac hart in the Block editor for better accessibility support
 * Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
-* Fixed an issue with translation text not making it into the Block interface (NOT DONE YET)
+* Fixed an issue with translation text not making it into the Block interface
 * Fixed an issue where Chart.js tooltips were sometimes missing a label
 
 ### 1.11 ###
