@@ -1,6 +1,7 @@
 <?php
 
 class M_Chart_Parse {
+	public $data;
 	public $data_prefix;
 	public $data_suffix;
 	public $value_labels;
