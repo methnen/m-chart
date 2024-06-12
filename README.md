@@ -2,7 +2,7 @@
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
 **Tags:** chartjs, highcharts, graphs, charts, data  
 **Requires at least:** 4.2  
-**Tested up to:** 6.4.3  
+**Tested up to:** 6.5.4  
 **Stable tag:** 1.11.1  
 **License:** MIT  
 
@@ -43,7 +43,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ### 1.11.1 ###
 
-* Added alt text to the image version of ac hart in the Block editor for better accessibility support
+* Added alt text to the image version of a chart in the Block editor for better accessibility support
+* Added chart title to the image version of a chart in the Block editor
 * Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
 * Fixed an issue with translation text not making it into the Block interface
 * Fixed an issue where Chart.js tooltips were sometimes missing a label
