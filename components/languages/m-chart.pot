@@ -1,26 +1,16 @@
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2024-04-29 15:04-0700\n"
-"PO-Revision-Date: 2024-04-29 15:03-0700\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.4.2\n"
-"X-Poedit-Basepath: ../..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: m-chart.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.min.js\n"
-"X-Poedit-SearchPathExcluded-1: node_modules\n"
+"POT-Creation-Date: 2024-06-13T12:50:03+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: languages\n"
 
 #: components/array-default-unit-terms.php:8
 msgid "Time"
@@ -2428,11 +2418,13 @@ msgstr ""
 msgid "Zulu (South Africa)"
 msgstr ""
 
-#: components/block-src/chart/edit.js:103 components/class-m-chart.php:210
+#: components/block-src/chart/edit.js:103
+#: components/class-m-chart.php:210
 msgid "New Chart"
 msgstr ""
 
-#: components/block-src/chart/edit.js:106 components/class-m-chart.php:209
+#: components/block-src/chart/edit.js:106
+#: components/class-m-chart.php:209
 msgid "Edit Chart"
 msgstr ""
 
@@ -2444,7 +2436,8 @@ msgstr ""
 msgid "There was a problem fetching charts"
 msgstr ""
 
-#: components/block-src/chart/edit.js:150 components/class-m-chart.php:214
+#: components/block-src/chart/edit.js:150
+#: components/class-m-chart.php:214
 msgid "No Charts found"
 msgstr ""
 
@@ -2505,7 +2498,8 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-#: components/class-m-chart-admin.php:390 components/class-m-chart.php:205
+#: components/class-m-chart-admin.php:390
+#: components/class-m-chart.php:205
 msgid "Chart"
 msgstr ""
 
@@ -2607,7 +2601,8 @@ msgstr ""
 msgid "Polar"
 msgstr ""
 
-#: components/class-m-chart.php:165 components/class-m-chart.php:175
+#: components/class-m-chart.php:165
+#: components/class-m-chart.php:175
 msgid "Chart Units"
 msgstr ""
 
@@ -2651,7 +2646,8 @@ msgstr ""
 msgid "Charts"
 msgstr ""
 
-#: components/class-m-chart.php:206 components/class-m-chart.php:207
+#: components/class-m-chart.php:206
+#: components/class-m-chart.php:207
 msgid "Add Chart"
 msgstr ""
 
@@ -2863,9 +2859,7 @@ msgid "Number Format Locale"
 msgstr ""
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid ""
-"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
-"chart"
+msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
 msgstr ""
 
 #: components/templates/m-chart-settings.php:5
@@ -2885,9 +2879,7 @@ msgid "Show Library in Edit Posts Screen"
 msgstr ""
 
 #: components/templates/m-chart-settings.php:34
-msgid ""
-"Displays an icon indicating the library used for a chart in Edit Posts "
-"Screen of the WP Admin"
+msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
 msgstr ""
 
 #: components/templates/m-chart-settings.php:39
@@ -2941,8 +2933,7 @@ msgid "4x"
 msgstr ""
 
 #: components/templates/m-chart-settings.php:86
-msgid ""
-"The higher the multiplier the better the images will look on high DPI screens"
+msgid "The higher the multiplier the better the images will look on high DPI screens"
 msgstr ""
 
 #: components/templates/m-chart-settings.php:91

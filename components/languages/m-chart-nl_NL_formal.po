@@ -1,96 +1,91 @@
+# Copyright (C) 2023 Jamie Poitra
+# This file is distributed under the MIT.
 msgid ""
 msgstr ""
-"Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2024-04-29 15:04-0700\n"
-"PO-Revision-Date: 2024-04-29 15:25-0700\n"
+"Project-Id-Version: M Chart 1.10.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-13T12:50:03+00:00\n"
+"PO-Revision-Date: 2024-06-17 15:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: en_US\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
-"X-Poedit-Basepath: ../..\n"
-"X-Poedit-WPHeader: m-chart.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Generator: Poedit 3.4.4\n"
+"X-Domain: m-chart\n"
 
 #: components/array-default-unit-terms.php:8
 msgid "Time"
-msgstr "Time"
+msgstr "Tijd"
 
 #: components/array-default-unit-terms.php:9
 msgid "Seconds"
-msgstr "Seconds"
+msgstr "Seconden"
 
 #: components/array-default-unit-terms.php:10
 msgid "Minutes"
-msgstr "Minutes"
+msgstr "Minuten"
 
 #: components/array-default-unit-terms.php:11
 msgid "Hours"
-msgstr "Hours"
+msgstr "Uren"
 
 #: components/array-default-unit-terms.php:12
 msgid "Days"
-msgstr "Days"
+msgstr "Dagen"
 
 #: components/array-default-unit-terms.php:13
 msgid "Weeks"
-msgstr "Weeks"
+msgstr "Weken"
 
 #: components/array-default-unit-terms.php:14
 msgid "Months"
-msgstr "Months"
+msgstr "Maanden"
 
 #: components/array-default-unit-terms.php:15
 msgid "Quarter"
-msgstr "Quarter"
+msgstr "Kwartaal"
 
 #: components/array-default-unit-terms.php:16
 msgid "Years"
-msgstr "Years"
+msgstr "Jaren"
 
 #: components/array-default-unit-terms.php:17
 msgid "Decades"
-msgstr "Decades"
+msgstr "Tientallen jaren"
 
 #: components/array-default-unit-terms.php:18
 msgid "Centuries"
-msgstr "Centuries"
+msgstr "Eeuwen"
 
 #: components/array-default-unit-terms.php:20
 msgid "Money"
-msgstr "Money"
+msgstr "Geld"
 
 #: components/array-default-unit-terms.php:21
 msgid "USD"
-msgstr "USD"
+msgstr "Dollar"
 
 #: components/array-default-unit-terms.php:22
 msgid "EUR"
-msgstr "EUR"
+msgstr "Euro"
 
 #: components/array-default-unit-terms.php:23
 msgid "GBP"
-msgstr "GBP"
+msgstr "Pond"
 
 #: components/array-default-unit-terms.php:24
 msgid "JPY"
-msgstr "JPY"
+msgstr "Yen"
 
 #: components/array-default-unit-terms.php:25
 msgid "CNY"
-msgstr "CNY"
+msgstr "Yuan"
 
 #: components/array-default-unit-terms.php:27
 msgid "Length"
-msgstr "Length"
+msgstr "Lengte"
 
 #: components/array-default-unit-terms.php:28
 msgid "Inch"
@@ -98,7 +93,7 @@ msgstr "Inch"
 
 #: components/array-default-unit-terms.php:29
 msgid "Foot"
-msgstr "Foot"
+msgstr "Voet"
 
 #: components/array-default-unit-terms.php:30
 msgid "Yard"
@@ -106,7 +101,7 @@ msgstr "Yard"
 
 #: components/array-default-unit-terms.php:31
 msgid "Mile"
-msgstr "Mile"
+msgstr "Mijl"
 
 #: components/array-default-unit-terms.php:32
 msgid "Millimeter"
@@ -126,53 +121,53 @@ msgstr "Kilometer"
 
 #: components/array-default-unit-terms.php:37
 msgid "Other"
-msgstr "Other"
+msgstr "Anders"
 
 #: components/array-default-unit-terms.php:38
 msgid "Percent"
-msgstr "Percent"
+msgstr "Procent"
 
 #: components/array-default-unit-terms.php:40
 msgid "Website/Traffic"
-msgstr "Website/Traffic"
+msgstr "Website/Verkeer"
 
 #: components/array-default-unit-terms.php:41
 msgid "Visitors"
-msgstr "Visitors"
+msgstr "Bezoekers"
 
 #: components/array-default-unit-terms.php:42
 msgid "Unique Visitors"
-msgstr "Unique Visitors"
+msgstr "Unieke Bezoekers"
 
 #: components/array-default-unit-terms.php:43
 msgid "Clicks"
-msgstr "Clicks"
+msgstr "Klikken"
 
 #: components/array-default-unit-terms.php:44
 msgid "Referrers"
-msgstr "Referrers"
+msgstr "Verwijzers"
 
 #: components/array-default-unit-terms.php:45
 msgid "Active Users"
-msgstr "Active Users"
+msgstr "Actieve gebruikers"
 
 #: components/array-default-unit-terms.php:46
 msgid "Pages"
-msgstr "Pages"
+msgstr "Pagina’s"
 
 #: components/array-default-unit-terms.php:48
 msgid "Sales"
-msgstr "Sales"
+msgstr "Verkoop"
 
 #: components/array-default-unit-terms.php:49
 #: components/templates/chartjs-settings.php:86
 #: components/templates/chartjs-settings.php:124
 msgid "Units"
-msgstr "Units"
+msgstr "Eenheden"
 
 #: components/array-default-unit-terms.php:50
 msgid "CPM"
-msgstr "CPM"
+msgstr "Kosten per mijl"
 
 #: components/array-locale-codes.php:9
 msgid "Afrikaans"
@@ -2428,80 +2423,77 @@ msgstr ""
 
 #: components/block-src/chart/edit.js:103 components/class-m-chart.php:210
 msgid "New Chart"
-msgstr "New Chart"
+msgstr "Nieuwe grafiek"
 
 #: components/block-src/chart/edit.js:106 components/class-m-chart.php:209
 msgid "Edit Chart"
-msgstr "Edit Chart"
+msgstr "Grafiek bewerken"
 
 #: components/block-src/chart/edit.js:107
 msgid "Replace"
-msgstr ""
+msgstr "Vervang"
 
 #: components/block-src/chart/edit.js:119
 msgid "There was a problem fetching charts"
-msgstr ""
+msgstr "Er is een probleem met het ophalen van grafieken"
 
 #: components/block-src/chart/edit.js:150 components/class-m-chart.php:214
 msgid "No Charts found"
-msgstr "No Charts found"
+msgstr "Geen grafieken gevonden"
 
 #: components/block-src/chart/edit.js:151
 msgid "Create a new chart"
-msgstr ""
+msgstr "Maak een nieuwe grafiek"
 
 #: components/block-src/chart/edit.js:158
-#, fuzzy
-#| msgid "Search Chart Units"
 msgid "Search by title"
-msgstr "Search Chart Units"
+msgstr "Doorzoek op titel"
 
 #: components/block-src/chart/edit.js:162
 msgid " of "
-msgstr " of "
+msgstr " van "
 
 #: components/block-src/chart/edit.js:165
-#, fuzzy
-#| msgid "No Charts found in the Trash"
 msgid "No Charts found using this search string"
-msgstr "No Charts found in the Trash"
+msgstr "Geen grafieken gevonden met deze zoekterm"
 
 #: components/class-m-chart-admin.php:53
 #: components/templates/m-chart-settings.php:2
 msgid "M Chart Settings"
-msgstr "M Chart Settings"
+msgstr "M chart instellingen"
 
 #: components/class-m-chart-admin.php:54
 msgid "Settings"
-msgstr "Settings"
+msgstr "Instellingen"
 
 #: components/class-m-chart-admin.php:205
 msgid "Settings saved"
-msgstr "Settings saved"
+msgstr "Instellingen opgeslagen"
 
 #: components/class-m-chart-admin.php:241
 #: components/class-m-chart-admin.php:242
 #: components/templates/chart-meta-box.php:14
 #: components/templates/chart-meta-box.php:15
 msgid "M Chart Highcharts Library"
-msgstr ""
+msgstr "M Chart Highcharts Bibliotheek"
 
 #: components/class-m-chart-admin.php:243
 msgid "You have charts that require the M Chart Highcharts Library plugin."
-msgstr ""
+msgstr "U hebt grafieken waarvoor de M Chart Highcharts plugin vereist is."
 
 #: components/class-m-chart-admin.php:247
 msgid "These charts will no longer display unless you install the plugin:"
 msgstr ""
+"Deze grafieken kunnen niet getoond worden tenzij u deze plugin installeert:"
 
 #: components/class-m-chart-admin.php:249
 #: components/templates/chart-meta-box.php:21
 msgid "Learn More"
-msgstr ""
+msgstr "Kom meer te weten"
 
 #: components/class-m-chart-admin.php:352
 msgid "Are you sure you want to delete this spreadsheet?"
-msgstr "Are you sure you want to delete this spreadsheet?"
+msgstr "Bent u zeker dat u deze spreadsheet wil verwijderen?"
 
 #: components/class-m-chart-admin.php:381
 msgid "Data"
@@ -2509,287 +2501,279 @@ msgstr "Data"
 
 #: components/class-m-chart-admin.php:390 components/class-m-chart.php:205
 msgid "Chart"
-msgstr "Chart"
+msgstr "Grafiek"
 
 #: components/class-m-chart-admin.php:494
-#, fuzzy
-#| msgid "Chart not found"
 msgid "Library not found"
-msgstr "No Charts found"
+msgstr "Bibliotheek niet gevonden"
 
 #: components/class-m-chart-admin.php:708
 #: components/class-m-chart-admin.php:718
 msgid "Wrong post type"
-msgstr "Wrong post type"
+msgstr "Verkeerd bericht type"
 
 #: components/class-m-chart-admin.php:713
 #: components/class-m-chart-admin.php:847
 msgid "Invalid nonce"
-msgstr "Invalid nonce"
+msgstr "Ongeldige beveiligingssleutel"
 
 #: components/class-m-chart-admin.php:723
 msgid "No file to import"
-msgstr "No file to import"
+msgstr "Geen bestand om te importeren"
 
 #: components/class-m-chart-admin.php:730
 msgid "Only CSV files can be imported "
-msgstr "Only CSV files can be imported "
+msgstr "Alleen CSV bestanden kunnen geïmporteerd worden "
 
 #: components/class-m-chart-admin.php:737
 msgid "File path not found"
-msgstr "File path not found"
+msgstr "Bestands pad niet gevonden"
 
 #: components/class-m-chart-admin.php:743
 msgid "CSV file was empty"
-msgstr "CSV file was empty"
+msgstr "CSV bestand is leeg"
 
 #: components/class-m-chart-admin.php:852
 msgid "Invalid post"
-msgstr "Invalid post"
+msgstr "Ongeldig bericht"
 
 #: components/class-m-chart-admin.php:857
 msgid "Permission error"
-msgstr "Permission error"
+msgstr "Geen rechten"
 
 #: components/class-m-chart-admin.php:862
 msgid "Invalid library"
-msgstr "Invalid library"
+msgstr "Ongeldige bibliotheek"
 
 #: components/class-m-chart-chartjs.php:98
 msgid "Line"
-msgstr "Line"
+msgstr "Lijn"
 
 #: components/class-m-chart-chartjs.php:99
 msgid "Spline"
-msgstr "Spline"
+msgstr "Gebogen lijn"
 
 #: components/class-m-chart-chartjs.php:100
 msgid "Area"
-msgstr "Area"
+msgstr "Gebied"
 
 #: components/class-m-chart-chartjs.php:101
 msgid "Column"
-msgstr "Column"
+msgstr "Kolom"
 
 #: components/class-m-chart-chartjs.php:102
-#, fuzzy
-#| msgid "Column"
 msgid "Stacked Column"
-msgstr "Column"
+msgstr "Gestapelde kolom"
 
 #: components/class-m-chart-chartjs.php:103
 msgid "Bar"
-msgstr "Bar"
+msgstr "Balk"
 
 #: components/class-m-chart-chartjs.php:104
 msgid "Stacked Bar"
-msgstr ""
+msgstr "Gestapelde balk"
 
 #: components/class-m-chart-chartjs.php:105
 msgid "Pie"
-msgstr "Pie"
+msgstr "Taart"
 
 #: components/class-m-chart-chartjs.php:106
 msgid "Doughnut"
-msgstr ""
+msgstr "Donut"
 
 #: components/class-m-chart-chartjs.php:107
 msgid "Scatter"
-msgstr "Scatter"
+msgstr "Puntenwolk"
 
 #: components/class-m-chart-chartjs.php:108
 msgid "Bubble"
-msgstr "Bubble"
+msgstr "Bubbel"
 
 #: components/class-m-chart-chartjs.php:109
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: components/class-m-chart-chartjs.php:110
 msgid "Radar Area"
-msgstr ""
+msgstr "Radar gebied"
 
 #: components/class-m-chart-chartjs.php:111
 msgid "Polar"
-msgstr ""
+msgstr "Polair"
 
 #: components/class-m-chart.php:165 components/class-m-chart.php:175
 msgid "Chart Units"
-msgstr "Chart Units"
+msgstr "Grafiek eenheden"
 
 #: components/class-m-chart.php:166
 msgid "Chart Unit"
-msgstr "Chart Unit"
+msgstr "Grafiek eenheid"
 
 #: components/class-m-chart.php:167
 msgid "Search Chart Units"
-msgstr "Search Chart Units"
+msgstr "Doorzoek grafiek eenheden"
 
 #: components/class-m-chart.php:168
 msgid "All Chart Units"
-msgstr "All Chart Units"
+msgstr "Alle grafiek eenheden"
 
 #: components/class-m-chart.php:169
 msgid "Parent Chart Unit"
-msgstr "Parent Chart Unit"
+msgstr "Hoofd grafiek eenheid"
 
 #: components/class-m-chart.php:170
 msgid "Parent Chart Unit:"
-msgstr "Parent Chart Unit:"
+msgstr "Ouder grafiek eenheid:"
 
 #: components/class-m-chart.php:171
 msgid "Edit Chart Unit"
-msgstr "Edit Chart Unit"
+msgstr "Grafiek eenheid bewerken"
 
 #: components/class-m-chart.php:172
 msgid "Update Chart Unit"
-msgstr "Update Chart Unit"
+msgstr "Grafiek eenheid updaten"
 
 #: components/class-m-chart.php:173
 msgid "Add New Chart Unit"
-msgstr "Add New Chart Unit"
+msgstr "Nieuwe grafiek eenheid toevoegen"
 
 #: components/class-m-chart.php:174
 msgid "Chart Unit Name"
-msgstr "Chart Unit Name"
+msgstr "Grafiek eenheid naam"
 
 #: components/class-m-chart.php:204
 msgid "Charts"
-msgstr "Charts"
+msgstr "Grafieken"
 
 #: components/class-m-chart.php:206 components/class-m-chart.php:207
 msgid "Add Chart"
-msgstr "Add Chart"
+msgstr "Grafiek toevoegen"
 
 #: components/class-m-chart.php:208
 msgid "Edit"
-msgstr "Edit"
+msgstr "Berwerken"
 
 #: components/class-m-chart.php:211
 #: components/templates/chartjs-settings.php:159
 msgid "View"
-msgstr "View"
+msgstr "Bekijken"
 
 #: components/class-m-chart.php:212
 msgid "View Chart"
-msgstr "View Chart"
+msgstr "Grafiek bekijken"
 
 #: components/class-m-chart.php:213
 msgid "Search Charts"
-msgstr "Search Charts"
+msgstr "Grafieken doorzoeken"
 
 #: components/class-m-chart.php:215
 msgid "No Charts found in the Trash"
-msgstr "No Charts found in the Trash"
+msgstr "Geen grafieken gevonden in de prullenbak"
 
 #. Description of the plugin/theme
 #: components/class-m-chart.php:227
 msgid "Manage data sets and display them as charts in WordPress."
-msgstr "Manage data sets and display them as charts in WordPress."
+msgstr "Data sets beheren & als grafieken tonen in WordPress."
 
 #: components/class-m-chart.php:935
 msgid "The chart could not be found"
-msgstr "The chart could not be found"
+msgstr "De grafiek is niet gevonden"
 
 #: components/class-m-chart.php:936
 msgid "Chart not found"
-msgstr "No Charts found"
+msgstr "Grafiek niet gevonden"
 
 #: components/class-m-chart.php:945
 msgid "Embeds of this type are not enabled"
-msgstr "Embeds of this type are not enabled"
+msgstr "Het invoegen van dit type bestand is niet toegestaan"
 
 #: components/class-m-chart.php:946
 msgid "Embeds disabled"
-msgstr "Embeds disabled"
+msgstr "Invoegen niet toegestaan"
 
 #: components/external/canvg/umd.js:1
 msgid "Symbol."
-msgstr ""
+msgstr "Symbool."
 
 #: components/external/handsontable/handsontable.js:29
 msgid "delete"
-msgstr ""
+msgstr "verwijder"
 
 #: components/external/handsontable/handsontable.js:29
-#, fuzzy
-#| msgid "Charts"
 msgid "has"
-msgstr "Charts"
+msgstr "heeft"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "get"
-msgstr ""
+msgstr "geef"
 
 #: components/external/handsontable/handsontable.js:29
-#, fuzzy
-#| msgid "Wrong post type"
 msgid "Wrong offset!"
-msgstr "Wrong post type"
+msgstr "Verkeerd startpunt!"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "Wrong length!"
-msgstr ""
+msgstr "Verkeerde lengte!"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "autocomplete"
-msgstr ""
+msgstr "zelf aanvullend"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "checkbox"
-msgstr ""
+msgstr "keuzevakje"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "date"
-msgstr ""
+msgstr "datum"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "dropdown"
-msgstr ""
+msgstr "selectielijst"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "handsontable"
-msgstr ""
+msgstr "tabel"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "numeric"
-msgstr ""
+msgstr "numeriek"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "password"
-msgstr ""
+msgstr "wachtwoord"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "text"
-msgstr ""
+msgstr "tekst"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "time"
-msgstr ""
+msgstr "tijd"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "Promise-chain cycle"
-msgstr ""
+msgstr "Eindeloze loop"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "Promise can't be resolved itself"
-msgstr ""
+msgstr "Een belofte kan niet zichzelf inlossen"
 
 #: components/templates/chart-meta-box.php:16
 msgid "This chart requires the M Chart Highcharts Library plugin."
-msgstr ""
+msgstr "Deze grafiek vereist de M Chart Highlights plugin."
 
 #: components/templates/chart-meta-box.php:20
 msgid "This chart will no longer display unless you install the plugin:"
-msgstr ""
+msgstr "Deze grafiek kan niet getoond worden tenzij u deze plugin installeert:"
 
 #: components/templates/chartjs-settings.php:3
 msgid "Columns"
-msgstr "Columns"
+msgstr "Kolommen"
 
 #: components/templates/chartjs-settings.php:4
 msgid "Rows"
-msgstr "Rows"
+msgstr "Rijen"
 
 #: components/templates/chartjs-settings.php:12
 msgid "Type"
@@ -2797,44 +2781,44 @@ msgstr "Type"
 
 #: components/templates/chartjs-settings.php:26
 msgid "Theme"
-msgstr "Theme"
+msgstr "Thema"
 
 #: components/templates/chartjs-settings.php:40
 msgid "Height"
-msgstr "Height"
+msgstr "Hoogte"
 
 #: components/templates/chartjs-settings.php:46
 msgid "Parse data in"
-msgstr "Parse data in"
+msgstr "Verwerk data in"
 
 #: components/templates/chartjs-settings.php:63
 msgid "Show labels"
-msgstr "Show labels"
+msgstr "Toon labels"
 
 #: components/templates/chartjs-settings.php:70
 msgid "Show legend"
-msgstr "Show legend"
+msgstr "Toon legenda"
 
 #: components/templates/chartjs-settings.php:76
 msgid "Shared tooltip"
-msgstr "Shared tooltip"
+msgstr "Gezamenlijke knopinfo"
 
 #: components/templates/chartjs-settings.php:82
 msgid "Vertical axis title"
-msgstr "Vertical axis title"
+msgstr "Verticale as titel"
 
 #: components/templates/chartjs-settings.php:88
 #: components/templates/chartjs-settings.php:126
 msgid "N/A"
-msgstr "N/A"
+msgstr "Niet beschikbaar"
 
 #: components/templates/chartjs-settings.php:113
 msgid "Force vertical axis minimum: "
-msgstr "Force vertical axis minimum: "
+msgstr "Minimum hoogte voor de verticale as vereist: "
 
 #: components/templates/chartjs-settings.php:120
 msgid "Horizontal axis title"
-msgstr "Horizontal axis title"
+msgstr "Horizontale as titel"
 
 #: components/templates/chartjs-settings.php:150
 msgid "Shortcode"
@@ -2842,224 +2826,222 @@ msgstr "Shortcode"
 
 #: components/templates/chartjs-settings.php:154
 msgid "Image"
-msgstr "Image"
+msgstr "Beeld"
 
 #: components/templates/chartjs-settings.php:162
 msgid "Image generation is disabled"
-msgstr "Image generation is disabled"
+msgstr "Beeld maken is uitgeschakeld"
 
 #: components/templates/chartjs-settings.php:164
 msgid "Save/Update this post to generate the image version"
-msgstr "Save/Update this post to generate the image version"
+msgstr "Sla op/vervang dit bericht om een beeld versie te maken"
 
 #: components/templates/handlebars.php:5
 msgid "Double click or long press tab to edit name"
-msgstr "Double click or long press tab to edit name"
+msgstr "Dubbel klik of houdt lang ingedrukt om de naam te bewerken"
 
 #: components/templates/m-chart-settings-chartjs.php:1
-#, fuzzy
-#| msgid "M Chart Settings"
 msgid "Chart.js Settings"
-msgstr "M Chart Settings"
+msgstr "Chart.js Instellingen"
 
 #: components/templates/m-chart-settings-chartjs.php:7
-#, fuzzy
-#| msgid "Default Highcharts Theme"
 msgid "Default Chart.js Theme"
-msgstr "Default Highcharts Theme"
+msgstr "Standaard Chart.js Thema"
 
 #: components/templates/m-chart-settings-chartjs.php:23
 msgid "See the M Chart documentation for more info on how to use themes:"
-msgstr "See the M Chart documentation for more info on how to use themes:"
+msgstr ""
+"Lees de M Chart documentatie voor meer informatie over hoe de thema’s te "
+"gebruiken:"
 
 #: components/templates/m-chart-settings-chartjs.php:29
 msgid "Number Format Locale"
-msgstr ""
+msgstr "Regio nummer weergave"
 
 #: components/templates/m-chart-settings-chartjs.php:43
 msgid ""
 "The locale you want Intl.NumberFormat to use when parsing the numbers in the "
 "chart"
 msgstr ""
+"De gewenste landinstelling bij het weergeven van de getallen in het diagram"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
-msgstr "General Settings"
+msgstr "Algemene instellingen"
 
 #: components/templates/m-chart-settings.php:9
-#, fuzzy
-#| msgid "Default"
 msgid "Default Library"
-msgstr "Default"
+msgstr "Standaard bibliotheek"
 
 #: components/templates/m-chart-settings.php:23
 msgid "Chart.js is the GPL compatible default library:"
-msgstr ""
+msgstr "Chart.js is the GPL compatibele standaard bibliotheek:"
 
 #: components/templates/m-chart-settings.php:33
 msgid "Show Library in Edit Posts Screen"
-msgstr ""
+msgstr "Toon de bibliotheek in bewerk schermen"
 
 #: components/templates/m-chart-settings.php:34
 msgid ""
 "Displays an icon indicating the library used for a chart in Edit Posts "
 "Screen of the WP Admin"
 msgstr ""
+"Toont een icoon dat de gebruikte grafiek bibliotheek aangeeft in het bewerk "
+"bericht scherm van WP Admin"
 
 #: components/templates/m-chart-settings.php:39
 #: components/templates/m-chart-settings.php:43
 msgid "Performance"
-msgstr "Performance"
+msgstr "Uitvoering"
 
 #: components/templates/m-chart-settings.php:47
 msgid "Default"
-msgstr "Default"
+msgstr "Standaard"
 
 #: components/templates/m-chart-settings.php:48
 msgid "Provides all functionality"
-msgstr "Provides all functionality"
+msgstr "Alle functionaliteit: voorbeeld weergave en aanmaken van een beeld"
 
 #: components/templates/m-chart-settings.php:52
 msgid "No Images"
-msgstr "No Images"
+msgstr "Geen beelden"
 
 #: components/templates/m-chart-settings.php:53
 msgid "No generation of chart images"
-msgstr "No generation of chart images"
+msgstr "Van een grafiek wordt geen beeld gemaakt"
 
 #: components/templates/m-chart-settings.php:57
 msgid "No Instant Preview"
-msgstr "No Instant Preview"
+msgstr "Geen voorbeeld weergave"
 
 #: components/templates/m-chart-settings.php:58
 msgid "No instant preview and no generation of chart images"
-msgstr "No instant preview and no generation of chart images"
+msgstr "Geen voorbeeld weergave en geen grafiek beeld"
 
 #: components/templates/m-chart-settings.php:64
 #: components/templates/m-chart-settings.php:68
 msgid "Image Multiplier"
-msgstr ""
+msgstr "Beeld vergroter"
 
 #: components/templates/m-chart-settings.php:72
 msgid "1x"
-msgstr ""
+msgstr "1x"
 
 #: components/templates/m-chart-settings.php:76
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: components/templates/m-chart-settings.php:80
 msgid "3x"
-msgstr ""
+msgstr "3x"
 
 #: components/templates/m-chart-settings.php:84
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
 msgid ""
 "The higher the multiplier the better the images will look on high DPI screens"
 msgstr ""
+"Hoe hoger de factor, des te beter de afbeeldingen er op schermen met een "
+"hoge resolutie uit zullen zien"
 
 #: components/templates/m-chart-settings.php:91
-#, fuzzy
-#| msgid "Image"
 msgid "Image Width"
-msgstr "Image"
+msgstr "Beeld breedte"
 
 #: components/templates/m-chart-settings.php:95
 msgid "The width of the image generated from your chart"
-msgstr ""
+msgstr "De breedte van het beeld van de grafiek"
 
 #: components/templates/m-chart-settings.php:100
 msgid "Embeds"
-msgstr "Embeds"
+msgstr "Integraties"
 
 #: components/templates/m-chart-settings.php:104
 msgid "Enable iframe embeds"
-msgstr "Enable iframe embeds"
+msgstr "Iframe integratie toestaan"
 
 #: components/templates/m-chart-settings.php:105
 msgid "Allow charts to be remotely embedded via iframes"
-msgstr "Allow charts to be remotely embedded via iframes"
+msgstr "Toestaan dat een grafiek door een externe website gebruikt kan worden"
 
 #: components/templates/m-chart-settings.php:110
 msgid "Default CSV Delimiter"
-msgstr ""
+msgstr "Standaard CSV scheidingsteken"
 
 #: components/templates/m-chart-settings.php:123
 msgid "Default used when importing/exporting CSV files"
-msgstr ""
+msgstr "Standaard gebruikt voor het importeren van CSV bestanden"
 
 #: components/templates/m-chart-settings.php:130
 msgid "Save Changes"
-msgstr "Save Changes"
+msgstr "Opslaan"
 
 #: components/templates/share.php:24
 msgid "Share:"
-msgstr "Share:"
+msgstr "Delen:"
 
 #: components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
-msgstr "Add Sheet"
+msgstr "Werkblad toevoegen"
 
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export CSV"
-msgstr "Export CSV"
+msgstr "CSV exporteren"
 
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export"
-msgstr "Export"
+msgstr "Exporteren"
 
 #: components/templates/spreadsheet-meta-box.php:14
 msgid "CSV Import/Export"
-msgstr "CSV Import/Export"
+msgstr "CSV importeren/exporteren"
 
 #: components/templates/spreadsheet-meta-box.php:16
 msgid "Select CSV File"
-msgstr "Select CSV File"
+msgstr "Kies CSV bestand"
 
 #: components/templates/spreadsheet-meta-box.php:16
 msgid "Select File"
-msgstr "Select File"
+msgstr "Kies bestand"
 
 #: components/templates/spreadsheet-meta-box.php:18
 msgid "Import"
-msgstr "Import"
+msgstr "Importeren"
 
 #: components/templates/spreadsheet-meta-box.php:26
 msgid " Delimited"
-msgstr ""
+msgstr " Beperkt"
 
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
-msgstr "You can only import CSV files"
+msgstr "Alleen CSV bestanden kunnen worden geïmporteerd"
 
 #: components/templates/spreadsheet-meta-box.php:35
 msgid "Importing file"
-msgstr "Importing file"
+msgstr "Bestand importeren"
 
 #: components/templates/spreadsheet-meta-box.php:37
 msgid "Cancel Import"
-msgstr "Cancel Import"
+msgstr "Importeren annuleren"
 
 #: components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
-msgstr "Importing this file will replace all existing data in this sheet"
+msgstr ""
+"Dit bestand importeren zal alle bestaande data in dit werkblad overschrijven"
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
-msgstr "Enter subtitle here"
+msgstr "Ondertitel"
 
 #. Plugin Name of the plugin/theme
 msgid "M Chart"
 msgstr "M Chart"
 
 #. Plugin URI of the plugin/theme
-#, fuzzy
-#| msgid "http://github.com/methnen/m-charts"
 msgid "http://github.com/methnen/m-chart"
-msgstr "http://github.com/methnen/m-charts"
+msgstr "http://github.com/methnen/m-chart"
 
 #. Author of the plugin/theme
 msgid "Jamie Poitra"
@@ -3069,53 +3051,27 @@ msgstr "Jamie Poitra"
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
 
-#, fuzzy
-#~| msgid "No Charts found"
-#~ msgid "No charts found"
-#~ msgstr "No Charts found"
+#.
+msgctxt "block description"
+msgid "Embed a chart made with M Chart into your posts and pages"
+msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
 
-#, fuzzy
-#~| msgid "No Charts found in the Trash"
-#~ msgid "No charts were found using this search string"
-#~ msgstr "No Charts found in the Trash"
+#.
+msgid "No charts found"
+msgstr "Geen grafieken gevonden"
 
-#~ msgid "Source"
-#~ msgstr "Source"
+#.
+msgid "No charts were found using this search string"
+msgstr "Geen grafieken gevonden met deze zoekterm"
 
-#~ msgid "Source URL"
-#~ msgstr "Source URL"
+#.
+msgid "Click on the chart to make a new selection"
+msgstr "Klik op de grafiek om een nieuwe keuze te maken"
 
-#~ msgid "Language Settings"
-#~ msgstr "Language Settings"
+#.
+msgid "Click on a chart to select & insert"
+msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
 
-#~ msgid "Decimal Indicator"
-#~ msgstr "Decimal Indicator"
-
-#~ msgid "Thousands Separator"
-#~ msgstr "Thousands Separator"
-
-#~ msgid "Numeric Symbols"
-#~ msgstr "Numeric Symbols"
-
-#~ msgid ""
-#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
-#~ "Quadrillions, Quintillions...)"
-#~ msgstr ""
-#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
-#~ "Quadrillions, Quintillions...)"
-
-#~ msgid "Numeric Symbol Magnitude"
-#~ msgstr "Numeric Symbol Magnitude"
-
-#~ msgid ""
-#~ "Allows adjustment for languages that use symbols at different intervals "
-#~ "(Japanese, Korean, etc...)"
-#~ msgstr ""
-#~ "Allows adjustment for languages that use symbols at different intervals "
-#~ "(Japanese, Korean, etc...)"
-
-#~ msgid "Importing this file will replace all existing data"
-#~ msgstr "Importing this file will replace all existing data"
-
-#~ msgid "Force vertical axis minimum to zero"
-#~ msgstr "Force vertical axis minimum to zero"
+#.
+msgid "Chart plugin not available or not active"
+msgstr "M Chart is niet aanwezig of niet actief"
