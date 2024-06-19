@@ -3,16 +3,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart 1.10.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
-"POT-Creation-Date: 2024-04-29 15:04-0700\n"
-"PO-Revision-Date: 2024-04-29 15:24-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-13T12:50:03+00:00\n"
+"PO-Revision-Date: 2024-06-17 15:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Domain: m-chart\n"
 
 #: components/array-default-unit-terms.php:8
@@ -2434,8 +2434,6 @@ msgid "Replace"
 msgstr "Vervang"
 
 #: components/block-src/chart/edit.js:119
-#, fuzzy
-#| msgid "There is a problem fetching charts"
 msgid "There was a problem fetching charts"
 msgstr "Er is een probleem met het ophalen van grafieken"
 
@@ -2453,7 +2451,7 @@ msgstr "Doorzoek op titel"
 
 #: components/block-src/chart/edit.js:162
 msgid " of "
-msgstr ""
+msgstr " van "
 
 #: components/block-src/chart/edit.js:165
 msgid "No Charts found using this search string"
@@ -2695,75 +2693,71 @@ msgstr "Invoegen niet toegestaan"
 
 #: components/external/canvg/umd.js:1
 msgid "Symbol."
-msgstr ""
+msgstr "Symbool."
 
 #: components/external/handsontable/handsontable.js:29
 msgid "delete"
-msgstr ""
+msgstr "verwijder"
 
 #: components/external/handsontable/handsontable.js:29
-#, fuzzy
-#| msgid "Charts"
 msgid "has"
-msgstr "Grafieken"
+msgstr "heeft"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "get"
-msgstr ""
+msgstr "geef"
 
 #: components/external/handsontable/handsontable.js:29
-#, fuzzy
-#| msgid "Wrong post type"
 msgid "Wrong offset!"
-msgstr "Verkeerd bericht type"
+msgstr "Verkeerd startpunt!"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "Wrong length!"
-msgstr ""
+msgstr "Verkeerde lengte!"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "autocomplete"
-msgstr ""
+msgstr "zelf aanvullend"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "checkbox"
-msgstr ""
+msgstr "keuzevakje"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "date"
-msgstr ""
+msgstr "datum"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "dropdown"
-msgstr ""
+msgstr "selectielijst"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "handsontable"
-msgstr ""
+msgstr "tabel"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "numeric"
-msgstr ""
+msgstr "numeriek"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "password"
-msgstr ""
+msgstr "wachtwoord"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "text"
-msgstr ""
+msgstr "tekst"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "time"
-msgstr ""
+msgstr "tijd"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "Promise-chain cycle"
-msgstr ""
+msgstr "Eindeloze loop"
 
 #: components/external/handsontable/handsontable.js:29
 msgid "Promise can't be resolved itself"
-msgstr ""
+msgstr "Een belofte kan niet zichzelf inlossen"
 
 #: components/templates/chart-meta-box.php:16
 msgid "This chart requires the M Chart Highcharts Library plugin."
@@ -2973,14 +2967,12 @@ msgid "Allow charts to be remotely embedded via iframes"
 msgstr "Toestaan dat een grafiek door een externe website gebruikt kan worden"
 
 #: components/templates/m-chart-settings.php:110
-#, fuzzy
-#| msgid "Default Chart.js Theme"
 msgid "Default CSV Delimiter"
-msgstr "Standaard Chart.js Thema"
+msgstr "Standaard CSV scheidingsteken"
 
 #: components/templates/m-chart-settings.php:123
 msgid "Default used when importing/exporting CSV files"
-msgstr ""
+msgstr "Standaard gebruikt voor het importeren van CSV bestanden"
 
 #: components/templates/m-chart-settings.php:130
 msgid "Save Changes"
@@ -3020,7 +3012,7 @@ msgstr "Importeren"
 
 #: components/templates/spreadsheet-meta-box.php:26
 msgid " Delimited"
-msgstr ""
+msgstr " Beperkt"
 
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
@@ -3059,47 +3051,27 @@ msgstr "Jamie Poitra"
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
 
-#, fuzzy
-#~| msgid "no charts found"
-#~ msgid "No charts found"
-#~ msgstr "geen grafieken gevonden"
+#.
+msgctxt "block description"
+msgid "Embed a chart made with M Chart into your posts and pages"
+msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
 
-#, fuzzy
-#~| msgid "No Charts found using this search string"
-#~ msgid "No charts were found using this search string"
-#~ msgstr "Geen grafieken gevonden met deze zoekterm"
+#.
+msgid "No charts found"
+msgstr "Geen grafieken gevonden"
 
-#, fuzzy
-#~| msgctxt "block description"
-#~| msgid "Embed a chart made with M Chart into your posts and pages"
-#~ msgctxt "block description"
-#~ msgid "Embed a chart made with M Chart into your content"
-#~ msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
+#.
+msgid "No charts were found using this search string"
+msgstr "Geen grafieken gevonden met deze zoekterm"
 
-#~ msgctxt "block title"
-#~ msgid "M Chart"
-#~ msgstr "M Chart"
+#.
+msgid "Click on the chart to make a new selection"
+msgstr "Klik op de grafiek om een nieuwe keuze te maken"
 
-#~ msgid "Click on the chart to make a new selection"
-#~ msgstr "Klik op de grafiek om een nieuwe keuze te maken"
+#.
+msgid "Click on a chart to select & insert"
+msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
 
-#~ msgid "Click on a chart to select & insert"
-#~ msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
-
-#~ msgid "Chart plugin not available or not active"
-#~ msgstr "M Chart is niet aanwezig of niet actief"
-
-#~ msgid "to plugins page"
-#~ msgstr "naar de plugin pagina"
-
-#~ msgctxt "block title"
-#~ msgid "Chart selector"
-#~ msgstr "Grafiek kiezer"
-
-#~ msgctxt "block description"
-#~ msgid ""
-#~ "Select out of all available charts a chart for presentation. Either "
-#~ "visual or with search term in the title or subtitle."
-#~ msgstr ""
-#~ "Kies uit alle beschikbare grafieken een grafiek voor presentatie. Visueel "
-#~ "of m.b.v. het doorzoeken van titel en ondertitel."
+#.
+msgid "Chart plugin not available or not active"
+msgstr "M Chart is niet aanwezig of niet actief"
