@@ -42,6 +42,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
 * Fixed an issue with translation text not making it into the Block interface
 * Fixed an issue where Chart.js tooltips were sometimes missing a label
+* Updated Chart.js to the latest stable version (4.4.3)
 
 = 1.11 =
 
