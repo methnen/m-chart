@@ -1,6 +1,6 @@
 # M Chart #
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
-**Tags:** chartjs, highcharts, graphs, charts, data  
+**Tags:** chartjs, highcharts, graphs, charts, tables, data  
 **Requires at least:** 4.2  
 **Tested up to:** 6.5.4  
 **Stable tag:** 1.11.1  
