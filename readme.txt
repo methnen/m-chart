@@ -47,7 +47,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.11 =
 
 * Added a Chart Block for the WordPress Block Editor
-	* Send your thanks to [webconstructor](https://github.com/webconstructor) for lion's share of the work on this
+	* Send your thanks to [webconstructor](https://github.com/webconstructor) for the lion's share of the work on this
 * Added a [CSV Delimiter](https://github.com/methnen/m-chart/wiki/csv-importing-exporting) control and setting to allow for differences in CSV files from different regions
 * Fixed an issue where data points weren't being cleaned well enough and it could confuse Chart.js
 * Fixed an issue where Chart.js tooltips sometimes duplicated a label
