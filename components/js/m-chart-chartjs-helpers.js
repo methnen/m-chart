@@ -136,10 +136,15 @@ var m_chart_chartjs_helpers = {
 			label = '';
 		}
 
+		// Handle stacked bar/column charts a bit better
+		if ( 'undefined' != typeof item.dataset.label && label != item.dataset.label ) {
+			label += item.dataset.label;
+		}
+
 		if ( '' != label ) {
 			label += ': ';
 		}
-		
+
 		var tooltip_label = label + prefix + m_chart_chartjs_helpers.number_format( item.raw ) + suffix;
 
 		return tooltip_label;

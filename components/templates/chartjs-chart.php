@@ -1,14 +1,20 @@
 <?php
+$title  = get_the_title( $post_id ); 
 $height = m_chart()->get_post_meta( $post_id, 'height' );
+$width  = '';
 
-$width = '';
+$subtitle = m_chart()->get_post_meta( $post_id, 'subtitle' );
+
+if ( '' != $subtitle ) {
+	$title = $title . ': ' . $subtitle;
+}
 
 if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 	$width = ' width="' . absint( $args['width'] ) . '"';
 }
 ?>
 <div id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-container chartjs">
-	<canvas id="m-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width; ?>></canvas>
+	<canvas id="m-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width; ?> aria-label="<?php echo esc_attr( $title ); ?>" role="img" style="height: <?php echo esc_attr( $height ); ?>px;"></canvas>
 </div>
 <script type="text/javascript">
 	var m_chart_container_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>_canvas = document.getElementById( 'm-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>' ).getContext('2d');

@@ -1,9 +1,9 @@
 === M Chart ===
 Contributors: methnen
-Tags: chartjs, highcharts, graphs, charts, data, wordpress
+Tags: chartjs, highcharts, graphs, charts, tables, data
 Requires at least: 4.2
-Tested up to: 6.4.3
-Stable tag: 1.11
+Tested up to: 6.5.4
+Stable tag: 1.11.1
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -31,13 +31,23 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 1. M Chart UI
 2. M Chart Settings
+3. M Chart Block UI
 
 == Changelog ==
+
+= 1.11.1 =
+
+* Added alt text to the image version of a chart in the Block editor for better accessibility support
+* Added chart title to the image version of a chart in the Block editor
+* Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
+* Fixed an issue with translation text not making it into the Block interface
+* Fixed an issue where Chart.js tooltips were sometimes missing a label
+* Updated Chart.js to the latest stable version (4.4.3)
 
 = 1.11 =
 
 * Added a Chart Block for the WordPress Block Editor
-	* Send your thanks to [webconstructor](https://github.com/webconstructor) for lion's share of the work on this
+	* Send your thanks to [webconstructor](https://github.com/webconstructor) for the lion's share of the work on this
 * Added a [CSV Delimiter](https://github.com/methnen/m-chart/wiki/csv-importing-exporting) control and setting to allow for differences in CSV files from different regions
 * Fixed an issue where data points weren't being cleaned well enough and it could confuse Chart.js
 * Fixed an issue where Chart.js tooltips sometimes duplicated a label
