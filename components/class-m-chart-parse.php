@@ -1,6 +1,7 @@
 <?php
 
 class M_Chart_Parse {
+	public $data;
 	public $data_prefix;
 	public $data_suffix;
 	public $value_labels;
@@ -170,11 +171,9 @@ class M_Chart_Parse {
 	 * @return string the label string cleaned of any problem content
 	 */
 	public function clean_labels( $label ) {
-		$label = esc_html( $label );
-
 		$label = trim( html_entity_decode( $label, ENT_QUOTES ) );
 
-		return $label;
+		return preg_replace( '#<([a-z]+)([^>]+)*(?:>(.*)<\/\1>|\s+\/>)#', '$3', $label );
 	}
 
 	/**

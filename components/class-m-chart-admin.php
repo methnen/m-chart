@@ -14,6 +14,7 @@ class M_Chart_Admin {
 			';',
 		),
 	);
+	private $plugin_url;
 
 	/**
 	 * Constructor

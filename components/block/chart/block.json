@@ -16,7 +16,7 @@
   "supports": {
     "html": false
   },
-  "editorScript": "m-chart_editor",
+  "editorScript": "m-chart-editor",
   "editorStyle": "m-chart-editor-style",
   "render": "file:./render.php"
 }

@@ -19,18 +19,18 @@ class M_Chart_Block {
 
 		// Register editor script.
 		wp_register_script(
-			'm-chart_editor',
+			'm-chart-editor',
 			m_chart()->plugin_url . '/components/block/index.js',
 			[ 'wp-i18n' ],
 			$this->version_str(),
 			true
 		);
-
+		
 		// Set editor script translation.
 		wp_set_script_translations(
-			'm-chart_editor',
+			'm-chart-editor',
 			'm-chart',
-			plugin_dir_path( __DIR__ ) . 'languages'
+			plugin_dir_path( __DIR__ ) . 'components/languages/'
 		);
 
 		// Register block styles.
