@@ -454,7 +454,7 @@ class M_Chart_Admin {
 	<input type="hidden" name="set_name" value=""
 		id="<?php echo esc_attr( $this->get_field_id( 'csv-set-name' ) ); ?>" />
 </form>
-<script type="text/javascript">
+<script>
 		<?php do_action( 'm_chart_admin_footer_javascript' ); ?>
 </script>
 		<?php

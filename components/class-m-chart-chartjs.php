@@ -548,6 +548,9 @@ class M_Chart_Chartjs {
 			'display' => '' == $this->post_meta['x_title'] ? false : true,
 			'text'    => $this->esc_title( $this->post_meta['x_title'] ),
 		);
+        $chart_args['options']['scales']['x']['ticks'] = array(
+            'color'   => esc_attr($this->post_meta['x_axis_color']),
+        );
 
 		// We've got x axis units so we'll add them to the axis label
 		if ( '' != $this->post_meta['x_units'] ) {
@@ -573,6 +576,12 @@ class M_Chart_Chartjs {
 
 			$chart_args['options']['scales']['y']['title']['text'] .= $y_units;
 		}
+
+        // Color of text
+        $chart_args['options']['scales']['y']['ticks'] = array(
+            'color'   => esc_attr($this->post_meta['y_axis_color']),
+        );
+
 
 		return $chart_args;
 	}

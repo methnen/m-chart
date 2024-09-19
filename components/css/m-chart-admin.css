@@ -313,14 +313,30 @@
 #m-chart .inside .settings .row.two.show-shared p.shared {
 	display: block;
 }
+
+#m-chart .inside .settings .three,
+#m-chart .inside .settings .five{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 2%;
+}
+
 #m-chart .inside .settings .row.three p, #m-chart .inside .settings .row.five p {
-	float: left;
 	width: 73%;
 }
-#m-chart .inside .settings .row.three p.units, #m-chart .inside .settings .row.five p.units {
-	float: right;
-	width: 25%;
+#m-chart .inside .settings .row.three p.units,
+#m-chart .inside .settings .row.five p.units {
+	width: 10%;
 }
+#m-chart .inside .settings .row.three .axis-color,
+#m-chart .inside .settings .row.five .axis-color {
+	width: 13%;
+}
+
+
+
 #m-chart .inside .settings .row.four p {
 	margin-top: 5px;
 }

@@ -134,7 +134,7 @@ export default function edit( { attributes, setAttributes } ) {
 															<h4 className="title">{ selected.title }</h4>
 														</div>
 	                                                    :
-	                                                    <img className="preview" src={ selected?.src + random } />
+	                                                    <img className="preview" src={ selected?.src + random } alt="chart" />
 	                                                }
 	                                            </div>
 	                                            :

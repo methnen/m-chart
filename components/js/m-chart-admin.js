@@ -7,7 +7,7 @@
 		this.nonce   = $( 'input[name="m-chart[nonce]"]' ).attr( 'value' );
 
 		// Store the setting inputs and title input for use later
-		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select' );
+		this.$setting_inputs = $( document.getElementById( 'm-chart' ) ).find( '.settings input, .settings select, .axis-color input' );
 		this.$title_input    = $( document.getElementById( 'titlewrap' ) ).find( 'input' );
 		this.$subtitle_input = $( document.getElementById( 'titlediv' ) ).find( '#m-chart-subtitle' );
 		this.$y_min_value    = $( document.getElementById( 'm-chart-y-min-value' ) );

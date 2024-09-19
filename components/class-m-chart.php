@@ -1,7 +1,7 @@
 <?php
 
 class M_Chart {
-	public $version           = '1.11.1';
+	public $version           = '1.12.1';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = array(
@@ -12,10 +12,12 @@ class M_Chart {
 		'shared'      => false,
 		'subtitle'    => '',
 		'y_title'     => '',
+        'y_axis_color'=> '#000000',
 		'y_units'     => '',
 		'y_min'       => false,
 		'y_min_value' => 0,
 		'x_title'     => '',
+        'x_axis_color'=> '#000000',
 		'x_units'     => '',
 		'height'      => 400,
 		'legend'      => true,

@@ -105,6 +105,10 @@ $y_min_disabled = $post_meta['y_min'] ? '' : 'disabled="disabled" ';
 				?>
 			</select>
 		</p>
+        <p class="axis-color">
+            <label for="<?php echo esc_attr( $this->get_field_id( 'y-axis-color' ) ); ?>"><?php esc_html_e( 'Vertical axis text color', 'm-chart' ); ?></label><br />
+            <input class="input" type="color" name="<?php echo esc_attr( $this->get_field_name( 'y_axis-color' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'y-axis-color' ) ); ?>" value="<?php echo esc_attr( $post_meta['y_axis_color'] ); ?>" />
+        </p>
 	</div>
 	<div class="row four y-min">
 		<p>
@@ -143,6 +147,10 @@ $y_min_disabled = $post_meta['y_min'] ? '' : 'disabled="disabled" ';
 				?>
 			</select>
 		</p>
+        <p class="axis-color">
+            <label for="<?php echo esc_attr( $this->get_field_id( 'x-axis-color' ) ); ?>"><?php esc_html_e( 'Horizontal axis text color', 'm-chart' ); ?></label><br />
+            <input class="input" type="color" name="<?php echo esc_attr( $this->get_field_name( 'x_axis-color' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'x-axis-color' ) ); ?>" value="<?php echo esc_attr( $post_meta['x_axis_color'] ); ?>" />
+        </p>
 	</div>
 </div>
 <div class="row seven">
