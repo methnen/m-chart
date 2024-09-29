@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, tables, data
 Requires at least: 4.2
 Tested up to: 6.5.4
-Stable tag: 1.11.1
+Stable tag: 1.11.2
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -34,6 +34,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 3. M Chart Block UI
 
 == Changelog ==
+
+= 1.11.2 =
+
+* Fixed a few PHP warnings that were occuring in specific situations
 
 = 1.11.1 =
 
