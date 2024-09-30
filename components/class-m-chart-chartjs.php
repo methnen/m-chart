@@ -167,7 +167,6 @@ class M_Chart_Chartjs {
 
 		// Run the parse class on the data
 		$data = isset( $this->post_meta['data']['sets'][0] ) ? $this->post_meta['data']['sets'][0] : '';
-		$data = '';
 		m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
 
 		$type = $this->post_meta['type'];
