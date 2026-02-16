@@ -1,7 +1,7 @@
 <?php
 
 class M_Chart {
-	public $version           = '1.11.1';
+	public $version           = '1.11.2';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = array(
@@ -338,6 +338,7 @@ class M_Chart {
 			// If we're we're adding a new chart and a library is specified in the get vars we use it
 			if (
 				   is_admin()
+				&& null != $current_screen
 				&& 'post' == $current_screen->base
 				&& 'add' == $current_screen->action
 				&& isset( $_GET['library'] )
