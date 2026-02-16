@@ -1,8 +1,7 @@
 === M Chart ===
 Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, tables, data
-Requires at least: 4.2
-Tested up to: 6.5.4
+Tested up to: 6.9.1
 Stable tag: 1.11.2
 License: MIT
 
