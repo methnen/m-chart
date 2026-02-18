@@ -1,4 +1,4 @@
-// Handsontable Styles
+// Spreadsheet Styles
 
 #m-chart-spreadsheet {
 	border-left: none;
@@ -36,7 +36,13 @@
 		overflow-y: hidden;
 		padding-top: 7px;
 		white-space: nowrap;
+		margin-bottom: -4px;
 
+		@media ( max-width:600px ) {
+
+			margin-bottom: -5px;
+		}
+		
 		&.hide {
 			display: none;
 		}
@@ -44,8 +50,10 @@
 		.add-sheet {
 			color: $wp-admin-inactive-icon-color;
 			float: left;
+			margin-top: 3px;
 			margin-bottom: 0;
 			margin-left: 7px;
+			margin-right: 7px;
 			text-decoration: none;
 
 			&:hover {
@@ -54,44 +62,71 @@
 
 			span {
 				line-height: 38px;
+			}
 
-				@media ( max-width:782px ) {
-					line-height: 46px;
-				}
+			@media ( max-width:782px ) {
+				margin-top: 7px;
 			}
 		}
 
 		.nav-tab {
 			display: inline-block;
 			float: none;
+			position: relative;
+			padding-left: 27px;
+			height: 33px;
+			max-height: 33px;
+			overflow-y: hidden;
+			margin-left: 0;
+			margin-right: 7px;
 
-			span {
+			@media ( max-width:600px ) {
+				margin-top: 0;
+			}
+
+			@media ( max-width:782px ) {
+				height: 41px;
+				max-height: 41px;
+			}
+
+			span.dashicons-dismiss {
 				color: $wp-admin-inactive-text-color;
-				margin-top: 3px;
-
-				@media ( max-width:782px ) {
-					margin-top: 7px;
-				}
+				position: absolute;
+				left: 7px;
+				top: 11px;
 
 				&:hover {
 					color: $wp-admin-red;
+				}
+
+				@media ( max-width:782px ) {
+					top: 15px;
+				}
+			}
+
+			span.tab-title {
+				padding: 0 10px 0 9px;
+				border: 1px solid transparent;
+				display: inline-block;
+				line-height: 27px;
+
+				@media ( max-width:782px ) {
+					font-size: 16px;
+					line-height: 38px;
+					padding: 0 12px 0 11px;
+				}
+
+				&.hide {
+					display: none;
 				}
 			}
 
 			input {
 				min-width: 30px;
-
-				&[disabled="disabled"] {
-					background: transparent;
-					border: 1px solid transparent;
-					box-shadow: none;
-					color: $wp-admin-inactive-text-color;
-					-webkit-text-fill-color: $wp-admin-inactive-text-color;
-				}
 			}
 
 			&.nav-tab-active {
-				span {
+				span.dashicons-dismiss {
 					color: $wp-admin-black;
 
 					&:hover {
@@ -114,6 +149,23 @@
 			&.do-not-delete {
 				span {
 					display: none;
+				}
+			}
+		}
+	}
+
+	#spreadsheets {
+		.jtabs-content {
+			border-left: 1px solid $wp-admin-meta-border-color;
+			overflow: auto;
+			max-height: 370px;
+
+			.jss_content {
+				margin: -1px 0 -5px -2px;
+				padding: 0;
+
+				table {
+					margin-right: -1px;
 				}
 			}
 		}

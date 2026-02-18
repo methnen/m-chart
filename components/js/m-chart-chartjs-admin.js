@@ -22,7 +22,7 @@ var m_chart_chartjs_admin = {};
 	m_chart_chartjs_admin.handle_chart_type = function( event ) {
 		var chart_type        = $( this ).val();
 		var $chart_meta_box   = $( document.getElementById( 'm-chart' ) );
-		var $spreadsheet_tabs = $( document.getElementById( 'hands-on-table-sheet-tabs' ) );
+		var $spreadsheet_tabs = $( document.getElementById( 'spreadsheet-tabs' ) );
 
 		// Show everything before hiding the options we don't want
 		$chart_meta_box.find( '.row, .shared' ).removeClass( 'hide' );
