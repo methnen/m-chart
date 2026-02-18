@@ -134,7 +134,15 @@
 				
 				return filtered_items;
 			},
+			onload: function(spreadsheet) {
+				// Run an auto width function to make the column widths
+				let worksheet = spreadsheet.worksheets[spreadsheet.getWorksheetActive()];
+				m_chart_admin.spreadsheet_auto_width(worksheet);
+			},
 			onafterchanges: function(worksheet, records) {
+				// Run an auto width function to make the column widths
+				m_chart_admin.spreadsheet_auto_width(worksheet, records);
+
 				// Update chart on spreadsheet changes
 				m_chart_admin.refresh_chart();
 			}
@@ -169,7 +177,49 @@
 		m_chart_admin.resize_input( $tab_input );
 
 		this.last_set = i;
-	}
+	};
+
+	m_chart_admin.spreadsheet_auto_width = function(worksheet, records = false) {
+		// If no records were passed we'll assume we're dealing with a full refresh
+		if ( ! records ) {
+			// This won't look exactly like the records array that onafterchanges passes
+			// However, all we care about is the x values of the columns we need to look at
+			records = worksheet.records[0];
+		}
+
+		// Get the unique column indexes that have changed.
+		const columns = [...new Set(records.map(record => record.x))];
+
+		// Create a canvas for text measurement
+		const canvas  = document.createElement('canvas');
+		const context = canvas.getContext('2d');
+
+		// Auto-resize the width of the columns that need it
+		columns.forEach(column => {
+			let max_width = 0;
+			let min_width = 100; // This matches the default width for a column
+			const padding = 13; // Some additional padding to keep things attractive
+
+			// Check each cell in the column for the widest content
+			for ( let i = 0; i < worksheet.records.length; i++ ) {
+				if ( worksheet.records[i] && worksheet.records[i][column] && worksheet.records[i][column].element ) {
+					const cell    = worksheet.records[i][column].element;
+					context.font  = window.getComputedStyle( cell ).font;
+					const metrics = context.measureText( cell.innerText );
+					
+					if ( metrics.width > max_width ) {
+						max_width = metrics.width;
+					}
+				}
+			}
+
+			// Make sure max_width is larger than min_width
+			max_width = min_width > max_width ? min_width - padding : max_width;
+
+			// Set the new width
+			worksheet.setWidth(column, max_width + padding);
+		});
+	};
 
 	// Handle spreadsheet functionality
 	m_chart_admin.handle_sheet_controls = function() {
