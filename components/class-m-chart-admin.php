@@ -272,21 +272,6 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
-			// Handsontable
-			wp_enqueue_style(
-				'handsontable',
-				$this->plugin_url . '/components/external/handsontable/handsontable.css',
-				array(),
-				m_chart()->version
-			);
-
-			wp_enqueue_script(
-				'handsontable',
-				$this->plugin_url . '/components/external/handsontable/handsontable.js',
-				array( 'jquery' ),
-				m_chart()->version
-			);
-
 			// Jspreadsheet CE
 			wp_enqueue_style(
 				'jspreadsheet',
@@ -337,7 +322,7 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'm-chart-admin',
 				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'jquery', 'handsontable', 'handlebars' ),
+				array( 'jquery', 'jspreadsheet', 'handlebars' ),
 				m_chart()->version
 			);
 
