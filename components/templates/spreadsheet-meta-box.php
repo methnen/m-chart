@@ -1,10 +1,10 @@
 <script type="text/javascript" charset="utf-8">
 	var hands_on_table_data = <?php echo json_encode( $sheet_data ); ?>;
 </script>
-<nav id="hands-on-table-sheet-tabs" class="nav-tab-wrapper hide">
+<nav id="spreadsheet-tabs" class="nav-tab-wrapper hide">
 	<a href="#add-sheet" class="add-sheet" title="<?php esc_html_e( 'Add Sheet', 'm-chart' ); ?>"><span class="dashicons dashicons-plus-alt"></span></a>
 </nav>
-<div id="hands-on-table-sheets"></div>
+<div id="spreadsheets"></div>
 <div id="m-chart-csv">
 	<div class="export">
 		<br />

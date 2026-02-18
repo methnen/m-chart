@@ -2,7 +2,7 @@
 Contributors: methnen
 Tags: chartjs, highcharts, graphs, charts, tables, data
 Tested up to: 6.9.1
-Stable tag: 1.11.2
+Stable tag: 1.12
 License: MIT
 
 Manage data sets and display them as charts in WordPress.
@@ -33,6 +33,14 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 3. M Chart Block UI
 
 == Changelog ==
+
+= 1.12 =
+
+* Switched from the old version (6.2.2) of [Handsontable](https://handsontable.com/blog/handsontable-drops-open-source-for-a-non-commercial-license) to [Jspreadsheet CE](https://bossanova.uk/jspreadsheet/) (5.0.0)
+	* This removes reliance on a third party library that hadn't recieved updates in a long time
+* Refactored spreadsheet tab handling code a bit since some changes in browser event bubbling were causing issues
+* Some style changes to deal with edge case UI issues in mobile situations
+* Updated Chart.js to the latest stable version (4.5.1)
 
 = 1.11.2 =
 

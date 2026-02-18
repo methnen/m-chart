@@ -287,6 +287,36 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
+			// Jspreadsheet CE
+			wp_enqueue_style(
+				'jspreadsheet',
+				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.css',
+				array(),
+				m_chart()->version
+			);
+
+			wp_enqueue_script(
+				'jspreadsheet',
+				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.js',
+				array( 'jquery' ),
+				m_chart()->version
+			);
+
+			// jSuites
+			wp_enqueue_style(
+				'jsuites',
+				$this->plugin_url . '/components/external/jsuites/jsuites.css',
+				array(),
+				m_chart()->version
+			);
+
+			wp_enqueue_script(
+				'jsuites',
+				$this->plugin_url . '/components/external/jsuites/jsuites.js',
+				array( 'jquery' ),
+				m_chart()->version
+			);
+
 			// Handlebars
 			wp_enqueue_script(
 				'handlebars',

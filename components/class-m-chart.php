@@ -1,7 +1,7 @@
 <?php
 
 class M_Chart {
-	public $version           = '1.11.2';
+	public $version           = '1.12';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = array(
