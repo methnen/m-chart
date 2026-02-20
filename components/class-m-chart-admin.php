@@ -283,7 +283,7 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'jspreadsheet',
 				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.js',
-				array( 'jquery' ),
+				array( 'jquery', 'jsuites' ),
 				m_chart()->version
 			);
 
