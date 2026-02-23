@@ -34,7 +34,7 @@
 					JSON.stringify( m_chart_admin.get_data() )
 				);
 
-				$( '.spreadsheet-sheet-tab-input' ).attr( 'disabled', false );
+				$( '.spreadsheet-tab-input' ).attr( 'disabled', false );
 			}
 		});
 
