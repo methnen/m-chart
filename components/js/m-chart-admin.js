@@ -135,12 +135,12 @@
 				return filtered_items;
 			},
 			onload: function(spreadsheet) {
-				// Run an auto width function to make the column widths
+				// Run an auto width function to make the column widths match content
 				let worksheet = spreadsheet.worksheets[spreadsheet.getWorksheetActive()];
 				m_chart_admin.spreadsheet_auto_width(worksheet);
 			},
 			onafterchanges: function(worksheet, records) {
-				// Run an auto width function to make the column widths
+				// Run an auto width function to make the column widths match content
 				m_chart_admin.spreadsheet_auto_width(worksheet, records);
 
 				// Update chart on spreadsheet changes
