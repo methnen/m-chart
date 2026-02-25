@@ -64,7 +64,7 @@ class M_Chart_Admin {
 
 		$libraries = m_chart()->get_libraries();
 
-		// If there's only one library we stop here as it's unecessary
+		// If there's only one library we stop here as it's unnecessary
 		if ( 1 === count( $libraries ) ) {
 			return;
 		}
@@ -149,13 +149,13 @@ class M_Chart_Admin {
 				} else {
 					$validated_settings[ $setting ] = $default;
 				}
-			} elseif ( 'lang_settings' == $setting ) {
-				// The language settinsg require a bit more checking
+			} elseif ( 'lang_settings' === $setting ) {
+				// The language settings require a bit more checking
 				foreach ( $default_settings['lang_settings'] as $lang_setting => $lang_default ) {
-					$lang_value = $submitted_settings['lang_settings'][ $lang_setting ];
+					$lang_value = $submitted_settings[ 'lang_settings' ][ $lang_setting ];
 
-					if ( 'numericSymbols' == $lang_setting ) {
-						// The numeric symbols are input as a comma seperated string so we'll deal with that here
+					if ( 'numericSymbols' === $lang_setting ) {
+						// The numeric symbols are input as a comma separated string so we'll deal with that here
 						$numeric_symbols = explode( ',', $lang_value );
 						$safe_symbols    = array();
 
@@ -164,7 +164,7 @@ class M_Chart_Admin {
 						}
 
 						$validated_settings[ $setting ][ $lang_setting ] = $safe_symbols;
-					} elseif ( 'numericSymbolMagnitude' == $lang_setting ) {
+					} elseif ( 'numericSymbolMagnitude' === $lang_setting ) {
 						// Only want positive numbers for the numericSymbolMagnitude value
 						if ( is_numeric( $lang_value ) && 0 < $lang_value ) {
 							$validated_settings[ $setting ][ $lang_setting ] = absint( $lang_value );
@@ -258,12 +258,12 @@ class M_Chart_Admin {
 	 * @param object the current screen object as passed by the current_screen action hook
 	 */
 	public function current_screen( $screen ) {
-		if ( m_chart()->slug != $screen->post_type ) {
+		if ( m_chart()->slug !== $screen->post_type ) {
 			return;
 		}
 
 		// Only load these if we are on a post page
-		if ( 'post' == $screen->base ) {
+		if ( 'post' === $screen->base ) {
 			// jQuery Mobile Touch Events
 			wp_enqueue_script(
 				'jquery-mobile-touch-events',
@@ -326,15 +326,15 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
-			// We need the library and post ID for some bunch of stuff below
+			// We need the library and post ID for a bunch of stuff below
 			$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : '';
 			$library = m_chart()->get_library();
 
 			if ( ! empty( $post_id ) ) {
 				$library = m_chart()->get_post_meta( absint( $post_id ), 'library' );
 			} elseif (
-				   'post' == $screen->base
-				&& 'add' == $screen->action
+				   'post' === $screen->base
+				&& 'add' === $screen->action
 				&& isset( $_GET['library'] )
 				&& m_chart()->is_valid_library( $_GET['library'] )
 			) {
@@ -342,7 +342,7 @@ class M_Chart_Admin {
 			}
 
 			// Only load this if we are on an appropriate post page
-			if ( 'post' == $screen->base && 'chartjs' == $library ) {
+			if ( 'post' === $screen->base && 'chartjs' === $library ) {
 				wp_enqueue_script(
 					'm-chart-chartjs-admin',
 					$this->plugin_url . '/components/js/m-chart-chartjs-admin.js',
@@ -365,7 +365,7 @@ class M_Chart_Admin {
 					'image_width'             => m_chart()->get_settings( 'image_width' ),
 					'library'                 => $library,
 					'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
-					'delete_comfirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
+					'delete_confirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				)
 			);
 
@@ -387,10 +387,10 @@ class M_Chart_Admin {
 	public function meta_boxes() {
 		global $wp_meta_boxes;
 
-		// Remove excerpt from it's normal spot in the meta_boxes array so we can put it back in after the spreadsheet
+		// Remove excerpt from its normal spot in the meta_boxes array so we can put it back in after the spreadsheet
 		// Users can move metaboxes, but this helps put things in a reasonable place on the first visit
-		$excerpt = $wp_meta_boxes[ m_chart()->slug ]['normal']['core']['postexcerpt'];
-		unset( $wp_meta_boxes[ m_chart()->slug ]['normal']['core']['postexcerpt'] );
+		$excerpt = $wp_meta_boxes[ m_chart()->slug ][ 'normal' ][ 'core' ][ 'postexcerpt' ];
+		unset( $wp_meta_boxes[ m_chart()->slug ][ 'normal' ][ 'core' ][ 'postexcerpt' ] );
 
 		add_meta_box(
 			m_chart()->slug . '-spreadsheet',
@@ -410,14 +410,14 @@ class M_Chart_Admin {
 			'high'
 		);
 
-		$wp_meta_boxes[ m_chart()->slug ]['normal']['high']['postexcerpt'] = $excerpt;
+		$wp_meta_boxes[ m_chart()->slug ][ 'normal' ][ 'high' ][ 'postexcerpt' ] = $excerpt;
 
 		// We are using our own interface for the units so we can remove the units taxonomy metabox
 		remove_meta_box( m_chart()->slug . '-unitsdiv', m_chart()->slug, 'side' );
 	}
 
 	/**
-	 * Displays the spread sheet meta box
+	 * Displays the spreadsheet meta box
 	 *
 	 * @param object the WP post object as returned by the metabox API
 	 */
@@ -453,7 +453,7 @@ class M_Chart_Admin {
 	public function admin_footer() {
 		$screen = get_current_screen();
 
-		if ( 'post' != $screen->base || m_chart()->slug != $screen->post_type ) {
+		if ( 'post' !== $screen->base || m_chart()->slug !== $screen->post_type ) {
 			return;
 		}
 		?>
@@ -481,7 +481,7 @@ class M_Chart_Admin {
 	 * @param object the WP post object as returned by the metabox API
 	 */
 	public function edit_form_before_permalink( $post ) {
-		if ( m_chart()->slug != $post->post_type ) {
+		if ( m_chart()->slug !== $post->post_type ) {
 			return;
 		}
 
@@ -498,13 +498,13 @@ class M_Chart_Admin {
 	 * @param string the $post_id of the post being displayed in this row
 	 */
 	public function manage_posts_custom_column( $column, $post_id ) {
-		if ( m_chart()->slug . '-type' != $column && m_chart()->slug . '-library' != $column ) {
+		if ( m_chart()->slug . '-type' !== $column && m_chart()->slug . '-library' !== $column ) {
 			return;
 		}
 
 		$library = m_chart()->get_post_meta( $post_id, 'library' );
 
-		if ( m_chart()->library( $library )->library != $library ) {
+		if ( m_chart()->library( $library )->library !== $library ) {
 			?>
 <span aria-hidden="true">—</span>
 <span class="screen-reader-text"><?php echo esc_html__( 'Library not found', 'm-chart' ); ?></span>
@@ -512,7 +512,7 @@ class M_Chart_Admin {
 			return;
 		}
 
-		if ( m_chart()->slug . '-type' == $column ) {
+		if ( m_chart()->slug . '-type' === $column ) {
 			$type      = m_chart()->get_post_meta( $post_id, 'type' );
 			$type_name = m_chart()->library( $library )->type_option_names[ $type ];
 			?>
@@ -522,7 +522,7 @@ class M_Chart_Admin {
 			<?php
 		}
 
-		if ( m_chart()->slug . '-library' == $column ) {
+		if ( m_chart()->slug . '-library' === $column ) {
 			$library_name = m_chart()->library( $library )->library_name;
 			?>
 <span class="library <?php echo esc_attr( $library ); ?>" title="<?php echo esc_attr( $library_name ); ?>">
@@ -553,10 +553,10 @@ class M_Chart_Admin {
 		foreach ( $columns as $column => $name ) {
 			$new_columns[ $column ] = $name;
 
-			if ( 'author' == $column || 'coauthors' == $column ) {
+			if ( 'author' === $column || 'coauthors' === $column ) {
 				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
 
-				if ( 'yes' == m_chart()->get_settings( 'show_library' ) ) {
+				if ( 'yes' === m_chart()->get_settings( 'show_library' ) ) {
 					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
 				}
 			}
@@ -579,7 +579,7 @@ class M_Chart_Admin {
 		}
 
 		// Check post type
-		if ( ! isset( $post->post_type ) || m_chart()->slug != $post->post_type ) {
+		if ( ! isset( $post->post_type ) || m_chart()->slug !== $post->post_type ) {
 			return;
 		}
 
@@ -633,19 +633,19 @@ class M_Chart_Admin {
 		$settings = m_chart()->get_settings();
 
 		// If the performance setting isn't turned to default we don't do this
-		if ( 'default' != $settings['performance'] ) {
-			return;
+		if ( 'default' !== $settings['performance'] ) {
+			return false;
 		}
 
 		if ( ! is_numeric( $_POST['post_ID'] ) ) {
-			return;
+			return false;
 		}
 
 		$post_id = absint( $_POST['post_ID'] );
 
 		// Make sure the library used on this post supports images
-		if ( 'no' == apply_filters( 'm_chart_image_support', 'no', m_chart()->get_post_meta( $post_id, 'library' ) ) ) {
-			return;
+		if ( 'no' === apply_filters( 'm_chart_image_support', 'no', m_chart()->get_post_meta( $post_id, 'library' ) ) ) {
+			return false;
 		}
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
@@ -656,14 +656,14 @@ class M_Chart_Admin {
 			return false;
 		}
 
-		if ( '' == $_POST[ m_chart()->slug ]['img'] ) {
+		if ( '' === $_POST[ m_chart()->slug ]['img'] ) {
 			return false;
 		}
 
 		// Decode the image so we can save it
 		$decoded_img = base64_decode( str_replace( 'data:image/png;base64,', '', $_POST[ m_chart()->slug ]['img'] ) );
 
-		if ( '' == $decoded_img ) {
+		if ( '' === $decoded_img ) {
 			return false;
 		}
 
@@ -714,13 +714,13 @@ class M_Chart_Admin {
 	/**
 	 * Parses an incoming CSV file and compiles it into an array
 	 *
-	 * @return array an array fo the data from the imported CSV file ready for use in the chart meta
+	 * @return array an array of the data from the imported CSV file ready for use in the chart meta
 	 */
 	public function ajax_import_csv() {
 		$post = get_post( absint( $_POST['post_id'] ) );
 
 		// Check post type
-		if ( ! isset( $post->post_type ) || m_chart()->slug != $post->post_type ) {
+		if ( ! isset( $post->post_type ) || m_chart()->slug !== $post->post_type ) {
 			wp_send_json_error( esc_html__( 'Wrong post type', 'm-chart' ) );
 		}
 
@@ -742,8 +742,8 @@ class M_Chart_Admin {
 		// Make sure the file is a CSV file
 		$file_ext = strtolower( pathinfo( $_FILES['import_csv_file']['name'], PATHINFO_EXTENSION ) );
 
-		if ( 'csv' != $file_ext ) {
-			wp_send_json_error( esc_html__( 'Only CSV files can be imported ', 'm-chart' ) );
+		if ( 'csv' !== $file_ext ) {
+			wp_send_json_error( esc_html__( 'Only CSV files can be imported', 'm-chart' ) );
 		}
 
 		// Do some validation on the CSV file (mirroring what WP does for this sort of thing)
@@ -755,7 +755,7 @@ class M_Chart_Admin {
 
 		$csv_data = file_get_contents( $csv_file );
 
-		if ( '' == $csv_data ) {
+		if ( '' === $csv_data ) {
 			wp_send_json_error( esc_html__( 'CSV file was empty', 'm-chart' ) );
 		}
 
@@ -769,10 +769,10 @@ class M_Chart_Admin {
 		// Which then seems to confuse parseCSV occasionally
 		$csv_data = "\n" . trim( $csv_data ) . "\n";
 
-		// Set delimiter
-		$parse_csv->delimiter = isset( $_POST['csv_delimiter'] ) ? $_POST['csv_delimiter'] : m_chart()->get_settings( 'csv_delimiter' );
-		
-		// Parse the CSV 
+		// Set delimiter but check to make sure it's safe first
+		$parse_csv->delimiter = isset( $_POST['csv_delimiter'] ) && in_array( $_POST['csv_delimiter'], $this->safe_settings[ 'csv_delimiter' ] ) ? $_POST['csv_delimiter'] : m_chart()->get_settings( 'csv_delimiter' );
+
+		// Parse the CSV
 		$parse_csv->parse( $csv_data );
 
 		// This deals with Google Doc's crappy CSV exports which don't include columns at the end of a row if they are empty
@@ -787,7 +787,7 @@ class M_Chart_Admin {
 	 *
 	 * @param array an array of data as returned from the parseCSV class
 	 *
-	 * @param array the array of data with matching array value counts
+	 * @return array the array of data with matching array value counts
 	 */
 	public function fix_csv_data_array( $data_array ) {
 		$count = 0;
@@ -821,6 +821,8 @@ class M_Chart_Admin {
 	public function ajax_export_csv() {
 		// Purposely using $_REQUEST here since this method can work via a GET and POST request
 		// POST requests are used when passing the data value since it's too big to pass via GET
+		// There is no nonce check here because a traditional WP nonce check would not work
+		// Instead we confirm the user has necessary permissions for the post in question
 		if ( ! is_numeric( $_REQUEST['post_id'] ) || ! current_user_can( 'edit_post', absint( $_REQUEST['post_id'] ) ) ) {
 			wp_die( 'Unauthorized access', 'You do not have permission to do that', array( 'response' => 401 ) );
 		}
@@ -878,7 +880,9 @@ class M_Chart_Admin {
 			wp_send_json_error( esc_html__( 'Invalid library', 'm-chart' ) );
 		}
 
-		if ( 'highcharts' == $_POST['library'] ) {
+		// This does get potentially overwritten later on
+		// However, it's necessary for initial load on a new chart
+		if ( 'highcharts' === $_POST['library'] ) {
 			$library = m_chart()->library( $_POST['library'] );
 		}
 
@@ -903,7 +907,7 @@ class M_Chart_Admin {
 	 * @param string a name spaced field name
 	 */
 	public function get_field_name( $field_name, $parent_field_name = '' ) {
-		if ( '' != $parent_field_name ) {
+		if ( '' !== $parent_field_name ) {
 			return m_chart()->slug . '[' . $parent_field_name . ']' . '[' . $field_name . ']';
 		}
 
