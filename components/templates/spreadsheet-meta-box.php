@@ -1,5 +1,5 @@
 <script type="text/javascript" charset="utf-8">
-	var hands_on_table_data = <?php echo json_encode( $sheet_data ); ?>;
+	var spreadsheet_data = <?php echo json_encode( $sheet_data ); ?>;
 </script>
 <nav id="spreadsheet-tabs" class="nav-tab-wrapper hide">
 	<a href="#add-sheet" class="add-sheet" title="<?php esc_html_e( 'Add Sheet', 'm-chart' ); ?>"><span class="dashicons dashicons-plus-alt"></span></a>
