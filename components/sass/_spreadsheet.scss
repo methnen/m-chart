@@ -20,7 +20,7 @@
 	}
 
 	.handlediv {
-		height: 35px;
+		height: rem-calc( 35 );
 	}
 
 	.inside {
@@ -34,15 +34,14 @@
 		border-top: 1px solid $wp-admin-meta-border-color;
 		overflow-x: scroll;
 		overflow-y: hidden;
-		padding-top: 7px;
+		padding-top: rem-calc( 7 );
 		white-space: nowrap;
-		margin-bottom: -4px;
+		margin-bottom: rem-calc( -4 );
 
-		@media ( max-width:600px ) {
-
-			margin-bottom: -5px;
+		@media (max-width: 600px) {
+			margin-bottom: rem-calc( -5 );
 		}
-		
+
 		&.hide {
 			display: none;
 		}
@@ -50,10 +49,10 @@
 		.add-sheet {
 			color: $wp-admin-inactive-icon-color;
 			float: left;
-			margin-top: 3px;
+			margin-top: rem-calc( 3 );
 			margin-bottom: 0;
-			margin-left: 7px;
-			margin-right: 7px;
+			margin-left: rem-calc( 7 );
+			margin-right: rem-calc( 7 );
 			text-decoration: none;
 
 			&:hover {
@@ -61,11 +60,11 @@
 			}
 
 			span {
-				line-height: 38px;
+				line-height: rem-calc( 38 );
 			}
 
-			@media ( max-width:782px ) {
-				margin-top: 7px;
+			@media (max-width: 782px) {
+				margin-top: rem-calc( 7 );
 			}
 		}
 
@@ -73,47 +72,47 @@
 			display: inline-block;
 			float: none;
 			position: relative;
-			padding-left: 27px;
-			height: 33px;
-			max-height: 33px;
+			padding-left: rem-calc( 27 );
+			height: rem-calc( 33 );
+			max-height: rem-calc( 33 );
 			overflow-y: hidden;
 			margin-left: 0;
-			margin-right: 7px;
+			margin-right: rem-calc( 7 );
 
-			@media ( max-width:600px ) {
+			@media (max-width: 600px) {
 				margin-top: 0;
 			}
 
-			@media ( max-width:782px ) {
-				height: 41px;
-				max-height: 41px;
+			@media (max-width: 782px) {
+				height: rem-calc( 41 );
+				max-height: rem-calc( 41 );
 			}
 
 			span.dashicons-dismiss {
 				color: $wp-admin-inactive-text-color;
 				position: absolute;
-				left: 7px;
-				top: 11px;
+				left: rem-calc( 7 );
+				top: rem-calc( 11 );
 
 				&:hover {
 					color: $wp-admin-red;
 				}
 
-				@media ( max-width:782px ) {
-					top: 15px;
+				@media (max-width: 782px) {
+					top: rem-calc( 15 );
 				}
 			}
 
 			span.tab-title {
-				padding: 0 10px 0 9px;
+				padding: rem-calc( 0 10 0 9 );
 				border: 1px solid transparent;
 				display: inline-block;
-				line-height: 27px;
+				line-height: rem-calc( 27 );
 
-				@media ( max-width:782px ) {
-					font-size: 16px;
-					line-height: 38px;
-					padding: 0 12px 0 11px;
+				@media (max-width: 782px) {
+					font-size: rem-calc( 16 );
+					line-height: rem-calc( 38 );
+					padding: rem-calc( 0 12 0 11 );
 				}
 
 				&.hide {
@@ -122,7 +121,7 @@
 			}
 
 			input {
-				min-width: 30px;
+				min-width: rem-calc( 30 );
 			}
 
 			&.nav-tab-active {
@@ -143,7 +142,7 @@
 			}
 
 			&:last-of-type {
-				margin-right: 10px;
+				margin-right: rem-calc( 10 );
 			}
 
 			&.do-not-delete {
@@ -158,14 +157,14 @@
 		.jtabs-content {
 			border-left: 1px solid $wp-admin-meta-border-color;
 			overflow: auto;
-			max-height: 370px;
+			max-height: rem-calc( 370 );
 
 			.jss_content {
-				margin: -1px 0 -5px -2px;
+				margin: rem-calc( -1 0 -5 -2 );
 				padding: 0;
 
 				table {
-					margin-right: -1px;
+					margin-right: rem-calc( -1 );
 				}
 			}
 		}
@@ -176,47 +175,47 @@
 		background-color: $wp-admin-dark-background-color;
 		border-left: 1px solid $wp-admin-meta-border-color;
 		border-top: 1px solid $wp-admin-border-color;
-		padding: 15px 10px 10px;
+		padding: rem-calc( 15 10 10 );
 
 		&::after {
 			clear: both;
-	    }
+		}
 
 		.button {
-			margin-top: 6px;
+			margin-top: rem-calc( 6 );
 
 			&.select {
-				margin-right: 10px;
+				margin-right: rem-calc( 10 );
 			}
 		}
 
 		div {
 			&.import {
-				margin-right: 65px;
+				margin-right: rem-calc( 65 );
 			}
 
 			&.export {
 				float: right;
 			}
-			
+
 			&.confirmation {
 				float: left;
-				margin-right: 10px;
-			
+				margin-right: rem-calc( 10 );
+
 				select {
-					margin-top: 6px;
-					margin-bottom: 4px;
-					
+					margin-top: rem-calc( 6 );
+					margin-bottom: rem-calc( 4 );
+
 					// Stop export button and select input from colliding on small screens
 					@media (max-width: 600px) {
 						display: block;
 					}
 				}
 			}
-			
+
 			&.file-info {
 				clear: left;
-				padding-top: 10px;
+				padding-top: rem-calc( 10 );
 			}
 		}
 
@@ -227,7 +226,7 @@
 
 		.error,
 		.in-progress {
-			margin: 10px 0 0 5px;
+			margin: rem-calc( 10 0 0 5 );
 
 			&:not( .hide ) {
 				display: inline-block;

@@ -125,7 +125,7 @@
   border-left: 1px solid #cdd0d4;
 }
 #m-chart-spreadsheet .handlediv {
-  height: 35px;
+  height: 2.1875rem;
 }
 #m-chart-spreadsheet .inside {
   margin: 0;
@@ -137,13 +137,13 @@
   border-top: 1px solid #cdd0d4;
   overflow-x: scroll;
   overflow-y: hidden;
-  padding-top: 7px;
+  padding-top: 0.4375rem;
   white-space: nowrap;
-  margin-bottom: -4px;
+  margin-bottom: -0.25rem;
 }
 @media (max-width: 600px) {
   #m-chart-spreadsheet .nav-tab-wrapper {
-    margin-bottom: -5px;
+    margin-bottom: -0.3125rem;
   }
 }
 #m-chart-spreadsheet .nav-tab-wrapper.hide {
@@ -152,33 +152,33 @@
 #m-chart-spreadsheet .nav-tab-wrapper .add-sheet {
   color: #82878c;
   float: left;
-  margin-top: 3px;
+  margin-top: 0.1875rem;
   margin-bottom: 0;
-  margin-left: 7px;
-  margin-right: 7px;
+  margin-left: 0.4375rem;
+  margin-right: 0.4375rem;
   text-decoration: none;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .add-sheet:hover {
   color: #000000;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .add-sheet span {
-  line-height: 38px;
+  line-height: 2.375rem;
 }
 @media (max-width: 782px) {
   #m-chart-spreadsheet .nav-tab-wrapper .add-sheet {
-    margin-top: 7px;
+    margin-top: 0.4375rem;
   }
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab {
   display: inline-block;
   float: none;
   position: relative;
-  padding-left: 27px;
-  height: 33px;
-  max-height: 33px;
+  padding-left: 1.6875rem;
+  height: 2.0625rem;
+  max-height: 2.0625rem;
   overflow-y: hidden;
   margin-left: 0;
-  margin-right: 7px;
+  margin-right: 0.4375rem;
 }
 @media (max-width: 600px) {
   #m-chart-spreadsheet .nav-tab-wrapper .nav-tab {
@@ -187,42 +187,42 @@
 }
 @media (max-width: 782px) {
   #m-chart-spreadsheet .nav-tab-wrapper .nav-tab {
-    height: 41px;
-    max-height: 41px;
+    height: 2.5625rem;
+    max-height: 2.5625rem;
   }
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span.dashicons-dismiss {
   color: #555555;
   position: absolute;
-  left: 7px;
-  top: 11px;
+  left: 0.4375rem;
+  top: 0.6875rem;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span.dashicons-dismiss:hover {
   color: #c80011;
 }
 @media (max-width: 782px) {
   #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span.dashicons-dismiss {
-    top: 15px;
+    top: 0.9375rem;
   }
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span.tab-title {
-  padding: 0 10px 0 9px;
+  padding: 0 0.625rem 0 0.5625rem;
   border: 1px solid transparent;
   display: inline-block;
-  line-height: 27px;
+  line-height: 1.6875rem;
 }
 @media (max-width: 782px) {
   #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span.tab-title {
-    font-size: 16px;
-    line-height: 38px;
-    padding: 0 12px 0 11px;
+    font-size: 1rem;
+    line-height: 2.375rem;
+    padding: 0 0.75rem 0 0.6875rem;
   }
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab span.tab-title.hide {
   display: none;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab input {
-  min-width: 30px;
+  min-width: 1.875rem;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab.nav-tab-active span.dashicons-dismiss {
   color: #000000;
@@ -235,7 +235,7 @@
   -webkit-text-fill-color: #000000;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab:last-of-type {
-  margin-right: 10px;
+  margin-right: 0.625rem;
 }
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab.do-not-delete span {
   display: none;
@@ -243,20 +243,20 @@
 #m-chart-spreadsheet #spreadsheets .jtabs-content {
   border-left: 1px solid #cdd0d4;
   overflow: auto;
-  max-height: 370px;
+  max-height: 23.125rem;
 }
 #m-chart-spreadsheet #spreadsheets .jtabs-content .jss_content {
-  margin: -1px 0 -5px -2px;
+  margin: -0.0625rem 0 -0.3125rem -0.125rem;
   padding: 0;
 }
 #m-chart-spreadsheet #spreadsheets .jtabs-content .jss_content table {
-  margin-right: -1px;
+  margin-right: -0.0625rem;
 }
 #m-chart-spreadsheet #m-chart-csv {
   background-color: #f5f5f5;
   border-left: 1px solid #cdd0d4;
   border-top: 1px solid #dddddd;
-  padding: 15px 10px 10px;
+  padding: 0.9375rem 0.625rem 0.625rem;
 }
 #m-chart-spreadsheet #m-chart-csv::after {
   clear: both;
@@ -267,24 +267,24 @@
   clear: both;
 }
 #m-chart-spreadsheet #m-chart-csv .button {
-  margin-top: 6px;
+  margin-top: 0.375rem;
 }
 #m-chart-spreadsheet #m-chart-csv .button.select {
-  margin-right: 10px;
+  margin-right: 0.625rem;
 }
 #m-chart-spreadsheet #m-chart-csv div.import {
-  margin-right: 65px;
+  margin-right: 4.0625rem;
 }
 #m-chart-spreadsheet #m-chart-csv div.export {
   float: right;
 }
 #m-chart-spreadsheet #m-chart-csv div.confirmation {
   float: left;
-  margin-right: 10px;
+  margin-right: 0.625rem;
 }
 #m-chart-spreadsheet #m-chart-csv div.confirmation select {
-  margin-top: 6px;
-  margin-bottom: 4px;
+  margin-top: 0.375rem;
+  margin-bottom: 0.25rem;
 }
 @media (max-width: 600px) {
   #m-chart-spreadsheet #m-chart-csv div.confirmation select {
@@ -293,7 +293,7 @@
 }
 #m-chart-spreadsheet #m-chart-csv div.file-info {
   clear: left;
-  padding-top: 10px;
+  padding-top: 0.625rem;
 }
 #m-chart-spreadsheet #m-chart-csv .warning,
 #m-chart-spreadsheet #m-chart-csv .error {
@@ -301,7 +301,7 @@
 }
 #m-chart-spreadsheet #m-chart-csv .error,
 #m-chart-spreadsheet #m-chart-csv .in-progress {
-  margin: 10px 0 0 5px;
+  margin: 0.625rem 0 0 0.3125rem;
 }
 #m-chart-spreadsheet #m-chart-csv .error:not(.hide),
 #m-chart-spreadsheet #m-chart-csv .in-progress:not(.hide) {
@@ -318,12 +318,12 @@
   padding: 0;
 }
 #m-chart .inside .m-chart-container {
-  padding: 7px 10px 10px;
+  padding: 0.4375rem 0.625rem 0.625rem;
 }
 #m-chart .inside .settings {
   background-color: #f5f5f5;
   border-top: 1px solid #dddddd;
-  padding: 0 10px 10px;
+  padding: 0 0.625rem 0.625rem;
 }
 #m-chart .inside .settings .row {
   border-top: none;
@@ -371,11 +371,11 @@
   width: 25%;
 }
 #m-chart .inside .settings .row.four p {
-  margin-top: 5px;
+  margin-top: 0.3125rem;
 }
 #m-chart .inside .settings .row.four p label {
   display: inline-block;
-  height: 23px;
+  height: 1.4375rem;
 }
 #m-chart .inside .settings .row.six p {
   float: right;
@@ -386,7 +386,7 @@
 }
 #m-chart .inside .row {
   border-top: 1px solid #dddddd;
-  padding: 0 10px 10px;
+  padding: 0 0.625rem 0.625rem;
 }
 #m-chart .inside .row::after {
   clear: both;
@@ -406,20 +406,20 @@
 }
 #m-chart .inside .row.seven p.image em {
   display: block;
-  margin-top: 5px;
+  margin-top: 0.3125rem;
 }
 #m-chart .inside .row.seven p.image .button {
-  bottom: 3px;
-  line-height: 22px;
-  min-height: 24px;
+  bottom: 0.1875rem;
+  line-height: 1.375rem;
+  min-height: 1.5rem;
   position: absolute;
-  right: 2px;
+  right: 0.125rem;
 }
-@media screen and (max-width: 782px) {
+@media (max-width: 782px) {
   #m-chart .inside .row.seven p.image .button {
     bottom: 0;
-    line-height: 30px;
-    min-height: 32px;
+    line-height: 1.875rem;
+    min-height: 2rem;
   }
 }
 
@@ -428,8 +428,8 @@
 }
 
 #m-chart-settings-error {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
 }
 
 /*# sourceMappingURL=m-chart-admin.css.map */

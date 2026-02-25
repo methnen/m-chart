@@ -5,13 +5,13 @@
 		padding: 0;
 
 		.m-chart-container {
-			padding: 7px 10px 10px;
+			padding: rem-calc( 7 10 10 );
 		}
 
 		.settings {
 			background-color: $wp-admin-dark-background-color;
 			border-top: 1px solid $wp-admin-border-color;
-			padding: 0 10px 10px;
+			padding: rem-calc( 0 10 10 );
 
 			.row {
 				@include clearfix;
@@ -75,11 +75,11 @@
 
 				&.four {
 					p {
-						margin-top: 5px;
+						margin-top: rem-calc( 5 );
 
 						label {
 							display: inline-block;
-							height: 23px;
+							height: rem-calc( 23 );
 						}
 					}
 				}
@@ -100,7 +100,7 @@
 		.row {
 			@include clearfix;
 			border-top: 1px solid $wp-admin-border-color;
-			padding: 0 10px 10px;
+			padding: rem-calc( 0 10 10 );
 
 			&.seven {
 				p {
@@ -117,22 +117,22 @@
 
 						em {
 							display: block;
-							margin-top: 5px;
+							margin-top: rem-calc( 5 );
 						}
 
 						.button {
-							bottom: 3px;
-							line-height: 22px;
-							min-height: 24px;
+							bottom: rem-calc( 3 );
+							line-height: rem-calc( 22 );
+							min-height: rem-calc( 24 );
 							position: absolute;
-							right: 2px;
+							right: rem-calc( 2 );
 						}
 
-						@media screen and ( max-width:782px ) {
+						@media (max-width: 782px) {
 							.button {
 								bottom: 0;
-								line-height: 30px;
-								min-height: 32px;
+								line-height: rem-calc( 30 );
+								min-height: rem-calc( 32 );
 							}
 						}
 					}
