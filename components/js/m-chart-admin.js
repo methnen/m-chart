@@ -17,12 +17,12 @@
 
 		// Build the spreadsheets
 		this.build_spreadsheets();
-		
+
 		// Handle the spreadsheet controls
 		this.handle_sheet_controls();
 
 		// Set the form encoding type to multipart/form-data so that the CSV import will work
-		let $form = $( 'form#post' );
+		const $form = $( 'form#post' );
 		$form.attr( 'enctype', 'multipart/form-data' );
 
 		// Watch form submissions and stop them if necessary or update data value
@@ -69,56 +69,56 @@
 
 	// Get data from the spreadsheets
 	m_chart_admin.get_data = function() {
-		let $data = [];
+		const data = [];
 
 		let spreadsheet = 0;
 
 		$.each( this.$spreadsheets, function( i ) {
-			$data[ spreadsheet ] = m_chart_admin.$spreadsheets[ i ].getData();
+			data[ spreadsheet ] = m_chart_admin.$spreadsheets[ i ].getData();
 			spreadsheet++;
 		});
 
-		return $data;
-	}
+		return data;
+	};
 
 	// Instantiate the spreadsheets
 	m_chart_admin.build_spreadsheets = function() {
-		this.$spreadsheet_divs  = $( document.getElementById( 'spreadsheets' ) );
+		this.spreadsheet_divs   = $( document.getElementById( 'spreadsheets' ) );
 		this.$spreadsheet_tabs  = $( document.getElementById( 'spreadsheet-tabs' ) );
 		this.sheet_div_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-div' ) ).html() );
 		this.sheet_tab_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-tab' ) ).html() );
 
 		this.$spreadsheets = {};
 
-		// hands_on_table_data is an array of data sets so we cycle through them and build a spreadsheet object for each one
-		$.each( hands_on_table_data, function( i, data ) {
-			let instance = Number( i ) + 1;
+		// spreadsheet_data is an array of data sets so we cycle through them and build a spreadsheet object for each one
+		$.each( spreadsheet_data, function( i, data ) {
+			const instance = Number( i ) + 1;
 
 			m_chart_admin.create_spreadsheet( instance, data );
 		});
-	}
+	};
 
-	// Instantiate a spreedsheet
+	// Instantiate a spreadsheet
 	m_chart_admin.create_spreadsheet = function( i, data ) {
-		this.$spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: i } ) );
+		this.spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: i } ) );
 		// Note we're purposely not getting a jQuery version of this object because Jspreadsheet likes it that way
-		let $spreadsheet_div = document.getElementById( 'spreadsheet-' + this.post_id + '-' + i );
+		const spreadsheet_div = document.getElementById( `spreadsheet-${this.post_id}-${i}` );
 
 		// New charts won't actually have data so we'll pass something Jspreadsheet understands
-		if ( '' == data ) {
+		if ( '' === data ) {
 			data = [[]];
 		}
 
-		let $context_menu_items = [
+		const context_menu_items = [
 			'Insert a new row before',
 			'Insert a new row after',
 			'Delete selected rows',
 			'Insert a new column before',
 			'Insert a new column after',
 			'Delete selected columns',
-		]
+		];
 
-		let spreadsheet = jspreadsheet( $spreadsheet_div, {
+		const spreadsheet = jspreadsheet( spreadsheet_div, {
 			worksheets: [{
 				data: data,
 				allowComments: false,
@@ -126,17 +126,17 @@
 			}],
 			contextMenu: function(obj, x, y, e, items, section) {
 				// Iterate through contextual menu items and only include the ones we want
-				let filtered_items = items.filter(item => {
-					if ($context_menu_items.includes( item.title )) {
-						return item.title
+				const filtered_items = items.filter(item => {
+					if ( context_menu_items.includes( item.title ) ) {
+						return true;
 					}
 				});
-				
+
 				return filtered_items;
 			},
 			onload: function(spreadsheet) {
 				// Run an auto width function to make the column widths match content
-				let worksheet = spreadsheet.worksheets[spreadsheet.getWorksheetActive()];
+				const worksheet = spreadsheet.worksheets[spreadsheet.getWorksheetActive()];
 				m_chart_admin.spreadsheet_auto_width(worksheet);
 			},
 			onafterchanges: function(worksheet, records) {
@@ -150,30 +150,30 @@
 
 		this.$spreadsheets[i] = spreadsheet[0];
 
-		// Built tab for sheet this sheet (it's only visible if the user selects an appropriate chart type but we build it now anyway)
-		let $template_vars = {
+		// Build a tab for this sheet (it's only visible if the user selects an appropriate chart type but we build it now anyway)
+		const template_vars = {
 			post_id: m_chart_admin.post_id,
 			instance: i
 		};
 
 		if ( i > 0 ) {
-			$( $spreadsheet_div ).addClass( 'hide' );
-			$template_vars.class = 'nav-tab';
+			$( spreadsheet_div ).addClass( 'hide' );
+			template_vars.class = 'nav-tab';
 		} else {
 			this.active_set = i;
-			$template_vars.class = 'nav-tab nav-tab-active';
+			template_vars.class = 'nav-tab nav-tab-active';
 		}
 
 		if ( 'undefined' !== typeof this.set_names[ i - 1 ] ) {
-			$template_vars.value = this.set_names[ i - 1 ];
+			template_vars.value = this.set_names[ i - 1 ];
 		} else {
-			$template_vars.value = 'Sheet ' + i;
+			template_vars.value = `Sheet ${i}`;
 		}
 
-		this.$spreadsheet_tabs.append( this.sheet_tab_template( $template_vars ) );
+		this.$spreadsheet_tabs.append( this.sheet_tab_template( template_vars ) );
 
 		// Set the tab input width
-		let $tab_input = $( '#spreadsheet-tab-' + this.post_id + '-' + i + ' input' );
+		const $tab_input = $( `#spreadsheet-tab-${this.post_id}-${i} input` );
 		m_chart_admin.resize_input( $tab_input );
 
 		this.last_set = i;
@@ -197,8 +197,8 @@
 		// Auto-resize the width of the columns that need it
 		columns.forEach(column => {
 			let max_width = 0;
-			let min_width = 100; // This matches the default width for a column
-			const padding = 13; // Some additional padding to keep things attractive
+			const min_width = 100; // This matches the default width for a column
+			const padding   = 13; // Some additional padding to keep things attractive
 
 			// Check each cell in the column for the widest content
 			for ( let i = 0; i < worksheet.records.length; i++ ) {
@@ -206,7 +206,7 @@
 					const cell    = worksheet.records[i][column].element;
 					context.font  = window.getComputedStyle( cell ).font;
 					const metrics = context.measureText( cell.innerText );
-					
+
 					if ( metrics.width > max_width ) {
 						max_width = metrics.width;
 					}
@@ -223,11 +223,11 @@
 
 	// Handle spreadsheet functionality
 	m_chart_admin.handle_sheet_controls = function() {
-		// Add a spreedsheet
+		// Add a spreadsheet
 		this.$spreadsheet_tabs.find( '.add-sheet' ).on( 'click', function( event ) {
 			event.preventDefault();
 			m_chart_admin.create_spreadsheet( m_chart_admin.last_set + 1, '' );
-			let new_tab = document.getElementById( 'spreadsheet-tab-' + m_chart_admin.post_id + '-' + m_chart_admin.last_set );
+			const new_tab = document.getElementById( `spreadsheet-tab-${m_chart_admin.post_id}-${m_chart_admin.last_set}` );
 
 			// Check tab count
 			m_chart_admin.check_tab_count();
@@ -244,15 +244,14 @@
 				return;
 			}
 
-			m_chart_admin.$spreadsheet_divs.find( '.spreadsheet' ).addClass( 'hide' );
-			$( document.getElementById( 'spreadsheet-' + m_chart_admin.post_id + '-' + $(this).data( 'instance' ) ) ).removeClass( 'hide' );
+			m_chart_admin.spreadsheet_divs.find( '.spreadsheet' ).addClass( 'hide' );
+			$( document.getElementById( `spreadsheet-${m_chart_admin.post_id}-${$( this ).data( 'instance' )}` ) ).removeClass( 'hide' );
 
 			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).removeClass( 'nav-tab-active' );
 			$( this ).addClass( 'nav-tab-active' );
-			m_chart_admin.active_set = $(this).data( 'instance' );
+			m_chart_admin.active_set = $( this ).data( 'instance' );
 		});
 
-		
 		// Handle double clicks and long presses on the tabs
 		this.$spreadsheet_tabs.on( 'dblclick taphold', '.nav-tab', function( event ) {
 			event.preventDefault();
@@ -269,7 +268,7 @@
 
 		// Set input back to disabled on return/enter
 		this.$spreadsheet_tabs.on( 'keydown', 'input', function( event ) {
-			if ( 13 === event.keyCode ) {
+			if ( 'Enter' === event.key ) {
 				event.preventDefault();
 
 				m_chart_admin.handle_tab_blur( this );
@@ -277,34 +276,34 @@
 			}
 		});
 
-		// Resize the input based on it's value
+		// Resize the input based on its value
 		this.$spreadsheet_tabs.on( 'keydown keyup input propertychange change', 'input', function( event ) {
 			m_chart_admin.resize_input( $( this ) );
 		});
 
 		// Remove a tab/spreadsheet
 		this.$spreadsheet_tabs.on( 'click', '.dashicons-dismiss', function( event ) {
-			if ( ! confirm( m_chart_admin.delete_comfirm ) ) {
+			if ( ! confirm( m_chart_admin.delete_confirm ) ) {
 				return;
 			}
 
-			let $tab = $( this ).closest( '.nav-tab' );
+			const $tab = $( this ).closest( '.nav-tab' );
 
 			// Select the tab we're working with if necessary
 			if ( ! $tab.hasClass( 'nav-tab-active' ) ) {
 				$tab.click();
 			}
 
-			let instance = $( this ).closest( '.nav-tab' ).data( 'instance' );
+			const instance = $( this ).closest( '.nav-tab' ).data( 'instance' );
 
-			// Delete the spreedsheet
+			// Delete the spreadsheet
 			delete m_chart_admin.$spreadsheets[ instance ];
 
 			// Remove the tab
 			$tab.remove();
 
-			// Remove the spreedsheet div
-			$( document.getElementById( 'spreadsheet-' + m_chart_admin.post_id + '-' + instance ) ).remove();
+			// Remove the spreadsheet div
+			$( document.getElementById( `spreadsheet-${m_chart_admin.post_id}-${instance}` ) ).remove();
 
 			// Check tab count
 			m_chart_admin.check_tab_count();
@@ -322,55 +321,55 @@
 	m_chart_admin.handle_tab_blur = function( tab ) {
 		$( tab ).addClass( 'hide' );
 
-		let $tab_title = $( tab ).closest('.nav-tab').find('.tab-title');
+		const $tab_title = $( tab ).closest( '.nav-tab' ).find( '.tab-title' );
 		$tab_title.text( $( tab ).val() );
 		$tab_title.removeClass( 'hide' );
 	};
 
 	// Set last tab as do-not-delete if tab count is 1
 	m_chart_admin.check_tab_count = function() {
-		if ( 1 == this.$spreadsheet_tabs.find( '.nav-tab' ).length ) {
+		if ( 1 === this.$spreadsheet_tabs.find( '.nav-tab' ).length ) {
 			this.$spreadsheet_tabs.find( '.nav-tab' ).addClass( 'do-not-delete' );
 		} else {
 			this.$spreadsheet_tabs.find( '.nav-tab' ).removeClass( 'do-not-delete' );
 		}
 	};
 
-	// Resize an input based on it's value
+	// Resize an input based on its value
 	m_chart_admin.resize_input = function( $input ) {
 		// Get what we need to calculate the value width
-		let font = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).font;
-		let text = $input.val();
+		const font = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).font;
+		const text = $input.val();
 
 		// Get what we need to properly size the input with the value width
-		let border_width  = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'border-width' ).replace( 'px', '' );
-		let padding_left  = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'padding-left' ).replace( 'px', '' );
-		let padding_right = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'padding-right' ).replace( 'px', '' );
+		const border_width  = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'border-width' ).replace( 'px', '' );
+		const padding_left  = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'padding-left' ).replace( 'px', '' );
+		const padding_right = window.getComputedStyle( document.getElementById( $input.attr( 'id' ) ) ).getPropertyValue( 'padding-right' ).replace( 'px', '' );
 
 		// Calculate width of the input value
-		let input_canvas  = document.createElement( 'canvas' );
-	    let input_context = input_canvas.getContext( '2d' );
+		const input_canvas  = document.createElement( 'canvas' );
+		const input_context = input_canvas.getContext( '2d' );
 
 		input_context.font = font;
 
-		let metrics = input_context.measureText( text );
-		let width   = Math.ceil( metrics.width ) + 1;
+		const metrics = input_context.measureText( text );
+		const width   = Math.ceil( metrics.width ) + 1;
 
-		$input.css( 'width', ( border_width * 2 ) + parseInt( padding_left ) + width + parseInt( padding_right ) + 'px' );
+		$input.css( 'width', `${( border_width * 2 ) + parseInt( padding_left, 10 ) + width + parseInt( padding_right, 10 )}px` );
 	};
 
 	// Handle CSV import functionality
 	m_chart_admin.handle_csv_import = function() {
-		let $csv_container = $( document.getElementById( 'm-chart-csv' ) );
-		let $select        = $csv_container.find( '.import .select.button' );
-		let $confirmation  = $csv_container.find( '.import .confirmation' );
-		let $import_form   = $( document.getElementById( 'm-chart-csv-import-form' ) );
-		let $file_input    = $import_form.find( 'input[type=file]' );
-		let $file_info     = $csv_container.find( '.file-info' );
-		let $file_error    = $csv_container.find( '.file.error' );
-		let $file_import   = $csv_container.find( '.import.in-progress' );
-		let $import_error  = $csv_container.find( '.import.error' );
-		let $cancel        = $csv_container.find( '.dashicons-dismiss' );
+		const $csv_container = $( document.getElementById( 'm-chart-csv' ) );
+		const $select        = $csv_container.find( '.import .select.button' );
+		const $confirmation  = $csv_container.find( '.import .confirmation' );
+		const $import_form   = $( document.getElementById( 'm-chart-csv-import-form' ) );
+		const $file_input    = $import_form.find( 'input[type=file]' );
+		const $file_info     = $csv_container.find( '.file-info' );
+		const $file_error    = $csv_container.find( '.file.error' );
+		const $file_import   = $csv_container.find( '.import.in-progress' );
+		const $import_error  = $csv_container.find( '.import.error' );
+		const $cancel        = $csv_container.find( '.dashicons-dismiss' );
 
 		// Watch for clicks on the select button
 		$select.on( 'click', function( event ) {
@@ -382,7 +381,7 @@
 
 		// Watch for changes to the file input
 		$file_input.on( 'change', function( event ) {
-			let file_name = $( this ).val().replace( /C:\\fakepath\\/i, '' );
+			const file_name = $( this ).val().replace( /C:\\fakepath\\/i, '' );
 
 			if ( -1 === file_name.search( /.+(\.csv)$/ ) ) {
 				$file_error.removeClass( 'hide' );
@@ -421,16 +420,16 @@
 		$import_form.on( 'submit', function( event ) {
 			event.preventDefault();
 
-			let $form_data = new FormData( this );
+			const form_data = new FormData( this );
 
-			$form_data.append( 'post_id', m_chart_admin.post_id );
-			$form_data.append( 'csv_delimiter', $confirmation.find( 'select' ).val() );
-			$form_data.append( 'nonce', m_chart_admin.nonce );
+			form_data.append( 'post_id', m_chart_admin.post_id );
+			form_data.append( 'csv_delimiter', $confirmation.find( 'select' ).val() );
+			form_data.append( 'nonce', m_chart_admin.nonce );
 
-			let request = $.ajax({
+			const request = $.ajax({
 				url: 'admin-ajax.php?action=m_chart_import_csv',
 				type: 'POST',
-				data: $form_data,
+				data: form_data,
 				cache: false,
 				dataType: 'json',
 				// Don't process the files
@@ -439,8 +438,8 @@
 				contentType: false
 			});
 
-			request.done( function( response ) {
-				if ( false == response.success ) {
+			request.done( ( response ) => {
+				if ( false === response.success ) {
 					$import_error.text( response.data );
 					$import_error.removeClass( 'hide' );
 
@@ -466,13 +465,12 @@
 		$( document.getElementById( 'm-chart-csv' ) ).find( '.export a' ).on( 'click', function( event ) {
 			event.preventDefault();
 
-			let $form = $( document.getElementById( 'm-chart-csv-export-form' ) );
-			let $data = m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].getData();
-
-			let set_name = m_chart_admin.$spreadsheet_tabs.find( '.nav-tab-active input' ).val();
+			const $form    = $( document.getElementById( 'm-chart-csv-export-form' ) );
+			const data     = m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].getData();
+			const set_name = m_chart_admin.$spreadsheet_tabs.find( '.nav-tab-active input' ).val();
 
 			$( document.getElementById( 'm-chart-csv-post-id' ) ).val( m_chart_admin.post_id );
-			$( document.getElementById( 'm-chart-csv-data' ) ).val( JSON.stringify( $data ) );
+			$( document.getElementById( 'm-chart-csv-data' ) ).val( JSON.stringify( data ) );
 			$( document.getElementById( 'm-chart-csv-title' ) ).val( m_chart_admin.$title_input.val() );
 			$( document.getElementById( 'm-chart-csv-set-name' ) ).val( set_name );
 
@@ -482,15 +480,15 @@
 
 	// Watch for changes to the chart settings or title
 	m_chart_admin.watch_for_chart_changes = function() {
-		this.$setting_inputs.on( 'change', function() {
+		this.$setting_inputs.on( 'change', () => {
 			m_chart_admin.refresh_chart();
 		});
 
-		this.$title_input.on( 'change', function() {
+		this.$title_input.on( 'change', () => {
 			m_chart_admin.refresh_chart();
 		});
 
-		this.$subtitle_input.on( 'change', function() {
+		this.$subtitle_input.on( 'change', () => {
 			m_chart_admin.refresh_chart();
 		});
 	};
@@ -509,8 +507,8 @@
 		// Stop form submission while we wait for the chart to refresh and a new image to generate
 		m_chart_admin.form_submission( false );
 
-		// Build an object with all fo the post_meta values
-		let $post_meta = {};
+		// Build an object with all of the post_meta values
+		const post_meta = {};
 
 		$.each( this.$setting_inputs, function() {
 			// Don't record unselected/unchecked radio/checkboxes
@@ -519,18 +517,18 @@
 				&& 'checkbox' !== $( this ).attr( 'type' )
 				|| true === $( this ).is( ':checked' )
 			 ) {
-				$post_meta[ $( this ).attr( 'name' ).replace( /^m-chart\[|\]$/g , '' ) ] = $( this ).val();
+				post_meta[ $( this ).attr( 'name' ).replace( /^m-chart\[|\]$/g , '' ) ] = $( this ).val();
 			}
 		});
 
-		$post_meta[ 'subtitle' ] = this.$subtitle_input.val();
+		post_meta.subtitle = this.$subtitle_input.val();
 
-		$post_meta.data = JSON.stringify( m_chart_admin.get_data() );
+		post_meta.data = JSON.stringify( m_chart_admin.get_data() );
 
-		$post_meta['set_names'] = [];
+		post_meta.set_names = [];
 
 		$.each( this.$spreadsheet_tabs.find( '.nav-tab' ), function( i ) {
-			$post_meta['set_names'][ i ] = $( this ).find( 'input' ).val();
+			post_meta.set_names[ i ] = $( this ).find( 'input' ).val();
 		});
 
 		// Request a new chart_args object so we can rerender the chart with the changes
@@ -542,13 +540,13 @@
 				nonce:     m_chart_admin.nonce,
 				library:   m_chart_admin.library,
 				title:     this.$title_input.val(),
-				post_meta: $post_meta
+				post_meta: post_meta
 			},
 			cache: false,
 			dataType: 'json'
 		});
 
-		this.request.done( function( response ) {
+		this.request.done( ( response ) => {
 			if ( true !== response.success ) {
 				return false;
 			}
@@ -570,7 +568,7 @@
 		}
 	};
 
-	$( function() {
+	$( () => {
 		m_chart_admin.init();
 	} );
 })( jQuery );
