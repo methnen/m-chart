@@ -28,9 +28,15 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Screenshots ##
 
-1. M Chart UI
-2. M Chart Settings
-3. M Chart Block UI
+### 1. M Chart UI ###
+![M Chart UI](https://methnen.com/misc/m-chart/screenshot-1.png)
+
+### 2. M Chart Settings ###
+![M Chart Settings](https://methnen.com/misc/m-chart/screenshot-2.png)
+
+### 3. M Chart Block UI ###
+![M Chart Block UI](https://methnen.com/misc/m-chart/screenshot-3.png)
+
 
 ## Changelog ##
 
