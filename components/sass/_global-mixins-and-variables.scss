@@ -48,13 +48,3 @@ $wp-admin-dark-mode-meta-background-color: #33373c;
 $wp-admin-dark-mode-meta-border-color: #1a1f24;
 $wp-admin-dark-mode-field-background-color: #53616e;
 $wp-admin-dark-mode-tab-text-color: #bdc8d3;
-
-#m-chart,
-#m-chart-spreadsheet,
-#m-chart-csv {
-	.inside {
-		.hide {
-			display: none;
-		}
-	}
-}
