@@ -83,7 +83,7 @@
 
 	// Instantiate the spreadsheets
 	m_chart_admin.build_spreadsheets = function() {
-		this.spreadsheet_divs   = $( document.getElementById( 'spreadsheets' ) );
+		this.$spreadsheet_divs   = $( document.getElementById( 'spreadsheets' ) );
 		this.$spreadsheet_tabs  = $( document.getElementById( 'spreadsheet-tabs' ) );
 		this.sheet_div_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-div' ) ).html() );
 		this.sheet_tab_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-tab' ) ).html() );
@@ -100,7 +100,7 @@
 
 	// Instantiate a spreadsheet
 	m_chart_admin.create_spreadsheet = function( i, data ) {
-		this.spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: i } ) );
+		this.$spreadsheet_divs.append( this.sheet_div_template( { post_id: this.post_id, instance: i } ) );
 		// Note we're purposely not getting a jQuery version of this object because Jspreadsheet likes it that way
 		const spreadsheet_div = document.getElementById( `spreadsheet-${this.post_id}-${i}` );
 
@@ -244,7 +244,7 @@
 				return;
 			}
 
-			m_chart_admin.spreadsheet_divs.find( '.spreadsheet' ).addClass( 'hide' );
+			m_chart_admin.$spreadsheet_divs.find( '.spreadsheet' ).addClass( 'hide' );
 			$( document.getElementById( `spreadsheet-${m_chart_admin.post_id}-${$( this ).data( 'instance' )}` ) ).removeClass( 'hide' );
 
 			m_chart_admin.$spreadsheet_tabs.find( '.nav-tab' ).removeClass( 'nav-tab-active' );
