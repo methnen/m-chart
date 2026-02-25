@@ -40,6 +40,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* This removes reliance on a third party library that hadn't recieved updates in a long time
 * Refactored spreadsheet tab handling code a bit since some changes in browser event bubbling were causing issues
 * Some style changes to deal with edge case UI issues in mobile situations
+* Updated the build scripts to use npm instead of Grunt
+	* Deploy has moved to GitHub Actions
 * Updated Chart.js to the latest stable version (4.5.1)
 
 = 1.11.2 =
