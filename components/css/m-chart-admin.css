@@ -118,11 +118,11 @@
 }
 #m-chart-spreadsheet .postbox-header h2.hndle {
   border-bottom: none;
-  border-left: 1px solid #cdd0d4;
+  border-left: 0.0625rem solid #cdd0d4;
 }
 #m-chart-spreadsheet h3 {
   border-bottom: none;
-  border-left: 1px solid #cdd0d4;
+  border-left: 0.0625rem solid #cdd0d4;
 }
 #m-chart-spreadsheet .handlediv {
   height: 2.1875rem;
@@ -133,8 +133,8 @@
 }
 #m-chart-spreadsheet .nav-tab-wrapper {
   border-bottom: none;
-  border-left: 1px solid #cdd0d4;
-  border-top: 1px solid #cdd0d4;
+  border-left: 0.0625rem solid #cdd0d4;
+  border-top: 0.0625rem solid #cdd0d4;
   overflow-x: scroll;
   overflow-y: hidden;
   padding-top: 0.4375rem;
@@ -254,8 +254,8 @@
 }
 #m-chart-spreadsheet #m-chart-csv {
   background-color: #f5f5f5;
-  border-left: 1px solid #cdd0d4;
-  border-top: 1px solid #dddddd;
+  border-left: 0.0625rem solid #cdd0d4;
+  border-top: 0.0625rem solid #dddddd;
   padding: 0.9375rem 0.625rem 0.625rem;
 }
 #m-chart-spreadsheet #m-chart-csv::after {

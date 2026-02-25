@@ -1,5 +1,7 @@
 // Spreadsheet Styles
 
+@use 'global-mixins-and-variables' as *;
+
 #m-chart-spreadsheet {
 	border-left: none;
 
@@ -9,14 +11,14 @@
 		h2 {
 			&.hndle {
 				border-bottom: none;
-				border-left: 1px solid $wp-admin-meta-border-color;
+				border-left: rem-calc(1) solid $wp-admin-meta-border-color;
 			}
 		}
 	}
 
 	h3 {
 		border-bottom: none;
-		border-left: 1px solid $wp-admin-meta-border-color;
+		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
 	}
 
 	.handlediv {
@@ -30,8 +32,8 @@
 
 	.nav-tab-wrapper {
 		border-bottom: none;
-		border-left: 1px solid $wp-admin-meta-border-color;
-		border-top: 1px solid $wp-admin-meta-border-color;
+		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-top: rem-calc(1) solid $wp-admin-meta-border-color;
 		overflow-x: scroll;
 		overflow-y: hidden;
 		padding-top: rem-calc( 7 );
@@ -173,8 +175,8 @@
 	#m-chart-csv {
 		@include clearfix;
 		background-color: $wp-admin-dark-background-color;
-		border-left: 1px solid $wp-admin-meta-border-color;
-		border-top: 1px solid $wp-admin-border-color;
+		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-top: rem-calc(1) solid $wp-admin-border-color;
 		padding: rem-calc( 15 10 10 );
 
 		&::after {

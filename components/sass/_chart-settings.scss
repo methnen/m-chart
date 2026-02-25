@@ -1,5 +1,7 @@
 // Chart/Settings Styles
 
+@use 'global-mixins-and-variables' as *;
+
 #m-chart {
 	.inside {
 		padding: 0;
