@@ -83,7 +83,7 @@
 
 	// Instantiate the spreadsheets
 	m_chart_admin.build_spreadsheets = function() {
-		this.$spreadsheet_divs   = $( document.getElementById( 'spreadsheets' ) );
+		this.$spreadsheet_divs  = $( document.getElementById( 'spreadsheets' ) );
 		this.$spreadsheet_tabs  = $( document.getElementById( 'spreadsheet-tabs' ) );
 		this.sheet_div_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-div' ) ).html() );
 		this.sheet_tab_template = Handlebars.compile( $( document.getElementById( 'm-chart-sheet-tab' ) ).html() );
