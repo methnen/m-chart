@@ -451,7 +451,11 @@
 				}
 
 				// Update the spreadsheet with the new data
-				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].loadData( response.data );
+				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].setData( response.data );
+
+				// Update chart now that the spreadsheet has new data
+				// This is necessary because Jspreadsheet CE doesn't fire any events on setData that I can tell
+				m_chart_admin.refresh_chart();
 
 				$file_input.val( '' );
 				$select.removeClass( 'hide' );
