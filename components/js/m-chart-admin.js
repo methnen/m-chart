@@ -197,8 +197,9 @@
 		// Auto-resize the width of the columns that need it
 		columns.forEach(column => {
 			let max_width = 0;
-			const min_width = 100; // This matches the default width for a column
+
 			const padding   = 13; // Some additional padding to keep things attractive
+			const min_width = 100 - padding; // 100px matches the default width for a column
 
 			// Check each cell in the column for the widest content
 			for ( let i = 0; i < worksheet.records.length; i++ ) {
@@ -214,7 +215,7 @@
 			}
 
 			// Make sure max_width is larger than min_width
-			max_width = min_width > max_width ? min_width - padding : max_width;
+			max_width = min_width > max_width ? min_width : max_width;
 
 			// Set the new width
 			worksheet.setWidth(column, max_width + padding);
@@ -455,7 +456,8 @@
 
 				// Update chart now that the spreadsheet has new data
 				// This is necessary because Jspreadsheet CE doesn't fire any events on setData that I can tell
-				m_chart_admin.refresh_chart();
+				// Jspreadsheet CE docs say onload should fire but it doesn't actually seem to in v5
+				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].onload();
 
 				$file_input.val( '' );
 				$select.removeClass( 'hide' );
