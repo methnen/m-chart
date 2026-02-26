@@ -42,6 +42,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Some style changes to deal with edge case UI issues in mobile situations
 * Updated the build scripts to use npm instead of Grunt
 	* Deploy has moved to GitHub Actions
+* Some SASS code and syntax cleanup
 * Updated Chart.js to the latest stable version (4.5.1)
 
 = 1.11.2 =
