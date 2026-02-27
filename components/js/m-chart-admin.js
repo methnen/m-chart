@@ -454,11 +454,11 @@
 				// Update the spreadsheet with the new data
 				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].setData( response.data );
 
-				// Update chart now that the spreadsheet has new data
-				// This is necessary because Jspreadsheet CE doesn't fire any events on setData that I can tell
-				// Jspreadsheet CE docs say onload should fire but it doesn't actually seem to in v5
-				m_chart_admin.$spreadsheets[ m_chart_admin.active_set ].onload();
+				// This is replicating the onafterchanges behavior because setData does not seem to trigger any events
+				m_chart_admin.spreadsheet_auto_width( m_chart_admin.$spreadsheets[ m_chart_admin.active_set ] );
+				m_chart_admin.refresh_chart();
 
+				// Reset the CSV UI and field values
 				$file_input.val( '' );
 				$select.removeClass( 'hide' );
 				$file_import.addClass( 'hide' );
