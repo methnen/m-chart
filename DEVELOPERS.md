@@ -4,42 +4,48 @@
 
 `npm install`
 
-### Block Development Commands ###
+## Build Commands ##
 
-Build Javascript: 
-
-```
-npm run js
-```
-
-Build CSS:
+Build everything:
 
 ```
-npm run css
+npm run build
 ```
 
-Watch & Build CSS/JS: 
+Build CSS only:
+
+```
+npm run build:css
+```
+
+Build JS (minify helpers):
+
+```
+npm run build:js
+```
+
+Build block only:
+
+```
+npm run build:block
+```
+
+Convert readme.txt to README.md:
+
+```
+npm run build:readme
+```
+
+## Watch Commands ##
+
+Watch everything (CSS, JS, and block):
 
 ```
 npm run watch
 ```
 
-### Primary Development Commands ###
+## Deployment ##
 
-Build all files (Except for block code):
+Deploy to WordPress.org via GitHub Actions:
 
-```
-grunt
-```
-
-Watch & Build CSS/JS (Except for block code):
-
-```
-grunt watch
-```
-
-Deploy cleaned plugin to wordpress.org:
-
-```
-grunt deploy
-```
+Actions tab → "Deploy to WordPress.org" → "Run workflow"

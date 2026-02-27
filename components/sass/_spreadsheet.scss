@@ -1,4 +1,6 @@
-// Handsontable Styles
+// Spreadsheet Styles
+
+@use 'global-mixins-and-variables' as *;
 
 #m-chart-spreadsheet {
 	border-left: none;
@@ -9,18 +11,18 @@
 		h2 {
 			&.hndle {
 				border-bottom: none;
-				border-left: 1px solid $wp-admin-meta-border-color;
+				border-left: rem-calc(1) solid $wp-admin-meta-border-color;
 			}
 		}
 	}
 
 	h3 {
 		border-bottom: none;
-		border-left: 1px solid $wp-admin-meta-border-color;
+		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
 	}
 
 	.handlediv {
-		height: 35px;
+		height: rem-calc( 35 );
 	}
 
 	.inside {
@@ -30,12 +32,17 @@
 
 	.nav-tab-wrapper {
 		border-bottom: none;
-		border-left: 1px solid $wp-admin-meta-border-color;
-		border-top: 1px solid $wp-admin-meta-border-color;
+		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-top: rem-calc(1) solid $wp-admin-meta-border-color;
 		overflow-x: scroll;
 		overflow-y: hidden;
-		padding-top: 7px;
+		padding-top: rem-calc( 7 );
 		white-space: nowrap;
+		margin-bottom: rem-calc( -4 );
+
+		@media (max-width: 600px) {
+			margin-bottom: rem-calc( -5 );
+		}
 
 		&.hide {
 			display: none;
@@ -44,8 +51,10 @@
 		.add-sheet {
 			color: $wp-admin-inactive-icon-color;
 			float: left;
+			margin-top: rem-calc( 3 );
 			margin-bottom: 0;
-			margin-left: 7px;
+			margin-left: rem-calc( 7 );
+			margin-right: rem-calc( 7 );
 			text-decoration: none;
 
 			&:hover {
@@ -53,45 +62,72 @@
 			}
 
 			span {
-				line-height: 38px;
+				line-height: rem-calc( 38 );
+			}
 
-				@media ( max-width:782px ) {
-					line-height: 46px;
-				}
+			@media (max-width: 782px) {
+				margin-top: rem-calc( 7 );
 			}
 		}
 
 		.nav-tab {
 			display: inline-block;
 			float: none;
+			position: relative;
+			padding-left: rem-calc( 27 );
+			height: rem-calc( 33 );
+			max-height: rem-calc( 33 );
+			overflow-y: hidden;
+			margin-left: 0;
+			margin-right: rem-calc( 7 );
 
-			span {
+			@media (max-width: 600px) {
+				margin-top: 0;
+			}
+
+			@media (max-width: 782px) {
+				height: rem-calc( 41 );
+				max-height: rem-calc( 41 );
+			}
+
+			span.dashicons-dismiss {
 				color: $wp-admin-inactive-text-color;
-				margin-top: 3px;
-
-				@media ( max-width:782px ) {
-					margin-top: 7px;
-				}
+				position: absolute;
+				left: rem-calc( 7 );
+				top: rem-calc( 11 );
 
 				&:hover {
 					color: $wp-admin-red;
 				}
-			}
 
-			input {
-				min-width: 30px;
-
-				&[disabled="disabled"] {
-					background: transparent;
-					border: 1px solid transparent;
-					box-shadow: none;
-					color: $wp-admin-inactive-text-color;
-					-webkit-text-fill-color: $wp-admin-inactive-text-color;
+				@media (max-width: 782px) {
+					top: rem-calc( 15 );
 				}
 			}
 
+			span.tab-title {
+				padding: rem-calc( 0 10 0 9 );
+				border: 1px solid transparent;
+				display: inline-block;
+				line-height: rem-calc( 27 );
+
+				@media (max-width: 782px) {
+					font-size: rem-calc( 16 );
+					line-height: rem-calc( 38 );
+					padding: rem-calc( 0 12 0 11 );
+				}
+
+				&.hide {
+					display: none;
+				}
+			}
+
+			input {
+				min-width: rem-calc( 30 );
+			}
+
 			&.nav-tab-active {
-				span {
+				span.dashicons-dismiss {
 					color: $wp-admin-black;
 
 					&:hover {
@@ -108,7 +144,7 @@
 			}
 
 			&:last-of-type {
-				margin-right: 10px;
+				margin-right: rem-calc( 10 );
 			}
 
 			&.do-not-delete {
@@ -119,52 +155,69 @@
 		}
 	}
 
+	#spreadsheets {
+		.jtabs-content {
+			border-left: 1px solid $wp-admin-meta-border-color;
+			overflow: auto;
+			max-height: rem-calc( 370 );
+
+			.jss_content {
+				margin: rem-calc( -1 0 -5 -2 );
+				padding: 0;
+
+				table {
+					margin-right: rem-calc( -1 );
+				}
+			}
+		}
+	}
+
 	#m-chart-csv {
 		@include clearfix;
 		background-color: $wp-admin-dark-background-color;
-		border-left: 1px solid $wp-admin-meta-border-color;
-		border-top: 1px solid $wp-admin-border-color;
-		padding: 15px 10px 10px;
+		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-top: rem-calc(1) solid $wp-admin-border-color;
+		padding: rem-calc( 15 10 10 );
 
 		&::after {
 			clear: both;
-	    }
+		}
 
 		.button {
-			margin-top: 6px;
+			margin-top: rem-calc( 6 );
 
 			&.select {
-				margin-right: 10px;
+				margin-right: rem-calc( 10 );
 			}
 		}
 
 		div {
 			&.import {
-				margin-right: 65px;
+				margin-right: rem-calc( 65 );
 			}
 
 			&.export {
 				float: right;
 			}
-			
+
 			&.confirmation {
 				float: left;
-				margin-right: 10px;
-			
+				margin-right: rem-calc( 10 );
+
 				select {
-					margin-top: 6px;
-					margin-bottom: 4px;
-					
+					margin-top: rem-calc( 6 );
+					margin-bottom: rem-calc( 4 );
+
 					// Stop export button and select input from colliding on small screens
 					@media (max-width: 600px) {
 						display: block;
 					}
 				}
 			}
-			
+
 			&.file-info {
 				clear: left;
-				padding-top: 10px;
+				padding-top: rem-calc( 10 );
 			}
 		}
 
@@ -175,7 +228,7 @@
 
 		.error,
 		.in-progress {
-			margin: 10px 0 0 5px;
+			margin: rem-calc( 10 0 0 5 );
 
 			&:not( .hide ) {
 				display: inline-block;

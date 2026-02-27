@@ -1,5 +1,6 @@
 // Global
 
+@use 'sass:list';
 @use 'sass:math';
 
 @mixin clearfix {
@@ -10,30 +11,25 @@
 	}
 }
 
-$rem-base: 16px;
-
-@function strip-unit( $num ) {
-	@return math.div( $num, $num * 0 + 1 );
-}
-
-@function convert-to-rem( $value, $base-value: $rem-base ) {
-	$value: math.div( strip-unit( $value ), strip-unit( $base-value ) ) * 1rem;
-	// Turn 0rem into 0
-	@if ( $value == 0rem ) { $value: 0; } // scss-lint:disable ZeroUnit
-	@return $value;
-}
+$rem-base: 16;
 
 @function rem-calc( $values, $base-value: $rem-base ) {
-	$max: length( $values );
-	@if $max == 1 { @return convert-to-rem( nth( $values, 1 ), $base-value ); }
-	$rem-values: ( );
-	@for $i from 1 through $max {
-		$rem-values: append( $rem-values, convert-to-rem( nth( $values, $i ), $base-value ) );
+	$rem-values: ();
+
+	@each $value in $values {
+		@if $value == 0 {
+			$rem-values: list.append( $rem-values, 0 );
+		} @else {
+			$rem-values: list.append( $rem-values, math.div( $value, $base-value ) * 1rem );
+		}
 	}
+
+	@if list.length( $rem-values ) == 1 {
+		@return list.nth( $rem-values, 1 );
+	}
+
 	@return $rem-values;
 }
-
-$handsontable-cell-border-color: #cccccc;
 
 $wp-admin-black: #000000;
 $wp-admin-red: #c80011;
@@ -52,13 +48,3 @@ $wp-admin-dark-mode-meta-background-color: #33373c;
 $wp-admin-dark-mode-meta-border-color: #1a1f24;
 $wp-admin-dark-mode-field-background-color: #53616e;
 $wp-admin-dark-mode-tab-text-color: #bdc8d3;
-
-#m-chart,
-#m-chart-spreadsheet,
-#m-chart-csv {
-	.inside {
-		.hide {
-			display: none;
-		}
-	}
-}

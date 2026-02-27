@@ -1,7 +1,7 @@
 <?php
 
 class M_Chart {
-	public $version           = '1.11.2';
+	public $version           = '1.12';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = array(
@@ -470,7 +470,7 @@ class M_Chart {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
-		// If the data value is not an array we asume it is JSON encoded (i.e. from Handsontable)
+		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet)
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
 			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 		}

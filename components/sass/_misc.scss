@@ -1,5 +1,17 @@
 // Misc Styles
 
+@use 'global-mixins-and-variables' as *;
+
+#m-chart,
+#m-chart-spreadsheet,
+#m-chart-csv {
+	.inside {
+		.hide {
+			display: none;
+		}
+	}
+}
+
 #m-chart-subtitle {
 	margin-left: 0;
 }
