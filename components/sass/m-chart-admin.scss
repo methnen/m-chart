@@ -1,5 +1,4 @@
-@import 'global-mixins-and-variables';
-@import 'misc';
-@import 'spreadsheet';
-@import 'chart-settings';
-@import 'settings';
+@use 'misc';
+@use 'spreadsheet';
+@use 'chart-settings';
+@use 'settings';
