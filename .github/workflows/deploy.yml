@@ -2,10 +2,6 @@ name: Deploy to WordPress.org
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to deploy (e.g. 1.12)'
-        required: true
 
 jobs:
   deploy:
@@ -14,6 +10,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Read version from readme.txt
+        id: readme_version
+        run: |
+          VERSION=$(grep -m1 "^Stable tag:" readme.txt | sed 's/Stable tag: *//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -30,4 +32,4 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: m-chart
           ASSETS_DIR: assets
-          VERSION: ${{ github.event.inputs.version }}
+          VERSION: ${{ steps.readme_version.outputs.version }}
