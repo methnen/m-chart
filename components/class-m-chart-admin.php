@@ -264,15 +264,7 @@ class M_Chart_Admin {
 
 		// Only load these if we are on a post page
 		if ( 'post' === $screen->base ) {
-			// jQuery Mobile Touch Events
-			wp_enqueue_script(
-				'jquery-mobile-touch-events',
-				$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js',
-				array(),
-				m_chart()->version
-			);
-
-			// Jspreadsheet CE
+			// Jspreadsheet CE — needed by both chartjs (React) and other libraries (jQuery).
 			wp_enqueue_style(
 				'jspreadsheet',
 				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.css',
@@ -283,11 +275,11 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'jspreadsheet',
 				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.js',
-				array( 'jquery', 'jsuites' ),
+				array( 'jsuites' ),
 				m_chart()->version
 			);
 
-			// jSuites
+			// jSuites — required by Jspreadsheet.
 			wp_enqueue_style(
 				'jsuites',
 				$this->plugin_url . '/components/external/jsuites/jsuites.css',
@@ -298,32 +290,19 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'jsuites',
 				$this->plugin_url . '/components/external/jsuites/jsuites.js',
-				array( 'jquery' ),
-				m_chart()->version
-			);
-
-			// Handlebars
-			wp_enqueue_script(
-				'handlebars',
-				$this->plugin_url . '/components/external/handlebars/handlebars.js',
 				array(),
 				m_chart()->version
 			);
 
-			// canvg is useful for SVG -> Canvas conversions
-			wp_enqueue_script(
-				'canvg',
-				$this->plugin_url . '/components/external/canvg/umd.js',
-				array(),
-				m_chart()->version
-			);
+			// Admin UI React app
+			$admin_app_asset = require __DIR__ . '/admin-ui/index.asset.php';
 
-			// Admin panel JS
 			wp_enqueue_script(
-				'm-chart-admin',
-				$this->plugin_url . '/components/js/m-chart-admin.js',
-				array( 'jquery', 'jspreadsheet', 'handlebars' ),
-				m_chart()->version
+				'm-chart-admin-app',
+				$this->plugin_url . '/components/admin-ui/index.js',
+				$admin_app_asset['dependencies'],
+				$admin_app_asset['version'],
+				array( 'strategy' => 'defer' )
 			);
 
 			// We need the library and post ID for a bunch of stuff below
@@ -341,33 +320,129 @@ class M_Chart_Admin {
 				$library = $_GET['library'];
 			}
 
-			// Only load this if we are on an appropriate post page
-			if ( 'post' === $screen->base && 'chartjs' === $library ) {
+			if ( 'chartjs' === $library ) {
+				// Chart.js libs — enqueued explicitly so the React preview has window.Chart.
+				wp_enqueue_script( 'chartjs-datalabels' ); // also loads chartjs + chartjs-helpers
+			} else {
+				// Non-chartjs libraries still use the jQuery/Handlebars admin.
 				wp_enqueue_script(
-					'm-chart-chartjs-admin',
-					$this->plugin_url . '/components/js/m-chart-chartjs-admin.js',
-					array( 'm-chart-admin', 'chartjs', 'jquery' ),
+					'jquery-mobile-touch-events',
+					$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js',
+					array(),
+					m_chart()->version
+				);
+
+				wp_enqueue_script(
+					'handlebars',
+					$this->plugin_url . '/components/external/handlebars/handlebars.js',
+					array(),
+					m_chart()->version
+				);
+
+				wp_enqueue_script(
+					'canvg',
+					$this->plugin_url . '/components/external/canvg/umd.js',
+					array(),
+					m_chart()->version
+				);
+
+				wp_enqueue_script(
+					'm-chart-admin',
+					$this->plugin_url . '/components/js/m-chart-admin.js',
+					array( 'jquery', 'jspreadsheet', 'handlebars' ),
 					m_chart()->version
 				);
 			}
 
-			wp_localize_script(
-				'm-chart-admin',
-				'm_chart_admin',
-				array(
-					'refresh_counter'         => 0,
-					'allow_form_submission'   => false,
-					'request'                 => false,
-					'performance'             => m_chart()->get_settings( 'performance' ),
-					'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
-					'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
-					'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
-					'image_width'             => m_chart()->get_settings( 'image_width' ),
-					'library'                 => $library,
-					'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
-					'delete_confirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
-				)
+			$post_meta        = m_chart()->get_post_meta( $post_id );
+			$spreadsheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
+			unset( $post_meta['data'] ); // passed separately as spreadsheet_data
+
+			// Collect library-specific config for the React admin app
+			$type_options      = array();
+			$type_option_names = array();
+			$themes            = array();
+
+			if ( 'chartjs' === $library && m_chart()->library( 'chartjs' ) ) {
+				$chartjs_lib       = m_chart()->library( 'chartjs' );
+				$type_options      = $chartjs_lib->type_options;
+				$type_option_names = $chartjs_lib->type_option_names;
+
+				foreach ( $chartjs_lib->get_themes() as $theme ) {
+					$themes[] = array(
+						'slug' => $theme->slug,
+						'name' => $theme->name,
+					);
+				}
+			}
+
+			// Format unit terms as an array of {group, units} for easy JS mapping
+			$unit_terms = array();
+
+			foreach ( m_chart()->get_unit_terms() as $group => $units ) {
+				$group_units = array();
+
+				foreach ( $units as $unit ) {
+					$group_units[] = array( 'name' => $unit->name );
+				}
+
+				$unit_terms[] = array(
+					'group' => $group,
+					'units' => $group_units,
+				);
+			}
+
+			$chart_image = m_chart()->get_chart_image( $post_id );
+
+			// Compute initial Chart.js args for the React preview (chartjs only, existing posts only)
+			$initial_chart_args = null;
+
+			if ( $post_id && 'chartjs' === $library ) {
+				$initial_chart_args = m_chart()->library( 'chartjs' )->get_chart_args(
+					$post_id,
+					m_chart()->get_chart_default_args,
+					true,  // force recompute
+					false  // don't store in cache
+				);
+			}
+
+			// Build CSV delimiter map for React's CsvControls component.
+			$csv_delimiters = array();
+			foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
+				$csv_delimiters[ $delimiter ] = $delimiter_name;
+			}
+
+			$localize_data = array(
+				'refresh_counter'         => 0,
+				'allow_form_submission'   => false,
+				'request'                 => false,
+				'performance'             => m_chart()->get_settings( 'performance' ),
+				'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
+				'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
+				'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
+				'image_width'             => m_chart()->get_settings( 'image_width' ),
+				'library'                 => $library,
+				'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
+				'delete_confirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
+				'post_id'                 => $post_id,
+				'nonce'                   => wp_create_nonce( m_chart()->slug . '-save-post' ),
+				'ajax_url'                => admin_url( 'admin-ajax.php' ),
+				'post_meta'               => $post_meta,
+				'spreadsheet_data'        => $spreadsheet_data,
+				'type_options'            => $type_options,
+				'type_option_names'       => $type_option_names,
+				'themes'                  => $themes,
+				'unit_terms'              => $unit_terms,
+				'image_url'               => $chart_image ? esc_url( $chart_image['url'] ) : '',
+				'chart_args'              => $initial_chart_args,
+				'csv_delimiters'          => $csv_delimiters,
+				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
 			);
+
+			// For chartjs the React app reads m_chart_admin; for other libraries the jQuery
+			// m-chart-admin.js reads it.  Attach to whichever handle is actually enqueued.
+			$localize_handle = 'chartjs' === $library ? 'm-chart-admin-app' : 'm-chart-admin';
+			wp_localize_script( $localize_handle, 'm_chart_admin', $localize_data );
 
 			do_action( 'm_chart_admin_scripts', $library, $post_id );
 		}
@@ -424,10 +499,16 @@ class M_Chart_Admin {
 	public function spreadsheet_meta_box( $post ) {
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 
-		// Setup default empty sheet data if needed
-		$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
-
-		require_once __DIR__ . '/templates/spreadsheet-meta-box.php';
+		if ( 'chartjs' === $post_meta['library'] ) {
+			// React SpreadsheetMetaBox renders everything inside this div.
+			echo '<div id="m-chart-spreadsheet-root"></div>';
+			echo '<textarea name="' . esc_attr( $this->get_field_name( 'data' ) ) . '" class="data hide"></textarea>';
+			wp_nonce_field( m_chart()->slug . '-save-post', $this->get_field_name( 'nonce' ) );
+		} else {
+			// Non-chartjs libraries (e.g. Highcharts) still use the PHP template.
+			$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
+			require_once __DIR__ . '/templates/spreadsheet-meta-box.php';
+		}
 	}
 
 	/**
@@ -439,10 +520,12 @@ class M_Chart_Admin {
 		// Force an instance of 1 since we NEVER show more than one chart at a time inside the admin panel
 		m_chart()->instance = 1;
 
-		$chart     = m_chart()->get_chart( $post->ID );
 		$post_meta = m_chart()->get_post_meta( $post->ID );
-		$image     = m_chart()->get_chart_image( $post->ID );
-		$settings  = m_chart()->get_settings();
+
+		// For chartjs, React renders the preview; PHP only needed for other libraries
+		$chart    = 'chartjs' !== $post_meta['library'] ? m_chart()->get_chart( $post->ID ) : '';
+		$image    = m_chart()->get_chart_image( $post->ID );
+		$settings = m_chart()->get_settings();
 
 		require_once __DIR__ . '/templates/chart-meta-box.php';
 	}
@@ -456,7 +539,15 @@ class M_Chart_Admin {
 		if ( 'post' !== $screen->base || m_chart()->slug !== $screen->post_type ) {
 			return;
 		}
-		?>
+
+		$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0;
+		$library = $post_id
+			? m_chart()->get_post_meta( absint( $post_id ), 'library' )
+			: m_chart()->get_library();
+
+		if ( 'chartjs' !== $library ) {
+			// Non-chartjs libraries still use jQuery-based CSV handling via hidden forms.
+			?>
 <form id="<?php echo esc_attr( $this->get_field_id( 'csv-import-form' ) ); ?>" style="display: none;">
 	<input type="file" name="import_csv_file" id="<?php echo esc_attr( $this->get_field_id( 'csv-file' ) ); ?>"
 		class="hide" />
@@ -469,6 +560,9 @@ class M_Chart_Admin {
 	<input type="hidden" name="set_name" value=""
 		id="<?php echo esc_attr( $this->get_field_id( 'csv-set-name' ) ); ?>" />
 </form>
+			<?php
+		}
+		?>
 <script type="text/javascript">
 		<?php do_action( 'm_chart_admin_footer_javascript' ); ?>
 </script>
@@ -487,8 +581,15 @@ class M_Chart_Admin {
 
 		$post_meta = m_chart()->get_post_meta( $post->ID );
 
-		require_once __DIR__ . '/templates/subtitle-field.php';
-		require_once __DIR__ . '/templates/handlebars.php';
+		if ( 'chartjs' === $post_meta['library'] ) {
+			// React SubtitleField renders into this mount div.
+			echo '<div id="m-chart-subtitle-root"></div>';
+		} else {
+			// Non-chartjs libraries still use the PHP-rendered subtitle input.
+			require_once __DIR__ . '/templates/subtitle-field.php';
+			// Handlebars templates are needed for the jQuery-based spreadsheet UI.
+			require_once __DIR__ . '/templates/handlebars.php';
+		}
 	}
 
 	/**
