@@ -1,3 +1,5 @@
+import { Fragment } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 // Chart types that show y-min controls (line, spline, area only)
@@ -33,14 +35,14 @@ export default function AxisRows() {
 
 	const unitOptions = (
 		<>
-			<option value="">{ 'N/A' }</option>
+			<option value="">{ __( 'N/A', 'm-chart' ) }</option>
 			{ unitTerms.map( ( { group, units } ) => (
-				<>
-					<option key={ group } value="" disabled>{ group }</option>
+				<Fragment key={ group }>
+					<option value="" disabled>{ group }</option>
 					{ units.map( ( unit ) => (
 						<option key={ unit.name } value={ unit.name }>{ unit.name }</option>
 					) ) }
-				</>
+				</Fragment>
 			) ) }
 		</>
 	);
@@ -49,7 +51,7 @@ export default function AxisRows() {
 		<>
 			<div className="row three vertical-axis" style={ axisStyle }>
 				<p>
-					<label htmlFor="m-chart-y-title">{ 'Vertical axis title' }</label><br />
+					<label htmlFor="m-chart-y-title">{ __( 'Vertical axis title', 'm-chart' ) }</label><br />
 					<input
 						className="input"
 						type="text"
@@ -61,7 +63,7 @@ export default function AxisRows() {
 					/>
 				</p>
 				<p className="units">
-					<label htmlFor="m-chart-y-units">{ 'Units' }</label><br />
+					<label htmlFor="m-chart-y-units">{ __( 'Units', 'm-chart' ) }</label><br />
 					<select
 						name="m-chart[y_units]"
 						id="m-chart-y-units"
@@ -84,7 +86,7 @@ export default function AxisRows() {
 							checked={ !! postMeta.y_min }
 							onChange={ ( e ) => handleYMinCheck( e.target.checked ) }
 						/>
-						{ ' Force vertical axis minimum: ' }
+						{ __( ' Force vertical axis minimum: ', 'm-chart' ) }
 					</label>
 					<input
 						type="number"
@@ -99,7 +101,7 @@ export default function AxisRows() {
 			</div>
 			<div className="row five horizontal-axis" style={ axisStyle }>
 				<p>
-					<label htmlFor="m-chart-x-title">{ 'Horizontal axis title' }</label><br />
+					<label htmlFor="m-chart-x-title">{ __( 'Horizontal axis title', 'm-chart' ) }</label><br />
 					<input
 						className="input"
 						type="text"
@@ -111,7 +113,7 @@ export default function AxisRows() {
 					/>
 				</p>
 				<p className="units">
-					<label htmlFor="m-chart-x-units">{ 'Units' }</label><br />
+					<label htmlFor="m-chart-x-units">{ __( 'Units', 'm-chart' ) }</label><br />
 					<select
 						name="m-chart[x_units]"
 						id="m-chart-x-units"

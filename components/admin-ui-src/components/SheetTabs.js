@@ -1,3 +1,4 @@
+import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import SheetTab from './SheetTab';
 
@@ -39,7 +40,7 @@ export default function SheetTabs() {
 					key={ id }
 					sheetId={ id }
 					sheetIndex={ index }
-					name={ setNames[ index ] || `Sheet ${ index + 1 }` }
+					name={ setNames[ index ] || sprintf( __( 'Sheet %d', 'm-chart' ), index + 1 ) }
 					isActive={ index === activeSheet }
 					isSingle={ sheetIds.length === 1 }
 					isNew={ id === newSheetId }
@@ -48,7 +49,7 @@ export default function SheetTabs() {
 			<a
 				href="#add-sheet"
 				className="add-sheet"
-				title="Add Sheet"
+				title={ __( 'Add Sheet', 'm-chart' ) }
 				onClick={ handleAddSheet }
 			>
 				<span className="dashicons dashicons-plus-alt" />

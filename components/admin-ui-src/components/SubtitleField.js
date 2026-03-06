@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
@@ -18,7 +19,7 @@ export default function SubtitleField() {
 			name="m-chart[subtitle]"
 			id="m-chart-subtitle"
 			value={ value }
-			placeholder="Enter subtitle here"
+			placeholder={ __( 'Enter subtitle here', 'm-chart' ) }
 			style={ { width: '100%' } }
 			onChange={ ( e ) =>
 				dispatch( { type: 'SET_SUBTITLE', payload: e.target.value } )
