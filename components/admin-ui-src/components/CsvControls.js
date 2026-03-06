@@ -1,4 +1,5 @@
 import { useState, useRef } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { spreadsheetAutoWidth } from './JspreadsheetWrapper';
 
@@ -84,7 +85,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 			const json = await response.json();
 
 			if ( ! json.success ) {
-				setImportError( json.data || 'Import failed' );
+				setImportError( json.data || __( 'Import failed', 'm-chart' ) );
 				return;
 			}
 
@@ -101,7 +102,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 				} );
 			}
 		} catch ( err ) {
-			setImportError( 'Import error: ' + err.message );
+			setImportError( sprintf( __( 'Import error: %s', 'm-chart' ), err.message ) );
 		} finally {
 			setIsImporting( false );
 		}
@@ -151,16 +152,16 @@ export default function CsvControls( { getActiveWorksheet } ) {
 				<br />
 				<a
 					href="#export-csv"
-					title="Export CSV"
+					title={ __( 'Export CSV', 'm-chart' ) }
 					className="button"
 					onClick={ handleExport }
 				>
-					Export
+					{ __( 'Export', 'm-chart' ) }
 				</a>
 			</div>
 
 			<div className="import">
-				CSV Import/Export<br />
+				{ __( 'CSV Import/Export', 'm-chart' ) }<br />
 				<div className="controls">
 
 					{ /* Hidden native file input — triggered programmatically */ }
@@ -176,11 +177,11 @@ export default function CsvControls( { getActiveWorksheet } ) {
 					{ ! showConfirmation && ! isImporting && (
 						<a
 							href="#select-csv"
-							title="Select CSV File"
+							title={ __( 'Select CSV File', 'm-chart' ) }
 							className="button select"
 							onClick={ handleSelectFile }
 						>
-							Select File
+							{ __( 'Select File', 'm-chart' ) }
 						</a>
 					) }
 
@@ -189,11 +190,11 @@ export default function CsvControls( { getActiveWorksheet } ) {
 						<div className="confirmation">
 							<a
 								href="#import-csv"
-								title="Import"
+								title={ __( 'Import', 'm-chart' ) }
 								className="button"
 								onClick={ handleImport }
 							>
-								Import
+								{ __( 'Import', 'm-chart' ) }
 							</a>
 							<select
 								name="m-chart[csv_delimiter]"
@@ -202,7 +203,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 							>
 								{ Object.entries( csvDelimiters ).map( ( [ val, label ] ) => (
 									<option key={ val } value={ val }>
-										{ label } Delimited
+										{ sprintf( __( '%s Delimited', 'm-chart' ), label ) }
 									</option>
 								) ) }
 							</select>
@@ -210,7 +211,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 					) }
 
 					{ fileError && (
-						<p className="file error">You can only import CSV files</p>
+						<p className="file error">{ __( 'You can only import CSV files', 'm-chart' ) }</p>
 					) }
 
 					{ importError && (
@@ -218,7 +219,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 					) }
 
 					{ isImporting && (
-						<p className="import in-progress">Importing file</p>
+						<p className="import in-progress">{ __( 'Importing file', 'm-chart' ) }</p>
 					) }
 
 					{ /* File info + cancel — shown while a file is selected */ }
@@ -226,13 +227,13 @@ export default function CsvControls( { getActiveWorksheet } ) {
 						<div className="file-info">
 							<a
 								href="#cancel"
-								title="Cancel Import"
+								title={ __( 'Cancel Import', 'm-chart' ) }
 								className="dashicons dashicons-dismiss"
 								onClick={ handleCancel }
 							/>
-							File: <span className="file-name">{ selectedFile.name }</span><br />
+							{ sprintf( __( 'File: %s', 'm-chart' ), selectedFile.name ) }<br />
 							<span className="warning">
-								Importing this file will replace all existing data in this sheet
+								{ __( 'Importing this file will replace all existing data in this sheet', 'm-chart' ) }
 							</span>
 						</div>
 					) }

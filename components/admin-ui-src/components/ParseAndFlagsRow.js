@@ -1,8 +1,9 @@
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 const PARSE_OPTION_NAMES = {
-	columns: 'Columns',
-	rows:    'Rows',
+	columns: __( 'Columns', 'm-chart' ),
+	rows:    __( 'Rows', 'm-chart' ),
 };
 
 // Chart types that support the shared tooltip option
@@ -25,7 +26,7 @@ export default function ParseAndFlagsRow() {
 	return (
 		<div className={ `row two${ showShared ? ' show-shared' : '' }` }>
 			<p>
-				<label htmlFor="m-chart-parse_in">{ 'Parse data in' }</label><br />
+				<label htmlFor="m-chart-parse_in">{ __( 'Parse data in', 'm-chart' ) }</label><br />
 				<select
 					name="m-chart[parse_in]"
 					id="m-chart-parse_in"
@@ -49,7 +50,7 @@ export default function ParseAndFlagsRow() {
 						checked={ !! postMeta.labels }
 						onChange={ ( e ) => handleCheckbox( 'labels', e.target.checked ) }
 					/>
-					{ ' Show labels' }
+					{ __( ' Show labels', 'm-chart' ) }
 				</label>
 			</p>
 			<p className="legend">
@@ -63,7 +64,7 @@ export default function ParseAndFlagsRow() {
 						checked={ !! postMeta.legend }
 						onChange={ ( e ) => handleCheckbox( 'legend', e.target.checked ) }
 					/>
-					{ ' Show legend' }
+					{ __( ' Show legend', 'm-chart' ) }
 				</label>
 			</p>
 			{ /* Always render shared in DOM so its value survives type switches on save */ }
@@ -78,7 +79,7 @@ export default function ParseAndFlagsRow() {
 						checked={ !! postMeta.shared }
 						onChange={ ( e ) => handleCheckbox( 'shared', e.target.checked ) }
 					/>
-					{ ' Shared tooltip' }
+					{ __( ' Shared tooltip', 'm-chart' ) }
 				</label>
 			</p>
 		</div>

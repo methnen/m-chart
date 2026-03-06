@@ -1,4 +1,5 @@
 import { useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
@@ -35,7 +36,7 @@ export default function TypeAndThemeRow() {
 	return (
 		<div className="row one">
 			<p>
-				<label htmlFor="m-chart-type">{ 'Type' }</label><br />
+				<label htmlFor="m-chart-type">{ __( 'Type', 'm-chart' ) }</label><br />
 				<select
 					name="m-chart[type]"
 					id="m-chart-type"
@@ -51,7 +52,7 @@ export default function TypeAndThemeRow() {
 				</select>
 			</p>
 			<p>
-				<label htmlFor="m-chart-theme">{ 'Theme' }</label><br />
+				<label htmlFor="m-chart-theme">{ __( 'Theme', 'm-chart' ) }</label><br />
 				<select
 					name="m-chart[theme]"
 					id="m-chart-theme"
@@ -66,7 +67,7 @@ export default function TypeAndThemeRow() {
 				</select>
 			</p>
 			<p>
-				<label htmlFor="m-chart-height">{ 'Height' }</label><br />
+				<label htmlFor="m-chart-height">{ __( 'Height', 'm-chart' ) }</label><br />
 				<input
 					type="number"
 					name="m-chart[height]"
