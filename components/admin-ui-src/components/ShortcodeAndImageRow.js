@@ -1,3 +1,4 @@
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
@@ -10,9 +11,18 @@ export default function ShortcodeAndImageRow() {
 	const showImageField = 'default' === performance && 'yes' === imageSupport;
 	const imageDisabled  = ! showImageField;
 
+	const [ copied, setCopied ] = useState( false );
+
+	function handleCopy() {
+		navigator.clipboard.writeText( shortcode ).then( () => {
+			setCopied( true );
+			setTimeout( () => setCopied( false ), 2000 );
+		} );
+	}
+
 	return (
 		<div className="row seven">
-			<p>
+			<p className="shortcode">
 				<label htmlFor="m-chart-shortcode">{ __( 'Shortcode', 'm-chart' ) }</label><br />
 				<input
 					className="input"
@@ -24,6 +34,9 @@ export default function ShortcodeAndImageRow() {
 					onClick={ ( e ) => e.target.select() }
 					readOnly
 				/>
+				<button type="button" className="button" onClick={ handleCopy }>
+					{ copied ? __( 'Copied!', 'm-chart' ) : __( 'Copy', 'm-chart' ) }
+				</button>
 			</p>
 			<p className="image">
 				<label htmlFor="m-chart-image">{ __( 'Image', 'm-chart' ) }</label><br />
