@@ -1,17 +1,9 @@
 import { useCallback, useRef } from '@wordpress/element';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
-function bridgeFormSubmission( enable ) {
-	if ( window.m_chart_admin && typeof window.m_chart_admin.form_submission === 'function' ) {
-		window.m_chart_admin.form_submission( enable );
-	}
-}
-
 /**
  * Returns a stable `generateImage` callback that captures the current Chart.js
  * instance as a PNG, writes it to the hidden img textarea, then re-enables the form.
- *
- * Mirrors m_chart_chartjs_admin.generate_image_from_chart.
  *
  * @param {React.MutableRefObject} chartRef  Ref holding the Chart.js instance.
  */
@@ -64,7 +56,6 @@ export function useImageGeneration( chartRef ) {
 
 		// Re-enable form submission.
 		dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-		bridgeFormSubmission( true );
 	}, [ chartRef, dispatch ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return generateImage;

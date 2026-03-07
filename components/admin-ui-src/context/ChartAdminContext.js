@@ -14,17 +14,18 @@ const initialSheetCount = ( m_chart_admin.spreadsheet_data || [ [] ] ).length;
 const initialSheetIds   = Array.from( { length: initialSheetCount }, ( _, i ) => i );
 
 const initialState = {
-	postId:          m_chart_admin.post_id,
-	nonce:           m_chart_admin.nonce,
-	ajaxUrl:         m_chart_admin.ajax_url,
-	library:         m_chart_admin.library,
-	performance:     m_chart_admin.performance,
-	imageSupport:    m_chart_admin.image_support,
-	instantPreview:  m_chart_admin.instant_preview_support,
-	imageMultiplier: m_chart_admin.image_multiplier,
-	imageWidth:      m_chart_admin.image_width,
-	deleteConfirm:   m_chart_admin.delete_confirm,
-	csvDelimiters:   m_chart_admin.csv_delimiters   || { ',': 'Comma' },
+	slug:             m_chart_admin.slug,
+	postId:           m_chart_admin.post_id,
+	nonce:            m_chart_admin.nonce,
+	ajaxUrl:          m_chart_admin.ajax_url,
+	library:          m_chart_admin.library,
+	performance:      m_chart_admin.performance,
+	imageSupport:     m_chart_admin.image_support,
+	instantPreview:   m_chart_admin.instant_preview_support,
+	imageMultiplier:  m_chart_admin.image_multiplier,
+	imageWidth:       m_chart_admin.image_width,
+	deleteConfirm:    m_chart_admin.delete_confirm,
+	csvDelimiters:    m_chart_admin.csv_delimiters || { ',': 'Comma' },
 	defaultDelimiter: m_chart_admin.default_delimiter || ',',
 
 	// Chart meta fields (type, theme, height, parse_in, labels, legend, etc.)
@@ -142,6 +143,7 @@ const ChartAdminContext = createContext( null );
 
 export function ChartAdminProvider( { children } ) {
 	const [ state, dispatch ] = useReducer( reducer, initialState );
+	
 	return (
 		<ChartAdminContext.Provider value={ { state, dispatch } }>
 			{ children }
@@ -154,8 +156,10 @@ export function ChartAdminProvider( { children } ) {
  */
 export function useChartAdmin() {
 	const context = useContext( ChartAdminContext );
+	
 	if ( ! context ) {
 		throw new Error( 'useChartAdmin must be used within a ChartAdminProvider' );
 	}
+	
 	return context;
 }

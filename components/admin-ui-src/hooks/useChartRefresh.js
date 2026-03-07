@@ -4,16 +4,6 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 const DEBOUNCE_MS = 300;
 
 /**
- * Bridge helper — keeps React formEnabled state in sync with jQuery's
- * m_chart_admin.allow_form_submission so the PHP submit handler still works.
- */
-function bridgeFormSubmission( enable ) {
-	if ( window.m_chart_admin && typeof window.m_chart_admin.form_submission === 'function' ) {
-		window.m_chart_admin.form_submission( enable );
-	}
-}
-
-/**
  * Fires an AJAX request to get updated chart args whenever postMeta,
  * spreadsheetData, setNames, or title changes.
  *
@@ -53,7 +43,6 @@ export function useChartRefresh( title ) {
 
 			dispatch( { type: 'SET_REFRESHING', payload: true } );
 			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
-			bridgeFormSubmission( false );
 
 			try {
 				const body = new URLSearchParams();
@@ -107,7 +96,6 @@ export function useChartRefresh( title ) {
 					// Otherwise ChartPreview's animation.onComplete enables it after capture.
 					if ( 'default' !== performance || 'yes' !== imageSupport ) {
 						dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-						bridgeFormSubmission( true );
 					}
 				}
 			} catch ( err ) {

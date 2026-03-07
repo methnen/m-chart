@@ -1,5 +1,6 @@
 import { useState, useEffect } from '@wordpress/element';
 import { useChartRefresh } from '../hooks/useChartRefresh';
+import { useFormSubmissionGuard } from '../hooks/useFormSubmissionGuard';
 import ChartPreview from './ChartPreview';
 import ChartSettings from './ChartSettings';
 
@@ -29,6 +30,7 @@ export default function ChartMetaBox() {
 	}, [] );
 
 	useChartRefresh( title );
+	useFormSubmissionGuard();
 
 	return (
 		<>

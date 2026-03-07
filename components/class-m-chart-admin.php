@@ -413,6 +413,8 @@ class M_Chart_Admin {
 			}
 
 			$localize_data = array(
+				'slug'                    => m_chart()->slug,
+				'version'                 => m_chart()->version,
 				'refresh_counter'         => 0,
 				'allow_form_submission'   => false,
 				'request'                 => false,
