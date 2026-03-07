@@ -404,6 +404,23 @@
 #m-chart .inside .row.seven p:first-child {
   float: left;
 }
+#m-chart .inside .row.seven p.shortcode {
+  position: relative;
+}
+#m-chart .inside .row.seven p.shortcode .button {
+  bottom: 0.1875rem;
+  line-height: 1.375rem;
+  min-height: 1.5rem;
+  position: absolute;
+  right: 0.125rem;
+}
+@media (max-width: 782px) {
+  #m-chart .inside .row.seven p.shortcode .button {
+    bottom: 0;
+    line-height: 1.875rem;
+    min-height: 2rem;
+  }
+}
 #m-chart .inside .row.seven p.image {
   position: relative;
 }
