@@ -42,6 +42,7 @@ export default function SheetTab( {
 } ) {
 	const { state, dispatch } = useChartAdmin();
 	const [ isRenaming, setIsRenaming ] = useState( () => !! isNew );
+	const [ inputValue, setInputValue ] = useState( name );
 	const inputRef = useRef( null );
 
 	const longPress = useLongPress( () => setIsRenaming( true ) );
@@ -53,13 +54,16 @@ export default function SheetTab( {
 		}
 	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Focus the rename input when entering rename mode.
+	// Sync local input value and focus when entering rename mode.
 	useEffect( () => {
-		if ( isRenaming && inputRef.current ) {
-			inputRef.current.focus();
-			inputRef.current.select();
+		if ( isRenaming ) {
+			setInputValue( name );
+			if ( inputRef.current ) {
+				inputRef.current.focus();
+				inputRef.current.select();
+			}
 		}
-	}, [ isRenaming ] );
+	}, [ isRenaming ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	function handleClick( e ) {
 		e.preventDefault();
@@ -91,13 +95,14 @@ export default function SheetTab( {
 	}
 
 	function handleNameChange( e ) {
-		dispatch( {
-			type:    'RENAME_SHEET',
-			payload: { index: sheetIndex, name: e.target.value },
-		} );
+		setInputValue( e.target.value );
 	}
 
 	function commitRename() {
+		dispatch( {
+			type:    'RENAME_SHEET',
+			payload: { index: sheetIndex, name: inputValue },
+		} );
 		setIsRenaming( false );
 	}
 
@@ -109,8 +114,8 @@ export default function SheetTab( {
 	}
 
 	const inputWidth = inputRef.current
-		? measureTextWidth( name, inputRef.current ) + 'px'
-		: Math.max( 40, name.length * 8 + 16 ) + 'px';
+		? measureTextWidth( inputValue, inputRef.current ) + 'px'
+		: Math.max( 40, inputValue.length * 8 + 16 ) + 'px';
 
 	const className = [
 		'nav-tab',
@@ -144,7 +149,7 @@ export default function SheetTab( {
 				type="text"
 				name={ `m-chart[set_names][${ sheetIndex }]` }
 				className="spreadsheet-tab-input"
-				value={ name }
+				value={ inputValue }
 				style={ {
 					display: isRenaming ? '' : 'none',
 					width:   inputWidth,
