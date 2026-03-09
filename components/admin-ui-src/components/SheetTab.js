@@ -1,27 +1,7 @@
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { useLongPress } from '../hooks/useLongPress';
-
-/**
- * Measures the pixel width of a string using a canvas, mirroring
- * m_chart_admin.resize_input() from m-chart-admin.js.
- */
-function measureTextWidth( text, inputEl ) {
-	if ( ! inputEl ) {
-		return Math.max( 40, text.length * 8 + 16 );
-	}
-
-	const style         = window.getComputedStyle( inputEl );
-	const canvas        = document.createElement( 'canvas' );
-	const ctx           = canvas.getContext( '2d' );
-	ctx.font            = style.font;
-	const textWidth     = Math.ceil( ctx.measureText( text ).width ) + 1;
-	const borderWidth   = parseFloat( style.borderWidth ) || 0;
-	const paddingLeft   = parseFloat( style.paddingLeft ) || 0;
-	const paddingRight  = parseFloat( style.paddingRight ) || 0;
-
-	return ( borderWidth * 2 ) + paddingLeft + textWidth + paddingRight;
-}
+import { measureTextWidth } from '../utils/measureTextWidth';
 
 /**
  * A single sheet tab in the spreadsheet tab bar.

@@ -1,6 +1,7 @@
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
+import { measureTextWidth } from '../utils/measureTextWidth';
 
 // Chart types that show y-min controls (line, spline, area only)
 const YMIN_TYPES = new Set( [ 'line', 'spline', 'area' ] );
@@ -17,8 +18,17 @@ export default function AxisRows() {
 	const { state, dispatch } = useChartAdmin();
 	const { postMeta, unitTerms } = state;
 
-	const showAxis = AXIS_TYPES.has( postMeta.type );
-	const showYMin = YMIN_TYPES.has( postMeta.type );
+	const showAxis  = AXIS_TYPES.has( postMeta.type );
+	const showYMin  = YMIN_TYPES.has( postMeta.type );
+
+	// Callback ref triggers a re-render when the input mounts, so the
+	// canvas measurement runs with the real element instead of the fallback.
+	const [ yMinEl, setYMinEl ] = useState( null );
+	const yMinRef               = useCallback( node => setYMinEl( node ), [] );
+	const yMinValue             = String( postMeta.y_min_value ?? 0 );
+	const yMinWidth             = yMinEl
+		? ( measureTextWidth( yMinValue, yMinEl ) + 20 ) + 'px'
+		: '73px';
 
 	function handleChange( field, value ) {
 		dispatch( { type: 'SET_POST_META', payload: { [ field ]: value } } );
@@ -92,10 +102,11 @@ export default function AxisRows() {
 						type="number"
 						name="m-chart[y_min_value]"
 						id="m-chart-y-min-value"
+						ref={ yMinRef }
 						value={ postMeta.y_min_value }
 						disabled={ ! postMeta.y_min }
 						onChange={ ( e ) => handleChange( 'y_min_value', e.target.value ) }
-						style={{ width: '133px' }}
+						style={ { width: yMinWidth, minWidth: 0 } }
 					/>
 				</p>
 			</div>
