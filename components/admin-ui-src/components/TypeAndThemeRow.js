@@ -1,9 +1,18 @@
+import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
+import { measureTextWidth } from '../utils/measureTextWidth';
 
 export default function TypeAndThemeRow() {
 	const { state, dispatch } = useChartAdmin();
 	const { postMeta, typeOptions, typeOptionNames, themes } = state;
+
+	const [ heightEl, setHeightEl ] = useState( null );
+	const heightRef                 = useCallback( node => setHeightEl( node ), [] );
+	const heightValue               = String( postMeta.height ?? '' );
+	const heightWidth               = heightEl
+		? ( measureTextWidth( heightValue, heightEl ) + 20 ) + 'px'
+		: '73px';
 
 	function handleChange( field, value ) {
 		dispatch( { type: 'SET_POST_META', payload: { [ field ]: value } } );
@@ -48,10 +57,12 @@ export default function TypeAndThemeRow() {
 					type="number"
 					name="m-chart[height]"
 					id="m-chart-height"
+					ref={ heightRef }
 					value={ postMeta.height }
 					min="300"
 					max="1500"
 					onChange={ ( e ) => handleChange( 'height', e.target.value ) }
+					style={ { width: heightWidth, minWidth: 0 } }
 				/>
 			</p>
 		</div>

@@ -19,6 +19,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+
 
 
 
@@ -30,6 +32,7 @@ const YMIN_TYPES = new Set(['line', 'spline', 'area']);
 // Chart types that show axis title/unit rows
 const AXIS_TYPES = new Set(['line', 'spline', 'area', 'column', 'stacked-column', 'bar', 'stacked-bar', 'scatter', 'bubble']);
 function AxisRows() {
+  var _postMeta$y_min_value;
   const {
     state,
     dispatch
@@ -40,6 +43,13 @@ function AxisRows() {
   } = state;
   const showAxis = AXIS_TYPES.has(postMeta.type);
   const showYMin = YMIN_TYPES.has(postMeta.type);
+
+  // Callback ref triggers a re-render when the input mounts, so the
+  // canvas measurement runs with the real element instead of the fallback.
+  const [yMinEl, setYMinEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const yMinRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(node => setYMinEl(node), []);
+  const yMinValue = String((_postMeta$y_min_value = postMeta.y_min_value) !== null && _postMeta$y_min_value !== void 0 ? _postMeta$y_min_value : 0);
+  const yMinWidth = yMinEl ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__.measureTextWidth)(yMinValue, yMinEl) + 20 + 'px' : '73px';
   function handleChange(field, value) {
     dispatch({
       type: 'SET_POST_META',
@@ -120,11 +130,13 @@ function AxisRows() {
     type: "number",
     name: "m-chart[y_min_value]",
     id: "m-chart-y-min-value",
+    ref: yMinRef,
     value: postMeta.y_min_value,
     disabled: !postMeta.y_min,
     onChange: e => handleChange('y_min_value', e.target.value),
     style: {
-      width: '133px'
+      width: yMinWidth,
+      minWidth: 0
     }
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "row five horizontal-axis",
@@ -955,29 +967,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
 /* harmony import */ var _hooks_useLongPress__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../hooks/useLongPress */ "./components/admin-ui-src/hooks/useLongPress.js");
+/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
 
 
 
 
 
-/**
- * Measures the pixel width of a string using a canvas, mirroring
- * m_chart_admin.resize_input() from m-chart-admin.js.
- */
-function measureTextWidth(text, inputEl) {
-  if (!inputEl) {
-    return Math.max(40, text.length * 8 + 16);
-  }
-  const style = window.getComputedStyle(inputEl);
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  ctx.font = style.font;
-  const textWidth = Math.ceil(ctx.measureText(text).width) + 1;
-  const borderWidth = parseFloat(style.borderWidth) || 0;
-  const paddingLeft = parseFloat(style.paddingLeft) || 0;
-  const paddingRight = parseFloat(style.paddingRight) || 0;
-  return borderWidth * 2 + paddingLeft + textWidth + paddingRight;
-}
 
 /**
  * A single sheet tab in the spreadsheet tab bar.
@@ -1081,7 +1076,7 @@ function SheetTab({
       commitRename();
     }
   }
-  const inputWidth = inputRef.current ? measureTextWidth(inputValue, inputRef.current) + 'px' : Math.max(40, inputValue.length * 8 + 16) + 'px';
+  const inputWidth = inputRef.current ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__.measureTextWidth)(inputValue, inputRef.current) + 'px' : Math.max(40, inputValue.length * 8 + 16) + 'px';
   const className = ['nav-tab', isActive ? 'nav-tab-active' : '', isSingle ? 'do-not-delete' : ''].filter(Boolean).join(' ');
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: "#",
@@ -1462,23 +1457,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+
+
 
 
 
 function TypeAndThemeRow() {
+  var _postMeta$height;
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
   const {
     postMeta,
     typeOptions,
     typeOptionNames,
     themes
   } = state;
+  const [heightEl, setHeightEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const heightRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(node => setHeightEl(node), []);
+  const heightValue = String((_postMeta$height = postMeta.height) !== null && _postMeta$height !== void 0 ? _postMeta$height : '');
+  const heightWidth = heightEl ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__.measureTextWidth)(heightValue, heightEl) + 20 + 'px' : '73px';
   function handleChange(field, value) {
     dispatch({
       type: 'SET_POST_META',
@@ -1491,7 +1496,7 @@ function TypeAndThemeRow() {
     className: "row one"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "m-chart-type"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Type', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Type', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     name: "m-chart[type]",
     id: "m-chart-type",
     className: "select",
@@ -1502,7 +1507,7 @@ function TypeAndThemeRow() {
     value: type
   }, typeOptionNames[type] || type)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "m-chart-theme"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Theme', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Theme', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     name: "m-chart[theme]",
     id: "m-chart-theme",
     value: postMeta.theme,
@@ -1512,14 +1517,19 @@ function TypeAndThemeRow() {
     value: theme.slug
   }, theme.name)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "m-chart-height"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Height', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Height', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "number",
     name: "m-chart[height]",
     id: "m-chart-height",
+    ref: heightRef,
     value: postMeta.height,
     min: "300",
     max: "1500",
-    onChange: e => handleChange('height', e.target.value)
+    onChange: e => handleChange('height', e.target.value),
+    style: {
+      width: heightWidth,
+      minWidth: 0
+    }
   })));
 }
 
@@ -2066,6 +2076,44 @@ function useLongPress(callback) {
     onPointerLeave: cancel,
     onPointerCancel: cancel
   };
+}
+
+/***/ },
+
+/***/ "./components/admin-ui-src/utils/measureTextWidth.js"
+/*!***********************************************************!*\
+  !*** ./components/admin-ui-src/utils/measureTextWidth.js ***!
+  \***********************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   measureTextWidth: () => (/* binding */ measureTextWidth)
+/* harmony export */ });
+/**
+ * Measures the pixel width needed to display a string inside a given input
+ * element, using a canvas and the input's computed font style.
+ *
+ * Falls back to a character-count estimate if the input element is not yet
+ * mounted (e.g. on the first render before refs are attached).
+ *
+ * @param {string}           text    The string to measure.
+ * @param {HTMLInputElement} inputEl The input element whose font to use.
+ * @return {number} Width in pixels.
+ */
+function measureTextWidth(text, inputEl) {
+  if (!inputEl) {
+    return Math.max(40, text.length * 8 + 16);
+  }
+  const style = window.getComputedStyle(inputEl);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.font = style.font;
+  const textWidth = Math.ceil(ctx.measureText(text).width) + 1;
+  const borderWidth = parseFloat(style.borderWidth) || 0;
+  const paddingLeft = parseFloat(style.paddingLeft) || 0;
+  const paddingRight = parseFloat(style.paddingRight) || 0;
+  return borderWidth * 2 + paddingLeft + textWidth + paddingRight;
 }
 
 /***/ },
