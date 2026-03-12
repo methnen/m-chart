@@ -35,7 +35,7 @@ function prepareArgs( args ) {
 		return prepared;
 	}
 
-	const { type, value_prefix = '', value_suffix = '', labels_pos = '' } = prepared;
+	const { type, labels_pos = '' } = prepared;
 
 	if ( prepared.options?.locale ) {
 		h.locale = prepared.options.locale;
@@ -45,15 +45,15 @@ function prepareArgs( args ) {
 	if ( 'bubble' === type ) {
 		prepared.data = h.preprocess_bubble_data( { ...prepared.data, datasets: [ ...prepared.data.datasets ] } );
 		prepared.options.plugins.tooltip.callbacks = {
-			label: ( item ) => h.bubble_chart_tooltip_label( item, type, value_prefix, value_suffix, labels_pos ),
+			label: ( item ) => h.bubble_chart_tooltip_label( item ),
 		};
 	} else if ( 'scatter' === type ) {
 		prepared.options.plugins.tooltip.callbacks = {
-			label: ( item ) => h.scatter_chart_tooltip_label( item, type, value_prefix, value_suffix, labels_pos ),
+			label: ( item ) => h.scatter_chart_tooltip_label( item ),
 		};
 	} else {
 		prepared.options.plugins.tooltip.callbacks = {
-			label: ( item ) => h.chart_tooltip_label( item, type, value_prefix, value_suffix, labels_pos ),
+			label: ( item ) => h.chart_tooltip_label( item, type, labels_pos ),
 		};
 	}
 
