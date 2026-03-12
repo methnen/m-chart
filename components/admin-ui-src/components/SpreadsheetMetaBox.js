@@ -18,10 +18,10 @@ export default function SpreadsheetMetaBox() {
 	// Map of stable sheetId → worksheet instance (Jspreadsheet worksheet object).
 	const worksheetInstances = useRef( {} );
 
-	// Refs so the form-submit handler always sees the latest values without
-	// needing to be recreated on every state change.
+	// Refs so the form-submit handler always sees the latest values without needing to be recreated on every state change.
 	const formEnabledRef  = useRef( formEnabled );
 	const sheetIdsRef     = useRef( sheetIds );
+	
 	formEnabledRef.current = formEnabled;
 	sheetIdsRef.current    = sheetIds;
 
@@ -44,6 +44,7 @@ export default function SpreadsheetMetaBox() {
 	// Intercept the WordPress post form submission.
 	useEffect( () => {
 		const form = document.getElementById( 'post' );
+		
 		if ( ! form ) {
 			return;
 		}

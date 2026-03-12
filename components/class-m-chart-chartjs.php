@@ -312,10 +312,8 @@ class M_Chart_Chartjs {
 		//);
 
 		// Add some stuff for the helper class
-		$chart_args['value_prefix'] = m_chart()->parse()->data_prefix;
-		$chart_args['value_suffix'] = m_chart()->parse()->data_suffix;
-		$chart_args['locale']       = m_chart()->get_settings( 'locale' );
-		$chart_args['labels_pos']   = m_chart()->parse()->value_labels_position;
+		$chart_args['locale']     = m_chart()->get_settings( 'locale' );
+		$chart_args['labels_pos'] = m_chart()->parse()->value_labels_position;
 
 		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
 		if ( ! isset( $chart_args['data']['datasets'] ) ) {
@@ -527,8 +525,8 @@ class M_Chart_Chartjs {
 	public function get_value_labels_array() {
 		$value_labels = m_chart()->parse()->value_labels;
 
-		if ( isset( $value_labels['first_column'] ) ) {
-			$label_key = 'rows' == $this->post_meta['parse_in'] ? 'first_row' : 'first_column';
+		if ( isset( $value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ] ) ) {
+			$label_key = M_Chart_Parse::PARSE_ROWS == $this->post_meta['parse_in'] ? M_Chart_Parse::LABELS_FIRST_ROW : M_Chart_Parse::LABELS_FIRST_COLUMN;
 
 			return $value_labels[ $label_key ];
 		}
@@ -588,12 +586,13 @@ class M_Chart_Chartjs {
 	public function add_data_sets( $chart_args ) {
 		// When Chart.js encounters an empty data value it stops so we set them to NULL
 		$data_array = array_map( array( $this, 'fix_null_values' ), m_chart()->parse()->set_data );
+		$raw_data   = m_chart()->parse()->raw_data;
 
 		if (
 			   'pie' == $this->post_meta['type']
 			|| 'doughnut' == $chart_args['type']
 			|| 'polar' == $this->post_meta['type']
-			|| 'both' != m_chart()->parse()->value_labels_position
+			|| M_Chart_Parse::LABELS_BOTH != m_chart()->parse()->value_labels_position
 			&& (
 				   'scatter' != $this->post_meta['type']
 				&& 'bubble' != $this->post_meta['type']
@@ -603,7 +602,8 @@ class M_Chart_Chartjs {
 		) {
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
 				if ( isset( $data_array[ $key ] ) ) {
-					$chart_args['data']['datasets'][0]['data'][] = $data_array[ $key ];
+					$chart_args['data']['datasets'][0]['data'][]    = $data_array[ $key ];
+					$chart_args['data']['datasets'][0]['rawData'][] = isset( $raw_data[ $key ] ) ? $raw_data[ $key ] : '';
 				}
 			}
 		} elseif (
@@ -618,8 +618,9 @@ class M_Chart_Chartjs {
 				$data_array = array_map( array( $this, 'fix_null_values' ), $parse->set_data );
 
 				$chart_args['data']['datasets'][ $key ] = array(
-					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data'  => $data_array,
+					'label'   => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data'    => $data_array,
+					'rawData' => $parse->raw_data,
 				);
 			}
 		} elseif ( 'scatter' == $this->post_meta['type'] ) {
@@ -632,9 +633,9 @@ class M_Chart_Chartjs {
 
 				$new_data_array = array();
 
-				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+				$label_key = ( $this->post_meta['parse_in'] == M_Chart_Parse::PARSE_ROWS ) ? M_Chart_Parse::LABELS_FIRST_COLUMN : M_Chart_Parse::LABELS_FIRST_ROW;
 
-				if ( 'both' == $parse->value_labels_position ) {
+				if ( M_Chart_Parse::LABELS_BOTH == $parse->value_labels_position ) {
 					foreach ( $data_array as $data_key => $data ) {
 						$new_data_array[] = array(
 							'x'     => $data[0],
@@ -656,8 +657,9 @@ class M_Chart_Chartjs {
 				}
 
 				$chart_args['data']['datasets'][ $key ] = array(
-					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data'  => $new_data_array,
+					'label'   => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data'    => $new_data_array,
+					'rawData' => $parse->raw_data,
 				);
 			}
 		} elseif ( 'bubble' == $this->post_meta['type'] ) {
@@ -670,9 +672,9 @@ class M_Chart_Chartjs {
 
 				$new_data_array = array();
 
-				$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+				$label_key = ( $this->post_meta['parse_in'] == M_Chart_Parse::PARSE_ROWS ) ? M_Chart_Parse::LABELS_FIRST_COLUMN : M_Chart_Parse::LABELS_FIRST_ROW;
 
-				if ( 'both' == $parse->value_labels_position ) {
+				if ( M_Chart_Parse::LABELS_BOTH == $parse->value_labels_position ) {
 					foreach ( $data_array as $data_key => $data ) {
 						$new_data_array[] = array(
 							'x'     => $data[0],
@@ -696,19 +698,21 @@ class M_Chart_Chartjs {
 				}
 
 				$chart_args['data']['datasets'][ $key ] = array(
-					'label' => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data'  => $new_data_array,
+					'label'   => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
+					'data'    => $new_data_array,
+					'rawData' => $parse->raw_data,
 				);
 			}
 		} else {
 			$set_data = array();
 
-			$label_key = ( $this->post_meta['parse_in'] == 'rows' ) ? 'first_column' : 'first_row';
+			$label_key = ( $this->post_meta['parse_in'] == M_Chart_Parse::PARSE_ROWS ) ? M_Chart_Parse::LABELS_FIRST_COLUMN : M_Chart_Parse::LABELS_FIRST_ROW;
 
 			foreach ( $data_array as $key => $data_chunk ) {
 				$set_data[ $key ] = array(
-					'label' => m_chart()->parse()->value_labels[ $label_key ][ $key ],
-					'data'  => array(),
+					'label'   => m_chart()->parse()->value_labels[ $label_key ][ $key ],
+					'data'    => array(),
+					'rawData' => isset( $raw_data[ $key ] ) ? $raw_data[ $key ] : array(),
 				);
 
 				if ( is_array( $data_chunk ) ) {
@@ -813,21 +817,26 @@ class M_Chart_Chartjs {
 		$hex = preg_replace( '#[^0-9A-Fa-f]#', '', $hex );
 		$rgb = array();
 
-		if ( 6 === strlen( $hex ) ) {
-			// If a proper hex code, convert using bitwise operation, no overhead... faster
-			$color_value = hexdec( $hex );
+		switch ( strlen( $hex ) ) {
+			case 6:
+				// If a proper hex code, convert using bitwise operation, no overhead... faster
+				$color_value = hexdec( $hex );
 
-			$rgb['red']   = 0xFF & ( $color_value >> 0x10 );
-			$rgb['green'] = 0xFF & ( $color_value >> 0x8 );
-			$rgb['blue']  = 0xFF & $color_value;
-		} elseif ( 3 == strlen( $hex ) ) {
-			// If shorthand notation we need to do some string manipulations
-			$rgb['red']   = hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) );
-			$rgb['green'] = hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) );
-			$rgb['blue']  = hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) );
-		} else {
-			// Invalid hex color code so we return false
-			return false;
+				$rgb['red']   = 0xFF & ( $color_value >> 0x10 );
+				$rgb['green'] = 0xFF & ( $color_value >> 0x8 );
+				$rgb['blue']  = 0xFF & $color_value;
+				break;
+
+			case 3:
+				// If shorthand notation we need to do some string manipulations
+				$rgb['red']   = hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) );
+				$rgb['green'] = hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) );
+				$rgb['blue']  = hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) );
+				break;
+
+			default:
+				// Invalid hex color code so we return false
+				return false;
 		}
 
 		return $rgb;

@@ -1,3 +1,25 @@
+<?php
+$locale    = m_chart()->get_settings( 'locale' );
+$formatter = class_exists( 'NumberFormatter' ) ? new NumberFormatter( $locale, NumberFormatter::DECIMAL ) : null;
+
+/**
+ * Formats an M_Chart_Parsed_Data_Point for table display.
+ * Numeric cells are formatted with the locale-aware NumberFormatter;
+ * non-numeric cells are returned as plain text.
+ */
+function m_chart_format_raw( ?M_Chart_Parsed_Data_Point $raw, ?NumberFormatter $formatter ): string {
+	if ( null === $raw ) {
+		return '';
+	}
+
+	if ( $raw->is_numeric() ) {
+		$number = $formatter ? $formatter->format( $raw->value ) : (string) $raw->value;
+		return $raw->prefix . $number . $raw->suffix;
+	}
+
+	return $raw->text;
+}
+?>
 <table class="<?php echo esc_attr( $classes ); ?>">
 	<?php
 	$set_name = '';
@@ -6,13 +28,13 @@
 		$set_name = ': ' . $post_meta['set_names'][ $set ];
 	}
 
-	if ( isset( m_chart()->parse()->value_labels['first_row'] ) ) {
-		$first_row = m_chart()->parse()->value_labels['first_row'];
-		$labels    = m_chart()->parse()->value_labels['first_column'];
+	if ( isset( m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_ROW ] ) ) {
+		$first_row = m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_ROW ];
+		$labels    = m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ];
 
 		$row_column = false;
 
-		if ( count( $first_row ) == count( m_chart()->parse()->set_data[0] ) ) {
+		if ( count( $first_row ) == count( m_chart()->parse()->raw_data[0] ) ) {
 			$row_column = true;
 		}
 		?>
@@ -35,17 +57,12 @@
 				<?php
 				foreach ( $first_row as $column => $label ) {
 					if ( $row_column ) {
-						$value = m_chart()->parse()->set_data[ $row ][ $column ];
+						$raw = m_chart()->parse()->raw_data[ $row ][ $column ] ?? null;
 					} else {
-						$value = m_chart()->parse()->set_data[ $column ][ $row ];
-					}
-
-					if ( is_numeric( $value ) ) {
-						$value = number_format_i18n( $value, strlen( substr( strrchr( $value, '.'), 1 ) ) );
-						$value = '' != $value ? m_chart()->parse()->data_prefix . $value . m_chart()->parse()->data_suffix : '';
+						$raw = m_chart()->parse()->raw_data[ $column ][ $row ] ?? null;
 					}
 					?>
-					<td><?php echo esc_html( $value ); ?></td>
+					<td><?php echo esc_html( m_chart_format_raw( $raw, $formatter ) ); ?></td>
 					<?php
 				}
 				?>
@@ -67,16 +84,12 @@
 		</tr>
 		<tr>
 			<?php
-			$row_count = 1;
-			$total_rows = count( m_chart()->parse()->set_data ) / count( $first_row );
+			$row_count  = 1;
+			$total_rows = count( m_chart()->parse()->raw_data ) / count( $first_row );
 
-			foreach ( m_chart()->parse()->set_data as $key => $value ) {
-				if ( is_numeric( $value ) ) {
-					$value = number_format_i18n( $value, strlen( substr( strrchr( $value, '.'), 1 ) ) );
-					$value = '' != $value ? m_chart()->parse()->data_prefix . $value . m_chart()->parse()->data_suffix : '';
-				}
+			foreach ( m_chart()->parse()->raw_data as $key => $raw ) {
 				?>
-				<td><?php echo esc_html( $value ); ?></td>
+				<td><?php echo esc_html( m_chart_format_raw( $raw, $formatter ) ); ?></td>
 				<?php
 
 				if ( ( $key + 1 ) / ( count( $first_row ) * $row_count ) == 1 ) {

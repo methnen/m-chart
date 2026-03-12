@@ -144,6 +144,7 @@ class M_Chart {
 	 */
 	public function parse() {
 		if ( ! $this->parse ) {
+			require_once __DIR__ . '/class-m-chart-parsed-data-point.php';
 			require_once __DIR__ . '/class-m-chart-parse.php';
 			$this->parse = new M_Chart_Parse();
 		}

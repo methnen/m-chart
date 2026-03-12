@@ -5,6 +5,10 @@
 #m-chart-spreadsheet {
 	border-left: none;
 
+	&.closed {
+		border-bottom: rem-calc(1) solid $wp-admin-meta-border-color;
+	}
+
 	.postbox-header {
 		border-bottom: none;
 

@@ -279,8 +279,6 @@ function prepareArgs(args) {
   }
   const {
     type,
-    value_prefix = '',
-    value_suffix = '',
     labels_pos = ''
   } = prepared;
   if (prepared.options?.locale) {
@@ -294,15 +292,15 @@ function prepareArgs(args) {
       datasets: [...prepared.data.datasets]
     });
     prepared.options.plugins.tooltip.callbacks = {
-      label: item => h.bubble_chart_tooltip_label(item, type, value_prefix, value_suffix, labels_pos)
+      label: item => h.bubble_chart_tooltip_label(item)
     };
   } else if ('scatter' === type) {
     prepared.options.plugins.tooltip.callbacks = {
-      label: item => h.scatter_chart_tooltip_label(item, type, value_prefix, value_suffix, labels_pos)
+      label: item => h.scatter_chart_tooltip_label(item)
     };
   } else {
     prepared.options.plugins.tooltip.callbacks = {
-      label: item => h.chart_tooltip_label(item, type, value_prefix, value_suffix, labels_pos)
+      label: item => h.chart_tooltip_label(item, type, labels_pos)
     };
   }
 
@@ -1326,8 +1324,7 @@ function SpreadsheetMetaBox() {
   // Map of stable sheetId → worksheet instance (Jspreadsheet worksheet object).
   const worksheetInstances = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)({});
 
-  // Refs so the form-submit handler always sees the latest values without
-  // needing to be recreated on every state change.
+  // Refs so the form-submit handler always sees the latest values without needing to be recreated on every state change.
   const formEnabledRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(formEnabled);
   const sheetIdsRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(sheetIds);
   formEnabledRef.current = formEnabled;

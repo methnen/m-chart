@@ -16,30 +16,27 @@ var m_chart_chartjs_helpers = {
 
 			m_chart_chartjs_helpers.locale = window[chart_object].chart_args.options.locale;
 
-			var type = window[chart_object].chart_args.type;
-
-			var value_prefix = window[chart_object].chart_args.value_prefix;
-			var value_suffix = window[chart_object].chart_args.value_suffix;
-			var labels_pos   = window[chart_object].chart_args.labels_pos;
+			var type       = window[chart_object].chart_args.type;
+			var labels_pos = window[chart_object].chart_args.labels_pos;
 
 			if ( 'bubble' == window[chart_object].chart_args.type ) {
 				window[chart_object].chart_args.data = m_chart_chartjs_helpers.preprocess_bubble_data( window[chart_object].chart_args.data );
 				window[chart_object].chart_args.options.plugins.tooltip.callbacks = {
 					label: (item) => {
-	                	return m_chart_chartjs_helpers.bubble_chart_tooltip_label( item, type, value_prefix, value_suffix, labels_pos );
-	                }
+                		return m_chart_chartjs_helpers.bubble_chart_tooltip_label( item );
+                	}
 				}
 			} else if ( 'scatter' == window[chart_object].chart_args.type ) {
 				window[chart_object].chart_args.options.plugins.tooltip.callbacks = {
 					label: (item) => {
-	                	return m_chart_chartjs_helpers.scatter_chart_tooltip_label( item, type, value_prefix, value_suffix, labels_pos );
-	                }
+                		return m_chart_chartjs_helpers.scatter_chart_tooltip_label( item );
+                	}
 				}
 			} else {
 				window[chart_object].chart_args.options.plugins.tooltip.callbacks = {
 					label: (item) => {
-	                	return m_chart_chartjs_helpers.chart_tooltip_label( item, type, value_prefix, value_suffix, labels_pos );
-	                }
+                		return m_chart_chartjs_helpers.chart_tooltip_label( item, type, labels_pos );
+                	}
 				}
 			}
 
@@ -87,7 +84,7 @@ var m_chart_chartjs_helpers = {
 		return $data;
 	};
 
-	m_chart_chartjs_helpers.bubble_chart_tooltip_label = function( item, type, prefix, suffix, labels_pos ) {
+	m_chart_chartjs_helpers.bubble_chart_tooltip_label = function( item ) {
 		var tooltip_label = [
 			item.raw.label,
 			item.chart.data.labels[0] + ': ' + m_chart_chartjs_helpers.number_format( item.parsed.x ),
@@ -98,7 +95,7 @@ var m_chart_chartjs_helpers = {
 		return tooltip_label;
 	};
 
-	m_chart_chartjs_helpers.scatter_chart_tooltip_label = function( item, type, prefix, suffix, labels_pos ) {
+	m_chart_chartjs_helpers.scatter_chart_tooltip_label = function( item ) {
 		var tooltip_label = [
 			item.dataset.label,
 			item.chart.data.labels[0] + ': ' + m_chart_chartjs_helpers.number_format( item.parsed.x ),
@@ -108,7 +105,7 @@ var m_chart_chartjs_helpers = {
 		return tooltip_label;
 	};
 
-	m_chart_chartjs_helpers.chart_tooltip_label = function( item, type, prefix, suffix, labels_pos ) {
+	m_chart_chartjs_helpers.chart_tooltip_label = function( item, type, labels_pos ) {
 		var label = item.dataset.label;
 
 		// If raw value is null we don't return anything
@@ -145,9 +142,20 @@ var m_chart_chartjs_helpers = {
 			label += ': ';
 		}
 
-		var tooltip_label = label + prefix + m_chart_chartjs_helpers.number_format( item.raw ) + suffix;
+		// Format the value using the raw data struct (prefix + localized number + suffix),
+		// Fall back to a plain formatted number if rawData is not available.
+		var raw = item.dataset.rawData && item.dataset.rawData[ item.dataIndex ];
+		var raw_value;
 
-		return tooltip_label;
+		if ( raw && null !== raw.value ) {
+			raw_value = ( raw.prefix || '' ) + m_chart_chartjs_helpers.number_format( raw.value ) + ( raw.suffix || '' );
+		} else if ( raw && raw.text ) {
+			raw_value = raw.text;
+		} else {
+			raw_value = m_chart_chartjs_helpers.number_format( item.raw );
+		}
+
+		return label + raw_value;
 	};
 
 	m_chart_chartjs_helpers.number_format = function( number ) {
