@@ -4,7 +4,7 @@ class M_Chart {
 	public $version           = '2.0';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
-	public $chart_meta_fields = array(
+	public $chart_meta_fields = [
 		'library'     => 'chartjs',
 		'type'        => 'line',
 		'parse_in'    => 'rows',
@@ -21,23 +21,23 @@ class M_Chart {
 		'legend'      => true,
 		'source'      => '',
 		'source_url'  => '',
-		'data'        => array(),
-		'set_names'   => array(),
-	);
-	public $get_chart_default_args = array(
+		'data'        => [],
+		'set_names'   => [],
+	];
+	public $get_chart_default_args = [
 		'show'  => 'chart',
 		'width' => 'responsive',
 		'share' => '',
-	);
-	public $parse_options = array(
+	];
+	public $parse_options = [
 		'columns',
 		'rows',
-	);
+	];
 	public $options_set;
 	public $plugin_url;
 	public $is_iframe    = false;
 	public $instance     = 1;
-	public $settings     = array(
+	public $settings     = [
 		'library'          => 'chartjs',
 		'show_library'     => 'no',
 		'performance'      => 'default',
@@ -47,34 +47,34 @@ class M_Chart {
 		'default_theme'    => '_default',
 		'locale'           => 'en-US',
 		'csv_delimiter'    => ',',
-		'lang_settings'    => array(
+		'lang_settings'    => [
 			'decimalPoint'   => '.',
 			'thousandsSep'   => ',',
-			'numericSymbols' => array(
+			'numericSymbols' => [
 				'K', // Thousands
 				'M', // Millions
 				'B', // Billions
 				'T', // Trillions
 				'P', // Quadrillions
 				'E', // Quintillions
-			),
+			],
 			'numericSymbolMagnitude' => 1000,
-		),
-	);
-	public $csv_delimiters = array(
+		],
+	];
+	public $csv_delimiters = [
 		','  => 'Comma',
 		"\t" => 'Tab',
 		' '  => 'Space',
 		';'  => 'Semicolon',
-	);
+	];
 	public $library_class;
 
 	private $admin;
 	private $parse;
 	private $block;
-	private $libraries = array(
+	private $libraries = [
 		'chartjs' => 'Chart.js',
-	);
+	];
 
 	/**
 	 * Constructor
@@ -82,23 +82,23 @@ class M_Chart {
 	public function __construct() {
 		$this->plugin_url = $this->plugin_url();
 
-		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
-		add_action( 'save_post', array( $this, 'save_post' ) );
-		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
+		add_action( 'init', [ $this, 'init' ] );
+		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
+		add_action( 'save_post', [ $this, 'save_post' ] );
+		add_action( 'shortcode_ui_before_do_shortcode', [ $this, 'shortcode_ui_before_do_shortcode' ] );
 		// Doing this early as possible because it sets is_iframe which we might need to use for other things
-		add_action( 'template_redirect', array( $this, 'template_redirect' ), 0 );
-		add_action( 'm_chart_update_post_meta', array( $this, 'm_chart_update_post_meta' ), 10, 2 );
+		add_action( 'template_redirect', [ $this, 'template_redirect' ], 0 );
+		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], 10, 2 );
 
 		// Doing this before the default so it's already done before anything else
-		add_filter( 'm_chart_get_chart_image_tag', array( $this, 'm_chart_get_chart_image_tag' ), 9, 3 );
-		add_filter( 'the_content', array( $this, 'the_content' ) );
-		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
-		add_filter( 'm_chart_instant_preview_support', array( $this, 'm_chart_instant_preview_support' ), 10, 2 );
-		add_filter( 'm_chart_library_class', array( $this, 'm_chart_library_class' ), 10, 2 );
+		add_filter( 'm_chart_get_chart_image_tag', [ $this, 'm_chart_get_chart_image_tag' ], 9, 3 );
+		add_filter( 'the_content', [ $this, 'the_content' ] );
+		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
+		add_filter( 'm_chart_instant_preview_support', [ $this, 'm_chart_instant_preview_support' ], 10, 2 );
+		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
-		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
-		add_shortcode( 'chart-share', array( $this, 'share_shortcode' ) );
+		add_shortcode( 'chart', [ $this, 'chart_shortcode' ] );
+		add_shortcode( 'chart-share', [ $this, 'share_shortcode' ] );
 		
 		// Initiate the block class
 		$this->block();
@@ -159,10 +159,10 @@ class M_Chart {
 		// Register the units taxonomy
 		register_taxonomy(
 			$this->slug . '-units',
-			array( $this->slug ),
-			array(
+			[ $this->slug ],
+			[
 				'hierarchical' => true,
-				'labels'       => array(
+				'labels'       => [
 					'name'              => esc_html__( 'Chart Units', 'm-chart' ),
 					'singular_name'     => esc_html__( 'Chart Unit', 'm-chart' ),
 					'search_items'      => esc_html__( 'Search Chart Units', 'm-chart' ),
@@ -174,34 +174,34 @@ class M_Chart {
 					'add_new_item'      => esc_html__( 'Add New Chart Unit', 'm-chart' ),
 					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
 					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
-				),
+				],
 				'show_ui'   => true,
 				'query_var' => true,
-				'rewrite'   => array(
+				'rewrite'   => [
 					'slug' => $this->slug . '-units',
-				),
-			)
+				],
+			]
 		);
 
 		// Register the library taxonomy
 		register_taxonomy(
 			$this->slug . '-library',
-			array( $this->slug ),
-			array(
+			[ $this->slug ],
+			[
 				'hierarchical' => false,
 				'show_ui'      => false,
 				'query_var'    => true,
-				'rewrite'      => array(
+				'rewrite'      => [
 					'slug' => $this->slug . '-library',
-				),
-			)
+				],
+			]
 		);
 
 		// Register the charts custom post type
 		register_post_type(
 			$this->slug,
-			array(
-				'labels' => array(
+			[
+				'labels' => [
 					'name'               => esc_html__( 'Charts', 'm-chart' ),
 					'singular_name'      => esc_html__( 'Chart', 'm-chart' ),
 					'add_new'            => esc_html__( 'Add Chart', 'm-chart' ),
@@ -214,8 +214,8 @@ class M_Chart {
 					'search_items'       => esc_html__( 'Search Charts', 'm-chart' ),
 					'not_found'          => esc_html__( 'No Charts found', 'm-chart' ),
 					'not_found_in_trash' => esc_html__( 'No Charts found in the Trash', 'm-chart' ),
-				),
-				'register_meta_box_cb' => is_admin() ? array( $this->admin(), 'meta_boxes' ) : null,
+				],
+				'register_meta_box_cb' => is_admin() ? [ $this->admin(), 'meta_boxes' ] : null,
 				'public'               => true,
 				'show_in_rest'         => true,
 				'hierarchical'         => false,
@@ -226,47 +226,47 @@ class M_Chart {
 				'can_export'           => true,
 				'has_archive'          => 'charts',
 				'description'          => esc_html__( 'Manage data sets and display them as charts in WordPress.', 'm-chart' ),
-				'rewrite'              => array(
+				'rewrite'              => [
 					'slug' => 'chart',
-				),
-				'supports' => array(
+				],
+				'supports' => [
 					'author',
 					'title',
 					'excerpt',
 					'comments',
-				),
-				'taxonomies' => array(
+				],
+				'taxonomies' => [
 					'category',
 					'post_tag',
 					$this->slug . '-units',
-				),
-			)
+				],
+			]
 		);
 
 		// Register the graphing library scripts
 		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart.js',
-			array( 'jquery' ),
+			[ 'jquery' ],
 			$this->version
 		);
 
 		wp_register_script(
 			'chartjs-helper',
 			$this->plugin_url . '/components/js/m-chart-chartjs-helper.min.js',
-			array( 'chartjs' ),
+			[ 'chartjs' ],
 			$this->version
 		);
 
 		wp_register_script(
 			'chartjs-datalabels',
 			$this->plugin_url . '/components/external/chartjs/chartjs-plugin-datalabels.js',
-			array( 'chartjs' ),
+			[ 'chartjs' ],
 			$this->version
 		);
 
 		// jQuery needs to be in the header since the charts are inline
-		wp_enqueue_script( 'jquery', false, array(), false, false );
+		wp_enqueue_script( 'jquery', false, [], false, false );
 
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', EP_PERMALINK );
@@ -372,13 +372,13 @@ class M_Chart {
 		// If the data has the old legacy format we need to update it
 		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
 			$data                        = $post_meta['data'];
-			$post_meta['data']           = array();
+			$post_meta['data']           = [];
 			$post_meta['data']['sets'][] = $data;
 		}
 
 		// If there's no set_names value set we'll set it to an empty array
 		if ( ! isset( $post_meta['set_names'] ) ) {
-			$post_meta['set_names'] = array();
+			$post_meta['set_names'] = [];
 		}
 
 		$post_meta = apply_filters( 'm_chart_get_post_meta', $post_meta, $raw_post_meta, $post_id );
@@ -403,7 +403,7 @@ class M_Chart {
 		$parsed_meta = $this->validate_post_meta( $meta );
 
 		// Set unit terms
-		$terms = array();
+		$terms = [];
 
 		if ( '' != $parsed_meta['y_units'] ) {
 			$terms[] = $parsed_meta['y_units'];
@@ -445,7 +445,7 @@ class M_Chart {
 					$chart_meta[ $field ]['sets'] = $meta[ $field ];
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
-				} elseif ( in_array( $field, array( 'labels', 'y_min', 'legend' ) ) ) {
+				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );
@@ -530,7 +530,7 @@ class M_Chart {
 	 *
 	 * @return string HTML and Javascript needed to display a chart (or if appropriate an HTML image tag)
 	 */
-	public function get_chart( $post_id = null, $args = array() ) {
+	public function get_chart( $post_id = null, $args = [] ) {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
@@ -675,13 +675,13 @@ class M_Chart {
 			return false;
 		}
 
-		return array(
+		return [
 			'url'    => $thumbnail[0],
 			'file'   => basename( $thumbnail[0] ),
 			'width'  => $thumbnail[1],
 			'height' => $thumbnail[2],
 			'name'   => get_the_title( $thumbnail_id ),
-		);
+		];
 	}
 
 	/**
@@ -699,13 +699,13 @@ class M_Chart {
 
 		$url = $this->plugin_url . '/components/images/chart-placeholder.png';
 
-		return array(
+		return [
 			'url'    => $url,
 			'file'   => basename( $url ),
 			'width'  => 640,
 			'height' => 480,
 			'name'   => get_the_title( $post_id ),
-		);
+		];
 	}
 
 	/**
@@ -788,7 +788,7 @@ class M_Chart {
 	 *
 	 * @return string HTML needed to display a chart via an iframe
 	 */
-	public function get_chart_iframe( $post_id, $args = array() ) {
+	public function get_chart_iframe( $post_id, $args = [] ) {
 		$post_meta = $this->get_post_meta( $post_id );
 
 		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
@@ -859,7 +859,7 @@ class M_Chart {
 	 * @return array an array of generated and/or compiled unit terms
 	 */
 	public function get_unit_terms() {
-		$terms = get_terms( $this->slug . '-units', array( 'hide_empty' => false ) );
+		$terms = get_terms( $this->slug . '-units', [ 'hide_empty' => false ] );
 
 		if ( empty( $terms ) ) {
 			$terms = $this->generate_unit_terms();
@@ -876,8 +876,8 @@ class M_Chart {
 	 * @return array an array of compiled unit terms
 	 */
 	public function compile_unit_terms( $terms ) {
-		$compiled_terms = array();
-		$parents        = array();
+		$compiled_terms = [];
+		$parents        = [];
 
 		foreach ( $terms as $unit ) {
 			if ( 0 == $unit->parent ) {
@@ -905,14 +905,14 @@ class M_Chart {
 		// Load the default terms array
 		$default_terms = require __DIR__ . '/array-default-unit-terms.php';
 
-		$terms = array();
+		$terms = [];
 
 		foreach ( $default_terms as $parent_term => $child_terms ) {
 			$parent  = (object) wp_insert_term( $parent_term, $this->slug . '-units' );
 			$terms[] = get_term( $parent->term_id, $this->slug . '-units' );
 
 			foreach ( $child_terms as $child_term ) {
-				$term    = (object) wp_insert_term( $child_term, $this->slug . '-units', array( 'parent' => $parent->term_id ) );
+				$term    = (object) wp_insert_term( $child_term, $this->slug . '-units', [ 'parent' => $parent->term_id ] );
 				$terms[] = get_term( $term->term_id, $this->slug . '-units' );
 			}
 		}
@@ -937,7 +937,7 @@ class M_Chart {
 			wp_die(
 				esc_html__( 'The chart could not be found', 'm-chart' ),
 				esc_html__( 'Chart not found', 'm-chart' ),
-				array( 'response' => 404 )
+				[ 'response' => 404 ]
 			);
 		}
 
@@ -947,17 +947,17 @@ class M_Chart {
 			wp_die(
 				esc_html__( 'Embeds of this type are not enabled', 'm-chart' ),
 				esc_html__( 'Embeds disabled', 'm-chart' ),
-				array( 'response' => 403 )
+				[ 'response' => 403 ]
 			);
 			exit;
 		}
 
 		$this->is_iframe = true;
 
-		$scripts = array(
+		$scripts = [
 			'jquery',
 			$this->get_post_meta( $post->ID, 'library' ),
-		);
+		];
 
 		unset( $_GET['action'], $_GET['share'] );
 
@@ -1105,19 +1105,19 @@ class M_Chart {
 	public function upgrade_to_1_7() {
 		// Get all charts
 		$charts = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'highcharts',
 						'operator' => 'NOT IN',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		// Add highcharts post_tag to all charts
@@ -1135,19 +1135,19 @@ class M_Chart {
 	public function upgrade_to_1_7_4() {
 		// Get all charts tagged with highcharts
 		$highcharts_charts = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'highcharts',
 						'operator' => 'IN',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		foreach ( $highcharts_charts as $chart ) {
@@ -1159,19 +1159,19 @@ class M_Chart {
 
 		// Get all charts tagged with chartjs
 		$chartjs_charts = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'chartjs',
 						'operator' => 'IN',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		foreach ( $chartjs_charts as $chart ) {

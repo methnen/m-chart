@@ -8,11 +8,11 @@ class M_Chart_Parse {
 	const PARSE_ROWS          = 'rows';
 	const PARSE_COLUMNS       = 'columns';
 
-	public array $data                  = array();
-	public array $value_labels          = array();
+	public array $data                  = [];
+	public array $value_labels          = [];
 	public string $value_labels_position = '';
-	public array $set_data              = array();
-	public array $raw_data              = array();
+	public array $set_data              = [];
+	public array $raw_data              = [];
 	public string $parse_in             = '';
 
 	/**
@@ -40,7 +40,7 @@ class M_Chart_Parse {
 	 * Helper function builds an array of the value labels for a data set
 	 */
 	private function parse_value_labels(): void {
-		$this->value_labels = array();
+		$this->value_labels = [];
 
 		switch ( $this->value_labels_position ) {
 			case self::LABELS_NONE:
@@ -187,8 +187,8 @@ class M_Chart_Parse {
 	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
 	 */
 	private function collect_rows_first_column(): array {
-		$set_data_array = array();
-		$raw_data_array = array();
+		$set_data_array = [];
+		$raw_data_array = [];
 
 		foreach ( $this->data as $row ) {
 			foreach ( $row as $key => $column ) {
@@ -210,11 +210,11 @@ class M_Chart_Parse {
 	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
 	 */
 	private function collect_rows_both(): array {
-		$set_data_array = array();
-		$raw_data_array = array();
+		$set_data_array = [];
+		$raw_data_array = [];
 		$limit          = count( $this->data );
-		$this_sets      = array();
-		$this_raw       = array();
+		$this_sets      = [];
+		$this_raw       = [];
 
 		for ( $i = 1; $i < $limit; $i++ ) {
 			foreach ( $this->data[ $i ] as $c_key => $column ) {
@@ -252,11 +252,11 @@ class M_Chart_Parse {
 	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
 	 */
 	private function collect_columns_both(): array {
-		$set_data_array = array();
-		$raw_data_array = array();
+		$set_data_array = [];
+		$raw_data_array = [];
 		$limit          = count( $this->data );
-		$this_sets      = array();
-		$this_raw       = array();
+		$this_sets      = [];
+		$this_raw       = [];
 
 		for ( $i = 1; $i < $limit; $i++ ) {
 			foreach ( $this->data[ $i ] as $key => $column ) {
@@ -296,8 +296,8 @@ class M_Chart_Parse {
 	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
 	 */
 	private function collect_default(): array {
-		$set_data_array = array();
-		$raw_data_array = array();
+		$set_data_array = [];
+		$raw_data_array = [];
 
 		if ( ! isset( $this->data[1] ) ) {
 			return [ $set_data_array, $raw_data_array ];
@@ -326,7 +326,7 @@ class M_Chart_Parse {
 	 */
 	private function normalize_data_array( array $data_array ): array {
 		if ( self::PARSE_ROWS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
-			$first_row_labels = $this->value_labels[ self::LABELS_FIRST_ROW ] ?? array();
+			$first_row_labels = $this->value_labels[ self::LABELS_FIRST_ROW ] ?? [];
 			$label_count      = is_array( $first_row_labels ) ? count( $first_row_labels ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
@@ -337,7 +337,7 @@ class M_Chart_Parse {
 				}
 			}
 		} elseif ( self::PARSE_COLUMNS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
-			$first_col_labels = $this->value_labels[ self::LABELS_FIRST_COLUMN ] ?? array();
+			$first_col_labels = $this->value_labels[ self::LABELS_FIRST_COLUMN ] ?? [];
 			$label_count      = is_array( $first_col_labels ) ? count( $first_col_labels ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {

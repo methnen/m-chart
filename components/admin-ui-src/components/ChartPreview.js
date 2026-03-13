@@ -4,8 +4,8 @@ import { useImageGeneration } from '../hooks/useImageGeneration';
 
 /**
  * Shallow-copies chart args to avoid mutating React state when Chart.js or
- * MChartHelperPlugin modifies the chart config during initialization.
- * Tooltip callbacks and datalabels formatter are applied by MChartHelperPlugin
+ * MChartHelper modifies the chart config during initialization.
+ * Tooltip callbacks and datalabels formatter are applied by MChartHelper
  * via its beforeUpdate hook (runs each render). Bubble preprocessing runs once
  * via beforeInit.
  */

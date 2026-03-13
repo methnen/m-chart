@@ -15,8 +15,8 @@ if ( window.Chart && window.ChartDataLabels ) {
 	window.Chart.register( window.ChartDataLabels );
 }
 
-if ( window.Chart && window.MChartHelperPlugin ) {
-	window.Chart.register( window.MChartHelperPlugin );
+if ( window.Chart && window.MChartHelper ) {
+	window.Chart.register( window.MChartHelper );
 }
 
 const subtitleRoot    = document.getElementById( 'm-chart-subtitle-root' );

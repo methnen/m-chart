@@ -39,12 +39,21 @@ $( '.m-chart' ).on( 'render_done', function( event ) {
 } );
 ```
 
-**After:**
+**After (admin):** use `wp.hooks`:
 ```js
 wp.hooks.addAction( 'm_chart.render_done', 'my-plugin', function( postId, instance, chart ) {
     // postId   — the current post ID
     // instance — always 1 in the admin context
     // chart    — the Chart.js instance
+} );
+```
+
+**After (front-end):** the jQuery event has been replaced with a native `CustomEvent` dispatched on each `.m-chart` canvas element. `post_id` and `instance` are on `event.detail`:
+```js
+document.querySelectorAll( '.m-chart' ).forEach( el => {
+    el.addEventListener( 'render_done', ( event ) => {
+        const { post_id, instance } = event.detail;
+    } );
 } );
 ```
 
@@ -65,7 +74,7 @@ wp.hooks.addFilter( 'm_chart.settings_component', 'my-plugin', function( Default
 
 ## What Did Not Change
 
-- All **front-end** rendering is unchanged (`chartjs-chart.php`, public JS).
+- The **front-end chart template** (`chartjs-chart.php`) has been modernized — jQuery removed, global variables replaced with locals, and `render_done` is now a native `CustomEvent` (see above). The rendered HTML output is unchanged.
 - The **Gutenberg block** is unchanged.
 - The **PHP AJAX handlers** (`ajax_get_chart_args`, `ajax_import_csv`, `ajax_export_csv`) are unchanged — React calls the same endpoints.
 - The **PHP save logic** (`save_post`, `validate_post_meta`) is unchanged — the form still submits all fields with the same `name="m-chart[field]"` attributes.

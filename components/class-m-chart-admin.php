@@ -1,19 +1,19 @@
 <?php
 
 class M_Chart_Admin {
-	private $safe_settings = array(
-		'performance' => array(
+	private $safe_settings = [
+		'performance' => [
 			'default',
 			'no-images',
 			'no-preview',
-		),
-		'csv_delimiter' => array(
+		],
+		'csv_delimiter' => [
 			',',
 			"\t",
 			' ',
 			';',
-		),
-	);
+		],
+	];
 	private $plugin_url;
 
 	/**
@@ -22,18 +22,18 @@ class M_Chart_Admin {
 	public function __construct() {
 		$this->plugin_url = m_chart()->plugin_url();
 
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'current_screen', array( $this, 'current_screen' ) );
-		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
-		add_action( 'wp_ajax_m_chart_export_csv', array( $this, 'ajax_export_csv' ) );
-		add_action( 'wp_ajax_m_chart_get_chart_args', array( $this, 'ajax_get_chart_args' ) );
-		add_action( 'wp_ajax_m_chart_import_csv', array( $this, 'ajax_import_csv' ) );
-		add_action( 'edit_form_before_permalink', array( $this, 'edit_form_before_permalink' ) );
-		add_action( 'manage_' . m_chart()->slug . '_posts_custom_column', array( $this, 'manage_posts_custom_column' ), 10, 2 );
-		add_action( 'm_chart_settings_admin', array( $this, 'm_chart_settings_admin' ) );
+		add_action( 'admin_init', [ $this, 'admin_init' ] );
+		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+		add_action( 'current_screen', [ $this, 'current_screen' ] );
+		add_action( 'admin_footer', [ $this, 'admin_footer' ] );
+		add_action( 'wp_ajax_m_chart_export_csv', [ $this, 'ajax_export_csv' ] );
+		add_action( 'wp_ajax_m_chart_get_chart_args', [ $this, 'ajax_get_chart_args' ] );
+		add_action( 'wp_ajax_m_chart_import_csv', [ $this, 'ajax_import_csv' ] );
+		add_action( 'edit_form_before_permalink', [ $this, 'edit_form_before_permalink' ] );
+		add_action( 'manage_' . m_chart()->slug . '_posts_custom_column', [ $this, 'manage_posts_custom_column' ], 10, 2 );
+		add_action( 'm_chart_settings_admin', [ $this, 'm_chart_settings_admin' ] );
 
-		add_filter( 'manage_' . m_chart()->slug . '_posts_columns', array( $this, 'manage_posts_columns' ) );
+		add_filter( 'manage_' . m_chart()->slug . '_posts_columns', [ $this, 'manage_posts_columns' ] );
 	}
 
 	/**
@@ -42,7 +42,7 @@ class M_Chart_Admin {
 	public function admin_init() {
 		$this->save_settings();
 
-		add_action( 'admin_notices', array( $this, 'library_warning' ) );
+		add_action( 'admin_notices', [ $this, 'library_warning' ] );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class M_Chart_Admin {
 			esc_html__( 'Settings', 'm-chart' ),
 			'manage_options',
 			m_chart()->slug . '-settings',
-			array( $this, 'm_chart_settings' )
+			[ $this, 'm_chart_settings' ]
 		);
 
 		// If multiple libraries are active we'll give you the option of using each one
@@ -70,16 +70,16 @@ class M_Chart_Admin {
 		}
 
 		// Put the default library into the admin menu first
-		$args = array(
+		$args = [
 			'post_type' => m_chart()->slug,
 			'library'   => m_chart()->get_library(),
-		);
+		];
 
-		$submenu[ 'edit.php?post_type=' . m_chart()->slug ][10] = array(
+		$submenu[ 'edit.php?post_type=' . m_chart()->slug ][10] = [
 			'Add ' . $libraries[ m_chart()->get_library() ] . ' Chart',
 			'edit_posts',
 			add_query_arg( $args, admin_url( 'post-new.php' ) ),
-		);
+		];
 
 		unset( $libraries[ m_chart()->get_library() ] );
 
@@ -87,16 +87,16 @@ class M_Chart_Admin {
 		$key = 11;
 
 		foreach ( $libraries as $library => $library_name ) {
-			$args = array(
+			$args = [
 				'post_type' => m_chart()->slug,
 				'library'   => $library,
-			);
+			];
 
-			$submenu[ 'edit.php?post_type=' . m_chart()->slug ][ $key ] = array(
+			$submenu[ 'edit.php?post_type=' . m_chart()->slug ][ $key ] = [
 				'Add ' . $library_name . ' Chart',
 				'edit_posts',
 				add_query_arg( $args, admin_url( 'post-new.php' ) ),
-			);
+			];
 
 			$key++;
 		}
@@ -129,7 +129,7 @@ class M_Chart_Admin {
 			return;
 		}
 
-		$validated_settings = array();
+		$validated_settings = [];
 		$submitted_settings = $_POST[ m_chart()->slug ];
 
 		$default_settings = apply_filters( 'm_chart_default_settings', m_chart()->settings );
@@ -157,7 +157,7 @@ class M_Chart_Admin {
 					if ( 'numericSymbols' === $lang_setting ) {
 						// The numeric symbols are input as a comma separated string so we'll deal with that here
 						$numeric_symbols = explode( ',', $lang_value );
-						$safe_symbols    = array();
+						$safe_symbols    = [];
 
 						foreach ( $numeric_symbols as $symbol ) {
 							$safe_symbols[] = trim( $symbol );
@@ -194,7 +194,7 @@ class M_Chart_Admin {
 		// Make sure the embed endpoint makes it into the rewrite rules
 		flush_rewrite_rules();
 
-		add_action( 'admin_notices', array( $this, 'save_success' ) );
+		add_action( 'admin_notices', [ $this, 'save_success' ] );
 	}
 
 	/**
@@ -217,18 +217,18 @@ class M_Chart_Admin {
 		}
 
 		$highcharts_check = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => 1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => m_chart()->slug . '-library',
 						'field'    => 'slug',
 						'terms'    => 'highcharts',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		if ( ! $highcharts_check ) {
@@ -268,14 +268,14 @@ class M_Chart_Admin {
 			wp_enqueue_style(
 				'jspreadsheet',
 				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.css',
-				array(),
+				[],
 				m_chart()->version
 			);
 
 			wp_enqueue_script(
 				'jspreadsheet',
 				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.js',
-				array( 'jsuites' ),
+				[ 'jsuites' ],
 				m_chart()->version
 			);
 
@@ -283,14 +283,14 @@ class M_Chart_Admin {
 			wp_enqueue_style(
 				'jsuites',
 				$this->plugin_url . '/components/external/jsuites/jsuites.css',
-				array(),
+				[],
 				m_chart()->version
 			);
 
 			wp_enqueue_script(
 				'jsuites',
 				$this->plugin_url . '/components/external/jsuites/jsuites.js',
-				array(),
+				[],
 				m_chart()->version
 			);
 
@@ -302,7 +302,7 @@ class M_Chart_Admin {
 				$this->plugin_url . '/components/admin-ui/index.js',
 				$admin_app_asset['dependencies'],
 				$admin_app_asset['version'],
-				array( 'strategy' => 'defer' )
+				[ 'strategy' => 'defer' ]
 			);
 
 			// We need the library and post ID for a bunch of stuff below
@@ -328,40 +328,40 @@ class M_Chart_Admin {
 				wp_enqueue_script(
 					'jquery-mobile-touch-events',
 					$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js',
-					array(),
+					[],
 					m_chart()->version
 				);
 
 				wp_enqueue_script(
 					'handlebars',
 					$this->plugin_url . '/components/external/handlebars/handlebars.js',
-					array(),
+					[],
 					m_chart()->version
 				);
 
 				wp_enqueue_script(
 					'canvg',
 					$this->plugin_url . '/components/external/canvg/umd.js',
-					array(),
+					[],
 					m_chart()->version
 				);
 
 				wp_enqueue_script(
 					'm-chart-admin',
 					$this->plugin_url . '/components/js/m-chart-admin.js',
-					array( 'jquery', 'jspreadsheet', 'handlebars' ),
+					[ 'jquery', 'jspreadsheet', 'handlebars' ],
 					m_chart()->version
 				);
 			}
 
 			$post_meta        = m_chart()->get_post_meta( $post_id );
-			$spreadsheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
+			$spreadsheet_data = empty( $post_meta['data'] ) ? [ [ '' ] ] : $post_meta['data']['sets'];
 			unset( $post_meta['data'] ); // passed separately as spreadsheet_data
 
 			// Collect library-specific config for the React admin app
-			$type_options      = array();
-			$type_option_names = array();
-			$themes            = array();
+			$type_options      = [];
+			$type_option_names = [];
+			$themes            = [];
 
 			if ( 'chartjs' === $library && m_chart()->library( 'chartjs' ) ) {
 				$chartjs_lib       = m_chart()->library( 'chartjs' );
@@ -369,27 +369,27 @@ class M_Chart_Admin {
 				$type_option_names = $chartjs_lib->type_option_names;
 
 				foreach ( $chartjs_lib->get_themes() as $theme ) {
-					$themes[] = array(
+					$themes[] = [
 						'slug' => $theme->slug,
 						'name' => $theme->name,
-					);
+					];
 				}
 			}
 
 			// Format unit terms as an array of {group, units} for easy JS mapping
-			$unit_terms = array();
+			$unit_terms = [];
 
 			foreach ( m_chart()->get_unit_terms() as $group => $units ) {
-				$group_units = array();
+				$group_units = [];
 
 				foreach ( $units as $unit ) {
-					$group_units[] = array( 'name' => $unit->name );
+					$group_units[] = [ 'name' => $unit->name ];
 				}
 
-				$unit_terms[] = array(
+				$unit_terms[] = [
 					'group' => $group,
 					'units' => $group_units,
-				);
+				];
 			}
 
 			$chart_image = m_chart()->get_chart_image( $post_id );
@@ -407,12 +407,12 @@ class M_Chart_Admin {
 			}
 
 			// Build CSV delimiter map for React's CsvControls component.
-			$csv_delimiters = array();
+			$csv_delimiters = [];
 			foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
 				$csv_delimiters[ $delimiter ] = $delimiter_name;
 			}
 
-			$localize_data = array(
+			$localize_data = [
 				'slug'                    => m_chart()->slug,
 				'version'                 => m_chart()->version,
 				'refresh_counter'         => 0,
@@ -439,7 +439,7 @@ class M_Chart_Admin {
 				'chart_args'              => $initial_chart_args,
 				'csv_delimiters'          => $csv_delimiters,
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
-			);
+			];
 
 			// For chartjs the React app reads m_chart_admin; for other libraries the jQuery
 			// m-chart-admin.js reads it.  Attach to whichever handle is actually enqueued.
@@ -453,7 +453,7 @@ class M_Chart_Admin {
 		wp_enqueue_style(
 			'm-chart-admin',
 			$this->plugin_url . '/components/css/m-chart-admin.css',
-			array(),
+			[],
 			m_chart()->version
 		);
 	}
@@ -472,7 +472,7 @@ class M_Chart_Admin {
 		add_meta_box(
 			m_chart()->slug . '-spreadsheet',
 			esc_html__( 'Data', 'm-chart' ),
-			array( $this, 'spreadsheet_meta_box' ),
+			[ $this, 'spreadsheet_meta_box' ],
 			m_chart()->slug,
 			'normal',
 			'high'
@@ -481,7 +481,7 @@ class M_Chart_Admin {
 		add_meta_box(
 			m_chart()->slug,
 			esc_html__( 'Chart', 'm-chart' ),
-			array( $this, 'chart_meta_box' ),
+			[ $this, 'chart_meta_box' ],
 			m_chart()->slug,
 			'normal',
 			'high'
@@ -508,7 +508,7 @@ class M_Chart_Admin {
 			wp_nonce_field( m_chart()->slug . '-save-post', $this->get_field_name( 'nonce' ) );
 		} else {
 			// Non-chartjs libraries (e.g. Highcharts) still use the PHP template.
-			$sheet_data = empty( $post_meta['data'] ) ? array( array( '' ) ) : $post_meta['data']['sets'];
+			$sheet_data = empty( $post_meta['data'] ) ? [ [ '' ] ] : $post_meta['data']['sets'];
 			require_once __DIR__ . '/templates/spreadsheet-meta-box.php';
 		}
 	}
@@ -651,7 +651,7 @@ class M_Chart_Admin {
 	 * @return array array of columns with the custom column added
 	 */
 	public function manage_posts_columns( $columns ) {
-		$new_columns = array();
+		$new_columns = [];
 
 		foreach ( $columns as $column => $name ) {
 			$new_columns[ $column ] = $name;
@@ -772,12 +772,12 @@ class M_Chart_Admin {
 
 		// Check for an existing attached image
 		$attachments = get_posts(
-			array(
+			[
 				'post_type'      => 'attachment',
 				'posts_per_page' => 1,
 				'post_parent'    => $post->ID,
 				'meta_key'       => m_chart()->slug . '-image',
-			)
+			]
 		);
 
 		// If an existing image was found delete it
@@ -879,7 +879,7 @@ class M_Chart_Admin {
 		$parse_csv->parse( $csv_data );
 
 		// This deals with Google Doc's crappy CSV exports which don't include columns at the end of a row if they are empty
-		$data_array = $this->fix_csv_data_array( $parse_csv->data );
+		$data_array = $this->fix_csv_data( $parse_csv->data );
 
 		wp_send_json_success( $data_array );
 	}
@@ -892,7 +892,7 @@ class M_Chart_Admin {
 	 *
 	 * @return array the array of data with matching array value counts
 	 */
-	public function fix_csv_data_array( $data_array ) {
+	public function fix_csv_data( $data_array ) {
 		$count = 0;
 
 		// Get largest row count
@@ -927,7 +927,7 @@ class M_Chart_Admin {
 		// There is no nonce check here because a traditional WP nonce check would not work
 		// Instead we confirm the user has necessary permissions for the post in question
 		if ( ! is_numeric( $_REQUEST['post_id'] ) || ! current_user_can( 'edit_post', absint( $_REQUEST['post_id'] ) ) ) {
-			wp_die( 'Unauthorized access', 'You do not have permission to do that', array( 'response' => 401 ) );
+			wp_die( 'Unauthorized access', 'You do not have permission to do that', [ 'response' => 401 ] );
 		}
 
 		$post = get_post( absint( $_REQUEST['post_id'] ) );
