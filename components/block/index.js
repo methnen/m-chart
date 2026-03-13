@@ -1006,7 +1006,7 @@ module.exports = window["wp"]["i18n"];
 (module) {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"m-chart/chart","title":"M Chart","category":"layout","icon":"chart-pie","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"string","default":""}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"m-chart/chart","title":"M Chart","category":"layout","icon":"chart-pie","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"integer","default":""},"show":{"type":"string","default":"chart"}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
 
 /***/ }
 
