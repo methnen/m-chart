@@ -9,7 +9,7 @@ Manage data sets and display them as charts in WordPress.
 
 == Description ==
 
-Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or [Highcharts](https://github.com/methnen/m-chart-highcharts-library/) chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
+Manage data sets via a spreadsheet interface and display them as charts via the Chart.js or [Highcharts](https://github.com/methnen/m-chart-highcharts-library/) chart libraries and embed them via a handy shortcode or WordPress block.
 
 **Note:** Starting with version 1.8 the Chart.js library is no longer on the 2.x.x branch which introduces some [breaking changes](https://www.chartjs.org/docs/latest/getting-started/v3-migration.html). This will probably only affect you if you were modifying the default Chart.js behavior in some way.
 
@@ -18,13 +18,6 @@ Allows you to manage data sets via a spreadsheet interface and present that data
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
-
-== Installation ==
-
-1. Put the m-chart directory into your plugins directory
-2. Click 'Activate' in the Plugins admin panel
-3. Adjust the M Chart Settings to your preference
-	- WordPress Admin -> Charts -> Settings
 
 == Screenshots ==
 

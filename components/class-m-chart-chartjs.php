@@ -136,6 +136,7 @@ class M_Chart_Chartjs {
 	 * Enqueue any Chart.js plugins that we'll need
 	 */
 	public function enqueue_chartjs_plugins() {
+		wp_enqueue_script( 'chartjs-helper' );
 		wp_enqueue_script( 'chartjs-datalabels' );
 	}
 
@@ -311,9 +312,9 @@ class M_Chart_Chartjs {
 		//	'anchor' => 'end',
 		//);
 
-		// Add some stuff for the helper class
-		$chart_args['locale']     = m_chart()->get_settings( 'locale' );
-		$chart_args['labels_pos'] = m_chart()->parse()->value_labels_position;
+		// Add some stuff for the helper plugin
+		$chart_args['locale']                                                    = m_chart()->get_settings( 'locale' );
+		$chart_args['options']['plugins']['m-chart-helper']['labels_pos'] = m_chart()->parse()->value_labels_position;
 
 		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
 		if ( ! isset( $chart_args['data']['datasets'] ) ) {
@@ -685,7 +686,7 @@ class M_Chart_Chartjs {
 					}
 				} else {
 					foreach ( $data_array as $data_key => $data ) {
-						if ( $data_key % 2 ) {
+						if ( $data_key % 3 ) {
 							continue;
 						}
 

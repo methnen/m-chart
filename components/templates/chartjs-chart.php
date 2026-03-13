@@ -30,12 +30,7 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 
 	(function( $ ) {
 		m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart = function() {
-			$( '.m-chart' ).trigger({
-				type:     'render_start',
-				post_id:  this.post_id,
-				instance: this.instance
-			});
-			
+			// This line and the subsequent code that refers to it allows animation options to be passed
 			var target = this.chart_args.options.animation;
             
 			var source = {
@@ -64,6 +59,7 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 			Object.assign( target, source );
 
 			Chart.register( ChartDataLabels );
+			Chart.register( MChartHelperPlugin );
 
 			this.chart = new Chart(
 				m_chart_container_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>_canvas,
@@ -72,9 +68,7 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 		};
 
 		$( function() {
-			$.when( m_chart_chartjs_helpers.init() ).done(function() {
-				m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart();
-			});
+			m_chart_chartjs_<?php echo absint( $post_id ); ?>_<?php echo absint( $this->instance ); ?>.render_chart();
 		} );
 	})( jQuery );
 </script>

@@ -326,7 +326,8 @@ class M_Chart_Parse {
 	 */
 	private function normalize_data_array( array $data_array ): array {
 		if ( self::PARSE_ROWS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
-			$label_count = is_array( $this->value_labels[ self::LABELS_FIRST_ROW ] ) ? count( $this->value_labels[ self::LABELS_FIRST_ROW ] ) - 1 : 0;
+			$first_row_labels = $this->value_labels[ self::LABELS_FIRST_ROW ] ?? array();
+			$label_count      = is_array( $first_row_labels ) ? count( $first_row_labels ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
 				foreach ( $data as $t_key => $value ) {
@@ -336,7 +337,8 @@ class M_Chart_Parse {
 				}
 			}
 		} elseif ( self::PARSE_COLUMNS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
-			$label_count = is_array( $this->value_labels[ self::LABELS_FIRST_COLUMN ] ) ? count( $this->value_labels[ self::LABELS_FIRST_COLUMN ] ) - 1 : 0;
+			$first_col_labels = $this->value_labels[ self::LABELS_FIRST_COLUMN ] ?? array();
+			$label_count      = is_array( $first_col_labels ) ? count( $first_col_labels ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
 				foreach ( $data as $t_key => $value ) {
