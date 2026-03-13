@@ -291,7 +291,7 @@ class M_Chart {
 	}
 
 	/**
-	 * VIP's CDN was breaking Highcharts ability to handle embedded SVGs so this should circumvent that
+	 * WP VIP's CDN was breaking Highcharts ability to handle embedded SVGs so this should circumvent that
 	 * If you wanted to say, watermark your charts, SVGs suddenly become very important
 	 *
 	 * @param string $path option additional path to be used (e.g. components)
@@ -323,7 +323,7 @@ class M_Chart {
 	 * @param int $post_id WP post ID of the post you want post meta from
 	 * @param string $field optional field to be returend instead of all post meta
 	 *
-	 * @return string URL to the plugin directory with path if parameter was passed
+	 * @return array $post_meta the meta for a give post ID
 	 */
 	public function get_post_meta( $post_id, $field = false ) {
 		$raw_post_meta = get_post_meta( $post_id, $this->slug, true );
@@ -471,7 +471,7 @@ class M_Chart {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
-		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet)
+		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet CE)
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
 			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 		}
