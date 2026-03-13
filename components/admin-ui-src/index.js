@@ -15,6 +15,10 @@ if ( window.Chart && window.ChartDataLabels ) {
 	window.Chart.register( window.ChartDataLabels );
 }
 
+if ( window.Chart && window.MChartHelperPlugin ) {
+	window.Chart.register( window.MChartHelperPlugin );
+}
+
 const subtitleRoot    = document.getElementById( 'm-chart-subtitle-root' );
 const spreadsheetRoot = document.getElementById( 'm-chart-spreadsheet-root' );
 const chartRoot       = document.getElementById( 'm-chart-chart-root' );

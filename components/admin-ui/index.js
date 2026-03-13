@@ -246,17 +246,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Applies m_chart_chartjs_helpers tooltip callbacks and datalabels formatter
- * to a copy of the chart args before passing them to Chart.js.
+ * Shallow-copies chart args to avoid mutating React state when Chart.js or
+ * MChartHelperPlugin modifies the chart config during initialization.
+ * Tooltip callbacks and datalabels formatter are applied by MChartHelperPlugin
+ * via its beforeUpdate hook (runs each render). Bubble preprocessing runs once
+ * via beforeInit.
  */
 function prepareArgs(args) {
   if (!args) {
     return args;
   }
-  const h = window.m_chart_chartjs_helpers;
-
-  // Shallow-copy the top level and options so we don't mutate state.
-  const prepared = {
+  return {
     ...args,
     data: {
       ...args.data
@@ -274,54 +274,6 @@ function prepareArgs(args) {
       }
     }
   };
-  if (!h) {
-    return prepared;
-  }
-  const {
-    type,
-    labels_pos = ''
-  } = prepared;
-  if (prepared.options?.locale) {
-    h.locale = prepared.options.locale;
-  }
-
-  // Bubble charts need data preprocessing and a custom tooltip.
-  if ('bubble' === type) {
-    prepared.data = h.preprocess_bubble_data({
-      ...prepared.data,
-      datasets: [...prepared.data.datasets]
-    });
-    prepared.options.plugins.tooltip.callbacks = {
-      label: item => h.bubble_chart_tooltip_label(item)
-    };
-  } else if ('scatter' === type) {
-    prepared.options.plugins.tooltip.callbacks = {
-      label: item => h.scatter_chart_tooltip_label(item)
-    };
-  } else {
-    prepared.options.plugins.tooltip.callbacks = {
-      label: item => h.chart_tooltip_label(item, type, labels_pos)
-    };
-  }
-
-  // Datalabels formatter — mirrors the helper's formatter closure.
-  prepared.options.plugins.datalabels.formatter = function (label) {
-    if (null === label) {
-      return label;
-    }
-    if ('undefined' !== typeof label.label) {
-      label = label.label;
-    } else if ('undefined' !== typeof label.r) {
-      label = label.r;
-    } else if ('undefined' !== typeof label.y) {
-      label = label.y;
-    }
-    if ('number' === typeof label) {
-      return h.number_format(label);
-    }
-    return label;
-  };
-  return prepared;
 }
 
 /**
@@ -2250,6 +2202,9 @@ __webpack_require__.r(__webpack_exports__);
 // Register Chart.js plugins before any chart instances are created.
 if (window.Chart && window.ChartDataLabels) {
   window.Chart.register(window.ChartDataLabels);
+}
+if (window.Chart && window.MChartHelperPlugin) {
+  window.Chart.register(window.MChartHelperPlugin);
 }
 const subtitleRoot = document.getElementById('m-chart-subtitle-root');
 const spreadsheetRoot = document.getElementById('m-chart-spreadsheet-root');

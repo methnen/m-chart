@@ -1,7 +1,7 @@
 <?php
 
 class M_Chart {
-	public $version           = '1.12';
+	public $version           = '2.0';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = array(
@@ -245,23 +245,23 @@ class M_Chart {
 
 		// Register the graphing library scripts
 		wp_register_script(
-			'chartjs-helpers',
-			$this->plugin_url . '/components/js/m-chart-chartjs-helpers.min.js',
+			'chartjs',
+			$this->plugin_url . '/components/external/chartjs/chart.js',
 			array( 'jquery' ),
 			$this->version
 		);
 
 		wp_register_script(
-			'chartjs',
-			$this->plugin_url . '/components/external/chartjs/chart.js',
-			array( 'jquery', 'chartjs-helpers' ),
+			'chartjs-helper',
+			$this->plugin_url . '/components/js/m-chart-chartjs-helper.min.js',
+			array( 'chartjs' ),
 			$this->version
 		);
 
 		wp_register_script(
 			'chartjs-datalabels',
 			$this->plugin_url . '/components/external/chartjs/chartjs-plugin-datalabels.js',
-			array( 'jquery', 'chartjs' ),
+			array( 'chartjs' ),
 			$this->version
 		);
 
@@ -608,6 +608,7 @@ class M_Chart {
 		// If we haven't enqueued the right library yet lets do it
 		if ( ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
+			wp_enqueue_script( 'chartjs-helper' );
 		}
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
