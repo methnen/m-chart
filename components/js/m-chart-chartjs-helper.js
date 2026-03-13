@@ -150,7 +150,7 @@ function chartTooltipLabel( item ) {
  *                tooltip callbacks and datalabels formatter so they survive
  *                options replacement on chart updates.
  */
-const MChartHelperPlugin = {
+const MChartHelper = {
 	id: 'm-chart-helper',
 
 	beforeInit( chart ) {
@@ -236,4 +236,4 @@ const MChartHelperPlugin = {
 	},
 };
 
-window.MChartHelperPlugin = MChartHelperPlugin;
+window.MChartHelper = MChartHelper;
