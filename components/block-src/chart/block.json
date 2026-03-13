@@ -9,8 +9,12 @@
 	"textdomain": "m-chart",
 	"attributes": {
 		"chartId": {
-			"type": "string",
+			"type": "integer",
 			"default": ""
+		},
+		"show": {
+			"type": "string",
+			"default": "chart"
 		}
 	},
 	"supports": {
