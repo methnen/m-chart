@@ -1,6 +1,6 @@
-import { TextControl, Spinner, ToolbarGroup, ToolbarButton, } from '@wordpress/components';
+import { TextControl, SelectControl, Spinner, ToolbarGroup, ToolbarButton, } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
-import { useBlockProps, BlockControls } from '@wordpress/block-editor';
+import { useBlockProps, BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import "./editor.scss";
@@ -98,6 +98,22 @@ export default function edit( { attributes, setAttributes } ) {
 
     return (
         <div { ...blockProps }>
+            { attributes.chartId &&
+                <InspectorControls>
+                    <div className="m-chart-block-inspector">
+                        <SelectControl
+                            label={ __( 'Show', 'm-chart' ) }
+                            value={ attributes.show }
+                            options={ [
+                                { label: __( 'Chart', 'm-chart' ),  value: 'chart' },
+                                { label: __( 'Image', 'm-chart' ),  value: 'image' },
+                                { label: __( 'Table', 'm-chart' ),  value: 'table' },
+                            ] }
+                            onChange={ ( value ) => setAttributes( { show: value } ) }
+                        />
+                    </div>
+                </InspectorControls>
+            }
             <BlockControls>
                 <ToolbarGroup className="m-chart-block">
                     <ToolbarButton onClick={ () => window.location.href = newUrl } icon="external">{ __( 'New Chart', 'm-chart' ) }</ToolbarButton>

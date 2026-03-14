@@ -1,25 +1,4 @@
 <?php
-$locale    = m_chart()->get_settings( 'locale' );
-$formatter = class_exists( 'NumberFormatter' ) ? new NumberFormatter( $locale, NumberFormatter::DECIMAL ) : null;
-
-/**
- * Formats an M_Chart_Parsed_Data_Point for table display.
- * Numeric cells are formatted with the locale-aware NumberFormatter;
- * non-numeric cells are returned as plain text.
- */
-function m_chart_format_raw( ?M_Chart_Parsed_Data_Point $raw, ?NumberFormatter $formatter ): string {
-	if ( null === $raw ) {
-		return '';
-	}
-
-	if ( $raw->is_numeric() ) {
-		$number = $formatter ? $formatter->format( $raw->value ) : (string) $raw->value;
-		return $raw->prefix . $number . $raw->suffix;
-	}
-
-	return $raw->text;
-}
-?>
 <table class="<?php echo esc_attr( $classes ); ?>">
 	<?php
 	$set_name = '';
@@ -62,7 +41,7 @@ function m_chart_format_raw( ?M_Chart_Parsed_Data_Point $raw, ?NumberFormatter $
 						$raw = m_chart()->parse()->raw_data[ $column ][ $row ] ?? null;
 					}
 					?>
-					<td><?php echo esc_html( m_chart_format_raw( $raw, $formatter ) ); ?></td>
+					<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
 					<?php
 				}
 				?>
@@ -89,7 +68,7 @@ function m_chart_format_raw( ?M_Chart_Parsed_Data_Point $raw, ?NumberFormatter $
 
 			foreach ( m_chart()->parse()->raw_data as $key => $raw ) {
 				?>
-				<td><?php echo esc_html( m_chart_format_raw( $raw, $formatter ) ); ?></td>
+				<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
 				<?php
 
 				if ( ( $key + 1 ) / ( count( $first_row ) * $row_count ) == 1 ) {
