@@ -10,5 +10,8 @@
 $chart_id = $attributes['chartId'] ?? null;
 
 if ( ! empty( $chart_id ) ) :
-	echo '[chart id="' . $chart_id . '"]';
+	$allowed_show = [ 'chart', 'image', 'table' ];
+	$show         = in_array( $attributes['show'] ?? '', $allowed_show, true ) ? $attributes['show'] : 'chart';
+
+	echo '[chart id="' . $chart_id . '" show="' . $show . '"]';
 endif;

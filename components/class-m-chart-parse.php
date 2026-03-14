@@ -15,8 +15,10 @@ class M_Chart_Parse {
 	public array $raw_data              = [];
 	public string $parse_in             = '';
 
+	private ?NumberFormatter $formatter = null;
+
 	/**
-	 * Constructor
+	 * Initializes the parse class
 	 */
 	public function __construct() {
 
@@ -24,6 +26,9 @@ class M_Chart_Parse {
 
 	/**
 	 * Parses a chart's data array for labels, data sets, and raw values
+	 *
+	 * @param array  $data     the raw two-dimensional data array from the chart post
+	 * @param string $parse_in whether to parse by rows or columns (PARSE_ROWS or PARSE_COLUMNS)
 	 *
 	 * @return static $this
 	 */
@@ -37,7 +42,7 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Helper function builds an array of the value labels for a data set
+	 * Populates $this->value_labels by reading label values from the data array based on the detected labels position
 	 */
 	private function parse_value_labels(): void {
 		$this->value_labels = [];
@@ -120,9 +125,9 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Helper function parses a data point into an M_Chart_Parsed_Data_Point value object
-	 * for localized display. Splits the cell string into prefix, numeric value, and suffix
-	 * so the number can be reformatted for any locale while preserving surrounding context.
+	 * Helper function parses a data point into an M_Chart_Parsed_Data_Point value object for localized display
+	 * Splits the cell string into prefix, numeric value, and suffix 
+	 * This means the number can be reformatted for any locale while preserving surrounding context
 	 *
 	 * @param mixed $data_point a raw cell value
 	 *
@@ -159,9 +164,8 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Builds a cleaned and parsed array of data from the post's data.
-	 * Also builds a parallel $raw_data array containing structured cell values
-	 * (prefix, numeric value, suffix) for localized display in tooltips and tables.
+	 * Populates $this->set_data and $this->raw_data by delegating to the appropriate
+	 * collector based on the parse direction and labels position, then normalizing both arrays
 	 */
 	private function parse_set_data(): void {
 		if ( self::PARSE_ROWS == $this->parse_in && self::LABELS_FIRST_COLUMN == $this->value_labels_position ) {
@@ -182,9 +186,9 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Collects data when parsing rows with labels in the first column.
+	 * Collects data when parsing rows with labels in the first column
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_rows_first_column(): array {
 		$set_data_array = [];
@@ -205,9 +209,9 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Collects data when parsing rows with labels in both the first row and first column.
+	 * Collects data when parsing rows with labels in both the first row and first column
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_rows_both(): array {
 		$set_data_array = [];
@@ -247,9 +251,9 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Collects data when parsing columns with labels in both the first row and first column.
+	 * Collects data when parsing columns with labels in both the first row and first column
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_columns_both(): array {
 		$set_data_array = [];
@@ -291,9 +295,9 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Collects data for the default case (first-row labels only, or no labels).
+	 * Collects data for the default case (first-row labels only, or no labels)
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data].
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_default(): array {
 		$set_data_array = [];
@@ -350,5 +354,41 @@ class M_Chart_Parse {
 		}
 
 		return $data_array;
+	}
+
+	/**
+	 * Formats an M_Chart_Parsed_Data_Point for table display
+	 * Numeric cells are formatted with the locale-aware NumberFormatter non-numeric cells are returned as plain text
+	 *
+	 * @param ?M_Chart_Parsed_Data_Point $raw the parsed data point to format, or null for an empty cell
+	 *
+	 * @return string the formatted cell value
+	 */
+	public function format_raw( ?M_Chart_Parsed_Data_Point $raw ): string {
+		if ( null === $raw ) {
+			return '';
+		}
+
+		// If the value is a number return the formatted and prefixed/suffixed version of it
+		if ( $raw->is_numeric() ) {
+			$formatter = $this->get_formatter();
+			$number    = $formatter ? $formatter->format( $raw->value ) : (string) $raw->value;
+			return $raw->prefix . $number . $raw->suffix;
+		}
+
+		return $raw->text;
+	}
+
+	/**
+	 * Returns a locale-aware NumberFormatter, creating and caching it on first use
+	 *
+	 * @return ?NumberFormatter a NumberFormatter instance, or null if the intl extension is unavailable
+	 */
+	private function get_formatter(): ?NumberFormatter {
+		if ( null === $this->formatter ) {
+			$locale          = m_chart()->get_settings( 'locale' );
+			$this->formatter = class_exists( 'NumberFormatter' ) ? new NumberFormatter( $locale, NumberFormatter::DECIMAL ) : null;
+		}
+		return $this->formatter;
 	}
 }
