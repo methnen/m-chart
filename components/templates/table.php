@@ -1,4 +1,3 @@
-<?php
 <table class="<?php echo esc_attr( $classes ); ?>">
 	<?php
 	$set_name = '';
