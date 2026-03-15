@@ -9,8 +9,6 @@ import { useCallback } from 'react';
 
 export default function edit( { attributes, setAttributes } ) {
 
-    console.log( '[m-chart] render — chartId:', attributes.chartId, '(type:', typeof attributes.chartId, ')' );
-
     // State.
     const [ options, setOptions ] = useState( [] );
     const [ search, setSearch ] = useState( '' );
@@ -43,7 +41,6 @@ export default function edit( { attributes, setAttributes } ) {
     // Using attributes.chartId as a dependency handles the case where Gutenberg
     // provides the saved attribute value after the initial render.
     useEffect( () => {
-        console.log( '[m-chart] chartId effect — chartId:', attributes.chartId );
         setSelectedChart( null );
         if ( attributes.chartId ) {
             fetchSingleChart( parseInt( attributes.chartId, 10 ) );
@@ -62,7 +59,6 @@ export default function edit( { attributes, setAttributes } ) {
     const selected = charts.filter( x => x.id === parseInt( attributes.chartId, 10 ) )[ 0 ] || selectedChart;
 
     const handleClick = ( id ) => {
-        console.log( '[m-chart] handleClick — id:', id, '(type:', typeof id, ')' );
         setAttributes( { chartId: id } );
         setSelectedChart( null );
         setTemp( id );
