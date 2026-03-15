@@ -10,7 +10,7 @@
   "attributes": {
     "chartId": {
       "type": "integer",
-      "default": ""
+      "default": 0
     },
     "show": {
       "type": "string",
