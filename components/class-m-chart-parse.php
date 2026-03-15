@@ -1,42 +1,38 @@
 <?php
 
 class M_Chart_Parse {
-	public $data;
-	public $data_prefix;
-	public $data_suffix;
-	public $value_labels;
-	public $value_labels_position;
-	public $set_data;
-	public $parse_in;
-	public $prefix_patterns = array(
-		'/^\$/',
-		'/^£/',
-		'/^₤/',
-	);
-	public $suffix_patterns = array(
-		'/%$/',
-		'/°$/',
-		'/°C$/',
-		'/°F$/',
-		'/K$/',
-		'/M$/',
-		'/B$/',
-		'/T$/',
-	);
+	const LABELS_NONE         = 'none';
+	const LABELS_FIRST_ROW    = 'first_row';
+	const LABELS_FIRST_COLUMN = 'first_column';
+	const LABELS_BOTH         = 'both';
+	const PARSE_ROWS          = 'rows';
+	const PARSE_COLUMNS       = 'columns';
+
+	public array $data                  = [];
+	public array $value_labels          = [];
+	public string $value_labels_position = '';
+	public array $set_data              = [];
+	public array $raw_data              = [];
+	public string $parse_in             = '';
+
+	private ?NumberFormatter $formatter = null;
 
 	/**
-	 * Constructor
+	 * Initializes the parse class
 	 */
 	public function __construct() {
 
 	}
 
 	/**
-	 * Parses a chart's data array for labels, data sets, and prefixes
+	 * Parses a chart's data array for labels, data sets, and raw values
 	 *
-	 * @return array an array of value labels filtered out of the data set
+	 * @param array  $data     the raw two-dimensional data array from the chart post
+	 * @param string $parse_in whether to parse by rows or columns (PARSE_ROWS or PARSE_COLUMNS)
+	 *
+	 * @return static $this
 	 */
-	public function parse_data( $data, $parse_in ) {
+	public function parse_data( array $data, string $parse_in ): static {
 		$this->data                  = $data;
 		$this->parse_in              = $parse_in;
 		$this->value_labels_position = $this->get_value_labels_position();
@@ -46,41 +42,44 @@ class M_Chart_Parse {
 	}
 
 	/**
-	 * Helper function builds an array of the value labels for a data set
-	 *
-	 * @return array an array of value labels filtered out of the data set
+	 * Populates $this->value_labels by reading label values from the data array based on the detected labels position
 	 */
-	public function parse_value_labels() {
-		$this->value_labels = array();
+	private function parse_value_labels(): void {
+		$this->value_labels = [];
 
-		if ( 'none' == $this->value_labels_position ) {
-			return $this->value_labels;
-		}
+		switch ( $this->value_labels_position ) {
+			case self::LABELS_NONE:
+				return;
 
-		if ( 'first_column' == $this->value_labels_position ) {
-			foreach ( (array) $this->data as $columns ) {
-				if ( '' != trim( (string) $columns[0] ) ) {
-					$this->value_labels[] = $this->clean_labels( $columns[0] );
+			case self::LABELS_FIRST_COLUMN:
+				foreach ( (array) $this->data as $columns ) {
+					if ( '' != trim( (string) $columns[0] ) ) {
+						$this->value_labels[] = $this->clean_labels( $columns[0] );
+					}
 				}
-			}
-		} elseif ( 'first_row' == $this->value_labels_position ) {
-			foreach ( (array) $this->data[0] as $column ) {
-				if ( '' != trim( (string) $column ) ) {
-					$this->value_labels[] = $this->clean_labels( $column );
-				}
-			}
-		} elseif ( 'both' == $this->value_labels_position ) {
-			foreach ( (array) $this->data as $columns ) {
-				if ( '' != trim( (string) $columns[0] ) ) {
-					$this->value_labels['first_column'][] = $this->clean_labels( $columns[0] );
-				}
-			}
+				break;
 
-			foreach ( (array) $this->data[0] as $column ) {
-				if ( '' != trim( (string) $column ) ) {
-					$this->value_labels['first_row'][] = $this->clean_labels( $column );
+			case self::LABELS_FIRST_ROW:
+				foreach ( (array) $this->data[0] as $column ) {
+					if ( '' != trim( (string) $column ) ) {
+						$this->value_labels[] = $this->clean_labels( $column );
+					}
 				}
-			}
+				break;
+
+			case self::LABELS_BOTH:
+				foreach ( (array) $this->data as $columns ) {
+					if ( '' != trim( (string) $columns[0] ) ) {
+						$this->value_labels[ self::LABELS_FIRST_COLUMN ][] = $this->clean_labels( $columns[0] );
+					}
+				}
+
+				foreach ( (array) $this->data[0] as $column ) {
+					if ( '' != trim( (string) $column ) ) {
+						$this->value_labels[ self::LABELS_FIRST_ROW ][] = $this->clean_labels( $column );
+					}
+				}
+				break;
 		}
 
 		$this->value_labels = apply_filters( 'm_chart_value_labels', $this->value_labels, $this->value_labels_position, $this->data );
@@ -91,190 +90,235 @@ class M_Chart_Parse {
 	 *
 	 * @return string the position of the labels in the given data set
 	 */
-	public function get_value_labels_position() {
+	private function get_value_labels_position(): string {
 		if ( ! isset( $this->data[0][0] ) && ! isset( $this->data[1][0] ) ) {
-			return 'none';
+			return self::LABELS_NONE;
 		}
 
 		if ( '' == $this->data[0][0] ) {
-			return 'both';
+			return self::LABELS_BOTH;
 		} elseif (
 			   ! is_numeric( $this->clean_data_point( $this->data[0][0], false ) )
 			&& ! is_numeric( $this->clean_data_point( $this->data[1][0], false ) )
 		) {
-			return 'first_column';
+			return self::LABELS_FIRST_COLUMN;
 		}
 
-		return 'first_row';
+		return self::LABELS_FIRST_ROW;
 	}
 
 	/**
-	 * Helper function cleans data point values and by default records suffix/prefixes to a class var
+	 * Helper function cleans data point values
 	 *
-	 * @param string $data_point a data point that may need to be cleaned or typed as an int
+	 * @param mixed $data_point a data point that may need to be cleaned or typed as an int
 	 *
-	 * @return int/string an integer of the cleaned data point or string if the cleaned value was not numeric
+	 * @return float|string a float of the cleaned data point or string if the cleaned value was not numeric
 	 */
-	public function clean_data_point( $data_point ) {
+	public function clean_data_point( mixed $data_point ): float|string {
 		$data_point = trim( (string) $data_point );
 
-		// Find any prefixes/suffixes in the data
-		if ( '' == $this->data_prefix && '' == $this->data_suffix ) {
-			$this->parse_suffix_prefix( $data_point );
+		if ( preg_match( '/-?\d[\d,]*(?:\.\d+)?/', $data_point, $matches ) ) {
+			return floatval( str_replace( ',', '', $matches[0] ) );
 		}
 
-		// Remove prefixes and suffixes
-		$data_point = preg_replace( $this->prefix_patterns, '', $data_point );
-		$data_point = preg_replace( $this->suffix_patterns, '', $data_point );
-
-		// Remove commas
-		$data_point = str_replace( ',', '', $data_point );
-
-		// Return value without typing it as an integer if it's not numeric
-		if ( ! is_numeric( $data_point ) ) {
-			return trim( $data_point );
-		}
-
-		// By typing it as an integer we prevent json_encode from later treating it as a string
-		return floatval( trim( $data_point ) );
+		return $data_point;
 	}
 
 	/**
-	 * Checks for any suffix/prefix vales in a data_point
+	 * Helper function parses a data point into an M_Chart_Parsed_Data_Point value object for localized display
+	 * Splits the cell string into prefix, numeric value, and suffix 
+	 * This means the number can be reformatted for any locale while preserving surrounding context
+	 *
+	 * @param mixed $data_point a raw cell value
+	 *
+	 * @return M_Chart_Parsed_Data_Point
 	 */
-	public function parse_suffix_prefix( $data_point ) {
-		$prefix_patterns = apply_filters( 'm_chart_prefix_patterns', $this->prefix_patterns );
-		$suffix_patterns = apply_filters( 'm_chart_suffix_patterns', $this->suffix_patterns );
+	public function parse_data_point( mixed $data_point ): M_Chart_Parsed_Data_Point {
+		$data_point = trim( (string) $data_point );
 
-		if ( ! $this->data_prefix ) {
-			foreach ( $prefix_patterns as $pattern ) {
-				if ( preg_match( $pattern, $data_point, $match ) ) {
-					$this->data_prefix = $match[0];
-				}
-			}
+		if ( preg_match( '/(-?\d[\d,]*(?:\.\d+)?)/', $data_point, $matches, PREG_OFFSET_CAPTURE ) ) {
+			$number = $matches[1][0];
+			$offset = $matches[1][1];
+
+			return M_Chart_Parsed_Data_Point::numeric(
+				floatval( str_replace( ',', '', $number ) ),
+				substr( $data_point, 0, $offset ),
+				substr( $data_point, $offset + strlen( $number ) )
+			);
 		}
 
-		if ( ! $this->data_suffix ) {
-			foreach ( $suffix_patterns as $pattern ) {
-				if ( preg_match( $pattern, $data_point, $match ) ) {
-					$this->data_suffix = $match[0];
-				}
-			}
-		}
+		return M_Chart_Parsed_Data_Point::text( $data_point );
 	}
 
 	/**
 	 * Helper function cleans out label values
 	 *
-	 * @param string $label a label string
+	 * @param mixed $label a label string
 	 *
 	 * @return string the label string cleaned of any problem content
 	 */
-	public function clean_labels( $label ) {
-		$label = trim( html_entity_decode( $label, ENT_QUOTES ) );
+	public function clean_labels( mixed $label ): string {
+		$label = trim( html_entity_decode( (string) $label, ENT_QUOTES ) );
 
 		return preg_replace( '#<([a-z]+)([^>]+)*(?:>(.*)<\/\1>|\s+\/>)#', '$3', $label );
 	}
 
 	/**
-	 * Builds a cleaned and parsed array of data from the post's data
+	 * Populates $this->set_data and $this->raw_data by delegating to the appropriate
+	 * collector based on the parse direction and labels position, then normalizing both arrays
 	 */
-	public function parse_set_data() {
-		// Reset these values in case a previous data set has altered them
-		$this->data_prefix = '';
-		$this->data_suffix = '';
+	private function parse_set_data(): void {
+		if ( self::PARSE_ROWS == $this->parse_in && self::LABELS_FIRST_COLUMN == $this->value_labels_position ) {
+			[ $set_data_array, $raw_data_array ] = $this->collect_rows_first_column();
+		} elseif ( self::PARSE_ROWS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
+			[ $set_data_array, $raw_data_array ] = $this->collect_rows_both();
+		} elseif ( self::PARSE_COLUMNS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
+			[ $set_data_array, $raw_data_array ] = $this->collect_columns_both();
+		} else {
+			[ $set_data_array, $raw_data_array ] = $this->collect_default();
+		}
 
-		$set_data_array = array();
+		$set_data_array = $this->normalize_data_array( $set_data_array );
+		$raw_data_array = $this->normalize_data_array( $raw_data_array );
 
-		if ( 'rows' == $this->parse_in && 'first_column' == $this->value_labels_position ) {
-			foreach ( $this->data as $row ) {
-				foreach ( $row as $key => $column ) {
-					if ( '' == $column || 0 == $key ) {
-						continue;
-					}
+		$this->set_data = apply_filters( 'm_chart_set_data', $set_data_array, $this->data, $this->parse_in );
+		$this->raw_data = apply_filters( 'm_chart_raw_data', $raw_data_array, $this->data, $this->parse_in );
+	}
 
+	/**
+	 * Collects data when parsing rows with labels in the first column
+	 *
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 */
+	private function collect_rows_first_column(): array {
+		$set_data_array = [];
+		$raw_data_array = [];
+
+		foreach ( $this->data as $row ) {
+			foreach ( $row as $key => $column ) {
+				if ( '' == $column || 0 == $key ) {
+					continue;
+				}
+
+				$set_data_array[] = $this->clean_data_point( $column );
+				$raw_data_array[] = $this->parse_data_point( $column );
+			}
+		}
+
+		return [ $set_data_array, $raw_data_array ];
+	}
+
+	/**
+	 * Collects data when parsing rows with labels in both the first row and first column
+	 *
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 */
+	private function collect_rows_both(): array {
+		$set_data_array = [];
+		$raw_data_array = [];
+		$limit          = count( $this->data );
+		$this_sets      = [];
+		$this_raw       = [];
+
+		for ( $i = 1; $i < $limit; $i++ ) {
+			foreach ( $this->data[ $i ] as $c_key => $column ) {
+				if ( 0 != $c_key ) {
 					$data_point = $this->clean_data_point( $column );
+					$key        = $i - 1;
 
-					$set_data_array[] = $data_point;
-				}
-			}
-		} elseif ( 'rows' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$limit     = count( $this->data );
-			$this_sets = array();
-
-			// Collect the sets of data
-			for ( $i = 1; $i < $limit; $i++ ) {
-				foreach ( $this->data[ $i ] as $c_key => $column ) {
-					if ( 0 != $c_key ) {
-						$data_point = $this->clean_data_point( $column );
-						$key        = $i - 1;
-
-						if ( ! isset( $this_sets[ $key ]['is_null'] ) ) {
-							$this_sets[ $key ]['is_null'] = true;
-						}
-
-						if ( is_numeric( $data_point ) ) {
-							$this_sets[ $key ]['is_null'] = false;
-						}
-
-						$this_sets[ $key ]['data'][] = $data_point;
-					}
-				}
-			}
-
-			// Compile the sets of data
-			foreach ( $this_sets as $key => $set ) {
-				if ( false == $set['is_null'] ) {
-					$set_data_array[ $key ] = $set['data'];
-				}
-			}
-		} elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$limit     = count( $this->data );
-			$this_sets = array();
-
-			for ( $i = 1; $i < $limit; $i++ ) {
-				foreach ( $this->data[ $i ] as $key => $column ) {
-					if ( 0 == $key ) {
-						continue;
-					}
-
-					$data_point = $this->clean_data_point( $column );
-					$a_key      = $key - 1;
-
-					if ( ! isset( $this_sets[ $a_key ]['is_null'] ) ) {
-						$this_sets[ $a_key ]['is_null'] = true;
+					if ( ! isset( $this_sets[ $key ]['is_null'] ) ) {
+						$this_sets[ $key ]['is_null'] = true;
 					}
 
 					if ( is_numeric( $data_point ) ) {
-						$this_sets[ $a_key ]['is_null'] = false;
+						$this_sets[ $key ]['is_null'] = false;
 					}
 
-					$this_sets[ $a_key ]['data'][] = $data_point;
-				}
-			}
-
-			foreach ( $this_sets as $key => $set ) {
-				if ( false == $set['is_null'] ) {
-					$set_data_array[ $key ] = $set['data'];
-				}
-			}
-		} elseif ( isset( $this->data[1] ) ) {
-			foreach ( $this->data as $key => $columns ) {
-				foreach ( $columns as $column ) {
-					if ( '' == $column || 0 == $key ) {
-						continue;
-					}
-
-					$data_point = $this->clean_data_point( $column );
-
-					$set_data_array[] = $data_point;
+					$this_sets[ $key ]['data'][] = $data_point;
+					$this_raw[ $key ][]          = $this->parse_data_point( $column );
 				}
 			}
 		}
 
-		$set_data_array = $this->normalize_data_array( $set_data_array );
+		foreach ( $this_sets as $key => $set ) {
+			if ( false == $set['is_null'] ) {
+				$set_data_array[ $key ] = $set['data'];
+				$raw_data_array[ $key ] = $this_raw[ $key ];
+			}
+		}
 
-		$this->set_data = apply_filters( 'm_chart_set_data', $set_data_array, $this->data, $this->parse_in );
+		return [ $set_data_array, $raw_data_array ];
+	}
+
+	/**
+	 * Collects data when parsing columns with labels in both the first row and first column
+	 *
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 */
+	private function collect_columns_both(): array {
+		$set_data_array = [];
+		$raw_data_array = [];
+		$limit          = count( $this->data );
+		$this_sets      = [];
+		$this_raw       = [];
+
+		for ( $i = 1; $i < $limit; $i++ ) {
+			foreach ( $this->data[ $i ] as $key => $column ) {
+				if ( 0 == $key ) {
+					continue;
+				}
+
+				$data_point = $this->clean_data_point( $column );
+				$a_key      = $key - 1;
+
+				if ( ! isset( $this_sets[ $a_key ]['is_null'] ) ) {
+					$this_sets[ $a_key ]['is_null'] = true;
+				}
+
+				if ( is_numeric( $data_point ) ) {
+					$this_sets[ $a_key ]['is_null'] = false;
+				}
+
+				$this_sets[ $a_key ]['data'][] = $data_point;
+				$this_raw[ $a_key ][]          = $this->parse_data_point( $column );
+			}
+		}
+
+		foreach ( $this_sets as $key => $set ) {
+			if ( false == $set['is_null'] ) {
+				$set_data_array[ $key ] = $set['data'];
+				$raw_data_array[ $key ] = $this_raw[ $key ];
+			}
+		}
+
+		return [ $set_data_array, $raw_data_array ];
+	}
+
+	/**
+	 * Collects data for the default case (first-row labels only, or no labels)
+	 *
+	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 */
+	private function collect_default(): array {
+		$set_data_array = [];
+		$raw_data_array = [];
+
+		if ( ! isset( $this->data[1] ) ) {
+			return [ $set_data_array, $raw_data_array ];
+		}
+
+		foreach ( $this->data as $key => $columns ) {
+			foreach ( $columns as $column ) {
+				if ( '' == $column || 0 == $key ) {
+					continue;
+				}
+
+				$set_data_array[] = $this->clean_data_point( $column );
+				$raw_data_array[] = $this->parse_data_point( $column );
+			}
+		}
+
+		return [ $set_data_array, $raw_data_array ];
 	}
 
 	/**
@@ -284,9 +328,10 @@ class M_Chart_Parse {
 	 *
 	 * @return array a normalized array of parsed data
 	 */
-	public function normalize_data_array( $data_array ) {
-		if ( 'rows' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$label_count = is_array( $this->value_labels['first_row'] ) ? count( $this->value_labels['first_row'] ) - 1 : 0;
+	private function normalize_data_array( array $data_array ): array {
+		if ( self::PARSE_ROWS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
+			$first_row_labels = $this->value_labels[ self::LABELS_FIRST_ROW ] ?? [];
+			$label_count      = is_array( $first_row_labels ) ? count( $first_row_labels ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
 				foreach ( $data as $t_key => $value ) {
@@ -295,8 +340,9 @@ class M_Chart_Parse {
 					}
 				}
 			}
-		} elseif ( 'columns' == $this->parse_in && 'both' == $this->value_labels_position ) {
-			$label_count = is_array( $this->value_labels['first_column'] ) ? count( $this->value_labels['first_column'] ) - 1 : 0;
+		} elseif ( self::PARSE_COLUMNS == $this->parse_in && self::LABELS_BOTH == $this->value_labels_position ) {
+			$first_col_labels = $this->value_labels[ self::LABELS_FIRST_COLUMN ] ?? [];
+			$label_count      = is_array( $first_col_labels ) ? count( $first_col_labels ) - 1 : 0;
 
 			foreach ( $data_array as $key => $data ) {
 				foreach ( $data as $t_key => $value ) {
@@ -306,16 +352,43 @@ class M_Chart_Parse {
 				}
 			}
 		}
-		//else {
-		//	$label_count = count( $this->value_labels ) - 1;
-		//
-		//	foreach ( $data_array as $key => $data ) {
-		//		if ( $key > $label_count ) {
-		//			unset( $data_array[ $key ] );
-		//		}
-		//	}
-		//}
 
 		return $data_array;
+	}
+
+	/**
+	 * Formats an M_Chart_Parsed_Data_Point for table display
+	 * Numeric cells are formatted with the locale-aware NumberFormatter non-numeric cells are returned as plain text
+	 *
+	 * @param ?M_Chart_Parsed_Data_Point $raw the parsed data point to format, or null for an empty cell
+	 *
+	 * @return string the formatted cell value
+	 */
+	public function format_raw( ?M_Chart_Parsed_Data_Point $raw ): string {
+		if ( null === $raw ) {
+			return '';
+		}
+
+		// If the value is a number return the formatted and prefixed/suffixed version of it
+		if ( $raw->is_numeric() ) {
+			$formatter = $this->get_formatter();
+			$number    = $formatter ? $formatter->format( $raw->value ) : (string) $raw->value;
+			return $raw->prefix . $number . $raw->suffix;
+		}
+
+		return $raw->text;
+	}
+
+	/**
+	 * Returns a locale-aware NumberFormatter, creating and caching it on first use
+	 *
+	 * @return ?NumberFormatter a NumberFormatter instance, or null if the intl extension is unavailable
+	 */
+	private function get_formatter(): ?NumberFormatter {
+		if ( null === $this->formatter ) {
+			$locale          = m_chart()->get_settings( 'locale' );
+			$this->formatter = class_exists( 'NumberFormatter' ) ? new NumberFormatter( $locale, NumberFormatter::DECIMAL ) : null;
+		}
+		return $this->formatter;
 	}
 }

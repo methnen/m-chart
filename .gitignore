@@ -6,3 +6,4 @@ deploy/
 build/
 package-lock.json
 .vscode/
+.php-cs-fixer.cache

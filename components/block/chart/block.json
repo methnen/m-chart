@@ -1,6 +1,6 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "m-chart/chart",
   "title": "M Chart",
   "category": "layout",
@@ -9,8 +9,12 @@
   "textdomain": "m-chart",
   "attributes": {
     "chartId": {
+      "type": "integer",
+      "default": 0
+    },
+    "show": {
       "type": "string",
-      "default": ""
+      "default": "chart"
     }
   },
   "supports": {

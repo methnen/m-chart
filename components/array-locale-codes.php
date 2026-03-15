@@ -5,7 +5,7 @@
  * Tanky ou @umpirsky! https://github.com/umpirsky/locale-list
  */
 
-return array(
+return [
 	'af' => esc_html__( 'Afrikaans' ),
 	'af-NA' => esc_html__( 'Afrikaans (Namibia)' ),
 	'af-ZA' => esc_html__( 'Afrikaans (South Africa)' ),
@@ -569,4 +569,4 @@ return array(
 	'yo-NG' => esc_html__( 'Yoruba (Nigeria)' ),
 	'zu' => esc_html__( 'Zulu' ),
 	'zu-ZA' => esc_html__( 'Zulu (South Africa)' ),
-);
+];

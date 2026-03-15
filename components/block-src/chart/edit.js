@@ -1,6 +1,6 @@
-import { TextControl, Spinner, ToolbarGroup, ToolbarButton, } from '@wordpress/components';
+import { TextControl, SelectControl, Spinner, ToolbarGroup, ToolbarButton, } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
-import { useBlockProps, BlockControls } from '@wordpress/block-editor';
+import { useBlockProps, BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import "./editor.scss";
@@ -16,6 +16,7 @@ export default function edit( { attributes, setAttributes } ) {
     const [ available, setAvailable ] = useState( 0 );
     const [ loaded, setLoaded ] = useState( false );
     const [ charts, setCharts ] = useState( [] );
+    const [ selectedChart, setSelectedChart ] = useState( null );
     const [ temp, setTemp ] = useState( null );
     const [ siteUrl, setSiteUrl ] = useState( null );
     const [ imageSupport, setImageSupport ] = useState( true );
@@ -31,11 +32,20 @@ export default function edit( { attributes, setAttributes } ) {
     const random = `?random=${ Math.round( Math.random() * 1000000 ) }`;
 
     // On load we fetch all charts if none available we set a constant to show an error message.
-    // We then check if a chart is already chosen. If so we show that one else show all.
     useEffect( () => {
         fetchOptions();
         fetchGraphs( search );
     }, [] );
+
+    // Fetch the selected chart individually whenever chartId changes.
+    // Using attributes.chartId as a dependency handles the case where Gutenberg
+    // provides the saved attribute value after the initial render.
+    useEffect( () => {
+        setSelectedChart( null );
+        if ( attributes.chartId ) {
+            fetchSingleChart( parseInt( attributes.chartId, 10 ) );
+        }
+    }, [ attributes.chartId ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Compose preview list.
     const optionsList = options.map( ( x ) => {
@@ -46,10 +56,11 @@ export default function edit( { attributes, setAttributes } ) {
         }
     } );
 
-    const selected = charts.filter( x => x.id === attributes.chartId )[ 0 ];
+    const selected = charts.filter( x => x.id === parseInt( attributes.chartId, 10 ) )[ 0 ] || selectedChart;
 
     const handleClick = ( id ) => {
         setAttributes( { chartId: id } );
+        setSelectedChart( null );
         setTemp( id );
     };
 
@@ -66,6 +77,20 @@ export default function edit( { attributes, setAttributes } ) {
             setSiteUrl( result.siteurl );
             setMaxAvailable( result.maxAvailable );
         } );
+    };
+
+    const fetchSingleChart = ( id ) => {
+        apiFetch( { path: `/m-chart/v1/graph/${ id }` } ).then( result => {
+            setSelectedChart( {
+                id: result.id,
+                title: result.title || '-',
+                subtitle: result.subtitle,
+                width: result.width,
+                height: result.height,
+                type: result.type || '',
+                src: result.url || ''
+            } );
+        } ).catch( () => {} );
     };
 
     const fetchGraphs = ( value ) => {
@@ -98,13 +123,29 @@ export default function edit( { attributes, setAttributes } ) {
 
     return (
         <div { ...blockProps }>
+            { attributes.chartId &&
+                <InspectorControls>
+                    <div className="m-chart-block-inspector">
+                        <SelectControl
+                            label={ __( 'Show', 'm-chart' ) }
+                            value={ attributes.show }
+                            options={ [
+                                { label: __( 'Chart', 'm-chart' ),  value: 'chart' },
+                                { label: __( 'Image', 'm-chart' ),  value: 'image' },
+                                { label: __( 'Table', 'm-chart' ),  value: 'table' },
+                            ] }
+                            onChange={ ( value ) => setAttributes( { show: value } ) }
+                        />
+                    </div>
+                </InspectorControls>
+            }
             <BlockControls>
                 <ToolbarGroup className="m-chart-block">
                     <ToolbarButton onClick={ () => window.location.href = newUrl } icon="external">{ __( 'New Chart', 'm-chart' ) }</ToolbarButton>
                     { attributes.chartId &&
                         <>
                             <ToolbarButton onClick={ () => window.location.href = editUrl } icon="external" >{ __( 'Edit Chart', 'm-chart' ) }</ToolbarButton>
-                            <ToolbarButton onClick={ () => handleClick( '' ) } >{ __( 'Replace', 'm-chart' ) }</ToolbarButton>
+                            <ToolbarButton onClick={ () => handleClick( 0 ) } >{ __( 'Replace', 'm-chart' ) }</ToolbarButton>
                         </>
                     }
                 </ToolbarGroup>

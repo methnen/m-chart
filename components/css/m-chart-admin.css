@@ -113,6 +113,9 @@
 #m-chart-spreadsheet {
   border-left: none;
 }
+#m-chart-spreadsheet.closed {
+  border-bottom: 0.0625rem solid #cdd0d4;
+}
 #m-chart-spreadsheet .postbox-header {
   border-bottom: none;
 }
@@ -237,8 +240,11 @@
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab:last-of-type {
   margin-right: 0.625rem;
 }
-#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.do-not-delete span {
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.do-not-delete span.dashicons-dismiss {
   display: none;
+}
+#m-chart-spreadsheet .nav-tab-wrapper .nav-tab.do-not-delete {
+  padding-left: 0.625rem;
 }
 #m-chart-spreadsheet #spreadsheets .jtabs-content {
   border-left: 1px solid #cdd0d4;
@@ -252,16 +258,16 @@
 #m-chart-spreadsheet #spreadsheets .jtabs-content .jss_content table {
   margin-right: -0.0625rem;
 }
+#m-chart-spreadsheet #m-chart-csv::after {
+  clear: both;
+  content: "";
+  display: table;
+}
 #m-chart-spreadsheet #m-chart-csv {
   background-color: #f5f5f5;
   border-left: 0.0625rem solid #cdd0d4;
   border-top: 0.0625rem solid #dddddd;
   padding: 0.9375rem 0.625rem 0.625rem;
-}
-#m-chart-spreadsheet #m-chart-csv::after {
-  clear: both;
-  content: "";
-  display: table;
 }
 #m-chart-spreadsheet #m-chart-csv::after {
   clear: both;
@@ -325,14 +331,14 @@
   border-top: 1px solid #dddddd;
   padding: 0 0.625rem 0.625rem;
 }
-#m-chart .inside .settings .row {
-  border-top: none;
-  padding: 0;
-}
 #m-chart .inside .settings .row::after {
   clear: both;
   content: "";
   display: table;
+}
+#m-chart .inside .settings .row {
+  border-top: none;
+  padding: 0;
 }
 #m-chart .inside .settings .row p {
   margin-bottom: 0;
@@ -384,14 +390,14 @@
 #m-chart .inside .settings .row.six p:first-child {
   float: left;
 }
-#m-chart .inside .row {
-  border-top: 1px solid #dddddd;
-  padding: 0 0.625rem 0.625rem;
-}
 #m-chart .inside .row::after {
   clear: both;
   content: "";
   display: table;
+}
+#m-chart .inside .row {
+  border-top: 1px solid #dddddd;
+  padding: 0 0.625rem 0.625rem;
 }
 #m-chart .inside .row.seven p {
   float: right;
@@ -400,6 +406,23 @@
 }
 #m-chart .inside .row.seven p:first-child {
   float: left;
+}
+#m-chart .inside .row.seven p.shortcode {
+  position: relative;
+}
+#m-chart .inside .row.seven p.shortcode .button {
+  bottom: 0.1875rem;
+  line-height: 1.375rem;
+  min-height: 1.5rem;
+  position: absolute;
+  right: 0.125rem;
+}
+@media (max-width: 782px) {
+  #m-chart .inside .row.seven p.shortcode .button {
+    bottom: 0;
+    line-height: 1.875rem;
+    min-height: 2rem;
+  }
 }
 #m-chart .inside .row.seven p.image {
   position: relative;
