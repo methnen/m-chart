@@ -165,6 +165,15 @@
 	
 	// Selected
 	.chart-selected {
+		.image-support {
+			overflow: hidden;
+
+			img.preview {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+		}
 		.type {
 			position: relative;
 			padding-top: 5rem;

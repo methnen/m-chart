@@ -1,14 +1,15 @@
 <?php
 
 class M_Chart_Block {
+
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_m_chart_block_support' ] );
-		add_action( 'plugins_loaded', [ $this, 'wt_m_chart_load_textdomain' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_m_chart_options' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_graphs' ] );
+		add_action( 'rest_api_init', [ $this, 'register_fetch_graph' ] );
 	}
 
 	/**
@@ -64,14 +65,6 @@ class M_Chart_Block {
 	}
 
 	/**
-	 * Load the plugin's text domain
-	 */
-	public function wt_m_chart_load_textdomain() {
-		load_plugin_textdomain( 'm-chart', false, basename( __DIR__ ) . '/languages' );
-	}
-
-
-	/**
 	 * Register api route to fetch all kind of information needed on the available graphs & settings of the plugin.
 	 */
 	public function register_fetch_m_chart_options() {
@@ -121,6 +114,58 @@ class M_Chart_Block {
 	}
 
 	/**
+	 * Register api route to fetch a single graph by post ID.
+	 */
+	public function register_fetch_graph() {
+		register_rest_route(
+			'm-chart/v1',
+			'/graph/(?P<id>\d+)',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'fetch_graph' ],
+				'permission_callback' => function () {
+					return true;
+				},
+				'args'                => [
+					'id' => [
+						'validate_callback' => function ( $param ) {
+							return is_numeric( $param );
+						},
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Fetch a single published chart post by ID and return its display data.
+	 *
+	 * @param WP_REST_Request $request The REST request object.
+	 * @return array|WP_Error Chart data array or WP_Error if not found.
+	 */
+	public function fetch_graph( $request ) {
+		$post_id = intval( $request->get_param( 'id' ) );
+		$post    = get_post( $post_id );
+
+		if ( ! $post || $post->post_type !== 'm-chart' || $post->post_status !== 'publish' ) {
+			return new WP_Error( 'not_found', __( 'Chart not found', 'm-chart' ), [ 'status' => 404 ] );
+		}
+
+		$post_meta         = get_post_meta( $post->ID, 'm-chart', true );
+		$post_thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+
+		return [
+			'id'       => intval( $post->ID ),
+			'title'    => html_entity_decode( get_the_title( $post->ID ) ),
+			'subtitle' => isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '',
+			'url'      => get_the_post_thumbnail_url( $post->ID ),
+			'type'     => isset( $post_meta['type'] ) ? $post_meta['type'] : '',
+			'height'   => wp_get_attachment_metadata( $post_thumbnail_id )['height'] ?? 800,
+			'width'    => wp_get_attachment_metadata( $post_thumbnail_id )['width'] ?? 1200,
+		];
+	}
+
+	/**
 	 * Callback function to fetch graphs possibly using a search term to query all titles.
 	 * Returns an array with the total number of results and a max of the 24 most recent objects
 	 */
@@ -146,7 +191,7 @@ class M_Chart_Block {
 			$result             = [];
 			$post_meta          = get_post_meta( $post->ID, 'm-chart', true );
 			$post_thumbnail_id  = get_post_meta( $post->ID, '_thumbnail_id', true );
-			$result['id']       = strval( $post->ID );
+			$result['id']       = intval( $post->ID );
 			$result['title']    = html_entity_decode( get_the_title( $post->ID ) );
 			$result['subtitle'] = isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '';
 			$result['url']      = get_the_post_thumbnail_url( $post->ID );
