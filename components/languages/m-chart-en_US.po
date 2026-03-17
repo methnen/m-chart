@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-16 18:17-0700\n"
-"PO-Revision-Date: 2026-03-16 18:19-0700\n"
+"POT-Creation-Date: 2026-03-17 13:36-0700\n"
+"PO-Revision-Date: 2026-03-17 14:08-0700\n"
 "Language: en_US\n"
 "X-Generator: Poedit 3.9\n"
 "X-Poedit-Basepath: ../..\n"
@@ -19,6 +19,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
+"X-Poedit-SearchPathExcluded-2: components/external\n"
 
 #: components/admin-ui-src/components/AxisRows.js:76
 #: components/admin-ui-src/components/AxisRows.js:127
@@ -2585,7 +2586,7 @@ msgstr "Invalid library"
 #: components/class-m-chart-block.php:170
 #: components/class-m-chart.php:940
 msgid "Chart not found"
-msgstr "No Charts found"
+msgstr "Chart not found"
 
 #: components/class-m-chart-chartjs.php:98
 msgid "Line"
