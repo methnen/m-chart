@@ -2,30 +2,57 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-17 15:40-0700\n"
+"PO-Revision-Date: 2026-03-17 15:40-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-17 14:35-0700\n"
-"PO-Revision-Date: 2026-03-17 14:40-0700\n"
-"Language: en_US\n"
 "X-Generator: Poedit 3.9\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: m-chart.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
 "X-Poedit-SearchPathExcluded-2: components/external\n"
+
+#: components/admin-ui-src/components/AxisRows.js:48
+msgid "N/A"
+msgstr "N/A"
+
+#: components/admin-ui-src/components/AxisRows.js:64
+msgid "Vertical axis title"
+msgstr "Vertical axis title"
 
 #: components/admin-ui-src/components/AxisRows.js:76
 #: components/admin-ui-src/components/AxisRows.js:127
 #: components/array-default-unit-terms.php:49
 msgid "Units"
 msgstr "Units"
+
+#: components/admin-ui-src/components/AxisRows.js:99
+msgid " Force vertical axis minimum: "
+msgstr " Force vertical axis minimum: "
+
+#: components/admin-ui-src/components/AxisRows.js:115
+msgid "Horizontal axis title"
+msgstr "Horizontal axis title"
+
+#: components/admin-ui-src/components/CsvControls.js:88
+#| msgid "Importing file"
+msgid "Import failed"
+msgstr "Import failed"
+
+#: components/admin-ui-src/components/CsvControls.js:105
+#, javascript-format
+msgid "Import error: %s"
+msgstr "Import error: %s"
 
 #: components/admin-ui-src/components/CsvControls.js:155
 #: components/templates/spreadsheet-meta-box.php:11
@@ -58,6 +85,12 @@ msgstr "Select File"
 msgid "Import"
 msgstr "Import"
 
+#: components/admin-ui-src/components/CsvControls.js:206
+#, javascript-format
+#| msgid " Delimited"
+msgid "%s Delimited"
+msgstr "%s Delimited"
+
 #: components/admin-ui-src/components/CsvControls.js:214
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
@@ -73,25 +106,98 @@ msgstr "Importing file"
 msgid "Cancel Import"
 msgstr "Cancel Import"
 
+#: components/admin-ui-src/components/CsvControls.js:234
+#, javascript-format
+msgid "File: %s"
+msgstr "File: %s"
+
 #: components/admin-ui-src/components/CsvControls.js:236
 #: components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr "Importing this file will replace all existing data in this sheet"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:5
+#| msgid "Column"
+msgid "Columns"
+msgstr "Columns"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:6
+msgid "Rows"
+msgstr "Rows"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:29
+msgid "Parse data in"
+msgstr "Parse data in"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:53
+msgid " Show labels"
+msgstr " Show labels"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:67
+msgid " Show legend"
+msgstr " Show legend"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:82
+msgid " Shared tooltip"
+msgstr " Shared tooltip"
+
+#: components/admin-ui-src/components/SheetTabs.js:43
+#, javascript-format
+msgid "Sheet %d"
+msgstr "Sheet %d"
 
 #: components/admin-ui-src/components/SheetTabs.js:52
 #: components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
 msgstr "Add Sheet"
 
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:26
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:38
+msgid "Copied!"
+msgstr "Copied!"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:38
+msgid "Copy"
+msgstr "Copy"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:42
+#: components/block-src/chart/edit.js:187
+#| msgid "No Images"
+msgid "Image"
+msgstr "Image"
+
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:56
 #: components/class-m-chart.php:213
 msgid "View"
 msgstr "View"
 
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:60
+msgid "Image generation is disabled"
+msgstr "Image generation is disabled"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:62
+msgid "Save/Update this post to generate the image version"
+msgstr "Save/Update this post to generate the image version"
+
 #: components/admin-ui-src/components/SubtitleField.js:22
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
 msgstr "Enter subtitle here"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:24
+msgid "Type"
+msgstr "Type"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:40
+msgid "Theme"
+msgstr "Theme"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:55
+msgid "Height"
+msgstr "Height"
 
 #: components/array-default-unit-terms.php:8
 msgid "Time"
@@ -2493,12 +2599,56 @@ msgstr "Zulu"
 msgid "Zulu (South Africa)"
 msgstr "Zulu (South Africa)"
 
+#: components/block-src/chart/edit.js:181
+msgid "Display settings"
+msgstr "Display settings"
+
+#: components/block-src/chart/edit.js:183
+msgid "Show"
+msgstr "Show"
+
 #: components/block-src/chart/edit.js:186
 #: components/block-src/chart/edit.js:237
-#: components/class-m-chart-admin.php:483
-#: components/class-m-chart.php:207
+#: components/class-m-chart-admin.php:489 components/class-m-chart.php:207
 msgid "Chart"
 msgstr "Chart"
+
+#: components/block-src/chart/edit.js:188
+msgid "Table"
+msgstr "Table"
+
+#: components/block-src/chart/edit.js:198
+#| msgid "New Chart"
+msgid "New chart"
+msgstr "New chart"
+
+#: components/block-src/chart/edit.js:202
+#| msgid "Edit Chart"
+msgid "Edit chart"
+msgstr "Edit chart"
+
+#: components/block-src/chart/edit.js:203
+msgid "Replace"
+msgstr "Replace"
+
+#: components/block-src/chart/edit.js:240
+msgid "There was a problem loading charts"
+msgstr "There was a problem loading charts"
+
+#: components/block-src/chart/edit.js:249
+#: components/block-src/chart/edit.js:264
+#| msgid "No Charts found"
+msgid "No charts found"
+msgstr "No charts found"
+
+#: components/block-src/chart/edit.js:250
+msgid "Create a new chart"
+msgstr "Create a new chart"
+
+#: components/block-src/chart/edit.js:257
+#| msgid "Search Chart Units"
+msgid "Search by title"
+msgstr "Search by title"
 
 #: components/class-m-chart-admin.php:54
 #: components/templates/m-chart-settings.php:2
@@ -2533,58 +2683,57 @@ msgstr "These charts will no longer display unless you install the plugin:"
 msgid "Learn More"
 msgstr "Learn More"
 
-#: components/class-m-chart-admin.php:428
+#: components/class-m-chart-admin.php:434
 msgid "Are you sure you want to delete this spreadsheet?"
 msgstr "Are you sure you want to delete this spreadsheet?"
 
-#: components/class-m-chart-admin.php:474
+#: components/class-m-chart-admin.php:480
 msgid "Data"
 msgstr "Data"
 
-#: components/class-m-chart-admin.php:613
+#: components/class-m-chart-admin.php:619
 msgid "Library not found"
 msgstr "Library not found"
 
-#: components/class-m-chart-admin.php:827
-#: components/class-m-chart-admin.php:837
+#: components/class-m-chart-admin.php:833
+#: components/class-m-chart-admin.php:843
 msgid "Wrong post type"
 msgstr "Wrong post type"
 
-#: components/class-m-chart-admin.php:832
-#: components/class-m-chart-admin.php:968
+#: components/class-m-chart-admin.php:838
+#: components/class-m-chart-admin.php:974
 msgid "Invalid nonce"
 msgstr "Invalid nonce"
 
-#: components/class-m-chart-admin.php:842
+#: components/class-m-chart-admin.php:848
 msgid "No file to import"
 msgstr "No file to import"
 
-#: components/class-m-chart-admin.php:849
+#: components/class-m-chart-admin.php:855
 msgid "Only CSV files can be imported"
 msgstr "Only CSV files can be imported"
 
-#: components/class-m-chart-admin.php:856
+#: components/class-m-chart-admin.php:862
 msgid "File path not found"
 msgstr "File path not found"
 
-#: components/class-m-chart-admin.php:862
+#: components/class-m-chart-admin.php:868
 msgid "CSV file was empty"
 msgstr "CSV file was empty"
 
-#: components/class-m-chart-admin.php:973
+#: components/class-m-chart-admin.php:979
 msgid "Invalid post"
 msgstr "Invalid post"
 
-#: components/class-m-chart-admin.php:978
+#: components/class-m-chart-admin.php:984
 msgid "Permission error"
 msgstr "Permission error"
 
-#: components/class-m-chart-admin.php:983
+#: components/class-m-chart-admin.php:989
 msgid "Invalid library"
 msgstr "Invalid library"
 
-#: components/class-m-chart-block.php:170
-#: components/class-m-chart.php:940
+#: components/class-m-chart-block.php:170 components/class-m-chart.php:940
 msgid "Chart not found"
 msgstr "Chart not found"
 
@@ -2644,8 +2793,7 @@ msgstr "Radar Area"
 msgid "Polar"
 msgstr "Polar"
 
-#: components/class-m-chart.php:167
-#: components/class-m-chart.php:177
+#: components/class-m-chart.php:167 components/class-m-chart.php:177
 msgid "Chart Units"
 msgstr "Chart Units"
 
@@ -2689,8 +2837,7 @@ msgstr "Chart Unit Name"
 msgid "Charts"
 msgstr "Charts"
 
-#: components/class-m-chart.php:208
-#: components/class-m-chart.php:209
+#: components/class-m-chart.php:208 components/class-m-chart.php:209
 msgid "Add Chart"
 msgstr "Add Chart"
 
@@ -2767,8 +2914,12 @@ msgid "Number Format Locale"
 msgstr "Number Format Locale"
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
-msgstr "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
+msgid ""
+"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
+"chart"
+msgstr ""
+"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
+"chart"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
@@ -2787,8 +2938,12 @@ msgid "Show Library in Edit Posts Screen"
 msgstr "Show Library in Edit Posts Screen"
 
 #: components/templates/m-chart-settings.php:34
-msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
-msgstr "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
+msgid ""
+"Displays an icon indicating the library used for a chart in Edit Posts "
+"Screen of the WP Admin"
+msgstr ""
+"Displays an icon indicating the library used for a chart in Edit Posts "
+"Screen of the WP Admin"
 
 #: components/templates/m-chart-settings.php:39
 #: components/templates/m-chart-settings.php:43
@@ -2841,8 +2996,10 @@ msgid "4x"
 msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
-msgid "The higher the multiplier the better the images will look on high DPI screens"
-msgstr "The higher the multiplier the better the images will look on high DPI screens"
+msgid ""
+"The higher the multiplier the better the images will look on high DPI screens"
+msgstr ""
+"The higher the multiplier the better the images will look on high DPI screens"
 
 #: components/templates/m-chart-settings.php:91
 msgid "Image Width"
@@ -2893,8 +3050,12 @@ msgid "http://github.com/methnen/m-chart"
 msgstr "http://github.com/methnen/m-chart"
 
 #. Description of the plugin/theme
-msgid "Manage data sets via a spreadsheet interface and display them as charts in WordPress."
-msgstr "Manage data sets via a spreadsheet interface and display them as charts in WordPress."
+msgid ""
+"Manage data sets via a spreadsheet interface and display them as charts in "
+"WordPress."
+msgstr ""
+"Manage data sets via a spreadsheet interface and display them as charts in "
+"WordPress."
 
 #. Author of the plugin/theme
 msgid "Jamie Poitra"
@@ -2941,14 +3102,22 @@ msgstr "http://methnen.com"
 #~ msgid "Numeric Symbols"
 #~ msgstr "Numeric Symbols"
 
-#~ msgid "Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)"
-#~ msgstr "Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)"
+#~ msgid ""
+#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
+#~ "Quadrillions, Quintillions...)"
+#~ msgstr ""
+#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
+#~ "Quadrillions, Quintillions...)"
 
 #~ msgid "Numeric Symbol Magnitude"
 #~ msgstr "Numeric Symbol Magnitude"
 
-#~ msgid "Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)"
-#~ msgstr "Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)"
+#~ msgid ""
+#~ "Allows adjustment for languages that use symbols at different intervals "
+#~ "(Japanese, Korean, etc...)"
+#~ msgstr ""
+#~ "Allows adjustment for languages that use symbols at different intervals "
+#~ "(Japanese, Korean, etc...)"
 
 #~ msgid "Importing this file will replace all existing data"
 #~ msgstr "Importing this file will replace all existing data"
