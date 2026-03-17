@@ -305,6 +305,12 @@ class M_Chart_Admin {
 				[ 'strategy' => 'defer' ]
 			);
 
+			wp_set_script_translations(
+				'm-chart-admin-app',
+				'm-chart',
+				plugin_dir_path( __DIR__ ) . 'components/languages/'
+			);
+
 			// We need the library and post ID for a bunch of stuff below
 			$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : '';
 			$library = m_chart()->get_library();

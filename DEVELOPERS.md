@@ -56,6 +56,47 @@ Watch admin app only:
 npm run watch:admin-ui
 ```
 
+## Translations (i18n) ##
+
+PHP translations use `.po` / `.mo` files managed in Poedit. JavaScript translations require additional steps because `wp-scripts` bundles multiple source files into a single compiled file, and WordPress needs handle-named JSON files to load them.
+
+### Workflow
+
+1. Open the `.po` file for the locale you are updating (e.g. `components/languages/m-chart-zh_CN.po`) in Poedit.
+2. **Catalog > Update from Sources** to scan for new/changed translatable strings in both PHP and JS source files.
+3. Translate any new or updated strings.
+4. Save in Poedit (this generates the `.mo` and `.l10n.php` files automatically).
+5. Generate per-source-file JSON translation files:
+
+```
+wp i18n make-json components/languages/m-chart-zh_CN.po --no-purge
+```
+
+6. Merge the hash-based JSON files into handle-named files that WordPress can find:
+
+```
+npm run build:i18n
+```
+
+Repeat steps 1–6 for each locale.
+
+### Why the merge step is needed
+
+`wp i18n make-json` generates one JSON file per source file, named with the md5 hash of the source path (e.g. `components/admin-ui-src/components/AxisRows.js`). However, WordPress looks up translations using the md5 hash of the *compiled* file path (e.g. `components/admin-ui/index.js`). Since these hashes don't match, WordPress falls back to looking for `{domain}-{locale}-{handle}.json`. The `build:i18n` script merges the per-source-file JSONs into these handle-named files:
+
+- `m-chart-{locale}-m-chart-admin-app.json` — admin UI translations
+- `m-chart-{locale}-m-chart-editor.json` — block editor translations
+
+### Poedit configuration
+
+Each `.po` file includes Poedit search path headers so that source scanning works correctly. These should exclude:
+
+- `*.min.js` — minified files (duplicates of source)
+- `node_modules` — third-party dependencies
+- `components/external` — vendored libraries
+
+If creating a new locale, copy these headers from an existing `.po` file (e.g. `m-chart-en_US.po`).
+
 ## Deployment ##
 
 Deploy to WordPress.org via GitHub Actions:

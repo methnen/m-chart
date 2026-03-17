@@ -17,6 +17,7 @@
     "build:css": "sass --source-map --style=expanded components/sass/m-chart-admin.scss components/css/m-chart-admin.css",
     "build:js": "uglifyjs components/js/m-chart-chartjs-helper.js -o components/js/m-chart-chartjs-helper.min.js",
     "build:readme": "wp-readme-to-md --screenshot-url=https://methnen.com/misc/m-chart/{screenshot}.png",
+    "build:i18n": "node scripts/merge-i18n-json.js",
     "build": "npm run build:block && npm run build:admin-ui && npm run build:css && npm run build:js && npm run build:readme",
     "watch:block": "wp-scripts start --output-path=components/block --webpack-src-dir=components/block-src",
     "watch:admin-ui": "wp-scripts start --output-path=components/admin-ui --webpack-src-dir=components/admin-ui-src",

@@ -2,30 +2,57 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-17 15:23-0700\n"
+"PO-Revision-Date: 2026-03-17 15:24-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-17 13:36-0700\n"
-"PO-Revision-Date: 2026-03-17 13:59-0700\n"
-"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.9\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-WPHeader: m-chart.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
 "X-Poedit-SearchPathExcluded-2: components/external\n"
+
+#: components/admin-ui-src/components/AxisRows.js:48
+#, fuzzy
+msgid "N/A"
+msgstr "不适用"
+
+#: components/admin-ui-src/components/AxisRows.js:64
+msgid "Vertical axis title"
+msgstr "纵坐标轴标题"
 
 #: components/admin-ui-src/components/AxisRows.js:76
 #: components/admin-ui-src/components/AxisRows.js:127
 #: components/array-default-unit-terms.php:49
 msgid "Units"
 msgstr "单位"
+
+#: components/admin-ui-src/components/AxisRows.js:99
+msgid " Force vertical axis minimum: "
+msgstr " 强制垂直轴最小值："
+
+#: components/admin-ui-src/components/AxisRows.js:115
+msgid "Horizontal axis title"
+msgstr "横坐标轴标题"
+
+#: components/admin-ui-src/components/CsvControls.js:88
+msgid "Import failed"
+msgstr "导入失败"
+
+#: components/admin-ui-src/components/CsvControls.js:105
+#, javascript-format
+msgid "Import error: %s"
+msgstr "导入错误：%s"
 
 #: components/admin-ui-src/components/CsvControls.js:155
 #: components/templates/spreadsheet-meta-box.php:11
@@ -58,6 +85,11 @@ msgstr "选择文件"
 msgid "Import"
 msgstr "导入"
 
+#: components/admin-ui-src/components/CsvControls.js:206
+#, javascript-format
+msgid "%s Delimited"
+msgstr "%s 分隔"
+
 #: components/admin-ui-src/components/CsvControls.js:214
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
@@ -73,25 +105,96 @@ msgstr "正在導入文件"
 msgid "Cancel Import"
 msgstr "取消导入"
 
+#: components/admin-ui-src/components/CsvControls.js:234
+#, javascript-format
+msgid "File: %s"
+msgstr "文件: %s"
+
 #: components/admin-ui-src/components/CsvControls.js:236
 #: components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr "导入此文件将替换此工作表中的所有现有数据"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:5
+msgid "Columns"
+msgstr "列"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:6
+msgid "Rows"
+msgstr "行"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:29
+msgid "Parse data in"
+msgstr "排列数据的方式 （行／列）"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:53
+msgid " Show labels"
+msgstr " 显示标签"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:67
+msgid " Show legend"
+msgstr "显示图例"
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:82
+msgid " Shared tooltip"
+msgstr "共享工具提示框"
+
+#: components/admin-ui-src/components/SheetTabs.js:43
+#, javascript-format
+msgid "Sheet %d"
+msgstr "工作表 %d"
 
 #: components/admin-ui-src/components/SheetTabs.js:52
 #: components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
 msgstr "添加工作表"
 
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:26
+msgid "Shortcode"
+msgstr "短代码"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:38
+msgid "Copied!"
+msgstr "复制！"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:38
+msgid "Copy"
+msgstr "复制"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:42
+#: components/block-src/chart/edit.js:187
+msgid "Image"
+msgstr "图像"
+
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:56
 #: components/class-m-chart.php:213
 msgid "View"
 msgstr "查看"
 
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:60
+msgid "Image generation is disabled"
+msgstr "图像生成功能关闭"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:62
+msgid "Save/Update this post to generate the image version"
+msgstr "以图像文档格式储存／上传此图表"
+
 #: components/admin-ui-src/components/SubtitleField.js:22
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
 msgstr "在此处输入子标题"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:24
+msgid "Type"
+msgstr "类型"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:40
+msgid "Theme"
+msgstr "主题"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:55
+msgid "Height"
+msgstr "高度"
 
 #: components/array-default-unit-terms.php:8
 msgid "Time"
@@ -2493,12 +2596,52 @@ msgstr "祖鲁语"
 msgid "Zulu (South Africa)"
 msgstr "祖鲁语（南非）"
 
+#: components/block-src/chart/edit.js:181
+msgid "Display settings"
+msgstr "显示设置"
+
+#: components/block-src/chart/edit.js:183
+msgid "Show"
+msgstr "显示"
+
 #: components/block-src/chart/edit.js:186
 #: components/block-src/chart/edit.js:237
-#: components/class-m-chart-admin.php:483
-#: components/class-m-chart.php:207
+#: components/class-m-chart-admin.php:489 components/class-m-chart.php:207
 msgid "Chart"
 msgstr "图表"
+
+#: components/block-src/chart/edit.js:188
+msgid "Table"
+msgstr "表格"
+
+#: components/block-src/chart/edit.js:198
+msgid "New chart"
+msgstr "新图表"
+
+#: components/block-src/chart/edit.js:202
+msgid "Edit chart"
+msgstr "编辑图表"
+
+#: components/block-src/chart/edit.js:203
+msgid "Replace"
+msgstr "替换"
+
+#: components/block-src/chart/edit.js:240
+msgid "There was a problem loading charts"
+msgstr "加载图表时出现问题"
+
+#: components/block-src/chart/edit.js:249
+#: components/block-src/chart/edit.js:264
+msgid "No charts found"
+msgstr "没找到图表"
+
+#: components/block-src/chart/edit.js:250
+msgid "Create a new chart"
+msgstr "创建新图表"
+
+#: components/block-src/chart/edit.js:257
+msgid "Search by title"
+msgstr "按标题搜索"
 
 #: components/class-m-chart-admin.php:54
 #: components/templates/m-chart-settings.php:2
@@ -2533,58 +2676,57 @@ msgstr "这些图表除非安装插件，否则将不再显示："
 msgid "Learn More"
 msgstr "了解更多"
 
-#: components/class-m-chart-admin.php:428
+#: components/class-m-chart-admin.php:434
 msgid "Are you sure you want to delete this spreadsheet?"
 msgstr "你确定你要删掉这个电子表格吗?"
 
-#: components/class-m-chart-admin.php:474
+#: components/class-m-chart-admin.php:480
 msgid "Data"
 msgstr "数据"
 
-#: components/class-m-chart-admin.php:613
+#: components/class-m-chart-admin.php:619
 msgid "Library not found"
 msgstr "找不到库"
 
-#: components/class-m-chart-admin.php:827
-#: components/class-m-chart-admin.php:837
+#: components/class-m-chart-admin.php:833
+#: components/class-m-chart-admin.php:843
 msgid "Wrong post type"
 msgstr "错误图表类型"
 
-#: components/class-m-chart-admin.php:832
-#: components/class-m-chart-admin.php:968
+#: components/class-m-chart-admin.php:838
+#: components/class-m-chart-admin.php:974
 msgid "Invalid nonce"
 msgstr "无效随机值"
 
-#: components/class-m-chart-admin.php:842
+#: components/class-m-chart-admin.php:848
 msgid "No file to import"
 msgstr "没有导入的文件"
 
-#: components/class-m-chart-admin.php:849
+#: components/class-m-chart-admin.php:855
 msgid "Only CSV files can be imported"
 msgstr "只有CSV文档可以导入"
 
-#: components/class-m-chart-admin.php:856
+#: components/class-m-chart-admin.php:862
 msgid "File path not found"
 msgstr "找不到文件路径"
 
-#: components/class-m-chart-admin.php:862
+#: components/class-m-chart-admin.php:868
 msgid "CSV file was empty"
 msgstr "CSV文档是空的"
 
-#: components/class-m-chart-admin.php:973
+#: components/class-m-chart-admin.php:979
 msgid "Invalid post"
 msgstr "无效图表"
 
-#: components/class-m-chart-admin.php:978
+#: components/class-m-chart-admin.php:984
 msgid "Permission error"
 msgstr "权限错误"
 
-#: components/class-m-chart-admin.php:983
+#: components/class-m-chart-admin.php:989
 msgid "Invalid library"
 msgstr "无效编码库"
 
-#: components/class-m-chart-block.php:170
-#: components/class-m-chart.php:940
+#: components/class-m-chart-block.php:170 components/class-m-chart.php:940
 msgid "Chart not found"
 msgstr "无法找到图表"
 
@@ -2644,8 +2786,7 @@ msgstr "雷达面积图"
 msgid "Polar"
 msgstr "极地数据集标签"
 
-#: components/class-m-chart.php:167
-#: components/class-m-chart.php:177
+#: components/class-m-chart.php:167 components/class-m-chart.php:177
 msgid "Chart Units"
 msgstr "图表单位"
 
@@ -2689,8 +2830,7 @@ msgstr "图表单位名称"
 msgid "Charts"
 msgstr "图表"
 
-#: components/class-m-chart.php:208
-#: components/class-m-chart.php:209
+#: components/class-m-chart.php:208 components/class-m-chart.php:209
 msgid "Add Chart"
 msgstr "添加图表"
 
@@ -2767,7 +2907,9 @@ msgid "Number Format Locale"
 msgstr "数字格式所在地"
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
+msgid ""
+"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
+"chart"
 msgstr "你想用Intl.NumberFormat解析图表中的数字时使用的地点"
 
 #: components/templates/m-chart-settings.php:5
@@ -2787,7 +2929,9 @@ msgid "Show Library in Edit Posts Screen"
 msgstr "在编辑帖子界面显示库"
 
 #: components/templates/m-chart-settings.php:34
-msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
+msgid ""
+"Displays an icon indicating the library used for a chart in Edit Posts "
+"Screen of the WP Admin"
 msgstr "在WP管理员编辑帖子界面显示用于图表的图书馆图标"
 
 #: components/templates/m-chart-settings.php:39
@@ -2841,7 +2985,8 @@ msgid "4x"
 msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
-msgid "The higher the multiplier the better the images will look on high DPI screens"
+msgid ""
+"The higher the multiplier the better the images will look on high DPI screens"
 msgstr "倍率越高，高DPI屏幕上的画面效果越好"
 
 #: components/templates/m-chart-settings.php:91
@@ -2893,7 +3038,9 @@ msgid "http://github.com/methnen/m-chart"
 msgstr "http://github.com/methnen/m-charts"
 
 #. Description of the plugin/theme
-msgid "Manage data sets via a spreadsheet interface and display them as charts in WordPress."
+msgid ""
+"Manage data sets via a spreadsheet interface and display them as charts in "
+"WordPress."
 msgstr "通过电子表格界面管理数据集，并在WordPress中以图表形式显示。"
 
 #. Author of the plugin/theme
@@ -2938,17 +3085,18 @@ msgstr "http://methnen.com"
 #~ msgid "Numeric Symbols"
 #~ msgstr "数字符号"
 
-#~ msgid "Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)"
+#~ msgid ""
+#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
+#~ "Quadrillions, Quintillions...)"
 #~ msgstr "用逗号分隔（千，百万，十亿，万亿，四万亿，五百万...）"
 
 #~ msgid "Numeric Symbol Magnitude"
 #~ msgstr "数字符号的幅度"
 
-#~ msgid "Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)"
+#~ msgid ""
+#~ "Allows adjustment for languages that use symbols at different intervals "
+#~ "(Japanese, Korean, etc...)"
 #~ msgstr "允许调整一些会在不同间隔间使用符号的语言（日语，韩语等）"
 
 #~ msgid "Importing this file will replace all existing data"
 #~ msgstr "导入此文档将替换现有数据"
-
-#~ msgid "Force vertical axis minimum to zero"
-#~ msgstr "制定纵坐标洲最小值为0"

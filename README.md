@@ -9,7 +9,7 @@ Manage data sets and display them as charts in WordPress.
 
 ## Description ##
 
-Allows you to manage data sets via a spreadsheet interface and present that data in chart form via the Chart.js or [Highcharts](https://github.com/methnen/m-chart-highcharts-library/) chart libraries.  The charts can then be embedded into a regular post via a handy shortcode.
+Manage data sets via a spreadsheet interface and display them as charts via the Chart.js or [Highcharts](https://github.com/methnen/m-chart-highcharts-library/) chart libraries and embed them via a handy shortcode or WordPress block.
 
 **Note:** Starting with version 1.8 the Chart.js library is no longer on the 2.x.x branch which introduces some [breaking changes](https://www.chartjs.org/docs/latest/getting-started/v3-migration.html). This will probably only affect you if you were modifying the default Chart.js behavior in some way.
 
@@ -18,13 +18,6 @@ Allows you to manage data sets via a spreadsheet interface and present that data
 For full documentation please see the [Wiki](https://github.com/methnen/m-chart/wiki).
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
-
-## Installation ##
-
-1. Put the m-chart directory into your plugins directory
-2. Click 'Activate' in the Plugins admin panel
-3. Adjust the M Chart Settings to your preference
-	- WordPress Admin -> Charts -> Settings
 
 ## Screenshots ##
 
@@ -39,6 +32,24 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 2.0 ###
+
+* Refactored the Admin UI to use React for all of the interface which results in some UI performance and functionality improvements
+	* Added a Copy button to the Shortcode input field
+	* Height and Force vertical axis minimum fields now resize to fit their contents
+* Refactored PHP data parsing code to improve reliability and flexibility with differently formatted data
+	* Number values are now parsed to extract prefix and suffix strings allowing data to always be displayed with formatting while still preserving prefixes and suffixes
+* Refactored helper code as a Chart.js plugin instead of jQuery
+	* Helper code now formats and parses labels as well as tooltips
+* Refactored Chart.js template to no longer be reliant on jQuery
+* Refactored the Block interface to make some performance and UI improvements
+	* Reduced the number of queries required for the interface to function
+	* Charts are now lazy loaded into the UI and subsequent charts are loaded as user scrolls
+	* Search now accepts any reasonable values you could expect in a post title
+	* Show attribute can now be controled from the block UI
+* Lots of additional code modernization and style improvements that didn't effect functionality but should make code easier to maintain going forward
+* Fixed an issue where a duplicate localization call could cause localization in the Block ui to not always load
 
 ### 1.12 ###
 
