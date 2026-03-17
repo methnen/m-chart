@@ -175,9 +175,9 @@ class M_Chart_Chartjs {
 		$chart_args = [
 			'type'    => $this->chart_types[ $this->post_meta['type'] ],
 			'options' => [
-				'plugins'             => [
+				'plugins' => [
 					// @TODO Figure out how to support subtitles in Chart.js
-					'title'   => [
+					'title' => [
 						'display' => true,
 						'text'    => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
 						'font'    => [
@@ -188,7 +188,7 @@ class M_Chart_Chartjs {
 							'bottom' => 15,
 						],
 					],
-					'legend'  => [
+					'legend' => [
 						'display'  => $this->post_meta['legend'] ? true : false,
 						'position' => 'bottom',
 						'labels'   => [
@@ -202,7 +202,10 @@ class M_Chart_Chartjs {
 						'enabled' => true,
 					],
 				],
-				'elements'            => [
+				'layout' => [
+					'padding' => 20,
+				],
+				'elements' => [
 					'point' => [
 						'hoverRadius' => 7,
 						'hitRadius'   => 13,

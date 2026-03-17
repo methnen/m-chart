@@ -1,17 +1,15 @@
-# Copyright (C) 2023 Jamie Poitra
-# This file is distributed under the MIT.
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart 1.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-13T12:50:03+00:00\n"
-"PO-Revision-Date: 2024-06-17 15:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-06-13T12:50:03+00:00\n"
+"PO-Revision-Date: 2024-06-17 15:26+0200\n"
+"Language: nl_NL\n"
 "X-Generator: Poedit 3.4.4\n"
 "X-Domain: m-chart\n"
 
@@ -2421,41 +2419,20 @@ msgstr ""
 msgid "Zulu (South Africa)"
 msgstr ""
 
-#: components/block-src/chart/edit.js:103 components/class-m-chart.php:210
+#: components/block-src/chart/edit.js:103
+#: components/class-m-chart.php:210
 msgid "New Chart"
 msgstr "Nieuwe grafiek"
 
-#: components/block-src/chart/edit.js:106 components/class-m-chart.php:209
+#: components/block-src/chart/edit.js:106
+#: components/class-m-chart.php:209
 msgid "Edit Chart"
 msgstr "Grafiek bewerken"
 
-#: components/block-src/chart/edit.js:107
-msgid "Replace"
-msgstr "Vervang"
-
-#: components/block-src/chart/edit.js:119
-msgid "There was a problem fetching charts"
-msgstr "Er is een probleem met het ophalen van grafieken"
-
-#: components/block-src/chart/edit.js:150 components/class-m-chart.php:214
+#: components/block-src/chart/edit.js:150
+#: components/class-m-chart.php:214
 msgid "No Charts found"
 msgstr "Geen grafieken gevonden"
-
-#: components/block-src/chart/edit.js:151
-msgid "Create a new chart"
-msgstr "Maak een nieuwe grafiek"
-
-#: components/block-src/chart/edit.js:158
-msgid "Search by title"
-msgstr "Doorzoek op titel"
-
-#: components/block-src/chart/edit.js:162
-msgid " of "
-msgstr " van "
-
-#: components/block-src/chart/edit.js:165
-msgid "No Charts found using this search string"
-msgstr "Geen grafieken gevonden met deze zoekterm"
 
 #: components/class-m-chart-admin.php:53
 #: components/templates/m-chart-settings.php:2
@@ -2483,8 +2460,7 @@ msgstr "U hebt grafieken waarvoor de M Chart Highcharts plugin vereist is."
 
 #: components/class-m-chart-admin.php:247
 msgid "These charts will no longer display unless you install the plugin:"
-msgstr ""
-"Deze grafieken kunnen niet getoond worden tenzij u deze plugin installeert:"
+msgstr "Deze grafieken kunnen niet getoond worden tenzij u deze plugin installeert:"
 
 #: components/class-m-chart-admin.php:249
 #: components/templates/chart-meta-box.php:21
@@ -2499,7 +2475,8 @@ msgstr "Bent u zeker dat u deze spreadsheet wil verwijderen?"
 msgid "Data"
 msgstr "Data"
 
-#: components/class-m-chart-admin.php:390 components/class-m-chart.php:205
+#: components/class-m-chart-admin.php:390
+#: components/class-m-chart.php:205
 msgid "Chart"
 msgstr "Grafiek"
 
@@ -2601,7 +2578,8 @@ msgstr "Radar gebied"
 msgid "Polar"
 msgstr "Polair"
 
-#: components/class-m-chart.php:165 components/class-m-chart.php:175
+#: components/class-m-chart.php:165
+#: components/class-m-chart.php:175
 msgid "Chart Units"
 msgstr "Grafiek eenheden"
 
@@ -2645,7 +2623,8 @@ msgstr "Grafiek eenheid naam"
 msgid "Charts"
 msgstr "Grafieken"
 
-#: components/class-m-chart.php:206 components/class-m-chart.php:207
+#: components/class-m-chart.php:206
+#: components/class-m-chart.php:207
 msgid "Add Chart"
 msgstr "Grafiek toevoegen"
 
@@ -2690,74 +2669,6 @@ msgstr "Het invoegen van dit type bestand is niet toegestaan"
 #: components/class-m-chart.php:946
 msgid "Embeds disabled"
 msgstr "Invoegen niet toegestaan"
-
-#: components/external/canvg/umd.js:1
-msgid "Symbol."
-msgstr "Symbool."
-
-#: components/external/handsontable/handsontable.js:29
-msgid "delete"
-msgstr "verwijder"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "has"
-msgstr "heeft"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "get"
-msgstr "geef"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Wrong offset!"
-msgstr "Verkeerd startpunt!"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Wrong length!"
-msgstr "Verkeerde lengte!"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "autocomplete"
-msgstr "zelf aanvullend"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "checkbox"
-msgstr "keuzevakje"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "date"
-msgstr "datum"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "dropdown"
-msgstr "selectielijst"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "handsontable"
-msgstr "tabel"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "numeric"
-msgstr "numeriek"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "password"
-msgstr "wachtwoord"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "text"
-msgstr "tekst"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "time"
-msgstr "tijd"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Promise-chain cycle"
-msgstr "Eindeloze loop"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Promise can't be resolved itself"
-msgstr "Een belofte kan niet zichzelf inlossen"
 
 #: components/templates/chart-meta-box.php:16
 msgid "This chart requires the M Chart Highcharts Library plugin."
@@ -2850,20 +2761,15 @@ msgstr "Standaard Chart.js Thema"
 
 #: components/templates/m-chart-settings-chartjs.php:23
 msgid "See the M Chart documentation for more info on how to use themes:"
-msgstr ""
-"Lees de M Chart documentatie voor meer informatie over hoe de thema’s te "
-"gebruiken:"
+msgstr "Lees de M Chart documentatie voor meer informatie over hoe de thema’s te gebruiken:"
 
 #: components/templates/m-chart-settings-chartjs.php:29
 msgid "Number Format Locale"
 msgstr "Regio nummer weergave"
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid ""
-"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
-"chart"
-msgstr ""
-"De gewenste landinstelling bij het weergeven van de getallen in het diagram"
+msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
+msgstr "De gewenste landinstelling bij het weergeven van de getallen in het diagram"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
@@ -2882,12 +2788,8 @@ msgid "Show Library in Edit Posts Screen"
 msgstr "Toon de bibliotheek in bewerk schermen"
 
 #: components/templates/m-chart-settings.php:34
-msgid ""
-"Displays an icon indicating the library used for a chart in Edit Posts "
-"Screen of the WP Admin"
-msgstr ""
-"Toont een icoon dat de gebruikte grafiek bibliotheek aangeeft in het bewerk "
-"bericht scherm van WP Admin"
+msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
+msgstr "Toont een icoon dat de gebruikte grafiek bibliotheek aangeeft in het bewerk bericht scherm van WP Admin"
 
 #: components/templates/m-chart-settings.php:39
 #: components/templates/m-chart-settings.php:43
@@ -2940,11 +2842,8 @@ msgid "4x"
 msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
-msgid ""
-"The higher the multiplier the better the images will look on high DPI screens"
-msgstr ""
-"Hoe hoger de factor, des te beter de afbeeldingen er op schermen met een "
-"hoge resolutie uit zullen zien"
+msgid "The higher the multiplier the better the images will look on high DPI screens"
+msgstr "Hoe hoger de factor, des te beter de afbeeldingen er op schermen met een hoge resolutie uit zullen zien"
 
 #: components/templates/m-chart-settings.php:91
 msgid "Image Width"
@@ -3028,8 +2927,7 @@ msgstr "Importeren annuleren"
 
 #: components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
-msgstr ""
-"Dit bestand importeren zal alle bestaande data in dit werkblad overschrijven"
+msgstr "Dit bestand importeren zal alle bestaande data in dit werkblad overschrijven"
 
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
@@ -3051,27 +2949,27 @@ msgstr "Jamie Poitra"
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
 
-#.
+#. 
 msgctxt "block description"
 msgid "Embed a chart made with M Chart into your posts and pages"
 msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
 
-#.
+#. 
 msgid "No charts found"
 msgstr "Geen grafieken gevonden"
 
-#.
+#. 
 msgid "No charts were found using this search string"
 msgstr "Geen grafieken gevonden met deze zoekterm"
 
-#.
+#. 
 msgid "Click on the chart to make a new selection"
 msgstr "Klik op de grafiek om een nieuwe keuze te maken"
 
-#.
+#. 
 msgid "Click on a chart to select & insert"
 msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
 
-#.
+#. 
 msgid "Chart plugin not available or not active"
 msgstr "M Chart is niet aanwezig of niet actief"

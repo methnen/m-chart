@@ -2,9 +2,8 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "m-chart/chart",
-	"title": "M Chart",
+	"title": "Chart",
 	"category": "layout",
-	"icon": "chart-pie",
 	"description": "Embed a chart made with M Chart into your posts and pages",
 	"textdomain": "m-chart",
 	"attributes": {

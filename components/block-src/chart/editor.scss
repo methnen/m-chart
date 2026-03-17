@@ -21,7 +21,6 @@
 		
 		.count {
 			font-family: var(--wp--preset--font-family--system-font);
-			text-align: center;
 			line-height: 2rem;
 			font-size: .8rem;
 			margin-top: 0;
@@ -161,8 +160,13 @@
 				}
 			}
 		}
+
+		li.loading-more {
+			flex-basis: 100%;
+			padding: 1rem 0;
+		}
 	}
-	
+
 	// Selected
 	.chart-selected {
 		.image-support {
@@ -174,6 +178,7 @@
 				height: auto;
 			}
 		}
+		
 		.type {
 			position: relative;
 			padding-top: 5rem;

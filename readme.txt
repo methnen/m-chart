@@ -27,6 +27,24 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 2.0 = 
+
+* Refactored the Admin UI to use React for all of the interface which results in some UI performance and functionality improvements
+	* Added a Copy button to the Shortcode input field
+	* Height and Force vertical axis minimum fields now resize to fit their contents
+* Refactored PHP data parsing code to improve reliability and flexibility with differently formatted data
+	* Number values are now parsed to extract prefix and suffix strings allowing data to always be displayed with formatting while still preserving prefixes and suffixes
+* Refactored helper code as a Chart.js plugin instead of jQuery
+	* Helper code now formats and parses labels as well as tooltips
+* Refactored Chart.js template to no longer be reliant on jQuery
+* Refactored the Block interface to make some performance and UI improvements
+	* Reduced the number of queries required for the interface to function
+	* Charts are now lazy loaded into the UI and subsequent charts are loaded as user scrolls
+	* Search now accepts any reasonable values you could expect in a post title
+	* Show attribute can now be controled from the block UI
+* Lots of additional code modernization and style improvements that didn't effect functionality but should make code easier to maintain going forward
+* Fixed an issue where a duplicate localization call could cause localization in the Block ui to not always load
+
 = 1.12 =
 
 * Switched from the old version (6.2.2) of [Handsontable](https://handsontable.com/blog/handsontable-drops-open-source-for-a-non-commercial-license) to [Jspreadsheet CE](https://bossanova.uk/jspreadsheet/) (5.0.0)

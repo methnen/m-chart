@@ -1,22 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
-"POT-Creation-Date: 2024-04-29 15:04-0700\n"
-"PO-Revision-Date: 2024-04-29 15:25-0700\n"
+"Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-16 18:16-0700\n"
+"PO-Revision-Date: 2026-03-16 18:16-0700\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.9\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-WPHeader: m-chart.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
@@ -165,8 +164,6 @@ msgid "Sales"
 msgstr "销售额"
 
 #: components/array-default-unit-terms.php:49
-#: components/templates/chartjs-settings.php:86
-#: components/templates/chartjs-settings.php:124
 msgid "Units"
 msgstr "单位"
 
@@ -176,2384 +173,2732 @@ msgstr "每千人价格"
 
 #: components/array-locale-codes.php:9
 msgid "Afrikaans"
-msgstr ""
+msgstr "南非荷兰语"
 
 #: components/array-locale-codes.php:10
+#, fuzzy
 msgid "Afrikaans (Namibia)"
-msgstr ""
+msgstr "南非荷兰语（纳米比亚）"
 
 #: components/array-locale-codes.php:11
+#, fuzzy
 msgid "Afrikaans (South Africa)"
-msgstr ""
+msgstr "南非荷兰语"
 
 #: components/array-locale-codes.php:12
 msgid "Akan"
-msgstr ""
+msgstr "阿坎语"
 
 #: components/array-locale-codes.php:13
+#, fuzzy
 msgid "Akan (Ghana)"
-msgstr ""
+msgstr "阿坎（加纳）"
 
 #: components/array-locale-codes.php:14
 msgid "Albanian"
-msgstr ""
+msgstr "阿尔巴尼亚语"
 
 #: components/array-locale-codes.php:15
+#, fuzzy
 msgid "Albanian (Albania)"
-msgstr ""
+msgstr "阿尔巴尼亚语（Albania）"
 
 #: components/array-locale-codes.php:16
+#, fuzzy
 msgid "Albanian (Kosovo)"
-msgstr ""
+msgstr "阿尔巴尼亚（科索沃）"
 
 #: components/array-locale-codes.php:17
+#, fuzzy
 msgid "Albanian (Macedonia)"
-msgstr ""
+msgstr "阿尔巴尼亚（马其顿）"
 
 #: components/array-locale-codes.php:18
 msgid "Amharic"
-msgstr ""
+msgstr "阿姆哈拉语"
 
 #: components/array-locale-codes.php:19
+#, fuzzy
 msgid "Amharic (Ethiopia)"
-msgstr ""
+msgstr "阿姆哈拉语（埃塞俄比亚）"
 
 #: components/array-locale-codes.php:20
 msgid "Arabic"
-msgstr ""
+msgstr "阿拉伯语"
 
 #: components/array-locale-codes.php:21
 msgid "Arabic (Algeria)"
-msgstr ""
+msgstr "阿拉伯语（阿尔及利亚）"
 
 #: components/array-locale-codes.php:22
+#, fuzzy
 msgid "Arabic (Bahrain)"
-msgstr ""
+msgstr "阿拉伯语（巴林）"
 
 #: components/array-locale-codes.php:23
+#, fuzzy
 msgid "Arabic (Chad)"
-msgstr ""
+msgstr "阿拉伯语（乍得）"
 
 #: components/array-locale-codes.php:24
+#, fuzzy
 msgid "Arabic (Comoros)"
-msgstr ""
+msgstr "阿拉伯语（科摩罗）"
 
 #: components/array-locale-codes.php:25
+#, fuzzy
 msgid "Arabic (Djibouti)"
-msgstr ""
+msgstr "阿拉伯语（吉布提）"
 
 #: components/array-locale-codes.php:26
 msgid "Arabic (Egypt)"
-msgstr ""
+msgstr "阿拉伯语（埃及）"
 
 #: components/array-locale-codes.php:27
+#, fuzzy
 msgid "Arabic (Eritrea)"
-msgstr ""
+msgstr "阿拉伯语（厄立特里亚）"
 
 #: components/array-locale-codes.php:28
+#, fuzzy
 msgid "Arabic (Iraq)"
-msgstr ""
+msgstr "阿拉伯语（伊拉克）"
 
 #: components/array-locale-codes.php:29
+#, fuzzy
 msgid "Arabic (Israel)"
-msgstr ""
+msgstr "阿拉伯语（以色列）"
 
 #: components/array-locale-codes.php:30
+#, fuzzy
 msgid "Arabic (Jordan)"
-msgstr ""
+msgstr "阿拉伯语（约旦）"
 
 #: components/array-locale-codes.php:31
 msgid "Arabic (Kuwait)"
-msgstr ""
+msgstr "阿拉伯语（科威特）"
 
 #: components/array-locale-codes.php:32
+#, fuzzy
 msgid "Arabic (Lebanon)"
-msgstr ""
+msgstr "阿拉伯语（黎巴嫩）"
 
 #: components/array-locale-codes.php:33
 msgid "Arabic (Libya)"
-msgstr ""
+msgstr "阿拉伯语（利比亚）"
 
 #: components/array-locale-codes.php:34
+#, fuzzy
 msgid "Arabic (Mauritania)"
-msgstr ""
+msgstr "阿拉伯语（毛里塔尼亚）"
 
 #: components/array-locale-codes.php:35
 msgid "Arabic (Morocco)"
-msgstr ""
+msgstr "阿拉伯语（摩洛哥）"
 
 #: components/array-locale-codes.php:36
+#, fuzzy
 msgid "Arabic (Oman)"
-msgstr ""
+msgstr "阿拉伯语（阿曼）"
 
 #: components/array-locale-codes.php:37
+#, fuzzy
 msgid "Arabic (Palestinian Territories)"
-msgstr ""
+msgstr "阿拉伯语（巴勒斯坦领土）"
 
 #: components/array-locale-codes.php:38
+#, fuzzy
 msgid "Arabic (Qatar)"
-msgstr ""
+msgstr "阿拉伯语（卡塔尔）"
 
 #: components/array-locale-codes.php:39
 msgid "Arabic (Saudi Arabia)"
-msgstr ""
+msgstr "阿拉伯语（沙特阿拉伯）"
 
 #: components/array-locale-codes.php:40
+#, fuzzy
 msgid "Arabic (Somalia)"
-msgstr ""
+msgstr "阿拉伯语（索马里）"
 
 #: components/array-locale-codes.php:41
+#, fuzzy
 msgid "Arabic (South Sudan)"
-msgstr ""
+msgstr "阿拉伯语（南苏丹）"
 
 #: components/array-locale-codes.php:42
+#, fuzzy
 msgid "Arabic (Sudan)"
-msgstr ""
+msgstr "阿拉伯语（苏丹）"
 
 #: components/array-locale-codes.php:43
+#, fuzzy
 msgid "Arabic (Syria)"
-msgstr ""
+msgstr "阿拉伯语（叙利亚）"
 
 #: components/array-locale-codes.php:44
 msgid "Arabic (Tunisia)"
-msgstr ""
+msgstr "阿拉伯语（突尼斯）"
 
 #: components/array-locale-codes.php:45
+#, fuzzy
 msgid "Arabic (United Arab Emirates)"
-msgstr ""
+msgstr "阿拉伯语（阿拉伯联合酋长国）"
 
 #: components/array-locale-codes.php:46
+#, fuzzy
 msgid "Arabic (Western Sahara)"
-msgstr ""
+msgstr "阿拉伯语（西撒哈拉）"
 
 #: components/array-locale-codes.php:47
+#, fuzzy
 msgid "Arabic (Yemen)"
-msgstr ""
+msgstr "阿拉伯语（也门）"
 
 #: components/array-locale-codes.php:48
 msgid "Armenian"
-msgstr ""
+msgstr "亚美尼亚"
 
 #: components/array-locale-codes.php:49
+#, fuzzy
 msgid "Armenian (Armenia)"
-msgstr ""
+msgstr "亚美尼亚（亚美尼亚）"
 
 #: components/array-locale-codes.php:50
 msgid "Assamese"
-msgstr ""
+msgstr "阿萨姆"
 
 #: components/array-locale-codes.php:51
+#, fuzzy
 msgid "Assamese (India)"
-msgstr ""
+msgstr "阿萨姆语（印度）"
 
 #: components/array-locale-codes.php:52
 msgid "Azerbaijani"
-msgstr ""
+msgstr "阿塞拜疆语"
 
 #: components/array-locale-codes.php:53
+#, fuzzy
 msgid "Azerbaijani (Azerbaijan)"
-msgstr ""
+msgstr "阿塞拜疆（阿塞拜疆）"
 
 #: components/array-locale-codes.php:54
+#, fuzzy
 msgid "Azerbaijani (Cyrillic, Azerbaijan)"
-msgstr ""
+msgstr "阿塞拜疆语（西里尔字母，阿塞拜疆）"
 
 #: components/array-locale-codes.php:55
+#, fuzzy
 msgid "Azerbaijani (Cyrillic)"
-msgstr ""
+msgstr "阿塞拜疆语（西里尔字母）"
 
 #: components/array-locale-codes.php:56
+#, fuzzy
 msgid "Azerbaijani (Latin, Azerbaijan)"
-msgstr ""
+msgstr "阿塞拜疆语（拉丁语，阿塞拜疆）"
 
 #: components/array-locale-codes.php:57
+#, fuzzy
 msgid "Azerbaijani (Latin)"
-msgstr ""
+msgstr "阿塞拜疆语（拉丁语）"
 
 #: components/array-locale-codes.php:58
 msgid "Bambara"
-msgstr ""
+msgstr "班巴拉语"
 
 #: components/array-locale-codes.php:59
+#, fuzzy
 msgid "Bambara (Latin, Mali)"
-msgstr ""
+msgstr "班巴拉（拉丁语，马里语）"
 
 #: components/array-locale-codes.php:60
+#, fuzzy
 msgid "Bambara (Latin)"
-msgstr ""
+msgstr "班巴拉（拉丁语）"
 
 #: components/array-locale-codes.php:61
 msgid "Basque"
-msgstr ""
+msgstr "巴斯克语"
 
 #: components/array-locale-codes.php:62
+#, fuzzy
 msgid "Basque (Spain)"
-msgstr ""
+msgstr "巴斯克（西班牙）"
 
 #: components/array-locale-codes.php:63
 msgid "Belarusian"
-msgstr ""
+msgstr "白俄罗斯语"
 
 #: components/array-locale-codes.php:64
+#, fuzzy
 msgid "Belarusian (Belarus)"
-msgstr ""
+msgstr "白俄罗斯（白俄罗斯）"
 
 #: components/array-locale-codes.php:65
 msgid "Bengali"
-msgstr ""
+msgstr "孟加拉"
 
 #: components/array-locale-codes.php:66
+#, fuzzy
 msgid "Bengali (Bangladesh)"
-msgstr ""
+msgstr "孟加拉（孟加拉国）"
 
 #: components/array-locale-codes.php:67
+#, fuzzy
 msgid "Bengali (India)"
-msgstr ""
+msgstr "孟加拉语（印度）"
 
 #: components/array-locale-codes.php:68
 msgid "Bosnian"
-msgstr ""
+msgstr "波斯尼亚语"
 
 #: components/array-locale-codes.php:69
+#, fuzzy
 msgid "Bosnian (Bosnia & Herzegovina)"
-msgstr ""
+msgstr "波斯尼亚（波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:70
+#, fuzzy
 msgid "Bosnian (Cyrillic, Bosnia & Herzegovina)"
-msgstr ""
+msgstr "波斯尼亚语（西里尔字母，波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:71
+#, fuzzy
 msgid "Bosnian (Cyrillic)"
-msgstr ""
+msgstr "波斯尼亚（西里尔字母）"
 
 #: components/array-locale-codes.php:72
+#, fuzzy
 msgid "Bosnian (Latin, Bosnia & Herzegovina)"
-msgstr ""
+msgstr "波斯尼亚语（拉丁语，波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:73
+#, fuzzy
 msgid "Bosnian (Latin)"
-msgstr ""
+msgstr "波斯尼亚语（拉丁语）"
 
 #: components/array-locale-codes.php:74
 msgid "Breton"
-msgstr ""
+msgstr "布列塔尼语"
 
 #: components/array-locale-codes.php:75
+#, fuzzy
 msgid "Breton (France)"
-msgstr ""
+msgstr "布列塔尼（法国）"
 
 #: components/array-locale-codes.php:76
 msgid "Bulgarian"
-msgstr ""
+msgstr "保加利亚语"
 
 #: components/array-locale-codes.php:77
+#, fuzzy
 msgid "Bulgarian (Bulgaria)"
-msgstr ""
+msgstr "保加利亚（保加利亚）"
 
 #: components/array-locale-codes.php:78
 msgid "Burmese"
-msgstr ""
+msgstr "缅甸语"
 
 #: components/array-locale-codes.php:79
+#, fuzzy
 msgid "Burmese (Myanmar (Burma))"
-msgstr ""
+msgstr "缅甸语（缅甸语）"
 
 #: components/array-locale-codes.php:80
 msgid "Catalan"
-msgstr ""
+msgstr "加泰罗尼亚语"
 
 #: components/array-locale-codes.php:81
+#, fuzzy
 msgid "Catalan (Andorra)"
-msgstr ""
+msgstr "加泰罗尼亚语（安道尔）"
 
 #: components/array-locale-codes.php:82
+#, fuzzy
 msgid "Catalan (France)"
-msgstr ""
+msgstr "加泰罗尼亚语（法国）"
 
 #: components/array-locale-codes.php:83
+#, fuzzy
 msgid "Catalan (Italy)"
-msgstr ""
+msgstr "加泰罗尼亚语（意大利）"
 
 #: components/array-locale-codes.php:84
+#, fuzzy
 msgid "Catalan (Spain)"
-msgstr ""
+msgstr "加泰罗尼亚语（西班牙）"
 
 #: components/array-locale-codes.php:85
 msgid "Chinese"
-msgstr ""
+msgstr "中文"
 
 #: components/array-locale-codes.php:86
 msgid "Chinese (China)"
-msgstr ""
+msgstr "中文（中国）"
 
 #: components/array-locale-codes.php:87
+#, fuzzy
 msgid "Chinese (Hong Kong SAR China)"
-msgstr ""
+msgstr "中国（香港特别行政区中国）"
 
 #: components/array-locale-codes.php:88
+#, fuzzy
 msgid "Chinese (Macau SAR China)"
-msgstr ""
+msgstr "华人（澳门特别行政区）"
 
 #: components/array-locale-codes.php:89
 msgid "Chinese (Simplified, China)"
-msgstr ""
+msgstr "中文（简体，中国）"
 
 #: components/array-locale-codes.php:90
+#, fuzzy
 msgid "Chinese (Simplified, Hong Kong SAR China)"
-msgstr ""
+msgstr "中文（简体，香港特别行政区中国）"
 
 #: components/array-locale-codes.php:91
+#, fuzzy
 msgid "Chinese (Simplified, Macau SAR China)"
-msgstr ""
+msgstr "中文（简体，澳门特别行政区中国）"
 
 #: components/array-locale-codes.php:92
+#, fuzzy
 msgid "Chinese (Simplified, Singapore)"
-msgstr ""
+msgstr "中文（简体，新加坡）"
 
 #: components/array-locale-codes.php:93
 msgid "Chinese (Simplified)"
-msgstr ""
+msgstr "中文（简体）"
 
 #: components/array-locale-codes.php:94
+#, fuzzy
 msgid "Chinese (Singapore)"
-msgstr ""
+msgstr "华人（新加坡）"
 
 #: components/array-locale-codes.php:95
 msgid "Chinese (Taiwan)"
-msgstr ""
+msgstr "中文（台湾）"
 
 #: components/array-locale-codes.php:96
+#, fuzzy
 msgid "Chinese (Traditional, Hong Kong SAR China)"
-msgstr ""
+msgstr "中文（繁体，香港特别行政区中国）"
 
 #: components/array-locale-codes.php:97
+#, fuzzy
 msgid "Chinese (Traditional, Macau SAR China)"
-msgstr ""
+msgstr "中文（繁体，澳门特别行政区）"
 
 #: components/array-locale-codes.php:98
 msgid "Chinese (Traditional, Taiwan)"
-msgstr ""
+msgstr "中文（繁体，中国台湾）"
 
 #: components/array-locale-codes.php:99
 msgid "Chinese (Traditional)"
-msgstr ""
+msgstr "中文（繁体）"
 
 #: components/array-locale-codes.php:100
 msgid "Cornish"
-msgstr ""
+msgstr "康沃尔语"
 
 #: components/array-locale-codes.php:101
+#, fuzzy
 msgid "Cornish (United Kingdom)"
-msgstr ""
+msgstr "康沃尔（英国）"
 
 #: components/array-locale-codes.php:102
 msgid "Croatian"
-msgstr ""
+msgstr "克罗地亚语"
 
 #: components/array-locale-codes.php:103
+#, fuzzy
 msgid "Croatian (Bosnia & Herzegovina)"
-msgstr ""
+msgstr "克罗地亚（波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:104
+#, fuzzy
 msgid "Croatian (Croatia)"
-msgstr ""
+msgstr "克罗地亚语（克罗地亚）"
 
 #: components/array-locale-codes.php:105
 msgid "Czech"
-msgstr ""
+msgstr "捷克语"
 
 #: components/array-locale-codes.php:106
 msgid "Czech (Czech Republic)"
-msgstr ""
+msgstr "捷克（捷克共和国）"
 
 #: components/array-locale-codes.php:107
 msgid "Danish"
-msgstr ""
+msgstr "丹麦语"
 
 #: components/array-locale-codes.php:108
 msgid "Danish (Denmark)"
-msgstr ""
+msgstr "丹麦"
 
 #: components/array-locale-codes.php:109
+#, fuzzy
 msgid "Danish (Greenland)"
-msgstr ""
+msgstr "丹麦（格陵兰）"
 
 #: components/array-locale-codes.php:110
 msgid "Dutch"
-msgstr ""
+msgstr "荷兰语"
 
 #: components/array-locale-codes.php:111
+#, fuzzy
 msgid "Dutch (Aruba)"
-msgstr ""
+msgstr "荷兰语（阿鲁巴）"
 
 #: components/array-locale-codes.php:112
 msgid "Dutch (Belgium)"
-msgstr ""
+msgstr "荷兰语 (比利时)"
 
 #: components/array-locale-codes.php:113
+#, fuzzy
 msgid "Dutch (Caribbean Netherlands)"
-msgstr ""
+msgstr "荷兰（加勒比尼德兰）"
 
 #: components/array-locale-codes.php:114
+#, fuzzy
 msgid "Dutch (Curaçao)"
-msgstr ""
+msgstr "荷兰（库拉索）"
 
 #: components/array-locale-codes.php:115
 msgid "Dutch (Netherlands)"
-msgstr ""
+msgstr "荷兰语(荷兰)"
 
 #: components/array-locale-codes.php:116
+#, fuzzy
 msgid "Dutch (Sint Maarten)"
-msgstr ""
+msgstr "荷兰人（圣马丁）"
 
 #: components/array-locale-codes.php:117
+#, fuzzy
 msgid "Dutch (Suriname)"
-msgstr ""
+msgstr "荷兰（苏里南）"
 
 #: components/array-locale-codes.php:118
 msgid "Dzongkha"
-msgstr ""
+msgstr "宗喀语"
 
 #: components/array-locale-codes.php:119
+#, fuzzy
 msgid "Dzongkha (Bhutan)"
-msgstr ""
+msgstr "宗喀（不丹）"
 
 #: components/array-locale-codes.php:120
 msgid "English"
-msgstr ""
+msgstr "英语"
 
 #: components/array-locale-codes.php:121
+#, fuzzy
 msgid "English (American Samoa)"
-msgstr ""
+msgstr "英格兰（美属萨摩亚）"
 
 #: components/array-locale-codes.php:122
+#, fuzzy
 msgid "English (Anguilla)"
-msgstr ""
+msgstr "英语（安圭拉）"
 
 #: components/array-locale-codes.php:123
+#, fuzzy
 msgid "English (Antigua & Barbuda)"
-msgstr ""
+msgstr "英语（安提瓜和巴布达）"
 
 #: components/array-locale-codes.php:124
 msgid "English (Australia)"
-msgstr ""
+msgstr "英语（澳大利亚）"
 
 #: components/array-locale-codes.php:125
+#, fuzzy
 msgid "English (Bahamas)"
-msgstr ""
+msgstr "英格兰（巴哈马）"
 
 #: components/array-locale-codes.php:126
+#, fuzzy
 msgid "English (Barbados)"
-msgstr ""
+msgstr "英格兰（巴巴多斯）"
 
 #: components/array-locale-codes.php:127
+#, fuzzy
 msgid "English (Belgium)"
-msgstr ""
+msgstr "英语（比利时）"
 
 #: components/array-locale-codes.php:128
+#, fuzzy
 msgid "English (Belize)"
-msgstr ""
+msgstr "英格兰（伯利兹）"
 
 #: components/array-locale-codes.php:129
+#, fuzzy
 msgid "English (Bermuda)"
-msgstr ""
+msgstr "英格兰（百慕大）"
 
 #: components/array-locale-codes.php:130
+#, fuzzy
 msgid "English (Botswana)"
-msgstr ""
+msgstr "英语（博茨瓦纳）"
 
 #: components/array-locale-codes.php:131
+#, fuzzy
 msgid "English (British Indian Ocean Territory)"
-msgstr ""
+msgstr "英格利希（英属印度洋领地）"
 
 #: components/array-locale-codes.php:132
+#, fuzzy
 msgid "English (British Virgin Islands)"
-msgstr ""
+msgstr "英格兰（英属维尔京群岛）"
 
 #: components/array-locale-codes.php:133
+#, fuzzy
 msgid "English (Cameroon)"
-msgstr ""
+msgstr "英语（喀麦隆）"
 
 #: components/array-locale-codes.php:134
 msgid "English (Canada)"
-msgstr ""
+msgstr "英语（加拿大）"
 
 #: components/array-locale-codes.php:135
+#, fuzzy
 msgid "English (Cayman Islands)"
-msgstr ""
+msgstr "英格利希（开曼群岛）"
 
 #: components/array-locale-codes.php:136
+#, fuzzy
 msgid "English (Christmas Island)"
-msgstr ""
+msgstr "英语（圣诞岛）"
 
 #: components/array-locale-codes.php:137
+#, fuzzy
 msgid "English (Cocos (Keeling) Islands)"
-msgstr ""
+msgstr "英格利希（科科斯（基林）群岛）"
 
 #: components/array-locale-codes.php:138
+#, fuzzy
 msgid "English (Cook Islands)"
-msgstr ""
+msgstr "英格利希（库克群岛）"
 
 #: components/array-locale-codes.php:139
+#, fuzzy
 msgid "English (Diego Garcia)"
-msgstr ""
+msgstr "英格利希（迭戈加西亚）"
 
 #: components/array-locale-codes.php:140
+#, fuzzy
 msgid "English (Dominica)"
-msgstr ""
+msgstr "英格兰（多米尼加）"
 
 #: components/array-locale-codes.php:141
+#, fuzzy
 msgid "English (Eritrea)"
-msgstr ""
+msgstr "英格兰（厄立特里亚）"
 
 #: components/array-locale-codes.php:142
+#, fuzzy
 msgid "English (Falkland Islands)"
-msgstr ""
+msgstr "英格利希（福克兰群岛）"
 
 #: components/array-locale-codes.php:143
+#, fuzzy
 msgid "English (Fiji)"
-msgstr ""
+msgstr "英语（斐济）"
 
 #: components/array-locale-codes.php:144
+#, fuzzy
 msgid "English (Gambia)"
-msgstr ""
+msgstr "英格兰（冈比亚）"
 
 #: components/array-locale-codes.php:145
+#, fuzzy
 msgid "English (Ghana)"
-msgstr ""
+msgstr "英语（加纳）"
 
 #: components/array-locale-codes.php:146
+#, fuzzy
 msgid "English (Gibraltar)"
-msgstr ""
+msgstr "英语（直布罗陀）"
 
 #: components/array-locale-codes.php:147
+#, fuzzy
 msgid "English (Grenada)"
-msgstr ""
+msgstr "英语（格林纳达）"
 
 #: components/array-locale-codes.php:148
+#, fuzzy
 msgid "English (Guam)"
-msgstr ""
+msgstr "英语（关岛）"
 
 #: components/array-locale-codes.php:149
+#, fuzzy
 msgid "English (Guernsey)"
-msgstr ""
+msgstr "英格兰（根西岛）"
 
 #: components/array-locale-codes.php:150
+#, fuzzy
 msgid "English (Guyana)"
-msgstr ""
+msgstr "英格兰（圭亚那）"
 
 #: components/array-locale-codes.php:151
+#, fuzzy
 msgid "English (Hong Kong SAR China)"
-msgstr ""
+msgstr "英文（香港特别行政区，中国）"
 
 #: components/array-locale-codes.php:152
 msgid "English (India)"
-msgstr ""
+msgstr "英语（印度）"
 
 #: components/array-locale-codes.php:153
 msgid "English (Ireland)"
-msgstr ""
+msgstr "英语（爱尔兰）"
 
 #: components/array-locale-codes.php:154
+#, fuzzy
 msgid "English (Isle of Man)"
-msgstr ""
+msgstr "英格利希（马恩岛）"
 
 #: components/array-locale-codes.php:155
+#, fuzzy
 msgid "English (Jamaica)"
-msgstr ""
+msgstr "英语（牙买加）"
 
 #: components/array-locale-codes.php:156
+#, fuzzy
 msgid "English (Jersey)"
-msgstr ""
+msgstr "英语（泽西）"
 
 #: components/array-locale-codes.php:157
+#, fuzzy
 msgid "English (Kenya)"
-msgstr ""
+msgstr "英语（肯尼亚）"
 
 #: components/array-locale-codes.php:158
+#, fuzzy
 msgid "English (Kiribati)"
-msgstr ""
+msgstr "英语（基里巴斯）"
 
 #: components/array-locale-codes.php:159
+#, fuzzy
 msgid "English (Lesotho)"
-msgstr ""
+msgstr "英语（莱索托）"
 
 #: components/array-locale-codes.php:160
+#, fuzzy
 msgid "English (Liberia)"
-msgstr ""
+msgstr "英语（利比里亚）"
 
 #: components/array-locale-codes.php:161
+#, fuzzy
 msgid "English (Macau SAR China)"
-msgstr ""
+msgstr "英文（澳门特别行政区中国）"
 
 #: components/array-locale-codes.php:162
+#, fuzzy
 msgid "English (Madagascar)"
-msgstr ""
+msgstr "英语（马达加斯加）"
 
 #: components/array-locale-codes.php:163
+#, fuzzy
 msgid "English (Malawi)"
-msgstr ""
+msgstr "英语（马拉维）"
 
 #: components/array-locale-codes.php:164
+#, fuzzy
 msgid "English (Malaysia)"
-msgstr ""
+msgstr "英语（马来西亚）"
 
 #: components/array-locale-codes.php:165
+#, fuzzy
 msgid "English (Malta)"
-msgstr ""
+msgstr "英语（马耳他）"
 
 #: components/array-locale-codes.php:166
+#, fuzzy
 msgid "English (Marshall Islands)"
-msgstr ""
+msgstr "英格利希（马绍尔群岛）"
 
 #: components/array-locale-codes.php:167
+#, fuzzy
 msgid "English (Mauritius)"
-msgstr ""
+msgstr "英格兰（毛里求斯）"
 
 #: components/array-locale-codes.php:168
+#, fuzzy
 msgid "English (Micronesia)"
-msgstr ""
+msgstr "英语（密克罗尼西亚）"
 
 #: components/array-locale-codes.php:169
+#, fuzzy
 msgid "English (Montserrat)"
-msgstr ""
+msgstr "英格利希（蒙特塞拉特）"
 
 #: components/array-locale-codes.php:170
+#, fuzzy
 msgid "English (Namibia)"
-msgstr ""
+msgstr "英语（纳米比亚）"
 
 #: components/array-locale-codes.php:171
+#, fuzzy
 msgid "English (Nauru)"
-msgstr ""
+msgstr "英语（瑙鲁）"
 
 #: components/array-locale-codes.php:172
 msgid "English (New Zealand)"
-msgstr ""
+msgstr "英语（新西兰）"
 
 #: components/array-locale-codes.php:173
 msgid "English (Nigeria)"
-msgstr ""
+msgstr "英文（尼日利亚）"
 
 #: components/array-locale-codes.php:174
+#, fuzzy
 msgid "English (Niue)"
-msgstr ""
+msgstr "英语（纽埃）"
 
 #: components/array-locale-codes.php:175
+#, fuzzy
 msgid "English (Norfolk Island)"
-msgstr ""
+msgstr "英格利希（诺福克岛）"
 
 #: components/array-locale-codes.php:176
+#, fuzzy
 msgid "English (Northern Mariana Islands)"
-msgstr ""
+msgstr "英格利希（北马里亚纳群岛）"
 
 #: components/array-locale-codes.php:177
+#, fuzzy
 msgid "English (Pakistan)"
-msgstr ""
+msgstr "英语（巴基斯坦）"
 
 #: components/array-locale-codes.php:178
+#, fuzzy
 msgid "English (Palau)"
-msgstr ""
+msgstr "英格兰（帕劳）"
 
 #: components/array-locale-codes.php:179
+#, fuzzy
 msgid "English (Papua New Guinea)"
-msgstr ""
+msgstr "英语（巴布亚新几内亚）"
 
 #: components/array-locale-codes.php:180
+#, fuzzy
 msgid "English (Philippines)"
-msgstr ""
+msgstr "英语（菲律宾）"
 
 #: components/array-locale-codes.php:181
+#, fuzzy
 msgid "English (Pitcairn Islands)"
-msgstr ""
+msgstr "英格利希（皮特凯恩群岛）"
 
 #: components/array-locale-codes.php:182
+#, fuzzy
 msgid "English (Puerto Rico)"
-msgstr ""
+msgstr "英语（波多黎各）"
 
 #: components/array-locale-codes.php:183
+#, fuzzy
 msgid "English (Rwanda)"
-msgstr ""
+msgstr "卢旺达英语"
 
 #: components/array-locale-codes.php:184
+#, fuzzy
 msgid "English (Samoa)"
-msgstr ""
+msgstr "英格兰（萨摩亚）"
 
 #: components/array-locale-codes.php:185
+#, fuzzy
 msgid "English (Seychelles)"
-msgstr ""
+msgstr "英语（塞舌尔）"
 
 #: components/array-locale-codes.php:186
+#, fuzzy
 msgid "English (Sierra Leone)"
-msgstr ""
+msgstr "英语（塞拉利昂）"
 
 #: components/array-locale-codes.php:187
 msgid "English (Singapore)"
-msgstr ""
+msgstr "英语（新加坡）"
 
 #: components/array-locale-codes.php:188
+#, fuzzy
 msgid "English (Sint Maarten)"
-msgstr ""
+msgstr "英语（圣马丁）"
 
 #: components/array-locale-codes.php:189
+#, fuzzy
 msgid "English (Solomon Islands)"
-msgstr ""
+msgstr "英语（所罗门群岛）"
 
 #: components/array-locale-codes.php:190
 msgid "English (South Africa)"
-msgstr ""
+msgstr "英语（南非）"
 
 #: components/array-locale-codes.php:191
+#, fuzzy
 msgid "English (South Sudan)"
-msgstr ""
+msgstr "英语（南苏丹）"
 
 #: components/array-locale-codes.php:192
+#, fuzzy
 msgid "English (St. Helena)"
-msgstr ""
+msgstr "英格利希（圣赫勒拿）"
 
 #: components/array-locale-codes.php:193
+#, fuzzy
 msgid "English (St. Kitts & Nevis)"
-msgstr ""
+msgstr "英格利希（圣基茨和尼维斯）"
 
 #: components/array-locale-codes.php:194
+#, fuzzy
 msgid "English (St. Lucia)"
-msgstr ""
+msgstr "英格兰（圣卢西亚）"
 
 #: components/array-locale-codes.php:195
+#, fuzzy
 msgid "English (St. Vincent & Grenadines)"
-msgstr ""
+msgstr "英语（圣文森特和格林纳丁斯）"
 
 #: components/array-locale-codes.php:196
+#, fuzzy
 msgid "English (Sudan)"
-msgstr ""
+msgstr "英语（苏丹）"
 
 #: components/array-locale-codes.php:197
+#, fuzzy
 msgid "English (Swaziland)"
-msgstr ""
+msgstr "英语（斯威士兰）"
 
 #: components/array-locale-codes.php:198
+#, fuzzy
 msgid "English (Tanzania)"
-msgstr ""
+msgstr "坦桑尼亚英语"
 
 #: components/array-locale-codes.php:199
+#, fuzzy
 msgid "English (Tokelau)"
-msgstr ""
+msgstr "英语（托克劳）"
 
 #: components/array-locale-codes.php:200
+#, fuzzy
 msgid "English (Tonga)"
-msgstr ""
+msgstr "英语（汤加）"
 
 #: components/array-locale-codes.php:201
+#, fuzzy
 msgid "English (Trinidad & Tobago)"
-msgstr ""
+msgstr "英语（特立尼达和多巴哥）"
 
 #: components/array-locale-codes.php:202
+#, fuzzy
 msgid "English (Turks & Caicos Islands)"
-msgstr ""
+msgstr "英格兰（特克斯和凯科斯群岛）"
 
 #: components/array-locale-codes.php:203
+#, fuzzy
 msgid "English (Tuvalu)"
-msgstr ""
+msgstr "英语（图瓦卢）"
 
 #: components/array-locale-codes.php:204
+#, fuzzy
 msgid "English (U.S. Outlying Islands)"
-msgstr ""
+msgstr "英语（美国外岛）"
 
 #: components/array-locale-codes.php:205
+#, fuzzy
 msgid "English (U.S. Virgin Islands)"
-msgstr ""
+msgstr "英格利什（美属维尔京群岛）"
 
 #: components/array-locale-codes.php:206
+#, fuzzy
 msgid "English (Uganda)"
-msgstr ""
+msgstr "英语（乌干达）"
 
 #: components/array-locale-codes.php:207
 msgid "English (United Kingdom)"
-msgstr ""
+msgstr "英语（英国）"
 
 #: components/array-locale-codes.php:208
 msgid "English (United States)"
-msgstr ""
+msgstr "英语（美国）"
 
 #: components/array-locale-codes.php:209
+#, fuzzy
 msgid "English (Vanuatu)"
-msgstr ""
+msgstr "瓦努阿图英语"
 
 #: components/array-locale-codes.php:210
+#, fuzzy
 msgid "English (Zambia)"
-msgstr ""
+msgstr "英语（赞比亚）"
 
 #: components/array-locale-codes.php:211
+#, fuzzy
 msgid "English (Zimbabwe)"
-msgstr ""
+msgstr "英语（津巴布韦）"
 
 #: components/array-locale-codes.php:212
 msgid "Esperanto"
-msgstr ""
+msgstr "世界语"
 
 #: components/array-locale-codes.php:213
 msgid "Estonian"
-msgstr ""
+msgstr "爱沙尼亚语"
 
 #: components/array-locale-codes.php:214
+#, fuzzy
 msgid "Estonian (Estonia)"
-msgstr ""
+msgstr "爱沙尼亚（爱沙尼亚）"
 
 #: components/array-locale-codes.php:215
 msgid "Ewe"
-msgstr ""
+msgstr "埃维语"
 
 #: components/array-locale-codes.php:216
+#, fuzzy
 msgid "Ewe (Ghana)"
-msgstr ""
+msgstr "加纳的母羊"
 
 #: components/array-locale-codes.php:217
+#, fuzzy
 msgid "Ewe (Togo)"
-msgstr ""
+msgstr "多哥的埃维族"
 
 #: components/array-locale-codes.php:218
 msgid "Faroese"
-msgstr ""
+msgstr "法罗语"
 
 #: components/array-locale-codes.php:219
+#, fuzzy
 msgid "Faroese (Faroe Islands)"
-msgstr ""
+msgstr "法罗群岛（法罗群岛）"
 
 #: components/array-locale-codes.php:220
 msgid "Finnish"
-msgstr ""
+msgstr "芬兰语"
 
 #: components/array-locale-codes.php:221
+#, fuzzy
 msgid "Finnish (Finland)"
-msgstr ""
+msgstr "芬兰语（芬兰）"
 
 #: components/array-locale-codes.php:222
 msgid "French"
-msgstr ""
+msgstr "法语"
 
 #: components/array-locale-codes.php:223
+#, fuzzy
 msgid "French (Algeria)"
-msgstr ""
+msgstr "法语（阿尔及利亚）"
 
 #: components/array-locale-codes.php:224
 msgid "French (Belgium)"
-msgstr ""
+msgstr "法语（比利时）"
 
 #: components/array-locale-codes.php:225
+#, fuzzy
 msgid "French (Benin)"
-msgstr ""
+msgstr "法国（贝宁）"
 
 #: components/array-locale-codes.php:226
+#, fuzzy
 msgid "French (Burkina Faso)"
-msgstr ""
+msgstr "法国（布基纳法索）"
 
 #: components/array-locale-codes.php:227
+#, fuzzy
 msgid "French (Burundi)"
-msgstr ""
+msgstr "法语（布隆迪）"
 
 #: components/array-locale-codes.php:228
+#, fuzzy
 msgid "French (Cameroon)"
-msgstr ""
+msgstr "法语（喀麦隆）"
 
 #: components/array-locale-codes.php:229
 msgid "French (Canada)"
-msgstr ""
+msgstr "法语（加拿大）"
 
 #: components/array-locale-codes.php:230
+#, fuzzy
 msgid "French (Central African Republic)"
-msgstr ""
+msgstr "法语（中非共和国）"
 
 #: components/array-locale-codes.php:231
+#, fuzzy
 msgid "French (Chad)"
-msgstr ""
+msgstr "法语（乍得）"
 
 #: components/array-locale-codes.php:232
+#, fuzzy
 msgid "French (Comoros)"
-msgstr ""
+msgstr "法国（科摩罗）"
 
 #: components/array-locale-codes.php:233
+#, fuzzy
 msgid "French (Congo - Brazzaville)"
-msgstr ""
+msgstr "法语（刚果-布拉柴维尔）"
 
 #: components/array-locale-codes.php:234
+#, fuzzy
 msgid "French (Congo - Kinshasa)"
-msgstr ""
+msgstr "法国（刚果-金沙萨）"
 
 #: components/array-locale-codes.php:235
+#, fuzzy
 msgid "French (Côte d’Ivoire)"
-msgstr ""
+msgstr "法语（科特迪瓦）"
 
 #: components/array-locale-codes.php:236
+#, fuzzy
 msgid "French (Djibouti)"
-msgstr ""
+msgstr "法国（吉布提）"
 
 #: components/array-locale-codes.php:237
+#, fuzzy
 msgid "French (Equatorial Guinea)"
-msgstr ""
+msgstr "法属（赤道几内亚）"
 
 #: components/array-locale-codes.php:238
 msgid "French (France)"
-msgstr ""
+msgstr "法语（法国）"
 
 #: components/array-locale-codes.php:239
+#, fuzzy
 msgid "French (French Guiana)"
-msgstr ""
+msgstr "法属圭亚那"
 
 #: components/array-locale-codes.php:240
+#, fuzzy
 msgid "French (French Polynesia)"
-msgstr ""
+msgstr "法属（法属波利尼西亚）"
 
 #: components/array-locale-codes.php:241
+#, fuzzy
 msgid "French (Gabon)"
-msgstr ""
+msgstr "法语（加蓬）"
 
 #: components/array-locale-codes.php:242
+#, fuzzy
 msgid "French (Guadeloupe)"
-msgstr ""
+msgstr "法国（瓜德罗普）"
 
 #: components/array-locale-codes.php:243
+#, fuzzy
 msgid "French (Guinea)"
-msgstr ""
+msgstr "法属（几内亚）"
 
 #: components/array-locale-codes.php:244
+#, fuzzy
 msgid "French (Haiti)"
-msgstr ""
+msgstr "法语（海地）"
 
 #: components/array-locale-codes.php:245
+#, fuzzy
 msgid "French (Luxembourg)"
-msgstr ""
+msgstr "法语（卢森堡）"
 
 #: components/array-locale-codes.php:246
+#, fuzzy
 msgid "French (Madagascar)"
-msgstr ""
+msgstr "法国（马达加斯加）"
 
 #: components/array-locale-codes.php:247
+#, fuzzy
 msgid "French (Mali)"
-msgstr ""
+msgstr "法语（马里）"
 
 #: components/array-locale-codes.php:248
+#, fuzzy
 msgid "French (Martinique)"
-msgstr ""
+msgstr "法语（马提尼克）"
 
 #: components/array-locale-codes.php:249
+#, fuzzy
 msgid "French (Mauritania)"
-msgstr ""
+msgstr "法语（毛里塔尼亚）"
 
 #: components/array-locale-codes.php:250
+#, fuzzy
 msgid "French (Mauritius)"
-msgstr ""
+msgstr "法语（毛里求斯）"
 
 #: components/array-locale-codes.php:251
+#, fuzzy
 msgid "French (Mayotte)"
-msgstr ""
+msgstr "法语（马约特）"
 
 #: components/array-locale-codes.php:252
+#, fuzzy
 msgid "French (Monaco)"
-msgstr ""
+msgstr "法国（摩纳哥）"
 
 #: components/array-locale-codes.php:253
+#, fuzzy
 msgid "French (Morocco)"
-msgstr ""
+msgstr "法语（摩洛哥）"
 
 #: components/array-locale-codes.php:254
+#, fuzzy
 msgid "French (New Caledonia)"
-msgstr ""
+msgstr "法语（新喀里多尼亚）"
 
 #: components/array-locale-codes.php:255
+#, fuzzy
 msgid "French (Niger)"
-msgstr ""
+msgstr "法语（尼日尔）"
 
 #: components/array-locale-codes.php:256
+#, fuzzy
 msgid "French (Réunion)"
-msgstr ""
+msgstr "法语（留尼汪）"
 
 #: components/array-locale-codes.php:257
+#, fuzzy
 msgid "French (Rwanda)"
-msgstr ""
+msgstr "法国（卢旺达）"
 
 #: components/array-locale-codes.php:258
+#, fuzzy
 msgid "French (Senegal)"
-msgstr ""
+msgstr "法语（塞内加尔）"
 
 #: components/array-locale-codes.php:259
+#, fuzzy
 msgid "French (Seychelles)"
-msgstr ""
+msgstr "法国（塞舌尔）"
 
 #: components/array-locale-codes.php:260
+#, fuzzy
 msgid "French (St. Barthélemy)"
-msgstr ""
+msgstr "法语（圣巴泰勒米）"
 
 #: components/array-locale-codes.php:261
+#, fuzzy
 msgid "French (St. Martin)"
-msgstr ""
+msgstr "法语（圣马丁）"
 
 #: components/array-locale-codes.php:262
+#, fuzzy
 msgid "French (St. Pierre & Miquelon)"
-msgstr ""
+msgstr "法语（圣皮埃尔和密克隆）"
 
 #: components/array-locale-codes.php:263
 msgid "French (Switzerland)"
-msgstr ""
+msgstr "法语（瑞士）"
 
 #: components/array-locale-codes.php:264
+#, fuzzy
 msgid "French (Syria)"
-msgstr ""
+msgstr "法语（叙利亚）"
 
 #: components/array-locale-codes.php:265
+#, fuzzy
 msgid "French (Togo)"
-msgstr ""
+msgstr "法语（多哥）"
 
 #: components/array-locale-codes.php:266
+#, fuzzy
 msgid "French (Tunisia)"
-msgstr ""
+msgstr "法国（突尼斯）"
 
 #: components/array-locale-codes.php:267
+#, fuzzy
 msgid "French (Vanuatu)"
-msgstr ""
+msgstr "法语（瓦努阿图）"
 
 #: components/array-locale-codes.php:268
+#, fuzzy
 msgid "French (Wallis & Futuna)"
-msgstr ""
+msgstr "法语（瓦利斯和富图纳）"
 
 #: components/array-locale-codes.php:269
 msgid "Fulah"
-msgstr ""
+msgstr "富拉赫语"
 
 #: components/array-locale-codes.php:270
+#, fuzzy
 msgid "Fulah (Cameroon)"
-msgstr ""
+msgstr "富拉（喀麦隆）"
 
 #: components/array-locale-codes.php:271
+#, fuzzy
 msgid "Fulah (Guinea)"
-msgstr ""
+msgstr "富拉（几内亚）"
 
 #: components/array-locale-codes.php:272
+#, fuzzy
 msgid "Fulah (Mauritania)"
-msgstr ""
+msgstr "富拉（毛里塔尼亚）"
 
 #: components/array-locale-codes.php:273
+#, fuzzy
 msgid "Fulah (Senegal)"
-msgstr ""
+msgstr "富拉（塞内加尔）"
 
 #: components/array-locale-codes.php:274
 msgid "Galician"
-msgstr ""
+msgstr "加利西亚"
 
 #: components/array-locale-codes.php:275
+#, fuzzy
 msgid "Galician (Spain)"
-msgstr ""
+msgstr "加利西亚语（西班牙）"
 
 #: components/array-locale-codes.php:276
 msgid "Ganda"
-msgstr ""
+msgstr "干达语"
 
 #: components/array-locale-codes.php:277
+#, fuzzy
 msgid "Ganda (Uganda)"
-msgstr ""
+msgstr "甘达（乌干达）"
 
 #: components/array-locale-codes.php:278
 msgid "Georgian"
-msgstr ""
+msgstr "格鲁吉亚"
 
 #: components/array-locale-codes.php:279
+#, fuzzy
 msgid "Georgian (Georgia)"
-msgstr ""
+msgstr "格鲁吉亚（Georgia）"
 
 #: components/array-locale-codes.php:280
 msgid "German"
-msgstr ""
+msgstr "德语"
 
 #: components/array-locale-codes.php:281
 msgid "German (Austria)"
-msgstr ""
+msgstr "德语（奥地利）"
 
 #: components/array-locale-codes.php:282
 msgid "German (Belgium)"
-msgstr ""
+msgstr "德语（比利时）"
 
 #: components/array-locale-codes.php:283
 msgid "German (Germany)"
-msgstr ""
+msgstr "德语（德国）"
 
 #: components/array-locale-codes.php:284
+#, fuzzy
 msgid "German (Liechtenstein)"
-msgstr ""
+msgstr "德国（列支敦士登）"
 
 #: components/array-locale-codes.php:285
+#, fuzzy
 msgid "German (Luxembourg)"
-msgstr ""
+msgstr "德国（卢森堡）"
 
 #: components/array-locale-codes.php:286
 msgid "German (Switzerland)"
-msgstr ""
+msgstr "德语（瑞士）"
 
 #: components/array-locale-codes.php:287
 msgid "Greek"
-msgstr ""
+msgstr "希腊语"
 
 #: components/array-locale-codes.php:288
+#, fuzzy
 msgid "Greek (Cyprus)"
-msgstr ""
+msgstr "希腊（塞浦路斯）"
 
 #: components/array-locale-codes.php:289
 msgid "Greek (Greece)"
-msgstr ""
+msgstr "希腊语 （希腊）"
 
 #: components/array-locale-codes.php:290
 msgid "Gujarati"
-msgstr ""
+msgstr "古吉拉特语"
 
 #: components/array-locale-codes.php:291
+#, fuzzy
 msgid "Gujarati (India)"
-msgstr ""
+msgstr "古吉拉特语（印度）"
 
 #: components/array-locale-codes.php:292
 msgid "Hausa"
-msgstr ""
+msgstr "豪撒语"
 
 #: components/array-locale-codes.php:293
+#, fuzzy
 msgid "Hausa (Ghana)"
-msgstr ""
+msgstr "豪萨（加纳）"
 
 #: components/array-locale-codes.php:294
+#, fuzzy
 msgid "Hausa (Latin, Ghana)"
-msgstr ""
+msgstr "豪萨语（拉丁语，加纳语）"
 
 #: components/array-locale-codes.php:295
+#, fuzzy
 msgid "Hausa (Latin, Niger)"
-msgstr ""
+msgstr "豪萨语（拉丁语，尼日尔语）"
 
 #: components/array-locale-codes.php:296
+#, fuzzy
 msgid "Hausa (Latin, Nigeria)"
-msgstr ""
+msgstr "豪萨语（拉丁语，尼日利亚语）"
 
 #: components/array-locale-codes.php:297
+#, fuzzy
 msgid "Hausa (Latin)"
-msgstr ""
+msgstr "豪萨语（拉丁语）"
 
 #: components/array-locale-codes.php:298
+#, fuzzy
 msgid "Hausa (Niger)"
-msgstr ""
+msgstr "豪萨（尼日尔）"
 
 #: components/array-locale-codes.php:299
+#, fuzzy
 msgid "Hausa (Nigeria)"
-msgstr ""
+msgstr "豪萨语（尼日利亚）"
 
 #: components/array-locale-codes.php:300
 msgid "Hebrew"
-msgstr ""
+msgstr "希伯来语"
 
 #: components/array-locale-codes.php:301
 msgid "Hebrew (Israel)"
-msgstr ""
+msgstr "希伯来语（以色列）"
 
 #: components/array-locale-codes.php:302
 msgid "Hindi"
-msgstr ""
+msgstr "印地语"
 
 #: components/array-locale-codes.php:303
+#, fuzzy
 msgid "Hindi (India)"
-msgstr ""
+msgstr "印地语（印度）"
 
 #: components/array-locale-codes.php:304
 msgid "Hungarian"
-msgstr ""
+msgstr "匈牙利语"
 
 #: components/array-locale-codes.php:305
+#, fuzzy
 msgid "Hungarian (Hungary)"
-msgstr ""
+msgstr "匈牙利语（匈牙利）"
 
 #: components/array-locale-codes.php:306
 msgid "Icelandic"
-msgstr ""
+msgstr "冰岛语"
 
 #: components/array-locale-codes.php:307
+#, fuzzy
 msgid "Icelandic (Iceland)"
-msgstr ""
+msgstr "冰岛语（冰岛）"
 
 #: components/array-locale-codes.php:308
 msgid "Igbo"
-msgstr ""
+msgstr "伊博语"
 
 #: components/array-locale-codes.php:309
+#, fuzzy
 msgid "Igbo (Nigeria)"
-msgstr ""
+msgstr "伊博族（尼日利亚）"
 
 #: components/array-locale-codes.php:310
 msgid "Indonesian"
-msgstr ""
+msgstr "印度尼西亚语"
 
 #: components/array-locale-codes.php:311
 msgid "Indonesian (Indonesia)"
-msgstr ""
+msgstr "印尼语（印度尼西亚）"
 
 #: components/array-locale-codes.php:312
 msgid "Irish"
-msgstr ""
+msgstr "爱尔兰语"
 
 #: components/array-locale-codes.php:313
+#, fuzzy
 msgid "Irish (Ireland)"
-msgstr ""
+msgstr "爱尔兰人（爱尔兰）"
 
 #: components/array-locale-codes.php:314
 msgid "Italian"
-msgstr ""
+msgstr "意大利语"
 
 #: components/array-locale-codes.php:315
 msgid "Italian (Italy)"
-msgstr ""
+msgstr "意大利语（意大利）"
 
 #: components/array-locale-codes.php:316
+#, fuzzy
 msgid "Italian (San Marino)"
-msgstr ""
+msgstr "意大利语（圣马力诺）"
 
 #: components/array-locale-codes.php:317
+#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr ""
+msgstr "意大利语（瑞士）"
 
 #: components/array-locale-codes.php:318
+#, fuzzy
 msgid "Japanese"
-msgstr ""
+msgstr "日本"
 
 #: components/array-locale-codes.php:319
+#, fuzzy
 msgid "Japanese (Japan)"
-msgstr ""
+msgstr "日本（日本）"
 
 #: components/array-locale-codes.php:320
 msgid "Kalaallisut"
-msgstr ""
+msgstr "格陵兰文"
 
 #: components/array-locale-codes.php:321
+#, fuzzy
 msgid "Kalaallisut (Greenland)"
-msgstr ""
+msgstr "卡拉利苏特（格陵兰）"
 
 #: components/array-locale-codes.php:322
 msgid "Kannada"
-msgstr ""
+msgstr "卡纳达语"
 
 #: components/array-locale-codes.php:323
+#, fuzzy
 msgid "Kannada (India)"
-msgstr ""
+msgstr "卡纳达语（印度）"
 
 #: components/array-locale-codes.php:324
 msgid "Kashmiri"
-msgstr ""
+msgstr "克什米尔语"
 
 #: components/array-locale-codes.php:325
+#, fuzzy
 msgid "Kashmiri (Arabic, India)"
-msgstr ""
+msgstr "克什米尔语（阿拉伯语，印度）"
 
 #: components/array-locale-codes.php:326
+#, fuzzy
 msgid "Kashmiri (Arabic)"
-msgstr ""
+msgstr "克什米尔语（阿拉伯语）"
 
 #: components/array-locale-codes.php:327
+#, fuzzy
 msgid "Kashmiri (India)"
-msgstr ""
+msgstr "克什米尔（印度）"
 
 #: components/array-locale-codes.php:328
 msgid "Kazakh"
-msgstr ""
+msgstr "哈萨克"
 
 #: components/array-locale-codes.php:329
+#, fuzzy
 msgid "Kazakh (Cyrillic, Kazakhstan)"
-msgstr ""
+msgstr "哈萨克语（西里尔字母，哈萨克斯坦）"
 
 #: components/array-locale-codes.php:330
+#, fuzzy
 msgid "Kazakh (Cyrillic)"
-msgstr ""
+msgstr "哈萨克语（西里尔字母）"
 
 #: components/array-locale-codes.php:331
+#, fuzzy
 msgid "Kazakh (Kazakhstan)"
-msgstr ""
+msgstr "哈萨克斯坦"
 
 #: components/array-locale-codes.php:332
 msgid "Khmer"
-msgstr ""
+msgstr "高棉"
 
 #: components/array-locale-codes.php:333
+#, fuzzy
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "柬埔寨高棉"
 
 #: components/array-locale-codes.php:334
 msgid "Kikuyu"
-msgstr ""
+msgstr "基库尤语"
 
 #: components/array-locale-codes.php:335
+#, fuzzy
 msgid "Kikuyu (Kenya)"
-msgstr ""
+msgstr "基库尤（肯尼亚）"
 
 #: components/array-locale-codes.php:336
 msgid "Kinyarwanda"
-msgstr ""
+msgstr "基尼阿万达语"
 
 #: components/array-locale-codes.php:337
+#, fuzzy
 msgid "Kinyarwanda (Rwanda)"
-msgstr ""
+msgstr "基尼亚卢旺达（卢旺达）"
 
 #: components/array-locale-codes.php:338
 msgid "Korean"
-msgstr ""
+msgstr "韩语"
 
 #: components/array-locale-codes.php:339
+#, fuzzy
 msgid "Korean (North Korea)"
-msgstr ""
+msgstr "朝鲜（朝鲜）"
 
 #: components/array-locale-codes.php:340
 msgid "Korean (South Korea)"
-msgstr ""
+msgstr "韩语（韩国）"
 
 #: components/array-locale-codes.php:341
 msgid "Kyrgyz"
-msgstr ""
+msgstr "吉尔吉斯坦语"
 
 #: components/array-locale-codes.php:342
+#, fuzzy
 msgid "Kyrgyz (Cyrillic, Kyrgyzstan)"
-msgstr ""
+msgstr "吉尔吉斯（西里尔字母，吉尔吉斯斯坦）"
 
 #: components/array-locale-codes.php:343
+#, fuzzy
 msgid "Kyrgyz (Cyrillic)"
-msgstr ""
+msgstr "吉尔吉斯语（西里尔字母）"
 
 #: components/array-locale-codes.php:344
+#, fuzzy
 msgid "Kyrgyz (Kyrgyzstan)"
-msgstr ""
+msgstr "吉尔吉斯（吉尔吉斯斯坦）"
 
 #: components/array-locale-codes.php:345
 msgid "Lao"
-msgstr ""
+msgstr "老挝语"
 
 #: components/array-locale-codes.php:346
+#, fuzzy
 msgid "Lao (Laos)"
-msgstr ""
+msgstr "老挝（老挝）"
 
 #: components/array-locale-codes.php:347
 msgid "Latvian"
-msgstr ""
+msgstr "拉脱维亚语"
 
 #: components/array-locale-codes.php:348
+#, fuzzy
 msgid "Latvian (Latvia)"
-msgstr ""
+msgstr "拉脱维亚（拉脱维亚）"
 
 #: components/array-locale-codes.php:349
 msgid "Lingala"
-msgstr ""
+msgstr "林加拉语"
 
 #: components/array-locale-codes.php:350
+#, fuzzy
 msgid "Lingala (Angola)"
-msgstr ""
+msgstr "林加拉（安哥拉）"
 
 #: components/array-locale-codes.php:351
+#, fuzzy
 msgid "Lingala (Central African Republic)"
-msgstr ""
+msgstr "林加拉（中非共和国）"
 
 #: components/array-locale-codes.php:352
+#, fuzzy
 msgid "Lingala (Congo - Brazzaville)"
-msgstr ""
+msgstr "林加拉（刚果-布拉柴维尔）"
 
 #: components/array-locale-codes.php:353
+#, fuzzy
 msgid "Lingala (Congo - Kinshasa)"
-msgstr ""
+msgstr "林加拉（刚果-金沙萨）"
 
 #: components/array-locale-codes.php:354
 msgid "Lithuanian"
-msgstr ""
+msgstr "立陶宛语"
 
 #: components/array-locale-codes.php:355
+#, fuzzy
 msgid "Lithuanian (Lithuania)"
-msgstr ""
+msgstr "立陶宛语（立陶宛）"
 
 #: components/array-locale-codes.php:356
 msgid "Luba-Katanga"
-msgstr ""
+msgstr "卢巴卡丹加语"
 
 #: components/array-locale-codes.php:357
+#, fuzzy
 msgid "Luba-Katanga (Congo - Kinshasa)"
-msgstr ""
+msgstr "卢巴-加丹加（刚果-金沙萨）"
 
 #: components/array-locale-codes.php:358
 msgid "Luxembourgish"
-msgstr ""
+msgstr "卢森堡语"
 
 #: components/array-locale-codes.php:359
+#, fuzzy
 msgid "Luxembourgish (Luxembourg)"
-msgstr ""
+msgstr "卢森堡语（Luxembourg）"
 
 #: components/array-locale-codes.php:360
 msgid "Macedonian"
-msgstr ""
+msgstr "马其顿语"
 
 #: components/array-locale-codes.php:361
+#, fuzzy
 msgid "Macedonian (Macedonia)"
-msgstr ""
+msgstr "马其顿（马其顿）"
 
 #: components/array-locale-codes.php:362
 msgid "Malagasy"
-msgstr ""
+msgstr "马尔加什语"
 
 #: components/array-locale-codes.php:363
+#, fuzzy
 msgid "Malagasy (Madagascar)"
-msgstr ""
+msgstr "马达加斯加（马达加斯加）"
 
 #: components/array-locale-codes.php:364
 msgid "Malay"
-msgstr ""
+msgstr "马来语"
 
 #: components/array-locale-codes.php:365
+#, fuzzy
 msgid "Malay (Brunei)"
-msgstr ""
+msgstr "马来语（文莱）"
 
 #: components/array-locale-codes.php:366
+#, fuzzy
 msgid "Malay (Latin, Brunei)"
-msgstr ""
+msgstr "马来语（拉丁语，文莱）"
 
 #: components/array-locale-codes.php:367
+#, fuzzy
 msgid "Malay (Latin, Malaysia)"
-msgstr ""
+msgstr "马来语（拉丁语，马来西亚）"
 
 #: components/array-locale-codes.php:368
+#, fuzzy
 msgid "Malay (Latin, Singapore)"
-msgstr ""
+msgstr "马来语（拉丁语，新加坡）"
 
 #: components/array-locale-codes.php:369
+#, fuzzy
 msgid "Malay (Latin)"
-msgstr ""
+msgstr "马来语（拉丁语）"
 
 #: components/array-locale-codes.php:370
 msgid "Malay (Malaysia)"
-msgstr ""
+msgstr "马来语（马来西亚）"
 
 #: components/array-locale-codes.php:371
+#, fuzzy
 msgid "Malay (Singapore)"
-msgstr ""
+msgstr "马来语（新加坡）"
 
 #: components/array-locale-codes.php:372
 msgid "Malayalam"
-msgstr ""
+msgstr "马拉雅拉姆语"
 
 #: components/array-locale-codes.php:373
+#, fuzzy
 msgid "Malayalam (India)"
-msgstr ""
+msgstr "马拉雅拉姆语（印度）"
 
 #: components/array-locale-codes.php:374
 msgid "Maltese"
-msgstr ""
+msgstr "马耳他语"
 
 #: components/array-locale-codes.php:375
+#, fuzzy
 msgid "Maltese (Malta)"
-msgstr ""
+msgstr "马耳他（马耳他）"
 
 #: components/array-locale-codes.php:376
 msgid "Manx"
-msgstr ""
+msgstr "曼岛语"
 
 #: components/array-locale-codes.php:377
+#, fuzzy
 msgid "Manx (Isle of Man)"
-msgstr ""
+msgstr "曼岛（马恩岛）"
 
 #: components/array-locale-codes.php:378
 msgid "Marathi"
-msgstr ""
+msgstr "马拉地语"
 
 #: components/array-locale-codes.php:379
+#, fuzzy
 msgid "Marathi (India)"
-msgstr ""
+msgstr "马拉地语（印度）"
 
 #: components/array-locale-codes.php:380
 msgid "Mongolian"
-msgstr ""
+msgstr "蒙古语"
 
 #: components/array-locale-codes.php:381
+#, fuzzy
 msgid "Mongolian (Cyrillic, Mongolia)"
-msgstr ""
+msgstr "蒙古语（西里尔字母，蒙古）"
 
 #: components/array-locale-codes.php:382
+#, fuzzy
 msgid "Mongolian (Cyrillic)"
-msgstr ""
+msgstr "蒙古文（西里尔字母）"
 
 #: components/array-locale-codes.php:383
+#, fuzzy
 msgid "Mongolian (Mongolia)"
-msgstr ""
+msgstr "蒙古（蒙古）"
 
 #: components/array-locale-codes.php:384
 msgid "Nepali"
-msgstr ""
+msgstr "尼泊尔语"
 
 #: components/array-locale-codes.php:385
+#, fuzzy
 msgid "Nepali (India)"
-msgstr ""
+msgstr "尼泊尔语（印度）"
 
 #: components/array-locale-codes.php:386
+#, fuzzy
 msgid "Nepali (Nepal)"
-msgstr ""
+msgstr "尼泊尔语（尼泊尔语）"
 
 #: components/array-locale-codes.php:387
 msgid "North Ndebele"
-msgstr ""
+msgstr "北恩德贝勒语"
 
 #: components/array-locale-codes.php:388
+#, fuzzy
 msgid "North Ndebele (Zimbabwe)"
-msgstr ""
+msgstr "北恩德贝莱（津巴布韦）"
 
 #: components/array-locale-codes.php:389
 msgid "Northern Sami"
-msgstr ""
+msgstr "北萨米语"
 
 #: components/array-locale-codes.php:390
+#, fuzzy
 msgid "Northern Sami (Finland)"
-msgstr ""
+msgstr "北萨米人（芬兰）"
 
 #: components/array-locale-codes.php:391
+#, fuzzy
 msgid "Northern Sami (Norway)"
-msgstr ""
+msgstr "北萨米语（挪威）"
 
 #: components/array-locale-codes.php:392
+#, fuzzy
 msgid "Northern Sami (Sweden)"
-msgstr ""
+msgstr "北萨米人（瑞典）"
 
 #: components/array-locale-codes.php:393
 msgid "Norwegian"
-msgstr ""
+msgstr "挪威语"
 
 #: components/array-locale-codes.php:394
+#, fuzzy
 msgid "Norwegian (Norway)"
-msgstr ""
+msgstr "挪威语（挪威）"
 
 #: components/array-locale-codes.php:395
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "挪威博克马尔"
 
 #: components/array-locale-codes.php:396
+#, fuzzy
 msgid "Norwegian Bokmål (Norway)"
-msgstr ""
+msgstr "挪威博克mål（挪威）"
 
 #: components/array-locale-codes.php:397
+#, fuzzy
 msgid "Norwegian Bokmål (Svalbard & Jan Mayen)"
-msgstr ""
+msgstr "挪威博克马尔（斯瓦尔巴群岛和扬迈恩）"
 
 #: components/array-locale-codes.php:398
 msgid "Norwegian Nynorsk"
-msgstr ""
+msgstr "挪威尼诺斯克"
 
 #: components/array-locale-codes.php:399
+#, fuzzy
 msgid "Norwegian Nynorsk (Norway)"
-msgstr ""
+msgstr "挪威尼诺尔斯克（挪威）"
 
 #: components/array-locale-codes.php:400
 msgid "Oriya"
-msgstr ""
+msgstr "奥里亚语"
 
 #: components/array-locale-codes.php:401
+#, fuzzy
 msgid "Oriya (India)"
-msgstr ""
+msgstr "奥里亚（印度）"
 
 #: components/array-locale-codes.php:402
 msgid "Oromo"
-msgstr ""
+msgstr "阿芳·奥洛莫语"
 
 #: components/array-locale-codes.php:403
+#, fuzzy
 msgid "Oromo (Ethiopia)"
-msgstr ""
+msgstr "奥罗莫（埃塞俄比亚）"
 
 #: components/array-locale-codes.php:404
+#, fuzzy
 msgid "Oromo (Kenya)"
-msgstr ""
+msgstr "奥罗莫（肯尼亚）"
 
 #: components/array-locale-codes.php:405
 msgid "Ossetic"
-msgstr ""
+msgstr "听觉的"
 
 #: components/array-locale-codes.php:406
+#, fuzzy
 msgid "Ossetic (Georgia)"
-msgstr ""
+msgstr "奥塞蒂克（佐治亚州）"
 
 #: components/array-locale-codes.php:407
+#, fuzzy
 msgid "Ossetic (Russia)"
-msgstr ""
+msgstr "奥塞蒂奇（俄罗斯）"
 
 #: components/array-locale-codes.php:408
 msgid "Pashto"
-msgstr ""
+msgstr "普什图语"
 
 #: components/array-locale-codes.php:409
+#, fuzzy
 msgid "Pashto (Afghanistan)"
-msgstr ""
+msgstr "普什图语（阿富汗）"
 
 #: components/array-locale-codes.php:410
 msgid "Persian"
-msgstr ""
+msgstr "波斯语"
 
 #: components/array-locale-codes.php:411
+#, fuzzy
 msgid "Persian (Afghanistan)"
-msgstr ""
+msgstr "波斯语（阿富汗）"
 
 #: components/array-locale-codes.php:412
 msgid "Persian (Iran)"
-msgstr ""
+msgstr "波斯语（伊朗）"
 
 #: components/array-locale-codes.php:413
 msgid "Polish"
-msgstr ""
+msgstr "波兰语"
 
 #: components/array-locale-codes.php:414
+#, fuzzy
 msgid "Polish (Poland)"
-msgstr ""
+msgstr "波兰（波兰）"
 
 #: components/array-locale-codes.php:415
 msgid "Portuguese"
-msgstr ""
+msgstr "葡萄牙语"
 
 #: components/array-locale-codes.php:416
+#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr ""
+msgstr "葡萄牙（安哥拉）"
 
 #: components/array-locale-codes.php:417
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "葡萄牙语（巴西）"
 
 #: components/array-locale-codes.php:418
+#, fuzzy
 msgid "Portuguese (Cape Verde)"
-msgstr ""
+msgstr "葡萄牙语（佛得角）"
 
 #: components/array-locale-codes.php:419
+#, fuzzy
 msgid "Portuguese (Guinea-Bissau)"
-msgstr ""
+msgstr "葡萄牙（几内亚比绍）"
 
 #: components/array-locale-codes.php:420
+#, fuzzy
 msgid "Portuguese (Macau SAR China)"
-msgstr ""
+msgstr "葡萄牙语（澳门特别行政区 中国）"
 
 #: components/array-locale-codes.php:421
+#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr ""
+msgstr "葡萄牙语（莫桑比克）"
 
 #: components/array-locale-codes.php:422
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "葡萄牙语（葡萄牙）"
 
 #: components/array-locale-codes.php:423
+#, fuzzy
 msgid "Portuguese (São Tomé & Príncipe)"
-msgstr ""
+msgstr "葡萄牙语（圣多美和普林西比）"
 
 #: components/array-locale-codes.php:424
+#, fuzzy
 msgid "Portuguese (Timor-Leste)"
-msgstr ""
+msgstr "葡萄牙（东帝汶）"
 
 #: components/array-locale-codes.php:425
 msgid "Punjabi"
-msgstr ""
+msgstr "旁遮普语"
 
 #: components/array-locale-codes.php:426
+#, fuzzy
 msgid "Punjabi (Arabic, Pakistan)"
-msgstr ""
+msgstr "旁遮普语（阿拉伯语，巴基斯坦）"
 
 #: components/array-locale-codes.php:427
+#, fuzzy
 msgid "Punjabi (Arabic)"
-msgstr ""
+msgstr "旁遮普语（阿拉伯语）"
 
 #: components/array-locale-codes.php:428
+#, fuzzy
 msgid "Punjabi (Gurmukhi, India)"
-msgstr ""
+msgstr "旁遮普语（印度古鲁穆奇语）"
 
 #: components/array-locale-codes.php:429
+#, fuzzy
 msgid "Punjabi (Gurmukhi)"
-msgstr ""
+msgstr "旁遮普语（古鲁穆奇语）"
 
 #: components/array-locale-codes.php:430
+#, fuzzy
 msgid "Punjabi (India)"
-msgstr ""
+msgstr "旁遮普语（印度）"
 
 #: components/array-locale-codes.php:431
+#, fuzzy
 msgid "Punjabi (Pakistan)"
-msgstr ""
+msgstr "旁遮普语（巴基斯坦）"
 
 #: components/array-locale-codes.php:432
 msgid "Quechua"
-msgstr ""
+msgstr "凯楚亚语"
 
 #: components/array-locale-codes.php:433
+#, fuzzy
 msgid "Quechua (Bolivia)"
-msgstr ""
+msgstr "克丘亚语（玻利维亚）"
 
 #: components/array-locale-codes.php:434
+#, fuzzy
 msgid "Quechua (Ecuador)"
-msgstr ""
+msgstr "克丘亚语（厄瓜多尔）"
 
 #: components/array-locale-codes.php:435
+#, fuzzy
 msgid "Quechua (Peru)"
-msgstr ""
+msgstr "克丘亚语（秘鲁）"
 
 #: components/array-locale-codes.php:436
 msgid "Romanian"
-msgstr ""
+msgstr "罗马尼亚语"
 
 #: components/array-locale-codes.php:437
+#, fuzzy
 msgid "Romanian (Moldova)"
-msgstr ""
+msgstr "罗马尼亚（摩尔多瓦）"
 
 #: components/array-locale-codes.php:438
 msgid "Romanian (Romania)"
-msgstr ""
+msgstr "罗马尼亚"
 
 #: components/array-locale-codes.php:439
 msgid "Romansh"
-msgstr ""
+msgstr "罗曼什"
 
 #: components/array-locale-codes.php:440
+#, fuzzy
 msgid "Romansh (Switzerland)"
-msgstr ""
+msgstr "罗曼什语（瑞士）"
 
 #: components/array-locale-codes.php:441
 msgid "Rundi"
-msgstr ""
+msgstr "Rundi"
 
 #: components/array-locale-codes.php:442
+#, fuzzy
 msgid "Rundi (Burundi)"
-msgstr ""
+msgstr "伦迪（布隆迪）"
 
 #: components/array-locale-codes.php:443
 msgid "Russian"
-msgstr ""
+msgstr "俄语"
 
 #: components/array-locale-codes.php:444
+#, fuzzy
 msgid "Russian (Belarus)"
-msgstr ""
+msgstr "俄罗斯（白俄罗斯）"
 
 #: components/array-locale-codes.php:445
+#, fuzzy
 msgid "Russian (Kazakhstan)"
-msgstr ""
+msgstr "俄罗斯（哈萨克斯坦）"
 
 #: components/array-locale-codes.php:446
+#, fuzzy
 msgid "Russian (Kyrgyzstan)"
-msgstr ""
+msgstr "俄罗斯（吉尔吉斯斯坦）"
 
 #: components/array-locale-codes.php:447
+#, fuzzy
 msgid "Russian (Moldova)"
-msgstr ""
+msgstr "俄罗斯（摩尔多瓦）"
 
 #: components/array-locale-codes.php:448
 msgid "Russian (Russia)"
-msgstr ""
+msgstr "俄语（俄罗斯）"
 
 #: components/array-locale-codes.php:449
+#, fuzzy
 msgid "Russian (Ukraine)"
-msgstr ""
+msgstr "俄罗斯（乌克兰）"
 
 #: components/array-locale-codes.php:450
 msgid "Sango"
-msgstr ""
+msgstr "桑戈语"
 
 #: components/array-locale-codes.php:451
+#, fuzzy
 msgid "Sango (Central African Republic)"
-msgstr ""
+msgstr "桑戈（中非共和国）"
 
 #: components/array-locale-codes.php:452
 msgid "Scottish Gaelic"
-msgstr ""
+msgstr "苏格兰盖尔语"
 
 #: components/array-locale-codes.php:453
+#, fuzzy
 msgid "Scottish Gaelic (United Kingdom)"
-msgstr ""
+msgstr "苏格兰盖尔语（英国）"
 
 #: components/array-locale-codes.php:454
 msgid "Serbian"
-msgstr ""
+msgstr "塞尔维亚语"
 
 #: components/array-locale-codes.php:455
+#, fuzzy
 msgid "Serbian (Bosnia & Herzegovina)"
-msgstr ""
+msgstr "塞尔维亚（波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:456
+#, fuzzy
 msgid "Serbian (Cyrillic, Bosnia & Herzegovina)"
-msgstr ""
+msgstr "塞尔维亚语（西里尔字母，波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:457
+#, fuzzy
 msgid "Serbian (Cyrillic, Kosovo)"
-msgstr ""
+msgstr "塞尔维亚语（西里尔字母，科索沃）"
 
 #: components/array-locale-codes.php:458
+#, fuzzy
 msgid "Serbian (Cyrillic, Montenegro)"
-msgstr ""
+msgstr "塞尔维亚语（西里尔字母，黑山）"
 
 #: components/array-locale-codes.php:459
+#, fuzzy
 msgid "Serbian (Cyrillic, Serbia)"
-msgstr ""
+msgstr "塞尔维亚语（西里尔字母，塞尔维亚）"
 
 #: components/array-locale-codes.php:460
 msgid "Serbian (Cyrillic)"
-msgstr ""
+msgstr "塞尔维亚语 (西里尔文)"
 
 #: components/array-locale-codes.php:461
+#, fuzzy
 msgid "Serbian (Kosovo)"
-msgstr ""
+msgstr "塞尔维亚（科索沃）"
 
 #: components/array-locale-codes.php:462
+#, fuzzy
 msgid "Serbian (Latin, Bosnia & Herzegovina)"
-msgstr ""
+msgstr "塞尔维亚语（拉丁语，波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:463
+#, fuzzy
 msgid "Serbian (Latin, Kosovo)"
-msgstr ""
+msgstr "塞尔维亚语（拉丁语，科索沃语）"
 
 #: components/array-locale-codes.php:464
+#, fuzzy
 msgid "Serbian (Latin, Montenegro)"
-msgstr ""
+msgstr "塞尔维亚语（拉丁语，黑山语）"
 
 #: components/array-locale-codes.php:465
+#, fuzzy
 msgid "Serbian (Latin, Serbia)"
-msgstr ""
+msgstr "塞尔维亚语（拉丁语，塞尔维亚语）"
 
 #: components/array-locale-codes.php:466
 msgid "Serbian (Latin)"
-msgstr ""
+msgstr "塞尔维亚语（拉丁语）"
 
 #: components/array-locale-codes.php:467
+#, fuzzy
 msgid "Serbian (Montenegro)"
-msgstr ""
+msgstr "塞尔维亚（黑山）"
 
 #: components/array-locale-codes.php:468
+#, fuzzy
 msgid "Serbian (Serbia)"
-msgstr ""
+msgstr "塞尔维亚（塞尔维亚）"
 
 #: components/array-locale-codes.php:469
+#, fuzzy
 msgid "Serbo-Croatian"
-msgstr ""
+msgstr "塞尔维亚-克罗地亚语"
 
 #: components/array-locale-codes.php:470
+#, fuzzy
 msgid "Serbo-Croatian (Bosnia & Herzegovina)"
-msgstr ""
+msgstr "塞尔维亚-克罗地亚语（波斯尼亚和黑塞哥维那）"
 
 #: components/array-locale-codes.php:471
 msgid "Shona"
-msgstr ""
+msgstr "绍纳语"
 
 #: components/array-locale-codes.php:472
+#, fuzzy
 msgid "Shona (Zimbabwe)"
-msgstr ""
+msgstr "绍纳（津巴布韦）"
 
 #: components/array-locale-codes.php:473
 msgid "Sichuan Yi"
-msgstr ""
+msgstr "四川彝族"
 
 #: components/array-locale-codes.php:474
+#, fuzzy
 msgid "Sichuan Yi (China)"
-msgstr ""
+msgstr "四川易（中国）"
 
 #: components/array-locale-codes.php:475
 msgid "Sinhala"
-msgstr ""
+msgstr "僧伽罗语"
 
 #: components/array-locale-codes.php:476
+#, fuzzy
 msgid "Sinhala (Sri Lanka)"
-msgstr ""
+msgstr "僧伽罗语（斯里兰卡）"
 
 #: components/array-locale-codes.php:477
 msgid "Slovak"
-msgstr ""
+msgstr "斯洛伐克语"
 
 #: components/array-locale-codes.php:478
 msgid "Slovak (Slovakia)"
-msgstr ""
+msgstr "斯洛伐克语"
 
 #: components/array-locale-codes.php:479
 msgid "Slovenian"
-msgstr ""
+msgstr "斯洛文尼亚语"
 
 #: components/array-locale-codes.php:480
 msgid "Slovenian (Slovenia)"
-msgstr ""
+msgstr "斯洛文尼亚语"
 
 #: components/array-locale-codes.php:481
 msgid "Somali"
-msgstr ""
+msgstr "索马里语"
 
 #: components/array-locale-codes.php:482
+#, fuzzy
 msgid "Somali (Djibouti)"
-msgstr ""
+msgstr "索马里（吉布提）"
 
 #: components/array-locale-codes.php:483
+#, fuzzy
 msgid "Somali (Ethiopia)"
-msgstr ""
+msgstr "索马里（埃塞俄比亚）"
 
 #: components/array-locale-codes.php:484
+#, fuzzy
 msgid "Somali (Kenya)"
-msgstr ""
+msgstr "索马里（肯尼亚）"
 
 #: components/array-locale-codes.php:485
+#, fuzzy
 msgid "Somali (Somalia)"
-msgstr ""
+msgstr "索马里（索马里）"
 
 #: components/array-locale-codes.php:486
+#, fuzzy
 msgid "Spanish"
-msgstr ""
+msgstr "西班牙语"
 
 #: components/array-locale-codes.php:487
 msgid "Spanish (Argentina)"
-msgstr ""
+msgstr "西班牙语（阿根廷）"
 
 #: components/array-locale-codes.php:488
+#, fuzzy
 msgid "Spanish (Bolivia)"
-msgstr ""
+msgstr "西班牙语（玻利维亚）"
 
 #: components/array-locale-codes.php:489
+#, fuzzy
 msgid "Spanish (Canary Islands)"
-msgstr ""
+msgstr "西班牙（加那利群岛）"
 
 #: components/array-locale-codes.php:490
+#, fuzzy
 msgid "Spanish (Ceuta & Melilla)"
-msgstr ""
+msgstr "西班牙语（休达和梅利利亚）"
 
 #: components/array-locale-codes.php:491
 msgid "Spanish (Chile)"
-msgstr ""
+msgstr "西班牙语"
 
 #: components/array-locale-codes.php:492
 msgid "Spanish (Colombia)"
-msgstr ""
+msgstr "西班牙语（哥伦比亚）"
 
 #: components/array-locale-codes.php:493
+#, fuzzy
 msgid "Spanish (Costa Rica)"
-msgstr ""
+msgstr "西班牙语（哥斯达黎加）"
 
 #: components/array-locale-codes.php:494
+#, fuzzy
 msgid "Spanish (Cuba)"
-msgstr ""
+msgstr "西班牙语（古巴）"
 
 #: components/array-locale-codes.php:495
 msgid "Spanish (Dominican Republic)"
-msgstr ""
+msgstr "西班牙语（多米尼加共和国）"
 
 #: components/array-locale-codes.php:496
+#, fuzzy
 msgid "Spanish (Ecuador)"
-msgstr ""
+msgstr "西班牙语（厄瓜多尔）"
 
 #: components/array-locale-codes.php:497
+#, fuzzy
 msgid "Spanish (El Salvador)"
-msgstr ""
+msgstr "西班牙语（萨尔瓦多）"
 
 #: components/array-locale-codes.php:498
+#, fuzzy
 msgid "Spanish (Equatorial Guinea)"
-msgstr ""
+msgstr "西班牙（赤道几内亚）"
 
 #: components/array-locale-codes.php:499
+#, fuzzy
 msgid "Spanish (Guatemala)"
-msgstr ""
+msgstr "西班牙（危地马拉）"
 
 #: components/array-locale-codes.php:500
+#, fuzzy
 msgid "Spanish (Honduras)"
-msgstr ""
+msgstr "西班牙语（洪都拉斯）"
 
 #: components/array-locale-codes.php:501
 msgid "Spanish (Mexico)"
-msgstr ""
+msgstr "西班牙语（墨西哥）"
 
 #: components/array-locale-codes.php:502
+#, fuzzy
 msgid "Spanish (Nicaragua)"
-msgstr ""
+msgstr "西班牙语（尼加拉瓜）"
 
 #: components/array-locale-codes.php:503
+#, fuzzy
 msgid "Spanish (Panama)"
-msgstr ""
+msgstr "西班牙语（巴拿马）"
 
 #: components/array-locale-codes.php:504
+#, fuzzy
 msgid "Spanish (Paraguay)"
-msgstr ""
+msgstr "西班牙语（巴拉圭）"
 
 #: components/array-locale-codes.php:505
+#, fuzzy
 msgid "Spanish (Peru)"
-msgstr ""
+msgstr "西班牙语（秘鲁）"
 
 #: components/array-locale-codes.php:506
+#, fuzzy
 msgid "Spanish (Philippines)"
-msgstr ""
+msgstr "西班牙语（菲律宾）"
 
 #: components/array-locale-codes.php:507
+#, fuzzy
 msgid "Spanish (Puerto Rico)"
-msgstr ""
+msgstr "西班牙语（波多黎各）"
 
 #: components/array-locale-codes.php:508
 msgid "Spanish (Spain)"
-msgstr ""
+msgstr "西班牙语（西班牙）"
 
 #: components/array-locale-codes.php:509
 msgid "Spanish (United States)"
-msgstr ""
+msgstr "西班牙语（美国）"
 
 #: components/array-locale-codes.php:510
+#, fuzzy
 msgid "Spanish (Uruguay)"
-msgstr ""
+msgstr "西班牙语（乌拉圭）"
 
 #: components/array-locale-codes.php:511
 msgid "Spanish (Venezuela)"
-msgstr ""
+msgstr "西班牙语（委内瑞拉）"
 
 #: components/array-locale-codes.php:512
 msgid "Swahili"
-msgstr ""
+msgstr "斯瓦希里语"
 
 #: components/array-locale-codes.php:513
+#, fuzzy
 msgid "Swahili (Kenya)"
-msgstr ""
+msgstr "斯瓦希里语（肯尼亚）"
 
 #: components/array-locale-codes.php:514
 msgid "Swahili (Tanzania)"
-msgstr ""
+msgstr "斯瓦希里语（坦桑尼亚）"
 
 #: components/array-locale-codes.php:515
+#, fuzzy
 msgid "Swahili (Uganda)"
-msgstr ""
+msgstr "斯瓦希里语（乌干达）"
 
 #: components/array-locale-codes.php:516
 msgid "Swedish"
-msgstr ""
+msgstr "瑞典语"
 
 #: components/array-locale-codes.php:517
+#, fuzzy
 msgid "Swedish (Åland Islands)"
-msgstr ""
+msgstr "瑞典语（奥兰群岛）"
 
 #: components/array-locale-codes.php:518
+#, fuzzy
 msgid "Swedish (Finland)"
-msgstr ""
+msgstr "瑞典语（芬兰）"
 
 #: components/array-locale-codes.php:519
 msgid "Swedish (Sweden)"
-msgstr ""
+msgstr "瑞典语（瑞典）"
 
 #: components/array-locale-codes.php:520
 msgid "Tagalog"
-msgstr ""
+msgstr "他加禄语"
 
 #: components/array-locale-codes.php:521
+#, fuzzy
 msgid "Tagalog (Philippines)"
-msgstr ""
+msgstr "他加禄语（菲律宾）"
 
 #: components/array-locale-codes.php:522
 msgid "Tamil"
-msgstr ""
+msgstr "泰米尔语"
 
 #: components/array-locale-codes.php:523
+#, fuzzy
 msgid "Tamil (India)"
-msgstr ""
+msgstr "泰米尔语（印度）"
 
 #: components/array-locale-codes.php:524
+#, fuzzy
 msgid "Tamil (Malaysia)"
-msgstr ""
+msgstr "泰米尔语（马来西亚）"
 
 #: components/array-locale-codes.php:525
+#, fuzzy
 msgid "Tamil (Singapore)"
-msgstr ""
+msgstr "泰米尔语（新加坡）"
 
 #: components/array-locale-codes.php:526
+#, fuzzy
 msgid "Tamil (Sri Lanka)"
-msgstr ""
+msgstr "泰米尔语（斯里兰卡）"
 
 #: components/array-locale-codes.php:527
 msgid "Telugu"
-msgstr ""
+msgstr "泰卢固语"
 
 #: components/array-locale-codes.php:528
+#, fuzzy
 msgid "Telugu (India)"
-msgstr ""
+msgstr "泰卢固语（印度）"
 
 #: components/array-locale-codes.php:529
 msgid "Thai"
-msgstr ""
+msgstr "泰国"
 
 #: components/array-locale-codes.php:530
 msgid "Thai (Thailand)"
-msgstr ""
+msgstr "泰语/泰国"
 
 #: components/array-locale-codes.php:531
 msgid "Tibetan"
-msgstr ""
+msgstr "藏语"
 
 #: components/array-locale-codes.php:532
+#, fuzzy
 msgid "Tibetan (China)"
-msgstr ""
+msgstr "藏族（中国）"
 
 #: components/array-locale-codes.php:533
+#, fuzzy
 msgid "Tibetan (India)"
-msgstr ""
+msgstr "藏族（印度）"
 
 #: components/array-locale-codes.php:534
 msgid "Tigrinya"
-msgstr ""
+msgstr "提格利尼亞語"
 
 #: components/array-locale-codes.php:535
+#, fuzzy
 msgid "Tigrinya (Eritrea)"
-msgstr ""
+msgstr "提格里尼亚（厄立特里亚）"
 
 #: components/array-locale-codes.php:536
+#, fuzzy
 msgid "Tigrinya (Ethiopia)"
-msgstr ""
+msgstr "提格里尼亚（埃塞俄比亚）"
 
 #: components/array-locale-codes.php:537
+#, fuzzy
 msgid "Tongan"
-msgstr ""
+msgstr "汤加语"
 
 #: components/array-locale-codes.php:538
+#, fuzzy
 msgid "Tongan (Tonga)"
-msgstr ""
+msgstr "汤加（汤加）"
 
 #: components/array-locale-codes.php:539
 msgid "Turkish"
-msgstr ""
+msgstr "土耳其"
 
 #: components/array-locale-codes.php:540
+#, fuzzy
 msgid "Turkish (Cyprus)"
-msgstr ""
+msgstr "土耳其（塞浦路斯）"
 
 #: components/array-locale-codes.php:541
 msgid "Turkish (Turkey)"
-msgstr ""
+msgstr "土耳其语（土耳其）"
 
 #: components/array-locale-codes.php:542
 msgid "Ukrainian"
-msgstr ""
+msgstr "乌克兰语"
 
 #: components/array-locale-codes.php:543
+#, fuzzy
 msgid "Ukrainian (Ukraine)"
-msgstr ""
+msgstr "乌克兰语（乌克兰）"
 
 #: components/array-locale-codes.php:544
 msgid "Urdu"
-msgstr ""
+msgstr "乌尔都语"
 
 #: components/array-locale-codes.php:545
+#, fuzzy
 msgid "Urdu (India)"
-msgstr ""
+msgstr "乌尔都语（印度）"
 
 #: components/array-locale-codes.php:546
+#, fuzzy
 msgid "Urdu (Pakistan)"
-msgstr ""
+msgstr "乌尔都语（巴基斯坦）"
 
 #: components/array-locale-codes.php:547
 msgid "Uyghur"
-msgstr ""
+msgstr "维吾尔语"
 
 #: components/array-locale-codes.php:548
+#, fuzzy
 msgid "Uyghur (Arabic, China)"
-msgstr ""
+msgstr "维吾尔语（阿拉伯语，中国）"
 
 #: components/array-locale-codes.php:549
+#, fuzzy
 msgid "Uyghur (Arabic)"
-msgstr ""
+msgstr "维吾尔语（阿拉伯语）"
 
 #: components/array-locale-codes.php:550
+#, fuzzy
 msgid "Uyghur (China)"
-msgstr ""
+msgstr "维吾尔（中国）"
 
 #: components/array-locale-codes.php:551
 msgid "Uzbek"
-msgstr ""
+msgstr "乌兹别克语"
 
 #: components/array-locale-codes.php:552
+#, fuzzy
 msgid "Uzbek (Afghanistan)"
-msgstr ""
+msgstr "乌兹别克（阿富汗）"
 
 #: components/array-locale-codes.php:553
+#, fuzzy
 msgid "Uzbek (Arabic, Afghanistan)"
-msgstr ""
+msgstr "乌兹别克语（阿拉伯语，阿富汗语）"
 
 #: components/array-locale-codes.php:554
+#, fuzzy
 msgid "Uzbek (Arabic)"
-msgstr ""
+msgstr "乌兹别克语（阿拉伯语）"
 
 #: components/array-locale-codes.php:555
+#, fuzzy
 msgid "Uzbek (Cyrillic, Uzbekistan)"
-msgstr ""
+msgstr "乌兹别克语（西里尔字母，乌兹别克斯坦）"
 
 #: components/array-locale-codes.php:556
 msgid "Uzbek (Cyrillic)"
-msgstr ""
+msgstr "乌兹别克语（西里尔）"
 
 #: components/array-locale-codes.php:557
+#, fuzzy
 msgid "Uzbek (Latin, Uzbekistan)"
-msgstr ""
+msgstr "乌兹别克语（拉丁语，乌兹别克斯坦）"
 
 #: components/array-locale-codes.php:558
 msgid "Uzbek (Latin)"
-msgstr ""
+msgstr "乌兹别克语（拉丁）"
 
 #: components/array-locale-codes.php:559
+#, fuzzy
 msgid "Uzbek (Uzbekistan)"
-msgstr ""
+msgstr "乌兹别克斯坦（乌兹别克斯坦）"
 
 #: components/array-locale-codes.php:560
 msgid "Vietnamese"
-msgstr ""
+msgstr "越南语"
 
 #: components/array-locale-codes.php:561
+#, fuzzy
 msgid "Vietnamese (Vietnam)"
-msgstr ""
+msgstr "越南语（越南）"
 
 #: components/array-locale-codes.php:562
 msgid "Welsh"
-msgstr ""
+msgstr "威尔士语"
 
 #: components/array-locale-codes.php:563
+#, fuzzy
 msgid "Welsh (United Kingdom)"
-msgstr ""
+msgstr "威尔士语（英国）"
 
 #: components/array-locale-codes.php:564
 msgid "Western Frisian"
-msgstr ""
+msgstr "西弗里斯兰语"
 
 #: components/array-locale-codes.php:565
+#, fuzzy
 msgid "Western Frisian (Netherlands)"
-msgstr ""
+msgstr "西弗里西亚语（荷兰）"
 
 #: components/array-locale-codes.php:566
 msgid "Yiddish"
-msgstr ""
+msgstr "意第绪语"
 
 #: components/array-locale-codes.php:567
 msgid "Yoruba"
-msgstr ""
+msgstr "约鲁巴"
 
 #: components/array-locale-codes.php:568
+#, fuzzy
 msgid "Yoruba (Benin)"
-msgstr ""
+msgstr "约鲁巴（贝宁）"
 
 #: components/array-locale-codes.php:569
+#, fuzzy
 msgid "Yoruba (Nigeria)"
-msgstr ""
+msgstr "约鲁巴（尼日利亚）"
 
 #: components/array-locale-codes.php:570
 msgid "Zulu"
-msgstr ""
+msgstr "祖鲁语"
 
 #: components/array-locale-codes.php:571
+#, fuzzy
 msgid "Zulu (South Africa)"
-msgstr ""
+msgstr "祖鲁（南非）"
 
-#: components/block-src/chart/edit.js:103 components/class-m-chart.php:210
-msgid "New Chart"
-msgstr "添加新的图表"
-
-#: components/block-src/chart/edit.js:106 components/class-m-chart.php:209
-msgid "Edit Chart"
-msgstr "编辑图表"
-
-#: components/block-src/chart/edit.js:107
-msgid "Replace"
-msgstr ""
-
-#: components/block-src/chart/edit.js:119
-msgid "There was a problem fetching charts"
-msgstr ""
-
-#: components/block-src/chart/edit.js:150 components/class-m-chart.php:214
-msgid "No Charts found"
-msgstr "没找到图表"
-
-#: components/block-src/chart/edit.js:151
-msgid "Create a new chart"
-msgstr ""
-
-#: components/block-src/chart/edit.js:158
-#, fuzzy
-#| msgid "Search Chart Units"
-msgid "Search by title"
-msgstr "搜索图表单位"
-
-#: components/block-src/chart/edit.js:162
-msgid " of "
-msgstr ""
-
-#: components/block-src/chart/edit.js:165
-#, fuzzy
-#| msgid "No Charts found in the Trash"
-msgid "No Charts found using this search string"
-msgstr "没有在回收站找到图表"
-
-#: components/class-m-chart-admin.php:53
+#: components/class-m-chart-admin.php:54
 #: components/templates/m-chart-settings.php:2
 msgid "M Chart Settings"
 msgstr "M Chart 设置"
 
-#: components/class-m-chart-admin.php:54
+#: components/class-m-chart-admin.php:55
 msgid "Settings"
 msgstr "设置"
 
-#: components/class-m-chart-admin.php:205
+#: components/class-m-chart-admin.php:206
 msgid "Settings saved"
 msgstr "已保存的设置"
 
-#: components/class-m-chart-admin.php:241
 #: components/class-m-chart-admin.php:242
-#: components/templates/chart-meta-box.php:14
-#: components/templates/chart-meta-box.php:15
-msgid "M Chart Highcharts Library"
-msgstr ""
-
 #: components/class-m-chart-admin.php:243
+#: components/templates/chart-meta-box.php:8
+#: components/templates/chart-meta-box.php:9
+msgid "M Chart Highcharts Library"
+msgstr "M Chart Highcharts Library"
+
+#: components/class-m-chart-admin.php:244
 msgid "You have charts that require the M Chart Highcharts Library plugin."
-msgstr ""
+msgstr "你有些图表需要使用 M Chart Highcharts Library 插件。"
 
-#: components/class-m-chart-admin.php:247
+#: components/class-m-chart-admin.php:248
 msgid "These charts will no longer display unless you install the plugin:"
-msgstr ""
+msgstr "这些图表除非安装插件，否则将不再显示："
 
-#: components/class-m-chart-admin.php:249
-#: components/templates/chart-meta-box.php:21
+#: components/class-m-chart-admin.php:250
+#: components/templates/chart-meta-box.php:15
 msgid "Learn More"
-msgstr ""
+msgstr "了解更多"
 
-#: components/class-m-chart-admin.php:352
+#: components/class-m-chart-admin.php:428
 msgid "Are you sure you want to delete this spreadsheet?"
 msgstr "你确定你要删掉这个电子表格吗?"
 
-#: components/class-m-chart-admin.php:381
+#: components/class-m-chart-admin.php:474
 msgid "Data"
 msgstr "数据"
 
-#: components/class-m-chart-admin.php:390 components/class-m-chart.php:205
+#: components/class-m-chart-admin.php:483
+#: components/class-m-chart.php:207
 msgid "Chart"
 msgstr "图表"
 
-#: components/class-m-chart-admin.php:494
+#: components/class-m-chart-admin.php:613
 #, fuzzy
-#| msgid "Chart not found"
 msgid "Library not found"
 msgstr "无法找到图表"
 
-#: components/class-m-chart-admin.php:708
-#: components/class-m-chart-admin.php:718
+#: components/class-m-chart-admin.php:827
+#: components/class-m-chart-admin.php:837
 msgid "Wrong post type"
 msgstr "错误图表类型"
 
-#: components/class-m-chart-admin.php:713
-#: components/class-m-chart-admin.php:847
+#: components/class-m-chart-admin.php:832
+#: components/class-m-chart-admin.php:968
 msgid "Invalid nonce"
 msgstr "无效随机值"
 
-#: components/class-m-chart-admin.php:723
+#: components/class-m-chart-admin.php:842
 msgid "No file to import"
 msgstr "没有导入的文件"
 
-#: components/class-m-chart-admin.php:730
-msgid "Only CSV files can be imported "
+#: components/class-m-chart-admin.php:849
+#, fuzzy
+msgid "Only CSV files can be imported"
 msgstr "只有CSV文档可以导入"
 
-#: components/class-m-chart-admin.php:737
+#: components/class-m-chart-admin.php:856
 msgid "File path not found"
 msgstr "找不到文件路径"
 
-#: components/class-m-chart-admin.php:743
+#: components/class-m-chart-admin.php:862
 msgid "CSV file was empty"
-msgstr " CSV文档是空的"
+msgstr "CSV文档是空的"
 
-#: components/class-m-chart-admin.php:852
+#: components/class-m-chart-admin.php:973
 msgid "Invalid post"
 msgstr "无效图表"
 
-#: components/class-m-chart-admin.php:857
+#: components/class-m-chart-admin.php:978
 msgid "Permission error"
 msgstr "权限错误"
 
-#: components/class-m-chart-admin.php:862
+#: components/class-m-chart-admin.php:983
 msgid "Invalid library"
 msgstr "无效编码库"
+
+#: components/class-m-chart-block.php:170
+#: components/class-m-chart.php:940
+msgid "Chart not found"
+msgstr "无法找到图表"
 
 #: components/class-m-chart-chartjs.php:98
 msgid "Line"
@@ -2573,7 +2918,6 @@ msgstr "柱型图"
 
 #: components/class-m-chart-chartjs.php:102
 #, fuzzy
-#| msgid "Column"
 msgid "Stacked Column"
 msgstr "柱型图"
 
@@ -2613,274 +2957,135 @@ msgstr ""
 msgid "Polar"
 msgstr ""
 
-#: components/class-m-chart.php:165 components/class-m-chart.php:175
+#: components/class-m-chart.php:167
+#: components/class-m-chart.php:177
 msgid "Chart Units"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:166
+#: components/class-m-chart.php:168
 msgid "Chart Unit"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:167
+#: components/class-m-chart.php:169
 msgid "Search Chart Units"
 msgstr "搜索图表单位"
 
-#: components/class-m-chart.php:168
+#: components/class-m-chart.php:170
 msgid "All Chart Units"
 msgstr "所有图表单位"
 
-#: components/class-m-chart.php:169
+#: components/class-m-chart.php:171
 msgid "Parent Chart Unit"
 msgstr "父图单位"
 
-#: components/class-m-chart.php:170
+#: components/class-m-chart.php:172
 msgid "Parent Chart Unit:"
-msgstr "父表单位 ︰"
+msgstr "父表单位︰"
 
-#: components/class-m-chart.php:171
+#: components/class-m-chart.php:173
 msgid "Edit Chart Unit"
 msgstr "编辑图表单位"
 
-#: components/class-m-chart.php:172
+#: components/class-m-chart.php:174
 msgid "Update Chart Unit"
 msgstr "更新图表单位"
 
-#: components/class-m-chart.php:173
+#: components/class-m-chart.php:175
 msgid "Add New Chart Unit"
 msgstr "添加新的图表单位"
 
-#: components/class-m-chart.php:174
+#: components/class-m-chart.php:176
 msgid "Chart Unit Name"
 msgstr "图表单位名称"
 
-#: components/class-m-chart.php:204
+#: components/class-m-chart.php:206
 msgid "Charts"
 msgstr "图表"
 
-#: components/class-m-chart.php:206 components/class-m-chart.php:207
+#: components/class-m-chart.php:208
+#: components/class-m-chart.php:209
 msgid "Add Chart"
 msgstr "添加图表"
 
-#: components/class-m-chart.php:208
+#: components/class-m-chart.php:210
 msgid "Edit"
 msgstr "编辑"
 
 #: components/class-m-chart.php:211
-#: components/templates/chartjs-settings.php:159
+msgid "Edit Chart"
+msgstr "编辑图表"
+
+#: components/class-m-chart.php:212
+msgid "New Chart"
+msgstr "添加新的图表"
+
+#: components/class-m-chart.php:213
 msgid "View"
 msgstr "查看"
 
-#: components/class-m-chart.php:212
+#: components/class-m-chart.php:214
 msgid "View Chart"
 msgstr "查看图表"
 
-#: components/class-m-chart.php:213
+#: components/class-m-chart.php:215
 msgid "Search Charts"
 msgstr "搜索图表"
 
-#: components/class-m-chart.php:215
+#: components/class-m-chart.php:216
+msgid "No Charts found"
+msgstr "没找到图表"
+
+#: components/class-m-chart.php:217
 msgid "No Charts found in the Trash"
 msgstr "没有在回收站找到图表"
 
-#. Description of the plugin/theme
-#: components/class-m-chart.php:227
+#: components/class-m-chart.php:229
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "管理数据集并将它们在 WordPress 中显示为图表。"
 
-#: components/class-m-chart.php:935
+#: components/class-m-chart.php:939
 msgid "The chart could not be found"
 msgstr "无法找到此图表"
 
-#: components/class-m-chart.php:936
-msgid "Chart not found"
-msgstr "无法找到图表"
-
-#: components/class-m-chart.php:945
+#: components/class-m-chart.php:949
 msgid "Embeds of this type are not enabled"
 msgstr "这种类型的嵌入无法被执行"
 
-#: components/class-m-chart.php:946
+#: components/class-m-chart.php:950
 msgid "Embeds disabled"
 msgstr "嵌入无法被执行"
 
-#: components/external/canvg/umd.js:1
-msgid "Symbol."
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "delete"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-#, fuzzy
-#| msgid "Charts"
-msgid "has"
-msgstr "图表"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "get"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-#, fuzzy
-#| msgid "Wrong post type"
-msgid "Wrong offset!"
-msgstr "错误图表类型"
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Wrong length!"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "autocomplete"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "checkbox"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "date"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "dropdown"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "handsontable"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "numeric"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "password"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "text"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "time"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Promise-chain cycle"
-msgstr ""
-
-#: components/external/handsontable/handsontable.js:29
-msgid "Promise can't be resolved itself"
-msgstr ""
-
-#: components/templates/chart-meta-box.php:16
+#: components/templates/chart-meta-box.php:10
 msgid "This chart requires the M Chart Highcharts Library plugin."
-msgstr ""
+msgstr "此图表需要使用 M Chart Highcharts Library 插件。"
 
-#: components/templates/chart-meta-box.php:20
+#: components/templates/chart-meta-box.php:14
 msgid "This chart will no longer display unless you install the plugin:"
-msgstr ""
-
-#: components/templates/chartjs-settings.php:3
-msgid "Columns"
-msgstr "列"
-
-#: components/templates/chartjs-settings.php:4
-msgid "Rows"
-msgstr "行"
-
-#: components/templates/chartjs-settings.php:12
-msgid "Type"
-msgstr "类型"
-
-#: components/templates/chartjs-settings.php:26
-msgid "Theme"
-msgstr "主题"
-
-#: components/templates/chartjs-settings.php:40
-msgid "Height"
-msgstr "高度"
-
-#: components/templates/chartjs-settings.php:46
-msgid "Parse data in"
-msgstr "排列数据的方式 （行／列）"
-
-#: components/templates/chartjs-settings.php:63
-msgid "Show labels"
-msgstr "显示标签"
-
-#: components/templates/chartjs-settings.php:70
-msgid "Show legend"
-msgstr "显示图例"
-
-#: components/templates/chartjs-settings.php:76
-msgid "Shared tooltip"
-msgstr "共享工具提示框"
-
-#: components/templates/chartjs-settings.php:82
-msgid "Vertical axis title"
-msgstr "纵坐标轴标题"
-
-#: components/templates/chartjs-settings.php:88
-#: components/templates/chartjs-settings.php:126
-msgid "N/A"
-msgstr "不适用"
-
-#: components/templates/chartjs-settings.php:113
-msgid "Force vertical axis minimum: "
-msgstr "制定纵坐标洲最小值为: "
-
-#: components/templates/chartjs-settings.php:120
-msgid "Horizontal axis title"
-msgstr "横坐标轴标题"
-
-#: components/templates/chartjs-settings.php:150
-msgid "Shortcode"
-msgstr "短代码"
-
-#: components/templates/chartjs-settings.php:154
-msgid "Image"
-msgstr "图像"
-
-#: components/templates/chartjs-settings.php:162
-msgid "Image generation is disabled"
-msgstr "图像生成功能关闭"
-
-#: components/templates/chartjs-settings.php:164
-msgid "Save/Update this post to generate the image version"
-msgstr "以图像文档格式储存／上传此图表"
+msgstr "除非你安装插件，否则此图表将不再显示："
 
 #: components/templates/handlebars.php:5
 msgid "Double click or long press tab to edit name"
 msgstr "按两下或是长按标签来更改姓名"
 
 #: components/templates/m-chart-settings-chartjs.php:1
-#, fuzzy
-#| msgid "M Chart Settings"
 msgid "Chart.js Settings"
-msgstr "M Chart 设置"
+msgstr "Chart.js 设定"
 
 #: components/templates/m-chart-settings-chartjs.php:7
-#, fuzzy
-#| msgid "Default Highcharts Theme"
 msgid "Default Chart.js Theme"
-msgstr "默认的Highcharts 主题"
+msgstr "默认Chart.js主题"
 
 #: components/templates/m-chart-settings-chartjs.php:23
 msgid "See the M Chart documentation for more info on how to use themes:"
-msgstr "有关如何使用主题，请参阅更多M Chart 说明 ︰"
+msgstr "有关如何使用主题，请参阅更多M Chart 说明︰"
 
 #: components/templates/m-chart-settings-chartjs.php:29
 msgid "Number Format Locale"
-msgstr ""
+msgstr "数字格式所在地"
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid ""
-"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
-"chart"
-msgstr ""
+msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
+msgstr "你想用Intl.NumberFormat解析图表中的数字时使用的地点"
 
 #: components/templates/m-chart-settings.php:5
 msgid "General Settings"
@@ -2888,23 +3093,20 @@ msgstr "一般设定"
 
 #: components/templates/m-chart-settings.php:9
 #, fuzzy
-#| msgid "Default"
 msgid "Default Library"
 msgstr "默认"
 
 #: components/templates/m-chart-settings.php:23
 msgid "Chart.js is the GPL compatible default library:"
-msgstr ""
+msgstr "Chart.js 是 GPL 兼容的默认库："
 
 #: components/templates/m-chart-settings.php:33
 msgid "Show Library in Edit Posts Screen"
-msgstr ""
+msgstr "在编辑帖子界面显示库"
 
 #: components/templates/m-chart-settings.php:34
-msgid ""
-"Displays an icon indicating the library used for a chart in Edit Posts "
-"Screen of the WP Admin"
-msgstr ""
+msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
+msgstr "在WP管理员编辑帖子界面显示用于图表的图书馆图标"
 
 #: components/templates/m-chart-settings.php:39
 #: components/templates/m-chart-settings.php:43
@@ -2938,38 +3140,36 @@ msgstr "没有即时预览和没有生成图表图像"
 #: components/templates/m-chart-settings.php:64
 #: components/templates/m-chart-settings.php:68
 msgid "Image Multiplier"
-msgstr ""
+msgstr "图像倍增器"
 
 #: components/templates/m-chart-settings.php:72
 msgid "1x"
-msgstr ""
+msgstr "1x"
 
 #: components/templates/m-chart-settings.php:76
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: components/templates/m-chart-settings.php:80
 msgid "3x"
-msgstr ""
+msgstr "3x"
 
 #: components/templates/m-chart-settings.php:84
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
-msgid ""
-"The higher the multiplier the better the images will look on high DPI screens"
-msgstr ""
+msgid "The higher the multiplier the better the images will look on high DPI screens"
+msgstr "倍率越高，高DPI屏幕上的画面效果越好"
 
 #: components/templates/m-chart-settings.php:91
 #, fuzzy
-#| msgid "Image"
 msgid "Image Width"
 msgstr "图像"
 
 #: components/templates/m-chart-settings.php:95
 msgid "The width of the image generated from your chart"
-msgstr ""
+msgstr "从你的图表生成的图像宽度"
 
 #: components/templates/m-chart-settings.php:100
 msgid "Embeds"
@@ -2985,11 +3185,11 @@ msgstr "允许图表能够远端内嵌网页框架(iframe)"
 
 #: components/templates/m-chart-settings.php:110
 msgid "Default CSV Delimiter"
-msgstr ""
+msgstr "默认CSV分隔符"
 
 #: components/templates/m-chart-settings.php:123
 msgid "Default used when importing/exporting CSV files"
-msgstr ""
+msgstr "导入/导出CSV文件时默认使用"
 
 #: components/templates/m-chart-settings.php:130
 msgid "Save Changes"
@@ -3029,7 +3229,7 @@ msgstr "导入"
 
 #: components/templates/spreadsheet-meta-box.php:26
 msgid " Delimited"
-msgstr ""
+msgstr "界限"
 
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
@@ -3056,10 +3256,12 @@ msgid "M Chart"
 msgstr "M Chart"
 
 #. Plugin URI of the plugin/theme
-#, fuzzy
-#| msgid "http://github.com/methnen/m-charts"
 msgid "http://github.com/methnen/m-chart"
 msgstr "http://github.com/methnen/m-charts"
+
+#. Description of the plugin/theme
+msgid "Manage data sets via a spreadsheet interface and display them as charts in WordPress."
+msgstr "通过电子表格界面管理数据集，并在WordPress中以图表形式显示。"
 
 #. Author of the plugin/theme
 msgid "Jamie Poitra"
@@ -3069,13 +3271,86 @@ msgstr "Jamie Poitra"
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
 
+#~ msgid "Replace"
+#~ msgstr "替换"
+
+#~ msgid "There was a problem fetching charts"
+#~ msgstr "取回图表时出了问题"
+
+#~ msgid "Create a new chart"
+#~ msgstr "创建新图表"
+
+#~ msgid "Search by title"
+#~ msgstr "按标题搜索"
+
 #, fuzzy
-#~| msgid "No Charts found"
+#~ msgid "No Charts found using this search string"
+#~ msgstr "没有在回收站找到图表"
+
+#, fuzzy
+#~ msgid "has"
+#~ msgstr "图表"
+
+#, fuzzy
+#~ msgid "Wrong offset!"
+#~ msgstr "错误图表类型"
+
+#~ msgid "Columns"
+#~ msgstr "列"
+
+#~ msgid "Rows"
+#~ msgstr "行"
+
+#~ msgid "Type"
+#~ msgstr "类型"
+
+#~ msgid "Theme"
+#~ msgstr "主题"
+
+#~ msgid "Height"
+#~ msgstr "高度"
+
+#~ msgid "Parse data in"
+#~ msgstr "排列数据的方式 （行／列）"
+
+#~ msgid "Show labels"
+#~ msgstr "显示标签"
+
+#~ msgid "Show legend"
+#~ msgstr "显示图例"
+
+#~ msgid "Shared tooltip"
+#~ msgstr "共享工具提示框"
+
+#~ msgid "Vertical axis title"
+#~ msgstr "纵坐标轴标题"
+
+#~ msgid "N/A"
+#~ msgstr "不适用"
+
+#~ msgid "Force vertical axis minimum: "
+#~ msgstr "制定纵坐标洲最小值为: "
+
+#~ msgid "Horizontal axis title"
+#~ msgstr "横坐标轴标题"
+
+#~ msgid "Shortcode"
+#~ msgstr "短代码"
+
+#~ msgid "Image"
+#~ msgstr "图像"
+
+#~ msgid "Image generation is disabled"
+#~ msgstr "图像生成功能关闭"
+
+#~ msgid "Save/Update this post to generate the image version"
+#~ msgstr "以图像文档格式储存／上传此图表"
+
+#, fuzzy
 #~ msgid "No charts found"
 #~ msgstr "没找到图表"
 
 #, fuzzy
-#~| msgid "No Charts found in the Trash"
 #~ msgid "No charts were found using this search string"
 #~ msgstr "没有在回收站找到图表"
 
@@ -3097,17 +3372,13 @@ msgstr "http://methnen.com"
 #~ msgid "Numeric Symbols"
 #~ msgstr "数字符号"
 
-#~ msgid ""
-#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
-#~ "Quadrillions, Quintillions...)"
+#~ msgid "Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)"
 #~ msgstr "用逗号分隔（千，百万，十亿，万亿，四万亿，五百万...）"
 
 #~ msgid "Numeric Symbol Magnitude"
 #~ msgstr "数字符号的幅度"
 
-#~ msgid ""
-#~ "Allows adjustment for languages that use symbols at different intervals "
-#~ "(Japanese, Korean, etc...)"
+#~ msgid "Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)"
 #~ msgstr "允许调整一些会在不同间隔间使用符号的语言（日语，韩语等）"
 
 #~ msgid "Importing this file will replace all existing data"
