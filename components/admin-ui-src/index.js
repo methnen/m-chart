@@ -38,7 +38,7 @@ if ( subtitleRoot || spreadsheetRoot || chartRoot ) {
 
 	if ( postForm ) {
 		const container = document.createElement( 'div' );
-		container.id = 'm-chart-admin-app';
+		container.id = 'm-chart-admin-ui';
 		container.hidden = true;
 		postForm.appendChild( container );
 		createRoot( container ).render( <App /> );

@@ -8,7 +8,7 @@
  * JSONs into one file per script handle.
  *
  * Handle mapping:
- *   components/admin-ui-src/** -> m-chart-admin-app
+ *   components/admin-ui-src/** -> m-chart-admin-ui
  *   components/block-src/**   -> m-chart-editor
  */
 
@@ -20,7 +20,7 @@ const DOMAIN        = 'm-chart';
 
 // Map source path prefixes to script handles.
 const HANDLE_MAP = {
-	'components/admin-ui-src/': 'm-chart-admin-app',
+	'components/admin-ui-src/': 'm-chart-admin-ui',
 	'components/block-src/':    'm-chart-editor',
 };
 

@@ -84,7 +84,7 @@ Repeat steps 1–6 for each locale.
 
 `wp i18n make-json` generates one JSON file per source file, named with the md5 hash of the source path (e.g. `components/admin-ui-src/components/AxisRows.js`). However, WordPress looks up translations using the md5 hash of the *compiled* file path (e.g. `components/admin-ui/index.js`). Since these hashes don't match, WordPress falls back to looking for `{domain}-{locale}-{handle}.json`. The `build:i18n` script merges the per-source-file JSONs into these handle-named files:
 
-- `m-chart-{locale}-m-chart-admin-app.json` — admin UI translations
+- `m-chart-{locale}-m-chart-admin-ui.json` — admin UI translations
 - `m-chart-{locale}-m-chart-editor.json` — block editor translations
 
 ### Poedit configuration

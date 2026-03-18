@@ -298,7 +298,7 @@ class M_Chart_Admin {
 			$admin_app_asset = require __DIR__ . '/admin-ui/index.asset.php';
 
 			wp_enqueue_script(
-				'm-chart-admin-app',
+				'm-chart-admin-ui',
 				$this->plugin_url . '/components/admin-ui/index.js',
 				$admin_app_asset['dependencies'],
 				$admin_app_asset['version'],
@@ -306,7 +306,7 @@ class M_Chart_Admin {
 			);
 
 			wp_set_script_translations(
-				'm-chart-admin-app',
+				'm-chart-admin-ui',
 				'm-chart',
 				plugin_dir_path( __DIR__ ) . 'components/languages/'
 			);
@@ -449,7 +449,7 @@ class M_Chart_Admin {
 
 			// For chartjs the React app reads m_chart_admin; for other libraries the jQuery
 			// m-chart-admin.js reads it.  Attach to whichever handle is actually enqueued.
-			$localize_handle = 'chartjs' === $library ? 'm-chart-admin-app' : 'm-chart-admin';
+			$localize_handle = 'chartjs' === $library ? 'm-chart-admin-ui' : 'm-chart-admin';
 			wp_localize_script( $localize_handle, 'm_chart_admin', $localize_data );
 
 			do_action( 'm_chart_admin_scripts', $library, $post_id );
