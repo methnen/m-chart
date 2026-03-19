@@ -8,8 +8,8 @@ class M_Chart_Block {
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_m_chart_block_support' ] );
 		add_action( 'rest_api_init', [ $this, 'register_fetch_m_chart_options' ] );
-		add_action( 'rest_api_init', [ $this, 'register_fetch_charts' ] );
-		add_action( 'rest_api_init', [ $this, 'register_fetch_chart' ] );
+		add_action( 'rest_api_init', [ $this, 'register_get_charts' ] );
+		add_action( 'rest_api_init', [ $this, 'register_get_chart' ] );
 	}
 
 	/**
@@ -106,13 +106,13 @@ class M_Chart_Block {
 	/**
 	 * Register api route to search graphs by title using a search string.
 	 */
-	public function register_fetch_charts() {
+	public function register_get_charts() {
 		register_rest_route(
 			'm-chart/v1',
 			'/charts',
 			[
 				'methods'             => 'GET',
-				'callback'            => [ $this, 'fetch_charts' ],
+				'callback'            => [ $this, 'get_charts' ],
 				'permission_callback' => function () {
 					return true;
 				},
@@ -135,13 +135,13 @@ class M_Chart_Block {
 	/**
 	 * Register api route to fetch a single graph by post ID.
 	 */
-	public function register_fetch_chart() {
+	public function register_get_chart() {
 		register_rest_route(
 			'm-chart/v1',
 			'/chart/(?P<id>\d+)',
 			[
 				'methods'             => 'GET',
-				'callback'            => [ $this, 'fetch_chart' ],
+				'callback'            => [ $this, 'get_chart' ],
 				'permission_callback' => function () {
 					return true;
 				},
@@ -162,7 +162,7 @@ class M_Chart_Block {
 	 * @param WP_REST_Request $request The REST request object.
 	 * @return array|WP_Error Chart data array or WP_Error if not found.
 	 */
-	public function fetch_chart( $request ) {
+	public function get_chart( $request ) {
 		$post_id = intval( $request->get_param( 'id' ) );
 		$post    = get_post( $post_id );
 
@@ -190,7 +190,7 @@ class M_Chart_Block {
 	 * @param WP_REST_Request $request The REST request object.
 	 * @return array|WP_Error Chart data array or WP_Error if not found.
 	 */
-	public function fetch_charts( $request ) {
+	public function get_charts( $request ) {
 		$args = [
 			'post_type'      => 'm-chart',
 			'post_status'    => 'publish',
@@ -215,15 +215,16 @@ class M_Chart_Block {
 			foreach ( $posts->posts as $post ) {
 				$post_meta         = get_post_meta( $post->ID, 'm-chart', true );
 				$post_thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+				$chart_image       = m_chart()->get_chart_image( $post->ID );
 				
 				$result = [
 					'id'       => intval( $post->ID ),
 					'title'    => html_entity_decode( get_the_title( $post->ID ) ),
 					'subtitle' => isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '',
-					'url'      => get_the_post_thumbnail_url( $post->ID ),
+					'url'      => $chart_image['url'],
 					'type'     => isset( $post_meta ) && isset( $post_meta['type'] ) ? $post_meta['type'] : '',
-					'height'   => wp_get_attachment_metadata( $post_thumbnail_id )['height'] ?? 800,
-					'width'    => wp_get_attachment_metadata( $post_thumbnail_id )['width'] ?? 1200,
+					'height'   => $chart_image['height'] ?? 800,
+					'width'    => $chart_image['width'] ?? 1200,
 				];
 				
 				$results[] = $result;

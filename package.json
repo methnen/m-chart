@@ -23,7 +23,7 @@
     "watch:admin-ui": "wp-scripts start --output-path=components/admin-ui --webpack-src-dir=components/admin-ui-src",
     "watch:css": "sass --watch components/sass/m-chart-admin.scss:components/css/m-chart-admin.css",
     "watch:js": "chokidar 'components/js/m-chart-chartjs-helper.js' -c 'npm run build:js'",
-    "watch": "concurrently 'npm run watch:block' 'npm run watch:admin-ui' 'npm run watch:css' 'npm run watch:js'",
+    "watch": "concurrently 'npm run watch:block' 'npm run watch:admin-ui' 'npm run watch:css' 'npm run watch:js' 'npm run build:readme'",
     "postinstall": "npm run build"
   },
   "repository": {

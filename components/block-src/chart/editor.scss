@@ -1,3 +1,5 @@
+@use '../../sass/global-mixins-and-variables' as *;
+
 .m-chart-selector {
 	background-color: #fff;
 	
@@ -38,10 +40,7 @@
 		list-style: none;
 		gap: .5rem;
 		padding: 0;
-		
-		@media (min-width: 600px) {
-			max-height: 15rem;
-		}
+		margin-bottom: 0;
 		
 		li {
 			flex-basis: 100%;
@@ -72,12 +71,12 @@
 			}
 
 			&:hover {
+				cursor: pointer;
+
 				img,
 				.type {
-					cursor: pointer;
 					border: 2px solid var(--wp-admin-theme-color);
 					border-radius: 2px;
-					//box-shadow: 0px 0px 3px gray;
 				}
 			}
 			
@@ -85,8 +84,17 @@
 				font-weight: normal;
 				font-size: .8rem;
 				text-transform: none;
-				margin-top: 1rem;
-				margin-bottom: 0;
+				margin: 1rem 5px 0 5px;
+			}
+
+			&.image {
+				position: relative;
+
+				h6.title {
+					@include text-stroke(3);
+					margin-top: 0;
+					position: absolute;
+				}
 			}
 			
 			.type {
@@ -169,7 +177,7 @@
 
 	// Selected
 	.chart-selected {
-		.image-support {
+		.image {
 			overflow: hidden;
 
 			img.preview {
@@ -179,83 +187,95 @@
 			}
 		}
 		
-		.type {
-			position: relative;
-			padding-top: 5rem;
-			padding-bottom: 5rem;
+		.image,
+		.no-image {
 			background: #f1f1f1;
-			
-			.icon {
-				&:before {
-					content: '';
-					height: 47px;
-					display: block;
-					background-image: url('../../images/types/pie.svg');
-					background-repeat: no-repeat;
-					background-size: contain;
-					background-position: center;
-				}
+			display: flex;
+			align-items: center;
 
-				&.line:before {
-					background-image: url('../../images/types/line.svg');
+			.type {
+				flex: 1;
+				
+				.icon {
+					&:before {
+						content: '';
+						height: 47px;
+						display: block;
+						background-image: url('../../images/types/pie.svg');
+						background-repeat: no-repeat;
+						background-size: contain;
+						background-position: center;
+					}
+	
+					&.line:before {
+						background-image: url('../../images/types/line.svg');
+					}
+	
+					&.spline:before {
+						background-image: url('../../images/types/spline.svg');
+					}
+	
+					&.area:before {
+						background-image: url('../../images/types/area.svg');
+					}
+	
+					&.column:before {
+						background-image: url('../../images/types/column.svg');
+					}
+	
+					&.stacked-column:before {
+						background-image: url('../../images/types/stacked-column.svg');
+					}
+	
+					&.bar:before {
+						background-image: url('../../images/types/bar.svg');
+					}
+	
+					&.stacked-bar:before {
+						background-image: url('../../images/types/stacked-bar.svg');
+					}
+	
+					&.pie:before {
+						background-image: url('../../images/types/pie.svg');
+					}
+	
+					&.doughnut:before {
+						background-image: url('../../images/types/doughnut.svg');
+					}
+	
+					&.scatter:before {
+						background-image: url('../../images/types/scatter.svg');
+					}
+	
+					&.bubble:before {
+						background-image: url('../../images/types/bubble.svg');
+					}
+	
+					&.radar:before {
+						background-image: url('../../images/types/radar.svg');
+					}
+	
+					&.polar:before {
+						background-image: url('../../images/types/polar.svg');
+					}
 				}
-
-				&.spline:before {
-					background-image: url('../../images/types/spline.svg');
+				
+				h5.title {
+					font-weight: normal;
+					font-size: 23px;
+					text-transform: none;
+					margin: 0 15px 0 15px;
+					text-align: center;
 				}
-
-				&.area:before {
-					background-image: url('../../images/types/area.svg');
+	
+				h6.subtitle {
+					font-weight: normal;
+					font-size: 17px;
+					text-transform: none;
+					margin: 1rem 15px 0 15px;
+					margin-bottom: 0;
+					text-align: center;
 				}
-
-				&.column:before {
-					background-image: url('../../images/types/column.svg');
-				}
-
-				&.stacked-column:before {
-					background-image: url('../../images/types/stacked-column.svg');
-				}
-
-				&.bar:before {
-					background-image: url('../../images/types/bar.svg');
-				}
-
-				&.stacked-bar:before {
-					background-image: url('../../images/types/stacked-bar.svg');
-				}
-
-				&.pie:before {
-					background-image: url('../../images/types/pie.svg');
-				}
-
-				&.doughnut:before {
-					background-image: url('../../images/types/doughnut.svg');
-				}
-
-				&.scatter:before {
-					background-image: url('../../images/types/scatter.svg');
-				}
-
-				&.bubble:before {
-					background-image: url('../../images/types/bubble.svg');
-				}
-
-				&.radar:before {
-					background-image: url('../../images/types/radar.svg');
-				}
-
-				&.polar:before {
-					background-image: url('../../images/types/polar.svg');
-				}
-			}
-			
-			h4.title {
-				font-weight: normal;
-				font-size: 18pt;
-				text-transform: none;
-				margin-top: 2rem;
-				margin-bottom: 0;
-				text-align: center;
 			}
 		}
 	}

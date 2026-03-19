@@ -1,6 +1,6 @@
-import { TextControl, SelectControl, Spinner, ToolbarGroup, ToolbarButton, Placeholder, ExternalLink, PanelBody } from '@wordpress/components';
+import { SelectControl, Spinner, ToolbarGroup, ToolbarButton, Placeholder, ExternalLink, PanelBody, SearchControl } from '@wordpress/components';
 import { getBlockType } from '@wordpress/blocks';
-import { useState, useEffect, useRef, useMemo } from '@wordpress/element';
+import { useState, useEffect, useRef, useMemo, useCallback } from '@wordpress/element';
 import { useBlockProps, BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
@@ -14,7 +14,6 @@ export default function edit( { attributes, setAttributes } ) {
     const [ postsAvailable, setPostsAvailable ] = useState( false );
     const [ available, setAvailable ] = useState( 0 );
     const [ loaded, setLoaded ] = useState( false );
-    const [ charts, setCharts ] = useState( [] );
     const [ selectedChart, setSelectedChart ] = useState( null );
     const [ siteUrl, setSiteUrl ] = useState( null );
     const [ imageSupport, setImageSupport ] = useState( false );
@@ -34,10 +33,10 @@ export default function edit( { attributes, setAttributes } ) {
     // Set a cache URL parameter based on the current moment in time to prevent cached images from messing up the UI
     const cacheBuster = `?cache=${performance.now()}`;
 
-    // On load we fetch some option settings and run fetchCharts so we have some intiial reasults loaded into the UI
+    // On load we fetch some option settings and run getCharts so we have some intiial reasults loaded into the UI
     useEffect( () => {
         fetchOptions();
-        fetchCharts( search );
+        getCharts( search );
     }, [] );
 
     // Fetch the selected chart individually whenever chartId changes
@@ -45,7 +44,7 @@ export default function edit( { attributes, setAttributes } ) {
     useEffect( () => {
         setSelectedChart( null );
         if ( attributes.chartId ) {
-            fetchChart( parseInt( attributes.chartId, 10 ) );
+            getChart( parseInt( attributes.chartId, 10 ) );
         }
     }, [ attributes.chartId ] );
 
@@ -63,7 +62,7 @@ export default function edit( { attributes, setAttributes } ) {
             if ( el.scrollTop + el.clientHeight >= el.scrollHeight - 100 ) {
                 const nextPage = page + 1;
                 setPage( nextPage );
-                fetchCharts( search, nextPage );
+                getCharts( search, nextPage );
             }
         };
 
@@ -72,16 +71,14 @@ export default function edit( { attributes, setAttributes } ) {
         return () => el.removeEventListener( 'scroll', handleScroll );
     }, [ results, available, loadingMore, page, search ] );
 
-    // Build list of charts
+    // Build list of charts out of the results object
     const resultsList = results.map( ( x ) => {
-        if ( imageSupport ) {
-			return <li className={ x.src ? 'item img' : 'item no-image' } key={ x.id } onClick={ () => handleClick( x.id ) } title={ x.title }>{ x.src ? <><h6 className="title">{ x.title }</h6><img src={ x.src + cacheBuster } alt={ x.title } /></> : <div className="type"><span className={ 'icon ' + x.type }><h6 className="title">{ x.title }</h6></span></div> }</li>;
+        if ( ! imageSupport || ! x.src ) {
+            return <li aria-label={"Select Chart: " + x.title} role="button" className="item no-image" key={ x.id } onClick={ () => handleClick( x.id ) } title={ x.title }><div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div></li>;
         } else {
-            return <li className="no-image" key={ x.id } onClick={ () => handleClick( x.id ) } title={ x.title }><div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div></li>;
+            return <li aria-label={"Select Chart: " + x.title} role="button" className="item image" key={ x.id } onClick={ () => handleClick( x.id ) } title={ x.title }><h6 className="title">{ x.title }</h6><img src={ x.src + cacheBuster } alt={ x.title } /></li>;
         }
     } );
-
-    const selected = charts.filter( x => x.id === parseInt( attributes.chartId, 10 ) )[ 0 ] || selectedChart;
 
     // Handle clicks to a chart in the results list
     const handleClick = ( id ) => {
@@ -91,10 +88,20 @@ export default function edit( { attributes, setAttributes } ) {
 
     // Handle user typing into the search field
     const handleSearch = ( value ) => {
-        setSearch( value );
-        setPage( 1 );
-        doDebounce( value );
+        console.log( 'search', value );
+        doSearch( value );
     };
+
+    // Actually actually carry out the debounced search
+    const doSearch = useCallback(
+        debounce( ( value ) => {
+            console.log( 'debounce', value );
+            setSearch( value );
+            setPage( 1 );
+            getCharts( value );
+        }, 500),
+        []
+    );
 
     // Get option settings
     const fetchOptions = () => {
@@ -105,7 +112,8 @@ export default function edit( { attributes, setAttributes } ) {
         } );
     };
 
-    const fetchChart = ( id ) => {
+    // Get a single chart
+    const getChart = ( id ) => {
         apiFetch( { path: `/m-chart/v1/chart/${ id }` } ).then( result => {
             setSelectedChart( {
                 id: result.id,
@@ -119,22 +127,28 @@ export default function edit( { attributes, setAttributes } ) {
         } ).catch( () => {} );
     };
 
-    const fetchCharts = ( value, fetchPage = 1 ) => {
+    const getCharts = ( value, getPage = 1 ) => {
         setLoadProblem( false );
 
-        if ( fetchPage > 1 ) {
+        // If we're getting a subsequent page we're adding to the existing results
+        if ( getPage > 1 ) {
             setLoadingMore( true );
         }
 
+        // Build the parameters
         const params = new URLSearchParams();
+
         if ( value ) {
             params.set( 's', value );
         }
-        if ( fetchPage > 1 ) {
-            params.set( 'page', fetchPage );
+
+        if ( getPage > 1 ) {
+            params.set( 'page', getPage );
         }
+
         const query = params.toString();
 
+        // Run the query and grab the results
         apiFetch( { path: `/m-chart/v1/charts${ query ? '?' + query : '' }` } )
             .then(
                 result => {
@@ -148,31 +162,27 @@ export default function edit( { attributes, setAttributes } ) {
                         src: x.url || ''
                     } ) );
 
+                    // Update the found value to match the current search
                     setAvailable( result.found_posts );
 
-                    if ( fetchPage === 1 ) {
-                        setCharts( newCharts );
+                    // Either append or replace the existing results
+                    if ( getPage === 1 ) {
                         setResults( newCharts );
                     } else {
-                        setCharts( prev => [ ...prev, ...newCharts ] );
                         setResults( prev => [ ...prev, ...newCharts ] );
                     }
 
                     setLoaded( true );
                     setLoadingMore( false );
                 } ).catch( ( error ) => {
+                    // If there's an error we'll note it
                     if ( error.code === 'rest_no_route' ) {
                         setLoadProblem( true );
                     }
+
                     setLoadingMore( false );
                 } );
     };
-
-    // We don't want to run the search until the user is done typeing so we'll setup a debounce to handle that here
-    const fetchChartsRef = useRef( fetchCharts );
-    fetchChartsRef.current = fetchCharts;
-
-    const doDebounce = useMemo( () => debounce( ( ...args ) => fetchChartsRef.current( ...args ), 500 ), [] );
 
     return (
         <div { ...blockProps }>
@@ -195,11 +205,11 @@ export default function edit( { attributes, setAttributes } ) {
             <BlockControls>
                 <ToolbarGroup className="m-chart-block">
                     { ! attributes.chartId &&
-                        <ToolbarButton onClick={ () => window.location.href = newUrl } icon="external">{ __( 'New chart', 'm-chart' ) }</ToolbarButton>
+                        <ToolbarButton onClick={ () => window.open( newUrl, "_blank" ) } icon="external">{ __( 'New chart', 'm-chart' ) }</ToolbarButton>
                     }
                     { !! attributes.chartId &&
                         <>
-                            <ToolbarButton onClick={ () => window.location.href = editUrl } icon="external" >{ __( 'Edit chart', 'm-chart' ) }</ToolbarButton>
+                            <ToolbarButton onClick={ () => window.open( editUrl, "_blank" ) } icon="external" >{ __( 'Edit chart', 'm-chart' ) }</ToolbarButton>
                             <ToolbarButton onClick={ () => handleClick( 0 ) } >{ __( 'Replace', 'm-chart' ) }</ToolbarButton>
                         </>
                     } 
@@ -207,26 +217,21 @@ export default function edit( { attributes, setAttributes } ) {
             </BlockControls>
             { !! attributes.chartId ? (
                 <div className="wp-block m-chart-selector">
-                    { ! selected ?
+                    { ! selectedChart ?
                         <p className="center"><Spinner /></p>
                         :
                         <div className="chart-selected">
-                            { imageSupport ?
-                                <div className="image-support">
-                                    { selected?.src === '' ?
-                                        <div className="type">
-                                            <span className={ 'icon ' + selected.type }></span>
-                                            <h4 className="title">{ selected.title }</h4>
-                                        </div>
-                                        :
-                                        <img className="preview" src={ selected?.src + cacheBuster } />
-                                    }
-                                </div>
+                            { ! imageSupport || ! selectedChart.src ?
+                                <div className="no-image" style={ { aspectRatio: selectedChart.width / selectedChart.height } }>
+                                    <div className="type">
+                                        <span className={ 'icon ' + selectedChart.type }></span>
+                                        <h5 className="title">{ selectedChart.title }</h5>
+                                        { selectedChart.subtitle && (<h6 className="subtitle">{ selectedChart.subtitle }</h6>)}
+                                    </div>
+                                </div>    
                                 :
-                                <div className="no-image-support" style={ { aspectRatio: selected.width / selected.height } }>
-                                    <span className={ 'type ' + selected.type }></span>
-                                    <h4 className="title">{ selected?.title }</h4>
-                                    <p>{ selected?.subtitle }</p>
+                                <div className="image">
+                                    <img className="preview" src={ selectedChart.src + cacheBuster } />
                                 </div>
                             }
                         </div>
@@ -246,19 +251,24 @@ export default function edit( { attributes, setAttributes } ) {
                                         </p>
                                         :
                                         postsAvailable === false ?
-                                            <p className="center">{ __( 'No charts found', 'm-chart' ) }
-                                                <ExternalLink href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</ExternalLink>
-                                            </p>
+                                            <div>
+                                                <p>
+                                                    { __( 'No charts found', 'm-chart' ) }<br />
+                                                </p>
+                                                <p>
+                                                    <ExternalLink href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</ExternalLink>
+                                                </p>
+                                            </div>
                                             :
                                             <div className="no-chart-selected">
                                                 <div className="search-box">
-                                                    <TextControl
+                                                    <SearchControl
                                                         value={ search }
                                                         placeholder={ __( 'Search by title', 'm-chart' ) }
                                                         onChange={ ( value ) => handleSearch( value ) }
                                                         autoFocus
                                                     />
-                                                    <p className="count">{ available } charts found</p>
+                                                    <p className="count">{ available } { 1 === available ? __( 'chart found', 'm-chart' ) : __( 'charts found', 'm-chart' ) }</p>
                                                 </div>
                                                 { resultsList.length === 0 && search.length > 1 ?
                                                     <p>{ __( 'No charts found', 'm-chart' ) }</p>

@@ -31,6 +31,49 @@ $rem-base: 16;
 	@return $rem-values;
 }
 
+// Yes, text-stroke exists but it's not well supported yet and at least in my experience renders strangely depending on the browser
+// This deals with that issue by rendering a text-shadow that does what we actually want
+@function text-stroke( $size: 2, $color: #fff, $correction: 0 ) {
+    $size-rounded: math.round( $size );
+    $size-rest:    $size-rounded - $size;
+    
+	$radius: $size - $correction;
+	$stroke: ();
+
+	@for $i from -$size-rounded through $size-rounded {
+	    $i: $i + $size-rest;
+	    
+		@for $k from -$size-rounded through $size-rounded {
+		    $k: $k + $size-rest;
+
+			$x: $k;
+			$y: $i;
+
+			@if $k > 0 {
+				$x: $k - 0.5;
+			} @else if $k < 0 {
+				$x: $k + 0.5;
+			}
+
+			@if $i > 0 {
+				$y: $i - 0.5;
+			} @else if $i < 0 {
+				$y: $i + 0.5;
+			}
+
+			@if ( $x*$x + $y*$y <= $radius*$radius ) {
+				$stroke: list.append( $stroke, $i*1px $k*1px 0 $color, comma );
+			}
+		}
+	}
+
+	@return $stroke;
+}
+
+@mixin text-stroke( $size: 2, $color: #fff, $correction: 0 ) {
+	text-shadow: text-stroke( $size, $color, $correction );
+}
+
 $wp-admin-black: #000000;
 $wp-admin-red: #c80011;
 $wp-admin-border-color: #dddddd;

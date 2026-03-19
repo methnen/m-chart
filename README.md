@@ -48,6 +48,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Charts are now lazy loaded into the UI and subsequent charts are loaded as user scrolls
 	* Search now accepts any reasonable values you could expect in a post title
 	* Show attribute can now be controled from the block UI
+	* Better handling of charts when Chart is missing an image or M Chart performance settings have disabled images
 * Lots of additional code modernization and style improvements that didn't effect functionality but should make code easier to maintain going forward
 * Fixed an issue where a duplicate localization call could cause localization in the Block ui to not always load
 
