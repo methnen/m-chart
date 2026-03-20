@@ -39,7 +39,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Added a Copy button to the Shortcode input field
 	* Height and Force vertical axis minimum fields now resize to fit their contents
 * Refactored PHP data parsing code to improve reliability and flexibility with differently formatted data
-	* Number values are now parsed to extract prefix and suffix strings allowing data to always be displayed with formatting while still preserving prefixes and suffixes
+	* Number values are now parsed to extract prefix and suffix strings allowing data to always be displayed with formatting and localization while still preserving prefixes and suffixes
 * Refactored helper code as a Chart.js plugin instead of jQuery
 	* Helper code now formats and parses labels as well as tooltips
 * Refactored Chart.js template to no longer be reliant on jQuery

@@ -44,8 +44,7 @@ function AxisRows() {
   const showAxis = AXIS_TYPES.has(postMeta.type);
   const showYMin = YMIN_TYPES.has(postMeta.type);
 
-  // Callback ref triggers a re-render when the input mounts, so the
-  // canvas measurement runs with the real element instead of the fallback.
+  // Callback ref triggers a re-render when the input mounts, so the canvas measurement runs with the real element instead of the fallback
   const [yMinEl, setYMinEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const yMinRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(node => setYMinEl(node), []);
   const yMinValue = String((_postMeta$y_min_value = postMeta.y_min_value) !== null && _postMeta$y_min_value !== void 0 ? _postMeta$y_min_value : 0);
@@ -196,10 +195,8 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Root component for the chart meta box.
  *
- * Owns the title state (read from the classic WP #title input) and wires
- * useChartRefresh so chart args are re-fetched whenever settings or data change.
- * The subtitle input is now a React-controlled SubtitleField component mounted
- * via a separate portal — no DOM bridge needed here.
+ * Owns the title state (read from the classic WP #title input) and wires useChartRefresh so chart args are re-fetched whenever settings or data change
+ * The subtitle input is now a React-controlled SubtitleField component mounted via a separate portal — no DOM bridge needed here.
  */
 function ChartMetaBox() {
   const [title, setTitle] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(() => {
@@ -207,7 +204,8 @@ function ChartMetaBox() {
     return el ? el.value : '';
   });
 
-  // Keep the React title state in sync with the native WP title input.
+  // Keep the React title state in sync with the native WP title input
+  // Needed because React doesn't own this input since it's created by core WordPress
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     const el = document.getElementById('title');
     if (!el) {
@@ -246,11 +244,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Shallow-copies chart args to avoid mutating React state when Chart.js or
- * MChartHelper modifies the chart config during initialization.
- * Tooltip callbacks and datalabels formatter are applied by MChartHelper
- * via its beforeUpdate hook (runs each render). Bubble preprocessing runs once
- * via beforeInit.
+ * Shallow-copies chart args to avoid mutating React state when Chart.js or MChartHelper modifies the chart config during initialization
+ * Tooltip callbacks and datalabels formatter are applied by MChartHelper via its beforeUpdate hook (runs each render)
+ * Bubble preprocessing runs once via beforeInit
  */
 function prepareArgs(args) {
   if (!args) {
@@ -277,16 +273,16 @@ function prepareArgs(args) {
 }
 
 /**
- * Default Chart.js renderer — create or update the Chart.js instance.
+ * Default Chart.js renderer — create or update the Chart.js instance
  *
- * Applies chartjs-specific arg preparation before rendering.
- * Returned instance is stored in chartRef by the caller.
+ * Applies chartjs-specific arg preparation before rendering
+ * Returned instance is stored in chartRef by the caller
  *
- * @param {HTMLCanvasElement}   canvas          Target canvas element.
- * @param {Object}              args            Raw chart args from state.
- * @param {Function}            onComplete      Callback to fire after render completes.
- * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render.
- * @return {Object} The Chart.js instance.
+ * @param {HTMLCanvasElement}   canvas          Target canvas element
+ * @param {Object}              args            Raw chart args from state
+ * @param {Function}            onComplete      Callback to fire after render completes
+ * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
+ * @return {Object} The Chart.js instance
  */
 function defaultChartjsRender(canvas, args, onComplete, existingInstance) {
   const prepared = prepareArgs(args);
@@ -310,6 +306,8 @@ function defaultChartjsRender(canvas, args, onComplete, existingInstance) {
       onComplete
     }
   };
+
+  // Only create the new chart if there isn't an existing one already
   if (!existingInstance) {
     return new window.Chart(canvas, {
       type: prepared.type,
@@ -1699,11 +1697,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
 
 
-const DEBOUNCE_MS = 300;
 
 /**
- * Fires an AJAX request to get updated chart args whenever postMeta,
- * spreadsheetData, setNames, or title changes.
+ * Fires an AJAX request to get updated chart args whenever postMeta, spreadsheetData, setNames, or title changes
+ * We pass title as a parameter because it's core WP and not present in the React environment
  *
  * @param {string} title The current post title (read from #title DOM input).
  */
@@ -1738,7 +1735,7 @@ function useChartRefresh(title) {
       clearTimeout(timerRef.current);
     }
     timerRef.current = setTimeout(async () => {
-      // Cancel any in-flight request
+      // This should cancel any currently running requests so only the most recent request is run
       if (abortRef.current) {
         abortRef.current.abort();
       }
@@ -1752,14 +1749,15 @@ function useChartRefresh(title) {
         payload: false
       });
       try {
+        // Start buidling the values we'll send to the m_chart_get_chart_args endpoint
         const body = new URLSearchParams();
         body.append('post_id', postId);
         body.append('nonce', nonce);
         body.append('library', library);
         body.append('title', title || '');
 
-        // Build post_meta matching the format ajax_get_chart_args expects.
-        // Exclude set_names — sent separately as indexed PHP array values.
+        // Build post_meta matching the format the m_chart_get_chart_args expects
+        // Exclude set_names since it is sent separately as indexed PHP array values
         const meta = {
           ...postMeta
         };
@@ -1768,8 +1766,8 @@ function useChartRefresh(title) {
         Object.entries(meta).forEach(([key, val]) => {
           let serialized;
           if (typeof val === 'boolean') {
-            // PHP's (bool) cast treats any non-empty string as true, including "false".
-            // Use "1"/"0" so unchecked checkboxes are correctly read as falsy.
+            // PHP's (boolean) cast treats any non-empty string as true, including "false"
+            // Use 1/0 so unchecked checkboxes are correctly read as false
             serialized = val ? '1' : '0';
           } else if (typeof val === 'object' && val !== null) {
             serialized = JSON.stringify(val);
@@ -1784,12 +1782,16 @@ function useChartRefresh(title) {
         (setNames || []).forEach((name, i) => {
           body.append(`post_meta[set_names][${i}]`, name);
         });
+
+        // Make the actual request to the endpoint
         const response = await fetch(ajaxUrl + '?action=m_chart_get_chart_args', {
           method: 'POST',
           body,
           signal: abortRef.current.signal
         });
         const json = await response.json();
+
+        // If the request succeeded we dispatch the returned data nd then trigger the m_chart.chart_args_success hook and pass it the new data and postId
         if (json.success) {
           dispatch({
             type: 'SET_CHART_ARGS',
@@ -1799,8 +1801,8 @@ function useChartRefresh(title) {
             window.wp.hooks.doAction('m_chart.chart_args_success', json.data, postId);
           }
 
-          // If no image generation is needed, enable the form now.
-          // Otherwise ChartPreview's animation.onComplete enables it after capture.
+          // If no image generation is needed, enable the form now
+          // Otherwise ChartPreview's animation.onComplete enables it after capture
           if ('default' !== performance || 'yes' !== imageSupport) {
             dispatch({
               type: 'SET_FORM_ENABLED',
@@ -1819,7 +1821,7 @@ function useChartRefresh(title) {
           payload: false
         });
       }
-    }, DEBOUNCE_MS);
+    }, 300);
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -1912,10 +1914,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Returns a stable `generateImage` callback that captures the current Chart.js
- * instance as a PNG, writes it to the hidden img textarea, then re-enables the form.
+ * Returns a stable `generateImage` callback that captures the current Chart.js instance as a PNG, writes it to the hidden img textarea, then re-enables the form
  *
- * @param {React.MutableRefObject} chartRef  Ref holding the Chart.js instance.
+ * @param {React.MutableRefObject} chartRef  Ref holding the Chart.js instance
  */
 function useImageGeneration(chartRef) {
   const {
@@ -1923,7 +1924,7 @@ function useImageGeneration(chartRef) {
     dispatch
   } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_1__.useChartAdmin)();
 
-  // Keep a ref so the callback always sees the latest state without being recreated.
+  // Keep a ref so the callback always sees the latest state without being recreated
   const stateRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(state);
   stateRef.current = state;
   const generateImage = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
@@ -1940,12 +1941,12 @@ function useImageGeneration(chartRef) {
     const canvas = chart.canvas;
     const container = canvas.parentElement;
 
-    // Resize container to image dimensions so chart fills the right area.
+    // Resize container to image dimensions so chart fills the right area
     container.style.width = chartWidth + 'px';
     container.style.height = chartHeight + 'px';
     chart.resize();
 
-    // Fill solid white background (canvas is transparent by default).
+    // Fill solid white background (canvas is transparent by default)
     const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.globalCompositeOperation = 'destination-over';
@@ -1956,12 +1957,12 @@ function useImageGeneration(chartRef) {
     // Capture PNG.
     const img = chart.toBase64Image('image/png', 1);
 
-    // Restore container to natural dimensions.
+    // Restore container to natural dimensions
     container.style.width = '';
     container.style.height = '';
     chart.resize();
 
-    // Write base64 string to the hidden textarea for form POST.
+    // Write base64 string to the hidden textarea for form POST
     const imgEl = document.getElementById('m-chart-img');
     if (imgEl) {
       imgEl.value = img;
@@ -1995,10 +1996,10 @@ __webpack_require__.r(__webpack_exports__);
 const LONG_PRESS_DELAY = 500;
 
 /**
- * Returns pointer-event handlers that fire `callback` after a sustained press.
- * Spread the returned object onto any element: <div {...longPress} />.
+ * Returns pointer-event handlers that fire `callback` after a sustained press
+ * Spread the returned object onto any element: <div {...longPress} />
  *
- * Replaces jQuery Mobile's `taphold` event for tab-rename triggering.
+ * Replaces jQuery Mobile's `taphold` event for tab-rename triggering
  */
 function useLongPress(callback) {
   const timerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);

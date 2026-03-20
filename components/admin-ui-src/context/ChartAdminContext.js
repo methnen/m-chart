@@ -59,7 +59,7 @@ const initialState = {
 	formEnabled: false,
 
 	// Static config from PHP — library-specific options for the settings form
-	typeOptions:     m_chart_admin.type_options      || [],
+	typeOptions:     m_chart_admin.type_options       || [],
 	typeOptionNames: m_chart_admin.type_option_names  || {},
 	themes:          m_chart_admin.themes             || [],
 	unitTerms:       m_chart_admin.unit_terms         || [],

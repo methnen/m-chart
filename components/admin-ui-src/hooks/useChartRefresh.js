@@ -1,11 +1,9 @@
 import { useEffect, useRef } from '@wordpress/element';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
-const DEBOUNCE_MS = 300;
-
 /**
- * Fires an AJAX request to get updated chart args whenever postMeta,
- * spreadsheetData, setNames, or title changes.
+ * Fires an AJAX request to get updated chart args whenever postMeta, spreadsheetData, setNames, or title changes
+ * We pass title as a parameter because it's core WP and not present in the React environment
  *
  * @param {string} title The current post title (read from #title DOM input).
  */
@@ -34,7 +32,7 @@ export function useChartRefresh( title ) {
 		}
 
 		timerRef.current = setTimeout( async () => {
-			// Cancel any in-flight request
+			// This should cancel any currently running requests so only the most recent request is run
 			if ( abortRef.current ) {
 				abortRef.current.abort();
 			}
@@ -45,29 +43,32 @@ export function useChartRefresh( title ) {
 			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
 
 			try {
+				// Start buidling the values we'll send to the m_chart_get_chart_args endpoint
 				const body = new URLSearchParams();
 				body.append( 'post_id', postId );
 				body.append( 'nonce', nonce );
 				body.append( 'library', library );
 				body.append( 'title', title || '' );
 
-				// Build post_meta matching the format ajax_get_chart_args expects.
-				// Exclude set_names — sent separately as indexed PHP array values.
+				// Build post_meta matching the format the m_chart_get_chart_args expects
+				// Exclude set_names since it is sent separately as indexed PHP array values
 				const meta = { ...postMeta };
 				delete meta.set_names;
 				meta.data = JSON.stringify( spreadsheetData );
 
 				Object.entries( meta ).forEach( ( [ key, val ] ) => {
 					let serialized;
+					
 					if ( typeof val === 'boolean' ) {
-						// PHP's (bool) cast treats any non-empty string as true, including "false".
-						// Use "1"/"0" so unchecked checkboxes are correctly read as falsy.
+						// PHP's (boolean) cast treats any non-empty string as true, including "false"
+						// Use 1/0 so unchecked checkboxes are correctly read as false
 						serialized = val ? '1' : '0';
 					} else if ( typeof val === 'object' && val !== null ) {
 						serialized = JSON.stringify( val );
 					} else {
 						serialized = val ?? '';
 					}
+
 					body.append( `post_meta[${ key }]`, serialized );
 				} );
 
@@ -77,6 +78,7 @@ export function useChartRefresh( title ) {
 					body.append( `post_meta[set_names][${ i }]`, name );
 				} );
 
+				// Make the actual request to the endpoint
 				const response = await fetch( ajaxUrl + '?action=m_chart_get_chart_args', {
 					method: 'POST',
 					body,
@@ -85,6 +87,7 @@ export function useChartRefresh( title ) {
 
 				const json = await response.json();
 
+				// If the request succeeded we dispatch the returned data nd then trigger the m_chart.chart_args_success hook and pass it the new data and postId
 				if ( json.success ) {
 					dispatch( { type: 'SET_CHART_ARGS', payload: json.data } );
 
@@ -92,8 +95,8 @@ export function useChartRefresh( title ) {
 						window.wp.hooks.doAction( 'm_chart.chart_args_success', json.data, postId );
 					}
 
-					// If no image generation is needed, enable the form now.
-					// Otherwise ChartPreview's animation.onComplete enables it after capture.
+					// If no image generation is needed, enable the form now
+					// Otherwise ChartPreview's animation.onComplete enables it after capture
 					if ( 'default' !== performance || 'yes' !== imageSupport ) {
 						dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 					}
@@ -106,7 +109,7 @@ export function useChartRefresh( title ) {
 			} finally {
 				dispatch( { type: 'SET_REFRESHING', payload: false } );
 			}
-		}, DEBOUNCE_MS );
+		}, 300 );
 
 		return () => {
 			if ( timerRef.current ) {

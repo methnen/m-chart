@@ -149,33 +149,6 @@ class M_Chart_Admin {
 				} else {
 					$validated_settings[ $setting ] = $default;
 				}
-			} elseif ( 'lang_settings' === $setting ) {
-				// The language settings require a bit more checking
-				foreach ( $default_settings['lang_settings'] as $lang_setting => $lang_default ) {
-					$lang_value = $submitted_settings[ 'lang_settings' ][ $lang_setting ];
-
-					if ( 'numericSymbols' === $lang_setting ) {
-						// The numeric symbols are input as a comma separated string so we'll deal with that here
-						$numeric_symbols = explode( ',', $lang_value );
-						$safe_symbols    = [];
-
-						foreach ( $numeric_symbols as $symbol ) {
-							$safe_symbols[] = trim( $symbol );
-						}
-
-						$validated_settings[ $setting ][ $lang_setting ] = $safe_symbols;
-					} elseif ( 'numericSymbolMagnitude' === $lang_setting ) {
-						// Only want positive numbers for the numericSymbolMagnitude value
-						if ( is_numeric( $lang_value ) && 0 < $lang_value ) {
-							$validated_settings[ $setting ][ $lang_setting ] = absint( $lang_value );
-						} else {
-							$validated_settings[ $setting ][ $lang_setting ] = $lang_default;
-						}
-					} else {
-						// The rest of the language settings are all single character values
-						$validated_settings[ $setting ][ $lang_setting ] = sanitize_text_field( substr( $lang_value, 0, 1 ) );
-					}
-				}
 			} else {
 				// Make sure the value is safe before attempting to save it
 				if ( preg_match( '#^[a-zA-Z0-9-_]+$#', $submitted_settings[ $setting ] ) ) {

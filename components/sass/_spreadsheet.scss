@@ -213,6 +213,7 @@
 				select {
 					margin-top: rem-calc( 6 );
 					margin-bottom: rem-calc( 4 );
+					margin-left: rem-calc( 7 );
 
 					// Stop export button and select input from colliding on small screens
 					@media (max-width: 600px) {

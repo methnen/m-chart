@@ -4,14 +4,23 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 import { measureTextWidth } from '../utils/measureTextWidth';
 
 // Chart types that show y-min controls (line, spline, area only)
-const YMIN_TYPES = new Set( [ 'line', 'spline', 'area' ] );
+const YMIN_TYPES = new Set( [ 
+	'line', 
+	'spline', 
+	'area',
+] );
 
 // Chart types that show axis title/unit rows
 const AXIS_TYPES = new Set( [
-	'line', 'spline', 'area',
-	'column', 'stacked-column',
-	'bar', 'stacked-bar',
-	'scatter', 'bubble',
+	'line', 
+	'spline', 
+	'area',
+	'column', 
+	'stacked-column',
+	'bar', 
+	'stacked-bar',
+	'scatter', 
+	'bubble',
 ] );
 
 export default function AxisRows() {
@@ -21,14 +30,11 @@ export default function AxisRows() {
 	const showAxis  = AXIS_TYPES.has( postMeta.type );
 	const showYMin  = YMIN_TYPES.has( postMeta.type );
 
-	// Callback ref triggers a re-render when the input mounts, so the
-	// canvas measurement runs with the real element instead of the fallback.
+	// Callback ref triggers a re-render when the input mounts, so the canvas measurement runs with the real element instead of the fallback
 	const [ yMinEl, setYMinEl ] = useState( null );
 	const yMinRef               = useCallback( node => setYMinEl( node ), [] );
 	const yMinValue             = String( postMeta.y_min_value ?? 0 );
-	const yMinWidth             = yMinEl
-		? ( measureTextWidth( yMinValue, yMinEl ) + 20 ) + 'px'
-		: '73px';
+	const yMinWidth             = yMinEl ? ( measureTextWidth( yMinValue, yMinEl ) + 20 ) + 'px' : '73px';
 
 	function handleChange( field, value ) {
 		dispatch( { type: 'SET_POST_META', payload: { [ field ]: value } } );

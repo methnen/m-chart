@@ -3,11 +3,9 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 import { useImageGeneration } from '../hooks/useImageGeneration';
 
 /**
- * Shallow-copies chart args to avoid mutating React state when Chart.js or
- * MChartHelper modifies the chart config during initialization.
- * Tooltip callbacks and datalabels formatter are applied by MChartHelper
- * via its beforeUpdate hook (runs each render). Bubble preprocessing runs once
- * via beforeInit.
+ * Shallow-copies chart args to avoid mutating React state when Chart.js or MChartHelper modifies the chart config during initialization
+ * Tooltip callbacks and datalabels formatter are applied by MChartHelper via its beforeUpdate hook (runs each render)
+ * Bubble preprocessing runs once via beforeInit
  */
 function prepareArgs( args ) {
 	if ( ! args ) {
@@ -33,16 +31,16 @@ function prepareArgs( args ) {
 }
 
 /**
- * Default Chart.js renderer — create or update the Chart.js instance.
+ * Default Chart.js renderer — create or update the Chart.js instance
  *
- * Applies chartjs-specific arg preparation before rendering.
- * Returned instance is stored in chartRef by the caller.
+ * Applies chartjs-specific arg preparation before rendering
+ * Returned instance is stored in chartRef by the caller
  *
- * @param {HTMLCanvasElement}   canvas          Target canvas element.
- * @param {Object}              args            Raw chart args from state.
- * @param {Function}            onComplete      Callback to fire after render completes.
- * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render.
- * @return {Object} The Chart.js instance.
+ * @param {HTMLCanvasElement}   canvas          Target canvas element
+ * @param {Object}              args            Raw chart args from state
+ * @param {Function}            onComplete      Callback to fire after render completes
+ * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
+ * @return {Object} The Chart.js instance
  */
 function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	const prepared = prepareArgs( args );
@@ -51,6 +49,7 @@ function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	if ( ! prepared.data?.datasets ) {
 		prepared.data = { ...prepared.data, datasets: [] };
 	}
+
 	if ( null === prepared.data?.labels ) {
 		prepared.data = { ...prepared.data, labels: [] };
 	}
@@ -60,6 +59,7 @@ function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 		animation: { onComplete },
 	};
 
+	// Only create the new chart if there isn't an existing one already
 	if ( ! existingInstance ) {
 		return new window.Chart( canvas, {
 			type:    prepared.type,
@@ -71,7 +71,9 @@ function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	existingInstance.data        = prepared.data;
 	existingInstance.config.type = prepared.type;
 	existingInstance.options     = options;
+	
 	existingInstance.update();
+
 	return existingInstance;
 }
 

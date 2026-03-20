@@ -3,10 +3,10 @@ import { useCallback, useRef } from '@wordpress/element';
 const LONG_PRESS_DELAY = 500;
 
 /**
- * Returns pointer-event handlers that fire `callback` after a sustained press.
- * Spread the returned object onto any element: <div {...longPress} />.
+ * Returns pointer-event handlers that fire `callback` after a sustained press
+ * Spread the returned object onto any element: <div {...longPress} />
  *
- * Replaces jQuery Mobile's `taphold` event for tab-rename triggering.
+ * Replaces jQuery Mobile's `taphold` event for tab-rename triggering
  */
 export function useLongPress( callback ) {
 	const timerRef = useRef( null );

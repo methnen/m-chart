@@ -23,6 +23,7 @@ export function useFormSubmissionGuard() {
 	useEffect( () => {
 		BUTTON_IDS.forEach( ( id ) => {
 			const el = document.getElementById( id );
+			
 			if ( el ) {
 				el.classList.toggle( 'disabled', ! formEnabled );
 			}
@@ -32,6 +33,7 @@ export function useFormSubmissionGuard() {
 	// Block form submission when not ready.
 	useEffect( () => {
 		const form = document.getElementById( 'post' );
+		
 		if ( ! form ) {
 			return;
 		}
@@ -43,6 +45,7 @@ export function useFormSubmissionGuard() {
 		}
 
 		form.addEventListener( 'submit', handleSubmit );
+		
 		return () => form.removeEventListener( 'submit', handleSubmit );
 	}, [ formEnabled ] );
 }

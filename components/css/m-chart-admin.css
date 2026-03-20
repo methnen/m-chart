@@ -291,6 +291,7 @@
 #m-chart-spreadsheet #m-chart-csv div.confirmation select {
   margin-top: 0.375rem;
   margin-bottom: 0.25rem;
+  margin-left: 0.4375rem;
 }
 @media (max-width: 600px) {
   #m-chart-spreadsheet #m-chart-csv div.confirmation select {
