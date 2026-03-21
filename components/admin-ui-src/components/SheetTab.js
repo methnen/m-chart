@@ -4,7 +4,7 @@ import { useLongPress } from '../hooks/useLongPress';
 import { measureTextWidth } from '../utils/measureTextWidth';
 
 /**
- * A single sheet tab in the spreadsheet tab bar.
+ * A single sheet tab in the spreadsheet tab bar
  *
  * Supports:
  *   - Click to activate
@@ -27,17 +27,18 @@ export default function SheetTab( {
 
 	const longPress = useLongPress( () => setIsRenaming( true ) );
 
-	// Clear the newSheetId flag once this tab has consumed it.
+	// Clear the newSheetId flag once this tab has consumed it
 	useEffect( () => {
 		if ( isNew ) {
 			dispatch( { type: 'CLEAR_NEW_SHEET_ID' } );
 		}
 	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Sync local input value and focus when entering rename mode.
+	// Sync local input value and focus when entering rename mode
 	useEffect( () => {
 		if ( isRenaming ) {
 			setInputValue( name );
+
 			if ( inputRef.current ) {
 				inputRef.current.focus();
 				inputRef.current.select();
@@ -47,6 +48,7 @@ export default function SheetTab( {
 
 	function handleClick( e ) {
 		e.preventDefault();
+
 		if ( ! isActive ) {
 			dispatch( { type: 'SET_ACTIVE_SHEET', payload: sheetIndex } );
 		}
@@ -54,23 +56,31 @@ export default function SheetTab( {
 
 	function handleDoubleClick( e ) {
 		e.preventDefault();
+
 		setIsRenaming( true );
 	}
 
 	function handleDelete( e ) {
 		e.preventDefault();
 		e.stopPropagation();
+
+		// If there's only one tab we don't let the user delete it
 		if ( isSingle ) {
 			return;
 		}
+
+		// If user rejects teh confirmation we stop
 		if ( ! window.confirm( state.deleteConfirm ) ) {
 			return;
 		}
+
 		// Activate a neighbouring sheet before deleting so the active index stays valid.
 		if ( isActive ) {
 			const newActive = sheetIndex > 0 ? sheetIndex - 1 : 1;
+
 			dispatch( { type: 'SET_ACTIVE_SHEET', payload: newActive } );
 		}
+
 		dispatch( { type: 'DELETE_SHEET', payload: { index: sheetIndex } } );
 	}
 
@@ -83,6 +93,7 @@ export default function SheetTab( {
 			type:    'RENAME_SHEET',
 			payload: { index: sheetIndex, name: inputValue },
 		} );
+
 		setIsRenaming( false );
 	}
 

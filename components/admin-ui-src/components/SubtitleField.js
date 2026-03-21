@@ -2,11 +2,9 @@ import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
- * Controlled subtitle input — replaces the PHP-rendered subtitle-field.php
- * template for Chart.js charts.
+ * Reach controlled subtitle input
  *
- * Renders with the same name/id attributes so the value is submitted with the
- * native WordPress post form and the existing PHP save logic still works.
+ * Renders with the m-chart[subtitle] name attribute so the value is submitted with the native WordPress post form and the existing PHP save logic still works
  */
 export default function SubtitleField() {
 	const { state, dispatch } = useChartAdmin();

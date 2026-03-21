@@ -4,22 +4,22 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 import { measureTextWidth } from '../utils/measureTextWidth';
 
 // Chart types that show y-min controls (line, spline, area only)
-const YMIN_TYPES = new Set( [ 
-	'line', 
-	'spline', 
+const YMIN_TYPES = new Set( [
+	'line',
+	'spline',
 	'area',
 ] );
 
 // Chart types that show axis title/unit rows
 const AXIS_TYPES = new Set( [
-	'line', 
-	'spline', 
+	'line',
+	'spline',
 	'area',
-	'column', 
+	'column',
 	'stacked-column',
-	'bar', 
+	'bar',
 	'stacked-bar',
-	'scatter', 
+	'scatter',
 	'bubble',
 ] );
 

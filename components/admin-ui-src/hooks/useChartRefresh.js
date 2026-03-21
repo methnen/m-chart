@@ -20,7 +20,7 @@ export function useChartRefresh( title ) {
 	const isFirstRun = useRef( true );
 
 	useEffect( () => {
-		// Skip the initial mount — the chart is already rendered from the PHP-seeded args.
+		// Skip the initial mount — the chart is already rendered from the PHP-seeded args
 		if ( isFirstRun.current ) {
 			isFirstRun.current = false;
 			return;
@@ -58,7 +58,7 @@ export function useChartRefresh( title ) {
 
 				Object.entries( meta ).forEach( ( [ key, val ] ) => {
 					let serialized;
-					
+
 					if ( typeof val === 'boolean' ) {
 						// PHP's (boolean) cast treats any non-empty string as true, including "false"
 						// Use 1/0 so unchecked checkboxes are correctly read as false
@@ -72,8 +72,8 @@ export function useChartRefresh( title ) {
 					body.append( `post_meta[${ key }]`, serialized );
 				} );
 
-				// set_names must arrive in PHP as an array, not a JSON string.
-				// Sending post_meta[set_names][0], [1], … lets PHP parse it as an array.
+				// set_names must arrive in PHP as an array, not a JSON string
+				// Sending post_meta[set_names][0], [1], … lets PHP parse it as an array
 				( setNames || [] ).forEach( ( name, i ) => {
 					body.append( `post_meta[set_names][${ i }]`, name );
 				} );

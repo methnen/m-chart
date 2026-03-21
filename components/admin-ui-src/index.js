@@ -6,11 +6,11 @@ import SubtitleField from './components/SubtitleField';
 
 /**
  * The admin UI spans multiple meta boxes and the title area, so we use a single
- * React root (in a hidden container) with portals to render into each mount point.
- * This ensures all components share a single ChartAdminContext instance.
+ * React root (in a hidden container) with portals to render into each mount point
+ * This ensures all components share a single ChartAdminContext instance
  */
 
-// Register Chart.js plugins before any chart instances are created.
+// Register Chart.js plugins before any chart instances are created
 if ( window.Chart && window.ChartDataLabels ) {
 	window.Chart.register( window.ChartDataLabels );
 }
@@ -32,8 +32,8 @@ if ( subtitleRoot || spreadsheetRoot || chartRoot ) {
 		</ChartAdminProvider>
 	);
 
-	// Mount the app into a hidden container appended to the post form.
-	// All visible content is rendered via portals into the actual meta box divs.
+	// Mount the app into a hidden container appended to the post form
+	// All visible content is rendered via portals into the actual meta box divs
 	const postForm = document.getElementById( 'post' );
 
 	if ( postForm ) {

@@ -282,7 +282,8 @@ function prepareArgs(args) {
  * @param {Object}              args            Raw chart args from state
  * @param {Function}            onComplete      Callback to fire after render completes
  * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
- * @return {Object} The Chart.js instance
+ *
+ * @return {Object}             he Chart.js instance
  */
 function defaultChartjsRender(canvas, args, onComplete, existingInstance) {
   const prepared = prepareArgs(args);
@@ -323,19 +324,15 @@ function defaultChartjsRender(canvas, args, onComplete, existingInstance) {
 }
 
 /**
- * React-managed chart preview for the admin meta box.
+ * React-managed chart preview for the admin meta box
  *
- * The chart instance is managed imperatively via refs and is never recreated
- * on re-render — only updated when chartArgs changes.
+ * The chart instance is managed imperatively via refs and is never recreated on re-render — only updated when chartArgs changes
  *
- * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so
- * library plugins can replace the default Chart.js renderer. The filter
- * receives ( canvas, args, onComplete, existingInstance ) as extra arguments.
- * If no filter handles rendering (i.e. returns false), Chart.js is used.
+ * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so library plugins can replace the default Chart.js renderer
+ * The filter receives ( canvas, args, onComplete, existingInstance ) as extra arguments
+ * If no filter handles rendering (i.e. returns false), Chart.js is used
  *
- * The onComplete callback must be called by the renderer once the chart has
- * finished drawing — it fires 'm_chart.render_done', triggers image
- * generation if needed, and re-enables the form.
+ * The onComplete callback must be called by the renderer once the chart has finished which will fire 'm_chart.render_done' to trigger image generation and/or re-enable the form
  */
 function ChartPreview() {
   const {
@@ -354,7 +351,7 @@ function ChartPreview() {
   const renderFlagRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
   const isFirstRender = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(true);
 
-  // Keep a ref so onComplete closures always see the latest values.
+  // Keep a ref so onComplete closures always see the latest values
   const needsImagesRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
   needsImagesRef.current = 'default' === performance && 'yes' === imageSupport;
   const generateImage = (0,_hooks_useImageGeneration__WEBPACK_IMPORTED_MODULE_3__.useImageGeneration)(chartRef);
@@ -369,13 +366,13 @@ function ChartPreview() {
     };
   }, []);
 
-  // Create or update the chart instance whenever chartArgs changes.
+  // Create or update the chart instance whenever chartArgs changes
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (!chartArgs || !canvasRef.current) {
       return;
     }
     function onComplete() {
-      // Only fire once per update cycle (guards against double-fire).
+      // Only fire once per update cycle
       if (!renderFlagRef.current) {
         return;
       }
@@ -386,8 +383,8 @@ function ChartPreview() {
       if (needsImagesRef.current) {
         generateImage();
       } else {
-        // No image generation — enable form submission immediately.
-        // This also covers the initial page load where useChartRefresh skips its first run.
+        // No image generation — enable form submission immediately
+        // This also covers the initial page load where useChartRefresh skips its first run
         dispatch({
           type: 'SET_FORM_ENABLED',
           payload: true
@@ -397,11 +394,12 @@ function ChartPreview() {
     }
     renderFlagRef.current = true;
 
-    // Allow library plugins to replace the renderer via wp.hooks.
-    // Plugins hook 'm_chart.render_chart' and return their chart instance.
-    // Returning false (the default) falls through to the built-in Chart.js renderer.
+    // Allow library plugins to replace the renderer via wp.hooks
+    // Plugins hook 'm_chart.render_chart' and return their chart instance
+    // Returning false (the default) falls through to the built-in Chart.js renderer
     let instance = false;
     if (window.wp?.hooks) {
+      // See defaultChartjsRender for the filter arguments
       instance = window.wp.hooks.applyFilters('m_chart.render_chart', false, canvasRef.current, chartArgs, onComplete, chartRef.current);
     }
     chartRef.current = false !== instance ? instance : defaultChartjsRender(canvasRef.current, chartArgs, onComplete, chartRef.current);
@@ -473,14 +471,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * CSV import and export controls for the active spreadsheet sheet.
+ * CSV import and export controls for the active spreadsheet sheet
  *
- * Import uses fetch + FormData (replaces the hidden #m-chart-csv-import-form).
- * Export uses a dynamically-created temporary form POST to trigger a file
- * download (replaces the hidden #m-chart-csv-export-form).
+ * Import uses fetch + FormData (replaces the hidden #m-chart-csv-import-form)
+ * Export uses a dynamically-created temporary form POST to trigger a file download (replaces the hidden #m-chart-csv-export-form)
  *
  * Props:
- *   getActiveWorksheet {Function}  Returns the active Jspreadsheet worksheet instance.
+ *   getActiveWorksheet {Function}  Returns the active Jspreadsheet worksheet instance
  */
 function CsvControls({
   getActiveWorksheet
@@ -512,6 +509,8 @@ function CsvControls({
   }
   function handleFileChange(e) {
     const file = e.target.files[0];
+
+    // Make sure it's a CSV file
     if (!file || !/\.csv$/i.test(file.name)) {
       setFileError(true);
       setSelectedFile(null);
@@ -523,6 +522,8 @@ function CsvControls({
   function handleCancel(e) {
     e.preventDefault();
     setSelectedFile(null);
+
+    // We're hiding the actual file input so we need to reset it for the user
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -532,18 +533,28 @@ function CsvControls({
     if (!selectedFile) {
       return;
     }
+
+    // Save the file value so we can reset the iput
     const file = selectedFile;
+
+    // Set the UI to show we're importing the file
     setSelectedFile(null);
     setIsImporting(true);
     setImportError('');
+
+    // Reset the actual file input back to empty
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+
+    // Create a form data object so we can submit it to the endpoint
     const formData = new FormData();
     formData.append('import_csv_file', file);
     formData.append('post_id', postId);
     formData.append('csv_delimiter', csvDelimiter);
     formData.append('nonce', nonce);
+
+    // Try submitting the data to the endpoint
     try {
       const response = await fetch(`${ajaxUrl}?action=m_chart_import_csv`, {
         method: 'POST',
@@ -554,11 +565,14 @@ function CsvControls({
         setImportError(json.data || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Import failed', 'm-chart'));
         return;
       }
+
+      // Get the active worksheet
       const worksheet = getActiveWorksheet();
       if (worksheet) {
+        // Set the active worksheet to the new data
         worksheet.setData(json.data);
 
-        // setData() does not trigger onafterchanges, so manually sync.
+        // setData() does not trigger onafterchanges so we need to run spreadsheetAutoWidth ourselves
         (0,_JspreadsheetWrapper__WEBPACK_IMPORTED_MODULE_4__.spreadsheetAutoWidth)(worksheet);
         dispatch({
           type: 'SET_SHEET_DATA',
@@ -571,11 +585,14 @@ function CsvControls({
     } catch (err) {
       setImportError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Import error: %s', 'm-chart'), err.message));
     } finally {
+      // When we're done reset everything in the CSV ui back to default
       setIsImporting(false);
     }
   }
   function handleExport(e) {
     e.preventDefault();
+
+    // Get the active worksheet
     const worksheet = getActiveWorksheet();
     if (!worksheet) {
       return;
@@ -584,18 +601,30 @@ function CsvControls({
     const title = document.getElementById('title')?.value || '';
     const setName = setNames[activeSheet] || '';
 
-    // Create a temporary form and submit it to trigger a file download.
+    // Build a FormData object so we can submit it to the endpoint
+    const formData = new FormData();
+    formData.append('post_id', postId);
+    formData.append('data', JSON.stringify(data));
+    formData.append('title', title);
+    formData.append('set_name', setName);
+
+    // Create a temporary form and submit it
+    // We have to do it this way so to trigger a download
     const form = document.createElement('form');
     form.action = `${ajaxUrl}?action=m_chart_export_csv`;
     form.method = 'post';
     form.style.display = 'none';
-    [['post_id', postId], ['data', JSON.stringify(data)], ['title', title], ['set_name', setName]].forEach(([name, value]) => {
+
+    // Loop through the formData and append it to the temporary form
+    for (const [name, value] of formData.entries()) {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = name;
       input.value = value;
       form.appendChild(input);
-    });
+    }
+
+    // Do the thing
     document.body.appendChild(form);
     form.submit();
     document.body.removeChild(form);
@@ -680,19 +709,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+// Jspreadsheet CE has a bunch of default menu items this is the list of the ones we actually want
 const CONTEXT_MENU_ITEMS = ['Insert a new row before', 'Insert a new row after', 'Delete selected rows', 'Insert a new column before', 'Insert a new column after', 'Delete selected columns'];
 
 /**
- * Resizes columns to fit their content using canvas-based text measurement.
- * Mirrors m_chart_admin.spreadsheet_auto_width() from m-chart-admin.js.
+ * Resizes columns to fit their content using canvas-based text measurement
  *
- * @param {object} worksheet  Jspreadsheet worksheet instance.
- * @param {Array}  [records]  Subset of changed records; omit for a full refresh.
+ * @param {object} worksheet  Jspreadsheet CE worksheet instance
+ * @param {Array}  [records]  Subset of changed records; omit for a full refresh
  */
 function spreadsheetAutoWidth(worksheet, records = false) {
+  // If no records to refresh were passed we'll just do all of them
   if (!records) {
     records = worksheet.records[0];
   }
+
+  // If there are no records even after the above we stop here
   if (!records || !records.length) {
     return;
   }
@@ -719,19 +752,18 @@ function spreadsheetAutoWidth(worksheet, records = false) {
 }
 
 /**
- * Thin React wrapper around a Jspreadsheet CE worksheet.
+ * Thin React wrapper around a Jspreadsheet CE worksheet
  *
- * The Jspreadsheet instance is created once on mount and never recreated on
- * re-render.  Show/hide between active/inactive sheets is done via CSS so
- * that DOM state and undo history are preserved.
+ * The Jspreadsheet instance is created once on mount and never recreated on re-render
+ * Show/hide between active/inactive sheets is done via CSS so that DOM state and undo history are preserved
  *
  * Props:
- *   sheetId       {number}   Stable identity key (used for registration).
- *   sheetIndex    {number}   Current position in the sheets array (may change after deletes).
- *   isActive      {boolean}  Whether this sheet is currently displayed.
- *   data          {Array}    Initial 2-D array of cell values.
- *   onMounted     {Function} Called with (sheetId, worksheetInstance) after init.
- *   onUnmounted   {Function} Called with (sheetId) before unmount.
+ *   sheetId       {number}   Stable identity key (used for registration)
+ *   sheetIndex    {number}   Current position in the sheets array (may change after deletes)
+ *   isActive      {boolean}  Whether this sheet is currently displayed
+ *   data          {Array}    Initial 2-D array of cell values
+ *   onMounted     {Function} Called with (sheetId, worksheetInstance) after init
+ *   onUnmounted   {Function} Called with (sheetId) before unmount
  */
 function JspreadsheetWrapper({
   sheetId,
@@ -747,27 +779,34 @@ function JspreadsheetWrapper({
   const containerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   const worksheetRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
 
-  // Keep a ref so the onafterchanges closure always dispatches the current index.
+  // Keep a ref so the onafterchanges closure always dispatches the current index
   const sheetIndexRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(sheetIndex);
   sheetIndexRef.current = sheetIndex;
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (!containerRef.current || worksheetRef.current) {
       return;
     }
+
+    // Need to load an empty data array if there's none to start already
     const initialData = data && data.length ? data : [['']];
+
+    // Create the sheet instance
     const instance = window.jspreadsheet(containerRef.current, {
       worksheets: [{
         data: initialData,
         allowComments: false,
         minDimensions: [37, 17]
       }],
+      // Filter out all of the contextual menu items we don't want
       contextMenu(obj, x, y, e, items) {
         return items.filter(item => CONTEXT_MENU_ITEMS.includes(item.title));
       },
+      // Run spreadsheetAutoWidth on the intiial load
       onload(spreadsheet) {
         const ws = spreadsheet.worksheets[spreadsheet.getWorksheetActive()];
         spreadsheetAutoWidth(ws);
       },
+      // Run spreadsheetAutoWidth on changed recrds and also push any changes to the chart
       onafterchanges(worksheet, records) {
         spreadsheetAutoWidth(worksheet, records);
         dispatch({
@@ -923,7 +962,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * A single sheet tab in the spreadsheet tab bar.
+ * A single sheet tab in the spreadsheet tab bar
  *
  * Supports:
  *   - Click to activate
@@ -948,7 +987,7 @@ function SheetTab({
   const inputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
   const longPress = (0,_hooks_useLongPress__WEBPACK_IMPORTED_MODULE_3__.useLongPress)(() => setIsRenaming(true));
 
-  // Clear the newSheetId flag once this tab has consumed it.
+  // Clear the newSheetId flag once this tab has consumed it
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (isNew) {
       dispatch({
@@ -957,7 +996,7 @@ function SheetTab({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sync local input value and focus when entering rename mode.
+  // Sync local input value and focus when entering rename mode
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (isRenaming) {
       setInputValue(name);
@@ -984,12 +1023,17 @@ function SheetTab({
   function handleDelete(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    // If there's only one tab we don't let the user delete it
     if (isSingle) {
       return;
     }
+
+    // If user rejects teh confirmation we stop
     if (!window.confirm(state.deleteConfirm)) {
       return;
     }
+
     // Activate a neighbouring sheet before deleting so the active index stays valid.
     if (isActive) {
       const newActive = sheetIndex > 0 ? sheetIndex - 1 : 1;
@@ -1081,16 +1125,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Chart types that support multiple data sets (multiple spreadsheet sheets).
- * All other types use a single sheet and the tab bar is hidden.
- * Mirrors the show/hide logic in m_chart_chartjs_admin.handle_chart_type().
+ * Chart types that support multiple data sets (multiple spreadsheet sheets)
+ * All other types use a single sheet and the tab bar is hidden
  */
 const MULTI_SHEET_TYPES = new Set(['scatter', 'bubble', 'radar', 'radar-area']);
 
 /**
- * The spreadsheet tab bar.  Renders one SheetTab per sheet and an Add Sheet
- * button.  The entire bar is hidden when the current chart type only supports
- * a single data set.
+ * The spreadsheet tab bar
+ * Renders one SheetTab per sheet and an Add Sheet button
+ * The entire bar is hidden when the current chart type only supports a single data set
  */
 function SheetTabs() {
   const {
@@ -1254,11 +1297,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Container for the spreadsheet meta box.
+ * Container for the spreadsheet meta box
  *
- * Manages Jspreadsheet worksheet instances via a ref map keyed by stable sheet
- * ID.  Handles form submission: writes all sheet data to the hidden
- * textarea[name="m-chart[data]"] before the post form is submitted.
+ * Manages Jspreadsheet worksheet instances via a ref map keyed by stable sheet ID
+ * Handles form submission: writes all sheet data to the hidden textarea[name="m-chart[data]"] before the post form is submitted
  */
 function SpreadsheetMetaBox() {
   const {
@@ -1271,45 +1313,46 @@ function SpreadsheetMetaBox() {
     formEnabled
   } = state;
 
-  // Map of stable sheetId → worksheet instance (Jspreadsheet worksheet object).
+  // Map of stable sheetId → worksheet instance (Jspreadsheet worksheet object)
   const worksheetInstances = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)({});
 
-  // Refs so the form-submit handler always sees the latest values without needing to be recreated on every state change.
+  // Refs so the form-submit handler always sees the latest values without needing to be recreated on every state change
   const formEnabledRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(formEnabled);
   const sheetIdsRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(sheetIds);
   formEnabledRef.current = formEnabled;
   sheetIdsRef.current = sheetIds;
 
-  // Called by JspreadsheetWrapper after it initialises its jspreadsheet instance.
+  // Called by JspreadsheetWrapper after it initialises its jspreadsheet instance
   const handleMounted = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((sheetId, worksheet) => {
     worksheetInstances.current[sheetId] = worksheet;
   }, []);
 
-  // Called by JspreadsheetWrapper just before it unmounts.
+  // Called by JspreadsheetWrapper just before it unmounts
   const handleUnmounted = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(sheetId => {
     delete worksheetInstances.current[sheetId];
   }, []);
 
-  // Returns the worksheet instance for the currently active sheet.
+  // Returns the worksheet instance for the currently active sheet
   const getActiveWorksheet = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(() => {
     var _worksheetInstances$c;
     const activeId = sheetIdsRef.current[state.activeSheet];
     return (_worksheetInstances$c = worksheetInstances.current[activeId]) !== null && _worksheetInstances$c !== void 0 ? _worksheetInstances$c : null;
   }, [state.activeSheet]);
 
-  // Intercept the WordPress post form submission.
+  // Intercept the WordPress post form submission
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     const form = document.getElementById('post');
     if (!form) {
       return;
     }
     function handleSubmit(e) {
+      // If user tries to submit the form when formEnabledRef.curretn is still false we stop it
       if (!formEnabledRef.current) {
         e.preventDefault();
         return;
       }
 
-      // Collect current data from every jspreadsheet instance.
+      // Collect current data from every jspreadsheet instance
       const allData = sheetIdsRef.current.map(id => {
         var _worksheetInstances$c2;
         return (_worksheetInstances$c2 = worksheetInstances.current[id]?.getData()) !== null && _worksheetInstances$c2 !== void 0 ? _worksheetInstances$c2 : [['']];
@@ -1321,7 +1364,7 @@ function SpreadsheetMetaBox() {
     }
     form.addEventListener('submit', handleSubmit);
     return () => form.removeEventListener('submit', handleSubmit);
-  }, []); // Attached once — reads latest values through refs.
+  }, []); // Attached once — reads latest values through refs
 
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SheetTabs__WEBPACK_IMPORTED_MODULE_4__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     id: "spreadsheets"
@@ -1360,11 +1403,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Controlled subtitle input — replaces the PHP-rendered subtitle-field.php
- * template for Chart.js charts.
+ * Reach controlled subtitle input
  *
- * Renders with the same name/id attributes so the value is submitted with the
- * native WordPress post form and the existing PHP save logic still works.
+ * Renders with the m-chart[subtitle] name attribute so the value is submitted with the native WordPress post form and the existing PHP save logic still works
  */
 function SubtitleField() {
   var _state$postMeta$subti;
@@ -1504,13 +1545,13 @@ const {
 } = window;
 
 /**
- * Initial state populated from the PHP-localised window.m_chart_admin object.
+ * Initial state populated from the PHP-localised window.m_chart_admin object
  *
- * post_meta contains all chart meta fields except 'data' (spreadsheetData holds that).
- * Fields mirror the PHP $chart_meta_fields defaults in class-m-chart.php.
+ * post_meta contains all chart meta fields except 'data' (spreadsheetData holds that)
+ * Fields mirror the PHP $chart_meta_fields defaults in class-m-chart.php
  */
 
-// Stable sheet IDs — never change once a sheet is created, survive deletion of siblings.
+// Stable sheet IDs — never change once a sheet is created, survive deletion of siblings
 const initialSheetCount = (m_chart_admin.spreadsheet_data || [[]]).length;
 const initialSheetIds = Array.from({
   length: initialSheetCount
@@ -1670,7 +1711,7 @@ function ChartAdminProvider({
 }
 
 /**
- * Convenience hook — returns { state, dispatch } from the nearest provider.
+ * Convenience hook — returns { state, dispatch } from the nearest provider
  */
 function useChartAdmin() {
   const context = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useContext)(ChartAdminContext);
@@ -1724,7 +1765,7 @@ function useChartRefresh(title) {
   const abortRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const isFirstRun = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(true);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    // Skip the initial mount — the chart is already rendered from the PHP-seeded args.
+    // Skip the initial mount — the chart is already rendered from the PHP-seeded args
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -1777,8 +1818,8 @@ function useChartRefresh(title) {
           body.append(`post_meta[${key}]`, serialized);
         });
 
-        // set_names must arrive in PHP as an array, not a JSON string.
-        // Sending post_meta[set_names][0], [1], … lets PHP parse it as an array.
+        // set_names must arrive in PHP as an array, not a JSON string
+        // Sending post_meta[set_names][0], [1], … lets PHP parse it as an array
         (setNames || []).forEach((name, i) => {
           body.append(`post_meta[set_names][${i}]`, name);
         });
@@ -1850,16 +1891,15 @@ __webpack_require__.r(__webpack_exports__);
 const BUTTON_IDS = ['save-post', 'wp-preview', 'post-preview', 'publish'];
 
 /**
- * Keeps the WordPress Save/Publish buttons and form submission gated on
- * state.formEnabled — replacing the jQuery m_chart_admin.form_submission bridge.
+ * Keeps the WordPress Save/Publish buttons and form submission gated on state.formEnabled
  *
  * When formEnabled is false:
- *   - Adds the 'disabled' class to the WP submit buttons.
- *   - Blocks form submission via a submit event listener.
+ *   - Adds the 'disabled' class to the WP submit buttons
+ *   - Blocks form submission via a submit event listener
  *
  * When formEnabled is true:
- *   - Removes the 'disabled' class from those buttons.
- *   - Allows form submission through normally.
+ *   - Removes the 'disabled' class from those buttons
+ *   - Allows form submission through normally
  */
 function useFormSubmissionGuard() {
   const {
@@ -1869,7 +1909,7 @@ function useFormSubmissionGuard() {
     formEnabled
   } = state;
 
-  // Toggle disabled class on WP buttons.
+  // Toggle disabled class on WP buttons
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     BUTTON_IDS.forEach(id => {
       const el = document.getElementById(id);
@@ -1879,7 +1919,7 @@ function useFormSubmissionGuard() {
     });
   }, [formEnabled]);
 
-  // Block form submission when not ready.
+  // Block form submission when not ready
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const form = document.getElementById('post');
     if (!form) {
@@ -1998,8 +2038,6 @@ const LONG_PRESS_DELAY = 500;
 /**
  * Returns pointer-event handlers that fire `callback` after a sustained press
  * Spread the returned object onto any element: <div {...longPress} />
- *
- * Replaces jQuery Mobile's `taphold` event for tab-rename triggering
  */
 function useLongPress(callback) {
   const timerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -2041,15 +2079,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   measureTextWidth: () => (/* binding */ measureTextWidth)
 /* harmony export */ });
 /**
- * Measures the pixel width needed to display a string inside a given input
- * element, using a canvas and the input's computed font style.
+ * Measures the pixel width needed to display a string inside a given input element, using a canvas and the input's computed font style
  *
- * Falls back to a character-count estimate if the input element is not yet
- * mounted (e.g. on the first render before refs are attached).
+ * Falls back to a character-count estimate if the input element is not yet mounted (e.g. on the first render before refs are attached)
  *
- * @param {string}           text    The string to measure.
- * @param {HTMLInputElement} inputEl The input element whose font to use.
- * @return {number} Width in pixels.
+ * @param {string}           text    The string to measure
+ * @param {HTMLInputElement} inputEl The input element whose font to use
+ * 
+ * @return {number} Width in pixels
  */
 function measureTextWidth(text, inputEl) {
   if (!inputEl) {
@@ -2196,11 +2233,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * The admin UI spans multiple meta boxes and the title area, so we use a single
- * React root (in a hidden container) with portals to render into each mount point.
- * This ensures all components share a single ChartAdminContext instance.
+ * React root (in a hidden container) with portals to render into each mount point
+ * This ensures all components share a single ChartAdminContext instance
  */
 
-// Register Chart.js plugins before any chart instances are created.
+// Register Chart.js plugins before any chart instances are created
 if (window.Chart && window.ChartDataLabels) {
   window.Chart.register(window.ChartDataLabels);
 }
@@ -2213,8 +2250,8 @@ const chartRoot = document.getElementById('m-chart-chart-root');
 if (subtitleRoot || spreadsheetRoot || chartRoot) {
   const App = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.ChartAdminProvider, null, subtitleRoot && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_SubtitleField__WEBPACK_IMPORTED_MODULE_5__["default"], null), subtitleRoot), spreadsheetRoot && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_SpreadsheetMetaBox__WEBPACK_IMPORTED_MODULE_4__["default"], null), spreadsheetRoot), chartRoot && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_ChartMetaBox__WEBPACK_IMPORTED_MODULE_3__["default"], null), chartRoot));
 
-  // Mount the app into a hidden container appended to the post form.
-  // All visible content is rendered via portals into the actual meta box divs.
+  // Mount the app into a hidden container appended to the post form
+  // All visible content is rendered via portals into the actual meta box divs
   const postForm = document.getElementById('post');
   if (postForm) {
     const container = document.createElement('div');

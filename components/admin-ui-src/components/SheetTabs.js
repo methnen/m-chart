@@ -3,9 +3,8 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 import SheetTab from './SheetTab';
 
 /**
- * Chart types that support multiple data sets (multiple spreadsheet sheets).
- * All other types use a single sheet and the tab bar is hidden.
- * Mirrors the show/hide logic in m_chart_chartjs_admin.handle_chart_type().
+ * Chart types that support multiple data sets (multiple spreadsheet sheets)
+ * All other types use a single sheet and the tab bar is hidden
  */
 const MULTI_SHEET_TYPES = new Set( [
 	'scatter',
@@ -15,9 +14,9 @@ const MULTI_SHEET_TYPES = new Set( [
 ] );
 
 /**
- * The spreadsheet tab bar.  Renders one SheetTab per sheet and an Add Sheet
- * button.  The entire bar is hidden when the current chart type only supports
- * a single data set.
+ * The spreadsheet tab bar
+ * Renders one SheetTab per sheet and an Add Sheet button
+ * The entire bar is hidden when the current chart type only supports a single data set
  */
 export default function SheetTabs() {
 	const { state, dispatch } = useChartAdmin();
@@ -27,14 +26,12 @@ export default function SheetTabs() {
 
 	function handleAddSheet( e ) {
 		e.preventDefault();
+
 		dispatch( { type: 'ADD_SHEET', payload: {} } );
 	}
 
 	return (
-		<nav
-			id="spreadsheet-tabs"
-			className={ `nav-tab-wrapper${ showTabs ? '' : ' hide' }` }
-		>
+		<nav id="spreadsheet-tabs" className={ `nav-tab-wrapper${ showTabs ? '' : ' hide' }` }>
 			{ sheetIds.map( ( id, index ) => (
 				<SheetTab
 					key={ id }

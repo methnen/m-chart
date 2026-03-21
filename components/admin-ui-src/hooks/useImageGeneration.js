@@ -15,7 +15,7 @@ export function useImageGeneration( chartRef ) {
 
 	const generateImage = useCallback( () => {
 		const chart = chartRef.current;
-		
+
 		if ( ! chart ) {
 			return;
 		}
@@ -50,7 +50,7 @@ export function useImageGeneration( chartRef ) {
 
 		// Write base64 string to the hidden textarea for form POST
 		const imgEl = document.getElementById( 'm-chart-img' );
-		
+
 		if ( imgEl ) {
 			imgEl.value = img;
 		}

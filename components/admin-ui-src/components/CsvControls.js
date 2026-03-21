@@ -4,21 +4,24 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 import { spreadsheetAutoWidth } from './JspreadsheetWrapper';
 
 /**
- * CSV import and export controls for the active spreadsheet sheet.
+ * CSV import and export controls for the active spreadsheet sheet
  *
- * Import uses fetch + FormData (replaces the hidden #m-chart-csv-import-form).
- * Export uses a dynamically-created temporary form POST to trigger a file
- * download (replaces the hidden #m-chart-csv-export-form).
+ * Import uses fetch + FormData (replaces the hidden #m-chart-csv-import-form)
+ * Export uses a dynamically-created temporary form POST to trigger a file download (replaces the hidden #m-chart-csv-export-form)
  *
  * Props:
- *   getActiveWorksheet {Function}  Returns the active Jspreadsheet worksheet instance.
+ *   getActiveWorksheet {Function}  Returns the active Jspreadsheet worksheet instance
  */
 export default function CsvControls( { getActiveWorksheet } ) {
 	const { state, dispatch } = useChartAdmin();
 	const {
-		postId, nonce, ajaxUrl,
-		setNames, activeSheet,
-		csvDelimiters, defaultDelimiter,
+		postId,
+		nonce,
+		ajaxUrl,
+		setNames,
+		activeSheet,
+		csvDelimiters,
+		defaultDelimiter,
 	} = state;
 
 	const [ selectedFile,  setSelectedFile  ] = useState( null );
@@ -31,25 +34,33 @@ export default function CsvControls( { getActiveWorksheet } ) {
 
 	function handleSelectFile( e ) {
 		e.preventDefault();
+
 		setFileError( false );
 		setImportError( '' );
+
 		fileInputRef.current?.click();
 	}
 
 	function handleFileChange( e ) {
 		const file = e.target.files[ 0 ];
+
+		// Make sure it's a CSV file
 		if ( ! file || ! /\.csv$/i.test( file.name ) ) {
 			setFileError( true );
 			setSelectedFile( null );
 			return;
 		}
+
 		setFileError( false );
 		setSelectedFile( file );
 	}
 
 	function handleCancel( e ) {
 		e.preventDefault();
+
 		setSelectedFile( null );
+
+		// We're hiding the actual file input so we need to reset it for the user
 		if ( fileInputRef.current ) {
 			fileInputRef.current.value = '';
 		}
@@ -57,25 +68,33 @@ export default function CsvControls( { getActiveWorksheet } ) {
 
 	async function handleImport( e ) {
 		e.preventDefault();
+
 		if ( ! selectedFile ) {
 			return;
 		}
 
+		// Save the file value so we can reset the iput
 		const file = selectedFile;
+
+		// Set the UI to show we're importing the file
 		setSelectedFile( null );
 		setIsImporting( true );
 		setImportError( '' );
 
+		// Reset the actual file input back to empty
 		if ( fileInputRef.current ) {
 			fileInputRef.current.value = '';
 		}
 
+		// Create a form data object so we can submit it to the endpoint
 		const formData = new FormData();
+
 		formData.append( 'import_csv_file', file );
 		formData.append( 'post_id',         postId );
 		formData.append( 'csv_delimiter',   csvDelimiter );
 		formData.append( 'nonce',           nonce );
 
+		// Try submitting the data to the endpoint
 		try {
 			const response = await fetch( `${ ajaxUrl }?action=m_chart_import_csv`, {
 				method: 'POST',
@@ -89,13 +108,16 @@ export default function CsvControls( { getActiveWorksheet } ) {
 				return;
 			}
 
+			// Get the active worksheet
 			const worksheet = getActiveWorksheet();
 
 			if ( worksheet ) {
+				// Set the active worksheet to the new data
 				worksheet.setData( json.data );
 
-				// setData() does not trigger onafterchanges, so manually sync.
+				// setData() does not trigger onafterchanges so we need to run spreadsheetAutoWidth ourselves
 				spreadsheetAutoWidth( worksheet );
+
 				dispatch( {
 					type:    'SET_SHEET_DATA',
 					payload: { index: activeSheet, data: worksheet.getData() },
@@ -104,6 +126,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		} catch ( err ) {
 			setImportError( sprintf( __( 'Import error: %s', 'm-chart' ), err.message ) );
 		} finally {
+			// When we're done reset everything in the CSV ui back to default
 			setIsImporting( false );
 		}
 	}
@@ -111,7 +134,9 @@ export default function CsvControls( { getActiveWorksheet } ) {
 	function handleExport( e ) {
 		e.preventDefault();
 
+		// Get the active worksheet
 		const worksheet = getActiveWorksheet();
+
 		if ( ! worksheet ) {
 			return;
 		}
@@ -120,25 +145,31 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		const title   = document.getElementById( 'title' )?.value || '';
 		const setName = setNames[ activeSheet ] || '';
 
-		// Create a temporary form and submit it to trigger a file download.
+		// Build a FormData object so we can submit it to the endpoint
+		const formData = new FormData();
+
+		formData.append( 'post_id',  postId );
+		formData.append( 'data',     JSON.stringify( data ) );
+		formData.append( 'title',    title );
+		formData.append( 'set_name', setName );
+
+		// Create a temporary form and submit it
+		// We have to do it this way so to trigger a download
 		const form    = document.createElement( 'form' );
 		form.action   = `${ ajaxUrl }?action=m_chart_export_csv`;
 		form.method   = 'post';
 		form.style.display = 'none';
 
-		[
-			[ 'post_id',  postId ],
-			[ 'data',     JSON.stringify( data ) ],
-			[ 'title',    title ],
-			[ 'set_name', setName ],
-		].forEach( ( [ name, value ] ) => {
+		// Loop through the formData and append it to the temporary form
+		for ( const [ name, value ] of formData.entries() ) {
 			const input   = document.createElement( 'input' );
 			input.type    = 'hidden';
 			input.name    = name;
 			input.value   = value;
 			form.appendChild( input );
-		} );
+		}
 
+		// Do the thing
 		document.body.appendChild( form );
 		form.submit();
 		document.body.removeChild( form );
@@ -159,11 +190,9 @@ export default function CsvControls( { getActiveWorksheet } ) {
 					{ __( 'Export', 'm-chart' ) }
 				</a>
 			</div>
-
 			<div className="import">
 				{ __( 'CSV Import/Export', 'm-chart' ) }<br />
 				<div className="controls">
-
 					{ /* Hidden native file input — triggered programmatically */ }
 					<input
 						ref={ fileInputRef }
@@ -172,7 +201,6 @@ export default function CsvControls( { getActiveWorksheet } ) {
 						style={ { display: 'none' } }
 						onChange={ handleFileChange }
 					/>
-
 					{ /* Select File button — shown when no file is selected */ }
 					{ ! showConfirmation && ! isImporting && (
 						<a
@@ -184,7 +212,6 @@ export default function CsvControls( { getActiveWorksheet } ) {
 							{ __( 'Select File', 'm-chart' ) }
 						</a>
 					) }
-
 					{ /* Confirmation row: Import button + delimiter select */ }
 					{ showConfirmation && (
 						<div className="confirmation">
@@ -209,19 +236,15 @@ export default function CsvControls( { getActiveWorksheet } ) {
 							</select>
 						</div>
 					) }
-
 					{ fileError && (
 						<p className="file error">{ __( 'You can only import CSV files', 'm-chart' ) }</p>
 					) }
-
 					{ importError && (
 						<p className="import error">{ importError }</p>
 					) }
-
 					{ isImporting && (
 						<p className="import in-progress">{ __( 'Importing file', 'm-chart' ) }</p>
 					) }
-
 					{ /* File info + cancel — shown while a file is selected */ }
 					{ showConfirmation && (
 						<div className="file-info">

@@ -3,13 +3,13 @@ import { createContext, useContext, useReducer } from '@wordpress/element';
 const { m_chart_admin } = window;
 
 /**
- * Initial state populated from the PHP-localised window.m_chart_admin object.
+ * Initial state populated from the PHP-localised window.m_chart_admin object
  *
- * post_meta contains all chart meta fields except 'data' (spreadsheetData holds that).
- * Fields mirror the PHP $chart_meta_fields defaults in class-m-chart.php.
+ * post_meta contains all chart meta fields except 'data' (spreadsheetData holds that)
+ * Fields mirror the PHP $chart_meta_fields defaults in class-m-chart.php
  */
 
-// Stable sheet IDs — never change once a sheet is created, survive deletion of siblings.
+// Stable sheet IDs — never change once a sheet is created, survive deletion of siblings
 const initialSheetCount = ( m_chart_admin.spreadsheet_data || [ [] ] ).length;
 const initialSheetIds   = Array.from( { length: initialSheetCount }, ( _, i ) => i );
 
@@ -143,7 +143,7 @@ const ChartAdminContext = createContext( null );
 
 export function ChartAdminProvider( { children } ) {
 	const [ state, dispatch ] = useReducer( reducer, initialState );
-	
+
 	return (
 		<ChartAdminContext.Provider value={ { state, dispatch } }>
 			{ children }
@@ -152,14 +152,14 @@ export function ChartAdminProvider( { children } ) {
 }
 
 /**
- * Convenience hook — returns { state, dispatch } from the nearest provider.
+ * Convenience hook — returns { state, dispatch } from the nearest provider
  */
 export function useChartAdmin() {
 	const context = useContext( ChartAdminContext );
-	
+
 	if ( ! context ) {
 		throw new Error( 'useChartAdmin must be used within a ChartAdminProvider' );
 	}
-	
+
 	return context;
 }

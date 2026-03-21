@@ -7,7 +7,13 @@ const PARSE_OPTION_NAMES = {
 };
 
 // Chart types that support the shared tooltip option
-const SHARED_TYPES = new Set( [ 'line', 'spline', 'area', 'radar', 'radar-area' ] );
+const SHARED_TYPES = new Set( [
+	'line',
+	'spline',
+	'area',
+	'radar',
+	'radar-area'
+] );
 
 export default function ParseAndFlagsRow() {
 	const { state, dispatch } = useChartAdmin();

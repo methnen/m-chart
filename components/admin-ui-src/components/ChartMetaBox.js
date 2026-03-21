@@ -20,15 +20,15 @@ export default function ChartMetaBox() {
 	// Needed because React doesn't own this input since it's created by core WordPress
 	useEffect( () => {
 		const el = document.getElementById( 'title' );
-		
+
 		if ( ! el ) {
 			return;
 		}
-		
+
 		const handler = ( e ) => setTitle( e.target.value );
-		
+
 		el.addEventListener( 'input', handler );
-		
+
 		return () => el.removeEventListener( 'input', handler );
 	}, [] );
 

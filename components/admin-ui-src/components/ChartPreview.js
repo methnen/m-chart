@@ -40,7 +40,8 @@ function prepareArgs( args ) {
  * @param {Object}              args            Raw chart args from state
  * @param {Function}            onComplete      Callback to fire after render completes
  * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
- * @return {Object} The Chart.js instance
+ *
+ * @return {Object}             he Chart.js instance
  */
 function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	const prepared = prepareArgs( args );
@@ -71,26 +72,22 @@ function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	existingInstance.data        = prepared.data;
 	existingInstance.config.type = prepared.type;
 	existingInstance.options     = options;
-	
+
 	existingInstance.update();
 
 	return existingInstance;
 }
 
 /**
- * React-managed chart preview for the admin meta box.
+ * React-managed chart preview for the admin meta box
  *
- * The chart instance is managed imperatively via refs and is never recreated
- * on re-render — only updated when chartArgs changes.
+ * The chart instance is managed imperatively via refs and is never recreated on re-render — only updated when chartArgs changes
  *
- * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so
- * library plugins can replace the default Chart.js renderer. The filter
- * receives ( canvas, args, onComplete, existingInstance ) as extra arguments.
- * If no filter handles rendering (i.e. returns false), Chart.js is used.
+ * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so library plugins can replace the default Chart.js renderer
+ * The filter receives ( canvas, args, onComplete, existingInstance ) as extra arguments
+ * If no filter handles rendering (i.e. returns false), Chart.js is used
  *
- * The onComplete callback must be called by the renderer once the chart has
- * finished drawing — it fires 'm_chart.render_done', triggers image
- * generation if needed, and re-enables the form.
+ * The onComplete callback must be called by the renderer once the chart has finished which will fire 'm_chart.render_done' to trigger image generation and/or re-enable the form
  */
 export default function ChartPreview() {
 	const { state, dispatch } = useChartAdmin();
@@ -101,7 +98,7 @@ export default function ChartPreview() {
 	const renderFlagRef  = useRef( false );
 	const isFirstRender  = useRef( true );
 
-	// Keep a ref so onComplete closures always see the latest values.
+	// Keep a ref so onComplete closures always see the latest values
 	const needsImagesRef = useRef( false );
 	needsImagesRef.current = ( 'default' === performance && 'yes' === imageSupport );
 
@@ -117,17 +114,18 @@ export default function ChartPreview() {
 		};
 	}, [] );
 
-	// Create or update the chart instance whenever chartArgs changes.
+	// Create or update the chart instance whenever chartArgs changes
 	useEffect( () => {
 		if ( ! chartArgs || ! canvasRef.current ) {
 			return;
 		}
 
 		function onComplete() {
-			// Only fire once per update cycle (guards against double-fire).
+			// Only fire once per update cycle
 			if ( ! renderFlagRef.current ) {
 				return;
 			}
+
 			renderFlagRef.current = false;
 
 			if ( window.wp?.hooks ) {
@@ -137,8 +135,8 @@ export default function ChartPreview() {
 			if ( needsImagesRef.current ) {
 				generateImage();
 			} else {
-				// No image generation — enable form submission immediately.
-				// This also covers the initial page load where useChartRefresh skips its first run.
+				// No image generation — enable form submission immediately
+				// This also covers the initial page load where useChartRefresh skips its first run
 				dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 				isFirstRender.current = false;
 			}
@@ -146,11 +144,13 @@ export default function ChartPreview() {
 
 		renderFlagRef.current = true;
 
-		// Allow library plugins to replace the renderer via wp.hooks.
-		// Plugins hook 'm_chart.render_chart' and return their chart instance.
-		// Returning false (the default) falls through to the built-in Chart.js renderer.
+		// Allow library plugins to replace the renderer via wp.hooks
+		// Plugins hook 'm_chart.render_chart' and return their chart instance
+		// Returning false (the default) falls through to the built-in Chart.js renderer
 		let instance = false;
+
 		if ( window.wp?.hooks ) {
+			// See defaultChartjsRender for the filter arguments
 			instance = window.wp.hooks.applyFilters(
 				'm_chart.render_chart',
 				false,
