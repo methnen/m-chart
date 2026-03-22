@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 15:23-0700\n"
-"PO-Revision-Date: 2026-03-17 15:24-0700\n"
+"POT-Creation-Date: 2026-03-21 17:03-0700\n"
+"PO-Revision-Date: 2026-03-21 17:04-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -22,95 +22,95 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
 "X-Poedit-SearchPathExcluded-2: components/external\n"
 
-#: components/admin-ui-src/components/AxisRows.js:48
+#: components/admin-ui-src/components/AxisRows.js:54
 #, fuzzy
 msgid "N/A"
 msgstr "不适用"
 
-#: components/admin-ui-src/components/AxisRows.js:64
+#: components/admin-ui-src/components/AxisRows.js:70
 msgid "Vertical axis title"
 msgstr "纵坐标轴标题"
 
-#: components/admin-ui-src/components/AxisRows.js:76
-#: components/admin-ui-src/components/AxisRows.js:127
+#: components/admin-ui-src/components/AxisRows.js:82
+#: components/admin-ui-src/components/AxisRows.js:133
 #: components/array-default-unit-terms.php:49
 msgid "Units"
 msgstr "单位"
 
-#: components/admin-ui-src/components/AxisRows.js:99
+#: components/admin-ui-src/components/AxisRows.js:105
 msgid " Force vertical axis minimum: "
 msgstr " 强制垂直轴最小值："
 
-#: components/admin-ui-src/components/AxisRows.js:115
+#: components/admin-ui-src/components/AxisRows.js:121
 msgid "Horizontal axis title"
 msgstr "横坐标轴标题"
 
-#: components/admin-ui-src/components/CsvControls.js:88
+#: components/admin-ui-src/components/CsvControls.js:107
 msgid "Import failed"
 msgstr "导入失败"
 
-#: components/admin-ui-src/components/CsvControls.js:105
+#: components/admin-ui-src/components/CsvControls.js:127
 #, javascript-format
 msgid "Import error: %s"
 msgstr "导入错误：%s"
 
-#: components/admin-ui-src/components/CsvControls.js:155
+#: components/admin-ui-src/components/CsvControls.js:186
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export CSV"
 msgstr "输出CSV"
 
-#: components/admin-ui-src/components/CsvControls.js:159
+#: components/admin-ui-src/components/CsvControls.js:190
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export"
 msgstr "导出"
 
-#: components/admin-ui-src/components/CsvControls.js:164
+#: components/admin-ui-src/components/CsvControls.js:194
 #: components/templates/spreadsheet-meta-box.php:14
 msgid "CSV Import/Export"
 msgstr "CSV 导入／导出"
 
-#: components/admin-ui-src/components/CsvControls.js:180
+#: components/admin-ui-src/components/CsvControls.js:208
 #: components/templates/spreadsheet-meta-box.php:16
 msgid "Select CSV File"
 msgstr "选择CSV文件"
 
-#: components/admin-ui-src/components/CsvControls.js:184
+#: components/admin-ui-src/components/CsvControls.js:212
 #: components/templates/spreadsheet-meta-box.php:16
 msgid "Select File"
 msgstr "选择文件"
 
-#: components/admin-ui-src/components/CsvControls.js:193
-#: components/admin-ui-src/components/CsvControls.js:197
+#: components/admin-ui-src/components/CsvControls.js:220
+#: components/admin-ui-src/components/CsvControls.js:224
 #: components/templates/spreadsheet-meta-box.php:18
 msgid "Import"
 msgstr "导入"
 
-#: components/admin-ui-src/components/CsvControls.js:206
+#: components/admin-ui-src/components/CsvControls.js:233
 #, javascript-format
 msgid "%s Delimited"
 msgstr "%s 分隔"
 
-#: components/admin-ui-src/components/CsvControls.js:214
+#: components/admin-ui-src/components/CsvControls.js:240
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
 msgstr "只可以导入CSV格式的文档"
 
-#: components/admin-ui-src/components/CsvControls.js:222
+#: components/admin-ui-src/components/CsvControls.js:246
 #: components/templates/spreadsheet-meta-box.php:35
 msgid "Importing file"
 msgstr "正在導入文件"
 
-#: components/admin-ui-src/components/CsvControls.js:230
+#: components/admin-ui-src/components/CsvControls.js:253
 #: components/templates/spreadsheet-meta-box.php:37
 msgid "Cancel Import"
 msgstr "取消导入"
 
-#: components/admin-ui-src/components/CsvControls.js:234
+#: components/admin-ui-src/components/CsvControls.js:257
 #, javascript-format
 msgid "File: %s"
 msgstr "文件: %s"
 
-#: components/admin-ui-src/components/CsvControls.js:236
+#: components/admin-ui-src/components/CsvControls.js:259
 #: components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr "导入此文件将替换此工作表中的所有现有数据"
@@ -123,28 +123,28 @@ msgstr "列"
 msgid "Rows"
 msgstr "行"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:29
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:35
 msgid "Parse data in"
 msgstr "排列数据的方式 （行／列）"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:53
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:59
 msgid " Show labels"
 msgstr " 显示标签"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:67
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:73
 msgid " Show legend"
 msgstr "显示图例"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:82
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:88
 msgid " Shared tooltip"
 msgstr "共享工具提示框"
 
-#: components/admin-ui-src/components/SheetTabs.js:43
+#: components/admin-ui-src/components/SheetTabs.js:40
 #, javascript-format
 msgid "Sheet %d"
 msgstr "工作表 %d"
 
-#: components/admin-ui-src/components/SheetTabs.js:52
+#: components/admin-ui-src/components/SheetTabs.js:49
 #: components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
 msgstr "添加工作表"
@@ -162,12 +162,12 @@ msgid "Copy"
 msgstr "复制"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:42
-#: components/block-src/chart/edit.js:187
+#: components/block-src/chart/edit.js:197
 msgid "Image"
 msgstr "图像"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:56
-#: components/class-m-chart.php:213
+#: components/class-m-chart.php:200
 msgid "View"
 msgstr "查看"
 
@@ -179,7 +179,7 @@ msgstr "图像生成功能关闭"
 msgid "Save/Update this post to generate the image version"
 msgstr "以图像文档格式储存／上传此图表"
 
-#: components/admin-ui-src/components/SubtitleField.js:22
+#: components/admin-ui-src/components/SubtitleField.js:20
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
 msgstr "在此处输入子标题"
@@ -2596,52 +2596,60 @@ msgstr "祖鲁语"
 msgid "Zulu (South Africa)"
 msgstr "祖鲁语（南非）"
 
-#: components/block-src/chart/edit.js:181
+#: components/block-src/chart/edit.js:191
 msgid "Display settings"
 msgstr "显示设置"
 
-#: components/block-src/chart/edit.js:183
+#: components/block-src/chart/edit.js:193
 msgid "Show"
 msgstr "显示"
 
-#: components/block-src/chart/edit.js:186
-#: components/block-src/chart/edit.js:237
-#: components/class-m-chart-admin.php:489 components/class-m-chart.php:207
+#: components/block-src/chart/edit.js:196
+#: components/block-src/chart/edit.js:242
+#: components/class-m-chart-admin.php:462 components/class-m-chart.php:194
 msgid "Chart"
 msgstr "图表"
 
-#: components/block-src/chart/edit.js:188
+#: components/block-src/chart/edit.js:198
 msgid "Table"
 msgstr "表格"
 
-#: components/block-src/chart/edit.js:198
+#: components/block-src/chart/edit.js:208
 msgid "New chart"
 msgstr "新图表"
 
-#: components/block-src/chart/edit.js:202
+#: components/block-src/chart/edit.js:212
 msgid "Edit chart"
 msgstr "编辑图表"
 
-#: components/block-src/chart/edit.js:203
+#: components/block-src/chart/edit.js:213
 msgid "Replace"
 msgstr "替换"
 
-#: components/block-src/chart/edit.js:240
+#: components/block-src/chart/edit.js:245
 msgid "There was a problem loading charts"
 msgstr "加载图表时出现问题"
 
-#: components/block-src/chart/edit.js:249
-#: components/block-src/chart/edit.js:264
+#: components/block-src/chart/edit.js:256
+#: components/block-src/chart/edit.js:274
 msgid "No charts found"
 msgstr "没找到图表"
 
-#: components/block-src/chart/edit.js:250
+#: components/block-src/chart/edit.js:259
 msgid "Create a new chart"
 msgstr "创建新图表"
 
-#: components/block-src/chart/edit.js:257
+#: components/block-src/chart/edit.js:267
 msgid "Search by title"
 msgstr "按标题搜索"
+
+#: components/block-src/chart/edit.js:271
+msgid "chart found"
+msgstr "已找到图表"
+
+#: components/block-src/chart/edit.js:271
+msgid "charts found"
+msgstr "找到的图表"
 
 #: components/class-m-chart-admin.php:54
 #: components/templates/m-chart-settings.php:2
@@ -2652,81 +2660,81 @@ msgstr "M Chart 设置"
 msgid "Settings"
 msgstr "设置"
 
-#: components/class-m-chart-admin.php:206
+#: components/class-m-chart-admin.php:179
 msgid "Settings saved"
 msgstr "已保存的设置"
 
-#: components/class-m-chart-admin.php:242
-#: components/class-m-chart-admin.php:243
+#: components/class-m-chart-admin.php:215
+#: components/class-m-chart-admin.php:216
 #: components/templates/chart-meta-box.php:8
 #: components/templates/chart-meta-box.php:9
 msgid "M Chart Highcharts Library"
 msgstr "M Chart Highcharts Library"
 
-#: components/class-m-chart-admin.php:244
+#: components/class-m-chart-admin.php:217
 msgid "You have charts that require the M Chart Highcharts Library plugin."
 msgstr "你有些图表需要使用 M Chart Highcharts Library 插件。"
 
-#: components/class-m-chart-admin.php:248
+#: components/class-m-chart-admin.php:221
 msgid "These charts will no longer display unless you install the plugin:"
 msgstr "这些图表除非安装插件，否则将不再显示："
 
-#: components/class-m-chart-admin.php:250
+#: components/class-m-chart-admin.php:223
 #: components/templates/chart-meta-box.php:15
 msgid "Learn More"
 msgstr "了解更多"
 
-#: components/class-m-chart-admin.php:434
+#: components/class-m-chart-admin.php:407
 msgid "Are you sure you want to delete this spreadsheet?"
 msgstr "你确定你要删掉这个电子表格吗?"
 
-#: components/class-m-chart-admin.php:480
+#: components/class-m-chart-admin.php:453
 msgid "Data"
 msgstr "数据"
 
-#: components/class-m-chart-admin.php:619
+#: components/class-m-chart-admin.php:592
 msgid "Library not found"
 msgstr "找不到库"
 
-#: components/class-m-chart-admin.php:833
-#: components/class-m-chart-admin.php:843
+#: components/class-m-chart-admin.php:806
+#: components/class-m-chart-admin.php:816
 msgid "Wrong post type"
 msgstr "错误图表类型"
 
-#: components/class-m-chart-admin.php:838
-#: components/class-m-chart-admin.php:974
+#: components/class-m-chart-admin.php:811
+#: components/class-m-chart-admin.php:947
 msgid "Invalid nonce"
 msgstr "无效随机值"
 
-#: components/class-m-chart-admin.php:848
+#: components/class-m-chart-admin.php:821
 msgid "No file to import"
 msgstr "没有导入的文件"
 
-#: components/class-m-chart-admin.php:855
+#: components/class-m-chart-admin.php:828
 msgid "Only CSV files can be imported"
 msgstr "只有CSV文档可以导入"
 
-#: components/class-m-chart-admin.php:862
+#: components/class-m-chart-admin.php:835
 msgid "File path not found"
 msgstr "找不到文件路径"
 
-#: components/class-m-chart-admin.php:868
+#: components/class-m-chart-admin.php:841
 msgid "CSV file was empty"
 msgstr "CSV文档是空的"
 
-#: components/class-m-chart-admin.php:979
+#: components/class-m-chart-admin.php:952
 msgid "Invalid post"
 msgstr "无效图表"
 
-#: components/class-m-chart-admin.php:984
+#: components/class-m-chart-admin.php:957
 msgid "Permission error"
 msgstr "权限错误"
 
-#: components/class-m-chart-admin.php:989
+#: components/class-m-chart-admin.php:962
 msgid "Invalid library"
 msgstr "无效编码库"
 
-#: components/class-m-chart-block.php:170 components/class-m-chart.php:940
+#: components/class-m-chart-block.php:170 components/class-m-chart.php:927
 msgid "Chart not found"
 msgstr "无法找到图表"
 
@@ -2786,95 +2794,95 @@ msgstr "雷达面积图"
 msgid "Polar"
 msgstr "极地数据集标签"
 
-#: components/class-m-chart.php:167 components/class-m-chart.php:177
+#: components/class-m-chart.php:154 components/class-m-chart.php:164
 msgid "Chart Units"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:168
+#: components/class-m-chart.php:155
 msgid "Chart Unit"
 msgstr "图表单位"
 
-#: components/class-m-chart.php:169
+#: components/class-m-chart.php:156
 msgid "Search Chart Units"
 msgstr "搜索图表单位"
 
-#: components/class-m-chart.php:170
+#: components/class-m-chart.php:157
 msgid "All Chart Units"
 msgstr "所有图表单位"
 
-#: components/class-m-chart.php:171
+#: components/class-m-chart.php:158
 msgid "Parent Chart Unit"
 msgstr "父图单位"
 
-#: components/class-m-chart.php:172
+#: components/class-m-chart.php:159
 msgid "Parent Chart Unit:"
 msgstr "父表单位︰"
 
-#: components/class-m-chart.php:173
+#: components/class-m-chart.php:160
 msgid "Edit Chart Unit"
 msgstr "编辑图表单位"
 
-#: components/class-m-chart.php:174
+#: components/class-m-chart.php:161
 msgid "Update Chart Unit"
 msgstr "更新图表单位"
 
-#: components/class-m-chart.php:175
+#: components/class-m-chart.php:162
 msgid "Add New Chart Unit"
 msgstr "添加新的图表单位"
 
-#: components/class-m-chart.php:176
+#: components/class-m-chart.php:163
 msgid "Chart Unit Name"
 msgstr "图表单位名称"
 
-#: components/class-m-chart.php:206
+#: components/class-m-chart.php:193
 msgid "Charts"
 msgstr "图表"
 
-#: components/class-m-chart.php:208 components/class-m-chart.php:209
+#: components/class-m-chart.php:195 components/class-m-chart.php:196
 msgid "Add Chart"
 msgstr "添加图表"
 
-#: components/class-m-chart.php:210
+#: components/class-m-chart.php:197
 msgid "Edit"
 msgstr "编辑"
 
-#: components/class-m-chart.php:211
+#: components/class-m-chart.php:198
 msgid "Edit Chart"
 msgstr "编辑图表"
 
-#: components/class-m-chart.php:212
+#: components/class-m-chart.php:199
 msgid "New Chart"
 msgstr "添加新的图表"
 
-#: components/class-m-chart.php:214
+#: components/class-m-chart.php:201
 msgid "View Chart"
 msgstr "查看图表"
 
-#: components/class-m-chart.php:215
+#: components/class-m-chart.php:202
 msgid "Search Charts"
 msgstr "搜索图表"
 
-#: components/class-m-chart.php:216
+#: components/class-m-chart.php:203
 msgid "No Charts found"
 msgstr "没找到图表"
 
-#: components/class-m-chart.php:217
+#: components/class-m-chart.php:204
 msgid "No Charts found in the Trash"
 msgstr "没有在回收站找到图表"
 
-#: components/class-m-chart.php:229
+#: components/class-m-chart.php:216
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "管理数据集并将它们在 WordPress 中显示为图表。"
 
-#: components/class-m-chart.php:939
+#: components/class-m-chart.php:926
 msgid "The chart could not be found"
 msgstr "无法找到此图表"
 
-#: components/class-m-chart.php:949
+#: components/class-m-chart.php:936
 msgid "Embeds of this type are not enabled"
 msgstr "这种类型的嵌入无法被执行"
 
-#: components/class-m-chart.php:950
+#: components/class-m-chart.php:937
 msgid "Embeds disabled"
 msgstr "嵌入无法被执行"
 

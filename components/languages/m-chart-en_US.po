@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 15:40-0700\n"
-"PO-Revision-Date: 2026-03-17 15:40-0700\n"
+"POT-Creation-Date: 2026-03-21 17:00-0700\n"
+"PO-Revision-Date: 2026-03-21 17:01-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -22,102 +22,99 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
 "X-Poedit-SearchPathExcluded-2: components/external\n"
 
-#: components/admin-ui-src/components/AxisRows.js:48
+#: components/admin-ui-src/components/AxisRows.js:54
 msgid "N/A"
 msgstr "N/A"
 
-#: components/admin-ui-src/components/AxisRows.js:64
+#: components/admin-ui-src/components/AxisRows.js:70
 msgid "Vertical axis title"
 msgstr "Vertical axis title"
 
-#: components/admin-ui-src/components/AxisRows.js:76
-#: components/admin-ui-src/components/AxisRows.js:127
+#: components/admin-ui-src/components/AxisRows.js:82
+#: components/admin-ui-src/components/AxisRows.js:133
 #: components/array-default-unit-terms.php:49
 msgid "Units"
 msgstr "Units"
 
-#: components/admin-ui-src/components/AxisRows.js:99
+#: components/admin-ui-src/components/AxisRows.js:105
 msgid " Force vertical axis minimum: "
 msgstr " Force vertical axis minimum: "
 
-#: components/admin-ui-src/components/AxisRows.js:115
+#: components/admin-ui-src/components/AxisRows.js:121
 msgid "Horizontal axis title"
 msgstr "Horizontal axis title"
 
-#: components/admin-ui-src/components/CsvControls.js:88
-#| msgid "Importing file"
+#: components/admin-ui-src/components/CsvControls.js:107
 msgid "Import failed"
 msgstr "Import failed"
 
-#: components/admin-ui-src/components/CsvControls.js:105
+#: components/admin-ui-src/components/CsvControls.js:127
 #, javascript-format
 msgid "Import error: %s"
 msgstr "Import error: %s"
 
-#: components/admin-ui-src/components/CsvControls.js:155
+#: components/admin-ui-src/components/CsvControls.js:186
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export CSV"
 msgstr "Export CSV"
 
-#: components/admin-ui-src/components/CsvControls.js:159
+#: components/admin-ui-src/components/CsvControls.js:190
 #: components/templates/spreadsheet-meta-box.php:11
 msgid "Export"
 msgstr "Export"
 
-#: components/admin-ui-src/components/CsvControls.js:164
+#: components/admin-ui-src/components/CsvControls.js:194
 #: components/templates/spreadsheet-meta-box.php:14
 msgid "CSV Import/Export"
 msgstr "CSV Import/Export"
 
-#: components/admin-ui-src/components/CsvControls.js:180
+#: components/admin-ui-src/components/CsvControls.js:208
 #: components/templates/spreadsheet-meta-box.php:16
 msgid "Select CSV File"
 msgstr "Select CSV File"
 
-#: components/admin-ui-src/components/CsvControls.js:184
+#: components/admin-ui-src/components/CsvControls.js:212
 #: components/templates/spreadsheet-meta-box.php:16
 msgid "Select File"
 msgstr "Select File"
 
-#: components/admin-ui-src/components/CsvControls.js:193
-#: components/admin-ui-src/components/CsvControls.js:197
+#: components/admin-ui-src/components/CsvControls.js:220
+#: components/admin-ui-src/components/CsvControls.js:224
 #: components/templates/spreadsheet-meta-box.php:18
 msgid "Import"
 msgstr "Import"
 
-#: components/admin-ui-src/components/CsvControls.js:206
+#: components/admin-ui-src/components/CsvControls.js:233
 #, javascript-format
-#| msgid " Delimited"
 msgid "%s Delimited"
 msgstr "%s Delimited"
 
-#: components/admin-ui-src/components/CsvControls.js:214
+#: components/admin-ui-src/components/CsvControls.js:240
 #: components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
 msgstr "You can only import CSV files"
 
-#: components/admin-ui-src/components/CsvControls.js:222
+#: components/admin-ui-src/components/CsvControls.js:246
 #: components/templates/spreadsheet-meta-box.php:35
 msgid "Importing file"
 msgstr "Importing file"
 
-#: components/admin-ui-src/components/CsvControls.js:230
+#: components/admin-ui-src/components/CsvControls.js:253
 #: components/templates/spreadsheet-meta-box.php:37
 msgid "Cancel Import"
 msgstr "Cancel Import"
 
-#: components/admin-ui-src/components/CsvControls.js:234
+#: components/admin-ui-src/components/CsvControls.js:257
 #, javascript-format
 msgid "File: %s"
 msgstr "File: %s"
 
-#: components/admin-ui-src/components/CsvControls.js:236
+#: components/admin-ui-src/components/CsvControls.js:259
 #: components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr "Importing this file will replace all existing data in this sheet"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:5
-#| msgid "Column"
 msgid "Columns"
 msgstr "Columns"
 
@@ -125,28 +122,28 @@ msgstr "Columns"
 msgid "Rows"
 msgstr "Rows"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:29
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:35
 msgid "Parse data in"
 msgstr "Parse data in"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:53
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:59
 msgid " Show labels"
 msgstr " Show labels"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:67
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:73
 msgid " Show legend"
 msgstr " Show legend"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:82
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:88
 msgid " Shared tooltip"
 msgstr " Shared tooltip"
 
-#: components/admin-ui-src/components/SheetTabs.js:43
+#: components/admin-ui-src/components/SheetTabs.js:40
 #, javascript-format
 msgid "Sheet %d"
 msgstr "Sheet %d"
 
-#: components/admin-ui-src/components/SheetTabs.js:52
+#: components/admin-ui-src/components/SheetTabs.js:49
 #: components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
 msgstr "Add Sheet"
@@ -164,13 +161,12 @@ msgid "Copy"
 msgstr "Copy"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:42
-#: components/block-src/chart/edit.js:187
-#| msgid "No Images"
+#: components/block-src/chart/edit.js:197
 msgid "Image"
 msgstr "Image"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:56
-#: components/class-m-chart.php:213
+#: components/class-m-chart.php:200
 msgid "View"
 msgstr "View"
 
@@ -182,7 +178,7 @@ msgstr "Image generation is disabled"
 msgid "Save/Update this post to generate the image version"
 msgstr "Save/Update this post to generate the image version"
 
-#: components/admin-ui-src/components/SubtitleField.js:22
+#: components/admin-ui-src/components/SubtitleField.js:20
 #: components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
 msgstr "Enter subtitle here"
@@ -2599,56 +2595,62 @@ msgstr "Zulu"
 msgid "Zulu (South Africa)"
 msgstr "Zulu (South Africa)"
 
-#: components/block-src/chart/edit.js:181
+#: components/block-src/chart/edit.js:191
 msgid "Display settings"
 msgstr "Display settings"
 
-#: components/block-src/chart/edit.js:183
+#: components/block-src/chart/edit.js:193
 msgid "Show"
 msgstr "Show"
 
-#: components/block-src/chart/edit.js:186
-#: components/block-src/chart/edit.js:237
-#: components/class-m-chart-admin.php:489 components/class-m-chart.php:207
+#: components/block-src/chart/edit.js:196
+#: components/block-src/chart/edit.js:242
+#: components/class-m-chart-admin.php:462 components/class-m-chart.php:194
 msgid "Chart"
 msgstr "Chart"
 
-#: components/block-src/chart/edit.js:188
+#: components/block-src/chart/edit.js:198
 msgid "Table"
 msgstr "Table"
 
-#: components/block-src/chart/edit.js:198
-#| msgid "New Chart"
+#: components/block-src/chart/edit.js:208
 msgid "New chart"
 msgstr "New chart"
 
-#: components/block-src/chart/edit.js:202
-#| msgid "Edit Chart"
+#: components/block-src/chart/edit.js:212
 msgid "Edit chart"
 msgstr "Edit chart"
 
-#: components/block-src/chart/edit.js:203
+#: components/block-src/chart/edit.js:213
 msgid "Replace"
 msgstr "Replace"
 
-#: components/block-src/chart/edit.js:240
+#: components/block-src/chart/edit.js:245
 msgid "There was a problem loading charts"
 msgstr "There was a problem loading charts"
 
-#: components/block-src/chart/edit.js:249
-#: components/block-src/chart/edit.js:264
-#| msgid "No Charts found"
+#: components/block-src/chart/edit.js:256
+#: components/block-src/chart/edit.js:274
 msgid "No charts found"
 msgstr "No charts found"
 
-#: components/block-src/chart/edit.js:250
+#: components/block-src/chart/edit.js:259
 msgid "Create a new chart"
 msgstr "Create a new chart"
 
-#: components/block-src/chart/edit.js:257
-#| msgid "Search Chart Units"
+#: components/block-src/chart/edit.js:267
 msgid "Search by title"
 msgstr "Search by title"
+
+#: components/block-src/chart/edit.js:271
+#| msgid "No charts found"
+msgid "chart found"
+msgstr "chart found"
+
+#: components/block-src/chart/edit.js:271
+#| msgid "No charts found"
+msgid "charts found"
+msgstr "charts found"
 
 #: components/class-m-chart-admin.php:54
 #: components/templates/m-chart-settings.php:2
@@ -2659,81 +2661,81 @@ msgstr "M Chart Settings"
 msgid "Settings"
 msgstr "Settings"
 
-#: components/class-m-chart-admin.php:206
+#: components/class-m-chart-admin.php:179
 msgid "Settings saved"
 msgstr "Settings saved"
 
-#: components/class-m-chart-admin.php:242
-#: components/class-m-chart-admin.php:243
+#: components/class-m-chart-admin.php:215
+#: components/class-m-chart-admin.php:216
 #: components/templates/chart-meta-box.php:8
 #: components/templates/chart-meta-box.php:9
 msgid "M Chart Highcharts Library"
 msgstr "M Chart Highcharts Library"
 
-#: components/class-m-chart-admin.php:244
+#: components/class-m-chart-admin.php:217
 msgid "You have charts that require the M Chart Highcharts Library plugin."
 msgstr "You have charts that require the M Chart Highcharts Library plugin."
 
-#: components/class-m-chart-admin.php:248
+#: components/class-m-chart-admin.php:221
 msgid "These charts will no longer display unless you install the plugin:"
 msgstr "These charts will no longer display unless you install the plugin:"
 
-#: components/class-m-chart-admin.php:250
+#: components/class-m-chart-admin.php:223
 #: components/templates/chart-meta-box.php:15
 msgid "Learn More"
 msgstr "Learn More"
 
-#: components/class-m-chart-admin.php:434
+#: components/class-m-chart-admin.php:407
 msgid "Are you sure you want to delete this spreadsheet?"
 msgstr "Are you sure you want to delete this spreadsheet?"
 
-#: components/class-m-chart-admin.php:480
+#: components/class-m-chart-admin.php:453
 msgid "Data"
 msgstr "Data"
 
-#: components/class-m-chart-admin.php:619
+#: components/class-m-chart-admin.php:592
 msgid "Library not found"
 msgstr "Library not found"
 
-#: components/class-m-chart-admin.php:833
-#: components/class-m-chart-admin.php:843
+#: components/class-m-chart-admin.php:806
+#: components/class-m-chart-admin.php:816
 msgid "Wrong post type"
 msgstr "Wrong post type"
 
-#: components/class-m-chart-admin.php:838
-#: components/class-m-chart-admin.php:974
+#: components/class-m-chart-admin.php:811
+#: components/class-m-chart-admin.php:947
 msgid "Invalid nonce"
 msgstr "Invalid nonce"
 
-#: components/class-m-chart-admin.php:848
+#: components/class-m-chart-admin.php:821
 msgid "No file to import"
 msgstr "No file to import"
 
-#: components/class-m-chart-admin.php:855
+#: components/class-m-chart-admin.php:828
 msgid "Only CSV files can be imported"
 msgstr "Only CSV files can be imported"
 
-#: components/class-m-chart-admin.php:862
+#: components/class-m-chart-admin.php:835
 msgid "File path not found"
 msgstr "File path not found"
 
-#: components/class-m-chart-admin.php:868
+#: components/class-m-chart-admin.php:841
 msgid "CSV file was empty"
 msgstr "CSV file was empty"
 
-#: components/class-m-chart-admin.php:979
+#: components/class-m-chart-admin.php:952
 msgid "Invalid post"
 msgstr "Invalid post"
 
-#: components/class-m-chart-admin.php:984
+#: components/class-m-chart-admin.php:957
 msgid "Permission error"
 msgstr "Permission error"
 
-#: components/class-m-chart-admin.php:989
+#: components/class-m-chart-admin.php:962
 msgid "Invalid library"
 msgstr "Invalid library"
 
-#: components/class-m-chart-block.php:170 components/class-m-chart.php:940
+#: components/class-m-chart-block.php:170 components/class-m-chart.php:927
 msgid "Chart not found"
 msgstr "Chart not found"
 
@@ -2793,95 +2795,95 @@ msgstr "Radar Area"
 msgid "Polar"
 msgstr "Polar"
 
-#: components/class-m-chart.php:167 components/class-m-chart.php:177
+#: components/class-m-chart.php:154 components/class-m-chart.php:164
 msgid "Chart Units"
 msgstr "Chart Units"
 
-#: components/class-m-chart.php:168
+#: components/class-m-chart.php:155
 msgid "Chart Unit"
 msgstr "Chart Unit"
 
-#: components/class-m-chart.php:169
+#: components/class-m-chart.php:156
 msgid "Search Chart Units"
 msgstr "Search Chart Units"
 
-#: components/class-m-chart.php:170
+#: components/class-m-chart.php:157
 msgid "All Chart Units"
 msgstr "All Chart Units"
 
-#: components/class-m-chart.php:171
+#: components/class-m-chart.php:158
 msgid "Parent Chart Unit"
 msgstr "Parent Chart Unit"
 
-#: components/class-m-chart.php:172
+#: components/class-m-chart.php:159
 msgid "Parent Chart Unit:"
 msgstr "Parent Chart Unit:"
 
-#: components/class-m-chart.php:173
+#: components/class-m-chart.php:160
 msgid "Edit Chart Unit"
 msgstr "Edit Chart Unit"
 
-#: components/class-m-chart.php:174
+#: components/class-m-chart.php:161
 msgid "Update Chart Unit"
 msgstr "Update Chart Unit"
 
-#: components/class-m-chart.php:175
+#: components/class-m-chart.php:162
 msgid "Add New Chart Unit"
 msgstr "Add New Chart Unit"
 
-#: components/class-m-chart.php:176
+#: components/class-m-chart.php:163
 msgid "Chart Unit Name"
 msgstr "Chart Unit Name"
 
-#: components/class-m-chart.php:206
+#: components/class-m-chart.php:193
 msgid "Charts"
 msgstr "Charts"
 
-#: components/class-m-chart.php:208 components/class-m-chart.php:209
+#: components/class-m-chart.php:195 components/class-m-chart.php:196
 msgid "Add Chart"
 msgstr "Add Chart"
 
-#: components/class-m-chart.php:210
+#: components/class-m-chart.php:197
 msgid "Edit"
 msgstr "Edit"
 
-#: components/class-m-chart.php:211
+#: components/class-m-chart.php:198
 msgid "Edit Chart"
 msgstr "Edit Chart"
 
-#: components/class-m-chart.php:212
+#: components/class-m-chart.php:199
 msgid "New Chart"
 msgstr "New Chart"
 
-#: components/class-m-chart.php:214
+#: components/class-m-chart.php:201
 msgid "View Chart"
 msgstr "View Chart"
 
-#: components/class-m-chart.php:215
+#: components/class-m-chart.php:202
 msgid "Search Charts"
 msgstr "Search Charts"
 
-#: components/class-m-chart.php:216
+#: components/class-m-chart.php:203
 msgid "No Charts found"
 msgstr "No Charts found"
 
-#: components/class-m-chart.php:217
+#: components/class-m-chart.php:204
 msgid "No Charts found in the Trash"
 msgstr "No Charts found in the Trash"
 
-#: components/class-m-chart.php:229
+#: components/class-m-chart.php:216
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "Manage data sets and display them as charts in WordPress."
 
-#: components/class-m-chart.php:939
+#: components/class-m-chart.php:926
 msgid "The chart could not be found"
 msgstr "The chart could not be found"
 
-#: components/class-m-chart.php:949
+#: components/class-m-chart.php:936
 msgid "Embeds of this type are not enabled"
 msgstr "Embeds of this type are not enabled"
 
-#: components/class-m-chart.php:950
+#: components/class-m-chart.php:937
 msgid "Embeds disabled"
 msgstr "Embeds disabled"
 
