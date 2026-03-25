@@ -300,37 +300,8 @@ class M_Chart_Admin {
 			}
 
 			if ( 'chartjs' === $library ) {
-				// Chart.js libs — enqueued explicitly so the React preview has window.Chart.
+				// Chart.js libs — enqueued explicitly so the React preview has window.Chart
 				wp_enqueue_script( 'chartjs-datalabels' ); // also loads chartjs + chartjs-helpers
-			} else {
-				// Non-chartjs libraries still use the jQuery/Handlebars admin.
-				wp_enqueue_script(
-					'jquery-mobile-touch-events',
-					$this->plugin_url . '/components/external/jquery-mobile/jquery-mobile-touch-events.js',
-					[],
-					m_chart()->version
-				);
-
-				wp_enqueue_script(
-					'handlebars',
-					$this->plugin_url . '/components/external/handlebars/handlebars.js',
-					[],
-					m_chart()->version
-				);
-
-				wp_enqueue_script(
-					'canvg',
-					$this->plugin_url . '/components/external/canvg/umd.js',
-					[],
-					m_chart()->version
-				);
-
-				wp_enqueue_script(
-					'm-chart-admin',
-					$this->plugin_url . '/components/js/m-chart-admin.js',
-					[ 'jquery', 'jspreadsheet', 'handlebars' ],
-					m_chart()->version
-				);
 			}
 
 			$post_meta        = m_chart()->get_post_meta( $post_id );
@@ -342,12 +313,12 @@ class M_Chart_Admin {
 			$type_option_names = [];
 			$themes            = [];
 
-			if ( 'chartjs' === $library && m_chart()->library( 'chartjs' ) ) {
-				$chartjs_lib       = m_chart()->library( 'chartjs' );
-				$type_options      = $chartjs_lib->type_options;
-				$type_option_names = $chartjs_lib->type_option_names;
+			if ( m_chart()->library( $library ) ) {
+				$library_class     = m_chart()->library( $library );
+				$type_options      = $library_class->type_options;
+				$type_option_names = $library_class->type_option_names;
 
-				foreach ( $chartjs_lib->get_themes() as $theme ) {
+				foreach ( $library_class->get_themes() as $theme ) {
 					$themes[] = [
 						'slug' => $theme->slug,
 						'name' => $theme->name,
@@ -373,11 +344,11 @@ class M_Chart_Admin {
 
 			$chart_image = m_chart()->get_chart_image( $post_id );
 
-			// Compute initial Chart.js args for the React preview (chartjs only, existing posts only)
+			// Compute initial chart args for the React preview (React-enabled libraries, existing posts only)
 			$initial_chart_args = null;
 
-			if ( $post_id && 'chartjs' === $library ) {
-				$initial_chart_args = m_chart()->library( 'chartjs' )->get_chart_args(
+			if ( $post_id && m_chart()->library( $library ) ) {
+				$initial_chart_args = m_chart()->library( $library )->get_chart_args(
 					$post_id,
 					m_chart()->get_chart_default_args,
 					true,  // force recompute
@@ -420,10 +391,7 @@ class M_Chart_Admin {
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
 			];
 
-			// For chartjs the React app reads m_chart_admin; for other libraries the jQuery
-			// m-chart-admin.js reads it.  Attach to whichever handle is actually enqueued.
-			$localize_handle = 'chartjs' === $library ? 'm-chart-admin-ui' : 'm-chart-admin';
-			wp_localize_script( $localize_handle, 'm_chart_admin', $localize_data );
+			wp_localize_script( 'm-chart-admin-ui', 'm_chart_admin', $localize_data );
 
 			do_action( 'm_chart_admin_scripts', $library, $post_id );
 		}
@@ -478,18 +446,9 @@ class M_Chart_Admin {
 	 * @param object the WP post object as returned by the metabox API
 	 */
 	public function spreadsheet_meta_box( $post ) {
-		$post_meta = m_chart()->get_post_meta( $post->ID );
-
-		if ( 'chartjs' === $post_meta['library'] ) {
-			// React SpreadsheetMetaBox renders everything inside this div.
-			echo '<div id="m-chart-spreadsheet-root"></div>';
-			echo '<textarea name="' . esc_attr( $this->get_field_name( 'data' ) ) . '" class="data hide"></textarea>';
-			wp_nonce_field( m_chart()->slug . '-save-post', $this->get_field_name( 'nonce' ) );
-		} else {
-			// Non-chartjs libraries (e.g. Highcharts) still use the PHP template.
-			$sheet_data = empty( $post_meta['data'] ) ? [ [ '' ] ] : $post_meta['data']['sets'];
-			require_once __DIR__ . '/templates/spreadsheet-meta-box.php';
-		}
+		echo '<div id="m-chart-spreadsheet-root"></div>';
+		echo '<textarea name="' . esc_attr( $this->get_field_name( 'data' ) ) . '" class="data hide"></textarea>';
+		wp_nonce_field( m_chart()->slug . '-save-post', $this->get_field_name( 'nonce' ) );
 	}
 
 	/**
@@ -502,11 +461,8 @@ class M_Chart_Admin {
 		m_chart()->instance = 1;
 
 		$post_meta = m_chart()->get_post_meta( $post->ID );
-
-		// For chartjs, React renders the preview; PHP only needed for other libraries
-		$chart    = 'chartjs' !== $post_meta['library'] ? m_chart()->get_chart( $post->ID ) : '';
-		$image    = m_chart()->get_chart_image( $post->ID );
-		$settings = m_chart()->get_settings();
+		$image     = m_chart()->get_chart_image( $post->ID );
+		$settings  = m_chart()->get_settings();
 
 		require_once __DIR__ . '/templates/chart-meta-box.php';
 	}
@@ -520,29 +476,6 @@ class M_Chart_Admin {
 		if ( 'post' !== $screen->base || m_chart()->slug !== $screen->post_type ) {
 			return;
 		}
-
-		$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0;
-		$library = $post_id
-			? m_chart()->get_post_meta( absint( $post_id ), 'library' )
-			: m_chart()->get_library();
-
-		if ( 'chartjs' !== $library ) {
-			// Non-chartjs libraries still use jQuery-based CSV handling via hidden forms.
-			?>
-<form id="<?php echo esc_attr( $this->get_field_id( 'csv-import-form' ) ); ?>" style="display: none;">
-	<input type="file" name="import_csv_file" id="<?php echo esc_attr( $this->get_field_id( 'csv-file' ) ); ?>"
-		class="hide" />
-</form>
-<form action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=m_chart_export_csv' ) ); ?>"
-	id="<?php echo esc_attr( $this->get_field_id( 'csv-export-form' ) ); ?>" style="display: none;" method="post">
-	<input type="hidden" name="post_id" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-post-id' ) ); ?>" />
-	<input type="hidden" name="data" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-data' ) ); ?>" />
-	<input type="hidden" name="title" value="" id="<?php echo esc_attr( $this->get_field_id( 'csv-title' ) ); ?>" />
-	<input type="hidden" name="set_name" value=""
-		id="<?php echo esc_attr( $this->get_field_id( 'csv-set-name' ) ); ?>" />
-</form>
-			<?php
-		}
 		?>
 <script type="text/javascript">
 		<?php do_action( 'm_chart_admin_footer_javascript' ); ?>
@@ -551,7 +484,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Inserts a subtitle field under the title field on the chart edit form and includes the handlebars templates we'll need
+	 * Inserts a subtitle field under the title field on the chart edit form
 	 *
 	 * @param object the WP post object as returned by the metabox API
 	 */
@@ -560,17 +493,7 @@ class M_Chart_Admin {
 			return;
 		}
 
-		$post_meta = m_chart()->get_post_meta( $post->ID );
-
-		if ( 'chartjs' === $post_meta['library'] ) {
-			// React SubtitleField renders into this mount div.
-			echo '<div id="m-chart-subtitle-root"></div>';
-		} else {
-			// Non-chartjs libraries still use the PHP-rendered subtitle input.
-			require_once __DIR__ . '/templates/subtitle-field.php';
-			// Handlebars templates are needed for the jQuery-based spreadsheet UI.
-			require_once __DIR__ . '/templates/handlebars.php';
-		}
+		echo '<div id="m-chart-subtitle-root"></div>';
 	}
 
 	/**

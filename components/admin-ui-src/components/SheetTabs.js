@@ -22,7 +22,12 @@ export default function SheetTabs() {
 	const { state, dispatch } = useChartAdmin();
 	const { postMeta, sheetIds, setNames, activeSheet, newSheetId } = state;
 
-	const showTabs = MULTI_SHEET_TYPES.has( postMeta.type );
+	// Allow library plugins to customize which chart types support multiple sheets
+	const multiSheetTypes = window.wp?.hooks
+		? wp.hooks.applyFilters( 'm_chart.multi_sheet_types', [ ...MULTI_SHEET_TYPES ] )
+		: [ ...MULTI_SHEET_TYPES ];
+
+	const showTabs = new Set( multiSheetTypes ).has( postMeta.type );
 
 	function handleAddSheet( e ) {
 		e.preventDefault();

@@ -20,6 +20,13 @@ export function useImageGeneration( chartRef ) {
 			return;
 		}
 
+		// Non-canvas libraries (e.g. Highcharts) handle image generation
+		// via the m_chart.render_done action hook instead.
+		if ( ! chart.canvas ) {
+			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+			return;
+		}
+
 		const { imageWidth, postMeta } = stateRef.current;
 		const chartWidth  = parseInt( imageWidth, 10 );
 		const chartHeight = parseInt( postMeta.height, 10 );

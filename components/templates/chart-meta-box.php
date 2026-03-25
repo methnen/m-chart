@@ -18,19 +18,7 @@ if ( ! m_chart()->is_valid_library( $post_meta['library'] ) ) {
 	return;
 }
 
-if ( 'chartjs' === $post_meta['library'] ) {
-	// React admin app renders both the chart preview and the settings form.
-	echo '<div id="m-chart-chart-root"></div>';
-	?>
-	<canvas id="<?php echo esc_attr( $this->get_field_id( 'canvas-render-' . absint( $post->ID ) ) ); ?>" class="hide"></canvas>
-	<textarea name="<?php echo esc_attr( $this->get_field_name( 'img' ) ); ?>" class="hide" id="<?php echo esc_attr( $this->get_field_id( 'img' ) ); ?>"></textarea>
-	<?php
-} else {
-	// Other libraries (e.g. highcharts) still use the PHP chart + settings template.
-	echo $chart;
-	?>
-	<canvas id="<?php echo esc_attr( $this->get_field_id( 'canvas-render-' . absint( $post->ID ) ) ); ?>" class="hide"></canvas>
-	<textarea name="<?php echo esc_attr( $this->get_field_name( 'img' ) ); ?>" class="hide" id="<?php echo esc_attr( $this->get_field_id( 'img' ) ); ?>"></textarea>
-	<?php
-	require apply_filters( 'm_chart_settings_template', __DIR__ . '/' . $post_meta['library'] . '-settings.php', $post_meta['library'] );
-}
+echo '<div id="m-chart-chart-root"></div>';
+?>
+<canvas id="<?php echo esc_attr( $this->get_field_id( 'canvas-render-' . absint( $post->ID ) ) ); ?>" class="hide"></canvas>
+<textarea name="<?php echo esc_attr( $this->get_field_name( 'img' ) ); ?>" class="hide" id="<?php echo esc_attr( $this->get_field_id( 'img' ) ); ?>"></textarea>

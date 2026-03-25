@@ -57,16 +57,25 @@ document.querySelectorAll( '.m-chart' ).forEach( el => {
 } );
 ```
 
-### Settings Panel (PHP filter still exists; JS filter added)
+### Settings Panel
 
-The PHP filter `m_chart_settings_template` is unchanged and continues to control which PHP template is loaded for non-chartjs libraries. For Chart.js, settings are now rendered by a React component.
-
-Library plugins that need to inject custom settings into the Chart.js admin panel should use the JS filter (to be wired in a future release):
+Library plugins that need to replace the settings panel should use the `m_chart.settings_component` filter. The filter receives the default settings component and should return a replacement React component:
 
 ```js
-// Placeholder — not yet wired; contact the M Chart maintainers if you need this.
 wp.hooks.addFilter( 'm_chart.settings_component', 'my-plugin', function( DefaultSettings ) {
     return MyCustomSettingsComponent;
+} );
+```
+
+### Multi-Sheet Chart Types
+
+By default only certain chart types (scatter, bubble, radar, radar-area) show the multi-sheet tab bar. Library plugins can add or remove types via the `m_chart.multi_sheet_types` filter:
+
+```js
+wp.hooks.addFilter( 'm_chart.multi_sheet_types', 'my-plugin', function( types ) {
+    // types is an array of type slugs, e.g. [ 'scatter', 'bubble', 'radar', 'radar-area' ]
+    types.push( 'my-custom-type' );
+    return types;
 } );
 ```
 
@@ -78,7 +87,7 @@ wp.hooks.addFilter( 'm_chart.settings_component', 'my-plugin', function( Default
 - The **Gutenberg block** is unchanged.
 - The **PHP AJAX handlers** (`ajax_get_chart_args`, `ajax_import_csv`, `ajax_export_csv`) are unchanged — React calls the same endpoints.
 - The **PHP save logic** (`save_post`, `validate_post_meta`) is unchanged — the form still submits all fields with the same `name="m-chart[field]"` attributes.
-- **Non-chartjs libraries** (e.g. Highcharts) continue to use the legacy jQuery admin stack.
+- **Non-chartjs libraries** (e.g. Highcharts) now use the React admin stack. Library plugins should use the JS hooks above to customize rendering and settings.
 
 ---
 
