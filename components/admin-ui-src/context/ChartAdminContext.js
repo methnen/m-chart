@@ -58,6 +58,9 @@ const initialState = {
 	// Controls whether the WordPress Save/Publish buttons are enabled
 	formEnabled: false,
 
+	// True when the user clicked Save/Update while the chart was still refreshing
+	pendingSubmit: false,
+
 	// Static config from PHP — library-specific options for the settings form
 	typeOptions:     m_chart_admin.type_options       || [],
 	typeOptionNames: m_chart_admin.type_option_names  || {},
@@ -77,7 +80,8 @@ function reducer( state, action ) {
 		case 'SET_SHEET_DATA': {
 			const spreadsheetData = [ ...state.spreadsheetData ];
 			spreadsheetData[ action.payload.index ] = action.payload.data;
-			return { ...state, spreadsheetData };
+			// Disable form immediately so a submit during the refresh window is gated
+			return { ...state, spreadsheetData, formEnabled: false };
 		}
 
 		case 'ADD_SHEET': {
@@ -127,6 +131,9 @@ function reducer( state, action ) {
 
 		case 'SET_FORM_ENABLED':
 			return { ...state, formEnabled: action.payload };
+
+		case 'SET_PENDING_SUBMIT':
+			return { ...state, pendingSubmit: action.payload };
 
 		case 'SET_SUBTITLE':
 			return {

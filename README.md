@@ -51,6 +51,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Better handling of charts when Chart is missing an image or M Chart performance settings have disabled images
 * Lots of additional code modernization and style improvements that didn't effect functionality but should make code easier to maintain going forward
 * Fixed an issue where a duplicate localization call could cause localization in the Block ui to not always load
+* Fixed an issue where changing a cell value and then clicking Update could result in lost data and/or an incorrect image
 
 ### 1.12 ###
 
