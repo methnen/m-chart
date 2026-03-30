@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Jamie Poitra
+Copyright (c) 2015-2026 Jamie Poitra
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 License info for libraries found in `components/external`:
-- [canvg](https://github.com/gabelerner/canvg/)
-	- License at the time of writing: MIT
-- [handlebars](https://github.com/wycats/handlebars.js/)
-	- License at the time of writing: MIT
-- [handsontable](https://github.com/handsontable/handsontable)
+- [Jspreadsheet CE](https://github.com/jspreadsheet/ce)
 	- License at the time of writing: MIT
 - [Chart.js](https://github.com/chartjs/Chart.js)
 	- License at the time of writing: MIT
