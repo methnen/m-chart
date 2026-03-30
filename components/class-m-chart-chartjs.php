@@ -653,6 +653,10 @@ class M_Chart_Chartjs {
 							continue;
 						}
 
+						if ( ! isset( $data_array[ $data_key + 1 ] ) ) {
+							continue;
+						}
+
 						$new_data_array[] = [
 							'x' => $data,
 							'y' => $data_array[ $data_key + 1 ],
@@ -690,6 +694,10 @@ class M_Chart_Chartjs {
 				} else {
 					foreach ( $data_array as $data_key => $data ) {
 						if ( $data_key % 3 ) {
+							continue;
+						}
+
+						if ( ! isset( $data_array[ $data_key + 1 ] ) || ! isset( $data_array[ $data_key + 2 ] ) ) {
 							continue;
 						}
 

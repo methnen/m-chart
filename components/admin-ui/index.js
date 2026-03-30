@@ -2312,12 +2312,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ChartMetaBox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ChartMetaBox */ "./components/admin-ui-src/components/ChartMetaBox.js");
 /* harmony import */ var _components_SpreadsheetMetaBox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/SpreadsheetMetaBox */ "./components/admin-ui-src/components/SpreadsheetMetaBox.js");
 /* harmony import */ var _components_SubtitleField__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/SubtitleField */ "./components/admin-ui-src/components/SubtitleField.js");
+/* harmony import */ var _components_TypeAndThemeRow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/TypeAndThemeRow */ "./components/admin-ui-src/components/TypeAndThemeRow.js");
+/* harmony import */ var _components_ParseAndFlagsRow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/ParseAndFlagsRow */ "./components/admin-ui-src/components/ParseAndFlagsRow.js");
+/* harmony import */ var _components_AxisRows__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/AxisRows */ "./components/admin-ui-src/components/AxisRows.js");
+/* harmony import */ var _components_ShortcodeAndImageRow__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/ShortcodeAndImageRow */ "./components/admin-ui-src/components/ShortcodeAndImageRow.js");
 
 
 
 
 
 
+
+
+
+
+
+// Expose shared context hook and settings row components for library plugins
+// that implement the m_chart.settings_component filter without a build step
+window.m_chart = {
+  useChartAdmin: _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.useChartAdmin,
+  TypeAndThemeRow: _components_TypeAndThemeRow__WEBPACK_IMPORTED_MODULE_6__["default"],
+  ParseAndFlagsRow: _components_ParseAndFlagsRow__WEBPACK_IMPORTED_MODULE_7__["default"],
+  AxisRows: _components_AxisRows__WEBPACK_IMPORTED_MODULE_8__["default"],
+  ShortcodeAndImageRow: _components_ShortcodeAndImageRow__WEBPACK_IMPORTED_MODULE_9__["default"]
+};
 
 /**
  * The admin UI spans multiple meta boxes and the title area, so we use a single

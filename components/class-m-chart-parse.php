@@ -97,10 +97,7 @@ class M_Chart_Parse {
 
 		if ( '' == $this->data[0][0] ) {
 			return self::LABELS_BOTH;
-		} elseif (
-			   ! is_numeric( $this->clean_data_point( $this->data[0][0], false ) )
-			&& ! is_numeric( $this->clean_data_point( $this->data[1][0], false ) )
-		) {
+		} elseif ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
 			return self::LABELS_FIRST_COLUMN;
 		}
 

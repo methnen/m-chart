@@ -1,8 +1,22 @@
 import { createRoot, createPortal } from '@wordpress/element';
-import { ChartAdminProvider } from './context/ChartAdminContext';
-import ChartMetaBox from './components/ChartMetaBox';
-import SpreadsheetMetaBox from './components/SpreadsheetMetaBox';
-import SubtitleField from './components/SubtitleField';
+import { ChartAdminProvider, useChartAdmin } from './context/ChartAdminContext';
+import ChartMetaBox         from './components/ChartMetaBox';
+import SpreadsheetMetaBox   from './components/SpreadsheetMetaBox';
+import SubtitleField        from './components/SubtitleField';
+import TypeAndThemeRow      from './components/TypeAndThemeRow';
+import ParseAndFlagsRow     from './components/ParseAndFlagsRow';
+import AxisRows             from './components/AxisRows';
+import ShortcodeAndImageRow from './components/ShortcodeAndImageRow';
+
+// Expose shared context hook and settings row components for library plugins
+// that implement the m_chart.settings_component filter without a build step
+window.m_chart = {
+	useChartAdmin,
+	TypeAndThemeRow,
+	ParseAndFlagsRow,
+	AxisRows,
+	ShortcodeAndImageRow,
+};
 
 /**
  * The admin UI spans multiple meta boxes and the title area, so we use a single
