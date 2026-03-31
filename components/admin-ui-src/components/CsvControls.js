@@ -154,7 +154,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		formData.append( 'set_name', setName );
 
 		// Create a temporary form and submit it
-		// We have to do it this way so to trigger a download
+		// We have to do it this way to trigger a download
 		const form    = document.createElement( 'form' );
 		form.action   = `${ ajaxUrl }?action=m_chart_export_csv`;
 		form.method   = 'post';
