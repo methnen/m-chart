@@ -41,7 +41,7 @@ function prepareArgs( args ) {
  * @param {Function}            onComplete      Callback to fire after render completes
  * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
  *
- * @return {Object}             he Chart.js instance
+ * @return {Object}             The Chart.js instance
  */
 function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	const prepared = prepareArgs( args );
@@ -104,7 +104,7 @@ export default function ChartPreview() {
 
 	const generateImage = useImageGeneration( chartRef );
 
-	// Cleanup — destroy chart instance on unmount.
+	// Cleanup — destroy chart instance on unmount
 	useEffect( () => {
 		return () => {
 			if ( chartRef.current ) {

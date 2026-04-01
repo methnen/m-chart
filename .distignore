@@ -11,6 +11,7 @@
 /components/sass
 /config.rb
 /deploy
+/docs
 /DEVELOPERS.md
 /Gruntfile.js
 /node_modules

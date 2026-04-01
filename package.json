@@ -1,10 +1,14 @@
 {
   "name": "m-chart",
   "devDependencies": {
+    "@vuepress/bundler-vite": "2.0.0-rc.26",
+    "@vuepress/plugin-shiki": "2.0.0-rc.124",
+    "@vuepress/theme-default": "2.0.0-rc.125",
     "@wordpress/scripts": "26.9.0",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.0.0",
     "uglify-js": "^3.19.3",
+    "vuepress": "2.0.0-rc.26",
     "wp-readme-to-markdown": "^1.0.0"
   },
   "dependencies": {
@@ -19,6 +23,8 @@
     "build:readme": "wp-readme-to-md --screenshot-url=https://methnen.com/misc/m-chart/{screenshot}.png",
     "build:i18n": "node scripts/merge-i18n-json.js",
     "build": "npm run build:block && npm run build:admin-ui && npm run build:css && npm run build:js && npm run build:readme",
+    "build:docs": "vuepress build docs",
+    "docs:dev": "vuepress dev docs",
     "watch:block": "wp-scripts start --output-path=components/block --webpack-src-dir=components/block-src",
     "watch:admin-ui": "wp-scripts start --output-path=components/admin-ui --webpack-src-dir=components/admin-ui-src",
     "watch:css": "sass --watch components/sass/m-chart-admin.scss:components/css/m-chart-admin.css",
