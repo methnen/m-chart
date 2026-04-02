@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Formats a number using the Chart.js locale-aware helper.
+ * Formats a number using the Chart.js locale-aware helper
  *
  * @param {number} number
  * @param {string} locale BCP 47 locale string (e.g. 'en-US').
@@ -12,7 +12,7 @@ function numberFormat( number, locale ) {
 }
 
 /**
- * Preprocesses bubble chart data so bubble size is constrained but still relative to value.
+ * Preprocesses bubble chart data so bubble size is constrained but still relative to value
  * See https://chartio.com/learn/charts/bubble-chart-complete-guide/#scale-bubble-area-by-value
  *
  * @param {Object} data Chart.js data object.
@@ -47,15 +47,16 @@ function preprocessBubbleData( data ) {
 }
 
 /**
- * Tooltip label for bubble charts.
+ * Tooltip label for bubble charts
  *
- * @param {Object} item Chart.js tooltip item.
+ * @param {Object} item Chart.js tooltip item
  * @return {string[]}
  */
 function bubbleChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
 	const lines  = [ item.dataset.label ];
 
+	// If we've got data point labels we include them in the tooltip
 	if ( item.raw?.label ) {
 		lines.push( item.raw.label );
 	}
@@ -70,15 +71,16 @@ function bubbleChartTooltipLabel( item ) {
 }
 
 /**
- * Tooltip label for scatter charts.
+ * Tooltip label for scatter charts
  *
- * @param {Object} item Chart.js tooltip item.
+ * @param {Object} item Chart.js tooltip item
  * @return {string[]}
  */
 function scatterChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
 	const lines  = [ item.dataset.label ];
 
+	// If we've got data point labels we include them in the tooltip
 	if ( item.raw?.label ) {
 		lines.push( item.raw.label );
 	}
@@ -92,10 +94,10 @@ function scatterChartTooltipLabel( item ) {
 }
 
 /**
- * Tooltip label for standard charts.
- * Reads type and labelsPos directly from the chart instance.
+ * Tooltip label for standard charts
+ * Reads type and labelsPos directly from the chart instance
  *
- * @param {Object} item Chart.js tooltip item.
+ * @param {Object} item Chart.js tooltip item
  * @return {string|null}
  */
 function chartTooltipLabel( item ) {
@@ -139,8 +141,8 @@ function chartTooltipLabel( item ) {
 		label += ': ';
 	}
 
-	// Format the value using the raw data struct (prefix + localized number + suffix),
-	// Fall back to a plain formatted number if rawData is not available.
+	// Format the value using the raw data struct (prefix + localized number + suffix)
+	// Fall back to a plain formatted number if rawData is not available
 	var raw = item.dataset.rawData && item.dataset.rawData[ item.dataIndex ];
 	var rawValue;
 
@@ -156,12 +158,10 @@ function chartTooltipLabel( item ) {
 }
 
 /**
- * Chart.js plugin that sets up m-chart tooltip callbacks, datalabels formatter,
- * and bubble data preprocessing.
+ * Chart.js plugin that sets up m-chart tooltip callbacks, datalabels formatter, and bubble data preprocessing
  *
- * beforeUpdate — runs before every render cycle (creation and updates); preprocesses
- *                bubble radii (idempotent via d.original), sets tooltip callbacks,
- *                and sets the datalabels formatter so they survive options replacement.
+ * beforeUpdate: runs before every render cycle (creation and updates)
+ * preprocesses bubble radii, sets tooltip callbacks, and sets the datalabels formatter so they survive options replacement
  */
 const MChartHelper = {
 	id: 'm-chart-helper',
@@ -197,14 +197,14 @@ const MChartHelper = {
 			}
 
 			if ( 'bubble' === type ) {
-				// Use prefix/suffix stored by preprocessBubbleData; show the original (pre-scaled) r value.
+				// Use prefix/suffix stored by preprocessBubbleData; show the original (pre-scaled) r value
 				const prefix = label.originalPrefix || '';
 				const suffix = label.originalSuffix || '';
 				return prefix + numberFormat( label.original, locale ) + suffix;
 			}
 
 			if ( 'scatter' === type ) {
-				// Show the Y value. rawData[dataIndex] is an array for LABELS_BOTH, a struct for flat.
+				// Show the Y value, rawData[dataIndex] is an array for LABELS_BOTH, a struct for flat
 				const rawEntry = rawData && rawData[ dataIndex ];
 				var rawY;
 
@@ -225,7 +225,7 @@ const MChartHelper = {
 				return numberFormat( label.y, locale );
 			}
 
-			// Standard charts: use the raw data struct (prefix + localized number + suffix).
+			// Standard charts: use the raw data struct (prefix + localized number + suffix)
 			var raw = rawData && rawData[ dataIndex ];
 
 			if ( raw && null !== raw.value ) {
@@ -236,7 +236,7 @@ const MChartHelper = {
 				return raw.text;
 			}
 
-			// Fallback: format the scalar as a number if possible.
+			// Fallback: format the scalar as a number if possible
 			if ( Number.isFinite( Number( label ) ) ) {
 				return numberFormat( label, locale );
 			}
