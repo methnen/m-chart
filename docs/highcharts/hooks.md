@@ -57,4 +57,14 @@ add_filter( 'm_chart_enable_highcharts_export', '__return_false' );
 
 ### `m_chart_highcharts_available_themes`
 
-Available since version 1.2.3. Filters the array of available Highcharts themes. See [Highcharts Themes](./themes.md).
+Available since version 1.2.3. Filters the array of available Highcharts themes. Use this to add, remove, or modify themes programmatically.
+
+```php
+add_filter( 'm_chart_highcharts_available_themes', function( $themes ) {
+	// Remove a built-in theme
+	unset( $themes['highcharts-v3'] );
+	return $themes;
+} );
+```
+
+See [Highcharts Themes](./themes.md) for information on creating custom themes.

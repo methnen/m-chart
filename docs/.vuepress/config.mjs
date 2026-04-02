@@ -1,7 +1,7 @@
 import { defineUserConfig } from 'vuepress'
 import { defaultTheme } from '@vuepress/theme-default'
 import { viteBundler } from '@vuepress/bundler-vite'
-import { shikiPlugin } from '@vuepress/plugin-shiki'
+import { searchPlugin } from '@vuepress/plugin-search'
 
 export default defineUserConfig( {
 	lang:        'en-US',
@@ -11,19 +11,20 @@ export default defineUserConfig( {
 	bundler:     viteBundler(),
 
 	plugins: [
-		shikiPlugin( { theme: 'monokai' } ),
+		searchPlugin(),
 	],
 
 	theme: defaultTheme( {
-		logo:       '/logo.png',
-		repo:       'methnen/m-chart',
-		docsDir:    'docs',
-		editLink:   false,
+		logo:     '/logo.png',
+		repo:     'methnen/m-chart',
+		docsDir:  'docs',
+		editLink: false,
 
 		navbar: [
-			{ text: 'User Guide',      link: '/guide/' },
-			{ text: 'Developer Guide', link: '/developer/' },
+			{ text: 'Users',      link: '/guide/' },
 			{ text: 'Highcharts',      link: '/highcharts/' },
+			{ text: 'Developers', link: '/developer/' },
+			{ text: 'Download',      link: 'https://wordpress.org/plugins/m-chart/' },
 		],
 
 		sidebar: {

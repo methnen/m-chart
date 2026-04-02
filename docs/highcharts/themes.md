@@ -47,12 +47,4 @@ The `options` array is merged directly into the Highcharts configuration object,
 
 ## Filtering Available Themes
 
-Use the `m_chart_highcharts_available_themes` filter (available since v1.2.3) to add, remove, or modify themes programmatically:
-
-```php
-add_filter( 'm_chart_highcharts_available_themes', function( $themes ) {
-	// Remove a built-in theme
-	unset( $themes['highcharts-v3'] );
-	return $themes;
-} );
-```
+Use the [`m_chart_highcharts_available_themes`](./hooks.md#m-chart-highcharts-available-themes) filter to add, remove, or modify themes programmatically.

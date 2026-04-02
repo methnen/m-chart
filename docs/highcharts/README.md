@@ -1,4 +1,4 @@
-# Highcharts
+# Highcharts Guide
 
 The [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library) plugin extends M Chart to support [Highcharts](https://www.highcharts.com) as the charting library.
 
