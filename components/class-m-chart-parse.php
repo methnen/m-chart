@@ -98,6 +98,15 @@ class M_Chart_Parse {
 		if ( '' == $this->data[0][0] ) {
 			return self::LABELS_BOTH;
 		} elseif ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
+			// If the first row has multiple non-numeric headers and the data rows start
+			// with numeric values the entire first row is column labels (e.g. scatter format)
+			if (
+				   isset( $this->data[0][1] ) && ! is_numeric( trim( (string) $this->data[0][1] ) )
+				&& isset( $this->data[1][0] ) &&   is_numeric( trim( (string) $this->data[1][0] ) )
+			) {
+				return self::LABELS_FIRST_ROW;
+			}
+
 			return self::LABELS_FIRST_COLUMN;
 		}
 

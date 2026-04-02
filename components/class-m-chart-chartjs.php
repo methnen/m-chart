@@ -637,15 +637,25 @@ class M_Chart_Chartjs {
 
 				$new_data_array = [];
 
-				$label_key = ( $this->post_meta['parse_in'] == M_Chart_Parse::PARSE_ROWS ) ? M_Chart_Parse::LABELS_FIRST_COLUMN : M_Chart_Parse::LABELS_FIRST_ROW;
-
 				if ( M_Chart_Parse::LABELS_BOTH == $parse->value_labels_position ) {
-					foreach ( $data_array as $data_key => $data ) {
-						$new_data_array[] = [
-							'x'     => $data[0],
-							'y'     => $data[1],
-							'label' => $parse->value_labels[ $label_key ][ $data_key ],
-						];
+					if ( M_Chart_Parse::PARSE_COLUMNS == $this->post_meta['parse_in'] ) {
+						// PARSE_COLUMNS: set_data is [x_values_array, y_values_array] — zip by index
+						foreach ( $data_array[0] as $i => $x ) {
+							$new_data_array[] = [
+								'x'     => $x,
+								'y'     => $data_array[1][ $i ],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $i ],
+							];
+						}
+					} else {
+						// PARSE_ROWS: set_data is [[x1,y1], [x2,y2], ...] — one entry per point
+						foreach ( $data_array as $data_key => $data ) {
+							$new_data_array[] = [
+								'x'     => $data[0],
+								'y'     => $data[1],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $data_key ],
+							];
+						}
 					}
 				} else {
 					foreach ( $data_array as $data_key => $data ) {
@@ -680,16 +690,27 @@ class M_Chart_Chartjs {
 
 				$new_data_array = [];
 
-				$label_key = ( $this->post_meta['parse_in'] == M_Chart_Parse::PARSE_ROWS ) ? M_Chart_Parse::LABELS_FIRST_COLUMN : M_Chart_Parse::LABELS_FIRST_ROW;
-
 				if ( M_Chart_Parse::LABELS_BOTH == $parse->value_labels_position ) {
-					foreach ( $data_array as $data_key => $data ) {
-						$new_data_array[] = [
-							'x'     => $data[0],
-							'y'     => $data[1],
-							'r'     => $data[2],
-							'label' => $parse->value_labels[ $label_key ][ $data_key ],
-						];
+					if ( M_Chart_Parse::PARSE_COLUMNS == $this->post_meta['parse_in'] ) {
+						// PARSE_COLUMNS: set_data is [x_values_array, y_values_array, r_values_array] — zip by index
+						foreach ( $data_array[0] as $i => $x ) {
+							$new_data_array[] = [
+								'x'     => $x,
+								'y'     => $data_array[1][ $i ],
+								'r'     => $data_array[2][ $i ],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $i ],
+							];
+						}
+					} else {
+						// PARSE_ROWS: set_data is [[x1,y1,r1], [x2,y2,r2], ...] — one entry per point
+						foreach ( $data_array as $data_key => $data ) {
+							$new_data_array[] = [
+								'x'     => $data[0],
+								'y'     => $data[1],
+								'r'     => $data[2],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $data_key ],
+							];
+						}
 					}
 				} else {
 					foreach ( $data_array as $data_key => $data ) {

@@ -1,0 +1,20 @@
+// M Chart brand colors derived from the plugin logo
+// Logo palette:
+//   Bright red-orange (M letterform): #cc3311
+//   Coral/salmon (background):        #e8714e
+//   Dark maroon (shadow facets):      #8c1717
+//   Light highlight:                  #f5a090
+
+:root {
+  --vp-c-accent:       #cc3311;
+  --vp-c-accent-bg:    #e8714e;
+  --vp-c-accent-hover: #aa2a0d;
+  --vp-c-accent-soft:  rgb(204 51 17 / 14%);
+}
+
+[data-theme='dark'] {
+  --vp-c-accent:       #e8714e;
+  --vp-c-accent-bg:    #cc3311;
+  --vp-c-accent-hover: #f5a090;
+  --vp-c-accent-soft:  rgb(232 113 78 / 16%);
+}

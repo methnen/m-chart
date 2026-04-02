@@ -19,23 +19,26 @@ function numberFormat( number, locale ) {
  * @return {Object}
  */
 function preprocessBubbleData( data ) {
-	const valueRange = data.datasets[0].data.reduce( ( acc, val ) => Math.max( acc, val.r ), 0 );
 	const pixelMax   = 31;
 	const pixelMin   = 1;
 	const pixelRange = pixelMax - pixelMin;
+
+	// Use the stored original value if available so re-runs always scale from the true value
+	const valueRange = data.datasets[0].data.reduce( ( acc, val ) => Math.max( acc, val.original ?? val.r ), 0 );
 
 	for ( const ds of data.datasets ) {
 		const rawData      = ds.rawData || [];
 		const isStructured = Array.isArray( rawData[0] );
 
 		ds.data.forEach( ( d, i ) => {
-			d.original = d.r;
+			const trueR = d.original ?? d.r;
+			d.original  = trueR;
 
 			const rawR = isStructured ? ( rawData[ i ] && rawData[ i ][ 2 ] ) : rawData[ i * 3 + 2 ];
 			d.originalPrefix = ( rawR && rawR.prefix ) ? rawR.prefix : '';
 			d.originalSuffix = ( rawR && rawR.suffix ) ? rawR.suffix : '';
 
-			const percentageRadius = Math.sqrt( Math.abs( d.r ) / valueRange );
+			const percentageRadius = Math.sqrt( Math.abs( trueR ) / valueRange );
 			d.r = percentageRadius * pixelRange + pixelMin;
 		} );
 	}
@@ -51,13 +54,19 @@ function preprocessBubbleData( data ) {
  */
 function bubbleChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
+	const lines  = [ item.dataset.label ];
 
-	return [
-		item.raw.label,
+	if ( item.raw?.label ) {
+		lines.push( item.raw.label );
+	}
+
+	lines.push(
 		item.chart.data.labels[0] + ': ' + numberFormat( item.parsed.x, locale ),
 		item.chart.data.labels[1] + ': ' + numberFormat( item.parsed.y, locale ),
 		item.chart.data.labels[2] + ': ' + numberFormat( item.raw.original, locale ),
-	];
+	);
+
+	return lines;
 }
 
 /**
@@ -68,12 +77,18 @@ function bubbleChartTooltipLabel( item ) {
  */
 function scatterChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
+	const lines  = [ item.dataset.label ];
 
-	return [
-		item.dataset.label,
+	if ( item.raw?.label ) {
+		lines.push( item.raw.label );
+	}
+
+	lines.push(
 		item.chart.data.labels[0] + ': ' + numberFormat( item.parsed.x, locale ),
 		item.chart.data.labels[1] + ': ' + numberFormat( item.parsed.y, locale ),
-	];
+	);
+
+	return lines;
 }
 
 /**
@@ -144,30 +159,25 @@ function chartTooltipLabel( item ) {
  * Chart.js plugin that sets up m-chart tooltip callbacks, datalabels formatter,
  * and bubble data preprocessing.
  *
- * beforeInit  — runs once at chart creation; handles bubble data preprocessing,
- *               which must only run once since it mutates dataset values.
- * beforeUpdate — runs before every render cycle (creation and updates); sets
- *                tooltip callbacks and datalabels formatter so they survive
- *                options replacement on chart updates.
+ * beforeUpdate — runs before every render cycle (creation and updates); preprocesses
+ *                bubble radii (idempotent via d.original), sets tooltip callbacks,
+ *                and sets the datalabels formatter so they survive options replacement.
  */
 const MChartHelper = {
 	id: 'm-chart-helper',
-
-	beforeInit( chart ) {
-		if ( 'bubble' === chart.config.type ) {
-			preprocessBubbleData( chart.config.data );
-		}
-	},
 
 	beforeUpdate( chart ) {
 		const type = chart.config.type;
 
 		if ( 'bubble' === type ) {
+			preprocessBubbleData( chart.config.data );
+
 			chart.options.plugins.tooltip.callbacks = {
 				label: ( item ) => bubbleChartTooltipLabel( item ),
 			};
 		} else if ( 'scatter' === type ) {
 			chart.options.plugins.tooltip.callbacks = {
+				title: () => '',
 				label: ( item ) => scatterChartTooltipLabel( item ),
 			};
 		} else {
