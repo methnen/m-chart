@@ -1,3 +1,4 @@
+import { useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import SheetTab from './SheetTab';
@@ -23,11 +24,16 @@ export default function SheetTabs() {
 	const { postMeta, sheetIds, setNames, activeSheet, newSheetId } = state;
 
 	// Allow library plugins to customize which chart types support multiple sheets
-	const multiSheetTypes = window.wp?.hooks
-		? wp.hooks.applyFilters( 'm_chart.multi_sheet_types', [ ...MULTI_SHEET_TYPES ] )
-		: [ ...MULTI_SHEET_TYPES ];
+	// useMemo with [] ensures the filter runs once — filters are registered at load time
+	// and the resulting Set is stable, so showTabs only re-evaluates when postMeta.type changes
+	const multiSheetTypes = useMemo( () => {
+		const types = window.wp?.hooks
+			? wp.hooks.applyFilters( 'm_chart.multi_sheet_types', [ ...MULTI_SHEET_TYPES ] )
+			: [ ...MULTI_SHEET_TYPES ];
+		return new Set( types );
+	}, [] );
 
-	const showTabs = new Set( multiSheetTypes ).has( postMeta.type );
+	const showTabs = multiSheetTypes.has( postMeta.type );
 
 	function handleAddSheet( e ) {
 		e.preventDefault();

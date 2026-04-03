@@ -121,7 +121,7 @@ Before triggering the workflow:
 - Bump the version number in `m-chart.php`, `class-m-chart.php`, and `readme.txt`
 - Run `npm run build` and commit all compiled assets
 - Run `npm run build:readme` and commit the updated `README.md`
-- Target the `master` branch when running the workflow
+- Target the `main` branch when running the workflow
 
 ---
 

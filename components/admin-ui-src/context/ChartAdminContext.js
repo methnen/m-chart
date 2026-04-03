@@ -1,5 +1,8 @@
 import { createContext, useContext, useReducer } from '@wordpress/element';
 
+const ChartAdminStateContext    = createContext( null );
+const ChartAdminDispatchContext = createContext( null );
+
 const { m_chart_admin } = window;
 
 /**
@@ -146,15 +149,15 @@ function reducer( state, action ) {
 	}
 }
 
-const ChartAdminContext = createContext( null );
-
 export function ChartAdminProvider( { children } ) {
 	const [ state, dispatch ] = useReducer( reducer, initialState );
 
 	return (
-		<ChartAdminContext.Provider value={ { state, dispatch } }>
-			{ children }
-		</ChartAdminContext.Provider>
+		<ChartAdminDispatchContext.Provider value={ dispatch }>
+			<ChartAdminStateContext.Provider value={ state }>
+				{ children }
+			</ChartAdminStateContext.Provider>
+		</ChartAdminDispatchContext.Provider>
 	);
 }
 
@@ -162,11 +165,26 @@ export function ChartAdminProvider( { children } ) {
  * Convenience hook — returns { state, dispatch } from the nearest provider
  */
 export function useChartAdmin() {
-	const context = useContext( ChartAdminContext );
+	const state    = useContext( ChartAdminStateContext );
+	const dispatch = useContext( ChartAdminDispatchContext );
 
-	if ( ! context ) {
+	if ( ! state ) {
 		throw new Error( 'useChartAdmin must be used within a ChartAdminProvider' );
 	}
 
-	return context;
+	return { state, dispatch };
+}
+
+/**
+ * Dispatch-only hook — subscribes only to the dispatch context
+ * Components using this hook will not re-render on state changes
+ */
+export function useChartDispatch() {
+	const dispatch = useContext( ChartAdminDispatchContext );
+
+	if ( ! dispatch ) {
+		throw new Error( 'useChartDispatch must be used within a ChartAdminProvider' );
+	}
+
+	return dispatch;
 }

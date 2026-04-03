@@ -35,5 +35,5 @@ npm install
 | `npm run watch:admin-ui` | Watch the React admin app only |
 
 ::: tip
-For additional build commands, translation tooling, and test setup, see [DEVELOPERS.md](https://github.com/methnen/m-chart/blob/master/DEVELOPERS.md) in the repository.
+For additional build commands, translation tooling, and test setup, see [DEVELOPERS.md](https://github.com/methnen/m-chart/blob/main/DEVELOPERS.md) in the repository.
 :::

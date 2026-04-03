@@ -19,6 +19,11 @@ export function useChartRefresh( title ) {
 	const abortRef   = useRef( null );
 	const isFirstRun = useRef( true );
 
+	// Keep a ref to the values that aren't in the effect deps so the async callback
+	// always reads the latest version without needing them in the deps array
+	const latestRef = useRef( null );
+	latestRef.current = { postId, nonce, ajaxUrl, library, performance, imageSupport };
+
 	useEffect( () => {
 		// Skip the initial mount — the chart is already rendered from the PHP-seeded args
 		if ( isFirstRun.current ) {
@@ -38,6 +43,10 @@ export function useChartRefresh( title ) {
 			}
 
 			abortRef.current = new AbortController();
+
+			// Read from the ref so the async body always has the latest values even if
+			// the component re-rendered between when the timeout was scheduled and when it fires
+			const { postId, nonce, ajaxUrl, library, performance, imageSupport } = latestRef.current;
 
 			dispatch( { type: 'SET_REFRESHING', payload: true } );
 			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
@@ -116,5 +125,5 @@ export function useChartRefresh( title ) {
 				clearTimeout( timerRef.current );
 			}
 		};
-	}, [ postMeta, spreadsheetData, setNames, title ] ); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [ postMeta, spreadsheetData, setNames, title ] );
 }
