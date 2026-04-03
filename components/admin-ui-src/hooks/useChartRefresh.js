@@ -13,6 +13,7 @@ export function useChartRefresh( title ) {
 		postId, nonce, ajaxUrl, library,
 		postMeta, spreadsheetData, setNames,
 		performance, imageSupport,
+		chartArgs,
 	} = state;
 
 	const timerRef   = useRef( null );
@@ -25,9 +26,11 @@ export function useChartRefresh( title ) {
 	latestRef.current = { postId, nonce, ajaxUrl, library, performance, imageSupport };
 
 	useEffect( () => {
-		// Skip the initial mount — the chart is already rendered from the PHP-seeded args
-		if ( isFirstRun.current ) {
+		// On first run we want to skip rendering since the chart will already be rendered
+		// But only if it's not a brand new chart (chartArgs being null indcates chart is new)
+		if ( isFirstRun.current && null !== chartArgs ) {
 			isFirstRun.current = false;
+			
 			return;
 		}
 

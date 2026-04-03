@@ -870,14 +870,29 @@ class M_Chart_Admin {
 			wp_send_json_error( esc_html__( 'Invalid nonce', 'm-chart' ) );
 		}
 
-		// Does the post exist?
-		if ( ! $post = get_post( absint( $_POST['post_id'] ) ) ) {
-			wp_send_json_error( esc_html__( 'Invalid post', 'm-chart' ) );
-		}
+		// Does the post exist? (post_id is 0 for new charts that haven't been saved yet)
+		$post_id = absint( $_POST['post_id'] );
 
-		// Can the user edit this post?
-		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
-			wp_send_json_error( esc_html__( 'Permission error', 'm-chart' ) );
+		if ( $post_id ) {
+			if ( ! $post = get_post( $post_id ) ) {
+				wp_send_json_error( esc_html__( 'Invalid post', 'm-chart' ) );
+			}
+
+			if ( ! current_user_can( 'edit_post', $post->ID ) ) {
+				wp_send_json_error( esc_html__( 'Permission error', 'm-chart' ) );
+			}
+		} else {
+			// New chart — no saved post yet, build a stub so the library can compute chart args
+			if ( ! current_user_can( 'edit_posts' ) ) {
+				wp_send_json_error( esc_html__( 'Permission error', 'm-chart' ) );
+			}
+
+			$post = new WP_Post( (object) [
+				'ID'          => 0,
+				'post_title'  => '',
+				'post_type'   => m_chart()->slug,
+				'post_status' => 'auto-draft',
+			] );
 		}
 
 		// Is this a valid library?
