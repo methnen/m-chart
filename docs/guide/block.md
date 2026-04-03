@@ -16,6 +16,10 @@ When first added, the block displays a chart picker:
 - Scroll down to load more charts
 - Use the **New chart** toolbar button to open a new chart edit screen in a new tab
 
+::: tip
+Only **published** charts appear in the picker. Draft or pending charts will not be listed.
+:::
+
 Click any chart in the list to select it.
 
 ## Working with a Selected Chart

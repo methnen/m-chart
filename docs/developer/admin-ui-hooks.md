@@ -90,18 +90,18 @@ wp.hooks.addAction(
 
 ### `m_chart.render_done`
 
-Fires after the Chart.js chart instance has been created or updated in the admin preview.
+Fires after the chart instance has been created or updated in the admin preview.
 
 ```js
 wp.hooks.addAction(
 	'm_chart.render_done',
 	'my-plugin/render-done',
 	( chart ) => {
-		// `chart` is the Chart.js instance
+		// `chart` is the chart instance for the active library
 		console.log( chart.data );
 	}
 );
 ```
 
 **Parameters:**
-- `chart` _(object)_ — The Chart.js chart instance
+- `chart` _(object)_ — The chart instance for the active library. This is a Chart.js instance when Chart.js is active, or a Highcharts instance when the [M Chart Highcharts Library](../highcharts/javascript-events.md) is active.

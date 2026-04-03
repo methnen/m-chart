@@ -17,7 +17,7 @@ Click the **Import** button below the spreadsheet and select a CSV file from you
 By default, M Chart uses a comma (`,`) as the CSV delimiter. If your CSV uses a different delimiter (e.g. semicolons or tabs), you can:
 
 1. **Override per-import** — A delimiter option appears on the import dialog, allowing you to specify a different character for that import.
-2. **Change the default** — Set a site-wide default delimiter in **Settings → M Chart**.
+2. **Change the default** — Set a site-wide default delimiter in **Chart → Settings**.
 
 ![CSV Controls](/m-chart/ui/csv-import.png)
 

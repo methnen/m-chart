@@ -1,6 +1,6 @@
 # Chart Shortcode
 
-Each chart has an auto-generated shortcode shown at the top of the chart edit screen. The shortcode intelligently selects the best display format based on context.
+Each chart has an auto-generated shortcode shown at the bottom of the chart settings panel. The shortcode intelligently selects the best display format based on context.
 
 ## Default Behavior
 
@@ -34,8 +34,16 @@ Controls the output format explicitly.
 
 ### `share`
 
-Displays an embed code box below the chart, allowing visitors to copy the shortcode and embed the chart on their own WordPress site.
+Displays an embed code box below the chart, allowing visitors to copy the shortcode and embed the chart on their own WordPress site. Requires **iFrame Embedding** to be enabled in **Chart → Settings**.
 
+There are two ways to show the share box:
+
+**As a parameter on the main shortcode:**
+```
+[chart id="123" share="show"]
+```
+
+**As a standalone shortcode** (useful when you want the share box separately from the chart):
 ```
 [chart-share id="123"]
 ```

@@ -18,4 +18,4 @@ Highcharts now requires a commercial license for use on many websites. Review th
 
 ## Switching Libraries
 
-The default library is selected in the **M Chart Settings** page (`Settings → M Chart`). All charts on the site use the library they were created in. Switching libraries does not migrate chart data, but the underlying data format is compatible meaning you can copy/paste the data from a Highcharts chart and use it in a Chart.js chart of the same type.
+The default library is selected in the **M Chart Settings** page (`Chart → Settings`). All charts on the site use the library they were created in. Switching libraries does not migrate chart data, but the underlying data format is compatible meaning you can copy/paste the data from a Highcharts chart and use it in a Chart.js chart of the same type.

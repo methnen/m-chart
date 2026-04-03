@@ -11,4 +11,29 @@ M Chart is extensible via PHP hooks and a JavaScript `wp.hooks` API. This sectio
 
 ## Build Environment
 
-See `DEVELOPERS.md` in the plugin root for instructions on setting up the local build environment, running the React admin UI in watch mode, and building the plugin for distribution.
+To work on the plugin source you will need Node.js installed. Then from the plugin root:
+
+```sh
+npm install
+```
+
+**Build commands:**
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build everything (CSS, JS, block, admin app) |
+| `npm run build:css` | Build CSS only |
+| `npm run build:js` | Minify JS helpers only |
+| `npm run build:block` | Build the Gutenberg block only |
+| `npm run build:admin-ui` | Build the React admin app only |
+
+**Watch commands:**
+
+| Command | Description |
+|---------|-------------|
+| `npm run watch` | Watch everything |
+| `npm run watch:admin-ui` | Watch the React admin app only |
+
+::: tip
+For additional build commands, translation tooling, and test setup, see [DEVELOPERS.md](https://github.com/methnen/m-chart/blob/master/DEVELOPERS.md) in the repository.
+:::

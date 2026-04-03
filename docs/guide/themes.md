@@ -2,15 +2,16 @@
 
 Available since version 1.8 (Chart.js).
 
-Themes control the color palette and point styles used by Chart.js charts. The active default theme is selected in **Settings → M Chart**.
+Themes control the color palette and point styles used by Chart.js charts. The active default theme is selected in **Chart → Settings**.
 
 ## Built-in Themes
 
-M Chart ships with three themes:
+M Chart ships with four themes:
 
 | Theme | Description |
 |-------|-------------|
-| **Chart.js (Default)** | Uses the default Chart.js 4.x color palette |
+| **Chart.js** | Uses the default Chart.js 4.x color palette |
+| **Chart.js 3.x** | Uses the default Chart.js 3.x color palette |
 | **Color Blind Safe** | A palette designed to be distinguishable for users with common forms of color blindness |
 | **Highcharts 4.x** | Approximates the default color scheme from Highcharts 4 |
 

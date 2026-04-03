@@ -40,6 +40,10 @@ document.querySelectorAll( '.m-chart canvas' ).forEach( ( canvas ) => {
 - `instance` _(int)_ — The instance number
 - `chart` _(object)_ — The Chart.js chart instance
 
+::: tip Highcharts
+These same events (`render_start`, `render_done`) are also dispatched when the M Chart Highcharts Library plugin is active. The `chart` property in `render_done` will be the Highcharts chart instance rather than a Chart.js instance. See [Highcharts JavaScript Events](../highcharts/javascript-events.md) for Highcharts-specific details.
+:::
+
 ::: tip Migrating from v1
 In v1.x these events were jQuery custom events (`.on('render_done', ...)`). In v2.0+ they are native `CustomEvent` events dispatched on the canvas element. Event data is accessed via `event.detail` rather than the jQuery handler arguments. See [Migrating to v2](./migrating-v2.md).
 :::

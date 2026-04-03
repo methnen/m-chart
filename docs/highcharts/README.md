@@ -9,7 +9,7 @@ Highcharts requires a commercial license for most websites. Review [Highcharts l
 ## Setup
 
 1. Install and activate the **M Chart Highcharts Library** plugin
-2. Go to **Settings → M Chart** and select **Highcharts** as the active library
+2. Go to **Chart → Settings** and select **Highcharts** as the active library
 
 ## Topics
 

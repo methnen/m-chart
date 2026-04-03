@@ -1,8 +1,16 @@
 # Developer Instructions #
 
+## Documentation ##
+
+Full user and developer documentation is available at **https://methnen.github.io/m-chart/**. The developer section covers PHP hooks, JavaScript events, and the admin UI hooks API.
+
 ## Build Environment Install ##
 
-`npm install`
+```
+npm install
+```
+
+> **Note:** `package.json` includes a `postinstall` script that runs `npm run build` automatically after `npm install` completes. This means a full build will fire on first install — this is expected.
 
 ## Build Commands ##
 
@@ -18,7 +26,7 @@ Build CSS only:
 npm run build:css
 ```
 
-Build JS (minify helpers):
+Build JS (minifies `components/js/m-chart-chartjs-helper.js`):
 
 ```
 npm run build:js
@@ -44,21 +52,27 @@ npm run build:readme
 
 ## Watch Commands ##
 
-Watch everything (CSS, JS, block, and admin app):
+Watch everything (CSS, JS, block, admin app, and readme):
 
 ```
 npm run watch
 ```
 
-Watch admin app only:
+Individual watch targets are also available:
 
-```
-npm run watch:admin-ui
-```
+| Command | Watches |
+|---------|---------|
+| `npm run watch:admin-ui` | React admin app |
+| `npm run watch:block` | Gutenberg block |
+| `npm run watch:css` | SCSS → CSS |
+| `npm run watch:js` | `m-chart-chartjs-helper.js` |
+| `npm run watch:readme` | `readme.txt` → `README.md` |
 
 ## Translations (i18n) ##
 
 PHP translations use `.po` / `.mo` files managed in Poedit. JavaScript translations require additional steps because `wp-scripts` bundles multiple source files into a single compiled file, and WordPress needs handle-named JSON files to load them.
+
+All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
 
 ### Workflow
 
@@ -103,11 +117,17 @@ Deploy to WordPress.org via GitHub Actions:
 
 Actions tab → "Deploy to WordPress.org" → "Run workflow"
 
+Before triggering the workflow:
+- Bump the version number in `m-chart.php`, `class-m-chart.php`, and `readme.txt`
+- Run `npm run build` and commit all compiled assets
+- Run `npm run build:readme` and commit the updated `README.md`
+- Target the `master` branch when running the workflow
+
 ---
 
 ## Admin UI Architecture ##
 
-The chart post-edit screen uses a React app (`components/admin-ui-src/`) compiled to `components/admin-ui/` by `@wordpress/scripts`.
+The chart post-edit screen uses a React app (`components/admin-ui-src/`) compiled to `components/admin-ui/` by `@wordpress/scripts`. As of v2.0 the React admin UI is used for all charting libraries — the previous jQuery + Handlebars stack has been removed.
 
 ### Source layout
 
@@ -118,8 +138,12 @@ components/admin-ui-src/
     ChartAdminContext.js       Single shared reducer (all components read/write here)
   hooks/
     useChartRefresh.js         Debounced AJAX fetch for updated chart args
+    useFormSubmissionGuard.js  Gates Save/Publish buttons on state.formEnabled; blocks
+                               form submission while a chart refresh is in flight
     useImageGeneration.js      Captures Chart.js canvas → base64 PNG → hidden textarea
     useLongPress.js            500ms pointer-event long-press (tab rename on mobile)
+  utils/
+    measureTextWidth.js        Canvas-based text measurement utility
   components/
     ChartMetaBox.js            Root for the Chart meta box (preview + settings)
     ChartPreview.js            Imperative Chart.js instance managed via refs
@@ -138,7 +162,7 @@ components/admin-ui-src/
 
 ### Data flow
 
-1. PHP localises initial state into `window.m_chart_admin` via `wp_localize_script`.
+1. PHP localises initial state into `window.m_chart_admin` via `wp_localize_script` (see `current_screen()` in `class-m-chart-admin.php`). The object contains: plugin metadata (`slug`, `version`), settings (`performance`, `image_support`, `image_multiplier`, etc.), the active `library`, chart post meta, spreadsheet data, available chart types and themes, a nonce, the AJAX URL, and initial chart args.
 2. `ChartAdminContext` seeds a `useReducer` from that object — all components share one context.
 3. User changes (settings, spreadsheet, title, subtitle) update context state.
 4. `useChartRefresh` debounces 300 ms then POSTs to `admin-ajax.php?action=m_chart_get_chart_args`.
@@ -155,9 +179,15 @@ components/admin-ui-src/
 
 All three share a single `ChartAdminProvider` rendered into a hidden container appended to `<form id="post">`, with portals projecting into each mount div.
 
-### Non-chartjs libraries
+### Library plugins
 
-Libraries other than Chart.js (e.g. Highcharts via the M Chart Highcharts Library plugin) continue to use the legacy jQuery + Handlebars admin stack (`m-chart-admin.js`, `handlebars.php`, `subtitle-field.php`, `spreadsheet-meta-box.php`). The PHP enqueue logic in `current_screen()` branches on `$library` to load the correct stack.
+Library plugins (e.g. M Chart Highcharts Library) integrate with the React admin UI via the `wp.hooks` API:
+
+- **`m_chart_admin_scripts` action** — enqueue library-specific scripts after M Chart's scripts are loaded
+- **`m_chart.render_chart` filter** — handle chart rendering in the admin preview, returning `true` to prevent the default Chart.js renderer from running
+- **`m_chart.settings_component` filter** — replace the default Chart.js settings UI with a library-specific React component
+
+See `version-2-notes.md` for the full list of available hooks.
 
 ### Extensibility (wp.hooks)
 

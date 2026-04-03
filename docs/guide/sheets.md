@@ -43,4 +43,5 @@ Each sheet is parsed independently. When the chart renders:
 
 - Each sheet produces one dataset
 - The sheet name becomes the dataset's legend label
-- All sheets share the same set of category labels (from the first sheet's label column/row)
+- **Radar and Radar Area:** all sheets share the same set of category labels (from the first sheet's label column/row)
+- **Scatter and Bubble:** each sheet's data is plotted independently — there are no shared categorical labels; each sheet provides its own x/y (and radius) values
