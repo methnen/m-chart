@@ -1,11 +1,9 @@
 /**
- * Merges per-source-file i18n JSON files into handle-named JSON files.
+ * Merges per-source-file i18n JSON files into handle-named JSON files
  *
- * WordPress looks up JS translations using md5( relative-path-of-compiled-file ).
- * Since wp-scripts bundles multiple source files into a single compiled file,
- * the per-source-file hashes from `wp i18n make-json` never match. WordPress
- * falls back to {domain}-{locale}-{handle}.json, so we merge per-source-file
- * JSONs into one file per script handle.
+ * WordPress looks up JS translations using md5( relative-path-of-compiled-file )
+ * Since wp-scripts bundles multiple source files into a single compiled file, the per-source-file hashes from `wp i18n make-json` never match 
+ * WordPress falls back to {domain}-{locale}-{handle}.json, so we merge per-source-file JSONs into one file per script handle
  *
  * Handle mapping:
  *   components/admin-ui-src/** -> m-chart-admin-ui
@@ -24,13 +22,13 @@ const HANDLE_MAP = {
 	'components/block-src/':    'm-chart-editor',
 };
 
-// Collect all hash-based JSON files grouped by locale and handle.
+// Collect all hash-based JSON files grouped by locale and handle
 const merged = {}; // { locale: { handle: { meta, messages } } }
 const consumed = []; // files that were merged
 
 const files = fs.readdirSync( LANGUAGES_DIR ).filter( ( f ) => {
 	// Match hash-based JSON files: m-chart-{locale}-{md5}.json
-	// Exclude handle-named files (already our output format).
+	// Exclude handle-named files (already our output format)
 	return /^m-chart-.+-[0-9a-f]{32}\.json$/.test( f );
 } );
 
@@ -56,7 +54,7 @@ for ( const file of files ) {
 	}
 
 	if ( ! handle ) {
-		// Not a file we need to merge (e.g. from a different source path).
+		// Not a file we need to merge (e.g. from a different source path)
 		continue;
 	}
 
@@ -80,12 +78,12 @@ for ( const file of files ) {
 
 	const entry = merged[ locale ][ handle ];
 
-	// Use the latest revision date.
+	// Use the latest revision date
 	if ( data[ 'translation-revision-date' ] > entry.revisionDate ) {
 		entry.revisionDate = data[ 'translation-revision-date' ];
 	}
 
-	// Merge messages (skip the empty-string metadata key).
+	// Merge messages (skip the empty-string metadata key)
 	const messages = data.locale_data?.messages || {};
 	for ( const [ key, value ] of Object.entries( messages ) ) {
 		if ( key === '' ) {
@@ -97,7 +95,7 @@ for ( const file of files ) {
 	consumed.push( filePath );
 }
 
-// Write merged handle-named files and remove consumed hash-based files.
+// Write merged handle-named files and remove consumed hash-based files
 let created = 0;
 let removed = 0;
 
@@ -127,7 +125,7 @@ for ( const [ locale, handles ] of Object.entries( merged ) ) {
 	}
 }
 
-// Remove consumed hash-based files.
+// Remove consumed hash-based files
 for ( const filePath of consumed ) {
 	fs.unlinkSync( filePath );
 	removed++;

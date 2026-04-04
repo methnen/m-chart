@@ -1,6 +1,6 @@
 # User Guide
 
-M Chart is a WordPress plugin that lets you create interactive charts and graphs using a spreadsheet-style data entry interface. Charts can be embedded anywhere on your site via shortcode or the WordPress block editor.
+M Chart is a WordPress plugin that lets you create interactive charts and graphs using a spreadsheet-style data entry interface with a live chart preview. Charts can be embedded anywhere on your site via shortcode or the WordPress block editor.
 
 ## Quick Links
 
