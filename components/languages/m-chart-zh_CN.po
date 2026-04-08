@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: M Chart\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-21 17:03-0700\n"
-"PO-Revision-Date: 2026-03-21 17:04-0700\n"
+"PO-Revision-Date: 2026-04-08 08:26-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -23,7 +23,6 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: components/external\n"
 
 #: components/admin-ui-src/components/AxisRows.js:54
-#, fuzzy
 msgid "N/A"
 msgstr "不适用"
 
@@ -31,8 +30,7 @@ msgstr "不适用"
 msgid "Vertical axis title"
 msgstr "纵坐标轴标题"
 
-#: components/admin-ui-src/components/AxisRows.js:82
-#: components/admin-ui-src/components/AxisRows.js:133
+#: components/admin-ui-src/components/AxisRows.js:82 components/admin-ui-src/components/AxisRows.js:133
 #: components/array-default-unit-terms.php:49
 msgid "Units"
 msgstr "单位"
@@ -54,34 +52,28 @@ msgstr "导入失败"
 msgid "Import error: %s"
 msgstr "导入错误：%s"
 
-#: components/admin-ui-src/components/CsvControls.js:186
-#: components/templates/spreadsheet-meta-box.php:11
+#: components/admin-ui-src/components/CsvControls.js:186 components/templates/spreadsheet-meta-box.php:11
 msgid "Export CSV"
 msgstr "输出CSV"
 
-#: components/admin-ui-src/components/CsvControls.js:190
-#: components/templates/spreadsheet-meta-box.php:11
+#: components/admin-ui-src/components/CsvControls.js:190 components/templates/spreadsheet-meta-box.php:11
 msgid "Export"
 msgstr "导出"
 
-#: components/admin-ui-src/components/CsvControls.js:194
-#: components/templates/spreadsheet-meta-box.php:14
+#: components/admin-ui-src/components/CsvControls.js:194 components/templates/spreadsheet-meta-box.php:14
 msgid "CSV Import/Export"
 msgstr "CSV 导入／导出"
 
-#: components/admin-ui-src/components/CsvControls.js:208
-#: components/templates/spreadsheet-meta-box.php:16
+#: components/admin-ui-src/components/CsvControls.js:208 components/templates/spreadsheet-meta-box.php:16
 msgid "Select CSV File"
 msgstr "选择CSV文件"
 
-#: components/admin-ui-src/components/CsvControls.js:212
-#: components/templates/spreadsheet-meta-box.php:16
+#: components/admin-ui-src/components/CsvControls.js:212 components/templates/spreadsheet-meta-box.php:16
 msgid "Select File"
 msgstr "选择文件"
 
 #: components/admin-ui-src/components/CsvControls.js:220
-#: components/admin-ui-src/components/CsvControls.js:224
-#: components/templates/spreadsheet-meta-box.php:18
+#: components/admin-ui-src/components/CsvControls.js:224 components/templates/spreadsheet-meta-box.php:18
 msgid "Import"
 msgstr "导入"
 
@@ -90,18 +82,15 @@ msgstr "导入"
 msgid "%s Delimited"
 msgstr "%s 分隔"
 
-#: components/admin-ui-src/components/CsvControls.js:240
-#: components/templates/spreadsheet-meta-box.php:33
+#: components/admin-ui-src/components/CsvControls.js:240 components/templates/spreadsheet-meta-box.php:33
 msgid "You can only import CSV files"
 msgstr "只可以导入CSV格式的文档"
 
-#: components/admin-ui-src/components/CsvControls.js:246
-#: components/templates/spreadsheet-meta-box.php:35
+#: components/admin-ui-src/components/CsvControls.js:246 components/templates/spreadsheet-meta-box.php:35
 msgid "Importing file"
 msgstr "正在導入文件"
 
-#: components/admin-ui-src/components/CsvControls.js:253
-#: components/templates/spreadsheet-meta-box.php:37
+#: components/admin-ui-src/components/CsvControls.js:253 components/templates/spreadsheet-meta-box.php:37
 msgid "Cancel Import"
 msgstr "取消导入"
 
@@ -110,8 +99,7 @@ msgstr "取消导入"
 msgid "File: %s"
 msgstr "文件: %s"
 
-#: components/admin-ui-src/components/CsvControls.js:259
-#: components/templates/spreadsheet-meta-box.php:39
+#: components/admin-ui-src/components/CsvControls.js:259 components/templates/spreadsheet-meta-box.php:39
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr "导入此文件将替换此工作表中的所有现有数据"
 
@@ -144,8 +132,7 @@ msgstr "共享工具提示框"
 msgid "Sheet %d"
 msgstr "工作表 %d"
 
-#: components/admin-ui-src/components/SheetTabs.js:49
-#: components/templates/spreadsheet-meta-box.php:5
+#: components/admin-ui-src/components/SheetTabs.js:49 components/templates/spreadsheet-meta-box.php:5
 msgid "Add Sheet"
 msgstr "添加工作表"
 
@@ -161,13 +148,11 @@ msgstr "复制！"
 msgid "Copy"
 msgstr "复制"
 
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:42
-#: components/block-src/chart/edit.js:197
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:42 components/block-src/chart/edit.js:197
 msgid "Image"
 msgstr "图像"
 
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:56
-#: components/class-m-chart.php:200
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:56 components/class-m-chart.php:200
 msgid "View"
 msgstr "查看"
 
@@ -179,8 +164,7 @@ msgstr "图像生成功能关闭"
 msgid "Save/Update this post to generate the image version"
 msgstr "以图像文档格式储存／上传此图表"
 
-#: components/admin-ui-src/components/SubtitleField.js:20
-#: components/templates/subtitle-field.php:1
+#: components/admin-ui-src/components/SubtitleField.js:20 components/templates/subtitle-field.php:1
 msgid "Enter subtitle here"
 msgstr "在此处输入子标题"
 
@@ -2604,8 +2588,7 @@ msgstr "显示设置"
 msgid "Show"
 msgstr "显示"
 
-#: components/block-src/chart/edit.js:196
-#: components/block-src/chart/edit.js:242
+#: components/block-src/chart/edit.js:196 components/block-src/chart/edit.js:242
 #: components/class-m-chart-admin.php:462 components/class-m-chart.php:194
 msgid "Chart"
 msgstr "图表"
@@ -2630,8 +2613,7 @@ msgstr "替换"
 msgid "There was a problem loading charts"
 msgstr "加载图表时出现问题"
 
-#: components/block-src/chart/edit.js:256
-#: components/block-src/chart/edit.js:274
+#: components/block-src/chart/edit.js:256 components/block-src/chart/edit.js:274
 msgid "No charts found"
 msgstr "没找到图表"
 
@@ -2651,8 +2633,7 @@ msgstr "已找到图表"
 msgid "charts found"
 msgstr "找到的图表"
 
-#: components/class-m-chart-admin.php:54
-#: components/templates/m-chart-settings.php:2
+#: components/class-m-chart-admin.php:54 components/templates/m-chart-settings.php:2
 msgid "M Chart Settings"
 msgstr "M Chart 设置"
 
@@ -2664,10 +2645,8 @@ msgstr "设置"
 msgid "Settings saved"
 msgstr "已保存的设置"
 
-#: components/class-m-chart-admin.php:215
-#: components/class-m-chart-admin.php:216
-#: components/templates/chart-meta-box.php:8
-#: components/templates/chart-meta-box.php:9
+#: components/class-m-chart-admin.php:215 components/class-m-chart-admin.php:216
+#: components/templates/chart-meta-box.php:8 components/templates/chart-meta-box.php:9
 msgid "M Chart Highcharts Library"
 msgstr "M Chart Highcharts Library"
 
@@ -2679,8 +2658,7 @@ msgstr "你有些图表需要使用 M Chart Highcharts Library 插件。"
 msgid "These charts will no longer display unless you install the plugin:"
 msgstr "这些图表除非安装插件，否则将不再显示："
 
-#: components/class-m-chart-admin.php:223
-#: components/templates/chart-meta-box.php:15
+#: components/class-m-chart-admin.php:223 components/templates/chart-meta-box.php:15
 msgid "Learn More"
 msgstr "了解更多"
 
@@ -2696,13 +2674,11 @@ msgstr "数据"
 msgid "Library not found"
 msgstr "找不到库"
 
-#: components/class-m-chart-admin.php:806
-#: components/class-m-chart-admin.php:816
+#: components/class-m-chart-admin.php:806 components/class-m-chart-admin.php:816
 msgid "Wrong post type"
 msgstr "错误图表类型"
 
-#: components/class-m-chart-admin.php:811
-#: components/class-m-chart-admin.php:947
+#: components/class-m-chart-admin.php:811 components/class-m-chart-admin.php:947
 msgid "Invalid nonce"
 msgstr "无效随机值"
 
@@ -2915,9 +2891,7 @@ msgid "Number Format Locale"
 msgstr "数字格式所在地"
 
 #: components/templates/m-chart-settings-chartjs.php:43
-msgid ""
-"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
-"chart"
+msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
 msgstr "你想用Intl.NumberFormat解析图表中的数字时使用的地点"
 
 #: components/templates/m-chart-settings.php:5
@@ -2937,13 +2911,10 @@ msgid "Show Library in Edit Posts Screen"
 msgstr "在编辑帖子界面显示库"
 
 #: components/templates/m-chart-settings.php:34
-msgid ""
-"Displays an icon indicating the library used for a chart in Edit Posts "
-"Screen of the WP Admin"
+msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
 msgstr "在WP管理员编辑帖子界面显示用于图表的图书馆图标"
 
-#: components/templates/m-chart-settings.php:39
-#: components/templates/m-chart-settings.php:43
+#: components/templates/m-chart-settings.php:39 components/templates/m-chart-settings.php:43
 msgid "Performance"
 msgstr "性能"
 
@@ -2971,8 +2942,7 @@ msgstr "没有即时预览"
 msgid "No instant preview and no generation of chart images"
 msgstr "没有即时预览和没有生成图表图像"
 
-#: components/templates/m-chart-settings.php:64
-#: components/templates/m-chart-settings.php:68
+#: components/templates/m-chart-settings.php:64 components/templates/m-chart-settings.php:68
 msgid "Image Multiplier"
 msgstr "图像倍增器"
 
@@ -2993,8 +2963,7 @@ msgid "4x"
 msgstr "4x"
 
 #: components/templates/m-chart-settings.php:86
-msgid ""
-"The higher the multiplier the better the images will look on high DPI screens"
+msgid "The higher the multiplier the better the images will look on high DPI screens"
 msgstr "倍率越高，高DPI屏幕上的画面效果越好"
 
 #: components/templates/m-chart-settings.php:91
@@ -3046,9 +3015,7 @@ msgid "http://github.com/methnen/m-chart"
 msgstr "http://github.com/methnen/m-charts"
 
 #. Description of the plugin/theme
-msgid ""
-"Manage data sets via a spreadsheet interface and display them as charts in "
-"WordPress."
+msgid "Manage data sets via a spreadsheet interface and display them as charts in WordPress."
 msgstr "通过电子表格界面管理数据集，并在WordPress中以图表形式显示。"
 
 #. Author of the plugin/theme
@@ -3059,52 +3026,44 @@ msgstr "Jamie Poitra"
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
 
-#, fuzzy
-#~ msgid "No Charts found using this search string"
-#~ msgstr "没有在回收站找到图表"
+msgid "No Charts found using this search string"
+msgstr "没有在回收站找到图表"
 
-#, fuzzy
-#~ msgid "has"
-#~ msgstr "图表"
+msgid "has"
+msgstr "图表"
 
-#, fuzzy
-#~ msgid "Wrong offset!"
-#~ msgstr "错误图表类型"
+msgid "Wrong offset!"
+msgstr "错误图表类型!"
 
-#, fuzzy
-#~ msgid "No charts were found using this search string"
-#~ msgstr "没有在回收站找到图表"
+msgid "No charts were found using this search string"
+msgstr "没有在回收站找到图表"
 
-#~ msgid "Source"
-#~ msgstr "数据来源"
+msgid "Source"
+msgstr "数据来源"
 
-#~ msgid "Source URL"
-#~ msgstr "数据来源网址"
+msgid "Source URL"
+msgstr "数据来源网址"
 
-#~ msgid "Language Settings"
-#~ msgstr "语言设定"
+msgid "Language Settings"
+msgstr "语言设定"
 
-#~ msgid "Decimal Indicator"
-#~ msgstr "小数点指示器"
+msgid "Decimal Indicator"
+msgstr "小数点指示器"
 
-#~ msgid "Thousands Separator"
-#~ msgstr "千进制分隔符"
+msgid "Thousands Separator"
+msgstr "千进制分隔符"
 
-#~ msgid "Numeric Symbols"
-#~ msgstr "数字符号"
+msgid "Numeric Symbols"
+msgstr "数字符号"
 
-#~ msgid ""
-#~ "Seperate by commas (Thousands, Millions, Billions, Trillions, "
-#~ "Quadrillions, Quintillions...)"
-#~ msgstr "用逗号分隔（千，百万，十亿，万亿，四万亿，五百万...）"
+msgid "Seperate by commas (Thousands, Millions, Billions, Trillions, Quadrillions, Quintillions...)"
+msgstr "用逗号分隔（千，百万，十亿，万亿，四万亿，五百万...）"
 
-#~ msgid "Numeric Symbol Magnitude"
-#~ msgstr "数字符号的幅度"
+msgid "Numeric Symbol Magnitude"
+msgstr "数字符号的幅度"
 
-#~ msgid ""
-#~ "Allows adjustment for languages that use symbols at different intervals "
-#~ "(Japanese, Korean, etc...)"
-#~ msgstr "允许调整一些会在不同间隔间使用符号的语言（日语，韩语等）"
+msgid "Allows adjustment for languages that use symbols at different intervals (Japanese, Korean, etc...)"
+msgstr "允许调整一些会在不同间隔间使用符号的语言（日语，韩语等）"
 
-#~ msgid "Importing this file will replace all existing data"
-#~ msgstr "导入此文档将替换现有数据"
+msgid "Importing this file will replace all existing data"
+msgstr "导入此文档将替换现有数据"

@@ -1036,6 +1036,24 @@ class M_Chart {
 	}
 
 	/**
+	 * Return the chart types that support multiple data sets (multi-sheet tab bar)
+	 *
+	 * This is the single authoritative source for this list. The value is passed to
+	 * window.m_chart_admin.multi_sheet_types so the React UI always stays in sync with PHP.
+	 * Filtered via 'm_chart_multi_sheet_types' so library plugins can add or remove types.
+	 *
+	 * @return array
+	 */
+	public function get_multi_sheet_types() {
+		return apply_filters( 'm_chart_multi_sheet_types', [
+			'scatter',
+			'bubble',
+			'radar',
+			'radar-area',
+		] );
+	}
+
+	/**
 	 * Return the current library
 	 *
 	 * @return string current library

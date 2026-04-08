@@ -21,11 +21,12 @@ export default function SheetTab( {
 	isNew,
 } ) {
 	const { state, dispatch } = useChartAdmin();
+	const { sheetEditingDisabled } = state;
 	const [ isRenaming, setIsRenaming ] = useState( () => !! isNew );
 	const [ inputValue, setInputValue ] = useState( name );
 	const inputRef = useRef( null );
 
-	const longPress = useLongPress( () => setIsRenaming( true ) );
+	const longPress = useLongPress( () => { if ( ! sheetEditingDisabled ) { setIsRenaming( true ); } } );
 
 	// Clear the newSheetId flag once this tab has consumed it
 	useEffect( () => {
@@ -33,6 +34,20 @@ export default function SheetTab( {
 			dispatch( { type: 'CLEAR_NEW_SHEET_ID' } );
 		}
 	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Exit rename mode if editing becomes disabled while the input is open
+	useEffect( () => {
+		if ( sheetEditingDisabled && isRenaming ) {
+			setIsRenaming( false );
+		}
+	}, [ sheetEditingDisabled ] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Keep the hidden input in sync when name changes externally (e.g. via RENAME_SHEET dispatch)
+	useEffect( () => {
+		if ( ! isRenaming ) {
+			setInputValue( name );
+		}
+	}, [ name ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Sync local input value and focus when entering rename mode
 	useEffect( () => {
@@ -57,7 +72,9 @@ export default function SheetTab( {
 	function handleDoubleClick( e ) {
 		e.preventDefault();
 
-		setIsRenaming( true );
+		if ( ! sheetEditingDisabled ) {
+			setIsRenaming( true );
+		}
 	}
 
 	function handleDelete( e ) {
@@ -123,7 +140,7 @@ export default function SheetTab( {
 			onDoubleClick={ handleDoubleClick }
 			{ ...longPress }
 		>
-			{ ! isSingle && (
+			{ ! isSingle && ! sheetEditingDisabled && (
 				<span
 					className="dashicons dashicons-dismiss"
 					onClick={ handleDelete }

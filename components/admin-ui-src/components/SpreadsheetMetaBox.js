@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from '@wordpress/element';
 import { useChartAdmin } from '../context/ChartAdminContext';
-import JspreadsheetWrapper from './JspreadsheetWrapper';
+import JspreadsheetWrapper, { spreadsheetAutoWidth } from './JspreadsheetWrapper';
 import SheetTabs from './SheetTabs';
 import CsvControls from './CsvControls';
 
@@ -15,7 +15,7 @@ const SUBMIT_BUTTON_IDS = [ 'publish', 'save-post' ];
  */
 export default function SpreadsheetMetaBox() {
 	const { state, dispatch } = useChartAdmin();
-	const { sheetIds, spreadsheetData, activeSheet, formEnabled, pendingSubmit } = state;
+	const { sheetIds, spreadsheetData, activeSheet, formEnabled, pendingSubmit, sheetEditingDisabled } = state;
 
 	// Map of stable sheetId → worksheet instance (Jspreadsheet worksheet object)
 	const worksheetInstances = useRef( {} );
@@ -36,6 +36,18 @@ export default function SpreadsheetMetaBox() {
 	const handleUnmounted = useCallback( ( sheetId ) => {
 		delete worksheetInstances.current[ sheetId ];
 	}, [] );
+
+	// Called by extensions (e.g. Google Sheets) to update a sheet's data imperatively
+	// Bypasses the jspreadsheet data-prop limitation (instance is created once on mount)
+	const setSheetDataOnWorksheet = useCallback( ( index, newData ) => {
+		const id        = sheetIds[ index ];
+		const worksheet = worksheetInstances.current[ id ];
+
+		if ( worksheet && newData ) {
+			worksheet.setData( newData );
+			spreadsheetAutoWidth( worksheet );
+		}
+	}, [ sheetIds ] );
 
 	// Returns the worksheet instance for the currently active sheet
 	const getActiveWorksheet = useCallback( () => {
@@ -134,23 +146,33 @@ export default function SpreadsheetMetaBox() {
 		return () => form.removeEventListener( 'submit', handleSubmit );
 	}, [ writeDataToForm ] );
 
+	// Allow external plugins to inject content between the sheet tabs and the spreadsheet
+	// The filter receives null as the default and the current { state, dispatch } as context
+	const metaboxExtension = wp.hooks.applyFilters(
+		'm_chart.spreadsheet_metabox_extension',
+		null,
+		{ state, dispatch, getActiveWorksheet, setSheetDataOnWorksheet }
+	);
+
 	return (
 		<>
+			{ metaboxExtension }
 			<SheetTabs />
-			<div id="spreadsheets">
+			<div id="spreadsheets" className={ sheetEditingDisabled ? 'editing-disabled' : '' }>
 				{ sheetIds.map( ( id, index ) => (
 					<JspreadsheetWrapper
-						key={ id }
+						key={ `${ id }-${ sheetEditingDisabled ? 'ro' : 'rw' }` }
 						sheetId={ id }
 						sheetIndex={ index }
 						isActive={ index === activeSheet }
 						data={ spreadsheetData[ index ] }
+						readOnly={ sheetEditingDisabled }
 						onMounted={ handleMounted }
 						onUnmounted={ handleUnmounted }
 					/>
 				) ) }
 			</div>
-			<CsvControls getActiveWorksheet={ getActiveWorksheet } />
+			{ ! sheetEditingDisabled && <CsvControls getActiveWorksheet={ getActiveWorksheet } /> }
 		</>
 	);
 }

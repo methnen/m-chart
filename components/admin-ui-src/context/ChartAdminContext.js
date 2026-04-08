@@ -64,6 +64,10 @@ const initialState = {
 	// True when the user clicked Save/Update while the chart was still refreshing
 	pendingSubmit: false,
 
+	// True when an extension (e.g. Google Sheets) has taken over the data source
+	// Puts the spreadsheet UI into read-only mode and disables tab add/rename/delete
+	sheetEditingDisabled: false,
+
 	// Static config from PHP — library-specific options for the settings form
 	typeOptions:     m_chart_admin.type_options       || [],
 	typeOptionNames: m_chart_admin.type_option_names  || {},
@@ -137,6 +141,9 @@ function reducer( state, action ) {
 
 		case 'SET_PENDING_SUBMIT':
 			return { ...state, pendingSubmit: action.payload };
+
+		case 'SET_SHEET_EDITING_DISABLED':
+			return { ...state, sheetEditingDisabled: action.payload };
 
 		case 'SET_SUBTITLE':
 			return {

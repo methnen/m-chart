@@ -159,6 +159,16 @@
 				padding-left: rem-calc(10);
 			}
 		}
+
+		&.editing-disabled {
+			.nav-tab {
+				padding-left: rem-calc(10);
+
+				&:first-of-type {
+					margin-left: rem-calc(7);
+				}
+			}
+		}
 	}
 
 	#spreadsheets {

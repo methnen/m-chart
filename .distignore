@@ -1,11 +1,15 @@
+/.git
 /.github
 /.gitignore
 /.distignore
 /.scss-lint.yml
 /.vscode
+.DS_Store
+/webpack.config.js
 /assets
 /bin
 /build
+/components/admin-ui-src
 /components/block-src
 /components/js/m-chart-chartjs-helpers.js
 /components/sass
@@ -14,6 +18,7 @@
 /docs
 /DEVELOPERS.md
 /Gruntfile.js
+/scripts
 /node_modules
 /package.json
 /package-lock.json

@@ -4,34 +4,22 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 import SheetTab from './SheetTab';
 
 /**
- * Chart types that support multiple data sets (multiple spreadsheet sheets)
- * All other types use a single sheet and the tab bar is hidden
- */
-const MULTI_SHEET_TYPES = new Set( [
-	'scatter',
-	'bubble',
-	'radar',
-	'radar-area',
-] );
-
-/**
  * The spreadsheet tab bar
  * Renders one SheetTab per sheet and an Add Sheet button
  * The entire bar is hidden when the current chart type only supports a single data set
+ *
+ * The authoritative list of multi-sheet types comes from PHP via window.m_chart_admin.multi_sheet_types
+ * (see M_Chart::get_multi_sheet_types() and the 'm_chart_multi_sheet_types' PHP filter).
  */
 export default function SheetTabs() {
 	const { state, dispatch } = useChartAdmin();
-	const { postMeta, sheetIds, setNames, activeSheet, newSheetId } = state;
+	const { postMeta, sheetIds, setNames, activeSheet, newSheetId, sheetEditingDisabled } = state;
 
-	// Allow library plugins to customize which chart types support multiple sheets
-	// useMemo with [] ensures the filter runs once — filters are registered at load time
-	// and the resulting Set is stable, so showTabs only re-evaluates when postMeta.type changes
-	const multiSheetTypes = useMemo( () => {
-		const types = window.wp?.hooks
-			? wp.hooks.applyFilters( 'm_chart.multi_sheet_types', [ ...MULTI_SHEET_TYPES ] )
-			: [ ...MULTI_SHEET_TYPES ];
-		return new Set( types );
-	}, [] );
+	// Read the PHP-authoritative multi-sheet type list, memoised for stable reference
+	const multiSheetTypes = useMemo(
+		() => new Set( m_chart_admin.multi_sheet_types || [] ),
+		[]
+	);
 
 	const showTabs = multiSheetTypes.has( postMeta.type );
 
@@ -42,7 +30,7 @@ export default function SheetTabs() {
 	}
 
 	return (
-		<nav id="spreadsheet-tabs" className={ `nav-tab-wrapper${ showTabs ? '' : ' hide' }` }>
+		<nav id="spreadsheet-tabs" className={ `nav-tab-wrapper${ showTabs ? '' : ' hide' }${ sheetEditingDisabled ? ' editing-disabled' : '' }` }>
 			{ sheetIds.map( ( id, index ) => (
 				<SheetTab
 					key={ id }
@@ -54,14 +42,16 @@ export default function SheetTabs() {
 					isNew={ id === newSheetId }
 				/>
 			) ) }
-			<a
-				href="#add-sheet"
-				className="add-sheet"
-				title={ __( 'Add Sheet', 'm-chart' ) }
-				onClick={ handleAddSheet }
-			>
-				<span className="dashicons dashicons-plus-alt" />
-			</a>
+			{ ! sheetEditingDisabled && (
+				<a
+					href="#add-sheet"
+					className="add-sheet"
+					title={ __( 'Add Sheet', 'm-chart' ) }
+					onClick={ handleAddSheet }
+				>
+					<span className="dashicons dashicons-plus-alt" />
+				</a>
+			) }
 		</nav>
 	);
 }

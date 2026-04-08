@@ -12,10 +12,34 @@ const blockIcon = (
 );
 
 registerBlockType(
-    blockJson,
-    {
-        edit: edit,
-        save: () => null,
-        icon: blockIcon,
-    }
+	blockJson,
+	{
+		edit: edit,
+		save: () => null,
+		icon: blockIcon,
+		deprecated: [
+			{
+				attributes: {
+					chartId: {
+						type:    'string',
+						default: '',
+					},
+					show: {
+						type:    'string',
+						default: 'chart',
+					},
+				},
+				save: () => null,
+				isEligible( attributes ) {
+					return typeof attributes.chartId === 'string';
+				},
+				migrate( attributes ) {
+					return {
+						...attributes,
+						chartId: parseInt( attributes.chartId, 10 ) || 0,
+					};
+				},
+			},
+		],
+	}
 );

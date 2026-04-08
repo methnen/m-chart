@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: M Chart 1.10.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-21 17:02-0700\n"
-"PO-Revision-Date: 2026-03-21 17:03-0700\n"
+"PO-Revision-Date: 2026-04-08 08:21-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: components/admin-ui-src/components/AxisRows.js:54
 msgid "N/A"
-msgstr "N/A"
+msgstr "N/B"
 
 #: components/admin-ui-src/components/AxisRows.js:70
 msgid "Vertical axis title"
@@ -3071,18 +3071,17 @@ msgstr "Jamie Poitra"
 msgid "http://methnen.com"
 msgstr "http://methnen.com"
 
-#~ msgctxt "block description"
-#~ msgid "Embed a chart made with M Chart into your posts and pages"
-#~ msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
+msgid "Embed a chart made with M Chart into your posts and pages"
+msgstr "Voeg een grafiek gemaakt met M-chart in in uw berichten en pagina’s"
 
-#~ msgid "No charts were found using this search string"
-#~ msgstr "Geen grafieken gevonden met deze zoekterm"
+msgid "No charts were found using this search string"
+msgstr "Geen grafieken gevonden met deze zoekterm"
 
-#~ msgid "Click on the chart to make a new selection"
-#~ msgstr "Klik op de grafiek om een nieuwe keuze te maken"
+msgid "Click on the chart to make a new selection"
+msgstr "Klik op de grafiek om een nieuwe keuze te maken"
 
-#~ msgid "Click on a chart to select & insert"
-#~ msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
+msgid "Click on a chart to select & insert"
+msgstr "Klik op een grafiek om deze te kiezen en in te voegen"
 
-#~ msgid "Chart plugin not available or not active"
-#~ msgstr "M Chart is niet aanwezig of niet actief"
+msgid "Chart plugin not available or not active"
+msgstr "M Chart is niet aanwezig of niet actief"

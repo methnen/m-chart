@@ -23,6 +23,7 @@
     "build:js": "uglifyjs components/js/m-chart-chartjs-helper.js -o components/js/m-chart-chartjs-helper.min.js",
     "build:readme": "wp-readme-to-md --screenshot-url=https://methnen.com/misc/m-chart/{screenshot}.png",
     "build:i18n": "node scripts/merge-i18n-json.js",
+    "build:zip": "node scripts/build-zip.js",
     "build": "npm run build:block && npm run build:admin-ui && npm run build:css && npm run build:js && npm run build:readme",
     "build:docs": "vuepress build docs",
     "docs:dev": "vuepress dev docs",

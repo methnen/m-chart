@@ -246,6 +246,12 @@
 #m-chart-spreadsheet .nav-tab-wrapper .nav-tab.do-not-delete {
   padding-left: 0.625rem;
 }
+#m-chart-spreadsheet .nav-tab-wrapper.editing-disabled .nav-tab {
+  padding-left: 0.625rem;
+}
+#m-chart-spreadsheet .nav-tab-wrapper.editing-disabled .nav-tab:first-of-type {
+  margin-left: 0.4375rem;
+}
 #m-chart-spreadsheet #spreadsheets .jtabs-content {
   border-left: 1px solid #cdd0d4;
   overflow: auto;

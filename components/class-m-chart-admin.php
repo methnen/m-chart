@@ -273,7 +273,7 @@ class M_Chart_Admin {
 			wp_enqueue_script(
 				'm-chart-admin-ui',
 				$this->plugin_url . '/components/admin-ui/index.js',
-				$admin_app_asset['dependencies'],
+				array_merge( $admin_app_asset['dependencies'], [ 'wp-hooks' ] ),
 				$admin_app_asset['version'],
 				[ 'strategy' => 'defer' ]
 			);
@@ -389,6 +389,7 @@ class M_Chart_Admin {
 				'chart_args'              => $initial_chart_args,
 				'csv_delimiters'          => $csv_delimiters,
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
+				'multi_sheet_types'       => m_chart()->get_multi_sheet_types(),
 			];
 
 			wp_localize_script( 'm-chart-admin-ui', 'm_chart_admin', $localize_data );

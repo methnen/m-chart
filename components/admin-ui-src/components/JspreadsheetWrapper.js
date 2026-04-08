@@ -67,6 +67,7 @@ export function spreadsheetAutoWidth( worksheet, records = false ) {
  *   sheetIndex    {number}   Current position in the sheets array (may change after deletes)
  *   isActive      {boolean}  Whether this sheet is currently displayed
  *   data          {Array}    Initial 2-D array of cell values
+ *   readOnly      {boolean}  When true, the spreadsheet is rendered in read-only mode
  *   onMounted     {Function} Called with (sheetId, worksheetInstance) after init
  *   onUnmounted   {Function} Called with (sheetId) before unmount
  */
@@ -75,6 +76,7 @@ export default function JspreadsheetWrapper( {
 	sheetIndex,
 	isActive,
 	data,
+	readOnly = false,
 	onMounted,
 	onUnmounted,
 } ) {
@@ -100,9 +102,14 @@ export default function JspreadsheetWrapper( {
 				data:          initialData,
 				allowComments: false,
 				minDimensions: [ 37, 17 ],
+				...( readOnly ? { editable: false } : {} ),
 			} ],
 			// Filter out all of the contextual menu items we don't want
 			contextMenu( obj, x, y, e, items ) {
+				if ( readOnly ) {
+					return false;
+				}
+
 				return items.filter( ( item ) =>
 					CONTEXT_MENU_ITEMS.includes( item.title )
 				);
@@ -113,13 +120,16 @@ export default function JspreadsheetWrapper( {
 				spreadsheetAutoWidth( ws );
 			},
 			// Run spreadsheetAutoWidth on changed recrds and also push any changes to the chart
-			onafterchanges( worksheet, records ) {
-				spreadsheetAutoWidth( worksheet, records );
-				dispatch( {
-					type:    'SET_SHEET_DATA',
-					payload: { index: sheetIndexRef.current, data: worksheet.getData() },
-				} );
-			},
+			// Skipped entirely in read-only mode since the data cannot change
+			...( ! readOnly ? {
+				onafterchanges( worksheet, records ) {
+					spreadsheetAutoWidth( worksheet, records );
+					dispatch( {
+						type:    'SET_SHEET_DATA',
+						payload: { index: sheetIndexRef.current, data: worksheet.getData() },
+					} );
+				},
+			} : {} ),
 		} );
 
 		worksheetRef.current = instance[ 0 ];
