@@ -2,7 +2,7 @@ import { SelectControl, Spinner, ToolbarGroup, ToolbarButton, Placeholder, Exter
 import { getBlockType } from '@wordpress/blocks';
 import { useState, useEffect, useRef, useMemo, useCallback } from '@wordpress/element';
 import { useBlockProps, BlockControls, InspectorControls } from '@wordpress/block-editor';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import debounce from 'lodash/debounce';
 import "./editor.scss";
@@ -268,7 +268,7 @@ export default function edit( { attributes, setAttributes } ) {
                                                         onChange={ ( value ) => handleSearch( value ) }
                                                         autoFocus
                                                     />
-                                                    <p className="count">{ available } { 1 === available ? __( 'chart found', 'm-chart' ) : __( 'charts found', 'm-chart' ) }</p>
+                                                    <p className="count">{ 1 === available ? sprintf( __( '%d chart found', 'm-chart' ), available ) : sprintf( __( '%d charts found', 'm-chart' ), available ) }</p>
                                                 </div>
                                                 { resultsList.length === 0 && search.length > 1 ?
                                                     <p>{ __( 'No charts found', 'm-chart' ) }</p>

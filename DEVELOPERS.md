@@ -70,6 +70,12 @@ Individual watch targets are also available:
 
 ## Translations (i18n) ##
 
+To create a new .pot file with any new string run:
+
+```
+wp i18n make-pot . components/languages/m-chart.pot
+```
+
 PHP translations use `.po` / `.mo` files managed in Poedit. JavaScript translations require additional steps because `wp-scripts` bundles multiple source files into a single compiled file, and WordPress needs handle-named JSON files to load them.
 
 All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
@@ -77,7 +83,8 @@ All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
 ### Workflow
 
 1. Open the `.po` file for the locale you are updating (e.g. `components/languages/m-chart-zh_CN.po`) in Poedit.
-2. **Catalog > Update from Sources** to scan for new/changed translatable strings in both PHP and JS source files.
+2. Go to Translation -> Update from POT file...
+  - Do not choose Update from Source Code it will fail to retrieve everything and your tanslation will be missing necessary items
 3. Translate any new or updated strings.
 4. Save in Poedit (this generates the `.mo` and `.l10n.php` files automatically).
 5. Generate per-source-file JSON translation files:
