@@ -13,50 +13,52 @@
 		.settings {
 			background-color: $wp-admin-dark-background-color;
 			border-top: 1px solid $wp-admin-border-color;
-			padding: rem-calc( 0 10 10 );
+			padding: rem-calc( 10 0 10 10 );
 
 			.row {
-				@include clearfix;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				gap: rem-calc( 10 );
+				width: 100%;
 				border-top: none;
 				padding: 0;
+				margin-bottom: rem-calc( 10 );
 
-				p {
+				&:last-of-type {
 					margin-bottom: 0;
 				}
 
-				&.one {
-					p {
-						float: left;
-						margin-left: 1%;
-						width: 32%;
+				.column {
+					display: flex;
+					flex-direction: column;
+					flex-basis: 100%;
+					flex: 1;
+					margin-bottom: 0;
+					justify-content: center;
 
-						&:first-child {
-							margin-left: 0;
-						}
+					> div {
+						width: fit-content;
+					}
+
+					&:last-of-type {
+						gap: 0;
 					}
 				}
 
 				&.two {
-					p {
-						float: left;
-						margin-left: 1%;
-						width: 32%;
-
-						&:first-child {
-							margin-left: 0;
-						}
-
+					.column {
 						&.shared {
 							display: none;
 						}
 					}
 
 					&.show-shared {
-						p {
+						.column {
 							width: 24%;
 
 							&.shared {
-								display: block;
+								display: flex;
 							}
 						}
 					}
@@ -64,33 +66,34 @@
 
 				&.three,
 				&.five {
-					p {
-						float: left;
-						width: 73%;
+					.column {
+						flex: 0 0 calc(75% - rem-calc(10));
+
+						> div {
+							width: auto;
+						}
 
 						&.units {
-							float: right;
-							width: 25%;
+							flex: 0 0 calc(25% - rem-calc(10));
+
+							> div {
+								width: fit-content;
+							}
 						}
 					}
 				}
 
-				&.four {
-					p {
-						margin-top: rem-calc( 5 );
+				&.y-min {
+					align-items: center;
 
-						label {
-							display: inline-block;
-							height: rem-calc( 23 );
-						}
+					input[type="number"] {
+						margin-left: rem-calc( 7 );
+						height: rem-calc( 32 );
 					}
 				}
 
 				&.six {
-					p {
-						float: right;
-						width: 49%;
-
+					.column {
 						&:first-child {
 							float: left;
 						}
@@ -105,32 +108,28 @@
 			padding: rem-calc( 0 10 10 );
 
 			&.seven {
-				p {
-					float: right;
-					margin-bottom: 0;
-					width: 49%;
+				.column {
+					> div {
+						width: auto;
+					}
 
 					&:first-child {
 						float: left;
 					}
 
+					.components-base-control__field {
+						margin-bottom: 0;
+					}
+
 					&.shortcode {
 						position: relative;
 
-						.button {
-							bottom: rem-calc( 3 );
-							line-height: rem-calc( 22 );
-							min-height: rem-calc( 24 );
-							position: absolute;
-							right: rem-calc( 2 );
+						.m-chart-input-action-button {
+							@include action-button;
 						}
 
 						@media (max-width: 782px) {
-							.button {
-								bottom: 0;
-								line-height: rem-calc( 30 );
-								min-height: rem-calc( 32 );
-							}
+	
 						}
 					}
 
@@ -142,16 +141,13 @@
 							margin-top: rem-calc( 5 );
 						}
 
-						.button {
-							bottom: rem-calc( 3 );
-							line-height: rem-calc( 22 );
-							min-height: rem-calc( 24 );
-							position: absolute;
-							right: rem-calc( 2 );
+						.m-chart-input-action-button {
+							@include action-button;
 						}
 
 						@media (max-width: 782px) {
-							.button {
+							.button,
+							.components-button {
 								bottom: 0;
 								line-height: rem-calc( 30 );
 								min-height: rem-calc( 32 );

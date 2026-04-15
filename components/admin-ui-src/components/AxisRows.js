@@ -1,3 +1,4 @@
+import { CheckboxControl, SelectControl, TextControl } from '@wordpress/components';
 import { Fragment, useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
@@ -66,81 +67,74 @@ export default function AxisRows() {
 	return (
 		<>
 			<div className="row three vertical-axis" style={ axisStyle }>
-				<p>
-					<label htmlFor="m-chart-y-title">{ __( 'Vertical axis title', 'm-chart' ) }</label><br />
-					<input
-						className="input"
-						type="text"
-						name="m-chart[y_title]"
-						id="m-chart-y-title"
-						value={ postMeta.y_title }
-						style={ { width: '100%' } }
-						onChange={ ( e ) => handleChange( 'y_title', e.target.value ) }
-					/>
-				</p>
-				<p className="units">
-					<label htmlFor="m-chart-y-units">{ __( 'Units', 'm-chart' ) }</label><br />
-					<select
-						name="m-chart[y_units]"
-						id="m-chart-y-units"
-						className="select"
-						value={ postMeta.y_units }
-						onChange={ ( e ) => handleChange( 'y_units', e.target.value ) }
-					>
-						{ unitOptions }
-					</select>
-				</p>
+				<div className="column">
+					<div>
+						<TextControl
+							__next40pxDefaultSize
+							label={ __( 'Vertical axis title', 'm-chart' ) }
+							name="m-chart[y_title]"
+							value={ postMeta.y_title }
+							onChange={ ( value ) => handleChange( 'y_title', value ) }
+						/>
+					</div>
+				</div>
+				<div className="column units">
+					<div>
+						<SelectControl
+							__next40pxDefaultSize
+							label={ __( 'Units', 'm-chart' ) }
+							name="m-chart[y_units]"
+							value={ postMeta.y_units }
+							onChange={ ( value ) => handleChange( 'y_units', value ) }
+						>
+							{ unitOptions }
+						</SelectControl>
+					</div>
+				</div>
 			</div>
 			<div className="row four y-min" style={ yMinStyle }>
-				<p>
-					<label htmlFor="m-chart-y-min">
-						<input
-							type="checkbox"
-							name="m-chart[y_min]"
-							id="m-chart-y-min"
-							value="1"
-							checked={ !! postMeta.y_min }
-							onChange={ ( e ) => handleYMinCheck( e.target.checked ) }
-						/>
-						{ __( ' Force vertical axis minimum: ', 'm-chart' ) }
-					</label>
-					<input
-						type="number"
-						name="m-chart[y_min_value]"
-						id="m-chart-y-min-value"
-						ref={ yMinRef }
-						value={ postMeta.y_min_value }
-						disabled={ ! postMeta.y_min }
-						onChange={ ( e ) => handleChange( 'y_min_value', e.target.value ) }
-						style={ { width: yMinWidth, minWidth: 0 } }
-					/>
-				</p>
+				<CheckboxControl
+					name="m-chart[y_min]"
+					label={ __( 'Force vertical axis minimum:', 'm-chart' ) }
+					checked={ !! postMeta.y_min }
+					onChange={ ( checked ) => handleYMinCheck( checked ) }
+				/>
+				<TextControl
+					__next40pxDefaultSize
+					type="number"
+					name="m-chart[y_min_value]"
+					ref={ yMinRef }
+					value={ postMeta.y_min_value }
+					disabled={ ! postMeta.y_min }
+					onChange={ ( value ) => handleChange( 'y_min_value', value ) }
+					style={ { width: yMinWidth, minWidth: 0 } }
+				/>
 			</div>
 			<div className="row five horizontal-axis" style={ axisStyle }>
-				<p>
-					<label htmlFor="m-chart-x-title">{ __( 'Horizontal axis title', 'm-chart' ) }</label><br />
-					<input
-						className="input"
-						type="text"
-						name="m-chart[x_title]"
-						id="m-chart-x-title"
-						value={ postMeta.x_title }
-						style={ { width: '100%' } }
-						onChange={ ( e ) => handleChange( 'x_title', e.target.value ) }
-					/>
-				</p>
-				<p className="units">
-					<label htmlFor="m-chart-x-units">{ __( 'Units', 'm-chart' ) }</label><br />
-					<select
-						name="m-chart[x_units]"
-						id="m-chart-x-units"
-						className="select"
-						value={ postMeta.x_units }
-						onChange={ ( e ) => handleChange( 'x_units', e.target.value ) }
-					>
-						{ unitOptions }
-					</select>
-				</p>
+				<div className="column">
+					<div>
+						<TextControl
+							__next40pxDefaultSize
+							label={ __( 'Horizontal axis title', 'm-chart' ) }
+							name="m-chart[x_title]"
+							value={ postMeta.x_title }
+							onChange={ ( value ) => handleChange( 'x_title', value ) }
+						/>
+					</div>
+				</div>
+				<div className="column units">
+					<div>
+						<SelectControl
+							__next40pxDefaultSize
+							label={ __( 'Units', 'm-chart' ) }
+							name="m-chart[x_units]"
+							value={ postMeta.x_units }
+							onChange={ ( value ) => handleChange( 'x_units', value ) }
+						>
+							{ unitOptions }
+						</SelectControl>
+					</div>
+				</div>
 			</div>
 		</>
 	);

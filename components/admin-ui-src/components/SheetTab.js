@@ -1,6 +1,8 @@
+import { Button, TextControl } from '@wordpress/components';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { useLongPress } from '../hooks/useLongPress';
+import { circleX } from '../icons';
 import { measureTextWidth } from '../utils/measureTextWidth';
 
 /**
@@ -101,10 +103,6 @@ export default function SheetTab( {
 		dispatch( { type: 'DELETE_SHEET', payload: { index: sheetIndex } } );
 	}
 
-	function handleNameChange( e ) {
-		setInputValue( e.target.value );
-	}
-
 	function commitRename() {
 		dispatch( {
 			type:    'RENAME_SHEET',
@@ -126,14 +124,16 @@ export default function SheetTab( {
 		: Math.max( 40, inputValue.length * 8 + 16 ) + 'px';
 
 	const className = [
-		'nav-tab',
-		isActive ? 'nav-tab-active' : '',
-		isSingle ? 'do-not-delete' : '',
+		'components-tab-panel__tabs-item',
+		'm-chart-sheet-tab',
+		isActive ? 'is-active' : '',
 	].filter( Boolean ).join( ' ' );
 
 	return (
-		<a
-			href="#"
+		<button
+			type="button"
+			role="tab"
+			aria-selected={ isActive }
 			className={ className }
 			id={ `spreadsheet-tab-${ sheetId }` }
 			onClick={ handleClick }
@@ -141,31 +141,33 @@ export default function SheetTab( {
 			{ ...longPress }
 		>
 			{ ! isSingle && ! sheetEditingDisabled && (
-				<span
-					className="dashicons dashicons-dismiss"
+				<Button
+					className="m-chart-sheet-tab-delete"
+					icon={ circleX }
+					size="small"
+					label="Delete"
 					onClick={ handleDelete }
 				/>
 			) }
 			<span
-				className="tab-title"
+				className="m-chart-sheet-tab-title"
 				style={ { display: isRenaming ? 'none' : '' } }
 			>
 				{ name }
 			</span>
-			<input
+			<TextControl
+				__next40pxDefaultSize
 				ref={ inputRef }
-				type="text"
 				name={ `m-chart[set_names][${ sheetIndex }]` }
-				className="spreadsheet-tab-input"
 				value={ inputValue }
 				style={ {
 					display: isRenaming ? '' : 'none',
 					width:   inputWidth,
 				} }
-				onChange={ handleNameChange }
+				onChange={ ( value ) => setInputValue( value ) }
 				onBlur={ commitRename }
 				onKeyDown={ handleKeyDown }
 			/>
-		</a>
+		</button>
 	);
 }

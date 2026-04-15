@@ -199,3 +199,11 @@ See `version-2-notes.md` for the full list of available hooks.
 ### Extensibility (wp.hooks)
 
 See `version-2-notes.md` for the full list of JavaScript hooks available to library plugin authors.
+
+### Native form elements
+
+The following elements are intentionally kept as native HTML and are **not** candidates for `@wordpress/components` swaps:
+
+- **`CsvControls.js` — hidden file input.** Triggered programmatically via `fileInputRef.current.click()`. `FormFileUpload` has different semantics.
+- **`CsvControls.js` — anchor-style buttons** (`Select File`, `Import`, `Export`, `Cancel`). These are `<a>` elements styled as `.button` with SCSS rules targeting `#m-chart-csv .button`. Converting to `Button` would require a full SCSS rework for minimal benefit.
+- **`ShortcodeAndImageRow.js` — `<input type="hidden">` for the library name.** Not a UI element; hidden inputs have no component counterpart.

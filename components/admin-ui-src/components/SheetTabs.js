@@ -1,6 +1,8 @@
+import { Button } from '@wordpress/components';
 import { useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
+import { circlePlus } from '../icons';
 import SheetTab from './SheetTab';
 
 /**
@@ -30,7 +32,19 @@ export default function SheetTabs() {
 	}
 
 	return (
-		<nav id="spreadsheet-tabs" className={ `nav-tab-wrapper${ showTabs ? '' : ' hide' }${ sheetEditingDisabled ? ' editing-disabled' : '' }` }>
+		<div
+			id="spreadsheet-tabs"
+			className={ `components-tab-panel__tabs m-chart-sheet-tabs${ showTabs ? '' : ' m-chart-hide' }${ sheetEditingDisabled ? ' editing-disabled' : '' }` }
+			role="tablist"
+		>
+			{ ! sheetEditingDisabled && (
+				<Button
+					className="m-chart-add-sheet"
+					icon={ circlePlus }
+					label={ __( 'Add Sheet', 'm-chart' ) }
+					onClick={ handleAddSheet }
+				/>
+			) }
 			{ sheetIds.map( ( id, index ) => (
 				<SheetTab
 					key={ id }
@@ -42,16 +56,6 @@ export default function SheetTabs() {
 					isNew={ id === newSheetId }
 				/>
 			) ) }
-			{ ! sheetEditingDisabled && (
-				<a
-					href="#add-sheet"
-					className="add-sheet"
-					title={ __( 'Add Sheet', 'm-chart' ) }
-					onClick={ handleAddSheet }
-				>
-					<span className="dashicons dashicons-plus-alt" />
-				</a>
-			) }
-		</nav>
+		</div>
 	);
 }

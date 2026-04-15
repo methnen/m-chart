@@ -1,6 +1,8 @@
+import { Button, SelectControl } from '@wordpress/components';
 import { useState, useRef } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
+import { circleX } from '../icons';
 import { spreadsheetAutoWidth } from './JspreadsheetWrapper';
 
 /**
@@ -223,17 +225,18 @@ export default function CsvControls( { getActiveWorksheet } ) {
 							>
 								{ __( 'Import', 'm-chart' ) }
 							</a>
-							<select
+							<SelectControl
+								__next40pxDefaultSize
 								name="m-chart[csv_delimiter]"
 								value={ csvDelimiter }
-								onChange={ ( e ) => setCsvDelimiter( e.target.value ) }
+								onChange={ ( value ) => setCsvDelimiter( value ) }
 							>
 								{ Object.entries( csvDelimiters ).map( ( [ val, label ] ) => (
 									<option key={ val } value={ val }>
 										{ sprintf( __( '%s Delimited', 'm-chart' ), label ) }
 									</option>
 								) ) }
-							</select>
+							</SelectControl>
 						</div>
 					) }
 					{ fileError && (
@@ -248,10 +251,11 @@ export default function CsvControls( { getActiveWorksheet } ) {
 					{ /* File info + cancel — shown while a file is selected */ }
 					{ showConfirmation && (
 						<div className="file-info">
-							<a
-								href="#cancel"
-								title={ __( 'Cancel Import', 'm-chart' ) }
-								className="dashicons dashicons-dismiss"
+							<Button
+								className="m-chart-csv-cancel"
+								icon={ circleX }
+								size="small"
+								label={ __( 'Cancel Import', 'm-chart' ) }
 								onClick={ handleCancel }
 							/>
 							{ sprintf( __( 'File: %s', 'm-chart' ), selectedFile.name ) }<br />

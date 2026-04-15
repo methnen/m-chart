@@ -11,6 +11,18 @@
 	}
 }
 
+@mixin action-button {
+	height: rem-calc(32);
+	background-color: white;
+	position: absolute;
+	right: rem-calc( 4 );
+	top: rem-calc( 27 );
+
+	&:hover {
+		background-color: $wp-admin-outline-button-hover-blue;
+	}
+}
+
 $rem-base: 16;
 
 @function rem-calc( $values, $base-value: $rem-base ) {
@@ -75,15 +87,12 @@ $rem-base: 16;
 }
 
 $wp-admin-black: #000000;
-$wp-admin-red: #c80011;
 $wp-admin-border-color: #dddddd;
 $wp-admin-meta-border-color: #cdd0d4;
 $wp-admin-dark-background-color: #f5f5f5;
 $wp-admin-icon-color: #b8b8b8;
-$wp-admin-error-color: #b00000;
 $wp-admin-description-color: #666666;
 $wp-admin-inactive-text-color: #555555;
-$wp-admin-active-tab-color: #f1f1f1;
 $wp-admin-inactive-icon-color: #82878c;
 
 $wp-admin-dark-mode-border-color: #24282d;
@@ -91,3 +100,9 @@ $wp-admin-dark-mode-meta-background-color: #33373c;
 $wp-admin-dark-mode-meta-border-color: #1a1f24;
 $wp-admin-dark-mode-field-background-color: #53616e;
 $wp-admin-dark-mode-tab-text-color: #bdc8d3;
+
+$wp-admin-outline-button-hover-blue: #f8f9fe;
+$wp-admin-alert-green: #4ab866;
+$wp-admin-alert-yellow: #f0b849;
+$wp-admin-alert-red: #cc1818;
+$m-chart-disabled-button: #757575;

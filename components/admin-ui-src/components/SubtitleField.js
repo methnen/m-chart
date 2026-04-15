@@ -1,3 +1,4 @@
+import { TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
@@ -11,16 +12,13 @@ export default function SubtitleField() {
 	const value = state.postMeta?.subtitle ?? '';
 
 	return (
-		<input
-			className="input"
-			type="text"
+		<TextControl
+			__next40pxDefaultSize
 			name="m-chart[subtitle]"
-			id="m-chart-subtitle"
 			value={ value }
 			placeholder={ __( 'Enter subtitle here', 'm-chart' ) }
-			style={ { width: '100%' } }
-			onChange={ ( e ) =>
-				dispatch( { type: 'SET_SUBTITLE', payload: e.target.value } )
+			onChange={ ( newValue ) =>
+				dispatch( { type: 'SET_SUBTITLE', payload: newValue } )
 			}
 		/>
 	);

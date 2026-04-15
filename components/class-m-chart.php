@@ -1069,10 +1069,27 @@ class M_Chart {
 	/**
 	 * Return the locale array
 	 *
+	 * When PHP's Intl extension is available, labels are generated in each locale's native language using Locale::getDisplayName()
+	 * Falls back to the English labels in array-locale-codes.php otherwise
+	 *
 	 * @return array locales as used by Intl.NumberFormat
 	 */
 	public function get_locales() {
-		return require __DIR__ . '/array-locale-codes.php';
+		$locales = require __DIR__ . '/array-locale-codes.php';
+
+		if ( ! class_exists( 'Locale' ) ) {
+			return $locales;
+		}
+
+		foreach ( $locales as $code => $english_label ) {
+			$native = Locale::getDisplayName( $code, $code );
+			
+			if ( $native ) {
+				$locales[ $code ] = esc_html( $native );
+			}
+		}
+
+		return $locales;
 	}
 
 	/**

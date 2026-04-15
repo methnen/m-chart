@@ -1,3 +1,4 @@
+import { Button, TextControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
@@ -22,46 +23,56 @@ export default function ShortcodeAndImageRow() {
 
 	return (
 		<div className="row seven">
-			<p className="shortcode">
-				<label htmlFor="m-chart-shortcode">{ __( 'Shortcode', 'm-chart' ) }</label><br />
-				<input
-					className="input"
-					type="text"
-					name="m-chart[shortcode]"
-					id="m-chart-shortcode"
-					value={ shortcode }
-					style={ { width: '100%' } }
-					onClick={ ( e ) => e.target.select() }
-					readOnly
-				/>
-				<button type="button" className="button" onClick={ handleCopy }>
+			<div className="column shortcode">
+				<div>
+					<TextControl
+						__next40pxDefaultSize
+						label={ __( 'Shortcode', 'm-chart' ) }
+						name="m-chart[shortcode]"
+						value={ shortcode }
+						readOnly
+						onChange={ () => {} }
+						onClick={ ( e ) => e.target.select() }
+					/>
+				</div>
+				<Button variant="secondary" onClick={ handleCopy } className="m-chart-input-action-button">
 					{ copied ? __( 'Copied!', 'm-chart' ) : __( 'Copy', 'm-chart' ) }
-				</button>
-			</p>
-			<p className="image">
-				<label htmlFor="m-chart-image">{ __( 'Image', 'm-chart' ) }</label><br />
+				</Button>
+			</div>
+			<div className="column image">
 				{ imageUrl ? (
-					<>
-						<input
-							className="input"
-							type="text"
+					<div>
+						<TextControl
+							__next40pxDefaultSize
+							label={ __( 'Image', 'm-chart' ) }
 							name="m-chart[image]"
-							id="m-chart-image"
 							value={ imageUrl }
-							style={ { width: '100%' } }
-							onClick={ ( e ) => e.target.select() }
 							readOnly
+							onChange={ () => {} }
+							onClick={ ( e ) => e.target.select() }
 						/>
-						<a href={ imageUrl } className="button" target="_blank" rel="noreferrer">
+						<Button
+							variant="secondary"
+							type="button"
+							href={ imageUrl }
+							target="_blank"
+							rel="noopener noreferrer"
+							className="m-chart-input-action-button"
+						>
 							{ __( 'View', 'm-chart' ) }
-						</a>
-					</>
-				) : imageDisabled ? (
-					<em>{ __( 'Image generation is disabled', 'm-chart' ) }</em>
+						</Button>
+					</div>
 				) : (
-					<em>{ __( 'Save/Update this post to generate the image version', 'm-chart' ) }</em>
+					<div>
+						<label htmlFor="m-chart-image">{ __( 'Image', 'm-chart' ) }</label><br />
+						{ imageDisabled ? (
+							<em>{ __( 'Image generation is disabled', 'm-chart' ) }</em>
+						) : (
+							<em>{ __( 'Save/Update this post to generate the image version', 'm-chart' ) }</em>
+						) }
+					</div>
 				) }
-			</p>
+			</div>
 			<input
 				type="hidden"
 				name="m-chart[library]"

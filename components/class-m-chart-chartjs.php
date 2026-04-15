@@ -640,7 +640,7 @@ class M_Chart_Chartjs {
 				if ( M_Chart_Parse::LABELS_BOTH == $parse->value_labels_position ) {
 					if ( M_Chart_Parse::PARSE_COLUMNS == $this->post_meta['parse_in'] ) {
 						// PARSE_COLUMNS: set_data is [x_values_array, y_values_array] — zip by index
-						foreach ( $data_array[0] as $i => $x ) {
+						foreach ( ( $data_array[0] ?? [] ) as $i => $x ) {
 							$new_data_array[] = [
 								'x'     => $x,
 								'y'     => $data_array[1][ $i ],

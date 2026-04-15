@@ -1,3 +1,4 @@
+import { CheckboxControl, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
@@ -31,63 +32,55 @@ export default function ParseAndFlagsRow() {
 
 	return (
 		<div className={ `row two${ showShared ? ' show-shared' : '' }` }>
-			<p>
-				<label htmlFor="m-chart-parse_in">{ __( 'Parse data in', 'm-chart' ) }</label><br />
-				<select
-					name="m-chart[parse_in]"
-					id="m-chart-parse_in"
-					className="select"
-					value={ postMeta.parse_in }
-					onChange={ ( e ) => handleChange( 'parse_in', e.target.value ) }
-				>
-					{ Object.entries( PARSE_OPTION_NAMES ).map( ( [ value, label ] ) => (
-						<option key={ value } value={ value }>{ label }</option>
-					) ) }
-				</select>
-			</p>
-			<p className="labels">
+			<div className="column">
+				<div>
+					<SelectControl
+						__next40pxDefaultSize
+						label={ __( 'Parse data in', 'm-chart' ) }
+						name="m-chart[parse_in]"
+						value={ postMeta.parse_in }
+						onChange={ ( value ) => handleChange( 'parse_in', value ) }
+					>
+						{ Object.entries( PARSE_OPTION_NAMES ).map( ( [ value, label ] ) => (
+							<option key={ value } value={ value }>{ label }</option>
+						) ) }
+					</SelectControl>
+				</div>
+			</div>
+			<div className="column labels">
 				{ '\u00a0' }<br />
-				<label htmlFor="m-chart-labels">
-					<input
-						type="checkbox"
+				<div>
+					<CheckboxControl
 						name="m-chart[labels]"
-						id="m-chart-labels"
-						value="1"
+						label={ __( 'Show labels', 'm-chart' ) }
 						checked={ !! postMeta.labels }
-						onChange={ ( e ) => handleCheckbox( 'labels', e.target.checked ) }
+						onChange={ ( checked ) => handleCheckbox( 'labels', checked ) }
 					/>
-					{ __( ' Show labels', 'm-chart' ) }
-				</label>
-			</p>
-			<p className="legend">
+				</div>
+			</div>
+			<div className="column legend">
 				{ '\u00a0' }<br />
-				<label htmlFor="m-chart-legend">
-					<input
-						type="checkbox"
+				<div>
+					<CheckboxControl
 						name="m-chart[legend]"
-						id="m-chart-legend"
-						value="1"
+						label={ __( 'Show legend', 'm-chart' ) }
 						checked={ !! postMeta.legend }
-						onChange={ ( e ) => handleCheckbox( 'legend', e.target.checked ) }
+						onChange={ ( checked ) => handleCheckbox( 'legend', checked ) }
 					/>
-					{ __( ' Show legend', 'm-chart' ) }
-				</label>
-			</p>
+				</div>
+			</div>
 			{ /* Always render shared in DOM so its value survives type switches on save */ }
-			<p className="shared">
+			<div className="column shared">
 				{ '\u00a0' }<br />
-				<label htmlFor="m-chart-shared">
-					<input
-						type="checkbox"
+				<div>
+					<CheckboxControl
 						name="m-chart[shared]"
-						id="m-chart-shared"
-						value="1"
+						label={ __( 'Shared tooltip', 'm-chart' ) }
 						checked={ !! postMeta.shared }
-						onChange={ ( e ) => handleCheckbox( 'shared', e.target.checked ) }
+						onChange={ ( checked ) => handleCheckbox( 'shared', checked ) }
 					/>
-					{ __( ' Shared tooltip', 'm-chart' ) }
-				</label>
-			</p>
+				</div>
+			</div>
 		</div>
 	);
 }

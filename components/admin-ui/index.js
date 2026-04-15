@@ -14,12 +14,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
-/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+
 
 
 
@@ -36,7 +39,7 @@ function AxisRows() {
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__.useChartAdmin)();
   const {
     postMeta,
     unitTerms
@@ -45,10 +48,10 @@ function AxisRows() {
   const showYMin = YMIN_TYPES.has(postMeta.type);
 
   // Callback ref triggers a re-render when the input mounts, so the canvas measurement runs with the real element instead of the fallback
-  const [yMinEl, setYMinEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
-  const yMinRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(node => setYMinEl(node), []);
+  const [yMinEl, setYMinEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const yMinRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(node => setYMinEl(node), []);
   const yMinValue = String((_postMeta$y_min_value = postMeta.y_min_value) !== null && _postMeta$y_min_value !== void 0 ? _postMeta$y_min_value : 0);
-  const yMinWidth = yMinEl ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__.measureTextWidth)(yMinValue, yMinEl) + 20 + 'px' : '73px';
+  const yMinWidth = yMinEl ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_5__.measureTextWidth)(yMinValue, yMinEl) + 20 + 'px' : '73px';
   function handleChange(field, value) {
     dispatch({
       type: 'SET_POST_META',
@@ -74,12 +77,12 @@ function AxisRows() {
   const yMinStyle = showAxis && showYMin ? {} : {
     display: 'none'
   };
-  const unitOptions = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  const unitOptions = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('N/A', 'm-chart')), unitTerms.map(({
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('N/A', 'm-chart')), unitTerms.map(({
     group,
     units
-  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
     key: group
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "",
@@ -88,81 +91,65 @@ function AxisRows() {
     key: unit.name,
     value: unit.name
   }, unit.name)))));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "row three vertical-axis",
     style: axisStyle
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-y-title"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Vertical axis title', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    type: "text",
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Vertical axis title', 'm-chart'),
     name: "m-chart[y_title]",
-    id: "m-chart-y-title",
     value: postMeta.y_title,
-    style: {
-      width: '100%'
-    },
-    onChange: e => handleChange('y_title', e.target.value)
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "units"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-y-units"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Units', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    onChange: value => handleChange('y_title', value)
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column units"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Units', 'm-chart'),
     name: "m-chart[y_units]",
-    id: "m-chart-y-units",
-    className: "select",
     value: postMeta.y_units,
-    onChange: e => handleChange('y_units', e.target.value)
-  }, unitOptions))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    onChange: value => handleChange('y_units', value)
+  }, unitOptions)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "row four y-min",
     style: yMinStyle
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-y-min"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "checkbox",
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
     name: "m-chart[y_min]",
-    id: "m-chart-y-min",
-    value: "1",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Force vertical axis minimum:', 'm-chart'),
     checked: !!postMeta.y_min,
-    onChange: e => handleYMinCheck(e.target.checked)
-  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)(' Force vertical axis minimum: ', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    onChange: checked => handleYMinCheck(checked)
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
     type: "number",
     name: "m-chart[y_min_value]",
-    id: "m-chart-y-min-value",
     ref: yMinRef,
     value: postMeta.y_min_value,
     disabled: !postMeta.y_min,
-    onChange: e => handleChange('y_min_value', e.target.value),
+    onChange: value => handleChange('y_min_value', value),
     style: {
       width: yMinWidth,
       minWidth: 0
     }
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "row five horizontal-axis",
     style: axisStyle
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-x-title"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Horizontal axis title', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    type: "text",
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Horizontal axis title', 'm-chart'),
     name: "m-chart[x_title]",
-    id: "m-chart-x-title",
     value: postMeta.x_title,
-    style: {
-      width: '100%'
-    },
-    onChange: e => handleChange('x_title', e.target.value)
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "units"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-x-units"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Units', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    onChange: value => handleChange('x_title', value)
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column units"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Units', 'm-chart'),
     name: "m-chart[x_units]",
-    id: "m-chart-x-units",
-    className: "select",
     value: postMeta.x_units,
-    onChange: e => handleChange('x_units', e.target.value)
-  }, unitOptions))));
+    onChange: value => handleChange('x_units', value)
+  }, unitOptions)))));
 }
 
 /***/ },
@@ -471,12 +458,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
-/* harmony import */ var _JspreadsheetWrapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./JspreadsheetWrapper */ "./components/admin-ui-src/components/JspreadsheetWrapper.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../icons */ "./components/admin-ui-src/icons.js");
+/* harmony import */ var _JspreadsheetWrapper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./JspreadsheetWrapper */ "./components/admin-ui-src/components/JspreadsheetWrapper.js");
+
+
 
 
 
@@ -498,7 +490,7 @@ function CsvControls({
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__.useChartAdmin)();
   const {
     postId,
     nonce,
@@ -508,12 +500,12 @@ function CsvControls({
     csvDelimiters,
     defaultDelimiter
   } = state;
-  const [selectedFile, setSelectedFile] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
-  const [csvDelimiter, setCsvDelimiter] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultDelimiter);
-  const [fileError, setFileError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const [importError, setImportError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)('');
-  const [isImporting, setIsImporting] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const fileInputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
+  const [selectedFile, setSelectedFile] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [csvDelimiter, setCsvDelimiter] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(defaultDelimiter);
+  const [fileError, setFileError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [importError, setImportError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)('');
+  const [isImporting, setIsImporting] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const fileInputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
   function handleSelectFile(e) {
     e.preventDefault();
     setFileError(false);
@@ -575,7 +567,7 @@ function CsvControls({
       });
       const json = await response.json();
       if (!json.success) {
-        setImportError(json.data || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Import failed', 'm-chart'));
+        setImportError(json.data || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Import failed', 'm-chart'));
         return;
       }
 
@@ -586,7 +578,7 @@ function CsvControls({
         worksheet.setData(json.data);
 
         // setData() does not trigger onafterchanges so we need to run spreadsheetAutoWidth ourselves
-        (0,_JspreadsheetWrapper__WEBPACK_IMPORTED_MODULE_4__.spreadsheetAutoWidth)(worksheet);
+        (0,_JspreadsheetWrapper__WEBPACK_IMPORTED_MODULE_6__.spreadsheetAutoWidth)(worksheet);
         dispatch({
           type: 'SET_SHEET_DATA',
           payload: {
@@ -596,7 +588,7 @@ function CsvControls({
         });
       }
     } catch (err) {
-      setImportError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Import error: %s', 'm-chart'), err.message));
+      setImportError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Import error: %s', 'm-chart'), err.message));
     } finally {
       // When we're done reset everything in the CSV ui back to default
       setIsImporting(false);
@@ -649,12 +641,12 @@ function CsvControls({
     className: "export"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: "#export-csv",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Export CSV', 'm-chart'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Export CSV', 'm-chart'),
     className: "button",
     onClick: handleExport
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Export', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Export', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "import"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('CSV Import/Export', 'm-chart'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('CSV Import/Export', 'm-chart'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "controls"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     ref: fileInputRef,
@@ -666,39 +658,41 @@ function CsvControls({
     onChange: handleFileChange
   }), !showConfirmation && !isImporting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: "#select-csv",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Select CSV File', 'm-chart'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select CSV File', 'm-chart'),
     className: "button select",
     onClick: handleSelectFile
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Select File', 'm-chart')), showConfirmation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select File', 'm-chart')), showConfirmation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "confirmation"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: "#import-csv",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Import', 'm-chart'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Import', 'm-chart'),
     className: "button",
     onClick: handleImport
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Import', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Import', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    __next40pxDefaultSize: true,
     name: "m-chart[csv_delimiter]",
     value: csvDelimiter,
-    onChange: e => setCsvDelimiter(e.target.value)
+    onChange: value => setCsvDelimiter(value)
   }, Object.entries(csvDelimiters).map(([val, label]) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     key: val,
     value: val
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('%s Delimited', 'm-chart'), label))))), fileError && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('%s Delimited', 'm-chart'), label))))), fileError && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "file error"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('You can only import CSV files', 'm-chart')), importError && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('You can only import CSV files', 'm-chart')), importError && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "import error"
   }, importError), isImporting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "import in-progress"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Importing file', 'm-chart')), showConfirmation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Importing file', 'm-chart')), showConfirmation && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "file-info"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "#cancel",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Cancel Import', 'm-chart'),
-    className: "dashicons dashicons-dismiss",
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    className: "m-chart-csv-cancel",
+    icon: _icons__WEBPACK_IMPORTED_MODULE_5__.circleX,
+    size: "small",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Cancel Import', 'm-chart'),
     onClick: handleCancel
-  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('File: %s', 'm-chart'), selectedFile.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('File: %s', 'm-chart'), selectedFile.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "warning"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Importing this file will replace all existing data in this sheet', 'm-chart'))))));
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Importing this file will replace all existing data in this sheet', 'm-chart'))))));
 }
 
 /***/ },
@@ -873,15 +867,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+
 
 
 
 const PARSE_OPTION_NAMES = {
-  columns: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Columns', 'm-chart'),
-  rows: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Rows', 'm-chart')
+  columns: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Columns', 'm-chart'),
+  rows: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Rows', 'm-chart')
 };
 
 // Chart types that support the shared tooltip option
@@ -890,7 +887,7 @@ function ParseAndFlagsRow() {
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
   const {
     postMeta
   } = state;
@@ -913,51 +910,39 @@ function ParseAndFlagsRow() {
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `row two${showShared ? ' show-shared' : ''}`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-parse_in"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Parse data in', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Parse data in', 'm-chart'),
     name: "m-chart[parse_in]",
-    id: "m-chart-parse_in",
-    className: "select",
     value: postMeta.parse_in,
-    onChange: e => handleChange('parse_in', e.target.value)
+    onChange: value => handleChange('parse_in', value)
   }, Object.entries(PARSE_OPTION_NAMES).map(([value, label]) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     key: value,
     value: value
-  }, label)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "labels"
-  }, '\u00a0', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-labels"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "checkbox",
+  }, label))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column labels"
+  }, '\u00a0', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
     name: "m-chart[labels]",
-    id: "m-chart-labels",
-    value: "1",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Show labels', 'm-chart'),
     checked: !!postMeta.labels,
-    onChange: e => handleCheckbox('labels', e.target.checked)
-  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(' Show labels', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "legend"
-  }, '\u00a0', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-legend"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "checkbox",
+    onChange: checked => handleCheckbox('labels', checked)
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column legend"
+  }, '\u00a0', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
     name: "m-chart[legend]",
-    id: "m-chart-legend",
-    value: "1",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Show legend', 'm-chart'),
     checked: !!postMeta.legend,
-    onChange: e => handleCheckbox('legend', e.target.checked)
-  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(' Show legend', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "shared"
-  }, '\u00a0', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-shared"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "checkbox",
+    onChange: checked => handleCheckbox('legend', checked)
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column shared"
+  }, '\u00a0', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.CheckboxControl, {
     name: "m-chart[shared]",
-    id: "m-chart-shared",
-    value: "1",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Shared tooltip', 'm-chart'),
     checked: !!postMeta.shared,
-    onChange: e => handleCheckbox('shared', e.target.checked)
-  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(' Shared tooltip', 'm-chart'))));
+    onChange: checked => handleCheckbox('shared', checked)
+  }))));
 }
 
 /***/ },
@@ -974,11 +959,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
-/* harmony import */ var _hooks_useLongPress__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../hooks/useLongPress */ "./components/admin-ui-src/hooks/useLongPress.js");
-/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _hooks_useLongPress__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../hooks/useLongPress */ "./components/admin-ui-src/hooks/useLongPress.js");
+/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../icons */ "./components/admin-ui-src/icons.js");
+/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+
+
 
 
 
@@ -1005,21 +995,21 @@ function SheetTab({
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
   const {
     sheetEditingDisabled
   } = state;
-  const [isRenaming, setIsRenaming] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(() => !!isNew);
-  const [inputValue, setInputValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(name);
-  const inputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  const longPress = (0,_hooks_useLongPress__WEBPACK_IMPORTED_MODULE_3__.useLongPress)(() => {
+  const [isRenaming, setIsRenaming] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(() => !!isNew);
+  const [inputValue, setInputValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(name);
+  const inputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
+  const longPress = (0,_hooks_useLongPress__WEBPACK_IMPORTED_MODULE_4__.useLongPress)(() => {
     if (!sheetEditingDisabled) {
       setIsRenaming(true);
     }
   });
 
   // Clear the newSheetId flag once this tab has consumed it
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (isNew) {
       dispatch({
         type: 'CLEAR_NEW_SHEET_ID'
@@ -1028,21 +1018,21 @@ function SheetTab({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Exit rename mode if editing becomes disabled while the input is open
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (sheetEditingDisabled && isRenaming) {
       setIsRenaming(false);
     }
   }, [sheetEditingDisabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keep the hidden input in sync when name changes externally (e.g. via RENAME_SHEET dispatch)
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!isRenaming) {
       setInputValue(name);
     }
   }, [name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync local input value and focus when entering rename mode
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (isRenaming) {
       setInputValue(name);
       if (inputRef.current) {
@@ -1096,9 +1086,6 @@ function SheetTab({
       }
     });
   }
-  function handleNameChange(e) {
-    setInputValue(e.target.value);
-  }
   function commitRename() {
     dispatch({
       type: 'RENAME_SHEET',
@@ -1115,34 +1102,38 @@ function SheetTab({
       commitRename();
     }
   }
-  const inputWidth = inputRef.current ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__.measureTextWidth)(inputValue, inputRef.current) + 'px' : Math.max(40, inputValue.length * 8 + 16) + 'px';
-  const className = ['nav-tab', isActive ? 'nav-tab-active' : '', isSingle ? 'do-not-delete' : ''].filter(Boolean).join(' ');
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "#",
+  const inputWidth = inputRef.current ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_6__.measureTextWidth)(inputValue, inputRef.current) + 'px' : Math.max(40, inputValue.length * 8 + 16) + 'px';
+  const className = ['components-tab-panel__tabs-item', 'm-chart-sheet-tab', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    role: "tab",
+    "aria-selected": isActive,
     className: className,
     id: `spreadsheet-tab-${sheetId}`,
     onClick: handleClick,
     onDoubleClick: handleDoubleClick,
     ...longPress
-  }, !isSingle && !sheetEditingDisabled && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "dashicons dashicons-dismiss",
+  }, !isSingle && !sheetEditingDisabled && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    className: "m-chart-sheet-tab-delete",
+    icon: _icons__WEBPACK_IMPORTED_MODULE_5__.circleX,
+    size: "small",
+    label: "Delete",
     onClick: handleDelete
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "tab-title",
+    className: "m-chart-sheet-tab-title",
     style: {
       display: isRenaming ? 'none' : ''
     }
-  }, name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
     ref: inputRef,
-    type: "text",
     name: `m-chart[set_names][${sheetIndex}]`,
-    className: "spreadsheet-tab-input",
     value: inputValue,
     style: {
       display: isRenaming ? '' : 'none',
       width: inputWidth
     },
-    onChange: handleNameChange,
+    onChange: value => setInputValue(value),
     onBlur: commitRename,
     onKeyDown: handleKeyDown
   }));
@@ -1162,12 +1153,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
-/* harmony import */ var _SheetTab__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SheetTab */ "./components/admin-ui-src/components/SheetTab.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../icons */ "./components/admin-ui-src/icons.js");
+/* harmony import */ var _SheetTab__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SheetTab */ "./components/admin-ui-src/components/SheetTab.js");
+
+
 
 
 
@@ -1186,7 +1182,7 @@ function SheetTabs() {
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__.useChartAdmin)();
   const {
     postMeta,
     sheetIds,
@@ -1197,7 +1193,7 @@ function SheetTabs() {
   } = state;
 
   // Read the PHP-authoritative multi-sheet type list, memoised for stable reference
-  const multiSheetTypes = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useMemo)(() => new Set(m_chart_admin.multi_sheet_types || []), []);
+  const multiSheetTypes = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useMemo)(() => new Set(m_chart_admin.multi_sheet_types || []), []);
   const showTabs = multiSheetTypes.has(postMeta.type);
   function handleAddSheet(e) {
     e.preventDefault();
@@ -1206,24 +1202,23 @@ function SheetTabs() {
       payload: {}
     });
   }
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("nav", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     id: "spreadsheet-tabs",
-    className: `nav-tab-wrapper${showTabs ? '' : ' hide'}${sheetEditingDisabled ? ' editing-disabled' : ''}`
-  }, sheetIds.map((id, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SheetTab__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    className: `components-tab-panel__tabs m-chart-sheet-tabs${showTabs ? '' : ' m-chart-hide'}${sheetEditingDisabled ? ' editing-disabled' : ''}`,
+    role: "tablist"
+  }, !sheetEditingDisabled && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    className: "m-chart-add-sheet",
+    icon: _icons__WEBPACK_IMPORTED_MODULE_5__.circlePlus,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add Sheet', 'm-chart'),
+    onClick: handleAddSheet
+  }), sheetIds.map((id, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SheetTab__WEBPACK_IMPORTED_MODULE_6__["default"], {
     key: id,
     sheetId: id,
     sheetIndex: index,
-    name: setNames[index] || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Sheet %d', 'm-chart'), index + 1),
+    name: setNames[index] || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Sheet %d', 'm-chart'), index + 1),
     isActive: index === activeSheet,
     isSingle: sheetIds.length === 1,
     isNew: id === newSheetId
-  })), !sheetEditingDisabled && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "#add-sheet",
-    className: "add-sheet",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add Sheet', 'm-chart'),
-    onClick: handleAddSheet
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "dashicons dashicons-plus-alt"
   })));
 }
 
@@ -1241,11 +1236,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+
 
 
 
@@ -1253,7 +1251,7 @@ __webpack_require__.r(__webpack_exports__);
 function ShortcodeAndImageRow() {
   const {
     state
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__.useChartAdmin)();
   const {
     postId,
     postMeta,
@@ -1264,7 +1262,7 @@ function ShortcodeAndImageRow() {
   const shortcode = `[chart id="${postId}"]`;
   const showImageField = 'default' === performance && 'yes' === imageSupport;
   const imageDisabled = !showImageField;
-  const [copied, setCopied] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [copied, setCopied] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
   function handleCopy() {
     navigator.clipboard.writeText(shortcode).then(() => {
       setCopied(true);
@@ -1273,46 +1271,40 @@ function ShortcodeAndImageRow() {
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "row seven"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "shortcode"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-shortcode"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Shortcode', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    type: "text",
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column shortcode"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Shortcode', 'm-chart'),
     name: "m-chart[shortcode]",
-    id: "m-chart-shortcode",
     value: shortcode,
-    style: {
-      width: '100%'
-    },
-    onClick: e => e.target.select(),
-    readOnly: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    type: "button",
-    className: "button",
-    onClick: handleCopy
-  }, copied ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Copied!', 'm-chart') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Copy', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "image"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-image"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Image', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), imageUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    type: "text",
+    readOnly: true,
+    onChange: () => {},
+    onClick: e => e.target.select()
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    onClick: handleCopy,
+    className: "m-chart-input-action-button"
+  }, copied ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Copied!', 'm-chart') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Copy', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column image"
+  }, imageUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Image', 'm-chart'),
     name: "m-chart[image]",
-    id: "m-chart-image",
     value: imageUrl,
-    style: {
-      width: '100%'
-    },
-    onClick: e => e.target.select(),
-    readOnly: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    readOnly: true,
+    onChange: () => {},
+    onClick: e => e.target.select()
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    type: "button",
     href: imageUrl,
-    className: "button",
     target: "_blank",
-    rel: "noreferrer"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('View', 'm-chart'))) : imageDisabled ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("em", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Image generation is disabled', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("em", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save/Update this post to generate the image version', 'm-chart'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    rel: "noopener noreferrer",
+    className: "m-chart-input-action-button"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('View', 'm-chart'))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    htmlFor: "m-chart-image"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Image', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), imageDisabled ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("em", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Image generation is disabled', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("em", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save/Update this post to generate the image version', 'm-chart')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "hidden",
     name: "m-chart[library]",
     id: "m-chart-library",
@@ -1530,9 +1522,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+
 
 
 
@@ -1547,21 +1542,16 @@ function SubtitleField() {
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
   const value = (_state$postMeta$subti = state.postMeta?.subtitle) !== null && _state$postMeta$subti !== void 0 ? _state$postMeta$subti : '';
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    type: "text",
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
     name: "m-chart[subtitle]",
-    id: "m-chart-subtitle",
     value: value,
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter subtitle here', 'm-chart'),
-    style: {
-      width: '100%'
-    },
-    onChange: e => dispatch({
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter subtitle here', 'm-chart'),
+    onChange: newValue => dispatch({
       type: 'SET_SUBTITLE',
-      payload: e.target.value
+      payload: newValue
     })
   });
 }
@@ -1580,12 +1570,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
-/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var _utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/measureTextWidth */ "./components/admin-ui-src/utils/measureTextWidth.js");
+
 
 
 
@@ -1596,17 +1589,17 @@ function TypeAndThemeRow() {
   const {
     state,
     dispatch
-  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_3__.useChartAdmin)();
+  } = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_4__.useChartAdmin)();
   const {
     postMeta,
     typeOptions,
     typeOptionNames,
     themes
   } = state;
-  const [heightEl, setHeightEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
-  const heightRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)(node => setHeightEl(node), []);
+  const [heightEl, setHeightEl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const heightRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)(node => setHeightEl(node), []);
   const heightValue = String((_postMeta$height = postMeta.height) !== null && _postMeta$height !== void 0 ? _postMeta$height : '');
-  const heightWidth = heightEl ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_4__.measureTextWidth)(heightValue, heightEl) + 20 + 'px' : '73px';
+  const heightWidth = heightEl ? (0,_utils_measureTextWidth__WEBPACK_IMPORTED_MODULE_5__.measureTextWidth)(heightValue, heightEl) + 20 + 'px' : '73px';
   function handleChange(field, value) {
     dispatch({
       type: 'SET_POST_META',
@@ -1617,43 +1610,45 @@ function TypeAndThemeRow() {
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "row one"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-type"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Type', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Type', 'm-chart'),
     name: "m-chart[type]",
-    id: "m-chart-type",
-    className: "select",
     value: postMeta.type,
-    onChange: e => handleChange('type', e.target.value)
+    onChange: value => handleChange('type', value)
   }, typeOptions.map(type => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     key: type,
     value: type
-  }, typeOptionNames[type] || type)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-theme"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Theme', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, typeOptionNames[type] || type))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    __next40pxDefaultSize: true,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Theme', 'm-chart'),
     name: "m-chart[theme]",
-    id: "m-chart-theme",
     value: postMeta.theme,
-    onChange: e => handleChange('theme', e.target.value)
+    onChange: value => handleChange('theme', value)
   }, themes.map(theme => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     key: theme.slug,
     value: theme.slug
-  }, theme.name)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "m-chart-height"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Height', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, theme.name))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    __next40pxDefaultSize: true,
     type: "number",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Height', 'm-chart'),
     name: "m-chart[height]",
-    id: "m-chart-height",
     ref: heightRef,
     value: postMeta.height,
     min: "300",
     max: "1500",
-    onChange: e => handleChange('height', e.target.value),
+    onChange: value => handleChange('height', value),
     style: {
       width: heightWidth,
       minWidth: 0
     }
-  })));
+  }))));
 }
 
 /***/ },
@@ -2272,6 +2267,38 @@ function useLongPress(callback) {
 
 /***/ },
 
+/***/ "./components/admin-ui-src/icons.js"
+/*!******************************************!*\
+  !*** ./components/admin-ui-src/icons.js ***!
+  \******************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   circlePlus: () => (/* binding */ circlePlus),
+/* harmony export */   circleX: () => (/* binding */ circleX)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__);
+
+
+const circlePlus = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 640 640"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+  d: "M320 96C443.7 96 544 196.3 544 320C544 443.7 443.7 544 320 544C196.3 544 96 443.7 96 320C96 196.3 196.3 96 320 96zM320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM304 416C304 424.8 311.2 432 320 432C328.8 432 336 424.8 336 416L336 336L416 336C424.8 336 432 328.8 432 320C432 311.2 424.8 304 416 304L336 304L336 224C336 215.2 328.8 208 320 208C311.2 208 304 215.2 304 224L304 304L224 304C215.2 304 208 311.2 208 320C208 328.8 215.2 336 224 336L304 336L304 416z"
+}));
+const circleX = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 640 640"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+  d: "M320 96C443.7 96 544 196.3 544 320C544 443.7 443.7 544 320 544C196.3 544 96 443.7 96 320C96 196.3 196.3 96 320 96zM320 576C461.4 576 576 461.4 576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576zM268.5 230C263 223.1 252.9 222 246 227.5C239.1 233 238 243.1 243.5 250L299.5 320L243.5 390C238 396.9 239.1 407 246 412.5C252.9 418 263 416.9 268.5 410L320 345.6L371.5 410C377 416.9 387.1 418 394 412.5C400.9 407 402 396.9 396.5 390L340.5 320L396.5 250C402 243.1 400.9 233 394 227.5C387.1 222 377 223.1 371.5 230L320 294.4L268.5 230z"
+}));
+
+/***/ },
+
 /***/ "./components/admin-ui-src/utils/measureTextWidth.js"
 /*!***********************************************************!*\
   !*** ./components/admin-ui-src/utils/measureTextWidth.js ***!
@@ -2319,6 +2346,16 @@ module.exports = window["React"];
 
 /***/ },
 
+/***/ "@wordpress/components"
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ },
+
 /***/ "@wordpress/element"
 /*!*********************************!*\
   !*** external ["wp","element"] ***!
@@ -2336,6 +2373,16 @@ module.exports = window["wp"]["element"];
 (module) {
 
 module.exports = window["wp"]["i18n"];
+
+/***/ },
+
+/***/ "@wordpress/primitives"
+/*!************************************!*\
+  !*** external ["wp","primitives"] ***!
+  \************************************/
+(module) {
+
+module.exports = window["wp"]["primitives"];
 
 /***/ }
 

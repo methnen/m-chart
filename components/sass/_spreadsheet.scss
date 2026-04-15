@@ -34,108 +34,84 @@
 		padding: 0;
 	}
 
-	.nav-tab-wrapper {
+	.m-chart-sheet-tabs {
 		border-bottom: none;
 		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
 		border-top: rem-calc(1) solid $wp-admin-meta-border-color;
-		overflow-x: scroll;
+		overflow-x: auto;
 		overflow-y: hidden;
-		padding-top: rem-calc( 7 );
 		white-space: nowrap;
-		margin-bottom: rem-calc( -4 );
 
-		@media (max-width: 600px) {
-			margin-bottom: rem-calc( -5 );
-		}
-
-		&.hide {
+		&.m-chart-hide {
 			display: none;
 		}
 
-		.add-sheet {
-			color: $wp-admin-inactive-icon-color;
-			float: left;
-			margin-top: rem-calc( 3 );
-			margin-bottom: 0;
-			margin-left: rem-calc( 7 );
-			margin-right: rem-calc( 7 );
-			text-decoration: none;
+		.m-chart-add-sheet {
+			color: $wp-admin-black;
+			align-self: center;
 
 			&:hover {
-				color: $wp-admin-black;
+				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 			}
 
-			span {
-				line-height: rem-calc( 38 );
-			}
-
-			@media (max-width: 782px) {
-				margin-top: rem-calc( 7 );
+			&:disabled {
+				color: $m-chart-disabled-button;
 			}
 		}
 
-		.nav-tab {
-			display: inline-block;
-			float: none;
-			position: relative;
-			padding-left: rem-calc( 27 );
-			height: rem-calc( 33 );
-			max-height: rem-calc( 33 );
-			overflow-y: hidden;
-			margin-left: 0;
-			margin-right: rem-calc( 7 );
+		.m-chart-sheet-tab {
+			display: flex;
+			align-items: center;
 
-			@media (max-width: 600px) {
-				margin-top: 0;
-			}
-
-			@media (max-width: 782px) {
-				height: rem-calc( 41 );
-				max-height: rem-calc( 41 );
-			}
-
-			span.dashicons-dismiss {
-				color: $wp-admin-inactive-text-color;
-				position: absolute;
-				left: rem-calc( 7 );
-				top: rem-calc( 11 );
+			.m-chart-sheet-tab-delete {
+				color: $wp-admin-black;
 
 				&:hover {
-					color: $wp-admin-red;
+					color: $wp-admin-alert-red;
 				}
 
-				@media (max-width: 782px) {
-					top: rem-calc( 15 );
+				&:disabled {
+					color: $m-chart-disabled-button;
 				}
 			}
 
-			span.tab-title {
-				padding: rem-calc( 0 10 0 9 );
+			.m-chart-sheet-tab-title {
+				padding: rem-calc( 0 13 0 12 );
 				border: 1px solid transparent;
 				display: inline-block;
-				line-height: rem-calc( 27 );
-
-				@media (max-width: 782px) {
-					font-size: rem-calc( 16 );
-					line-height: rem-calc( 38 );
-					padding: rem-calc( 0 12 0 11 );
-				}
-
-				&.hide {
-					display: none;
-				}
 			}
 
 			input {
 				min-width: rem-calc( 30 );
+				height: rem-calc(32);
 			}
 
-			&.nav-tab-active {
-				span.dashicons-dismiss {
+			&:hover {
+				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+			}
+
+			&::after {
+				background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+				bottom: 0;
+				content: '';
+				height: 0;
+				left: 0;
+				pointer-events: none;
+				position: absolute;
+				right: 0;
+				transition: height 0.1s linear;
+			}
+
+			&.is-active {
+				&::after {
+					height: var(--wp-admin-border-width-focus, 2px);
+				}
+
+				.m-chart-sheet-tab-delete {
 					color: $wp-admin-black;
 
 					&:hover {
-						color: $wp-admin-red;
+						color: $wp-admin-alert-red;
 					}
 				}
 
@@ -144,28 +120,6 @@
 						color: $wp-admin-black;
 						-webkit-text-fill-color: $wp-admin-black;
 					}
-				}
-			}
-
-			&:last-of-type {
-				margin-right: rem-calc( 10 );
-			}
-
-			&.do-not-delete {
-				span.dashicons-dismiss {
-					display: none;
-				}
-
-				padding-left: rem-calc(10);
-			}
-		}
-
-		&.editing-disabled {
-			.nav-tab {
-				padding-left: rem-calc(10);
-
-				&:first-of-type {
-					margin-left: rem-calc(7);
 				}
 			}
 		}
@@ -220,7 +174,8 @@
 				float: left;
 				margin-right: rem-calc( 10 );
 
-				select {
+				select,
+				.components-select-control__input {
 					margin-top: rem-calc( 6 );
 					margin-bottom: rem-calc( 4 );
 					margin-left: rem-calc( 7 );
@@ -240,7 +195,7 @@
 
 		.warning,
 		.error {
-			color: $wp-admin-error-color;
+			color: $wp-admin-alert-red;
 		}
 
 		.error,
@@ -252,13 +207,11 @@
 			}
 		}
 
-		a {
-			&.dashicons {
-				color: $wp-admin-icon-color;
+		.m-chart-csv-cancel {
+			color: $wp-admin-icon-color;
 
-				&:hover {
-					color: $wp-admin-error-color;
-				}
+			&:hover {
+				color: $wp-admin-alert-red;
 			}
 		}
 	}
