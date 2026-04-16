@@ -21,7 +21,7 @@
 						</select>
 						<p class="description">
 							<?php esc_html_e( 'Chart.js is the GPL compatible default library:', 'm-chart' ); ?>
-							<a href="https://github.com/methnen/m-chart/wiki/Libraries">https://github.com/methnen/m-chart/wiki/Libraries</a>
+							<a href="https://docs.mch.art/guide/libraries">https://docs.mch.art/guide/libraries</a>
 						</p>
 					</td>
 				</tr>
