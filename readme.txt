@@ -17,7 +17,7 @@ Manage data sets via a spreadsheet interface and display them as charts via the 
 
 **Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
 
-For full documentation please see the [Documentation](https://methnen.github.io/m-chart/).
+For full documentation please see the [Documentation](https://docs.mch.art/).
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
 
@@ -77,7 +77,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Added a Chart Block for the WordPress Block Editor
 	* Send your thanks to [webconstructor](https://github.com/webconstructor) for the lion's share of the work on this
-* Added a [CSV Delimiter](https://methnen.github.io/m-chart/guide/csv) control and setting to allow for differences in CSV files from different regions
+* Added a [CSV Delimiter](https://docs.mch.art/guide/csv) control and setting to allow for differences in CSV files from different regions
 * Fixed an issue where data points weren't being cleaned well enough and it could confuse Chart.js
 * Fixed an issue where Chart.js tooltips sometimes duplicated a label
 * Fixed an issue with entities inside of labels
@@ -128,7 +128,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.9 =
 
-* Added support for [stacked column](https://methnen.github.io/m-chart/guide/chart-types), [stacked bar](https://methnen.github.io/m-chart/guide/chart-types), and [doughnut](https://methnen.github.io/m-chart/guide/chart-types) charts when using Chart.js
+* Added support for [stacked column](https://docs.mch.art/guide/chart-types), [stacked bar](https://docs.mch.art/guide/chart-types), and [doughnut](https://docs.mch.art/guide/chart-types) charts when using Chart.js
 * Added support for data point labels when using Chart.js
 	* Uses the [chartjs-plugin-datalabels](https://github.com/chartjs/chartjs-plugin-datalabels) plugin
 * Added better number formatting for Chart.js
@@ -149,15 +149,15 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.8 =
 
-* Added support for [spline](https://methnen.github.io/m-chart/guide/chart-types), [area](https://methnen.github.io/m-chart/guide/chart-types), [scatter](https://methnen.github.io/m-chart/guide/chart-types), [bubble](https://methnen.github.io/m-chart/guide/chart-types), [radar](https://methnen.github.io/m-chart/guide/chart-types), [radar area](https://methnen.github.io/m-chart/guide/chart-types), and [polar](https://methnen.github.io/m-chart/guide/chart-types) charts when using Chart.js
-* Chart.js can now use [themes](https://methnen.github.io/m-chart/guide/themes)
+* Added support for [spline](https://docs.mch.art/guide/chart-types), [area](https://docs.mch.art/guide/chart-types), [scatter](https://docs.mch.art/guide/chart-types), [bubble](https://docs.mch.art/guide/chart-types), [radar](https://docs.mch.art/guide/chart-types), [radar area](https://docs.mch.art/guide/chart-types), and [polar](https://docs.mch.art/guide/chart-types) charts when using Chart.js
+* Chart.js can now use [themes](https://docs.mch.art/guide/themes)
 	* Default themes:
 		* Chart.js (Default)
 			* Based on the Chart.js homepage colors
 		* Color Blind Safe
 		* Highcharts 4.x
 * Many additions/tweaks to Chart.js support
-	* Charts can now use the [Vertical axis minimum value field](https://methnen.github.io/m-chart/guide/creating-a-chart)
+	* Charts can now use the [Vertical axis minimum value field](https://docs.mch.art/guide/creating-a-chart)
 	* Charts can now use the Shared tooltip setting
 	* Charts use different symbols for each data set when possible
 		* Circle, Diamond, Square, Triangle, etc...
@@ -264,7 +264,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.6 =
 
-* Added support for [scatter](https://methnen.github.io/m-chart/guide/chart-types) and [bubble](https://methnen.github.io/m-chart/guide/chart-types) charts
+* Added support for [scatter](https://docs.mch.art/guide/chart-types) and [bubble](https://docs.mch.art/guide/chart-types) charts
 * Charts can now be loaded via iframes (this enables remote embedding among other things)
 * Line, spline and area charts can now use shared tool tips
 * Added language settings to allow things like setting the thousands seperator and decimal symbols
@@ -285,7 +285,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.5 =
 
 * Added support for the [AMP plugin](https://wordpress.org/plugins/amp/)
-* Shortcode can now output a [HTML table](https://methnen.github.io/m-chart/guide/shortcode) instead of a chart
+* Shortcode can now output a [HTML table](https://docs.mch.art/guide/shortcode) instead of a chart
 * Updated Handsontable to the latest stable version (0.29)
 * Updated Highcharts to the latest stable version (5.0.2)
 * Tweaked how taxonomies are assigned so we don't unintentionally inherit them from other plugins
@@ -296,7 +296,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.4 =
 
-* Added [Vertical axis minimum value field](https://methnen.github.io/m-chart/guide/creating-a-chart)
+* Added [Vertical axis minimum value field](https://docs.mch.art/guide/creating-a-chart)
 * Fixed an issue where a notice error could occur when chart caches are being refreshed
 
 = 1.3.2 =
@@ -322,7 +322,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 1.2 =
 
-* Added [themes](https://methnen.github.io/m-chart/guide/themes)
+* Added [themes](https://docs.mch.art/guide/themes)
 	* Default themes:
 		* Highcharts 4.x (Default)
 		* Color Blind Safe
@@ -362,8 +362,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 = 1.1 =
 
 * Added a Shortcake shortcode ui
-* Added [`canvas_done`](https://methnen.github.io/m-chart/developer/javascript-events) Javascript event
-* Added [`m_chart_admin_footer_javascript`](https://methnen.github.io/m-chart/developer/hooks) Action hook
+* Added [`canvas_done`](https://docs.mch.art/developer/javascript-events) Javascript event
+* Added [`m_chart_admin_footer_javascript`](https://docs.mch.art/developer/hooks) Action hook
 * Fixed a PHP warning that occured when adding a new chart that had no data yet
 
 = 1.0 =

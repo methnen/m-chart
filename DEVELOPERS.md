@@ -2,7 +2,7 @@
 
 ## Documentation ##
 
-Full user and developer documentation is available at **https://methnen.github.io/m-chart/**. The developer section covers PHP hooks, JavaScript events, and the admin UI hooks API.
+Full user and developer documentation is available at **https://docs.mch.art/**. The developer section covers PHP hooks, JavaScript events, and the admin UI hooks API.
 
 ## Build Environment Install ##
 

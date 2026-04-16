@@ -7,6 +7,3 @@ build/
 package-lock.json
 .vscode/
 .php-cs-fixer.cache
-docs/.vuepress/dist
-docs/.vuepress/.temp
-docs/.vuepress/.cache
