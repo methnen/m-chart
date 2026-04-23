@@ -473,6 +473,9 @@ class M_Chart_Chartjs {
 			$chart_args = m_chart()->array_merge_recursive( $chart_args, $theme );
 		}
 
+		// Expose the full resolved color palette so extensions can use it
+		$chart_args['colors'] = $this->colors;
+
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
 
 		// Set the cache, we'll regenerate this when someone updates the post

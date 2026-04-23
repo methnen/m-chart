@@ -1,4 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
+import { useChartAdmin } from '../context/ChartAdminContext';
 import { useChartRefresh } from '../hooks/useChartRefresh';
 import { useFormSubmissionGuard } from '../hooks/useFormSubmissionGuard';
 import ChartPreview from './ChartPreview';
@@ -11,6 +12,8 @@ import ChartSettings from './ChartSettings';
  * The subtitle input is now a React-controlled SubtitleField component mounted via a separate portal — no DOM bridge needed here.
  */
 export default function ChartMetaBox() {
+	const { state, dispatch } = useChartAdmin();
+
 	const [ title, setTitle ] = useState( () => {
 		const el = document.getElementById( 'title' );
 		return el ? el.value : '';
@@ -35,8 +38,17 @@ export default function ChartMetaBox() {
 	useChartRefresh( title );
 	useFormSubmissionGuard();
 
+	// Allow external plugins to inject content above the chart preview
+	// Same pattern as m_chart.spreadsheet_metabox_extension in SpreadsheetMetaBox.js
+	const chartMetaboxExtension = wp.hooks.applyFilters(
+		'm_chart.chart_metabox_extension',
+		null,
+		{ state, dispatch }
+	);
+
 	return (
 		<>
+			{ chartMetaboxExtension }
 			<ChartPreview />
 			<ChartSettings />
 		</>

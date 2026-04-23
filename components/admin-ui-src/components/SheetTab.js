@@ -1,5 +1,6 @@
-import { Button, TextControl } from '@wordpress/components';
+import { Button, Modal, TextControl } from '@wordpress/components';
 import { useState, useEffect, useRef } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { useLongPress } from '../hooks/useLongPress';
 import { circleX } from '../icons';
@@ -26,6 +27,7 @@ export default function SheetTab( {
 	const { sheetEditingDisabled } = state;
 	const [ isRenaming, setIsRenaming ] = useState( () => !! isNew );
 	const [ inputValue, setInputValue ] = useState( name );
+	const [ showDeleteModal, setShowDeleteModal ] = useState( false );
 	const inputRef = useRef( null );
 
 	const longPress = useLongPress( () => { if ( ! sheetEditingDisabled ) { setIsRenaming( true ); } } );
@@ -88,12 +90,11 @@ export default function SheetTab( {
 			return;
 		}
 
-		// If user rejects teh confirmation we stop
-		if ( ! window.confirm( state.deleteConfirm ) ) {
-			return;
-		}
+		setShowDeleteModal( true );
+	}
 
-		// Activate a neighbouring sheet before deleting so the active index stays valid.
+	function confirmDelete() {
+		// Activate a neighbouring sheet before deleting so the active index stays valid
 		if ( isActive ) {
 			const newActive = sheetIndex > 0 ? sheetIndex - 1 : 1;
 
@@ -101,6 +102,7 @@ export default function SheetTab( {
 		}
 
 		dispatch( { type: 'DELETE_SHEET', payload: { index: sheetIndex } } );
+		setShowDeleteModal( false );
 	}
 
 	function commitRename() {
@@ -168,6 +170,31 @@ export default function SheetTab( {
 				onBlur={ commitRename }
 				onKeyDown={ handleKeyDown }
 			/>
+			{ showDeleteModal && (
+				<Modal
+					className="m-chart-modal"
+					title={ __( 'Delete Sheet', 'm-chart' ) }
+					size="small"
+					onRequestClose={ () => setShowDeleteModal( false ) }
+				>
+					<p>{ __( 'Are you sure you want to delete this sheet?', 'm-chart' ) }</p>
+					<div className="buttons">
+						<Button
+							variant="primary"
+							isDestructive
+							onClick={ confirmDelete }
+						>
+							{ __( 'Delete', 'm-chart' ) }
+						</Button>
+						<Button
+							variant="secondary"
+							onClick={ () => setShowDeleteModal( false ) }
+						>
+							{ __( 'Cancel', 'm-chart' ) }
+						</Button>
+					</div>
+				</Modal>
+			) }
 		</button>
 	);
 }

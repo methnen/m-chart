@@ -375,7 +375,6 @@ class M_Chart_Admin {
 				'image_width'             => m_chart()->get_settings( 'image_width' ),
 				'library'                 => $library,
 				'set_names'               => m_chart()->get_post_meta( $post_id, 'set_names' ),
-				'delete_confirm'          => esc_attr__( 'Are you sure you want to delete this spreadsheet?', 'm-chart' ),
 				'post_id'                 => $post_id,
 				'nonce'                   => wp_create_nonce( m_chart()->slug . '-save-post' ),
 				'ajax_url'                => admin_url( 'admin-ajax.php' ),

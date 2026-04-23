@@ -27,7 +27,6 @@ const initialState = {
 	instantPreview:   m_chart_admin.instant_preview_support,
 	imageMultiplier:  m_chart_admin.image_multiplier,
 	imageWidth:       m_chart_admin.image_width,
-	deleteConfirm:    m_chart_admin.delete_confirm,
 	csvDelimiters:    m_chart_admin.csv_delimiters || { ',': 'Comma' },
 	defaultDelimiter: m_chart_admin.default_delimiter || ',',
 
@@ -131,6 +130,7 @@ function reducer( state, action ) {
 			return { ...state, activeSheet: action.payload };
 
 		case 'SET_CHART_ARGS':
+			console.log({ ...state, chartArgs: action.payload });
 			return { ...state, chartArgs: action.payload };
 
 		case 'SET_REFRESHING':

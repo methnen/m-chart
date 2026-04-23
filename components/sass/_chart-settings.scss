@@ -2,9 +2,28 @@
 
 @use 'global-mixins-and-variables' as *;
 
+.m-chart-modal {
+	.components-modal__content {
+		margin-top: rem-calc(60);
+	
+		.components-modal__header {
+			height: rem-calc(60);
+			padding-bottom: 0;
+		}
+
+		.buttons {
+			display: flex;
+			gap: rem-calc(10);
+			justify-content: flex-end;
+			margin-top: 1rem;
+		}
+	}
+}
+
 #m-chart {
 	.inside {
 		padding: 0;
+		margin-top: 0;
 
 		.m-chart-container {
 			padding: rem-calc( 7 10 10 );

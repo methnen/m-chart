@@ -281,8 +281,23 @@
   color: #cc1818;
 }
 
+.m-chart-modal .components-modal__content {
+  margin-top: 3.75rem;
+}
+.m-chart-modal .components-modal__content .components-modal__header {
+  height: 3.75rem;
+  padding-bottom: 0;
+}
+.m-chart-modal .components-modal__content .buttons {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
 #m-chart .inside {
   padding: 0;
+  margin-top: 0;
 }
 #m-chart .inside .m-chart-container {
   padding: 0.4375rem 0.625rem 0.625rem;
