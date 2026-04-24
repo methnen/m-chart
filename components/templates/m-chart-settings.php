@@ -119,7 +119,7 @@
 								<?php
 							}
 							?>
-						</select>
+						</select><br />
 						<span class="description"><?php esc_html_e( 'Default used when importing/exporting CSV files', 'm-chart' ); ?></span>
 					</td>
 				</tr>

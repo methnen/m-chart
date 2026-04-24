@@ -47,11 +47,11 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 			onComplete,
 		};
 
-		Chart.register( ChartDataLabels );
-		Chart.register( MChartHelper );
-		<?php do_action( 'm_chart_after_chartjs_plugins', $post_id, $args, $this->instance ); ?>
-
 		document.addEventListener( 'DOMContentLoaded', () => {
+			Chart.register( ChartDataLabels );
+			Chart.register( MChartHelper );
+			<?php do_action( 'm_chart_after_chartjs_plugins', $post_id, $args, $this->instance ); ?>
+
 			new Chart( canvas, chartArgs );
 		} );
 	} )();
