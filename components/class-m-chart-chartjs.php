@@ -35,34 +35,7 @@ class M_Chart_Chartjs {
 		'#6cbebf', // Turquoise
 		'#47494b', // Gray
 	];
-	public $points         = [
-		[
-			'point' => [
-				'pointStyle' => 'circle',
-			],
-		],
-		[
-			'point' => [
-				'pointStyle' => 'rectRot',
-			],
-		],
-		[
-			'point' => [
-				'pointStyle' => 'rect',
-			],
-		],
-		[
-			'point' => [
-				'pointStyle' => 'triangle',
-			],
-		],
-		[
-			'point' => [
-				'pointStyle' => 'triangle',
-				'rotation'   => 180,
-			],
-		],
-	];
+	public $points;
 	public $chart_types    = [
 		'column'         => 'bar',
 		'stacked-column' => 'bar',
@@ -88,6 +61,8 @@ class M_Chart_Chartjs {
 		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
 		add_filter( 'm_chart_iframe_scripts', [ $this, 'm_chart_iframe_scripts' ], 10, 2 );
 
+		$this->points = self::get_points_defaults();
+
 		$this->theme_directories = [
 			get_stylesheet_directory() . '/m-chart-chartjs-themes/', // Child theme
 			get_template_directory() . '/m-chart-chartjs-themes/', // Parent theme
@@ -109,6 +84,115 @@ class M_Chart_Chartjs {
 			'radar'          => esc_html__( 'Radar', 'm-chart' ),
 			'radar-area'     => esc_html__( 'Radar Area', 'm-chart' ),
 			'polar'          => esc_html__( 'Polar', 'm-chart' ),
+		];
+	}
+
+	/**
+	 * Canonical Chart.js options scaffold that get_chart_args() builds on top of.
+	 *
+	 * Pure static defaults with no post-meta dependencies. Exposed so
+	 * extensions (e.g. m-chart-pro's theme builder preview) can read the
+	 * same literals m-chart will apply at render time, instead of mirroring
+	 * them and drifting.
+	 *
+	 * @return array
+	 */
+	public static function get_chart_options_defaults() {
+		return [
+			'plugins' => [
+				'title' => [
+					'font'    => [
+						'size'   => 21,
+						'weight' => 'normal',
+					],
+					'padding' => [
+						'bottom' => 15,
+					],
+				],
+				'subtitle' => [
+					'font'    => [
+						'size'   => 18,
+						'weight' => 'normal',
+					],
+					'padding' => [
+						'bottom' => 15,
+					],
+				],
+				'legend' => [
+					'position' => 'bottom',
+					'labels'   => [
+						'font'          => [
+							'weight' => 'bold',
+						],
+						'usePointStyle' => true,
+					],
+				],
+				'tooltip' => [
+					'enabled' => true,
+				],
+				'datalabels' => [
+					'color'  => 'black',
+					'font'   => [
+						'weight' => 'bold',
+					],
+					'offset' => 3,
+				],
+			],
+			'layout' => [
+				'padding' => 20,
+			],
+			'responsive'          => true,
+			'maintainAspectRatio' => false,
+		];
+	}
+
+	/**
+	 * Canonical per-dataset point defaults cycle.
+	 *
+	 * Each entry's `point` array is what core assigns to a dataset's
+	 * `elements` slot for line/scatter/radar charts. Extensions read this
+	 * to get pointStyle/hoverRadius/hitRadius without mirroring the values.
+	 *
+	 * @return array
+	 */
+	public static function get_points_defaults() {
+		return [
+			[
+				'point' => [
+					'pointStyle'  => 'circle',
+					'hoverRadius' => 7,
+					'hitRadius'   => 13,
+				],
+			],
+			[
+				'point' => [
+					'pointStyle'  => 'rectRot',
+					'hoverRadius' => 7,
+					'hitRadius'   => 13,
+				],
+			],
+			[
+				'point' => [
+					'pointStyle'  => 'rect',
+					'hoverRadius' => 7,
+					'hitRadius'   => 13,
+				],
+			],
+			[
+				'point' => [
+					'pointStyle'  => 'triangle',
+					'hoverRadius' => 7,
+					'hitRadius'   => 13,
+				],
+			],
+			[
+				'point' => [
+					'pointStyle'  => 'triangle',
+					'rotation'    => 180,
+					'hoverRadius' => 7,
+					'hitRadius'   => 13,
+				],
+			],
 		];
 	}
 
@@ -172,47 +256,31 @@ class M_Chart_Chartjs {
 
 		$type = $this->post_meta['type'];
 
+		$defaults = self::get_chart_options_defaults();
+
 		$chart_args = [
 			'type'    => $this->chart_types[ $this->post_meta['type'] ],
 			'options' => [
 				'plugins' => [
 					// @TODO Figure out how to support subtitles in Chart.js
-					'title' => [
-						'display' => true,
-						'text'    => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
-						'font'    => [
-							'size'   => 21,
-							'weight' => 'normal',
-						],
-						'padding' => [
-							'bottom' => 15,
-						],
-					],
-					'legend' => [
-						'display'  => $this->post_meta['legend'] ? true : false,
-						'position' => 'bottom',
-						'labels'   => [
-							'font'          => [
-								'weight' => 'bold',
-							],
-							'usePointStyle' => true,
-						],
-					],
-					'tooltip' => [
-						'enabled' => true,
-					],
+					'title' => array_merge(
+						$defaults['plugins']['title'],
+						[
+							'display' => true,
+							'text'    => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
+						]
+					),
+					'legend' => array_merge(
+						$defaults['plugins']['legend'],
+						[
+							'display' => $this->post_meta['legend'] ? true : false,
+						]
+					),
+					'tooltip' => $defaults['plugins']['tooltip'],
 				],
-				'layout' => [
-					'padding' => 20,
-				],
-				'elements' => [
-					'point' => [
-						'hoverRadius' => 7,
-						'hitRadius'   => 13,
-					],
-				],
-				'responsive'          => true,
-				'maintainAspectRatio' => false,
+				'layout'              => $defaults['layout'],
+				'responsive'          => $defaults['responsive'],
+				'maintainAspectRatio' => $defaults['maintainAspectRatio'],
 				'locale'              => m_chart()->get_settings( 'locale' ),
 			],
 		];
@@ -221,17 +289,13 @@ class M_Chart_Chartjs {
 		if ( '' != $this->post_meta['subtitle'] ) {
 			$chart_args['options']['plugins']['title']['padding']['bottom'] = 10;
 
-			$chart_args['options']['plugins']['subtitle'] = [
-				'display' => true,
-				'text'    => $this->esc_title( $this->post_meta['subtitle'] ),
-				'font'    => [
-					'size'   => 18,
-					'weight' => 'normal',
-				],
-				'padding' => [
-					'bottom' => 15,
-				],
-			];
+			$chart_args['options']['plugins']['subtitle'] = array_merge(
+				$defaults['plugins']['subtitle'],
+				[
+					'display' => true,
+					'text'    => $this->esc_title( $this->post_meta['subtitle'] ),
+				]
+			);
 		}
 
 		// If we're in the admin panel we need to bump up the devicePixelRatio to get a better image
@@ -459,14 +523,10 @@ class M_Chart_Chartjs {
 		$chart_args['options']['plugins']['datalabels']['display'] = false;
 
 		if ( true == $this->post_meta['labels'] ) {
-			$chart_args['options']['plugins']['datalabels'] = [
-				'color'   => 'black',
-				'font'    => [
-					'weight' => 'bold',
-				],
-				'offset'  => 3,
-				'display' => 'auto',
-			];
+			$chart_args['options']['plugins']['datalabels'] = array_merge(
+				$defaults['plugins']['datalabels'],
+				[ 'display' => 'auto' ]
+			);
 		}
 
 		if ( $theme ) {
