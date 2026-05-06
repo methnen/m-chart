@@ -307,6 +307,7 @@ class M_Chart_Admin {
 				// Chart.js libs — enqueued explicitly so the React preview has window.Chart
 				wp_enqueue_script( 'chartjs-datalabels' ); // also loads chartjs + chartjs-helpers
 				wp_enqueue_script( 'chartjs-treemap' );    // user can switch to treemap from any type
+				wp_enqueue_script( 'chartjs-boxplot' );    // user can switch to boxplot/violin from any type
 			}
 
 			$post_meta        = m_chart()->get_post_meta( $post_id );

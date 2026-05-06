@@ -22,6 +22,8 @@ const AXIS_TYPES = new Set( [
 	'stacked-bar',
 	'scatter',
 	'bubble',
+	'boxplot',
+	'violin',
 ] );
 
 export default function AxisRows() {

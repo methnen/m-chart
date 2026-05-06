@@ -143,54 +143,48 @@
 	}
 
 	#m-chart-csv {
-		@include clearfix;
 		background-color: $wp-admin-dark-background-color;
 		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
 		border-top: rem-calc(1) solid $wp-admin-border-color;
 		padding: rem-calc( 15 10 10 );
 
-		&::after {
-			clear: both;
+		label {
+			@include wp-react-form-label;
 		}
 
-		.button {
-			margin-top: rem-calc( 6 );
+		.actions {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: rem-calc( 10 );
+			flex-wrap: wrap;
 
-			&.select {
-				margin-right: rem-calc( 10 );
-			}
-		}
-
-		div {
-			&.import {
-				margin-right: rem-calc( 65 );
-			}
-
-			&.export {
-				float: right;
+			// WP admin adds `margin-bottom: 4px` to all .button elements at the 782px
+			// breakpoint, which shifts flex centering and pushes the SelectControl
+			// visually below the buttons. Zero it out so they stay aligned.
+			.button {
+				margin-bottom: 0;
 			}
 
-			&.confirmation {
-				float: left;
-				margin-right: rem-calc( 10 );
+			.actions-left {
+				display: flex;
+				align-items: center;
+				gap: rem-calc( 10 );
+			}
 
-				select,
-				.components-select-control__input {
-					margin-top: rem-calc( 6 );
-					margin-bottom: rem-calc( 4 );
-					margin-left: rem-calc( 7 );
+			.confirmation {
+				display: flex;
+				align-items: center;
+				gap: rem-calc( 7 );
 
-					// Stop export button and select input from colliding on small screens
-					@media (max-width: 600px) {
-						display: block;
-					}
+				.components-base-control {
+					margin: 0;
 				}
 			}
+		}
 
-			&.file-info {
-				clear: left;
-				padding-top: rem-calc( 10 );
-			}
+		.file-info {
+			padding-top: rem-calc( 10 );
 		}
 
 		.warning,
@@ -201,14 +195,13 @@
 		.error,
 		.in-progress {
 			margin: rem-calc( 10 0 0 5 );
-
-			&:not( .hide ) {
-				display: inline-block;
-			}
 		}
 
 		.m-chart-csv-cancel {
 			color: $wp-admin-icon-color;
+			position: relative;
+			bottom: rem-calc(-7);
+			left: rem-calc(-2);
 
 			&:hover {
 				color: $wp-admin-alert-red;

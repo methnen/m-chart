@@ -11,6 +11,16 @@
 	}
 }
 
+@mixin wp-react-form-label {
+	font-size: rem-calc(11);
+	font-weight: 499;
+	line-height: 1.4;
+	text-transform: uppercase;
+	display: block;
+	margin-bottom: calc(rem-calc(8));
+	padding-top: 0;
+}
+
 @mixin action-button {
 	height: rem-calc(32);
 	background-color: white;

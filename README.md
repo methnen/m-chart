@@ -1,8 +1,8 @@
 # M Chart #
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
 **Tags:** chartjs, highcharts, graphs, charts, tables, data  
-**Tested up to:** 6.9.1  
-**Stable tag:** 2.0  
+**Tested up to:** 7.0  
+**Stable tag:** 2.1  
 **License:** MIT  
 
 Manage data sets and display them as charts in WordPress.
@@ -34,6 +34,26 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 2.1 ###
+
+* Added support for a [treemap](https://docs.mch.art/guide/chart-types) chart type
+	* Each row of [label, value] data becomes a rectangle sized by value
+	* Defaults to a single-color value-shaded look; can be switched to one color per rectangle via the new "Color per data point" toggle
+	* Treemap charts also accept hierarchical data - add 3 or more columns and the last column becomes the value while columns to the left become nested grouping levels (outermost first); leave the top-left cell empty to use row 1 as field-name headers and the names will show in tooltips and captions
+* Added support for [boxplot](https://docs.mch.art/guide/chart-types) and [violin](https://docs.mch.art/guide/chart-types) chart types
+	* Each row in the spreadsheet is one distribution: first cell is the category, remaining cells are the values
+	* Min, Q1, Median, Q3, Max, whiskers, and outliers are computed automatically using the standard 1.5 x IQR rule
+	* Tooltips show the five-number summary on separate lines plus an outlier count when applicable
+	* Add additional sheets to compare distributions across groups - each sheet becomes its own dataset
+* Added a "Color per data point" setting for Treemap, Column, and Bar charts
+	* This is only available if using a single series data set
+		* For example in a Column chart with a single series data set each column gets a different color cycled from the active theme palette instead of just one color for each column
+* Added a setting to defer chart rendering until charts scroll into view
+	* Inline Chart.js charts wait to instantiate (and animate) until their container enters the viewport
+	* iframe-embedded charts get the native `loading="lazy"` attribute so they don't load until they near the viewport
+	* Enabled by default - uncheck the new "Defer Rendering" setting to restore the old behavior
+* Refactored the Admin UI a bit to better fit the new WordPress 7 admin styles and input types
 
 ### 2.0 ###
 

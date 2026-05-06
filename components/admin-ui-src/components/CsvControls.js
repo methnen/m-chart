@@ -181,19 +181,8 @@ export default function CsvControls( { getActiveWorksheet } ) {
 
 	return (
 		<div id="m-chart-csv">
-			<div className="export">
-				<br />
-				<a
-					href="#export-csv"
-					title={ __( 'Export CSV', 'm-chart' ) }
-					className="button"
-					onClick={ handleExport }
-				>
-					{ __( 'Export', 'm-chart' ) }
-				</a>
-			</div>
 			<div className="import">
-				{ __( 'CSV Import/Export', 'm-chart' ) }<br />
+				<label>{ __( 'CSV Import/Export', 'm-chart' ) }</label>
 				<div className="controls">
 					{ /* Hidden native file input — triggered programmatically */ }
 					<input
@@ -203,42 +192,57 @@ export default function CsvControls( { getActiveWorksheet } ) {
 						style={ { display: 'none' } }
 						onChange={ handleFileChange }
 					/>
-					{ /* Select File button — shown when no file is selected */ }
-					{ ! showConfirmation && ! isImporting && (
-						<a
-							href="#select-csv"
-							title={ __( 'Select CSV File', 'm-chart' ) }
-							className="button select"
-							onClick={ handleSelectFile }
-						>
-							{ __( 'Select File', 'm-chart' ) }
-						</a>
-					) }
-					{ /* Confirmation row: Import button + delimiter select */ }
-					{ showConfirmation && (
-						<div className="confirmation">
-							<a
-								href="#import-csv"
-								title={ __( 'Import', 'm-chart' ) }
-								className="button"
-								onClick={ handleImport }
-							>
-								{ __( 'Import', 'm-chart' ) }
-							</a>
-							<SelectControl
-								__next40pxDefaultSize
-								name="m-chart[csv_delimiter]"
-								value={ csvDelimiter }
-								onChange={ ( value ) => setCsvDelimiter( value ) }
-							>
-								{ Object.entries( csvDelimiters ).map( ( [ val, label ] ) => (
-									<option key={ val } value={ val }>
-										{ sprintf( __( '%s Delimited', 'm-chart' ), label ) }
-									</option>
-								) ) }
-							</SelectControl>
+					<div className="actions">
+						<div className="actions-left">
+							{ /* Select File button — shown when no file is selected */ }
+							{ ! showConfirmation && ! isImporting && (
+								<a
+									href="#select-csv"
+									title={ __( 'Select CSV File', 'm-chart' ) }
+									className="button select"
+									onClick={ handleSelectFile }
+								>
+									{ __( 'Select File', 'm-chart' ) }
+								</a>
+							) }
+							{ /* Confirmation row: Import button + delimiter select */ }
+							{ showConfirmation && (
+								<div className="confirmation">
+									<a
+										href="#import-csv"
+										title={ __( 'Import', 'm-chart' ) }
+										className="button"
+										onClick={ handleImport }
+									>
+										{ __( 'Import', 'm-chart' ) }
+									</a>
+									<SelectControl
+										__next40pxDefaultSize
+										name="m-chart[csv_delimiter]"
+										value={ csvDelimiter }
+										onChange={ ( value ) => setCsvDelimiter( value ) }
+									>
+										{ Object.entries( csvDelimiters ).map( ( [ val, label ] ) => (
+											<option key={ val } value={ val }>
+												{ sprintf( __( '%s Delimited', 'm-chart' ), label ) }
+											</option>
+										) ) }
+									</SelectControl>
+								</div>
+							) }
 						</div>
-					) }
+						{ /* Export hidden while a file is queued or being imported */ }
+						{ ! showConfirmation && ! isImporting && (
+							<a
+								href="#export-csv"
+								title={ __( 'Export CSV', 'm-chart' ) }
+								className="button export"
+								onClick={ handleExport }
+							>
+								{ __( 'Export', 'm-chart' ) }
+							</a>
+						) }
+					</div>
 					{ fileError && (
 						<p className="file error">{ __( 'You can only import CSV files', 'm-chart' ) }</p>
 					) }

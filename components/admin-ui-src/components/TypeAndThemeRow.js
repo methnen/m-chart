@@ -9,15 +9,20 @@ const DATA_POINT_COLOR_TYPES = new Set( [
 	'treemap',
 	'column',
 	'bar',
+	'boxplot',
+	'violin',
 ] );
 
 // Chart types where the per-point color toggle requires single-series (simple 2D) data
 // Treemap is in this set because hierarchical (3+ column) data uses parent-group coloring
-// rather than per-leaf cycling, so the toggle wouldn't apply
+// rather than per-leaf cycling, so the toggle wouldn't apply.
+// Boxplot/Violin are in this set because per-box cycling only makes sense with one dataset
 const TYPES_REQUIRING_SIMPLE_2D = new Set( [
 	'column',
 	'bar',
 	'treemap',
+	'boxplot',
+	'violin',
 ] );
 
 /**
@@ -55,8 +60,14 @@ export default function TypeAndThemeRow() {
 	let showDataPointColors = DATA_POINT_COLOR_TYPES.has( postMeta.type );
 
 	if ( showDataPointColors && TYPES_REQUIRING_SIMPLE_2D.has( postMeta.type ) ) {
-		const activeSheet = Array.isArray( spreadsheetData ) ? spreadsheetData[0] : null;
-		showDataPointColors = isSimple2DSeries( activeSheet, postMeta.parse_in );
+		// Boxplot/violin treat each sheet as a separate dataset, so "single-dataset" means
+		// exactly one sheet (the per-box-color toggle is meaningful only there)
+		if ( 'boxplot' === postMeta.type || 'violin' === postMeta.type ) {
+			showDataPointColors = Array.isArray( spreadsheetData ) && 1 === spreadsheetData.length;
+		} else {
+			const activeSheet = Array.isArray( spreadsheetData ) ? spreadsheetData[0] : null;
+			showDataPointColors = isSimple2DSeries( activeSheet, postMeta.parse_in );
+		}
 	}
 
 	function handleChange( field, value ) {

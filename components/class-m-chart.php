@@ -1,7 +1,7 @@
 <?php
 
 class M_Chart {
-	public $version           = '2.0';
+	public $version           = '2.1';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
@@ -21,9 +21,11 @@ class M_Chart {
 		'legend'            => true,
 		'source'            => '',
 		'source_url'        => '',
-		'data'              => [],
-		'set_names'         => [],
-		'data_point_colors' => false,
+		'data'               => [],
+		'set_names'          => [],
+		'data_point_colors'  => false,
+		'mean_point'         => true,
+		'sample_points' => false,
 	];
 	public $get_chart_default_args = [
 		'show'  => 'chart',
@@ -262,6 +264,13 @@ class M_Chart {
 			$this->version
 		);
 
+		wp_register_script(
+			'chartjs-boxplot',
+			$this->plugin_url . '/components/external/chartjs/chartjs-chart-boxplot.min.js',
+			[ 'chartjs' ],
+			$this->version
+		);
+
 		// jQuery needs to be in the header since the charts are inline
 		wp_enqueue_script( 'jquery', false, [], false, false );
 
@@ -429,10 +438,12 @@ class M_Chart {
 	 */
 	public function validate_post_meta( $meta ) {
 		// Need to set checkboxes before checking or they can't be deselected
-		$chart_meta['labels']            = false;
-		$chart_meta['y_min']             = false;
-		$chart_meta['legend']            = false;
-		$chart_meta['data_point_colors'] = false;
+		$chart_meta['labels']             = false;
+		$chart_meta['y_min']              = false;
+		$chart_meta['legend']             = false;
+		$chart_meta['data_point_colors']  = false;
+		$chart_meta['mean_point']         = false;
+		$chart_meta['sample_points'] = false;
 
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
@@ -443,7 +454,7 @@ class M_Chart {
 					$chart_meta[ $field ]['sets'] = $meta[ $field ];
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
-				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors' ] ) ) {
+				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );
@@ -1062,6 +1073,8 @@ class M_Chart {
 			'bubble',
 			'radar',
 			'radar-area',
+			'boxplot',
+			'violin',
 		] );
 	}
 

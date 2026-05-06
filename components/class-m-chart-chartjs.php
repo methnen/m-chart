@@ -25,6 +25,8 @@ class M_Chart_Chartjs {
 		'radar-area',
 		'polar',
 		'treemap',
+		'boxplot',
+		'violin',
 	];
 	public $type_option_names = [];
 	public $theme_directories;
@@ -53,6 +55,8 @@ class M_Chart_Chartjs {
 		'radar-area'     => 'radar',
 		'polar'          => 'polarArea',
 		'treemap'        => 'treemap',
+		'boxplot'        => 'boxplot',
+		'violin'         => 'violin',
 	];
 	public $helpers_loaded = false;
 
@@ -87,6 +91,8 @@ class M_Chart_Chartjs {
 			'radar-area'     => esc_html__( 'Radar Area', 'm-chart' ),
 			'polar'          => esc_html__( 'Polar', 'm-chart' ),
 			'treemap'        => esc_html__( 'Treemap', 'm-chart' ),
+			'boxplot'        => esc_html__( 'Boxplot', 'm-chart' ),
+			'violin'         => esc_html__( 'Violin', 'm-chart' ),
 		];
 	}
 
@@ -142,7 +148,7 @@ class M_Chart_Chartjs {
 				],
 			],
 			'layout' => [
-				'padding' => 20,
+				'padding' => 16,
 			],
 			'responsive'          => true,
 			'maintainAspectRatio' => false,
@@ -226,8 +232,14 @@ class M_Chart_Chartjs {
 		wp_enqueue_script( 'chartjs-helper' );
 		wp_enqueue_script( 'chartjs-datalabels' );
 
-		if ( isset( $this->post_meta['type'] ) && 'treemap' === $this->post_meta['type'] ) {
+		$type = isset( $this->post_meta['type'] ) ? $this->post_meta['type'] : '';
+
+		if ( 'treemap' === $type ) {
 			wp_enqueue_script( 'chartjs-treemap' );
+		}
+
+		if ( 'boxplot' === $type || 'violin' === $type ) {
+			wp_enqueue_script( 'chartjs-boxplot' );
 		}
 	}
 
@@ -326,7 +338,7 @@ class M_Chart_Chartjs {
 			$chart_args['options']['interaction']['mode']        = 'index';
 		}
 
-		// Treemap has no meaningful series legend; force it off
+		// Treemap has no meaningful series legend; force it off regardless of stored meta
 		if ( 'treemap' === $chart_args['type'] ) {
 			$chart_args['options']['plugins']['legend']['display'] = false;
 		}
@@ -484,6 +496,61 @@ class M_Chart_Chartjs {
 			unset( $ds );
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
+			&& ( 'boxplot' === $chart_args['type'] || 'violin' === $chart_args['type'] )
+		) {
+			$is_single_dataset = 1 === count( $chart_args['data']['datasets'] );
+			$mean_radius       = ! empty( $this->post_meta['mean_point'] )         ? 3 : 0;
+			$item_radius       = ! empty( $this->post_meta['sample_points'] ) ? 3 : 0;
+
+			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
+				if ( $use_per_point_colors && $is_single_dataset ) {
+					// Per-box palette cycling for the single-dataset case
+					$count       = isset( $dataset['data'] ) && is_array( $dataset['data'] ) ? count( $dataset['data'] ) : 0;
+					$bg_per_box  = [];
+					$bd_per_box  = [];
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$hex = $this->colors[ $i % $color_count ];
+						$rgb = $this->hex_to_rgb( $hex );
+						$bg_per_box[] = sprintf( 'rgba(%d, %d, %d, 0.5)', $rgb['red'], $rgb['green'], $rgb['blue'] );
+						$bd_per_box[] = $hex;
+					}
+
+					$chart_args['data']['datasets'][ $key ]['backgroundColor']        = $bg_per_box;
+					$chart_args['data']['datasets'][ $key ]['borderColor']            = $bd_per_box;
+					$chart_args['data']['datasets'][ $key ]['outlierBackgroundColor'] = $bd_per_box;
+					$chart_args['data']['datasets'][ $key ]['outlierBorderColor']     = $bd_per_box;
+					$chart_args['data']['datasets'][ $key ]['meanBackgroundColor']    = $bd_per_box;
+					$chart_args['data']['datasets'][ $key ]['meanBorderColor']        = $bd_per_box;
+				} else {
+					$hex = $this->colors[ $key % $color_count ];
+					$rgb = $this->hex_to_rgb( $hex );
+
+					$chart_args['data']['datasets'][ $key ]['backgroundColor']        = sprintf( 'rgba(%d, %d, %d, 0.5)', $rgb['red'], $rgb['green'], $rgb['blue'] );
+					$chart_args['data']['datasets'][ $key ]['borderColor']            = $hex;
+					$chart_args['data']['datasets'][ $key ]['outlierBackgroundColor'] = $hex;
+					$chart_args['data']['datasets'][ $key ]['outlierBorderColor']     = $hex;
+					$chart_args['data']['datasets'][ $key ]['meanBackgroundColor']    = $hex;
+					$chart_args['data']['datasets'][ $key ]['meanBorderColor']        = $hex;
+				}
+
+				$chart_args['data']['datasets'][ $key ]['borderWidth']        = 2;
+
+				// Outlier dots: solid filled circles in the box's color, no border
+				$chart_args['data']['datasets'][ $key ]['outlierRadius']      = 3;
+				$chart_args['data']['datasets'][ $key ]['outlierBorderWidth'] = 0;
+
+				// Mean dot: same visual style as outliers; toggle via mean_point meta
+				$chart_args['data']['datasets'][ $key ]['meanRadius']         = $mean_radius;
+				$chart_args['data']['datasets'][ $key ]['meanBorderWidth']    = 0;
+
+				// Item dots (raw value distribution overlay): light gray, no border, smaller; toggle via sample_points
+				$chart_args['data']['datasets'][ $key ]['itemRadius']            = $item_radius;
+				$chart_args['data']['datasets'][ $key ]['itemBorderWidth']       = 0;
+				$chart_args['data']['datasets'][ $key ]['itemBackgroundColor']   = 'rgba(160, 160, 160, 0.5)';
+			}
+		} elseif (
+			   isset( $chart_args['data']['datasets'] )
 			&& ( 'bar' == $chart_args['type'] || 'horizontalBar' == $chart_args['type'] )
 		) {
 			$is_single_series = 1 === count( $chart_args['data']['datasets'] );
@@ -602,7 +669,12 @@ class M_Chart_Chartjs {
 		// Data labels are handled by a plugin so we have to conditionally set these values
 		$chart_args['options']['plugins']['datalabels']['display'] = false;
 
-		if ( true == $this->post_meta['labels'] && 'treemap' !== $chart_args['type'] ) {
+		if (
+			   true == $this->post_meta['labels']
+			&& 'treemap' !== $chart_args['type']
+			&& 'boxplot' !== $chart_args['type']
+			&& 'violin' !== $chart_args['type']
+		) {
 			$chart_args['options']['plugins']['datalabels'] = array_merge(
 				$defaults['plugins']['datalabels'],
 				[ 'display' => 'auto' ]
@@ -734,6 +806,90 @@ class M_Chart_Chartjs {
 		// When Chart.js encounters an empty data value it stops so we set them to NULL
 		$data_array = array_map( [ $this, 'fix_null_values' ], m_chart()->parse()->set_data );
 		$raw_data   = m_chart()->parse()->raw_data;
+
+		if ( 'boxplot' === $this->post_meta['type'] || 'violin' === $this->post_meta['type'] ) {
+			$sheets    = isset( $this->post_meta['data']['sets'] ) && is_array( $this->post_meta['data']['sets'] ) ? $this->post_meta['data']['sets'] : [];
+			$set_names = isset( $this->post_meta['set_names'] ) ? $this->post_meta['set_names'] : [];
+			$parse_in  = $this->post_meta['parse_in'];
+
+			$primary_categories = null;
+			$datasets           = [];
+
+			foreach ( $sheets as $sheet_index => $sheet ) {
+				$rows = ( 'columns' === $parse_in ) ? $this->transpose_sheet( $sheet ) : $sheet;
+				$rows = $this->strip_empty_rows( $rows );
+
+				$categories     = [];
+				$values_array   = [];
+				$dataset_prefix = '';
+				$dataset_suffix = '';
+				$affixes_set    = false;
+
+				foreach ( $rows as $row ) {
+					if ( ! is_array( $row ) ) {
+						continue;
+					}
+
+					$category = isset( $row[0] ) ? trim( (string) $row[0] ) : '';
+					if ( '' === $category ) {
+						continue;
+					}
+
+					$values = [];
+					$cell_count = count( $row );
+					for ( $i = 1; $i < $cell_count; $i++ ) {
+						$cell = isset( $row[ $i ] ) ? (string) $row[ $i ] : '';
+						if ( '' === trim( $cell ) ) {
+							continue;
+						}
+
+						$parsed = m_chart()->parse()->parse_data_point( $cell );
+						if ( null === $parsed->value ) {
+							continue;
+						}
+
+						$values[] = (float) $parsed->value;
+
+						if ( ! $affixes_set ) {
+							$dataset_prefix = $parsed->prefix;
+							$dataset_suffix = $parsed->suffix;
+							$affixes_set    = true;
+						}
+					}
+
+					if ( empty( $values ) ) {
+						continue;
+					}
+
+					$categories[]   = $category;
+					$values_array[] = $values;
+				}
+
+				if ( empty( $values_array ) ) {
+					continue;
+				}
+
+				if ( null === $primary_categories ) {
+					$primary_categories = $categories;
+				}
+
+				// Pass raw value arrays to the library so it computes both stats AND the KDE
+				// (the violin controller needs the KDE to draw its density curve; pre-computed
+				// stats objects skip that construction and result in a blank violin).
+				$datasets[] = [
+					'label'               => isset( $set_names[ $sheet_index ] ) && '' !== $set_names[ $sheet_index ] ? $set_names[ $sheet_index ] : ( 'Sheet ' . ( $sheet_index + 1 ) ),
+					'data'                => $values_array,
+					'mChartIsBoxplot'     => true,
+					'mChartDatasetPrefix' => $dataset_prefix,
+					'mChartDatasetSuffix' => $dataset_suffix,
+				];
+			}
+
+			$chart_args['data']['labels']   = null !== $primary_categories ? $primary_categories : [];
+			$chart_args['data']['datasets'] = $datasets;
+
+			return $chart_args;
+		}
 
 		if ( 'treemap' === $this->post_meta['type'] ) {
 			$raw_sheet = isset( $this->post_meta['data']['sets'][0] ) ? $this->post_meta['data']['sets'][0] : [];
@@ -1039,6 +1195,10 @@ class M_Chart_Chartjs {
 			$scripts[] = 'chartjs-treemap';
 		}
 
+		if ( 'boxplot' === $type || 'violin' === $type ) {
+			$scripts[] = 'chartjs-boxplot';
+		}
+
 		// Return the scripts
 		return $scripts;
 	}
@@ -1149,22 +1309,9 @@ class M_Chart_Chartjs {
 			return null;
 		}
 
-		// Header detection. Treat row 0 as headers only if EVERY row-0 cell extracts to non-numeric
-		// (per the same parse_data_point used by other chart types) AND row 1's last cell extracts
-		// to a usable numeric value. This avoids misinterpreting an all-numeric leaf row as headers.
-		$row_zero_all_non_numeric = true;
-		for ( $i = 0; $i < $col_count; $i++ ) {
-			$cell   = isset( $rows[0][ $i ] ) ? (string) $rows[0][ $i ] : '';
-			$parsed = m_chart()->parse()->parse_data_point( $cell );
-			if ( '' === trim( $cell ) || null !== $parsed->value ) {
-				$row_zero_all_non_numeric = false;
-				break;
-			}
-		}
-
-		$row_one_last_cell   = isset( $rows[1][ $col_count - 1 ] ) ? (string) $rows[1][ $col_count - 1 ] : '';
-		$row_one_last_parsed = m_chart()->parse()->parse_data_point( $row_one_last_cell );
-		$has_headers         = $row_zero_all_non_numeric && null !== $row_one_last_parsed->value;
+		// Header detection — empty top-left cell signals "row 0 contains field-name headers"
+		// Mirrors the LABELS_BOTH convention used by line/bar/scatter chart types
+		$has_headers = isset( $rows[0][0] ) && '' === trim( (string) $rows[0][0] );
 
 		if ( $has_headers ) {
 			$headers      = array_map( function( $h ) { return trim( (string) $h ); }, $rows[0] );
@@ -1172,7 +1319,12 @@ class M_Chart_Chartjs {
 			$value_field  = isset( $headers[ $col_count - 1 ] ) && '' !== $headers[ $col_count - 1 ] ? $headers[ $col_count - 1 ] : 'value';
 			$group_fields = [];
 
-			for ( $i = 0; $i < $col_count - 1; $i++ ) {
+			// Outermost group field (col 0) is always synthesized — the corner cell IS
+			// the empty-headers signal so there's no name there to read
+			$group_fields[] = 'group_1';
+
+			// Inner grouping fields (cols 1..col_count-2) take their names from row 0
+			for ( $i = 1; $i < $col_count - 1; $i++ ) {
 				$group_fields[] = isset( $headers[ $i ] ) && '' !== $headers[ $i ] ? $headers[ $i ] : 'group_' . ( $i + 1 );
 			}
 		} else {
@@ -1305,6 +1457,33 @@ class M_Chart_Chartjs {
 		}
 
 		return $out;
+	}
+
+	/**
+	 * Drop fully-empty rows from a 2D sheet (matches the filter used by build_treemap_hierarchy)
+	 *
+	 * @param array $sheet array of rows
+	 *
+	 * @return array sheet with empty rows removed and indices reset
+	 */
+	private function strip_empty_rows( $sheet ) {
+		if ( ! is_array( $sheet ) ) {
+			return [];
+		}
+
+		return array_values( array_filter( $sheet, function( $row ) {
+			if ( ! is_array( $row ) ) {
+				return false;
+			}
+
+			foreach ( $row as $cell ) {
+				if ( '' !== trim( (string) $cell ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		} ) );
 	}
 
 	/**

@@ -387,6 +387,53 @@ const MChartHelper = {
 
 			// chartjs-plugin-datalabels has nothing useful to do for treemap
 			return;
+		} else if ( 'boxplot' === type || 'violin' === type ) {
+			const locale = chart.options.locale;
+
+			// Format a single number with the dataset's prefix/suffix and locale formatting
+			const fmtForItem = ( item, value ) => {
+				if ( value === null || value === undefined || ! Number.isFinite( value ) ) {
+					return '';
+				}
+				const itemDs = item && item.dataset ? item.dataset : {};
+				const prefix = itemDs.mChartDatasetPrefix || '';
+				const suffix = itemDs.mChartDatasetSuffix || '';
+				return prefix + numberFormat( value, locale ) + suffix;
+			};
+
+			chart.options.plugins.tooltip.callbacks = {
+				title: ( items ) => ( items && items.length && items[0].label ) ? String( items[0].label ) : '',
+				label: ( item ) => {
+					// chartjs-chart-boxplot overrides Chart.js's getLabelAndValue so that
+					// item.formattedValue is an OBJECT for boxplot/violin, with .raw carrying
+					// the parsed numeric stats (min, q1, median, q3, max, mean, whiskerMin,
+					// whiskerMax, outliers, items). Chart.js's tooltip filters item.parsed
+					// down to {x, y} for cartesian charts so the stats wouldn't be there.
+					const fv    = item.formattedValue;
+					const stats = ( fv && 'object' === typeof fv && fv.raw ) ? fv.raw : ( item.parsed || {} );
+					const lines = [];
+
+					if ( item.dataset && item.dataset.label ) {
+						lines.push( String( item.dataset.label ) );
+					}
+
+					lines.push( 'Min: '    + fmtForItem( item, stats.min ) );
+					lines.push( 'Q1: '     + fmtForItem( item, stats.q1 ) );
+					lines.push( 'Median: ' + fmtForItem( item, stats.median ) );
+					lines.push( 'Q3: '     + fmtForItem( item, stats.q3 ) );
+					lines.push( 'Max: '    + fmtForItem( item, stats.max ) );
+
+					const outliers = Array.isArray( stats.outliers ) ? stats.outliers.length : 0;
+					if ( outliers > 0 ) {
+						lines.push( '+ ' + outliers + ' outlier' + ( 1 === outliers ? '' : 's' ) );
+					}
+
+					return lines;
+				},
+			};
+
+			// chartjs-plugin-datalabels is disabled in PHP for these types — nothing to wire here
+			return;
 		} else {
 			chart.options.plugins.tooltip.callbacks = {
 				label: ( item ) => chartTooltipLabel( item ),

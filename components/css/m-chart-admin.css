@@ -216,50 +216,45 @@
 #m-chart-spreadsheet #spreadsheets .jtabs-content .jss_content table {
   margin-right: -0.0625rem;
 }
-#m-chart-spreadsheet #m-chart-csv::after {
-  clear: both;
-  content: "";
-  display: table;
-}
 #m-chart-spreadsheet #m-chart-csv {
   background-color: #f5f5f5;
   border-left: 0.0625rem solid #cdd0d4;
   border-top: 0.0625rem solid #dddddd;
   padding: 0.9375rem 0.625rem 0.625rem;
 }
-#m-chart-spreadsheet #m-chart-csv::after {
-  clear: both;
+#m-chart-spreadsheet #m-chart-csv label {
+  font-size: 0.6875rem;
+  font-weight: 499;
+  line-height: 1.4;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+  padding-top: 0;
 }
-#m-chart-spreadsheet #m-chart-csv .button {
-  margin-top: 0.375rem;
+#m-chart-spreadsheet #m-chart-csv .actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
+  flex-wrap: wrap;
 }
-#m-chart-spreadsheet #m-chart-csv .button.select {
-  margin-right: 0.625rem;
+#m-chart-spreadsheet #m-chart-csv .actions .button {
+  margin-bottom: 0;
 }
-#m-chart-spreadsheet #m-chart-csv div.import {
-  margin-right: 4.0625rem;
+#m-chart-spreadsheet #m-chart-csv .actions .actions-left {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
 }
-#m-chart-spreadsheet #m-chart-csv div.export {
-  float: right;
+#m-chart-spreadsheet #m-chart-csv .actions .confirmation {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
 }
-#m-chart-spreadsheet #m-chart-csv div.confirmation {
-  float: left;
-  margin-right: 0.625rem;
+#m-chart-spreadsheet #m-chart-csv .actions .confirmation .components-base-control {
+  margin: 0;
 }
-#m-chart-spreadsheet #m-chart-csv div.confirmation select,
-#m-chart-spreadsheet #m-chart-csv div.confirmation .components-select-control__input {
-  margin-top: 0.375rem;
-  margin-bottom: 0.25rem;
-  margin-left: 0.4375rem;
-}
-@media (max-width: 600px) {
-  #m-chart-spreadsheet #m-chart-csv div.confirmation select,
-  #m-chart-spreadsheet #m-chart-csv div.confirmation .components-select-control__input {
-    display: block;
-  }
-}
-#m-chart-spreadsheet #m-chart-csv div.file-info {
-  clear: left;
+#m-chart-spreadsheet #m-chart-csv .file-info {
   padding-top: 0.625rem;
 }
 #m-chart-spreadsheet #m-chart-csv .warning,
@@ -270,12 +265,11 @@
 #m-chart-spreadsheet #m-chart-csv .in-progress {
   margin: 0.625rem 0 0 0.3125rem;
 }
-#m-chart-spreadsheet #m-chart-csv .error:not(.hide),
-#m-chart-spreadsheet #m-chart-csv .in-progress:not(.hide) {
-  display: inline-block;
-}
 #m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel {
   color: #b8b8b8;
+  position: relative;
+  bottom: -0.4375rem;
+  left: -0.125rem;
 }
 #m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel:hover {
   color: #cc1818;
@@ -298,9 +292,6 @@
 #m-chart .inside {
   padding: 0;
   margin-top: 0;
-}
-#m-chart .inside .m-chart-container {
-  padding: 0.4375rem 0.625rem 0.625rem;
 }
 #m-chart .inside .settings {
   background-color: #f5f5f5;
