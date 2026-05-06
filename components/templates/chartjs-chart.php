@@ -12,6 +12,14 @@ if ( '' != $subtitle ) {
 if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 	$width = ' width="' . absint( $args['width'] ) . '"';
 }
+
+$defer_rendering  = 'enabled' === m_chart()->get_settings( 'defer_rendering' );
+$observer_options = apply_filters(
+	'm_chart_defer_rendering_observer_options',
+	[ 'rootMargin' => '100px', 'threshold' => 0 ],
+	$post_id,
+	$args
+);
 ?>
 <div id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-container chartjs">
 	<canvas id="m-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width; ?> aria-label="<?php echo esc_attr( $title ); ?>" role="img" style="height: <?php echo esc_attr( $height ); ?>px;"></canvas>
@@ -47,12 +55,31 @@ if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
 			onComplete,
 		};
 
-		document.addEventListener( 'DOMContentLoaded', () => {
+		const renderChart = () => {
 			Chart.register( ChartDataLabels );
 			Chart.register( MChartHelper );
 			<?php do_action( 'm_chart_after_chartjs_plugins', $post_id, $args, $this->instance ); ?>
 
 			new Chart( canvas, chartArgs );
+		};
+
+		document.addEventListener( 'DOMContentLoaded', () => {
+			const defer = <?php echo $defer_rendering ? 'true' : 'false'; ?>;
+
+			if ( ! defer || ! ( 'IntersectionObserver' in window ) ) {
+				renderChart();
+				return;
+			}
+
+			const container = document.getElementById( 'm-chart-container-' + postId + '-' + instance );
+			const observer  = new IntersectionObserver( ( entries, obs ) => {
+				if ( entries[0].isIntersecting ) {
+					obs.disconnect();
+					renderChart();
+				}
+			}, <?php echo wp_json_encode( $observer_options ); ?> );
+
+			observer.observe( container );
 		} );
 	} )();
 </script>

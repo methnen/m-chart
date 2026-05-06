@@ -24,6 +24,7 @@ class M_Chart_Chartjs {
 		'radar',
 		'radar-area',
 		'polar',
+		'treemap',
 	];
 	public $type_option_names = [];
 	public $theme_directories;
@@ -51,6 +52,7 @@ class M_Chart_Chartjs {
 		'radar'          => 'radar',
 		'radar-area'     => 'radar',
 		'polar'          => 'polarArea',
+		'treemap'        => 'treemap',
 	];
 	public $helpers_loaded = false;
 
@@ -84,6 +86,7 @@ class M_Chart_Chartjs {
 			'radar'          => esc_html__( 'Radar', 'm-chart' ),
 			'radar-area'     => esc_html__( 'Radar Area', 'm-chart' ),
 			'polar'          => esc_html__( 'Polar', 'm-chart' ),
+			'treemap'        => esc_html__( 'Treemap', 'm-chart' ),
 		];
 	}
 
@@ -222,6 +225,10 @@ class M_Chart_Chartjs {
 	public function enqueue_chartjs_plugins() {
 		wp_enqueue_script( 'chartjs-helper' );
 		wp_enqueue_script( 'chartjs-datalabels' );
+
+		if ( isset( $this->post_meta['type'] ) && 'treemap' === $this->post_meta['type'] ) {
+			wp_enqueue_script( 'chartjs-treemap' );
+		}
 	}
 
 	/**
@@ -308,6 +315,7 @@ class M_Chart_Chartjs {
 			&& 'doughnut' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
+			&& 'treemap' != $chart_args['type']
 		) {
 			$chart_args['options']['scales']['x']['grid']['borderWidth'] = 0;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
@@ -316,6 +324,11 @@ class M_Chart_Chartjs {
 		if ( $this->post_meta['shared'] ) {
 			$chart_args['options']['plugins']['tooltip']['mode'] = 'index';
 			$chart_args['options']['interaction']['mode']        = 'index';
+		}
+
+		// Treemap has no meaningful series legend; force it off
+		if ( 'treemap' === $chart_args['type'] ) {
+			$chart_args['options']['plugins']['legend']['display'] = false;
 		}
 
 		// Forcing a minimum value of 0 prevents the built in fudging which sometimes looks weird
@@ -343,6 +356,7 @@ class M_Chart_Chartjs {
 			&& 'doughnut' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
+			&& 'treemap' != $chart_args['type']
 		) {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
@@ -359,6 +373,7 @@ class M_Chart_Chartjs {
 			&& 'doughnut' != $chart_args['type']
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
+			&& 'treemap' != $chart_args['type']
 		) {
 			$chart_args['options']['scales']['x']['grid']['display'] = false;
 		}
@@ -413,19 +428,84 @@ class M_Chart_Chartjs {
 		$color_count = count( $this->colors );
 		$point_count = count( $this->points );
 
+		$use_per_point_colors = ! empty( $this->post_meta['data_point_colors'] );
+
 		// Apply colors and point styles, yes this kind of sucks, but so does the Chart.js color system
-		if (
+		if ( 'treemap' === $chart_args['type'] && isset( $chart_args['data']['datasets'][0]['tree'] ) ) {
+			$ds = &$chart_args['data']['datasets'][0];
+
+			if ( ! empty( $ds['mChartTreemapHierarchical'] ) ) {
+				// Hierarchical: build a stable map from each unique top-level group VALUE to a palette color
+				// in first-seen order so downstream JS can paint top groups + alpha-shaded descendants
+				$top_field    = $ds['mChartTopGroupField'];
+				$top_colors   = [];
+				$top_rgb      = [];
+
+				foreach ( $ds['tree'] as $entry ) {
+					if ( ! isset( $entry[ $top_field ] ) ) {
+						continue;
+					}
+					$top_id = $entry[ $top_field ];
+					if ( isset( $top_colors[ $top_id ] ) ) {
+						continue;
+					}
+
+					$hex                    = $this->colors[ count( $top_colors ) % $color_count ];
+					$top_colors[ $top_id ]  = $hex;
+					$top_rgb[ $top_id ]     = $this->hex_to_rgb( $hex );
+				}
+
+				$ds['mChartTopGroupColors'] = $top_colors;
+				$ds['mChartTopGroupRgb']    = $top_rgb;
+			} else {
+				$values = wp_list_pluck( $ds['tree'], 'value' );
+				$max    = ! empty( $values ) ? max( $values ) : 0;
+				$max    = $max > 0 ? $max : 1;
+
+				$colors = [];
+
+				if ( $use_per_point_colors ) {
+					foreach ( $values as $i => $_v ) {
+						$colors[] = $this->colors[ $i % $color_count ];
+					}
+				} else {
+					$rgb = $this->hex_to_rgb( $this->colors[0] );
+
+					foreach ( $values as $v ) {
+						// Floor at 0.15 so the smallest rectangles still render visibly
+						$alpha    = max( 0.15, min( 1, $v / $max ) );
+						$colors[] = sprintf( 'rgba(%d, %d, %d, %.3f)', $rgb['red'], $rgb['green'], $rgb['blue'], $alpha );
+					}
+				}
+
+				$ds['mChartColors'] = $colors;
+			}
+
+			unset( $ds );
+		} elseif (
 			   isset( $chart_args['data']['datasets'] )
 			&& ( 'bar' == $chart_args['type'] || 'horizontalBar' == $chart_args['type'] )
 		) {
+			$is_single_series = 1 === count( $chart_args['data']['datasets'] );
+			$is_stacked       = 'stacked-column' == $this->post_meta['type'] || 'stacked-bar' == $this->post_meta['type'];
+
 			foreach ( $chart_args['data']['datasets'] as $key => $dataset ) {
-				$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % $color_count ];
+				if ( $use_per_point_colors && $is_single_series && ! $is_stacked ) {
+					// Each bar/column gets a different color cycled from the palette
+					$per_point = [];
+					$count     = isset( $dataset['data'] ) && is_array( $dataset['data'] ) ? count( $dataset['data'] ) : 0;
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$per_point[] = $this->colors[ $i % $color_count ];
+					}
+
+					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $per_point;
+				} else {
+					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = $this->colors[ $key % $color_count ];
+				}
 
 				if ( true == $this->post_meta['labels'] ) {
-					if (
-						   'stacked-column' == $this->post_meta['type']
-						|| 'stacked-bar' == $this->post_meta['type']
-					) {
+					if ( $is_stacked ) {
 						$chart_args['data']['datasets'][ $key ]['datalabels'] = [
 							'align'  => 'center',
 							'anchor' => 'center',
@@ -522,7 +602,7 @@ class M_Chart_Chartjs {
 		// Data labels are handled by a plugin so we have to conditionally set these values
 		$chart_args['options']['plugins']['datalabels']['display'] = false;
 
-		if ( true == $this->post_meta['labels'] ) {
+		if ( true == $this->post_meta['labels'] && 'treemap' !== $chart_args['type'] ) {
 			$chart_args['options']['plugins']['datalabels'] = array_merge(
 				$defaults['plugins']['datalabels'],
 				[ 'display' => 'auto' ]
@@ -654,6 +734,114 @@ class M_Chart_Chartjs {
 		// When Chart.js encounters an empty data value it stops so we set them to NULL
 		$data_array = array_map( [ $this, 'fix_null_values' ], m_chart()->parse()->set_data );
 		$raw_data   = m_chart()->parse()->raw_data;
+
+		if ( 'treemap' === $this->post_meta['type'] ) {
+			$raw_sheet = isset( $this->post_meta['data']['sets'][0] ) ? $this->post_meta['data']['sets'][0] : [];
+			$hierarchy = $this->build_treemap_hierarchy( $raw_sheet, $this->post_meta['parse_in'] );
+
+			if ( null !== $hierarchy ) {
+				$dataset_defaults = apply_filters(
+					'm_chart_treemap_dataset_defaults',
+					[
+						'spacing'          => 1,
+						'borderWidth'      => 1,
+						'borderColor'      => '#ffffff',
+						'hoverBorderWidth' => 1,
+						'hoverBorderColor' => '#ffffff',
+						'captions'         => [
+							'display' => true,
+							'align'   => 'left',
+							'color'   => '#000000',
+							'font'    => [ 'weight' => 'bold' ],
+							'padding' => 4,
+						],
+						'labels'           => [
+							'display'  => (bool) $this->post_meta['labels'],
+							'color'    => '#000000',
+							'font'     => [ 'weight' => 'bold' ],
+							'align'    => 'center',
+							'position' => 'middle',
+						],
+					],
+					$this->post,
+					$this->args
+				);
+
+				$chart_args['data']['labels']   = [];
+				$chart_args['data']['datasets'] = [
+					array_merge(
+						$dataset_defaults,
+						[
+							'tree'                      => $hierarchy['tree'],
+							'key'                       => $hierarchy['key'],
+							'groups'                    => $hierarchy['groups'],
+							'mChartIsTreemap'           => true,
+							'mChartTreemapHierarchical' => true,
+							'mChartTopGroupField'       => $hierarchy['top_field'],
+							'mChartDatasetPrefix'       => $hierarchy['dataset_prefix'],
+							'mChartDatasetSuffix'       => $hierarchy['dataset_suffix'],
+						]
+					),
+				];
+
+				return $chart_args;
+			}
+
+			$tree = [];
+
+			foreach ( $chart_args['data']['labels'] as $key => $label ) {
+				if ( ! isset( $data_array[ $key ] ) ) {
+					continue;
+				}
+
+				// raw_data entries are M_Chart_Parsed_Data_Point objects produced by parse_data_point()
+				$raw = isset( $raw_data[ $key ] ) && $raw_data[ $key ] instanceof M_Chart_Parsed_Data_Point ? $raw_data[ $key ] : null;
+
+				$tree[] = [
+					'label'  => $label,
+					'value'  => is_numeric( $data_array[ $key ] ) ? (float) $data_array[ $key ] : 0,
+					'prefix' => $raw ? $raw->prefix : '',
+					'suffix' => $raw ? $raw->suffix : '',
+					'text'   => $raw ? $raw->text : null,
+				];
+			}
+
+			$dataset_defaults = apply_filters(
+				'm_chart_treemap_dataset_defaults',
+				[
+					'spacing'          => 1,
+					'borderWidth'      => 1,
+					'borderColor'      => '#ffffff',
+					'hoverBorderWidth' => 1,
+					'hoverBorderColor' => '#ffffff',
+					'captions'         => [ 'display' => false ],
+					'labels'           => [
+						'display'  => (bool) $this->post_meta['labels'],
+						'color'    => '#000000',
+						'font'     => [ 'weight' => 'bold' ],
+						'align'    => 'center',
+						'position' => 'middle',
+					],
+				],
+				$this->post,
+				$this->args
+			);
+
+			$chart_args['data']['labels']   = [];
+			$chart_args['data']['datasets'] = [
+				array_merge(
+					$dataset_defaults,
+					[
+						'tree'            => $tree,
+						'key'             => 'value',
+						'rawData'         => $tree,
+						'mChartIsTreemap' => true,
+					]
+				),
+			];
+
+			return $chart_args;
+		}
 
 		if (
 			   'pie' == $this->post_meta['type']
@@ -844,8 +1032,12 @@ class M_Chart_Chartjs {
 
 		$type = m_chart()->get_post_meta( $post_id, 'type' );
 
-		$scripts[]  = 'chartjs-helper';
+		$scripts[] = 'chartjs-helper';
 		$scripts[] = 'chartjs-datalabels';
+
+		if ( 'treemap' === $type ) {
+			$scripts[] = 'chartjs-treemap';
+		}
 
 		// Return the scripts
 		return $scripts;
@@ -900,6 +1092,219 @@ class M_Chart_Chartjs {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Detect and build a hierarchical tree config for a treemap from a raw spreadsheet
+	 * Returns null when the sheet is flat (<=2 columns/rows after orientation normalization)
+	 * so the caller can fall through to the existing flat treemap path
+	 *
+	 * @param array  $sheet    Raw sheet, array of rows in Jspreadsheet getData() shape
+	 * @param string $parse_in 'rows' or 'columns'
+	 *
+	 * @return array|null { 'tree', 'key', 'groups', 'top_field', 'dataset_prefix', 'dataset_suffix' } or null
+	 */
+	public function build_treemap_hierarchy( $sheet, $parse_in ) {
+		if ( ! is_array( $sheet ) || count( $sheet ) < 2 ) {
+			return null;
+		}
+
+		$rows = ( 'columns' === $parse_in ) ? $this->transpose_sheet( $sheet ) : $sheet;
+
+		$rows = array_values( array_filter( $rows, function( $r ) {
+			if ( ! is_array( $r ) ) {
+				return false;
+			}
+			foreach ( $r as $c ) {
+				if ( '' !== trim( (string) $c ) ) {
+					return true;
+				}
+			}
+			return false;
+		} ) );
+
+		if ( count( $rows ) < 2 ) {
+			return null;
+		}
+
+		// Effective column count: the rightmost column with any non-empty cell across all rows.
+		// Jspreadsheet pads sheets out to a minimum width (37 cols by default), so a raw max-width
+		// reading would include trailing padding columns that aren't real data.
+		$col_count = 0;
+		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			for ( $i = count( $row ) - 1; $i >= 0; $i-- ) {
+				if ( '' !== trim( (string) $row[ $i ] ) ) {
+					if ( $i + 1 > $col_count ) {
+						$col_count = $i + 1;
+					}
+					break;
+				}
+			}
+		}
+
+		if ( $col_count < 3 ) {
+			return null;
+		}
+
+		// Header detection. Treat row 0 as headers only if EVERY row-0 cell extracts to non-numeric
+		// (per the same parse_data_point used by other chart types) AND row 1's last cell extracts
+		// to a usable numeric value. This avoids misinterpreting an all-numeric leaf row as headers.
+		$row_zero_all_non_numeric = true;
+		for ( $i = 0; $i < $col_count; $i++ ) {
+			$cell   = isset( $rows[0][ $i ] ) ? (string) $rows[0][ $i ] : '';
+			$parsed = m_chart()->parse()->parse_data_point( $cell );
+			if ( '' === trim( $cell ) || null !== $parsed->value ) {
+				$row_zero_all_non_numeric = false;
+				break;
+			}
+		}
+
+		$row_one_last_cell   = isset( $rows[1][ $col_count - 1 ] ) ? (string) $rows[1][ $col_count - 1 ] : '';
+		$row_one_last_parsed = m_chart()->parse()->parse_data_point( $row_one_last_cell );
+		$has_headers         = $row_zero_all_non_numeric && null !== $row_one_last_parsed->value;
+
+		if ( $has_headers ) {
+			$headers      = array_map( function( $h ) { return trim( (string) $h ); }, $rows[0] );
+			$data_rows    = array_slice( $rows, 1 );
+			$value_field  = isset( $headers[ $col_count - 1 ] ) && '' !== $headers[ $col_count - 1 ] ? $headers[ $col_count - 1 ] : 'value';
+			$group_fields = [];
+
+			for ( $i = 0; $i < $col_count - 1; $i++ ) {
+				$group_fields[] = isset( $headers[ $i ] ) && '' !== $headers[ $i ] ? $headers[ $i ] : 'group_' . ( $i + 1 );
+			}
+		} else {
+			$data_rows    = $rows;
+			$value_field  = 'value';
+			$group_fields = [];
+
+			for ( $i = 0; $i < $col_count - 1; $i++ ) {
+				$group_fields[] = 'group_' . ( $i + 1 );
+			}
+		}
+
+		$group_fields = $this->disambiguate_field_names( $group_fields, $value_field );
+
+		$tree           = [];
+		$dataset_prefix = '';
+		$dataset_suffix = '';
+		$affixes_set    = false;
+
+		foreach ( $data_rows as $row ) {
+			$entry = [];
+			$skip  = false;
+
+			for ( $i = 0; $i < $col_count - 1; $i++ ) {
+				$cell = isset( $row[ $i ] ) ? trim( (string) $row[ $i ] ) : '';
+				if ( '' === $cell ) {
+					$skip = true;
+					break;
+				}
+				$entry[ $group_fields[ $i ] ] = $cell;
+			}
+
+			if ( $skip ) {
+				continue;
+			}
+
+			$value_cell = isset( $row[ $col_count - 1 ] ) ? (string) $row[ $col_count - 1 ] : '';
+			$parsed     = m_chart()->parse()->parse_data_point( $value_cell );
+
+			if ( null === $parsed->value ) {
+				continue;
+			}
+
+			$entry[ $value_field ] = (float) $parsed->value;
+			$entry['prefix']       = $parsed->prefix;
+			$entry['suffix']       = $parsed->suffix;
+
+			if ( ! $affixes_set ) {
+				$dataset_prefix = $parsed->prefix;
+				$dataset_suffix = $parsed->suffix;
+				$affixes_set    = true;
+			}
+
+			$tree[] = $entry;
+		}
+
+		if ( empty( $tree ) ) {
+			return null;
+		}
+
+		return [
+			'tree'           => $tree,
+			'key'            => $value_field,
+			'groups'         => $group_fields,
+			'top_field'      => $group_fields[0],
+			'dataset_prefix' => $dataset_prefix,
+			'dataset_suffix' => $dataset_suffix,
+		];
+	}
+
+	/**
+	 * Transpose a 2D sheet so columns become rows (used to normalize parse_in='columns'
+	 * to a row-oriented shape for hierarchical treemap construction)
+	 *
+	 * @param array $sheet array of rows
+	 *
+	 * @return array array of rows (transposed)
+	 */
+	private function transpose_sheet( $sheet ) {
+		if ( ! is_array( $sheet ) || empty( $sheet ) ) {
+			return [];
+		}
+
+		$row_count = count( $sheet );
+		$col_count = 0;
+
+		foreach ( $sheet as $row ) {
+			if ( is_array( $row ) ) {
+				$col_count = max( $col_count, count( $row ) );
+			}
+		}
+
+		$out = [];
+
+		for ( $c = 0; $c < $col_count; $c++ ) {
+			$new_row = [];
+			for ( $r = 0; $r < $row_count; $r++ ) {
+				$new_row[] = isset( $sheet[ $r ][ $c ] ) ? $sheet[ $r ][ $c ] : '';
+			}
+			$out[] = $new_row;
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Ensure no two field names collide and that none collide with the value field
+	 * Appends _2, _3, etc. as needed to disambiguate
+	 *
+	 * @param array  $group_fields array of group field names
+	 * @param string $value_field  the value field name
+	 *
+	 * @return array deduplicated group fields
+	 */
+	private function disambiguate_field_names( $group_fields, $value_field ) {
+		$seen = [ $value_field => 1 ];
+		$out  = [];
+
+		foreach ( $group_fields as $name ) {
+			$candidate = $name;
+			$suffix    = 2;
+
+			while ( isset( $seen[ $candidate ] ) ) {
+				$candidate = $name . '_' . $suffix;
+				$suffix++;
+			}
+
+			$seen[ $candidate ] = 1;
+			$out[]              = $candidate;
+		}
+
+		return $out;
 	}
 
 	/**

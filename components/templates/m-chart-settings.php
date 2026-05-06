@@ -107,6 +107,17 @@
 					</td>
 				</tr>
 				<tr>
+					<th scope="row"><?php esc_html_e( 'Defer Rendering', 'm-chart' ); ?></th>
+					<td>
+						<label>
+							<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'defer_rendering' ) ); ?>" value="" />
+							<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'defer_rendering' ) ); ?>" value="enabled"<?php checked( $settings['defer_rendering'], 'enabled' ); ?> />
+							<span><?php esc_html_e( 'Defer chart rendering until scrolled into view', 'm-chart' ); ?></span><br />
+							<span class="description"><?php esc_html_e( 'Charts below the fold will not initialize (or animate) until they enter the viewport', 'm-chart' ); ?></span>
+						</label>
+					</td>
+				</tr>
+				<tr>
 					<th scope="row"><?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?></th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'csv_delimiter' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">

@@ -13,6 +13,10 @@ class M_Chart_Admin {
 			' ',
 			';',
 		],
+		'defer_rendering' => [
+			'',
+			'enabled',
+		],
 	];
 	private $plugin_url;
 
@@ -302,6 +306,7 @@ class M_Chart_Admin {
 			if ( 'chartjs' === $library ) {
 				// Chart.js libs — enqueued explicitly so the React preview has window.Chart
 				wp_enqueue_script( 'chartjs-datalabels' ); // also loads chartjs + chartjs-helpers
+				wp_enqueue_script( 'chartjs-treemap' );    // user can switch to treemap from any type
 			}
 
 			$post_meta        = m_chart()->get_post_meta( $post_id );

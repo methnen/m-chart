@@ -5,24 +5,25 @@ class M_Chart {
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
-		'library'     => 'chartjs',
-		'type'        => 'line',
-		'parse_in'    => 'rows',
-		'labels'      => true,
-		'shared'      => false,
-		'subtitle'    => '',
-		'y_title'     => '',
-		'y_units'     => '',
-		'y_min'       => false,
-		'y_min_value' => 0,
-		'x_title'     => '',
-		'x_units'     => '',
-		'height'      => 400,
-		'legend'      => true,
-		'source'      => '',
-		'source_url'  => '',
-		'data'        => [],
-		'set_names'   => [],
+		'library'           => 'chartjs',
+		'type'              => 'line',
+		'parse_in'          => 'rows',
+		'labels'            => true,
+		'shared'            => false,
+		'subtitle'          => '',
+		'y_title'           => '',
+		'y_units'           => '',
+		'y_min'             => false,
+		'y_min_value'       => 0,
+		'x_title'           => '',
+		'x_units'           => '',
+		'height'            => 400,
+		'legend'            => true,
+		'source'            => '',
+		'source_url'        => '',
+		'data'              => [],
+		'set_names'         => [],
+		'data_point_colors' => false,
 	];
 	public $get_chart_default_args = [
 		'show'  => 'chart',
@@ -44,6 +45,7 @@ class M_Chart {
 		'image_multiplier' => '2',
 		'image_width'      => '600',
 		'embeds'           => '',
+		'defer_rendering'  => 'enabled',
 		'default_theme'    => '_default',
 		'locale'           => 'en-US',
 		'csv_delimiter'    => ',',
@@ -253,6 +255,13 @@ class M_Chart {
 			$this->version
 		);
 
+		wp_register_script(
+			'chartjs-treemap',
+			$this->plugin_url . '/components/external/chartjs/chartjs-chart-treemap.min.js',
+			[ 'chartjs' ],
+			$this->version
+		);
+
 		// jQuery needs to be in the header since the charts are inline
 		wp_enqueue_script( 'jquery', false, [], false, false );
 
@@ -420,9 +429,10 @@ class M_Chart {
 	 */
 	public function validate_post_meta( $meta ) {
 		// Need to set checkboxes before checking or they can't be deselected
-		$chart_meta['labels'] = false;
-		$chart_meta['y_min']  = false;
-		$chart_meta['legend'] = false;
+		$chart_meta['labels']            = false;
+		$chart_meta['y_min']             = false;
+		$chart_meta['legend']            = false;
+		$chart_meta['data_point_colors'] = false;
 
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
@@ -433,7 +443,7 @@ class M_Chart {
 					$chart_meta[ $field ]['sets'] = $meta[ $field ];
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
-				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend' ] ) ) {
+				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );
@@ -781,11 +791,13 @@ class M_Chart {
 
 		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
 
+		$loading_attr = 'enabled' === $this->get_settings( 'defer_rendering' ) ? ' loading="lazy"' : '';
+
 		ob_start();
 		?>
 <iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
 	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
-	src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe>
+	src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"<?php echo $loading_attr; ?>></iframe>
 		<?php
 		if ( 'show' == $args['share'] ) {
 			unset( $args['share'] );

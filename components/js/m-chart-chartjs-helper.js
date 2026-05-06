@@ -94,6 +94,91 @@ function scatterChartTooltipLabel( item ) {
 }
 
 /**
+ * Read the original tree entry for a treemap rectangle
+ * The library exposes the original object on ctx.raw._data for elements
+ *
+ * @param {Object} ctxOrItem Tooltip item or scriptable label/color context
+ * @return {Object|null}
+ */
+function treemapRawEntry( ctxOrItem ) {
+	const raw = ctxOrItem.raw;
+
+	if ( ! raw ) {
+		return null;
+	}
+
+	return raw._data || raw;
+}
+
+/**
+ * Format a treemap rectangle value with prefix/suffix and locale formatting
+ *
+ * @param {Object} entry The original tree entry (label, value, prefix, suffix, text)
+ * @param {string} locale BCP 47 locale string
+ * @return {string}
+ */
+function treemapFormatValue( entry, locale ) {
+	if ( ! entry ) {
+		return '';
+	}
+
+	if ( null != entry.text && '' !== entry.text ) {
+		return entry.text;
+	}
+
+	const value = Number.isFinite( entry.value ) ? entry.value : Number( entry.value );
+
+	if ( ! Number.isFinite( value ) ) {
+		return '';
+	}
+
+	return ( entry.prefix || '' ) + numberFormat( value, locale ) + ( entry.suffix || '' );
+}
+
+/**
+ * In-rectangle label content for treemap
+ * Returns [label, formattedValue] for two-line display
+ *
+ * @param {Object} ctx chartjs-chart-treemap labels formatter context
+ * @param {string} locale BCP 47 locale string
+ * @return {string|string[]}
+ */
+function treemapItemText( ctx, locale ) {
+	if ( 'data' !== ctx.type ) {
+		return '';
+	}
+
+	const entry     = treemapRawEntry( ctx );
+	const label     = entry && entry.label ? String( entry.label ) : '';
+	const formatted = treemapFormatValue( entry, locale );
+
+	if ( label && formatted ) {
+		return [ label, formatted ];
+	}
+
+	return label || formatted;
+}
+
+/**
+ * Tooltip label for treemap charts
+ *
+ * @param {Object} item Chart.js tooltip item
+ * @return {string}
+ */
+function treemapTooltipLabel( item ) {
+	const locale    = item.chart.options.locale;
+	const entry     = treemapRawEntry( item );
+	const label     = entry && entry.label ? String( entry.label ) : '';
+	const formatted = treemapFormatValue( entry, locale );
+
+	if ( label && formatted ) {
+		return label + ': ' + formatted;
+	}
+
+	return formatted || label;
+}
+
+/**
  * Tooltip label for standard charts
  * Reads type and labelsPos directly from the chart instance
  *
@@ -180,6 +265,128 @@ const MChartHelper = {
 				title: () => '',
 				label: ( item ) => scatterChartTooltipLabel( item ),
 			};
+		} else if ( 'treemap' === type ) {
+			const ds     = chart.data.datasets[0];
+			const locale = chart.options.locale;
+
+			if ( ds && ds.mChartTreemapHierarchical ) {
+				const topColors = ds.mChartTopGroupColors || {};
+				const topRgb    = ds.mChartTopGroupRgb || {};
+				const topField  = ds.mChartTopGroupField;
+				const groups    = ds.groups || [];
+				// chartjs-chart-treemap renders leaves at level (groups.length - 1)
+				// — its draw() passes that number to the labels/captions render gate
+				const leafLevel = Math.max( 0, groups.length - 1 );
+
+				// Group rectangles get a progressive faint group-color tint that builds with depth:
+				// each nesting level adds a small alpha step over the previous. Hover darkens that
+				// level's tint slightly. Leaves remain alpha-shaded by their share of the top group.
+				const groupBaseAlpha    = 0.06;
+				const groupStepPerLevel = 0.06;
+				const hoverAlphaBump    = 0.06;
+				const leafHoverBump     = 0.18;
+
+				const colorFor = ( raw, active ) => {
+					// At l=0 the group identifier is on raw.g; at deeper levels and leaves we walk
+					// back to the top-level identifier via the original tree entry on raw._data
+					const topId = ( 0 === raw.l ) ? raw.g : ( raw._data && raw._data[ topField ] );
+					const rgb   = topRgb[ topId ];
+
+					if ( ! rgb ) {
+						return topColors[ topId ] || 'rgba(160,160,160,0.5)';
+					}
+
+					// Group rectangle (any non-leaf level) — light tint that builds with nesting depth
+					if ( raw.l < leafLevel ) {
+						const restAlpha = groupBaseAlpha + raw.l * groupStepPerLevel;
+						const alpha     = active ? Math.min( 1, restAlpha + hoverAlphaBump ) : restAlpha;
+						return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ alpha.toFixed( 3 ) })`;
+					}
+
+					// Leaf — alpha by share of top-group total; bumped on hover for the same
+					// "more saturated = darker = more important" feel that already encodes value visually
+					const denom     = raw.gs || raw.s || raw.v || 1;
+					const ratio     = raw.v / denom;
+					const baseAlpha = Math.max( 0.35, Math.min( 1, ratio + 0.35 ) );
+					const finalA    = active ? Math.min( 1, baseAlpha + leafHoverBump ) : baseAlpha;
+					return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ finalA.toFixed( 3 ) })`;
+				};
+
+				ds.backgroundColor = ( ctx ) => {
+					if ( 'data' !== ctx.type ) {
+						return 'transparent';
+					}
+					return colorFor( ctx.raw, false );
+				};
+
+				ds.hoverBackgroundColor = ( ctx ) => {
+					if ( 'data' !== ctx.type ) {
+						return 'transparent';
+					}
+					return colorFor( ctx.raw, true );
+				};
+
+				const datasetPrefix = ds.mChartDatasetPrefix || '';
+				const datasetSuffix = ds.mChartDatasetSuffix || '';
+
+				// Format with locale + affixes. Leaves prefer their own _data prefix/suffix; parent
+				// rectangles fall back to the dataset-level affixes since the library aggregates
+				// them synthetically and they have no source row.
+				const formatWithAffixes = ( raw ) => {
+					const isLeaf  = raw.l >= leafLevel;
+					const leafRaw = isLeaf ? ( raw._data || {} ) : null;
+					const prefix  = isLeaf ? ( leafRaw.prefix || datasetPrefix ) : datasetPrefix;
+					const suffix  = isLeaf ? ( leafRaw.suffix || datasetSuffix ) : datasetSuffix;
+					return prefix + numberFormat( raw.v, locale ) + suffix;
+				};
+
+				ds.captions = ds.captions || {};
+				ds.captions.formatter = ( ctx ) => {
+					if ( 'data' !== ctx.type || ctx.raw.l >= leafLevel ) {
+						return '';
+					}
+					return ctx.raw.g + ': ' + formatWithAffixes( ctx.raw );
+				};
+
+				ds.labels = ds.labels || {};
+				ds.labels.formatter = ( ctx ) => {
+					if ( 'data' !== ctx.type || ctx.raw.l < leafLevel ) {
+						return '';
+					}
+					return [ String( ctx.raw.g ), formatWithAffixes( ctx.raw ) ];
+				};
+
+				chart.options.plugins.tooltip.callbacks = {
+					title: () => '',
+					label: ( item ) => String( item.raw.g ) + ': ' + formatWithAffixes( item.raw ),
+				};
+
+				return;
+			}
+
+			// Flat treemap (Phase 1 path)
+			if ( ds && Array.isArray( ds.mChartColors ) ) {
+				const colors = ds.mChartColors;
+				ds.backgroundColor = ( ctx ) => {
+					if ( 'data' !== ctx.type ) {
+						return 'transparent';
+					}
+					return colors[ ctx.dataIndex ] || colors[0];
+				};
+			}
+
+			if ( ds ) {
+				ds.labels = ds.labels || {};
+				ds.labels.formatter = ( ctx ) => treemapItemText( ctx, locale );
+			}
+
+			chart.options.plugins.tooltip.callbacks = {
+				title: () => '',
+				label: ( item ) => treemapTooltipLabel( item ),
+			};
+
+			// chartjs-plugin-datalabels has nothing useful to do for treemap
+			return;
 		} else {
 			chart.options.plugins.tooltip.callbacks = {
 				label: ( item ) => chartTooltipLabel( item ),

@@ -29,7 +29,21 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
-= 2.0 = 
+= 2.1 =
+
+* Added a new Treemap chart type
+	* Each row of [label, value] data becomes a rectangle sized by value
+	* Defaults to a single-color value-shaded look; can be switched to one color per rectangle via the new "Color per data point" toggle
+	* Treemap charts also accept hierarchical data - add 3 or more columns and the last column becomes the value while columns to the left become nested grouping levels (outermost first); optionally include a header row and the column names show in tooltips and captions
+* Added a "Color per data point" setting for Treemap, Column, and Bar charts
+	* For Column and Bar this is most useful with a single-series data set - each bar gets a different color cycled from the active theme palette
+* Added a setting to defer chart rendering until charts scroll into view
+	* Inline Chart.js charts wait to instantiate (and animate) until their container enters the viewport
+	* iframe-embedded charts get the native `loading="lazy"` attribute so they don't load until they near the viewport
+	* Enabled by default - uncheck the new "Defer Rendering" setting to restore the old behavior
+* Refactored the UI a bit to better fit the new WordPress 7 admin styles
+
+= 2.0 =
 
 * Refactored the Admin UI to use React for all of the interface which results in some UI performance and functionality improvements
 	* Added a Copy button to the Shortcode input field
