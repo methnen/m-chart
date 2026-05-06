@@ -5,6 +5,10 @@
 #m-chart-spreadsheet {
 	border-left: none;
 
+	&.closed {
+		border-bottom: rem-calc(1) solid $wp-admin-meta-border-color;
+	}
+
 	.postbox-header {
 		border-bottom: none;
 
@@ -148,8 +152,20 @@
 			}
 
 			&.do-not-delete {
-				span {
+				span.dashicons-dismiss {
 					display: none;
+				}
+
+				padding-left: rem-calc(10);
+			}
+		}
+
+		&.editing-disabled {
+			.nav-tab {
+				padding-left: rem-calc(10);
+
+				&:first-of-type {
+					margin-left: rem-calc(7);
 				}
 			}
 		}
@@ -207,6 +223,7 @@
 				select {
 					margin-top: rem-calc( 6 );
 					margin-bottom: rem-calc( 4 );
+					margin-left: rem-calc( 7 );
 
 					// Stop export button and select input from colliding on small screens
 					@media (max-width: 600px) {

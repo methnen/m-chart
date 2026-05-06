@@ -114,6 +114,26 @@
 						float: left;
 					}
 
+					&.shortcode {
+						position: relative;
+
+						.button {
+							bottom: rem-calc( 3 );
+							line-height: rem-calc( 22 );
+							min-height: rem-calc( 24 );
+							position: absolute;
+							right: rem-calc( 2 );
+						}
+
+						@media (max-width: 782px) {
+							.button {
+								bottom: 0;
+								line-height: rem-calc( 30 );
+								min-height: rem-calc( 32 );
+							}
+						}
+					}
+
 					&.image {
 						position: relative;
 
