@@ -27,7 +27,11 @@
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Number Format Locale', 'm-chart' ); ?></th>
+			<th scope="row">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'locale' ) ); ?>">
+					<?php esc_html_e( 'Number Format Locale', 'm-chart' ); ?>
+				</label>
+			</th>
 			<td>
 				<select name="<?php echo esc_attr( $this->get_field_name( 'locale' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'locale' ) ); ?>">
 					<?php

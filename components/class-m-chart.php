@@ -593,17 +593,34 @@ class M_Chart {
 
 			if ( $this->is_amp_endpoint() ) {
 				ob_start();
-				?><amp-img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>"
-	width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
-	class="<?php echo esc_attr( $classes ); ?>"></amp-img>
+				?>
+<figure class="m-chart-image-figure">
+	<amp-img src="<?php echo esc_url( $image['url'] ); ?>"
+		width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
+		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
+		class="<?php echo esc_attr( $classes ); ?>"></amp-img>
+	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
+	<div class="screen-reader-text">
+		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
+	</div>
+	<?php endif; ?>
+</figure>
 				<?php
 				return ob_get_clean();
 			} else {
 				ob_start();
 				?>
-<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>"
-	width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
-	alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" class="<?php echo esc_attr( $classes ); ?>" />
+<figure class="m-chart-image-figure">
+	<img src="<?php echo esc_url( $image['url'] ); ?>"
+		width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
+		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
+		class="<?php echo esc_attr( $classes ); ?>" />
+	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
+	<div class="screen-reader-text">
+		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
+	</div>
+	<?php endif; ?>
+</figure>
 				<?php
 				return ob_get_clean();
 			}
@@ -813,7 +830,8 @@ class M_Chart {
 		?>
 <iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
 	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
-	src="<?php echo esc_url( $src_url ); ?>" frameborder="0"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
+	title="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
+	src="<?php echo esc_url( $src_url ); ?>"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
 		<?php
 		if ( 'show' == $args['share'] ) {
 			unset( $args['share'] );

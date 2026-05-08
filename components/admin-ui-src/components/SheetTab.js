@@ -1,6 +1,7 @@
 import { Button, Modal, TextControl } from '@wordpress/components';
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { speak } from '@wordpress/a11y';
+import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { useLongPress } from '../hooks/useLongPress';
 import { circleX } from '../icons';
@@ -103,6 +104,13 @@ export default function SheetTab( {
 
 		dispatch( { type: 'DELETE_SHEET', payload: { index: sheetIndex } } );
 		setShowDeleteModal( false );
+		speak( __( 'Sheet deleted', 'm-chart' ) );
+
+		// Move focus to the now-active tab after React commits — Modal can't
+		// restore focus to this component because it unmounts on delete
+		setTimeout( () => {
+			document.querySelector( '#spreadsheet-tabs [role="tab"][aria-selected="true"]' )?.focus();
+		}, 0 );
 	}
 
 	function commitRename() {
@@ -112,6 +120,7 @@ export default function SheetTab( {
 		} );
 
 		setIsRenaming( false );
+		speak( sprintf( __( 'Sheet renamed to %s', 'm-chart' ), inputValue ) );
 	}
 
 	function handleKeyDown( e ) {
@@ -135,6 +144,28 @@ export default function SheetTab( {
 		if ( 'Enter' === e.key || ' ' === e.key ) {
 			e.preventDefault();
 			handleClick( e );
+			return;
+		}
+
+		if ( 'F2' === e.key && ! sheetEditingDisabled ) {
+			e.preventDefault();
+			setIsRenaming( true );
+			return;
+		}
+
+		if ( 'Delete' === e.key && ! isSingle && ! sheetEditingDisabled ) {
+			e.preventDefault();
+			setShowDeleteModal( true );
+			return;
+		}
+
+		// Arrow keys / Home / End — let SheetTabs handle cross-tab navigation
+		if ( [ 'ArrowLeft', 'ArrowRight', 'Home', 'End' ].includes( e.key ) ) {
+			e.preventDefault();
+			e.currentTarget.dispatchEvent( new CustomEvent( 'm-chart-tab-nav', {
+				bubbles: true,
+				detail: { key: e.key, fromIndex: sheetIndex },
+			} ) );
 		}
 	}
 
@@ -143,6 +174,7 @@ export default function SheetTab( {
 			role="tab"
 			tabIndex={ isActive ? 0 : -1 }
 			aria-selected={ isActive }
+			aria-controls={ `spreadsheet-panel-${ sheetId }` }
 			className={ className }
 			id={ `spreadsheet-tab-${ sheetId }` }
 			onClick={ handleClick }
@@ -167,6 +199,8 @@ export default function SheetTab( {
 			</span>
 			<TextControl
 				__next40pxDefaultSize
+				label={ __( 'Rename sheet', 'm-chart' ) }
+				hideLabelFromVision
 				ref={ inputRef }
 				name={ `m-chart[set_names][${ sheetIndex }]` }
 				value={ inputValue }

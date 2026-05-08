@@ -171,11 +171,17 @@
   display: flex;
   align-items: center;
 }
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab:focus-visible {
+  outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+  outline-offset: -2px;
+}
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete {
   color: #000000;
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete:hover {
   color: #cc1818;
+  background-color: rgba(204, 24, 24, 0.08);
+  border-radius: 2px;
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete:disabled {
   color: #757575;
@@ -234,7 +240,7 @@
   border-top: 0.0625rem solid #dddddd;
   padding: 0.9375rem 0.625rem 0.625rem;
 }
-#m-chart-spreadsheet #m-chart-csv label {
+#m-chart-spreadsheet #m-chart-csv .m-chart-csv-heading {
   font-size: 0.6875rem;
   font-weight: 499;
   line-height: 1.4;
@@ -242,6 +248,7 @@
   display: block;
   margin-bottom: 0.5rem;
   padding-top: 0;
+  margin: 0;
 }
 #m-chart-spreadsheet #m-chart-csv .actions {
   display: flex;
@@ -278,15 +285,29 @@
   margin: 0.625rem 0 0 0.3125rem;
 }
 #m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel {
-  color: #b8b8b8;
+  color: #000000;
   position: relative;
   bottom: -0.4375rem;
   left: -0.125rem;
 }
 #m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel:hover {
   color: #cc1818;
+  background-color: rgba(204, 24, 24, 0.08);
+  border-radius: 2px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab::after {
+    transition: none;
+  }
+}
+@media (pointer: coarse) {
+  #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete,
+  #m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
 .m-chart-modal .components-modal__content {
   margin-top: 3.75rem;
 }

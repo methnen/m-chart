@@ -145,7 +145,11 @@ export default function JspreadsheetWrapper( {
 		<div
 			ref={ containerRef }
 			className="spreadsheet"
-			style={ { display: isActive ? '' : 'none' } }
+			role="tabpanel"
+			id={ `spreadsheet-panel-${ sheetId }` }
+			aria-labelledby={ `spreadsheet-tab-${ sheetId }` }
+			tabIndex={ isActive ? 0 : -1 }
+			hidden={ ! isActive }
 		/>
 	);
 }

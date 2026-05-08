@@ -1,4 +1,6 @@
 import { useCallback, useRef } from '@wordpress/element';
+import { speak } from '@wordpress/a11y';
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
@@ -64,6 +66,7 @@ export function useImageGeneration( chartRef ) {
 
 		// Re-enable form submission.
 		dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+		speak( __( 'Chart image generated', 'm-chart' ) );
 	}, [ chartRef, dispatch ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return generateImage;

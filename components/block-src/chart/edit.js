@@ -73,11 +73,29 @@ export default function edit( { attributes, setAttributes } ) {
 
     // Build list of charts out of the results object
     const resultsList = results.map( ( x ) => {
+        const aria = sprintf( __( 'Select chart: %s', 'm-chart' ), x.title );
+
         if ( ! imageSupport || ! x.src ) {
-            return <li aria-label={"Select Chart: " + x.title} role="button" className="item no-image" key={ x.id } onClick={ () => handleClick( x.id ) } title={ x.title }><div className="type"><span className={ 'icon ' + x.type }></span><h6 className="title">{ x.title }</h6></div></li>;
-        } else {
-            return <li aria-label={"Select Chart: " + x.title} role="button" className="item image" key={ x.id } onClick={ () => handleClick( x.id ) } title={ x.title }><h6 className="title">{ x.title }</h6><img src={ x.src + cacheBuster } alt={ x.title } /></li>;
+            return (
+                <li className="item no-image" key={ x.id }>
+                    <button type="button" className="select" onClick={ () => handleClick( x.id ) } aria-label={ aria }>
+                        <div className="type">
+                            <span className={ 'icon ' + x.type } aria-hidden="true"></span>
+                            <h6 className="title">{ x.title }</h6>
+                        </div>
+                    </button>
+                </li>
+            );
         }
+
+        return (
+            <li className="item image" key={ x.id }>
+                <button type="button" className="select" onClick={ () => handleClick( x.id ) } aria-label={ aria }>
+                    <h6 className="title">{ x.title }</h6>
+                    <img src={ x.src + cacheBuster } alt="" />
+                </button>
+            </li>
+        );
     } );
 
     // Handle clicks to a chart in the results list
@@ -230,7 +248,7 @@ export default function edit( { attributes, setAttributes } ) {
                                 </div>    
                                 :
                                 <div className="image">
-                                    <img className="preview" src={ selectedChart.src + cacheBuster } />
+                                    <img className="preview" src={ selectedChart.src + cacheBuster } alt={ selectedChart.title || '' } />
                                 </div>
                             }
                         </div>
@@ -265,7 +283,6 @@ export default function edit( { attributes, setAttributes } ) {
                                                         value={ search }
                                                         placeholder={ __( 'Search by title', 'm-chart' ) }
                                                         onChange={ ( value ) => handleSearch( value ) }
-                                                        autoFocus
                                                     />
                                                     <p className="count">{ 1 === available ? sprintf( __( '%d chart found', 'm-chart' ), available ) : sprintf( __( '%d charts found', 'm-chart' ), available ) }</p>
                                                 </div>
@@ -277,6 +294,21 @@ export default function edit( { attributes, setAttributes } ) {
                                                         { loadingMore &&
                                                             <li className="loading-more"><Spinner /></li>
                                                         }
+                                                        { ! loadingMore && results.length < available && (
+                                                            <li className="load-more">
+                                                                <button
+                                                                    type="button"
+                                                                    className="button"
+                                                                    onClick={ () => {
+                                                                        const nextPage = page + 1;
+                                                                        setPage( nextPage );
+                                                                        getCharts( search, nextPage );
+                                                                    } }
+                                                                >
+                                                                    { __( 'Load more results', 'm-chart' ) }
+                                                                </button>
+                                                            </li>
+                                                        ) }
                                                     </ul>
                                                 }
                                             </div>

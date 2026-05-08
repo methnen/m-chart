@@ -112,8 +112,12 @@ class M_Chart_Chartjs {
 	 */
 	public static function get_chart_options_defaults() {
 		return [
+			// Override Chart.js's global default text color so axis ticks, legend
+			// labels, and tooltip text always pass WCAG 2.1 AA contrast on white
+			'color'   => '#222222',
 			'plugins' => [
 				'title' => [
+					'color'   => '#222222',
 					'font'    => [
 						'size'   => 21,
 						'weight' => 'normal',
@@ -123,6 +127,7 @@ class M_Chart_Chartjs {
 					],
 				],
 				'subtitle' => [
+					'color'   => '#222222',
 					'font'    => [
 						'size'   => 18,
 						'weight' => 'normal',
@@ -134,6 +139,7 @@ class M_Chart_Chartjs {
 				'legend' => [
 					'position' => 'bottom',
 					'labels'   => [
+						'color'         => '#222222',
 						'font'          => [
 							'weight' => 'bold',
 						],
@@ -144,7 +150,7 @@ class M_Chart_Chartjs {
 					'enabled' => true,
 				],
 				'datalabels' => [
-					'color'  => 'black',
+					'color'  => '#222222',
 					'font'   => [
 						'weight' => 'bold',
 					],
@@ -801,8 +807,13 @@ class M_Chart_Chartjs {
 	 * @return array the chart args array with axis labels (and units) added to it
 	 */
 	public function add_axis_labels( $chart_args ) {
+		// Force tick + axis-title text color so dark text always passes WCAG 2.1 AA contrast
+		$chart_args['options']['scales']['x']['ticks']['color'] = '#222222';
+		$chart_args['options']['scales']['y']['ticks']['color'] = '#222222';
+
 		// Note the additional layer in the array: [0] its needed for Chart.js to see the label settings
 		$chart_args['options']['scales']['x']['title'] = [
+			'color'   => '#222222',
 			'display' => '' == $this->post_meta['x_title'] ? false : true,
 			'text'    => $this->esc_title( $this->post_meta['x_title'] ),
 		];
@@ -818,6 +829,7 @@ class M_Chart_Chartjs {
 		}
 
 		$chart_args['options']['scales']['y']['title'] = [
+			'color'   => '#222222',
 			'display' => '' == $this->post_meta['y_title'] ? false : true,
 			'text'    => $this->esc_title( $this->post_meta['y_title'] ),
 		];

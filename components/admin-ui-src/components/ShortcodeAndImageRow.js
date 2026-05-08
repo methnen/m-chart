@@ -1,5 +1,6 @@
 import { Button, TextControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { speak } from '@wordpress/a11y';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
@@ -17,6 +18,7 @@ export default function ShortcodeAndImageRow() {
 	function handleCopy() {
 		navigator.clipboard.writeText( shortcode ).then( () => {
 			setCopied( true );
+			speak( __( 'Shortcode copied to clipboard', 'm-chart' ) );
 			setTimeout( () => setCopied( false ), 2000 );
 		} );
 	}
@@ -60,6 +62,9 @@ export default function ShortcodeAndImageRow() {
 							className="m-chart-input-action-button"
 						>
 							{ __( 'View', 'm-chart' ) }
+							<span className="screen-reader-text">
+								{ __( '(opens in a new tab)', 'm-chart' ) }
+							</span>
 						</Button>
 					</div>
 				) : (

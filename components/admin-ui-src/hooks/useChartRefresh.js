@@ -1,4 +1,6 @@
 import { useEffect, useRef } from '@wordpress/element';
+import { speak } from '@wordpress/a11y';
+import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
@@ -115,6 +117,7 @@ export function useChartRefresh( title ) {
 				// If the request succeeded we dispatch the returned data nd then trigger the m_chart.chart_args_success hook and pass it the new data and postId
 				if ( json.success ) {
 					dispatch( { type: 'SET_CHART_ARGS', payload: json.data } );
+					speak( __( 'Chart refreshed', 'm-chart' ) );
 
 					if ( window.wp && window.wp.hooks ) {
 						window.wp.hooks.doAction( 'm_chart.chart_args_success', json.data, postId );

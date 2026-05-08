@@ -1,13 +1,17 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div id="m-chart-settings-page" class="wrap">
 	<h1><?php esc_html_e( 'M Chart Settings', 'm-chart' ); ?></h1>
-	<form method="post">
+	<form method="post" action="">
 		<?php wp_nonce_field( m_chart()->slug . '-save-settings', $this->get_field_name( 'nonce' ) ); ?>
 		<h2><?php esc_html_e( 'General Settings', 'm-chart' ); ?></h2>
 		<table class="form-table">
 			<tbody>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Default Library', 'm-chart' ); ?></th>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
+							<?php esc_html_e( 'Default Library', 'm-chart' ); ?>
+						</label>
+					</th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'library' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
 							<?php
@@ -89,9 +93,13 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Image Width', 'm-chart' ); ?></th>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'image_width' ) ); ?>">
+							<?php esc_html_e( 'Image Width', 'm-chart' ); ?>
+						</label>
+					</th>
 					<td>
-						<input type="number" name="<?php echo esc_attr( m_chart()->admin()->get_field_name( 'image_width' ) ); ?>" value="<?php echo absint( $settings['image_width'] ); ?>" />
+						<input type="number" id="<?php echo esc_attr( $this->get_field_id( 'image_width' ) ); ?>" name="<?php echo esc_attr( m_chart()->admin()->get_field_name( 'image_width' ) ); ?>" value="<?php echo absint( $settings['image_width'] ); ?>" />
 						<p class="description">
 							<?php esc_html_e( 'The width of the image generated from your chart', 'm-chart' ); ?>
 						</p>
@@ -119,7 +127,11 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?></th>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">
+							<?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?>
+						</label>
+					</th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'csv_delimiter' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">
 							<?php

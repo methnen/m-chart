@@ -14,6 +14,8 @@ export default function SubtitleField() {
 	return (
 		<TextControl
 			__next40pxDefaultSize
+			label={ __( 'Subtitle', 'm-chart' ) }
+			hideLabelFromVision
 			name="m-chart[subtitle]"
 			value={ value }
 			placeholder={ __( 'Enter subtitle here', 'm-chart' ) }

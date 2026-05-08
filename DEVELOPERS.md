@@ -204,6 +204,35 @@ See `version-2-notes.md` for the full list of JavaScript hooks available to libr
 
 The following elements are intentionally kept as native HTML and are **not** candidates for `@wordpress/components` swaps:
 
-- **`CsvControls.js` — hidden file input.** Triggered programmatically via `fileInputRef.current.click()`. `FormFileUpload` has different semantics.
-- **`CsvControls.js` — anchor-style buttons** (`Select File`, `Import`, `Export`, `Cancel`). These are `<a>` elements styled as `.button` with SCSS rules targeting `#m-chart-csv .button`. Converting to `Button` would require a full SCSS rework for minimal benefit.
+- **`CsvControls.js` — file input.** Triggered programmatically via `fileInputRef.current.click()`. Visually-hidden via `screen-reader-text` class so it remains accessible to screen readers. `FormFileUpload` has different semantics.
 - **`ShortcodeAndImageRow.js` — `<input type="hidden">` for the library name.** Not a UI element; hidden inputs have no component counterpart.
+
+## Accessibility
+
+This plugin targets WCAG 2.1 Level AA. A few things to know when extending or maintaining it:
+
+### Data entry for screen-reader users
+
+Screen-reader users should use **CSV Import** as the primary data-entry path. The Jspreadsheet CE library used in the spreadsheet UI provides partial keyboard accessibility but is not fully WCAG-compliant in forms mode. CSV import handles the same data shapes and is fully accessible.
+
+### `m_chart_screen_reader_text` action
+
+Fires inside the visually-hidden context container after the auto-emitted data table for every chart render (canvas, image, AMP). Use it to inject additional context — methodology notes, trend descriptions, alt-text-style summaries — that helps screen-reader users understand the chart beyond the raw data values.
+
+```php
+add_action( 'm_chart_screen_reader_text', function ( $post_id, $args ) {
+    $note = get_post_meta( $post_id, 'chart_a11y_note', true );
+
+    if ( $note ) {
+        echo '<p>' . esc_html( $note ) . '</p>';
+    }
+}, 10, 2 );
+```
+
+### Heading hierarchy
+
+The React admin UI sits inside meta-box `<h2>` elements provided by WordPress core. When inserting headings inside React components, level them appropriately (typically `<h3>` or `<h4>`) so the document outline stays sensible.
+
+### Status announcements
+
+The admin UI uses `wp.a11y.speak()` from `@wordpress/a11y` for transient status announcements (chart refreshed, sheet renamed, CSV imported, shortcode copied, etc.). Library plugin authors hooking into the React data-flow should consider doing the same.

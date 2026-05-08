@@ -1,5 +1,6 @@
-import { Button, SelectControl } from '@wordpress/components';
+import { Button, SelectControl, Spinner } from '@wordpress/components';
 import { useState, useRef } from '@wordpress/element';
+import { speak } from '@wordpress/a11y';
 import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { circleX } from '../icons';
@@ -50,6 +51,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		if ( ! file || ! /\.csv$/i.test( file.name ) ) {
 			setFileError( true );
 			setSelectedFile( null );
+			speak( __( 'You can only import CSV files', 'm-chart' ), 'assertive' );
 			return;
 		}
 
@@ -82,6 +84,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		setSelectedFile( null );
 		setIsImporting( true );
 		setImportError( '' );
+		speak( __( 'Importing CSV file', 'm-chart' ) );
 
 		// Reset the actual file input back to empty
 		if ( fileInputRef.current ) {
@@ -106,7 +109,9 @@ export default function CsvControls( { getActiveWorksheet } ) {
 			const json = await response.json();
 
 			if ( ! json.success ) {
-				setImportError( json.data || __( 'Import failed', 'm-chart' ) );
+				const msg = json.data || __( 'Import failed', 'm-chart' );
+				setImportError( msg );
+				speak( msg, 'assertive' );
 				return;
 			}
 
@@ -125,8 +130,12 @@ export default function CsvControls( { getActiveWorksheet } ) {
 					payload: { index: activeSheet, data: worksheet.getData() },
 				} );
 			}
+
+			speak( __( 'CSV file imported', 'm-chart' ) );
 		} catch ( err ) {
-			setImportError( sprintf( __( 'Import error: %s', 'm-chart' ), err.message ) );
+			const msg = sprintf( __( 'Import error: %s', 'm-chart' ), err.message );
+			setImportError( msg );
+			speak( msg, 'assertive' );
 		} finally {
 			// When we're done reset everything in the CSV ui back to default
 			setIsImporting( false );
@@ -182,41 +191,41 @@ export default function CsvControls( { getActiveWorksheet } ) {
 
 	return (
 		<div id="m-chart-csv">
-			<div className="import">
-				<label>{ __( 'CSV Import/Export', 'm-chart' ) }</label>
+			<div className="import" role="group" aria-labelledby="m-chart-csv-heading">
+				<h4 id="m-chart-csv-heading" className="m-chart-csv-heading">
+					{ __( 'CSV Import/Export', 'm-chart' ) }
+				</h4>
 				<div className="controls">
-					{ /* Hidden native file input — triggered programmatically */ }
+					{ /* Visually-hidden native file input — triggered programmatically */ }
 					<input
 						ref={ fileInputRef }
 						type="file"
 						accept=".csv"
-						style={ { display: 'none' } }
+						aria-label={ __( 'CSV file to import', 'm-chart' ) }
+						className="screen-reader-text"
 						onChange={ handleFileChange }
 					/>
 					<div className="actions">
 						<div className="actions-left">
 							{ /* Select File button — shown when no file is selected */ }
 							{ ! showConfirmation && ! isImporting && (
-								<a
-									href="#select-csv"
-									title={ __( 'Select CSV File', 'm-chart' ) }
-									className="button select"
+								<Button
+									variant="secondary"
+									className="select"
 									onClick={ handleSelectFile }
 								>
 									{ __( 'Select File', 'm-chart' ) }
-								</a>
+								</Button>
 							) }
 							{ /* Confirmation row: Import button + delimiter select */ }
 							{ showConfirmation && (
 								<div className="confirmation">
-									<a
-										href="#import-csv"
-										title={ __( 'Import', 'm-chart' ) }
-										className="button"
+									<Button
+										variant="primary"
 										onClick={ handleImport }
 									>
 										{ __( 'Import', 'm-chart' ) }
-									</a>
+									</Button>
 									<SelectControl
 										__next40pxDefaultSize
 										name="m-chart[csv_delimiter]"
@@ -234,25 +243,30 @@ export default function CsvControls( { getActiveWorksheet } ) {
 						</div>
 						{ /* Export hidden while a file is queued or being imported */ }
 						{ ! showConfirmation && ! isImporting && (
-							<a
-								href="#export-csv"
-								title={ __( 'Export CSV', 'm-chart' ) }
-								className="button export"
+							<Button
+								variant="secondary"
+								className="export"
 								onClick={ handleExport }
 							>
 								{ __( 'Export', 'm-chart' ) }
-							</a>
+							</Button>
 						) }
 					</div>
-					{ fileError && (
-						<p className="file error">{ __( 'You can only import CSV files', 'm-chart' ) }</p>
-					) }
-					{ importError && (
-						<p className="import error">{ importError }</p>
-					) }
-					{ isImporting && (
-						<p className="import in-progress">{ __( 'Importing file', 'm-chart' ) }</p>
-					) }
+					<div role="status" aria-live="polite" aria-atomic="true" aria-busy={ isImporting }>
+						{ fileError && (
+							<p className="file error" role="alert">{ __( 'You can only import CSV files', 'm-chart' ) }</p>
+						) }
+						{ importError && (
+							<p className="import error" role="alert">{ importError }</p>
+						) }
+						{ isImporting && (
+							<p className="import in-progress">
+								<Spinner />
+								{ ' ' }
+								{ __( 'Importing file', 'm-chart' ) }
+							</p>
+						) }
+					</div>
 					{ /* File info + cancel — shown while a file is selected */ }
 					{ showConfirmation && (
 						<div className="file-info">

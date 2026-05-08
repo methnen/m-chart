@@ -1,5 +1,6 @@
 import { Button } from '@wordpress/components';
-import { useMemo } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
+import { speak } from '@wordpress/a11y';
 import { __, sprintf } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { circlePlus } from '../icons';
@@ -25,17 +26,56 @@ export default function SheetTabs() {
 
 	const showTabs = multiSheetTypes.has( postMeta.type );
 
+	// Defensive: if activeSheet ever lands out of bounds (e.g. mid-delete), fall back to 0
+	// so at least one tab is always in the tab order
+	const validActive = sheetIds[ activeSheet ] !== undefined ? activeSheet : 0;
+
 	function handleAddSheet( e ) {
 		e.preventDefault();
 
 		dispatch( { type: 'ADD_SHEET', payload: {} } );
+		speak( __( 'New sheet added', 'm-chart' ) );
 	}
+
+	// ARIA tabs pattern: ArrowLeft/ArrowRight/Home/End move focus + activate the target tab
+	// Each SheetTab dispatches a custom 'm-chart-tab-nav' event with the requested key
+	useEffect( () => {
+		const el = document.getElementById( 'spreadsheet-tabs' );
+
+		if ( ! el ) {
+			return;
+		}
+
+		function handler( e ) {
+			const { key, fromIndex } = e.detail;
+			const last = sheetIds.length - 1;
+			let target = fromIndex;
+
+			if ( 'ArrowLeft' === key )  target = fromIndex > 0 ? fromIndex - 1 : last;
+			if ( 'ArrowRight' === key ) target = fromIndex < last ? fromIndex + 1 : 0;
+			if ( 'Home' === key )       target = 0;
+			if ( 'End' === key )        target = last;
+
+			dispatch( { type: 'SET_ACTIVE_SHEET', payload: target } );
+
+			// Move focus to the new active tab after React commits
+			setTimeout( () => {
+				document.getElementById( `spreadsheet-tab-${ sheetIds[ target ] }` )?.focus();
+			}, 0 );
+		}
+
+		el.addEventListener( 'm-chart-tab-nav', handler );
+
+		return () => el.removeEventListener( 'm-chart-tab-nav', handler );
+	}, [ sheetIds, dispatch ] );
 
 	return (
 		<div
 			id="spreadsheet-tabs"
 			className={ `components-tab-panel__tabs m-chart-sheet-tabs${ showTabs ? '' : ' m-chart-hide' }${ sheetEditingDisabled ? ' editing-disabled' : '' }` }
 			role="tablist"
+			aria-label={ __( 'Spreadsheet sheets', 'm-chart' ) }
+			aria-orientation="horizontal"
 		>
 			{ ! sheetEditingDisabled && (
 				<Button
@@ -51,7 +91,7 @@ export default function SheetTabs() {
 					sheetId={ id }
 					sheetIndex={ index }
 					name={ setNames[ index ] || sprintf( __( 'Sheet %d', 'm-chart' ), index + 1 ) }
-					isActive={ index === activeSheet }
+					isActive={ index === validActive }
 					isSingle={ sheetIds.length === 1 }
 					isNew={ id === newSheetId }
 				/>

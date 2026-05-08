@@ -63,11 +63,18 @@
 			display: flex;
 			align-items: center;
 
+			&:focus-visible {
+				outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+				outline-offset: -2px;
+			}
+
 			.m-chart-sheet-tab-delete {
 				color: $wp-admin-black;
 
 				&:hover {
 					color: $wp-admin-alert-red;
+					background-color: rgba( 204, 24, 24, 0.08 );
+					border-radius: 2px;
 				}
 
 				&:disabled {
@@ -148,8 +155,9 @@
 		border-top: rem-calc(1) solid $wp-admin-border-color;
 		padding: rem-calc( 15 10 10 );
 
-		label {
+		.m-chart-csv-heading {
 			@include wp-react-form-label;
+			margin: 0;
 		}
 
 		.actions {
@@ -198,14 +206,32 @@
 		}
 
 		.m-chart-csv-cancel {
-			color: $wp-admin-icon-color;
+			color: $wp-admin-black;
 			position: relative;
 			bottom: rem-calc(-7);
 			left: rem-calc(-2);
 
 			&:hover {
 				color: $wp-admin-alert-red;
+				background-color: rgba( 204, 24, 24, 0.08 );
+				border-radius: 2px;
 			}
 		}
+	}
+}
+
+// Respect the user's reduced-motion preference
+@media ( prefers-reduced-motion: reduce ) {
+	#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab::after {
+		transition: none;
+	}
+}
+
+// Bump touch targets on coarse-pointer devices to meet 2.5.5 (44x44 minimum)
+@media ( pointer: coarse ) {
+	#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete,
+	#m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel {
+		min-width: rem-calc( 44 );
+		min-height: rem-calc( 44 );
 	}
 }
