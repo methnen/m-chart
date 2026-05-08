@@ -96,6 +96,18 @@
   background-image: url("../images/types/polar.svg");
   background-size: contain;
 }
+.column-m-chart-type span.type.treemap::after {
+  background-image: url("../images/types/treemap.svg");
+  background-size: contain;
+}
+.column-m-chart-type span.type.boxplot::after {
+  background-image: url("../images/types/boxplot.svg");
+  background-size: contain;
+}
+.column-m-chart-type span.type.violin::after {
+  background-image: url("../images/types/violin.svg");
+  background-size: contain;
+}
 
 .column-m-chart-library span.library {
   background-position: left center;

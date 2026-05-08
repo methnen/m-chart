@@ -154,6 +154,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		formData.append( 'data',     JSON.stringify( data ) );
 		formData.append( 'title',    title );
 		formData.append( 'set_name', setName );
+		formData.append( 'nonce',    nonce );
 
 		// Create a temporary form and submit it
 		// We have to do it this way to trigger a download

@@ -25,5 +25,11 @@ License info for libraries found in `components/external`:
 	- License at the time of writing: MIT
 - [Chart.js](https://github.com/chartjs/Chart.js)
 	- License at the time of writing: MIT
+- [chartjs-plugin-datalabels](https://github.com/chartjs/chartjs-plugin-datalabels)
+	- License at the time of writing: MIT
+- [chartjs-chart-boxplot](https://github.com/sgratzl/chartjs-chart-boxplot)
+	- License at the time of writing: MIT
+- [chartjs-chart-treemap](https://github.com/kurkle/chartjs-chart-treemap)
+	- License at the time of writing: MIT
 - [parsecsv](https://github.com/parsecsv/parsecsv-for-php)
 	- License at the time of writing: MIT

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" focusable="false" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;">
+  <style type="text/css">
+	.st0{opacity:0.33;}
+</style>
+  <g id="svg-1" transform="matrix(0.800186, 0, 0, 1.000734, 29.072685, 13.324691)" style="">
+    <path class="cls-1" d="M 182.684 352.3 C 182.684 311.19 229.054 274.97 229.054 227.38 C 229.054 185.59 215.304 164.34 198.554 141.55 C 171.394 104.6 169.734 62.42 169.734 62.42 L 143.164 62.42 C 143.164 62.42 141.514 104.59 114.354 141.55 C 97.614 164.34 83.864 185.58 83.864 227.38 C 83.864 274.97 130.234 311.19 130.234 352.3 L 182.684 352.3 Z" style="stroke: rgb(0, 0, 0); fill: rgb(171, 171, 171); stroke-width: 15px; stroke-linecap: round; stroke-linejoin: round;"/>
+  </g>
+  <path d="M504,416H32V72c0-4.4-3.6-8-8-8H8c-4.4,0-8,3.6-8,8v360c0,8.8,7.2,16,16,16h488c4.4,0,8-3.6,8-8v-16 C512,419.6,508.4,416,504,416z"/>
+  <g id="svg-2" transform="matrix(0.940433, 0, 0, 0.794236, 62.664719, 166.064362)" style="">
+    <g id="group-1" transform="matrix(1, 0, 0, 1, 246.066971, -38.225121)">
+      <path class="cls-1" d="M122.61,334.12c8.5-107.07,76.77-115.65,76.77-163.24,0-41.8-31.28-61.01-48.02-83.8-27.16-36.96-22.72-79.57-22.72-79.57h-50.39s4.44,42.61-22.72,79.57c-16.74,22.79-48.02,42-48.02,83.8,0,47.59,68.27,56.18,76.77,163.24h38.34Z" style="fill: rgb(171, 171, 171); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 15px;"/>
+    </g>
+  </g>
+</svg>

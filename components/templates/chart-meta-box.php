@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! m_chart()->is_valid_library( $post_meta['library'] ) ) {
 	?>
 	<div id="m-chart-settings-error" class="wrap">

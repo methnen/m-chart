@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div id="m-chart-settings-page" class="wrap">
 	<h1><?php esc_html_e( 'M Chart Settings', 'm-chart' ); ?></h1>
 	<form method="post">
@@ -13,7 +14,7 @@
 							foreach ( m_chart()->get_libraries() as $library => $library_name ) {
 								?>
 								<option value="<?php echo esc_attr( $library ); ?>"<?php selected( $library, $settings['library'] ); ?>>
-									<?php esc_html_e( $library_name, 'm-chart' ); ?>
+									<?php echo esc_html( $library_name ); ?>
 								</option>
 								<?php
 							}
@@ -125,7 +126,7 @@
 							foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
 								?>
 								<option value="<?php echo esc_attr( $delimiter ); ?>"<?php selected( $delimiter, $settings['csv_delimiter'] ); ?>>
-									<?php esc_html_e( $delimiter_name, 'm-chart' ); ?>
+									<?php echo esc_html( $delimiter_name ); ?>
 								</option>
 								<?php
 							}
@@ -138,7 +139,7 @@
 		</table>
 		<?php do_action( 'm_chart_settings_admin' ); ?>
 		<p class="submit">
-			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr_e( 'Save Changes', 'm-chart' ); ?>">
+			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr__( 'Save Changes', 'm-chart' ); ?>">
 		</p>
 	</form>
 </div>

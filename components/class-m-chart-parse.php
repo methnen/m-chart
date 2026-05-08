@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class M_Chart_Parse {
 	const LABELS_NONE         = 'none';
 	const LABELS_FIRST_ROW    = 'first_row';

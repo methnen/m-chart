@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Server-side rendering of the `wtblocks/chart` block.
  *
@@ -13,5 +17,5 @@ if ( ! empty( $chart_id ) ) :
 	$allowed_show = [ 'chart', 'image', 'table' ];
 	$show         = in_array( $attributes['show'] ?? '', $allowed_show, true ) ? $attributes['show'] : 'chart';
 
-	echo '[chart id="' . $chart_id . '" show="' . $show . '"]';
+	echo '[chart id="' . absint( $chart_id ) . '" show="' . esc_attr( $show ) . '"]';
 endif;

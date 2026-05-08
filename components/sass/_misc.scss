@@ -147,6 +147,27 @@
 				background-size: contain;
 			}
 		}
+
+		&.treemap {
+			&::after {
+				background-image: url( '../images/types/treemap.svg' );
+				background-size: contain;
+			}
+		}
+
+		&.boxplot {
+			&::after {
+				background-image: url( '../images/types/boxplot.svg' );
+				background-size: contain;
+			}
+		}
+
+		&.violin {
+			&::after {
+				background-image: url( '../images/types/violin.svg' );
+				background-size: contain;
+			}
+		}
 	}
 }
 

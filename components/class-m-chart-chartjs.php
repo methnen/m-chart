@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class M_Chart_Chartjs {
 	public $library            = 'chartjs';
 	public $library_name       = 'Chart.js';
@@ -201,6 +205,42 @@ class M_Chart_Chartjs {
 					'hoverRadius' => 7,
 					'hitRadius'   => 13,
 				],
+			],
+		];
+	}
+
+	/**
+	 * Canonical chartjs-chart-treemap dataset defaults (style-only).
+	 *
+	 * Returns the static color/font/spacing values core writes onto every
+	 * treemap dataset. Per-instance flags (`captions.display`,
+	 * `labels.display`) are intentionally omitted — call-sites layer them
+	 * in based on the post's data shape and `labels` meta.
+	 *
+	 * Exposed so extensions (e.g. m-chart-pro's theme builder preview) can
+	 * read the same literals m-chart will apply, instead of mirroring them
+	 * and drifting.
+	 *
+	 * @return array
+	 */
+	public static function get_treemap_dataset_defaults() {
+		return [
+			'spacing'          => 3,
+			'borderWidth'      => 0,
+			'borderColor'      => '#ffffff',
+			'hoverBorderWidth' => 0,
+			'hoverBorderColor' => '#ffffff',
+			'captions'         => [
+				'align'   => 'left',
+				'color'   => '#000000',
+				'font'    => [ 'weight' => 'bold' ],
+				'padding' => 4,
+			],
+			'labels'           => [
+				'color'    => '#000000',
+				'font'     => [ 'weight' => 'bold' ],
+				'align'    => 'center',
+				'position' => 'middle',
 			],
 		];
 	}
@@ -896,29 +936,13 @@ class M_Chart_Chartjs {
 			$hierarchy = $this->build_treemap_hierarchy( $raw_sheet, $this->post_meta['parse_in'] );
 
 			if ( null !== $hierarchy ) {
+				$treemap_defaults = self::get_treemap_dataset_defaults();
+				$treemap_defaults['captions']['display'] = true;
+				$treemap_defaults['labels']['display']   = (bool) $this->post_meta['labels'];
+
 				$dataset_defaults = apply_filters(
 					'm_chart_treemap_dataset_defaults',
-					[
-						'spacing'          => 1,
-						'borderWidth'      => 1,
-						'borderColor'      => '#ffffff',
-						'hoverBorderWidth' => 1,
-						'hoverBorderColor' => '#ffffff',
-						'captions'         => [
-							'display' => true,
-							'align'   => 'left',
-							'color'   => '#000000',
-							'font'    => [ 'weight' => 'bold' ],
-							'padding' => 4,
-						],
-						'labels'           => [
-							'display'  => (bool) $this->post_meta['labels'],
-							'color'    => '#000000',
-							'font'     => [ 'weight' => 'bold' ],
-							'align'    => 'center',
-							'position' => 'middle',
-						],
-					],
+					$treemap_defaults,
 					$this->post,
 					$this->args
 				);
@@ -962,23 +986,15 @@ class M_Chart_Chartjs {
 				];
 			}
 
+			$treemap_defaults = self::get_treemap_dataset_defaults();
+			// Flat (single-level) data — captions don't render, so reset
+			// the array to just the off flag and let the styling drop.
+			$treemap_defaults['captions']           = [ 'display' => false ];
+			$treemap_defaults['labels']['display']  = (bool) $this->post_meta['labels'];
+
 			$dataset_defaults = apply_filters(
 				'm_chart_treemap_dataset_defaults',
-				[
-					'spacing'          => 1,
-					'borderWidth'      => 1,
-					'borderColor'      => '#ffffff',
-					'hoverBorderWidth' => 1,
-					'hoverBorderColor' => '#ffffff',
-					'captions'         => [ 'display' => false ],
-					'labels'           => [
-						'display'  => (bool) $this->post_meta['labels'],
-						'color'    => '#000000',
-						'font'     => [ 'weight' => 'bold' ],
-						'align'    => 'center',
-						'position' => 'middle',
-					],
-				],
+				$treemap_defaults,
 				$this->post,
 				$this->args
 			);
@@ -1569,9 +1585,15 @@ class M_Chart_Chartjs {
 	 * @return array an array of all the themes available in a given directory
 	 */
 	private function _get_themes_readdir( $theme_base ) {
+		static $cache = [];
+
+		if ( isset( $cache[ $theme_base ] ) ) {
+			return $cache[ $theme_base ];
+		}
+
 		// Sanity check to make sure we have a real directory
 		if ( ! is_dir( $theme_base ) ) {
-			return [];
+			return $cache[ $theme_base ] = [];
 		}
 
 		$theme_dir = new DirectoryIterator( $theme_base );
@@ -1589,18 +1611,26 @@ class M_Chart_Chartjs {
 			}
 
 			if ( isset( $name ) && '' != $name ) {
-				$file = basename( $file );
+				$file    = basename( $file );
+				$options = require $theme_base . $file;
+
+				// Skip any theme file that doesn't return an array of options
+				if ( ! is_array( $options ) ) {
+					continue;
+				}
 
 				$themes[ $file ] = (object) [
 					'slug'    => substr( $file, 0, -4 ),
 					'name'    => $name,
 					'file'    => $file,
-					'options' => require $theme_base . $file,
+					'options' => $options,
 				];
 			}
 		}
 
 		asort( $themes );
+
+		$cache[ $theme_base ] = $themes;
 
 		return $themes;
 	}

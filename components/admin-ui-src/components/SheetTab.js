@@ -131,15 +131,23 @@ export default function SheetTab( {
 		isActive ? 'is-active' : '',
 	].filter( Boolean ).join( ' ' );
 
+	function handleKeyActivate( e ) {
+		if ( 'Enter' === e.key || ' ' === e.key ) {
+			e.preventDefault();
+			handleClick( e );
+		}
+	}
+
 	return (
-		<button
-			type="button"
+		<div
 			role="tab"
+			tabIndex={ isActive ? 0 : -1 }
 			aria-selected={ isActive }
 			className={ className }
 			id={ `spreadsheet-tab-${ sheetId }` }
 			onClick={ handleClick }
 			onDoubleClick={ handleDoubleClick }
+			onKeyDown={ handleKeyActivate }
 			{ ...longPress }
 		>
 			{ ! isSingle && ! sheetEditingDisabled && (
@@ -167,6 +175,7 @@ export default function SheetTab( {
 					width:   inputWidth,
 				} }
 				onChange={ ( value ) => setInputValue( value ) }
+				onClick={ ( e ) => e.stopPropagation() }
 				onBlur={ commitRename }
 				onKeyDown={ handleKeyDown }
 			/>
@@ -195,6 +204,6 @@ export default function SheetTab( {
 					</div>
 				</Modal>
 			) }
-		</button>
+		</div>
 	);
 }

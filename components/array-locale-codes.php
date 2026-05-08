@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * An array of Intl.NumberFormat locales matched to names in US English
  * Thank you @umpirsky! https://github.com/umpirsky/locale-list

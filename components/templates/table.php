@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <table class="<?php echo esc_attr( $classes ); ?>">
 	<?php
 	$set_name = '';
@@ -12,11 +13,11 @@
 
 		$row_column = false;
 
-		if ( count( $first_row ) == count( m_chart()->parse()->raw_data[0] ) ) {
+		if ( isset( m_chart()->parse()->raw_data[0] ) && count( $first_row ) == count( m_chart()->parse()->raw_data[0] ) ) {
 			$row_column = true;
 		}
 		?>
-		<tr><th colspan="<?php echo count( $first_row ) + 1; ?>"><?php echo get_the_title( $post_id ) . $set_name; ?></th></tr>
+		<tr><th colspan="<?php echo absint( count( $first_row ) + 1 ); ?>"><?php echo esc_html( get_the_title( $post_id ) . $set_name ); ?></th></tr>
 		<tr>
 			<th></th>
 			<?php
@@ -50,7 +51,7 @@
 	} else {
 		$first_row = m_chart()->parse()->value_labels;
 		?>
-		<tr><th colspan="<?php echo count( $first_row ); ?>"><?php echo get_the_title( $post_id ) . $set_name; ?></th></tr>
+		<tr><th colspan="<?php echo absint( count( $first_row ) ); ?>"><?php echo esc_html( get_the_title( $post_id ) . $set_name ); ?></th></tr>
 		<tr>
 			<?php
 			foreach ( $first_row as $label ) {

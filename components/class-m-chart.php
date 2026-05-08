@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class M_Chart {
 	public $version           = '2.1';
 	public $slug              = 'm-chart';
@@ -25,7 +29,7 @@ class M_Chart {
 		'set_names'          => [],
 		'data_point_colors'  => false,
 		'mean_point'         => true,
-		'sample_points' => false,
+		'sample_points'      => false,
 	];
 	public $get_chart_default_args = [
 		'show'  => 'chart',
@@ -45,7 +49,7 @@ class M_Chart {
 		'show_library'     => 'no',
 		'performance'      => 'default',
 		'image_multiplier' => '2',
-		'image_width'      => '600',
+		'image_width'      => '900',
 		'embeds'           => '',
 		'defer_rendering'  => 'enabled',
 		'default_theme'    => '_default',
@@ -77,7 +81,6 @@ class M_Chart {
 		add_action( 'init', [ $this, 'init' ] );
 		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 		add_action( 'save_post', [ $this, 'save_post' ] );
-		add_action( 'shortcode_ui_before_do_shortcode', [ $this, 'shortcode_ui_before_do_shortcode' ] );
 		// Doing this early as possible because it sets is_iframe which we might need to use for other things
 		add_action( 'template_redirect', [ $this, 'template_redirect' ], 0 );
 		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], 10, 2 );
@@ -90,8 +93,7 @@ class M_Chart {
 		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
 		add_shortcode( 'chart', [ $this, 'chart_shortcode' ] );
-		add_shortcode( 'chart-share', [ $this, 'share_shortcode' ] );
-		
+
 		// Initiate the block class
 		$this->block();
 	}
@@ -239,7 +241,7 @@ class M_Chart {
 		wp_register_script(
 			'chartjs',
 			$this->plugin_url . '/components/external/chartjs/chart.js',
-			[ 'jquery' ],
+			[],
 			$this->version
 		);
 
@@ -270,9 +272,6 @@ class M_Chart {
 			[ 'chartjs' ],
 			$this->version
 		);
-
-		// jQuery needs to be in the header since the charts are inline
-		wp_enqueue_script( 'jquery', false, [], false, false );
 
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', EP_PERMALINK );
@@ -320,7 +319,12 @@ class M_Chart {
 			$port = ':' . $url_base['port'];
 		}
 
-		return $url_base['scheme'] . '://' . $url_base['host'] . $port . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
+		$scheme = $url_base['scheme'] ?? 'https';
+		$host   = $url_base['host']   ?? '';
+		$path   = $url_path['path']   ?? '';
+		$query  = $url_path['query']  ?? '';
+
+		return $scheme . '://' . $host . $port . preg_replace( '#/$#', '', $path ) . ( '' === $query ? '' : '?' . $query );
 	}
 
 	/**
@@ -443,7 +447,7 @@ class M_Chart {
 		$chart_meta['legend']             = false;
 		$chart_meta['data_point_colors']  = false;
 		$chart_meta['mean_point']         = false;
-		$chart_meta['sample_points'] = false;
+		$chart_meta['sample_points']      = false;
 
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
@@ -482,7 +486,8 @@ class M_Chart {
 
 		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet CE)
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
-			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
+			$decoded = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
+			$chart_meta['data']['sets'] = is_array( $decoded ) ? $decoded : [];
 		}
 
 		// Validate the data array
@@ -802,13 +807,13 @@ class M_Chart {
 
 		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
 
-		$loading_attr = 'enabled' === $this->get_settings( 'defer_rendering' ) ? ' loading="lazy"' : '';
+		$defer_lazy = 'enabled' === $this->get_settings( 'defer_rendering' );
 
 		ob_start();
 		?>
 <iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
 	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
-	src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"<?php echo $loading_attr; ?>></iframe>
+	src="<?php echo esc_url( $src_url ); ?>" frameborder="0"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
 		<?php
 		if ( 'show' == $args['share'] ) {
 			unset( $args['share'] );

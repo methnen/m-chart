@@ -69,14 +69,37 @@ wp.hooks.addFilter( 'm_chart.settings_component', 'my-plugin', function( Default
 
 ### Multi-Sheet Chart Types
 
-By default only certain chart types (scatter, bubble, radar, radar-area) show the multi-sheet tab bar. Library plugins can add or remove types via the `m_chart.multi_sheet_types` filter:
+By default the chart types that show the multi-sheet tab bar are: `scatter`, `bubble`, `radar`, `radar-area`, `boxplot`, `violin`. Library plugins can add or remove types via the **PHP** filter `m_chart_multi_sheet_types`:
+
+```php
+add_filter( 'm_chart_multi_sheet_types', function ( $types ) {
+    $types[] = 'my-custom-type';
+    return $types;
+} );
+```
+
+The filtered list is exposed to JS via `window.m_chart_admin.multi_sheet_types`, so the React UI stays in sync with PHP automatically.
+
+### Metabox Extensions
+
+Library plugins can inject additional components into the spreadsheet and chart meta boxes via two `wp.hooks` filters. Each filter receives the existing extension (initially `null`) and a `{ state, dispatch }` context object so the injected component can read and mutate the shared admin state:
 
 ```js
-wp.hooks.addFilter( 'm_chart.multi_sheet_types', 'my-plugin', function( types ) {
-    // types is an array of type slugs, e.g. [ 'scatter', 'bubble', 'radar', 'radar-area' ]
-    types.push( 'my-custom-type' );
-    return types;
-} );
+wp.hooks.addFilter(
+    'm_chart.spreadsheet_metabox_extension',
+    'my-plugin',
+    function ( _existing, ctx ) {
+        return <MyExtensionComponent state={ ctx.state } dispatch={ ctx.dispatch } />;
+    }
+);
+
+wp.hooks.addFilter(
+    'm_chart.chart_metabox_extension',
+    'my-plugin',
+    function ( _existing, ctx ) {
+        return <MyChartExtension state={ ctx.state } dispatch={ ctx.dispatch } />;
+    }
+);
 ```
 
 ---

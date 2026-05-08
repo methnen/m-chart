@@ -16,9 +16,14 @@ export function useChartRefresh( title ) {
 		chartArgs,
 	} = state;
 
-	const timerRef   = useRef( null );
-	const abortRef   = useRef( null );
-	const isFirstRun = useRef( true );
+	const timerRef        = useRef( null );
+	const abortRef        = useRef( null );
+	const isFirstRun      = useRef( true );
+	const isMountedRef    = useRef( true );
+	const requestTokenRef = useRef( 0 );
+
+	// Track unmount so we don't dispatch after the component is gone
+	useEffect( () => () => { isMountedRef.current = false; }, [] );
 
 	// Keep a ref to the values that aren't in the effect deps so the async callback
 	// always reads the latest version without needing them in the deps array
@@ -30,7 +35,7 @@ export function useChartRefresh( title ) {
 		// But only if it's not a brand new chart (chartArgs being null indcates chart is new)
 		if ( isFirstRun.current && null !== chartArgs ) {
 			isFirstRun.current = false;
-			
+
 			return;
 		}
 
@@ -46,6 +51,9 @@ export function useChartRefresh( title ) {
 			}
 
 			abortRef.current = new AbortController();
+
+			// Bump the token so any older in-flight request that resolves later can detect it's stale
+			const myToken = ++requestTokenRef.current;
 
 			// Read from the ref so the async body always has the latest values even if
 			// the component re-rendered between when the timeout was scheduled and when it fires
@@ -99,6 +107,11 @@ export function useChartRefresh( title ) {
 
 				const json = await response.json();
 
+				// Drop the response if the component has unmounted or a newer request was launched in the meantime
+				if ( ! isMountedRef.current || myToken !== requestTokenRef.current ) {
+					return;
+				}
+
 				// If the request succeeded we dispatch the returned data nd then trigger the m_chart.chart_args_success hook and pass it the new data and postId
 				if ( json.success ) {
 					dispatch( { type: 'SET_CHART_ARGS', payload: json.data } );
@@ -119,7 +132,9 @@ export function useChartRefresh( title ) {
 					console.error( 'm-chart: chart refresh failed', err );
 				}
 			} finally {
-				dispatch( { type: 'SET_REFRESHING', payload: false } );
+				if ( isMountedRef.current && myToken === requestTokenRef.current ) {
+					dispatch( { type: 'SET_REFRESHING', payload: false } );
+				}
 			}
 		}, 300 );
 

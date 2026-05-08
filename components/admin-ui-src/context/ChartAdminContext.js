@@ -130,7 +130,6 @@ function reducer( state, action ) {
 			return { ...state, activeSheet: action.payload };
 
 		case 'SET_CHART_ARGS':
-			console.log({ ...state, chartArgs: action.payload });
 			return { ...state, chartArgs: action.payload };
 
 		case 'SET_REFRESHING':

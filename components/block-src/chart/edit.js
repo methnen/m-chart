@@ -88,20 +88,8 @@ export default function edit( { attributes, setAttributes } ) {
 
     // Handle user typing into the search field
     const handleSearch = ( value ) => {
-        console.log( 'search', value );
         doSearch( value );
     };
-
-    // Actually actually carry out the debounced search
-    const doSearch = useCallback(
-        debounce( ( value ) => {
-            console.log( 'debounce', value );
-            setSearch( value );
-            setPage( 1 );
-            getCharts( value );
-        }, 500),
-        []
-    );
 
     // Get option settings
     const fetchOptions = () => {
@@ -127,7 +115,8 @@ export default function edit( { attributes, setAttributes } ) {
         } ).catch( () => {} );
     };
 
-    const getCharts = ( value, getPage = 1 ) => {
+    // Stable across renders so the debounced search closure doesn't go stale
+    const getCharts = useCallback( ( value, getPage = 1 ) => {
         setLoadProblem( false );
 
         // If we're getting a subsequent page we're adding to the existing results
@@ -182,7 +171,17 @@ export default function edit( { attributes, setAttributes } ) {
 
                     setLoadingMore( false );
                 } );
-    };
+    }, [] );
+
+    // Actually actually carry out the debounced search
+    const doSearch = useMemo(
+        () => debounce( ( value ) => {
+            setSearch( value );
+            setPage( 1 );
+            getCharts( value );
+        }, 500 ),
+        [ getCharts ]
+    );
 
     return (
         <div { ...blockProps }>

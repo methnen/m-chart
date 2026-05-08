@@ -1,7 +1,10 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $title  = get_the_title( $post_id );
 $height = m_chart()->get_post_meta( $post_id, 'height' );
-$width  = '';
 
 $subtitle = m_chart()->get_post_meta( $post_id, 'subtitle' );
 
@@ -9,9 +12,9 @@ if ( '' != $subtitle ) {
 	$title = $title . ': ' . $subtitle;
 }
 
-if ( '' != $args['width'] && 'responsive' != $args['width'] ) {
-	$width = ' width="' . absint( $args['width'] ) . '"';
-}
+$width = ( '' !== $args['width'] && 'responsive' !== $args['width'] )
+	? absint( $args['width'] )
+	: 0;
 
 $defer_rendering  = 'enabled' === m_chart()->get_settings( 'defer_rendering' );
 $observer_options = apply_filters(
@@ -22,7 +25,7 @@ $observer_options = apply_filters(
 );
 ?>
 <div id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart-container chartjs">
-	<canvas id="m-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width; ?> aria-label="<?php echo esc_attr( $title ); ?>" role="img" style="height: <?php echo esc_attr( $height ); ?>px;"></canvas>
+	<canvas id="m-chart-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width ? ' width="' . absint( $width ) . '"' : ''; ?> aria-label="<?php echo esc_attr( $title ); ?>" role="img" style="height: <?php echo esc_attr( $height ); ?>px;"></canvas>
 </div>
 <script>
 	( () => {

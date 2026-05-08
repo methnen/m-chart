@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class M_Chart_Block {
 
 	/**
@@ -57,11 +61,21 @@ class M_Chart_Block {
 	 * Create a version string to add to the loaded script & style files, but refresh if in develop mode.
 	 */
 	public function version_str() {
-		$plugin_file    = plugin_dir_path( __DIR__ ) . ( 'm-chart.php' );
+		static $cached = null;
+
+		if ( null !== $cached ) {
+			return $cached;
+		}
+
+		$plugin_file    = plugin_dir_path( __DIR__ ) . 'm-chart.php';
 		$plugin_data    = get_file_data( $plugin_file, [ 'Version' => 'Version' ] );
 		$plugin_version = $plugin_data['Version'];
-	
-		return WP_DEBUG ? $plugin_version . ' - ' . substr( hash( 'sha256', current_time( 'timestamp' ) ), 0, 12 ) : $plugin_version;
+
+		$cached = WP_DEBUG
+			? $plugin_version . ' - ' . substr( hash( 'sha256', (string) time() ), 0, 12 )
+			: $plugin_version;
+
+		return $cached;
 	}
 
 	/**
@@ -75,7 +89,8 @@ class M_Chart_Block {
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'fetch_options' ],
 				'permission_callback' => function () {
-					return true;                },
+					return current_user_can( 'edit_posts' );
+				},
 			]
 		);
 	}
@@ -114,7 +129,7 @@ class M_Chart_Block {
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'get_charts' ],
 				'permission_callback' => function () {
-					return true;
+					return current_user_can( 'edit_posts' );
 				},
 				'args'                => [
 					's' => [
@@ -142,8 +157,8 @@ class M_Chart_Block {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'get_chart' ],
-				'permission_callback' => function () {
-					return true;
+				'permission_callback' => function ( $request ) {
+					return current_user_can( 'read_post', (int) $request['id'] );
 				},
 				'args'                => [
 					'id' => [
@@ -175,7 +190,7 @@ class M_Chart_Block {
 
 		return [
 			'id'       => intval( $post->ID ),
-			'title'    => html_entity_decode( get_the_title( $post->ID ) ),
+			'title'    => get_the_title( $post->ID ),
 			'subtitle' => isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '',
 			'url'      => get_the_post_thumbnail_url( $post->ID ),
 			'type'     => isset( $post_meta['type'] ) ? $post_meta['type'] : '',
@@ -219,7 +234,7 @@ class M_Chart_Block {
 				
 				$result = [
 					'id'       => intval( $post->ID ),
-					'title'    => html_entity_decode( get_the_title( $post->ID ) ),
+					'title'    => get_the_title( $post->ID ),
 					'subtitle' => isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '',
 					'url'      => $chart_image['url'],
 					'type'     => isset( $post_meta ) && isset( $post_meta['type'] ) ? $post_meta['type'] : '',

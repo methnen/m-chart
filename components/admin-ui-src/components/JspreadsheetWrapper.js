@@ -1,5 +1,5 @@
 import { useEffect, useRef } from '@wordpress/element';
-import { useChartAdmin } from '../context/ChartAdminContext';
+import { useChartDispatch } from '../context/ChartAdminContext';
 
 // Jspreadsheet CE has a bunch of default menu items this is the list of the ones we actually want
 const CONTEXT_MENU_ITEMS = [
@@ -80,7 +80,7 @@ export default function JspreadsheetWrapper( {
 	onMounted,
 	onUnmounted,
 } ) {
-	const { dispatch } = useChartAdmin();
+	const dispatch = useChartDispatch();
 	const containerRef  = useRef( null );
 	const worksheetRef  = useRef( null );
 

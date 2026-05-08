@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class M_Chart_Admin {
 	private $safe_settings = [
 		'performance' => [
@@ -126,13 +130,16 @@ class M_Chart_Admin {
 		}
 
 		// Check the nonce
+		$nonce = $_POST[ m_chart()->slug ]['nonce'] ?? '';
+
 		if (
 			   ! isset( $_POST[ m_chart()->slug ] )
-			|| ! wp_verify_nonce( $_POST[ m_chart()->slug ]['nonce'], m_chart()->slug . '-save-settings' )
+			|| ! wp_verify_nonce( $nonce, m_chart()->slug . '-save-settings' )
 		) {
 			return;
 		}
 
+		$previous_settings  = m_chart()->get_settings();
 		$validated_settings = [];
 		$submitted_settings = $_POST[ m_chart()->slug ];
 
@@ -168,8 +175,13 @@ class M_Chart_Admin {
 
 		update_option( m_chart()->slug, $validated_settings );
 
-		// Make sure the embed endpoint makes it into the rewrite rules
-		flush_rewrite_rules();
+		// Only flush rewrite rules when the embed endpoint is actually being toggled
+		$previous_embeds = $previous_settings['embeds'] ?? '';
+		$current_embeds  = $validated_settings['embeds'] ?? '';
+
+		if ( $previous_embeds !== $current_embeds ) {
+			flush_rewrite_rules();
+		}
 
 		add_action( 'admin_notices', [ $this, 'save_success' ] );
 	}
@@ -513,9 +525,10 @@ class M_Chart_Admin {
 			return;
 		}
 
-		$library = m_chart()->get_post_meta( $post_id, 'library' );
+		$library          = m_chart()->get_post_meta( $post_id, 'library' );
+		$library_instance = m_chart()->library( $library );
 
-		if ( m_chart()->library( $library )->library !== $library ) {
+		if ( ! $library_instance || $library_instance->library !== $library ) {
 			?>
 <span aria-hidden="true">—</span>
 <span class="screen-reader-text"><?php echo esc_html__( 'Library not found', 'm-chart' ); ?></span>
@@ -525,7 +538,7 @@ class M_Chart_Admin {
 
 		if ( m_chart()->slug . '-type' === $column ) {
 			$type      = m_chart()->get_post_meta( $post_id, 'type' );
-			$type_name = m_chart()->library( $library )->type_option_names[ $type ];
+			$type_name = $library_instance->type_option_names[ $type ];
 			?>
 <span class="type <?php echo esc_attr( $type ); ?>" title="<?php echo esc_attr( $type_name ); ?>">
 			<?php echo esc_html( $type_name ); ?>
@@ -534,7 +547,7 @@ class M_Chart_Admin {
 		}
 
 		if ( m_chart()->slug . '-library' === $column ) {
-			$library_name = m_chart()->library( $library )->library_name;
+			$library_name = $library_instance->library_name;
 			?>
 <span class="library <?php echo esc_attr( $library ); ?>" title="<?php echo esc_attr( $library_name ); ?>">
 			<?php echo esc_html( $library_name ); ?>
@@ -605,7 +618,9 @@ class M_Chart_Admin {
 		}
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $_POST[ m_chart()->slug ]['nonce'], m_chart()->slug . '-save-post' ) ) {
+		$nonce = $_POST[ m_chart()->slug ]['nonce'] ?? '';
+
+		if ( ! wp_verify_nonce( $nonce, m_chart()->slug . '-save-post' ) ) {
 			return;
 		}
 
@@ -623,8 +638,10 @@ class M_Chart_Admin {
 		if (
 			   isset( $_POST[ m_chart()->slug ]['library'] )
 			// Make sure the library value is clean and valid before trying to use it
-			&& $library = m_chart()->is_valid_library( $_POST[ m_chart()->slug ]['library'] )
+			&& m_chart()->is_valid_library( $_POST[ m_chart()->slug ]['library'] )
 		) {
+			$library = sanitize_key( $_POST[ m_chart()->slug ]['library'] );
+
 			// Load the library in question in case there's a filter/action we'll need
 			m_chart()->library( $library );
 
@@ -648,7 +665,7 @@ class M_Chart_Admin {
 			return false;
 		}
 
-		if ( ! is_numeric( $_POST['post_ID'] ) ) {
+		if ( ! is_numeric( $_POST['post_ID'] ?? '' ) ) {
 			return false;
 		}
 
@@ -667,14 +684,22 @@ class M_Chart_Admin {
 			return false;
 		}
 
-		if ( '' === $_POST[ m_chart()->slug ]['img'] ) {
+		$img_data = $_POST[ m_chart()->slug ]['img'] ?? '';
+
+		if ( '' === $img_data ) {
 			return false;
 		}
 
 		// Decode the image so we can save it
-		$decoded_img = base64_decode( str_replace( 'data:image/png;base64,', '', $_POST[ m_chart()->slug ]['img'] ) );
+		$decoded_img = base64_decode( str_replace( 'data:image/png;base64,', '', $img_data ) );
 
-		if ( '' === $decoded_img ) {
+		// Reject anything that isn't a real PNG before writing it to disk
+		if ( false === $decoded_img || '' === $decoded_img || "\x89PNG\r\n\x1a\n" !== substr( $decoded_img, 0, 8 ) ) {
+			return false;
+		}
+
+		// Cap the image size at 5MB to keep a runaway client from filling disk
+		if ( strlen( $decoded_img ) > 5 * 1024 * 1024 ) {
 			return false;
 		}
 
@@ -728,7 +753,7 @@ class M_Chart_Admin {
 	 * @return array an array of the data from the imported CSV file ready for use in the chart meta
 	 */
 	public function ajax_import_csv() {
-		$post = get_post( absint( $_POST['post_id'] ) );
+		$post = get_post( absint( $_POST['post_id'] ?? 0 ) );
 
 		// Check post type
 		if ( ! isset( $post->post_type ) || m_chart()->slug !== $post->post_type ) {
@@ -736,7 +761,9 @@ class M_Chart_Admin {
 		}
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $_POST['nonce'], m_chart()->slug . '-save-post' ) ) {
+		$nonce = $_POST['nonce'] ?? '';
+
+		if ( ! wp_verify_nonce( $nonce, m_chart()->slug . '-save-post' ) ) {
 			wp_send_json_error( esc_html__( 'Invalid nonce', 'm-chart' ) );
 		}
 
@@ -746,14 +773,27 @@ class M_Chart_Admin {
 		}
 
 		// Make sure there's a CSV file
-		if ( empty( $_FILES ) || ! isset( $_FILES['import_csv_file']['name'] ) ) {
+		if ( empty( $_FILES['import_csv_file']['name'] ) ) {
 			wp_send_json_error( esc_html__( 'No file to import', 'm-chart' ) );
 		}
 
-		// Make sure the file is a CSV file
-		$file_ext = strtolower( pathinfo( $_FILES['import_csv_file']['name'], PATHINFO_EXTENSION ) );
+		// Check upload-level errors first
+		if ( UPLOAD_ERR_OK !== ( $_FILES['import_csv_file']['error'] ?? UPLOAD_ERR_NO_FILE ) ) {
+			wp_send_json_error( esc_html__( 'File upload error', 'm-chart' ) );
+		}
 
-		if ( 'csv' !== $file_ext ) {
+		if ( ! is_uploaded_file( $_FILES['import_csv_file']['tmp_name'] ) ) {
+			wp_send_json_error( esc_html__( 'Invalid upload', 'm-chart' ) );
+		}
+
+		// Verify both extension AND MIME (some browsers send text/plain for CSV)
+		$file_check = wp_check_filetype_and_ext(
+			$_FILES['import_csv_file']['tmp_name'],
+			$_FILES['import_csv_file']['name'],
+			[ 'csv' => 'text/csv', 'csv-alt' => 'text/plain' ]
+		);
+
+		if ( 'csv' !== ( $file_check['ext'] ?? '' ) ) {
 			wp_send_json_error( esc_html__( 'Only CSV files can be imported', 'm-chart' ) );
 		}
 
@@ -762,6 +802,11 @@ class M_Chart_Admin {
 
 		if ( ! $csv_file ) {
 			wp_send_json_error( esc_html__( 'File path not found', 'm-chart' ) );
+		}
+
+		// Cap file size at 2MB to prevent resource exhaustion
+		if ( filesize( $csv_file ) > 2 * 1024 * 1024 ) {
+			wp_send_json_error( esc_html__( 'CSV file too large (max 2MB)', 'm-chart' ) );
 		}
 
 		$csv_data = file_get_contents( $csv_file );
@@ -830,15 +875,18 @@ class M_Chart_Admin {
 	 * Converts data array into CSV and outputs it to the browser
 	 */
 	public function ajax_export_csv() {
-		// Purposely using $_REQUEST here since this method can work via a GET and POST request
-		// POST requests are used when passing the data value since it's too big to pass via GET
-		// There is no nonce check here because a traditional WP nonce check would not work
-		// Instead we confirm the user has necessary permissions for the post in question
-		if ( ! is_numeric( $_REQUEST['post_id'] ) || ! current_user_can( 'edit_post', absint( $_REQUEST['post_id'] ) ) ) {
-			wp_die( 'Unauthorized access', 'You do not have permission to do that', [ 'response' => 401 ] );
+		$post_id = $_REQUEST['post_id'] ?? '';
+		$nonce   = $_REQUEST['nonce'] ?? '';
+
+		if (
+			   ! is_numeric( $post_id )
+			|| ! wp_verify_nonce( $nonce, m_chart()->slug . '-save-post' )
+			|| ! current_user_can( 'edit_post', absint( $post_id ) )
+		) {
+			wp_die( esc_html__( 'Unauthorized access', 'm-chart' ), esc_html__( 'You do not have permission to do that', 'm-chart' ), [ 'response' => 401 ] );
 		}
 
-		$post = get_post( absint( $_REQUEST['post_id'] ) );
+		$post = get_post( absint( $post_id ) );
 
 		// If the user passed a data value in their request we'll use it after validation
 		if ( isset( $_POST['data'] ) && isset( $_POST['title'] ) ) {
@@ -849,11 +897,17 @@ class M_Chart_Admin {
 			$file_name = sanitize_title( get_the_title( $post->ID ) );
 		}
 
-		$set_name = sanitize_title( $_REQUEST['set_name'] );
+		$set_name = sanitize_title( $_REQUEST['set_name'] ?? '' );
 
 		if ( empty( $data ) ) {
 			return;
 		}
+
+		// Prevent CSV/formula injection by prefixing any cell that begins with a
+		// formula trigger so spreadsheet apps treat it as a literal string
+		array_walk_recursive( $data, function ( &$cell ) {
+			$cell = $this->neutralize_csv_cell( $cell );
+		} );
 
 		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
 		$parse_csv = new parseCSV();
@@ -866,18 +920,37 @@ class M_Chart_Admin {
 	}
 
 	/**
+	 * Prefix a cell value with a single quote when it starts with a character
+	 * that Excel/Sheets/Numbers would otherwise interpret as a formula trigger
+	 *
+	 * @param mixed $cell The raw cell value
+	 * @return string The cell value, prefixed with ' if it would otherwise execute
+	 */
+	public function neutralize_csv_cell( $cell ) {
+		$cell = (string) $cell;
+
+		if ( '' !== $cell && in_array( $cell[0], [ '=', '+', '-', '@', "\t", "\r" ], true ) ) {
+			return "'" . $cell;
+		}
+
+		return $cell;
+	}
+
+	/**
 	 * Returns JSON encoded chart args from $_POST values sent from the admin panel
 	 *
 	 * @return string a JSON encoded string containing all of the chart args needed to update an active chart
 	 */
 	public function ajax_get_chart_args() {
 		// Check the nonce
-		if ( ! wp_verify_nonce( $_POST['nonce'], m_chart()->slug . '-save-post' ) ) {
+		$nonce = $_POST['nonce'] ?? '';
+
+		if ( ! wp_verify_nonce( $nonce, m_chart()->slug . '-save-post' ) ) {
 			wp_send_json_error( esc_html__( 'Invalid nonce', 'm-chart' ) );
 		}
 
 		// Does the post exist? (post_id is 0 for new charts that haven't been saved yet)
-		$post_id = absint( $_POST['post_id'] );
+		$post_id = absint( $_POST['post_id'] ?? 0 );
 
 		if ( $post_id ) {
 			if ( ! $post = get_post( $post_id ) ) {
@@ -902,25 +975,32 @@ class M_Chart_Admin {
 		}
 
 		// Is this a valid library?
-		if ( ! m_chart()->is_valid_library( $_POST['library'] ) ) {
+		$library_slug = $_POST['library'] ?? '';
+
+		if ( ! m_chart()->is_valid_library( $library_slug ) ) {
 			wp_send_json_error( esc_html__( 'Invalid library', 'm-chart' ) );
 		}
 
 		// This does get potentially overwritten later on
 		// However, it's necessary for initial load on a new chart
-		if ( 'highcharts' === $_POST['library'] ) {
-			$library = m_chart()->library( $_POST['library'] );
+		if ( 'highcharts' === $library_slug ) {
+			$library = m_chart()->library( $library_slug );
 		}
 
-		$library = apply_filters( 'm_chart_library_class', m_chart()->library_class, $_POST['library'] );
+		$library = apply_filters( 'm_chart_library_class', m_chart()->library_class, $library_slug );
+
+		// Make sure a third-party filter didn't replace the library with something unusable
+		if ( ! is_object( $library ) || ! method_exists( $library, 'get_chart_args' ) ) {
+			wp_send_json_error( esc_html__( 'Invalid library', 'm-chart' ) );
+		}
 
 		// Set these values so that get_chart_args has them already available before we call it
 		$library->args             = m_chart()->get_chart_default_args;
 		$library->post             = $post;
-		$library->post->post_title = sanitize_text_field( $_POST['title'] );
+		$library->post->post_title = sanitize_text_field( $_POST['title'] ?? '' );
 
 		// validate_post_meta returns only valid post meta values and does data validation on each item
-		$library->post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] );
+		$library->post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] ?? [] );
 
 		wp_send_json_success( $library->get_chart_args( $library->post->ID, $library->args, true, false ) );
 	}
