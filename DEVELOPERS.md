@@ -183,6 +183,18 @@ The Wordfence M-Chart-194 stored-XSS CVE has dedicated regression tests at three
 
 If `M_Chart_Parse::clean_labels()` ever regresses to a state that lets `<script>` tags through, all three fail loudly. Tag: `@security`.
 
+### Linting
+
+The project uses `@wordpress/scripts` ESLint config with Prettier formatting rules disabled (`.eslintrc.json`). Lint scope is restricted to source directories — `components/admin-ui-src/`, `components/block-src/`, `components/js/m-chart-chartjs-helper.js`, `tests/js/`, `tests/e2e/` — to avoid choking on vendored libraries in `components/external/` and compiled webpack output in `components/admin-ui/` / `components/block/`.
+
+```sh
+npm run lint:js              # one-shot lint
+npm run lint:js:fix          # auto-fix what's safe to auto-fix
+npm run lint:js:watch        # re-lint on file save
+```
+
+There are pre-existing ESLint errors in older source files (no-var, eqeqeq, missing JSDoc descriptions, etc.) that surfaced once the lint step was unhung. They will be cleaned up incrementally — the lint job in CI flags them but isn't a hard block.
+
 ### CI
 
 Three GitHub Actions workflows under `.github/workflows/`:

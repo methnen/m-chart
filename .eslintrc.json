@@ -1,0 +1,21 @@
+{
+	"root": true,
+	"extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
+	"rules": {
+		"prettier/prettier": "off"
+	},
+	"overrides": [
+		{
+			"files": [ "**/@(test|__tests__)/**/*.js", "**/?(*.)test.js" ],
+			"extends": [ "plugin:@wordpress/eslint-plugin/test-unit" ]
+		},
+		{
+			"files": [ "tests/js/setup*.js" ],
+			"env": { "jest": true }
+		},
+		{
+			"files": [ "tests/e2e/**/*.js" ],
+			"env": { "node": true }
+		}
+	]
+}
