@@ -1,0 +1,14 @@
+{
+	"core": "WordPress/WordPress#6.7",
+	"phpVersion": "8.2",
+	"plugins": [ "." ],
+	"themes": [],
+	"config": {
+		"WP_DEBUG":     true,
+		"SCRIPT_DEBUG": true,
+		"WP_DEBUG_LOG": true
+	},
+	"mappings": {
+		"wp-content/plugins/m-chart-highcharts-library": "../m-chart-highcharts-library"
+	}
+}
