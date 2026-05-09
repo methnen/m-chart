@@ -18,27 +18,18 @@ jobs:
   playwright:
     name: "Playwright (${{ matrix.browser }})"
     runs-on: ubuntu-latest
+    # Skip the entire job for firefox/webkit on push and PR events. The matrix
+    # always produces all three browser cells; this `if:` collapses the cells
+    # we don't want at runtime so push/PR runs are chromium-only and the nightly
+    # schedule runs all three. Jspreadsheet has historical browser quirks so
+    # cross-browser coverage stays in the rotation, just nightly.
+    if: ${{ github.event_name == 'schedule' || matrix.browser == 'chromium' }}
     strategy:
       fail-fast: false
       matrix:
-        # PR + push: chromium only (fast feedback)
-        # Nightly: add firefox + webkit (Jspreadsheet has historical browser quirks)
-        browser:
-          - chromium
-        include:
-          - browser: firefox
-            schedule_only: true
-          - browser: webkit
-            schedule_only: true
-        exclude:
-          - { browser: firefox }
-          - { browser: webkit }
+        browser: [ chromium, firefox, webkit ]
 
     steps:
-      - name: Skip non-chromium on push/PR
-        if: github.event_name != 'schedule' && matrix.browser != 'chromium'
-        run: exit 0
-
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4

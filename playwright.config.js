@@ -29,7 +29,17 @@ module.exports = defineConfig( {
 			name: 'chromium',
 			use:  { ...devices[ 'Desktop Chrome' ] },
 		},
-		// firefox + webkit are nightly-only; see .github/workflows/test-e2e.yml
+		// firefox + webkit are nightly-only in CI but defined here so the
+		// playwright runner accepts --project=firefox / --project=webkit
+		// when the nightly cron run dispatches them
+		{
+			name: 'firefox',
+			use:  { ...devices[ 'Desktop Firefox' ] },
+		},
+		{
+			name: 'webkit',
+			use:  { ...devices[ 'Desktop Safari' ] },
+		},
 	],
 	webServer: {
 		command:             'npm run wp-env start',
