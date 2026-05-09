@@ -34,7 +34,11 @@ module.exports = defineConfig( {
 	webServer: {
 		command:             'npm run wp-env start',
 		url:                 'http://localhost:8889',
-		reuseExistingServer: ! process.env.CI,
+		// Always reuse an existing wp-env on port 8889. In CI the workflow's
+		// "Start wp-env" step starts it before this config runs; locally the
+		// developer may have wp-env already up. In both cases we want Playwright
+		// to skip its own start rather than fight for the port.
+		reuseExistingServer: true,
 		timeout:             180000,
 	},
 } );

@@ -82,9 +82,12 @@ jobs:
       - run: npm ci
 
       - name: Start wp-env
+        # Note: 'trunk' in the matrix maps to the WordPress/WordPress repo's
+        # `master` branch, which is the auto-synced mirror of SVN trunk. The
+        # GitHub mirror has no Git branch literally named `trunk`.
         run: npx wp-env start
         env:
-          WP_ENV_CORE: ${{ matrix.wp == 'trunk' && 'WordPress/WordPress#trunk' || format('WordPress/WordPress#{0}', matrix.wp) }}
+          WP_ENV_CORE: ${{ matrix.wp == 'trunk' && 'WordPress/WordPress#master' || format('WordPress/WordPress#{0}', matrix.wp) }}
           WP_ENV_PHP_VERSION: ${{ matrix.php }}
 
       - name: Activate plugin and configure permalinks on tests instance
