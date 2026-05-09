@@ -19,6 +19,7 @@
   display: block;
   position: relative;
   text-indent: -999rem;
+  height: 1.5rem;
   width: 100%;
 }
 .column-m-chart-type span.type::after {
@@ -248,7 +249,7 @@
   display: block;
   margin-bottom: 0.5rem;
   padding-top: 0;
-  margin: 0;
+  margin: 0 0 0.625rem 0;
 }
 #m-chart-spreadsheet #m-chart-csv .actions {
   display: flex;

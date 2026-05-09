@@ -170,7 +170,9 @@ class M_Chart_Parse {
 	public function clean_labels( mixed $label ): string {
 		$label = trim( html_entity_decode( (string) $label, ENT_QUOTES ) );
 
-		return preg_replace( '#<([a-z]+)([^>]+)*(?:>(.*)<\/\1>|\s+\/>)#', '$3', $label );
+		// PHP's strip_tags() is case-insensitive, recursive, handles
+		// unclosed/malformed tags, and is XSS-safe — unlike the regex it replaces
+		return strip_tags( $label );
 	}
 
 	/**

@@ -344,7 +344,12 @@ class M_Chart {
 
 		// Make sure the correct library is set in the default chart meta fields
 		if ( ! $post_meta ) {
-			$current_screen = get_current_screen();
+			// get_current_screen() is only defined in admin context. Guard the
+			// call so REST and front-end contexts (where the_content filter may
+			// fire on m-chart posts during excerpt generation) don't fatal
+			$current_screen = is_admin() && function_exists( 'get_current_screen' )
+				? get_current_screen()
+				: null;
 
 			// If we're we're adding a new chart and a library is specified in the get vars we use it
 			if (

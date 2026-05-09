@@ -1,0 +1,20 @@
+{
+    "library": "chartjs",
+    "type": "treemap",
+    "parse_in": "rows",
+    "set_names": [ "Sheet 1" ],
+    "data": {
+        "sets": [
+            [
+                [ "",         "Sector", "Company",   "Market Cap" ],
+                [ "",         "Tech",   "Acme",      1000 ],
+                [ "",         "Tech",   "Beta",       800 ],
+                [ "",         "Tech",   "Gamma",      600 ],
+                [ "",         "Health", "Delta",      500 ],
+                [ "",         "Health", "Epsilon",    400 ],
+                [ "",         "Energy", "Zeta",       300 ],
+                [ "",         "Energy", "Eta",        200 ]
+            ]
+        ]
+    }
+}

@@ -118,6 +118,80 @@ Each `.po` file includes Poedit search path headers so that source scanning work
 
 If creating a new locale, copy these headers from an existing `.po` file (e.g. `m-chart-en_US.po`).
 
+## Running Tests ##
+
+This plugin has automated tests across four layers — PHP unit, PHP integration, JS unit, and Playwright E2E. All test materials live under `/tests/` at the repo root.
+
+### One-time setup
+
+```bash
+composer install        # PHP dev dependencies (PHPUnit, Brain Monkey, etc.)
+npm ci                  # JS dev dependencies (Jest, Playwright, wp-env)
+npx playwright install  # Playwright browser binaries (only needed once per machine)
+```
+
+### PHP unit tests (Brain Monkey, no WP)
+
+Fast, no Docker, runs against the source directly:
+
+```bash
+composer test:unit
+```
+
+Covers `M_Chart_Parse`, `M_Chart_Parsed_Data_Point`, `clean_labels()` (Wordfence M-Chart-194 CVE regression), and `neutralize_csv_cell()`.
+
+### PHP integration tests (full WP via wp-env)
+
+Requires Docker. Spins up a real WP install with the plugin active and runs against a real MariaDB:
+
+```bash
+npx wp-env start
+npx wp-env run tests-cli --env-cwd=wp-content/plugins/m-chart \
+    vendor/bin/phpunit --testsuite integration
+```
+
+Covers the save_post pipeline, CSV import/export AJAX, the REST API permission callbacks, and a Contributor-role end-to-end XSS regression test.
+
+### JS unit tests (Jest)
+
+```bash
+npm run test:js              # one-shot
+npm run test:js:watch        # interactive
+npm run test:js:coverage     # with coverage report
+```
+
+Covers the `ChartAdminContext` reducer (every action type) and `useChartRefresh` race-condition guards.
+
+### E2E tests (Playwright)
+
+The `pretest:e2e` script runs `npm run build` and starts wp-env automatically:
+
+```bash
+npm run test:e2e             # all chromium specs
+npm run test:e2e:ui          # interactive Playwright UI
+npm run test:a11y            # axe-core accessibility gate
+```
+
+For the visual-regression suite (Tier 3), see `tests/e2e/visual/` and `npm run test:e2e:visual`.
+
+### CVE regression suite
+
+The Wordfence M-Chart-194 stored-XSS CVE has dedicated regression tests at three layers:
+- `tests/php/unit/CleanLabelsTest.php` — pure-function payload neutralization
+- `tests/php/integration/XssRegressionTest.php` — Contributor-role end-to-end render
+- `tests/e2e/security-regression-xss.spec.js` — real browser execution check
+
+If `M_Chart_Parse::clean_labels()` ever regresses to a state that lets `<script>` tags through, all three fail loudly. Tag: `@security`.
+
+### CI
+
+Three GitHub Actions workflows under `.github/workflows/`:
+- `test-php.yml` — PHP unit + integration matrix (PHP 8.1/8.2/8.3 × WP 6.5/6.6/6.7/trunk)
+- `test-js.yml` — Jest + ESLint
+- `test-e2e.yml` — Playwright (chromium on PR, full firefox/webkit nightly)
+
+---
+
 ## Deployment ##
 
 Deploy to WordPress.org via GitHub Actions:

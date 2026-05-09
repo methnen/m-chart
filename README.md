@@ -18,6 +18,8 @@ Manage data sets via a spreadsheet interface and display them as charts via the 
 
 **Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
 
+**Accessibility:** M Chart targets WCAG 2.1 Level AA. Charts on the front end include a visually-hidden data table for screen-reader users, and a `Color Blind Safe` theme is bundled. Screen-reader users entering chart data should use the CSV Import feature — the spreadsheet widget has partial keyboard support but CSV import is fully accessible.
+
 For full documentation please see the [Documentation](https://docs.mch.art/).
 
 To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).

@@ -24,3 +24,13 @@
 /phpunit.xml
 /README.md
 /tests
+/.phpunit.cache
+/.wp-env.json
+/composer.json
+/composer.lock
+/coverage
+/jest.config.js
+/playwright.config.js
+/playwright-report
+/test-results
+/vendor

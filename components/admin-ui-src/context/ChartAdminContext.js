@@ -75,7 +75,7 @@ const initialState = {
 	imageUrl:        m_chart_admin.image_url          || '',
 };
 
-function reducer( state, action ) {
+export function reducer( state, action ) {
 	switch ( action.type ) {
 		case 'SET_POST_META':
 			return {

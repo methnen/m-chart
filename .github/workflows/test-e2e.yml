@@ -1,0 +1,111 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, wordpress-7 ]
+  pull_request:
+  schedule:
+    # Nightly run with the full browser matrix
+    - cron: '0 6 * * *'
+
+# Required for the test reporter to post check results, PR comments, and source-line annotations
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  playwright:
+    name: "Playwright (${{ matrix.browser }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # PR + push: chromium only (fast feedback)
+        # Nightly: add firefox + webkit (Jspreadsheet has historical browser quirks)
+        browser:
+          - chromium
+        include:
+          - browser: firefox
+            schedule_only: true
+          - browser: webkit
+            schedule_only: true
+        exclude:
+          - { browser: firefox }
+          - { browser: webkit }
+
+    steps:
+      - name: Skip non-chromium on push/PR
+        if: github.event_name != 'schedule' && matrix.browser != 'chromium'
+        run: exit 0
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ matrix.browser }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Start wp-env
+        run: npx wp-env start
+
+      - name: Activate plugin and configure permalinks on tests instance
+        # wp-env auto-mounts the plugin but doesn't always activate it on the
+        # tests-cli instance. Activate explicitly and configure pretty
+        # permalinks so REST routes resolve at /wp-json/ and the chart
+        # post-type permalink (/chart/{slug}) returns 200 instead of 404.
+        run: |
+          npx wp-env run tests-cli wp plugin activate m-chart
+          npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard
+          npx wp-env run tests-cli wp rewrite flush --hard
+
+      - name: Run E2E tests
+        run: npm run test:e2e -- --project=${{ matrix.browser }}
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright JUnit XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-junit-${{ matrix.browser }}
+          path: tests/junit/playwright.xml
+          retention-days: 7
+
+      - name: Upload Playwright test traces and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 7
+
+      - name: Publish Playwright test results
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: tests/junit/playwright.xml
+          check_name: Playwright (${{ matrix.browser }})
+          require_tests: false
+          fail_on_failure: true
+          detailed_summary: true

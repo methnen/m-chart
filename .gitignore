@@ -7,3 +7,12 @@ build/
 package-lock.json
 .vscode/
 .php-cs-fixer.cache
+
+# Test artifacts
+.phpunit.cache/
+.phpunit.result.cache
+coverage/
+playwright-report/
+test-results/
+tests/junit/
+vendor/

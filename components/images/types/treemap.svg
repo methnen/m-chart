@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" focusable="false" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;">
-  <style type="text/css">
-	.st0{opacity:0.33;}
-</style>
-  <rect x="11.921" y="69.649" width="286.312" height="189.446" style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; stroke-width: 15; fill: rgb(135, 135, 135);"/>
-  <rect x="11.183" y="281.942" width="288.092" height="122.359" style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; stroke-width: 15; fill: rgba(116, 116, 116, 0.62);"/>
-  <rect x="321.904" y="214.633" width="117.023" height="115.374" style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; stroke-width: 15; fill: rgba(171, 171, 171, 0.6);"/>
-  <rect x="459.081" y="214.633" width="41.572" height="115.374" style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; stroke-width: 15; fill: rgba(171, 171, 171, 0.192);"/>
-  <rect x="321.161" y="70.627" width="179.492" height="119.808" style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; stroke-width: 15; fill: rgba(139, 139, 139, 0.54);"/>
-  <rect x="321.405" y="355.067" width="179.248" height="49.234" style="stroke: rgb(0, 0, 0); stroke-linejoin: round; stroke-linecap: round; stroke-width: 15; fill: rgba(171, 171, 171, 0.443);"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+<g fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="50" y="74" width="260" height="218" rx="4"></rect>
+    <rect x="50" y="328" width="260" height="110" rx="4"></rect>
+    <rect x="346" y="74" width="116" height="108" rx="4"></rect>
+    <rect x="346" y="218" width="60" height="108" rx="4"></rect>
+    <rect x="442" y="218" width="20" height="108" rx="4"></rect>
+    <rect x="346" y="362" width="116" height="76" rx="4"></rect>
+  </g>
 </svg>

@@ -157,7 +157,7 @@
 
 		.m-chart-csv-heading {
 			@include wp-react-form-label;
-			margin: 0;
+			margin: 0 0 rem-calc(10) 0;
 		}
 
 		.actions {
