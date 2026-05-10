@@ -14,8 +14,8 @@ const CONTEXT_MENU_ITEMS = [
 /**
  * Resizes columns to fit their content using canvas-based text measurement
  *
- * @param {object} worksheet  Jspreadsheet CE worksheet instance
- * @param {Array}  [records]  Subset of changed records; omit for a full refresh
+ * @param {Object} worksheet Jspreadsheet CE worksheet instance
+ * @param {Array}  [records] Subset of changed records; omit for a full refresh
  */
 export function spreadsheetAutoWidth( worksheet, records = false ) {
 	// If no records to refresh were passed we'll just do all of them

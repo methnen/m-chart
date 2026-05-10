@@ -5,7 +5,7 @@
  *
  * @param {string}           text    The string to measure
  * @param {HTMLInputElement} inputEl The input element whose font to use
- * 
+ *
  * @return {number} Width in pixels
  */
 export function measureTextWidth( text, inputEl ) {

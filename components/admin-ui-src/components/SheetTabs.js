@@ -90,7 +90,11 @@ export default function SheetTabs() {
 					key={ id }
 					sheetId={ id }
 					sheetIndex={ index }
-					name={ setNames[ index ] || sprintf( __( 'Sheet %d', 'm-chart' ), index + 1 ) }
+					name={
+						setNames[ index ] ||
+						/* translators: %d: the sheet's 1-based ordinal (e.g. "Sheet 2") */
+						sprintf( __( 'Sheet %d', 'm-chart' ), index + 1 )
+					}
 					isActive={ index === validActive }
 					isSingle={ sheetIds.length === 1 }
 					isNew={ id === newSheetId }

@@ -6,6 +6,9 @@ import { useImageGeneration } from '../hooks/useImageGeneration';
  * Shallow-copies chart args to avoid mutating React state when Chart.js or MChartHelper modifies the chart config during initialization
  * Tooltip callbacks and datalabels formatter are applied by MChartHelper via its beforeUpdate hook (runs each render)
  * Bubble preprocessing runs once via beforeInit
+ *
+ * @param {Object} args Raw chart args from state
+ * @return {Object} Sanitized clone safe to hand to Chart.js
  */
 function prepareArgs( args ) {
 	if ( ! args ) {
@@ -36,10 +39,10 @@ function prepareArgs( args ) {
  * Applies chartjs-specific arg preparation before rendering
  * Returned instance is stored in chartRef by the caller
  *
- * @param {HTMLCanvasElement}   canvas          Target canvas element
- * @param {Object}              args            Raw chart args from state
- * @param {Function}            onComplete      Callback to fire after render completes
- * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
+ * @param {HTMLCanvasElement} canvas           Target canvas element
+ * @param {Object}            args             Raw chart args from state
+ * @param {Function}          onComplete       Callback to fire after render completes
+ * @param {Object|null}       existingInstance Existing Chart.js instance, or null on first render
  *
  * @return {Object}             The Chart.js instance
  */

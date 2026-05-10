@@ -6,7 +6,7 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 /**
  * Returns a stable `generateImage` callback that captures the current Chart.js instance as a PNG, writes it to the hidden img textarea, then re-enables the form
  *
- * @param {React.MutableRefObject} chartRef  Ref holding the Chart.js instance
+ * @param {Object} chartRef React ref (`useRef`) holding the Chart.js instance
  */
 export function useImageGeneration( chartRef ) {
 	const { state, dispatch } = useChartAdmin();

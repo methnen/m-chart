@@ -65,10 +65,6 @@ jobs:
   lint:
     name: "ESLint"
     runs-on: ubuntu-latest
-    # Pre-existing source has known lint errors that will be addressed
-    # incrementally; the lint job stays in CI as a visible signal but
-    # doesn't block the PR until the backlog is paid down.
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 

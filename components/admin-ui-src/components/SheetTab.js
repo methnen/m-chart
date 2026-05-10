@@ -120,6 +120,7 @@ export default function SheetTab( {
 		} );
 
 		setIsRenaming( false );
+		/* translators: %s: the sheet's new name */
 		speak( sprintf( __( 'Sheet renamed to %s', 'm-chart' ), inputValue ) );
 	}
 

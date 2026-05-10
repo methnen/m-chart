@@ -5,7 +5,7 @@
  *
  * @param {number} number
  * @param {string} locale BCP 47 locale string (e.g. 'en-US').
- * @return {string}
+ * @return {string} The locale-formatted number
  */
 function numberFormat( number, locale ) {
 	return Chart.helpers.formatNumber( number, locale );
@@ -16,7 +16,7 @@ function numberFormat( number, locale ) {
  * See https://chartio.com/learn/charts/bubble-chart-complete-guide/#scale-bubble-area-by-value
  *
  * @param {Object} data Chart.js data object.
- * @return {Object}
+ * @return {Object} The same data object with bubble radii rescaled
  */
 function preprocessBubbleData( data ) {
 	const pixelMax   = 31;
@@ -50,7 +50,7 @@ function preprocessBubbleData( data ) {
  * Tooltip label for bubble charts
  *
  * @param {Object} item Chart.js tooltip item
- * @return {string[]}
+ * @return {string[]} Tooltip lines (label, x, y, value)
  */
 function bubbleChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
@@ -74,7 +74,7 @@ function bubbleChartTooltipLabel( item ) {
  * Tooltip label for scatter charts
  *
  * @param {Object} item Chart.js tooltip item
- * @return {string[]}
+ * @return {string[]} Tooltip lines (label, x, y)
  */
 function scatterChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
@@ -98,7 +98,7 @@ function scatterChartTooltipLabel( item ) {
  * The library exposes the original object on ctx.raw._data for elements
  *
  * @param {Object} ctxOrItem Tooltip item or scriptable label/color context
- * @return {Object|null}
+ * @return {Object|null} The original tree entry, or null when no raw data is present
  */
 function treemapRawEntry( ctxOrItem ) {
 	const raw = ctxOrItem.raw;
@@ -113,9 +113,9 @@ function treemapRawEntry( ctxOrItem ) {
 /**
  * Format a treemap rectangle value with prefix/suffix and locale formatting
  *
- * @param {Object} entry The original tree entry (label, value, prefix, suffix, text)
+ * @param {Object} entry  The original tree entry (label, value, prefix, suffix, text)
  * @param {string} locale BCP 47 locale string
- * @return {string}
+ * @return {string} Formatted value with prefix/suffix, or empty string when entry is missing or non-numeric
  */
 function treemapFormatValue( entry, locale ) {
 	if ( ! entry ) {
@@ -139,9 +139,9 @@ function treemapFormatValue( entry, locale ) {
  * In-rectangle label content for treemap
  * Returns [label, formattedValue] for two-line display
  *
- * @param {Object} ctx chartjs-chart-treemap labels formatter context
+ * @param {Object} ctx    chartjs-chart-treemap labels formatter context
  * @param {string} locale BCP 47 locale string
- * @return {string|string[]}
+ * @return {string|string[]} A 2-element array for two-line display, or a single string when only label or value is present
  */
 function treemapItemText( ctx, locale ) {
 	if ( 'data' !== ctx.type ) {
@@ -163,7 +163,7 @@ function treemapItemText( ctx, locale ) {
  * Tooltip label for treemap charts
  *
  * @param {Object} item Chart.js tooltip item
- * @return {string}
+ * @return {string} "Label: value" string (or whichever side is present)
  */
 function treemapTooltipLabel( item ) {
 	const locale    = item.chart.options.locale;
@@ -183,14 +183,14 @@ function treemapTooltipLabel( item ) {
  * Reads type and labelsPos directly from the chart instance
  *
  * @param {Object} item Chart.js tooltip item
- * @return {string|null}
+ * @return {string|null} Composed tooltip label, or null when the data point has no value
  */
 function chartTooltipLabel( item ) {
 	const type      = item.chart.config.type;
 	const labelsPos = item.chart.options.plugins?.[ 'm-chart-helper' ]?.labels_pos ?? '';
 	const locale    = item.chart.options.locale;
 
-	var label = item.dataset.label;
+	let label = item.dataset.label;
 
 	// If raw value is null we don't return anything
 	if ( null == item.raw ) {
@@ -198,38 +198,38 @@ function chartTooltipLabel( item ) {
 	}
 
 	// Depending on the chart type or data format the label is usually in one of two places
-	if ( 'undefined' == typeof label ) {
+	if ( 'undefined' === typeof label ) {
 		label = item.label;
 	}
 
 	// Bar tooltips already get the label in the tooltip title
-	if ( 'bar' == type ) {
+	if ( 'bar' === type ) {
 		label = '';
 	}
 
 	// Polar charts put the label in a strange place
-	if ( 'polarArea' == type ) {
+	if ( 'polarArea' === type ) {
 		label = item.chart.data.labels[ item.dataIndex ];
 	}
 
 	// Make sure we don't double labels
-	if ( 'both' != labelsPos ) {
+	if ( 'both' !== labelsPos ) {
 		label = '';
 	}
 
 	// Handle stacked bar/column charts a bit better
-	if ( 'undefined' != typeof item.dataset.label && label != item.dataset.label ) {
+	if ( 'undefined' !== typeof item.dataset.label && label !== item.dataset.label ) {
 		label += item.dataset.label;
 	}
 
-	if ( '' != label ) {
+	if ( '' !== label ) {
 		label += ': ';
 	}
 
 	// Format the value using the raw data struct (prefix + localized number + suffix)
 	// Fall back to a plain formatted number if rawData is not available
-	var raw = item.dataset.rawData && item.dataset.rawData[ item.dataIndex ];
-	var rawValue;
+	const raw = item.dataset.rawData && item.dataset.rawData[ item.dataIndex ];
+	let rawValue;
 
 	if ( raw && null !== raw.value ) {
 		rawValue = ( raw.prefix || '' ) + numberFormat( raw.value, locale ) + ( raw.suffix || '' );
@@ -460,7 +460,7 @@ const MChartHelper = {
 			if ( 'scatter' === type ) {
 				// Show the Y value, rawData[dataIndex] is an array for LABELS_BOTH, a struct for flat
 				const rawEntry = rawData && rawData[ dataIndex ];
-				var rawY;
+				let rawY;
 
 				if ( Array.isArray( rawEntry ) ) {
 					rawY = rawEntry[ 1 ];
@@ -480,7 +480,7 @@ const MChartHelper = {
 			}
 
 			// Standard charts: use the raw data struct (prefix + localized number + suffix)
-			var raw = rawData && rawData[ dataIndex ];
+			const raw = rawData && rawData[ dataIndex ];
 
 			if ( raw && null !== raw.value ) {
 				return ( raw.prefix || '' ) + numberFormat( raw.value, locale ) + ( raw.suffix || '' );

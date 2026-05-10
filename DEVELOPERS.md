@@ -193,8 +193,6 @@ npm run lint:js:fix          # auto-fix what's safe to auto-fix
 npm run lint:js:watch        # re-lint on file save
 ```
 
-There are pre-existing ESLint errors in older source files (no-var, eqeqeq, missing JSDoc descriptions, etc.) that surfaced once the lint step was unhung. They will be cleaned up incrementally — the lint job in CI flags them but isn't a hard block.
-
 ### CI
 
 Three GitHub Actions workflows under `.github/workflows/`:

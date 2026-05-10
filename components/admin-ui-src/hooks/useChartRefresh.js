@@ -59,6 +59,7 @@ export function useChartRefresh( title ) {
 
 			// Read from the ref so the async body always has the latest values even if
 			// the component re-rendered between when the timeout was scheduled and when it fires
+			// eslint-disable-next-line no-shadow -- intentional: same names, fresh-via-ref values
 			const { postId, nonce, ajaxUrl, library, performance, imageSupport } = latestRef.current;
 
 			dispatch( { type: 'SET_REFRESHING', payload: true } );
@@ -146,5 +147,10 @@ export function useChartRefresh( title ) {
 				clearTimeout( timerRef.current );
 			}
 		};
-	}, [ postMeta, spreadsheetData, setNames, title ] );
+		// chartArgs is intentionally excluded: it's read only on the first run via the
+		// isFirstRun ref guard; including it would re-fire on every successful refresh
+		// (since SET_CHART_ARGS updates chartArgs) and start an infinite fetch loop.
+		// dispatch is React-stable per the docs but still listed for completeness.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ postMeta, spreadsheetData, setNames, title, dispatch ] );
 }

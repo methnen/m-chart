@@ -29,9 +29,9 @@ const TYPES_REQUIRING_SIMPLE_2D = new Set( [
  * Detect whether the active sheet looks like simple 2D single-series data
  * — at most 2 columns in rows mode, or at most 2 rows in columns mode
  *
- * @param {Array<Array>} sheet The 2D data array (Jspreadsheet getData() shape)
- * @param {string} parseIn 'rows' or 'columns'
- * @return {boolean}
+ * @param {Array<Array>} sheet   The 2D data array (Jspreadsheet getData() shape)
+ * @param {string}       parseIn 'rows' or 'columns'
+ * @return {boolean} True when the sheet has only one series in the active orientation
  */
 function isSimple2DSeries( sheet, parseIn ) {
 	if ( ! Array.isArray( sheet ) || 0 === sheet.length ) {

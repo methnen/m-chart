@@ -1,8 +1,7 @@
-import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { SVG, Path } from '@wordpress/components';
 import blockJson from './block.json';
-import edit from './edit';
+import Edit from './edit';
 
 const blockIcon = (
 <SVG viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" aria-hidden="true" focusable="false">
@@ -14,7 +13,7 @@ const blockIcon = (
 registerBlockType(
 	blockJson,
 	{
-		edit: edit,
+		edit: Edit,
 		save: () => null,
 		icon: blockIcon,
 		deprecated: [

@@ -2,12 +2,12 @@ import { SelectControl, Spinner, ToolbarGroup, ToolbarButton, Placeholder, Exter
 import { getBlockType } from '@wordpress/blocks';
 import { useState, useEffect, useRef, useMemo, useCallback } from '@wordpress/element';
 import { useBlockProps, BlockControls, InspectorControls } from '@wordpress/block-editor';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import debounce from 'lodash/debounce';
 import "./editor.scss";
 
-export default function edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes } ) {
     // State
     const [ results, setResults ] = useState( [] );
     const [ search, setSearch ] = useState( '' );
@@ -37,6 +37,7 @@ export default function edit( { attributes, setAttributes } ) {
     useEffect( () => {
         fetchOptions();
         getCharts( search );
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only initial fetch
     }, [] );
 
     // Fetch the selected chart individually whenever chartId changes
@@ -67,12 +68,13 @@ export default function edit( { attributes, setAttributes } ) {
         };
 
         el.addEventListener( 'scroll', handleScroll );
-        
+
         return () => el.removeEventListener( 'scroll', handleScroll );
-    }, [ results, available, loadingMore, page, search ] );
+    }, [ results, available, loadingMore, page, search, getCharts ] );
 
     // Build list of charts out of the results object
     const resultsList = results.map( ( x ) => {
+        /* translators: %s: the chart's title */
         const aria = sprintf( __( 'Select chart: %s', 'm-chart' ), x.title );
 
         if ( ! imageSupport || ! x.src ) {
@@ -262,29 +264,35 @@ export default function edit( { attributes, setAttributes } ) {
                                 <p>{ __( 'There was a problem loading charts', 'm-chart' ) }</p>
                                 :
                                 <>
-                                    { !loaded ?
+                                    { ! loaded && (
                                         <p className="center">
                                             <Spinner />
                                         </p>
-                                        :
-                                        postsAvailable === false ?
-                                            <div>
-                                                <p>
-                                                    { __( 'No charts found', 'm-chart' ) }<br />
-                                                </p>
-                                                <p>
-                                                    <ExternalLink href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</ExternalLink>
-                                                </p>
-                                            </div>
-                                            :
-                                            <div className="no-chart-selected">
+                                    ) }
+                                    { loaded && postsAvailable === false && (
+                                        <div>
+                                            <p>
+                                                { __( 'No charts found', 'm-chart' ) }<br />
+                                            </p>
+                                            <p>
+                                                <ExternalLink href={ newUrl }>{ __( 'Create a new chart', 'm-chart' ) }</ExternalLink>
+                                            </p>
+                                        </div>
+                                    ) }
+                                    { loaded && postsAvailable !== false && (
+                                        <div className="no-chart-selected">
                                                 <div className="search-box">
                                                     <SearchControl
                                                         value={ search }
                                                         placeholder={ __( 'Search by title', 'm-chart' ) }
                                                         onChange={ ( value ) => handleSearch( value ) }
                                                     />
-                                                    <p className="count">{ 1 === available ? sprintf( __( '%d chart found', 'm-chart' ), available ) : sprintf( __( '%d charts found', 'm-chart' ), available ) }</p>
+                                                    <p className="count">
+                                                        {
+                                                            /* translators: %d: number of charts found */
+                                                            sprintf( _n( '%d chart found', '%d charts found', available, 'm-chart' ), available )
+                                                        }
+                                                    </p>
                                                 </div>
                                                 { resultsList.length === 0 && search.length > 1 ?
                                                     <p>{ __( 'No charts found', 'm-chart' ) }</p>
@@ -312,7 +320,7 @@ export default function edit( { attributes, setAttributes } ) {
                                                     </ul>
                                                 }
                                             </div>
-                                    }
+                                    ) }
                                 </>
                             }
                         </div>

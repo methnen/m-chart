@@ -133,6 +133,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 
 			speak( __( 'CSV file imported', 'm-chart' ) );
 		} catch ( err ) {
+			/* translators: %s: the underlying error message */
 			const msg = sprintf( __( 'Import error: %s', 'm-chart' ), err.message );
 			setImportError( msg );
 			speak( msg, 'assertive' );
@@ -234,7 +235,10 @@ export default function CsvControls( { getActiveWorksheet } ) {
 									>
 										{ Object.entries( csvDelimiters ).map( ( [ val, label ] ) => (
 											<option key={ val } value={ val }>
-												{ sprintf( __( '%s Delimited', 'm-chart' ), label ) }
+												{
+													/* translators: %s: the delimiter character name (e.g. Comma, Tab, Semicolon) */
+													sprintf( __( '%s Delimited', 'm-chart' ), label )
+												}
 											</option>
 										) ) }
 									</SelectControl>
@@ -277,7 +281,10 @@ export default function CsvControls( { getActiveWorksheet } ) {
 								label={ __( 'Cancel Import', 'm-chart' ) }
 								onClick={ handleCancel }
 							/>
-							{ sprintf( __( 'File: %s', 'm-chart' ), selectedFile.name ) }<br />
+							{
+								/* translators: %s: the selected file's name */
+								sprintf( __( 'File: %s', 'm-chart' ), selectedFile.name )
+							}<br />
 							<span className="warning">
 								{ __( 'Importing this file will replace all existing data in this sheet', 'm-chart' ) }
 							</span>
