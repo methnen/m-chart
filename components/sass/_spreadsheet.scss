@@ -81,8 +81,7 @@
 					color: $m-chart-disabled-button;
 				}
 
-				// Suppress WP <Button>'s focus ring after a mouse click — the ring lingers
-				// on the X icon after deleting a sheet and reads as a stuck "active" state
+				// Suppress WP <Button>'s focus ring after a mouse click — the ring lingers on the X icon after canceling a delete and leaves a stuck "active" state
 				// Keyboard focus (:focus-visible) is preserved so tab-nav still shows the ring
 				&:focus:not(:focus-visible) {
 					box-shadow: none;
@@ -175,9 +174,9 @@
 			gap: rem-calc( 10 );
 			flex-wrap: wrap;
 
-			// WP admin adds `margin-bottom: 4px` to all .button elements at the 782px
-			// breakpoint, which shifts flex centering and pushes the SelectControl
-			// visually below the buttons. Zero it out so they stay aligned.
+			// WP admin adds `margin-bottom: 4px` to all .button elements at the 782px breakpoint
+			// This shifts flex centering and pushes the SelectControl visually below the buttons
+			// We zero it out so it stays aligned
 			.button {
 				margin-bottom: 0;
 			}

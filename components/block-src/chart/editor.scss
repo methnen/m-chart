@@ -91,7 +91,10 @@
 				position: relative;
 
 				h6.title {
-					@include text-stroke(3);
+					// White outline so titles remain legible over arbitrary chart preview imagery
+					// paint-order: stroke fill draws the stroke behind the glyphs, preserving letter shape
+					-webkit-text-stroke: 3px white;
+					paint-order: stroke fill;
 					margin-top: 0;
 					position: absolute;
 				}
