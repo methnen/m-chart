@@ -154,11 +154,19 @@ export default function SpreadsheetMetaBox() {
 		{ state, dispatch, getActiveWorksheet, setSheetDataOnWorksheet }
 	);
 
+	// Deterministic signal for E2E tests — pending means the submit gate engaged
+	// and form.submit() is deferred until chart refresh + image capture complete
+	const submitState = pendingSubmit ? 'pending' : 'idle';
+
 	return (
 		<>
 			{ metaboxExtension }
 			<SheetTabs />
-			<div id="spreadsheets" className={ sheetEditingDisabled ? 'editing-disabled' : '' }>
+			<div
+				id="spreadsheets"
+				className={ sheetEditingDisabled ? 'editing-disabled' : '' }
+				data-submit-state={ submitState }
+			>
 				{ sheetIds.map( ( id, index ) => (
 					<JspreadsheetWrapper
 						key={ `${ id }-${ sheetEditingDisabled ? 'ro' : 'rw' }` }

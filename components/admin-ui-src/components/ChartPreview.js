@@ -170,8 +170,25 @@ export default function ChartPreview() {
 
 	}, [ chartArgs ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
+	// Deterministic signal for E2E tests — the submit gate releases on 'ready'
+	// idle: no chart args yet (initial mount before first refresh resolves)
+	// capturing: form is disabled mid-render-cycle and images are needed
+	// ready: form is enabled (image is in the textarea, or images not needed)
+	const needsImages = needsImagesRef.current;
+	let captureState  = 'ready';
+
+	if ( ! chartArgs ) {
+		captureState = 'idle';
+	} else if ( ! state.formEnabled && needsImages ) {
+		captureState = 'capturing';
+	}
+
 	return (
-		<div className="m-chart-container" style={ { height: postMeta.height + 'px' } }>
+		<div
+			className="m-chart-container"
+			style={ { height: postMeta.height + 'px' } }
+			data-image-capture-state={ captureState }
+		>
 			<canvas ref={ canvasRef } />
 		</div>
 	);

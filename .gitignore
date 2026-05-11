@@ -10,6 +10,7 @@ build/
 # Test artifacts
 .phpunit.cache/
 .phpunit.result.cache
+.playwright-auth-state.json
 coverage/
 playwright-report/
 test-results/
