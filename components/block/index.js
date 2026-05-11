@@ -10,7 +10,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ edit)
+/* harmony export */   "default": () => (/* binding */ Edit)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -29,6 +29,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor.scss */ "./components/block-src/chart/editor.scss");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_editor_scss__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -38,7 +39,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function edit({
+function Edit({
   attributes,
   setAttributes
 }) {
@@ -73,6 +74,7 @@ function edit({
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     fetchOptions();
     getCharts(search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only initial fetch
   }, []);
 
   // Fetch the selected chart individually whenever chartId changes
@@ -101,10 +103,11 @@ function edit({
     };
     el.addEventListener('scroll', handleScroll);
     return () => el.removeEventListener('scroll', handleScroll);
-  }, [results, available, loadingMore, page, search]);
+  }, [results, available, loadingMore, page, search, getCharts]);
 
   // Build list of charts out of the results object
   const resultsList = results.map(x => {
+    /* translators: %s: the chart's title */
     const aria = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select chart: %s', 'm-chart'), x.title);
     if (!imageSupport || !x.src) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
@@ -303,11 +306,11 @@ function edit({
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Chart', 'm-chart')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "viewbox"
-  }, loadProblem ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('There was a problem loading charts', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, !loaded ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, loadProblem ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('There was a problem loading charts', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, !loaded && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "center"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, null)) : postsAvailable === false ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No charts found', 'm-chart'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ExternalLink, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, null)), loaded && postsAvailable === false && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No charts found', 'm-chart'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ExternalLink, {
     href: newUrl
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Create a new chart', 'm-chart')))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Create a new chart', 'm-chart')))), loaded && postsAvailable !== false && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "no-chart-selected"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "search-box"
@@ -317,7 +320,8 @@ function edit({
     onChange: value => handleSearch(value)
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "count"
-  }, 1 === available ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('%d chart found', 'm-chart'), available) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('%d charts found', 'm-chart'), available))), resultsList.length === 0 && search.length > 1 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No charts found', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+  }, /* translators: %d: number of charts found */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__._n)('%d chart found', '%d charts found', available, 'm-chart'), available))), resultsList.length === 0 && search.length > 1 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No charts found', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     ref: resultsRef,
     className: imageSupport ? 'results image-support' : 'results no-image-support'
   }, resultsList, loadingMore && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
@@ -348,37 +352,34 @@ function edit({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./components/block-src/chart/block.json");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./edit */ "./components/block-src/chart/edit.js");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./components/block-src/chart/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./components/block-src/chart/edit.js");
 
 
 
 
 
-
-const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SVG, {
+const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SVG, {
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg",
   width: "24",
   height: "24",
   "aria-hidden": "true",
   focusable: "false"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Path, {
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Path, {
   d: "M 18.7 3 L 5.3 3 C 4 3 3 4 3 5.3 L 3 18.7 C 3 20 4 21 5.3 21 L 18.7 21 C 20 21 21 20 21 18.7 L 21 5.3 C 21 4 20 3 18.7 3 Z M 19.5 18.7 C 19.5 19.1 19.1 19.5 18.7 19.5 L 5.3 19.5 C 4.9 19.5 4.5 19.1 4.5 18.7 L 4.5 5.3 C 4.5 4.9 4.9 4.5 5.3 4.5 L 18.7 4.5 C 19.1 4.5 19.5 4.9 19.5 5.3 L 19.5 18.7 Z"
-}), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Path, {
+}), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Path, {
   d: "M 12.312 7 L 12.312 11.688 L 17 11.688 C 17 9.1 14.9 7 12.312 7 Z M 11.375 12.157 L 11.375 7.635 C 8.932 7.797 7 9.828 7 12.312 C 7 14.9 9.1 17 11.687 17 C 14.172 17 16.203 15.068 16.365 12.625 L 11.375 12.625 L 11.375 12.157 Z",
   style: {
     strokeWidth: 1
   }
 }));
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_4__, {
-  edit: _edit__WEBPACK_IMPORTED_MODULE_5__["default"],
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_3__, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
   save: () => null,
   icon: blockIcon,
   deprecated: [{
@@ -1071,12 +1072,9 @@ module.exports = toNumber;
 /*!************************************************!*\
   !*** ./components/block-src/chart/editor.scss ***!
   \************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+() {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
+throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nHookWebpackError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Undefined mixin.\n   ╷\n94 │                     @include text-stroke(3);\n   │                     ^^^^^^^^^^^^^^^^^^^^^^^\n   ╵\n  components/block-src/chart/editor.scss 94:6  root stylesheet\n    at tryRunOrWebpackError (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/HookWebpackError.js:116:9)\n    at __webpack_require_module__ (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5626:14)\n    at __webpack_require__ (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5570:20)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5661:22\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3485:9)\n    at done (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3527:9)\n    at Hook.eval [as callAsync] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:31:10), <anonymous>:15:1)\n    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/Hook.js:21:14)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5545:45\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3482:9)\n    at timesSync (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:2297:7)\n    at Object.eachLimit (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3463:5)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5502:18\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3485:9)\n    at timesSync (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:2297:7)\n    at Object.eachLimit (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3463:5)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5464:16\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3485:9)\n    at done (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3527:9)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5404:8\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:3799:6\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/HookWebpackError.js:96:2\n    at Hook.eval [as callAsync] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:31:10), <anonymous>:15:1)\n    at Cache.store (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:114:20)\n    at ItemCacheFacade.store (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/CacheFacade.js:141:15)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:3798:11\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:98:34\n    at Array.<anonymous> (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/cache/MemoryCachePlugin.js:44:13)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:98:19\n    at Hook.eval [as callAsync] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:31:10), <anonymous>:19:1)\n    at Cache.get (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:82:18)\n    at ItemCacheFacade.get (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/CacheFacade.js:115:15)\n    at Compilation._codeGenerationModule (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:3764:9)\n    at codeGen (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5392:11)\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3482:9)\n    at timesSync (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:2297:7)\n    at Object.eachLimit (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3463:5)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5422:14\n    at processQueue (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/util/processAsyncTree.js:61:4)\n    at process.processTicksAndRejections (node:internal/process/task_queues:85:11)\n-- inner error --\nError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Undefined mixin.\n   ╷\n94 │                     @include text-stroke(3);\n   │                     ^^^^^^^^^^^^^^^^^^^^^^^\n   ╵\n  components/block-src/chart/editor.scss 94:6  root stylesheet\n    at Object.<anonymous> (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/components/block-src/chart/editor.scss:1:7)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/javascript/JavascriptModulesPlugin.js:596:10\n    at Hook.eval [as call] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:19:10), <anonymous>:7:1)\n    at Hook.CALL_DELEGATE [as _call] (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/Hook.js:16:14)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5628:41\n    at tryRunOrWebpackError (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/HookWebpackError.js:111:7)\n    at __webpack_require_module__ (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5626:14)\n    at __webpack_require__ (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5570:20)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5661:22\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3485:9)\n    at done (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3527:9)\n    at Hook.eval [as callAsync] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:31:10), <anonymous>:15:1)\n    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/Hook.js:21:14)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5545:45\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3482:9)\n    at timesSync (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:2297:7)\n    at Object.eachLimit (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3463:5)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5502:18\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3485:9)\n    at timesSync (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:2297:7)\n    at Object.eachLimit (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3463:5)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5464:16\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3485:9)\n    at done (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3527:9)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5404:8\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:3799:6\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/HookWebpackError.js:96:2\n    at Hook.eval [as callAsync] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:31:10), <anonymous>:15:1)\n    at Cache.store (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:114:20)\n    at ItemCacheFacade.store (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/CacheFacade.js:141:15)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:3798:11\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:98:34\n    at Array.<anonymous> (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/cache/MemoryCachePlugin.js:44:13)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:98:19\n    at Hook.eval [as callAsync] (eval at create (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/tapable/lib/HookCodeFactory.js:31:10), <anonymous>:19:1)\n    at Cache.get (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Cache.js:82:18)\n    at ItemCacheFacade.get (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/CacheFacade.js:115:15)\n    at Compilation._codeGenerationModule (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:3764:9)\n    at codeGen (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5392:11)\n    at symbolIterator (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3482:9)\n    at timesSync (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:2297:7)\n    at Object.eachLimit (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/neo-async/async.js:3463:5)\n    at /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/Compilation.js:5422:14\n    at processQueue (/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/webpack/lib/util/processAsyncTree.js:61:4)\n    at process.processTicksAndRejections (node:internal/process/task_queues:85:11)\n\nGenerated code for /Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!/Users/jpoitra/mamp/wordpress/wp-content/plugins/m-chart/components/block-src/chart/editor.scss\n1 | throw new Error(\"Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\\nSassError: Undefined mixin.\\n   ╷\\n94 │                     @include text-stroke(3);\\n   │                     ^^^^^^^^^^^^^^^^^^^^^^^\\n   ╵\\n  components/block-src/chart/editor.scss 94:6  root stylesheet\");");
 
 /***/ },
 

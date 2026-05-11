@@ -202,6 +202,25 @@ Three GitHub Actions workflows under `.github/workflows/`:
 
 ---
 
+## Styling overrides ##
+
+m-chart exposes its color palette as CSS custom properties on `:root`, so themes and library plugins can re-skin the admin UI without recompiling SASS. The full token list lives at the top of `components/sass/_global-mixins-and-variables.scss`. Override any of them at any matching selector:
+
+```css
+/* Example: change the accent color and the destructive-action red */
+.m-chart-container {
+    --m-chart-accent:      #ff6b35;
+    --m-chart-alert-error: #b00020;
+}
+```
+
+The accent token chains through to WordPress's `--wp-admin-theme-color`, so the chart-edit screen's accent (sheet-tab underline, focus rings, hover states) automatically follows the user's Admin Color Scheme (Users → Profile). Other tokens hold direct hex defaults because WP's component library does not reliably emit gray/foreground/notice colors as runtime custom properties — when it does in a future version, those tokens will be migrated to chain through with one-line changes.
+
+Available tokens:
+`--m-chart-accent`, `--m-chart-accent-bg-hover`, `--m-chart-text`, `--m-chart-text-muted`, `--m-chart-text-inactive`, `--m-chart-border`, `--m-chart-border-strong`, `--m-chart-bg-sectioned`, `--m-chart-icon`, `--m-chart-icon-inactive`, `--m-chart-disabled`, `--m-chart-alert-error`, `--m-chart-alert-success`, `--m-chart-alert-warning`.
+
+---
+
 ## Deployment ##
 
 Deploy to WordPress.org via GitHub Actions:

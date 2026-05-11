@@ -247,6 +247,9 @@ __webpack_require__.r(__webpack_exports__);
  * Shallow-copies chart args to avoid mutating React state when Chart.js or MChartHelper modifies the chart config during initialization
  * Tooltip callbacks and datalabels formatter are applied by MChartHelper via its beforeUpdate hook (runs each render)
  * Bubble preprocessing runs once via beforeInit
+ *
+ * @param {Object} args Raw chart args from state
+ * @return {Object} Sanitized clone safe to hand to Chart.js
  */
 function prepareArgs(args) {
   if (!args) {
@@ -278,10 +281,10 @@ function prepareArgs(args) {
  * Applies chartjs-specific arg preparation before rendering
  * Returned instance is stored in chartRef by the caller
  *
- * @param {HTMLCanvasElement}   canvas          Target canvas element
- * @param {Object}              args            Raw chart args from state
- * @param {Function}            onComplete      Callback to fire after render completes
- * @param {Object|null}         existingInstance Existing Chart.js instance, or null on first render
+ * @param {HTMLCanvasElement} canvas           Target canvas element
+ * @param {Object}            args             Raw chart args from state
+ * @param {Function}          onComplete       Callback to fire after render completes
+ * @param {Object|null}       existingInstance Existing Chart.js instance, or null on first render
  *
  * @return {Object}             The Chart.js instance
  */
@@ -609,6 +612,7 @@ function CsvControls({
       }
       (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__.speak)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('CSV file imported', 'm-chart'));
     } catch (err) {
+      /* translators: %s: the underlying error message */
       const msg = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Import error: %s', 'm-chart'), err.message);
       setImportError(msg);
       (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__.speak)(msg, 'assertive');
@@ -698,7 +702,8 @@ function CsvControls({
   }, Object.entries(csvDelimiters).map(([val, label]) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     key: val,
     value: val
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('%s Delimited', 'm-chart'), label)))))), !showConfirmation && !isImporting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+  }, /* translators: %s: the delimiter character name (e.g. Comma, Tab, Semicolon) */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('%s Delimited', 'm-chart'), label)))))), !showConfirmation && !isImporting && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
     className: "export",
     onClick: handleExport
@@ -723,7 +728,8 @@ function CsvControls({
     size: "small",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Cancel Import', 'm-chart'),
     onClick: handleCancel
-  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('File: %s', 'm-chart'), selectedFile.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }), /* translators: %s: the selected file's name */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('File: %s', 'm-chart'), selectedFile.name), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "warning"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Importing this file will replace all existing data in this sheet', 'm-chart'))))));
 }
@@ -756,8 +762,8 @@ const CONTEXT_MENU_ITEMS = ['Insert a new row before', 'Insert a new row after',
 /**
  * Resizes columns to fit their content using canvas-based text measurement
  *
- * @param {object} worksheet  Jspreadsheet CE worksheet instance
- * @param {Array}  [records]  Subset of changed records; omit for a full refresh
+ * @param {Object} worksheet Jspreadsheet CE worksheet instance
+ * @param {Array}  [records] Subset of changed records; omit for a full refresh
  */
 function spreadsheetAutoWidth(worksheet, records = false) {
   // If no records to refresh were passed we'll just do all of them
@@ -1179,6 +1185,7 @@ function SheetTab({
       }
     });
     setIsRenaming(false);
+    /* translators: %s: the sheet's new name */
     (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_3__.speak)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Sheet renamed to %s', 'm-chart'), inputValue));
   }
   function handleKeyDown(e) {
@@ -1390,7 +1397,8 @@ function SheetTabs() {
     key: id,
     sheetId: id,
     sheetIndex: index,
-    name: setNames[index] || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Sheet %d', 'm-chart'), index + 1),
+    name: setNames[index] || /* translators: %d: the sheet's 1-based ordinal (e.g. "Sheet 2") */
+    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Sheet %d', 'm-chart'), index + 1),
     isActive: index === validActive,
     isSingle: sheetIds.length === 1,
     isNew: id === newSheetId
@@ -1781,9 +1789,9 @@ const TYPES_REQUIRING_SIMPLE_2D = new Set(['column', 'bar', 'treemap', 'boxplot'
  * Detect whether the active sheet looks like simple 2D single-series data
  * — at most 2 columns in rows mode, or at most 2 rows in columns mode
  *
- * @param {Array<Array>} sheet The 2D data array (Jspreadsheet getData() shape)
- * @param {string} parseIn 'rows' or 'columns'
- * @return {boolean}
+ * @param {Array<Array>} sheet   The 2D data array (Jspreadsheet getData() shape)
+ * @param {string}       parseIn 'rows' or 'columns'
+ * @return {boolean} True when the sheet has only one series in the active orientation
  */
 function isSimple2DSeries(sheet, parseIn) {
   if (!Array.isArray(sheet) || 0 === sheet.length) {
@@ -2219,6 +2227,7 @@ function useChartRefresh(title) {
 
       // Read from the ref so the async body always has the latest values even if
       // the component re-rendered between when the timeout was scheduled and when it fires
+      // eslint-disable-next-line no-shadow -- intentional: same names, fresh-via-ref values
       const {
         postId,
         nonce,
@@ -2322,7 +2331,12 @@ function useChartRefresh(title) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [postMeta, spreadsheetData, setNames, title]);
+    // chartArgs is intentionally excluded: it's read only on the first run via the
+    // isFirstRun ref guard; including it would re-fire on every successful refresh
+    // (since SET_CHART_ARGS updates chartArgs) and start an infinite fetch loop.
+    // dispatch is React-stable per the docs but still listed for completeness.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postMeta, spreadsheetData, setNames, title, dispatch]);
 }
 
 /***/ },
@@ -2416,7 +2430,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Returns a stable `generateImage` callback that captures the current Chart.js instance as a PNG, writes it to the hidden img textarea, then re-enables the form
  *
- * @param {React.MutableRefObject} chartRef  Ref holding the Chart.js instance
+ * @param {Object} chartRef React ref (`useRef`) holding the Chart.js instance
  */
 function useImageGeneration(chartRef) {
   const {
@@ -2509,6 +2523,9 @@ const LONG_PRESS_DELAY = 500;
 /**
  * Returns pointer-event handlers that fire `callback` after a sustained press
  * Spread the returned object onto any element: <div {...longPress} />
+ *
+ * @param {Function} callback Invoked when the press has been held past the threshold
+ * @return {Object} Pointer-event handlers ready to spread onto a JSX element
  */
 function useLongPress(callback) {
   const timerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -2588,7 +2605,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @param {string}           text    The string to measure
  * @param {HTMLInputElement} inputEl The input element whose font to use
- * 
+ *
  * @return {number} Width in pixels
  */
 function measureTextWidth(text, inputEl) {

@@ -4,16 +4,16 @@
 
 .m-chart-modal {
 	.components-modal__content {
-		margin-top: rem-calc(60);
+		margin-top: rem-calc( 60 );
 	
 		.components-modal__header {
-			height: rem-calc(60);
+			height: rem-calc( 60 );
 			padding-bottom: 0;
 		}
 
 		.buttons {
 			display: flex;
-			gap: rem-calc(10);
+			gap: rem-calc( 10 );
 			justify-content: flex-end;
 			margin-top: 1rem;
 		}
@@ -82,14 +82,14 @@
 				&.three,
 				&.five {
 					.column {
-						flex: 0 0 calc(75% - rem-calc(10));
+						flex: 0 0 calc(75% - rem-calc( 10 ));
 
 						> div {
 							width: auto;
 						}
 
 						&.units {
-							flex: 0 0 calc(25% - rem-calc(10));
+							flex: 0 0 calc(25% - rem-calc( 10 ));
 
 							> div {
 								width: fit-content;
@@ -118,7 +118,7 @@
 		}
 
 		.row {
-			@include clearfix;
+			display: flow-root;
 			border-top: 1px solid $wp-admin-border-color;
 			padding: rem-calc( 0 10 10 );
 
@@ -141,10 +141,6 @@
 
 						.m-chart-input-action-button {
 							@include action-button;
-						}
-
-						@media (max-width: 782px) {
-	
 						}
 					}
 

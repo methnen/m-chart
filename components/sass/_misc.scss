@@ -27,11 +27,11 @@
 }
 
 .column-m-chart-type {
-	span.type { // scss-lint:disable QualifyingElement
+	span.type {
 		display: block;
 		position: relative;
 		text-indent: -999rem;
-		height: rem-calc(24);
+		height: rem-calc( 24 );
 		width: 100%;
 
 		&::after {
@@ -173,7 +173,7 @@
 }
 
 .column-m-chart-library {
-	span.library { // scss-lint:disable QualifyingElement
+	span.library {
 		background-position: left center;
 		background-repeat: no-repeat;
 		display: block;

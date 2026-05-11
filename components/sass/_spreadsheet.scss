@@ -6,7 +6,7 @@
 	border-left: none;
 
 	&.closed {
-		border-bottom: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-bottom: rem-calc( 1 ) solid $wp-admin-meta-border-color;
 	}
 
 	.postbox-header {
@@ -15,14 +15,14 @@
 		h2 {
 			&.hndle {
 				border-bottom: none;
-				border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+				border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
 			}
 		}
 	}
 
 	h3 {
 		border-bottom: none;
-		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
 	}
 
 	.handlediv {
@@ -36,8 +36,8 @@
 
 	.m-chart-sheet-tabs {
 		border-bottom: none;
-		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
-		border-top: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
+		border-top: rem-calc( 1 ) solid $wp-admin-meta-border-color;
 		overflow-x: auto;
 		overflow-y: hidden;
 		white-space: nowrap;
@@ -73,12 +73,20 @@
 
 				&:hover {
 					color: $wp-admin-alert-red;
-					background-color: rgba( 204, 24, 24, 0.08 );
-					border-radius: 2px;
+					background-color: color-mix( in srgb, var( --m-chart-alert-error ) 8%, transparent );
+					border-radius: 25px;
 				}
 
 				&:disabled {
 					color: $m-chart-disabled-button;
+				}
+
+				// Suppress WP <Button>'s focus ring after a mouse click — the ring lingers
+				// on the X icon after deleting a sheet and reads as a stuck "active" state
+				// Keyboard focus (:focus-visible) is preserved so tab-nav still shows the ring
+				&:focus:not(:focus-visible) {
+					box-shadow: none;
+					outline:    none;
 				}
 			}
 
@@ -90,7 +98,7 @@
 
 			input {
 				min-width: rem-calc( 30 );
-				height: rem-calc(32);
+				height: rem-calc( 32 );
 			}
 
 			&:hover {
@@ -151,13 +159,13 @@
 
 	#m-chart-csv {
 		background-color: $wp-admin-dark-background-color;
-		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
-		border-top: rem-calc(1) solid $wp-admin-border-color;
+		border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
+		border-top: rem-calc( 1 ) solid $wp-admin-border-color;
 		padding: rem-calc( 15 10 10 );
 
 		.m-chart-csv-heading {
 			@include wp-react-form-label;
-			margin: 0 0 rem-calc(10) 0;
+			margin: 0 0 rem-calc( 10 ) 0;
 		}
 
 		.actions {
@@ -208,13 +216,13 @@
 		.m-chart-csv-cancel {
 			color: $wp-admin-black;
 			position: relative;
-			bottom: rem-calc(-7);
-			left: rem-calc(-2);
+			bottom: rem-calc( -7 );
+			left: rem-calc( -2 );
 
 			&:hover {
 				color: $wp-admin-alert-red;
-				background-color: rgba( 204, 24, 24, 0.08 );
-				border-radius: 2px;
+				background-color: color-mix( in srgb, var( --m-chart-alert-error ) 8%, transparent );
+				border-radius: 25px;
 			}
 		}
 	}
