@@ -1563,7 +1563,18 @@ class M_Chart_Chartjs {
 			$themes = array_merge( $themes, $this->_get_themes_readdir( $directory ) );
 		}
 
-		return $themes;
+		/**
+		 * Filter the Chart.js theme list before it's returned to admin
+		 * consumers (chart-editor dropdown, settings-page default-theme
+		 * select). Extensions can append entries shaped like the built-in
+		 * theme objects — at minimum `slug` and `name` are required for
+		 * the dropdowns; `file` and `options` may be empty if the
+		 * extension applies the theme via the `m_chart_chart_args`
+		 * filter instead of a theme file on disk.
+		 *
+		 * @param array $themes Array of theme objects ( slug, name, file, options ).
+		 */
+		return apply_filters( 'm_chart_chartjs_themes', $themes );
 	}
 
 	/**
