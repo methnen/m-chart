@@ -1,0 +1,30 @@
+{
+    "library":    "chartjs",
+    "type":       "polar",
+    "parse_in":   "rows",
+    "set_names":  [ "Search interest" ],
+    "labels":     true,
+    "legend":     false,
+    "height":     500,
+    "source":     "Google Trends — \"pickling\", United States",
+    "source_url": "https://trends.google.com/trends/explore?q=pickling&geo=US",
+    "subtitle":   "Source: Google Trends - relative-interest index (0-100), peak month = 100",
+    "data": {
+        "sets": [
+            [
+                [ "Jan",  "30%" ],
+                [ "Feb",  "25%" ],
+                [ "Mar",  "25%" ],
+                [ "Apr",  "30%" ],
+                [ "May",  "40%" ],
+                [ "Jun",  "60%" ],
+                [ "Jul",  "80%" ],
+                [ "Aug",  "95%" ],
+                [ "Sep",  "100%" ],
+                [ "Oct",  "70%" ],
+                [ "Nov",  "50%" ],
+                [ "Dec",  "35%" ]
+            ]
+        ]
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "library":            "chartjs",
+    "type":               "bar",
+    "parse_in":           "rows",
+    "set_names":          [ "Sodium content" ],
+    "x_title":            "Sodium (per 100g serving)",
+    "x_units":            "milligrams",
+    "labels":             true,
+    "legend":             false,
+    "height":             500,
+    "data_point_colors":  true,
+    "source":             "USDA FoodData Central - supplemented for non-US varieties (zha cai, gari)",
+    "source_url":         "https://fdc.nal.usda.gov/",
+    "subtitle":           "Source: USDA FoodData Central - per-100g typical values, rounded to nearest 10mg",
+    "data": {
+        "sets": [
+            [
+                [ "Zha cai (Chinese pickled mustard)",       3700 ],
+                [ "Gari (Japanese pickled ginger)",          1300 ],
+                [ "Dill pickle (US)",                        1100 ],
+                [ "Olives (table)",                           730 ],
+                [ "Sauerkraut (German-style)",                660 ],
+                [ "Sweet gherkin (UK)",                       570 ],
+                [ "Đồ chua (Vietnamese pickled daikon)",      600 ],
+                [ "Kimchi (Korean)",                          500 ],
+                [ "Bread-and-butter pickle (US)",             470 ],
+                [ "Sweet pickle (US)",                        460 ]
+            ]
+        ]
+    }
+}

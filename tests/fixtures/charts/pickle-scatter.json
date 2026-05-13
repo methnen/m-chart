@@ -1,0 +1,56 @@
+{
+    "library":    "chartjs",
+    "type":       "scatter",
+    "parse_in":   "rows",
+    "set_names":  [ "Kimchi (15°C)", "Sauerkraut", "Dill pickle (lacto)", "Pao cai (Sichuan)" ],
+    "x_title":    "Fermentation time",
+    "x_units":    "days",
+    "y_title":    "pH",
+    "labels":     true,
+    "legend":     true,
+    "height":     500,
+    "source":     "Synthesis of cited fermentation studies (PMC 12385461, PMC 8997386, JMBE)",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12385461/",
+    "subtitle":   "Source: multiple fermentation studies - curves synthesized from per-study trajectories",
+    "data": {
+        "sets": [
+            [
+                [ "",        "Days", "pH" ],
+                [ "Day 0",    0,     5.6 ],
+                [ "Day 1",    1,     5.4 ],
+                [ "Day 3",    3,     4.7 ],
+                [ "Day 5",    5,     4.4 ],
+                [ "Day 7",    7,     4.3 ],
+                [ "Day 14",  14,     3.9 ],
+                [ "Day 21",  21,     3.85 ]
+            ],
+            [
+                [ "",        "Days", "pH" ],
+                [ "Day 0",    0,     6.2 ],
+                [ "Day 2",    2,     5.5 ],
+                [ "Day 5",    5,     4.2 ],
+                [ "Day 10",  10,     3.6 ],
+                [ "Day 14",  14,     3.4 ],
+                [ "Day 21",  21,     3.3 ]
+            ],
+            [
+                [ "",        "Days", "pH" ],
+                [ "Day 0",    0,     5.5 ],
+                [ "Day 1",    1,     5.0 ],
+                [ "Day 3",    3,     4.0 ],
+                [ "Day 5",    5,     3.6 ],
+                [ "Day 7",    7,     3.5 ],
+                [ "Day 14",  14,     3.3 ]
+            ],
+            [
+                [ "",        "Days", "pH" ],
+                [ "Day 0",    0,     5.4 ],
+                [ "Day 1",    1,     4.9 ],
+                [ "Day 3",    3,     4.1 ],
+                [ "Day 5",    5,     3.9 ],
+                [ "Day 7",    7,     3.8 ],
+                [ "Day 14",  14,     3.7 ]
+            ]
+        ]
+    }
+}
