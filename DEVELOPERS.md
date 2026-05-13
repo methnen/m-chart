@@ -221,6 +221,49 @@ Available tokens:
 
 ---
 
+## Example charts ##
+
+The repo ships a library of 17 pickle-themed example charts (one per chart type) — useful for documentation, screenshots, and as data fixtures.
+
+- **Canonical data:** [`tests/fixtures/charts/pickle-*.json`](tests/fixtures/charts/) — one JSON file per chart type with the full meta + `data.sets` payload
+- **Human-readable doc:** [`docs/example-charts.md`](docs/example-charts.md) — concept blurb, data table, and source citations per chart
+- **WP-importable file:** [`example-charts/pickle-charts.wxr.xml`](example-charts/) — WordPress eXtended RSS (WXR) export creating all 17 posts as drafts
+
+Each example exercises a different real-world dataset (FAOSTAT cucumber production, KITA kimchi exports, USDA FoodData Central sodium figures, Chinese pao cai / zha cai industry data, Korean kimchi fermentation studies, Google Trends, etc.) and includes a `subtitle` field that surfaces any data caveats (rounding, interpolation, normalization) directly on the rendered chart.
+
+### Regenerating the WXR
+
+The JSON fixtures are the source of truth. After editing a fixture, regenerate the WXR with:
+
+```sh
+npm run build:example-charts
+```
+
+Implementation lives at [`scripts/generate-example-charts-wxr.js`](scripts/generate-example-charts-wxr.js) — a hand-rolled Node script that PHP-serializes each fixture's contents and wraps them in a valid WXR 1.2 envelope. No dependencies beyond Node's stdlib.
+
+### Importing into WordPress
+
+```sh
+npx wp-env run cli wp import example-charts/pickle-charts.wxr.xml --authors=skip
+```
+
+…or through the WP admin: **Tools → Import → WordPress** (install the WP Importer plugin if prompted), then upload `example-charts/pickle-charts.wxr.xml`. The 17 example charts will appear as drafts under **M Chart → All Chart Posts**.
+
+### Adding a new example chart
+
+1. Create a new fixture under `tests/fixtures/charts/pickle-<slug>.json` matching the existing shape (every fixture has `library`, `type`, `parse_in`, `set_names`, `subtitle`, `source`, `source_url`, and `data`).
+2. Add a `<slug> =>` entry to the `TITLES` map at the top of `scripts/generate-example-charts-wxr.js`.
+3. Add a section to `docs/example-charts.md`.
+4. Run `npm run build:example-charts` and commit the regenerated WXR.
+
+### WXR contents notes
+
+- Each chart imports with `wp:status = draft` — review before publishing.
+- The PHP-serialized blob in `<wp:meta_value>` is what WP's importer unpacks via `maybe_unserialize()` and then re-serializes via `update_post_meta()`. The end result in `wp_postmeta` is identical to what the m-chart admin UI would produce when saving the same chart manually.
+- Post IDs in the WXR start at 1000 to avoid collisions with low-numbered posts on the destination site. The importer will reassign IDs if they conflict.
+
+---
+
 ## Deployment ##
 
 Deploy to WordPress.org via GitHub Actions:
@@ -297,11 +340,11 @@ Library plugins (e.g. M Chart Highcharts Library) integrate with the React admin
 - **`m_chart.render_chart` filter** — handle chart rendering in the admin preview, returning `true` to prevent the default Chart.js renderer from running
 - **`m_chart.settings_component` filter** — replace the default Chart.js settings UI with a library-specific React component
 
-See `version-2-notes.md` for the full list of available hooks.
+See the [Admin UI Hooks reference](https://docs.mch.art/developer/admin-ui-hooks.html) for the full list of available hooks.
 
 ### Extensibility (wp.hooks)
 
-See `version-2-notes.md` for the full list of JavaScript hooks available to library plugin authors.
+See the [Admin UI Hooks reference](https://docs.mch.art/developer/admin-ui-hooks.html) for the full list of JavaScript hooks available to library plugin authors, and the [Migrating to v2 guide](https://docs.mch.art/developer/migrating-v2.html) for what changed when migrating from v1.x.
 
 ### Native form elements
 

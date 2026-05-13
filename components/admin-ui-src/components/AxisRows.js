@@ -11,6 +11,12 @@ const YMIN_TYPES = new Set( [
 	'area',
 ] );
 
+// Chart types that show the constrain-y-axis checkbox in the same slot as y-min
+const CONSTRAIN_Y_TYPES = new Set( [
+	'boxplot',
+	'violin',
+] );
+
 // Chart types that show axis title/unit rows
 const AXIS_TYPES = new Set( [
 	'line',
@@ -30,8 +36,9 @@ export default function AxisRows() {
 	const { state, dispatch } = useChartAdmin();
 	const { postMeta, unitTerms } = state;
 
-	const showAxis  = AXIS_TYPES.has( postMeta.type );
-	const showYMin  = YMIN_TYPES.has( postMeta.type );
+	const showAxis        = AXIS_TYPES.has( postMeta.type );
+	const showYMin        = YMIN_TYPES.has( postMeta.type );
+	const showConstrainY  = CONSTRAIN_Y_TYPES.has( postMeta.type );
 
 	// Callback ref triggers a re-render when the input mounts, so the canvas measurement runs with the real element instead of the fallback
 	const [ yMinEl, setYMinEl ] = useState( null );
@@ -47,10 +54,15 @@ export default function AxisRows() {
 		dispatch( { type: 'SET_POST_META', payload: { y_min: checked } } );
 	}
 
+	function handleConstrainYCheck( checked ) {
+		dispatch( { type: 'SET_POST_META', payload: { constrain_y_axis: checked } } );
+	}
+
 	// Always render axis rows so field values survive type switches on form save.
 	// Only hide them visually when the chart type doesn't need them.
-	const axisStyle = showAxis ? {} : { display: 'none' };
-	const yMinStyle = showAxis && showYMin ? {} : { display: 'none' };
+	const axisStyle       = showAxis ? {} : { display: 'none' };
+	const yMinStyle       = showAxis && showYMin ? {} : { display: 'none' };
+	const constrainYStyle = showAxis && showConstrainY ? {} : { display: 'none' };
 
 	const unitOptions = (
 		<>
@@ -59,7 +71,7 @@ export default function AxisRows() {
 				<Fragment key={ group }>
 					<option value="" disabled>{ group }</option>
 					{ units.map( ( unit ) => (
-						<option key={ unit.name } value={ unit.name }>{ unit.name }</option>
+						<option key={ unit.slug } value={ unit.slug }>{ unit.name }</option>
 					) ) }
 				</Fragment>
 			) ) }
@@ -110,6 +122,15 @@ export default function AxisRows() {
 					disabled={ ! postMeta.y_min }
 					onChange={ ( value ) => handleChange( 'y_min_value', value ) }
 					style={ { width: yMinWidth, minWidth: 0 } }
+				/>
+			</div>
+			{ /* Always render so the value survives type switches on save; same row slot as y-min, mutually exclusive by type */ }
+			<div className="row four constrain-y-axis" style={ constrainYStyle }>
+				<CheckboxControl
+					name="m-chart[constrain_y_axis]"
+					label={ __( 'Constrain vertical axis', 'm-chart' ) }
+					checked={ !! postMeta.constrain_y_axis }
+					onChange={ ( checked ) => handleConstrainYCheck( checked ) }
 				/>
 			</div>
 			<div className="row five horizontal-axis" style={ axisStyle }>

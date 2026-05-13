@@ -237,16 +237,18 @@ class M_Chart_Chartjs {
 			'hoverBorderWidth' => 0,
 			'hoverBorderColor' => '#ffffff',
 			'captions'         => [
-				'align'   => 'left',
-				'color'   => '#000000',
-				'font'    => [ 'weight' => 'bold' ],
-				'padding' => 4,
+				'align'    => 'left',
+				'color'    => '#000000',
+				'font'     => [ 'weight' => 'bold' ],
+				'padding'  => 4,
+				'overflow' => 'fit',
 			],
 			'labels'           => [
 				'color'    => '#000000',
 				'font'     => [ 'weight' => 'bold' ],
 				'align'    => 'center',
 				'position' => 'middle',
+				'overflow' => 'fit',
 			],
 		];
 	}
@@ -399,6 +401,42 @@ class M_Chart_Chartjs {
 			)
 		) {
 			$chart_args['options']['scales']['y']['min'] = $this->post_meta['y_min_value'];
+		}
+
+		// Flag boxplot/violin charts that opt in to auto-tightened y-axis bounds
+		// The MChartHelper runtime plugin reads this flag and computes bounds from the data
+		if (
+			! empty( $this->post_meta['constrain_y_axis'] )
+			&& ( 'boxplot' === $this->post_meta['type'] || 'violin' === $this->post_meta['type'] )
+		) {
+			if ( ! isset( $chart_args['options']['plugins']['mchart'] ) ) {
+				$chart_args['options']['plugins']['mchart'] = [];
+			}
+
+			$chart_args['options']['plugins']['mchart']['constrain_y_axis'] = true;
+		}
+
+		// In-chart source attribution — MChartHelper.afterDraw paints the source line bottom-left of the canvas
+		// and afterEvent wires up the clickable behavior when source_url is present
+		if (
+			! empty( $this->post_meta['include_source'] )
+			&& '' !== $this->post_meta['source']
+		) {
+			if ( ! isset( $chart_args['options']['plugins']['mchart'] ) ) {
+				$chart_args['options']['plugins']['mchart'] = [];
+			}
+
+			$chart_args['options']['plugins']['mchart']['source']         = $this->post_meta['source'];
+			$chart_args['options']['plugins']['mchart']['source_url']     = $this->post_meta['source_url'];
+			$chart_args['options']['plugins']['mchart']['include_source'] = true;
+
+			// Push the bottom of the plot area up so the source line has room to render
+			$chart_args['options']['layout']['padding'] = [
+				'top'    => 16,
+				'right'  => 16,
+				'bottom' => 36,
+				'left'   => 16,
+			];
 		}
 
 		// @TODO: Bubble charts need a little massaging to look better by default (not sure how to properly do this yet)

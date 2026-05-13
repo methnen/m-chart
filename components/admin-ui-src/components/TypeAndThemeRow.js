@@ -26,23 +26,56 @@ const TYPES_REQUIRING_SIMPLE_2D = new Set( [
 ] );
 
 /**
+ * Returns the index past the last non-empty cell in a row.
+ * Empty = "" or null or undefined. 0 is non-empty (valid numeric value).
+ * Used so trailing Jspreadsheet padding cells don't inflate the column count.
+ *
+ * @param {Array} row One row from a 2D data array
+ * @return {number} Effective length (rightmost non-empty index + 1, or 0)
+ */
+function effectiveLength( row ) {
+	if ( ! Array.isArray( row ) ) {
+		return 0;
+	}
+	for ( let i = row.length - 1; i >= 0; i-- ) {
+		const cell = row[ i ];
+		if ( cell !== '' && cell !== null && cell !== undefined ) {
+			return i + 1;
+		}
+	}
+	return 0;
+}
+
+/**
  * Detect whether the active sheet looks like simple 2D single-series data
- * — at most 2 columns in rows mode, or at most 2 rows in columns mode
+ * — at most 2 effective columns in rows mode, or at most 2 effective rows in columns mode
+ *
+ * "Effective" trims trailing empty cells/rows so Jspreadsheet's minDimensions padding
+ * (37 cols × 17 rows by default) doesn't push otherwise-simple data over the threshold
  *
  * @param {Array<Array>} sheet   The 2D data array (Jspreadsheet getData() shape)
  * @param {string}       parseIn 'rows' or 'columns'
  * @return {boolean} True when the sheet has only one series in the active orientation
  */
-function isSimple2DSeries( sheet, parseIn ) {
+export function isSimple2DSeries( sheet, parseIn ) {
 	if ( ! Array.isArray( sheet ) || 0 === sheet.length ) {
 		return false;
 	}
 
 	if ( 'columns' === parseIn ) {
-		return sheet.length <= 2;
+		// "simple" means ≤ 2 effective rows (rows that have any non-empty cell)
+		let lastNonEmptyRow = -1;
+		for ( let i = sheet.length - 1; i >= 0; i-- ) {
+			if ( effectiveLength( sheet[ i ] ) > 0 ) {
+				lastNonEmptyRow = i;
+				break;
+			}
+		}
+		return ( lastNonEmptyRow + 1 ) <= 2;
 	}
 
-	const maxCols = sheet.reduce( ( max, row ) => Math.max( max, Array.isArray( row ) ? row.length : 0 ), 0 );
+	// rows mode — "simple" means ≤ 2 effective columns across any row
+	const maxCols = sheet.reduce( ( max, row ) => Math.max( max, effectiveLength( row ) ), 0 );
 	return maxCols <= 2;
 }
 

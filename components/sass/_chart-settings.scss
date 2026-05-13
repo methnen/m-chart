@@ -109,10 +109,20 @@
 
 				&.six {
 					.column {
-						&:first-child {
-							float: left;
+						flex: 1;
+
+						> div {
+							width: auto;
+						}
+
+						&.source-url {
+							margin-right: rem-calc( 10 );
 						}
 					}
+				}
+
+				&.eight {
+					align-items: center;
 				}
 			}
 		}
@@ -146,6 +156,7 @@
 
 					&.image {
 						position: relative;
+						margin-right: rem-calc( 10 );
 
 						em {
 							display: block;

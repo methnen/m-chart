@@ -144,4 +144,110 @@ final class ParseTest extends TestCase {
 		$widths = array_map( 'count', $this->parser->set_data );
 		$this->assertSame( [ 4, 4, 3, 2 ], $widths );
 	}
+
+	public function test_label_position_with_year_labels_in_rows_mode(): void {
+		// Years as numeric-looking strings in column 0 — historically PHP's is_numeric()
+		// trips the heuristic into LABELS_FIRST_ROW which is wrong for this 2-column shape
+		$data = [
+			[ '2014', 73000000 ],
+			[ '2015', 75000000 ],
+			[ '2016', 78000000 ],
+		];
+
+		$this->parser->parse_data( $data, M_Chart_Parse::PARSE_ROWS );
+
+		$this->assertSame(
+			M_Chart_Parse::LABELS_FIRST_COLUMN,
+			$this->parser->value_labels_position
+		);
+		$this->assertSame(
+			[ '2014', '2015', '2016' ],
+			$this->parser->value_labels
+		);
+	}
+
+	public function test_label_position_with_string_labels_in_rows_mode_still_works(): void {
+		// Regression check — non-numeric labels (existing behavior) still resolve correctly
+		$data = [
+			[ 'Apr', 10 ],
+			[ 'May', 20 ],
+			[ 'Jun', 30 ],
+		];
+
+		$this->parser->parse_data( $data, M_Chart_Parse::PARSE_ROWS );
+
+		$this->assertSame(
+			M_Chart_Parse::LABELS_FIRST_COLUMN,
+			$this->parser->value_labels_position
+		);
+		$this->assertSame(
+			[ 'Apr', 'May', 'Jun' ],
+			$this->parser->value_labels
+		);
+	}
+
+	public function test_label_position_with_padded_2col_data_in_rows_mode(): void {
+		// Jspreadsheet's minDimensions padding adds trailing empty cells per row
+		// effective_max_columns must strip them so the 2-column shape is still detected
+		$padded = array_map(
+			static fn( $row ) => array_pad( $row, 37, '' ),
+			[
+				[ '2014', 73000000 ],
+				[ '2015', 75000000 ],
+				[ '2016', 78000000 ],
+			]
+		);
+
+		$this->parser->parse_data( $padded, M_Chart_Parse::PARSE_ROWS );
+
+		$this->assertSame(
+			M_Chart_Parse::LABELS_FIRST_COLUMN,
+			$this->parser->value_labels_position
+		);
+		$this->assertSame(
+			[ '2014', '2015', '2016' ],
+			$this->parser->value_labels
+		);
+	}
+
+	public function test_label_position_with_empty_corner_still_returns_labels_both(): void {
+		// Regression check — the multi-series LABELS_BOTH shape is unaffected by the pre-check
+		$data = [
+			[ '',   'Series A', 'Series B' ],
+			[ 'Q1', 10,         15 ],
+			[ 'Q2', 20,         25 ],
+		];
+
+		$this->parser->parse_data( $data, M_Chart_Parse::PARSE_ROWS );
+
+		$this->assertSame( M_Chart_Parse::LABELS_BOTH, $this->parser->value_labels_position );
+		$this->assertSame(
+			[ 'Series A', 'Series B' ],
+			$this->parser->value_labels[ M_Chart_Parse::LABELS_FIRST_ROW ]
+		);
+		$this->assertSame(
+			[ 'Q1', 'Q2' ],
+			$this->parser->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ]
+		);
+	}
+
+	public function test_label_position_columns_mode_with_2_effective_rows_returns_first_row(): void {
+		// Mirror of the rows-mode 2-column case: parse_in=columns + 2 effective rows
+		// means row 0 holds labels for the values in row 1
+		$data = [
+			[ '2014', '2015', '2016', '2017' ],
+			[ 100,    110,    120,    130 ],
+		];
+
+		$this->parser->parse_data( $data, M_Chart_Parse::PARSE_COLUMNS );
+
+		$this->assertSame(
+			M_Chart_Parse::LABELS_FIRST_ROW,
+			$this->parser->value_labels_position
+		);
+		$this->assertSame(
+			[ '2014', '2015', '2016', '2017' ],
+			$this->parser->value_labels
+		);
+	}
 }

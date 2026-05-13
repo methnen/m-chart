@@ -54,9 +54,10 @@ function preprocessBubbleData( data ) {
  */
 function bubbleChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
-	const lines  = [ item.dataset.label ];
+	const lines  = [];
 
-	// If we've got data point labels we include them in the tooltip
+	// Dataset label lives in the tooltip title (see MChartHelper.beforeUpdate)
+	// First body line is the per-point label when present (country name, etc)
 	if ( item.raw?.label ) {
 		lines.push( item.raw.label );
 	}
@@ -78,9 +79,10 @@ function bubbleChartTooltipLabel( item ) {
  */
 function scatterChartTooltipLabel( item ) {
 	const locale = item.chart.options.locale;
-	const lines  = [ item.dataset.label ];
+	const lines  = [];
 
-	// If we've got data point labels we include them in the tooltip
+	// Dataset label lives in the tooltip title (see MChartHelper.beforeUpdate)
+	// First body line is the per-point label when present
 	if ( item.raw?.label ) {
 		lines.push( item.raw.label );
 	}
@@ -137,26 +139,20 @@ function treemapFormatValue( entry, locale ) {
 
 /**
  * In-rectangle label content for treemap
- * Returns [label, formattedValue] for two-line display
+ * Returns just the entity label as a single-line string — the value is surfaced via the tooltip on hover
+ * Single-line labels combine with `overflow: 'fit'` so small rectangles scale gracefully instead of clipping
  *
- * @param {Object} ctx    chartjs-chart-treemap labels formatter context
- * @param {string} locale BCP 47 locale string
- * @return {string|string[]} A 2-element array for two-line display, or a single string when only label or value is present
+ * @param {Object} ctx chartjs-chart-treemap labels formatter context
+ * @return {string} The entity label, or empty string when no label is available
  */
-function treemapItemText( ctx, locale ) {
+function treemapItemText( ctx ) {
 	if ( 'data' !== ctx.type ) {
 		return '';
 	}
 
-	const entry     = treemapRawEntry( ctx );
-	const label     = entry && entry.label ? String( entry.label ) : '';
-	const formatted = treemapFormatValue( entry, locale );
+	const entry = treemapRawEntry( ctx );
 
-	if ( label && formatted ) {
-		return [ label, formatted ];
-	}
-
-	return label || formatted;
+	return entry && entry.label ? String( entry.label ) : '';
 }
 
 /**
@@ -243,6 +239,138 @@ function chartTooltipLabel( item ) {
 }
 
 /**
+ * Compute tight y-axis bounds from the raw observation values in a boxplot/violin chart.data
+ *
+ * Boxplot/violin data is shaped as datasets[].data[row][] where each row is an array of
+ * observations for a single box. Chart.js's default auto-fit plus the boxplot library's
+ * whisker expansion leaves enough headroom that narrow IQRs collapse visually — this helper
+ * returns a min/max that hugs the actual data with a small grace so the boxes stay legible
+ *
+ * Returns null when there's no usable data to bound (empty, non-numeric, or zero range)
+ * so the caller can leave the library default in place
+ *
+ * @param {Object} data Chart.js data object
+ * @return {Object|null} { min, max } padded bounds, or null when bounds can't be computed
+ */
+function computeBoxplotViolinYBounds( data ) {
+	let dataMin = Infinity;
+	let dataMax = -Infinity;
+
+	for ( const dataset of data.datasets ?? [] ) {
+		for ( const row of dataset.data ?? [] ) {
+			if ( ! Array.isArray( row ) ) {
+				continue;
+			}
+
+			for ( const value of row ) {
+				const num = Number( value );
+
+				if ( Number.isFinite( num ) ) {
+					if ( num < dataMin ) {
+						dataMin = num;
+					}
+
+					if ( num > dataMax ) {
+						dataMax = num;
+					}
+				}
+			}
+		}
+	}
+
+	if ( ! Number.isFinite( dataMin ) || ! Number.isFinite( dataMax ) ) {
+		return null;
+	}
+
+	const range = dataMax - dataMin;
+
+	if ( 0 === range ) {
+		return null;
+	}
+
+	const grace = range * 0.05;
+
+	return {
+		min: dataMin - grace,
+		max: dataMax + grace,
+	};
+}
+
+/**
+ * Wrap a Chart.js title-or-subtitle plugin's text to fit within a maxWidth
+ *
+ * Reads the configured font, measures the original string in the canvas 2d context,
+ * and if it doesn't fit on one line, breaks it at word boundaries into an array of lines
+ * Stashes the original string on the chart instance under originalProp so subsequent
+ * relayouts always wrap from the source (not from an already-wrapped array)
+ *
+ * @param {Object} chart        Chart.js chart instance
+ * @param {string} key          'title' or 'subtitle'
+ * @param {number} maxWidth     Available width in canvas pixels
+ * @param {string} originalProp Property name on the chart instance for stashing the original string
+ */
+function wrapPluginText( chart, key, maxWidth, originalProp ) {
+	const opt = chart.options.plugins?.[ key ];
+
+	if ( ! opt || false === opt.display ) {
+		return;
+	}
+
+	// First-touch: stash the original string so subsequent layouts wrap from the source
+	if ( ! chart[ originalProp ] ) {
+		chart[ originalProp ] = Array.isArray( opt.text ) ? opt.text.join( ' ' ) : ( opt.text || '' );
+	}
+
+	const original = chart[ originalProp ];
+
+	if ( ! original ) {
+		return;
+	}
+
+	const defaultSize = 'title' === key ? 21 : 18;
+	const fontSize    = opt.font?.size || defaultSize;
+	const family      = opt.font?.family || ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
+	const weight      = opt.font?.weight || '';
+
+	chart.ctx.save();
+	chart.ctx.font = ( weight ? weight + ' ' : '' ) + fontSize + 'px ' + family;
+
+	// Fast path: text already fits on one line
+	if ( chart.ctx.measureText( original ).width <= maxWidth ) {
+		chart.options.plugins[ key ].text = original;
+		chart.ctx.restore();
+		return;
+	}
+
+	// Greedy word-break wrap
+	const words = original.split( /\s+/ ).filter( Boolean );
+	const lines = [];
+	let   line  = '';
+
+	for ( const word of words ) {
+		const trial = line ? line + ' ' + word : word;
+
+		if ( chart.ctx.measureText( trial ).width <= maxWidth ) {
+			line = trial;
+		} else {
+			if ( line ) {
+				lines.push( line );
+			}
+
+			// If a single word is itself wider than maxWidth, accept it on its own line
+			line = word;
+		}
+	}
+
+	if ( line ) {
+		lines.push( line );
+	}
+
+	chart.options.plugins[ key ].text = lines.length > 1 ? lines : original;
+	chart.ctx.restore();
+}
+
+/**
  * Chart.js plugin that sets up m-chart tooltip callbacks, datalabels formatter, and bubble data preprocessing
  *
  * beforeUpdate: runs before every render cycle (creation and updates)
@@ -251,6 +379,28 @@ function chartTooltipLabel( item ) {
 const MChartHelper = {
 	id: 'm-chart-helper',
 
+	/**
+	 * beforeLayout: runs before Chart.js calculates layout positions
+	 *
+	 * Wraps title and subtitle text at word boundaries when they don't fit the current
+	 * chart width — keeps font size constant and breaks across multiple lines instead of
+	 * letting the canvas CSS-scale and visually squish the text horizontally
+	 *
+	 * @param {Object} chart Chart.js chart instance
+	 */
+	beforeLayout( chart ) {
+		if ( ! chart.ctx || ! chart.width ) {
+			return;
+		}
+
+		// Match the default options.layout.padding in get_chart_options_defaults()
+		const horizontalPadding = 16;
+		const maxWidth          = chart.width - ( horizontalPadding * 2 );
+
+		wrapPluginText( chart, 'title',    maxWidth, '$mchartTitleOriginal'    );
+		wrapPluginText( chart, 'subtitle', maxWidth, '$mchartSubtitleOriginal' );
+	},
+
 	beforeUpdate( chart ) {
 		const type = chart.config.type;
 
@@ -258,11 +408,12 @@ const MChartHelper = {
 			preprocessBubbleData( chart.config.data );
 
 			chart.options.plugins.tooltip.callbacks = {
+				title: ( items ) => items[0]?.dataset?.label ?? '',
 				label: ( item ) => bubbleChartTooltipLabel( item ),
 			};
 		} else if ( 'scatter' === type ) {
 			chart.options.plugins.tooltip.callbacks = {
-				title: () => '',
+				title: ( items ) => items[0]?.dataset?.label ?? '',
 				label: ( item ) => scatterChartTooltipLabel( item ),
 			};
 		} else if ( 'treemap' === type ) {
@@ -349,11 +500,13 @@ const MChartHelper = {
 				};
 
 				ds.labels = ds.labels || {};
+				// Single-line label — value is in the tooltip on hover
+				// Combined with overflow: 'fit' (set in PHP defaults) small rectangles scale gracefully
 				ds.labels.formatter = ( ctx ) => {
 					if ( 'data' !== ctx.type || ctx.raw.l < leafLevel ) {
 						return '';
 					}
-					return [ String( ctx.raw.g ), formatWithAffixes( ctx.raw ) ];
+					return String( ctx.raw.g );
 				};
 
 				chart.options.plugins.tooltip.callbacks = {
@@ -377,7 +530,7 @@ const MChartHelper = {
 
 			if ( ds ) {
 				ds.labels = ds.labels || {};
-				ds.labels.formatter = ( ctx ) => treemapItemText( ctx, locale );
+				ds.labels.formatter = ( ctx ) => treemapItemText( ctx );
 			}
 
 			chart.options.plugins.tooltip.callbacks = {
@@ -389,6 +542,10 @@ const MChartHelper = {
 			return;
 		} else if ( 'boxplot' === type || 'violin' === type ) {
 			const locale = chart.options.locale;
+
+			// Note: when constrain_y_axis is on, the scale bounds are applied in
+			// afterDataLimits below — that's the canonical Chart.js hook for axis bound
+			// manipulation and avoids the visible double-paint that beforeUpdate causes
 
 			// Format a single number with the dataset's prefix/suffix and locale formatting
 			const fmtForItem = ( item, value ) => {
@@ -497,6 +654,129 @@ const MChartHelper = {
 
 			return label;
 		};
+	},
+
+	/**
+	 * afterDataLimits: per-scale hook that fires after Chart.js computes auto-fit bounds
+	 * but before layout calculations
+	 *
+	 * For boxplot/violin charts with constrain_y_axis on, overwrite the scale's min/max
+	 * with bounds tightened to the actual data so the chart paints once with the
+	 * constrained bounds — no double-paint flicker
+	 *
+	 * @param {Object} chart Chart.js chart instance
+	 * @param {Object} args  Hook args; args.scale is the scale being processed
+	 */
+	afterDataLimits( chart, args ) {
+		const type = chart.config.type;
+
+		if ( 'boxplot' !== type && 'violin' !== type ) {
+			return;
+		}
+
+		if ( ! chart.options.plugins?.mchart?.constrain_y_axis ) {
+			return;
+		}
+
+		if ( 'y' !== args.scale.axis ) {
+			return;
+		}
+
+		const bounds = computeBoxplotViolinYBounds( chart.config.data );
+
+		if ( ! bounds ) {
+			return;
+		}
+
+		args.scale.min = bounds.min;
+		args.scale.max = bounds.max;
+	},
+
+	/**
+	 * afterDraw: paint the optional in-chart source attribution in the bottom-left of the canvas
+	 *
+	 * Renders only when include_source is on AND source has a non-empty value
+	 * Caches the rendered text's bounding box on the chart instance for afterEvent hit-testing
+	 *
+	 * @param {Object} chart Chart.js chart instance
+	 */
+	afterDraw( chart ) {
+		const opts = chart.options.plugins?.mchart;
+
+		if ( ! opts?.include_source || ! opts?.source ) {
+			chart.$mchartSourceBounds = null;
+			return;
+		}
+
+		const ctx     = chart.ctx;
+		const padding = 12;
+		const text    = String( opts.source );
+		const family  = ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
+		const color   = ( window.Chart && window.Chart.defaults?.color ) || '#666666';
+
+		ctx.save();
+		ctx.font         = '12px ' + family;
+		ctx.fillStyle    = color;
+		ctx.textAlign    = 'left';
+		ctx.textBaseline = 'bottom';
+
+		const drawX = padding;
+		const drawY = chart.height - padding;
+
+		ctx.fillText( text, drawX, drawY );
+
+		// textBaseline:'bottom' means drawY is the bottom of the rendered text
+		// Pad the box slightly on every side so the click target is comfortable to hit
+		const metrics = ctx.measureText( text );
+
+		chart.$mchartSourceBounds = {
+			left:   drawX - 2,
+			right:  drawX + metrics.width + 2,
+			top:    drawY - 14,
+			bottom: drawY + 2,
+		};
+
+		ctx.restore();
+	},
+
+	/**
+	 * afterEvent: hover cursor + click handling for the rendered source attribution
+	 *
+	 * Mousemove inside the cached bounds switches to pointer cursor
+	 * Click inside the bounds opens source_url in a new tab (only when source_url is set)
+	 *
+	 * @param {Object} chart Chart.js chart instance
+	 * @param {Object} args  Hook args; args.event is the normalized event
+	 */
+	afterEvent( chart, args ) {
+		const opts   = chart.options.plugins?.mchart;
+		const bounds = chart.$mchartSourceBounds;
+
+		if ( ! opts?.include_source || ! opts?.source || ! opts?.source_url || ! bounds ) {
+			if ( chart.canvas && 'pointer' === chart.canvas.style.cursor ) {
+				chart.canvas.style.cursor = '';
+			}
+
+			return;
+		}
+
+		const e = args.event;
+
+		if ( ! e || 'number' !== typeof e.x || 'number' !== typeof e.y ) {
+			return;
+		}
+
+		const inside =
+			e.x >= bounds.left  &&
+			e.x <= bounds.right &&
+			e.y >= bounds.top   &&
+			e.y <= bounds.bottom;
+
+		if ( 'mousemove' === e.type ) {
+			chart.canvas.style.cursor = inside ? 'pointer' : '';
+		} else if ( 'click' === e.type && inside ) {
+			window.open( opts.source_url, '_blank', 'noopener,noreferrer' );
+		}
 	},
 };
 

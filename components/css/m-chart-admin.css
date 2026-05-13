@@ -408,8 +408,17 @@
   margin-left: 0.4375rem;
   height: 2rem;
 }
-#m-chart .inside .settings .row.six .column:first-child {
-  float: left;
+#m-chart .inside .settings .row.six .column {
+  flex: 1;
+}
+#m-chart .inside .settings .row.six .column > div {
+  width: auto;
+}
+#m-chart .inside .settings .row.six .column.source-url {
+  margin-right: 0.625rem;
+}
+#m-chart .inside .settings .row.eight {
+  align-items: center;
 }
 #m-chart .inside .row {
   display: flow-root;
@@ -440,6 +449,7 @@
 }
 #m-chart .inside .row.seven .column.image {
   position: relative;
+  margin-right: 0.625rem;
 }
 #m-chart .inside .row.seven .column.image em {
   display: block;

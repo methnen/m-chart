@@ -351,7 +351,7 @@ class M_Chart_Admin {
 				$group_units = [];
 
 				foreach ( $units as $unit ) {
-					$group_units[] = [ 'name' => $unit->name ];
+					$group_units[] = [ 'name' => $unit->name, 'slug' => $unit->slug ];
 				}
 
 				$unit_terms[] = [

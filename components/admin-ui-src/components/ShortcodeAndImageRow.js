@@ -13,6 +13,10 @@ export default function ShortcodeAndImageRow() {
 	const showImageField = 'default' === performance && 'yes' === imageSupport;
 	const imageDisabled  = ! showImageField;
 
+	const imagePlaceholder = imageDisabled
+		? __( 'Image generation is disabled', 'm-chart' )
+		: __( 'Save/Update this post to generate the image version', 'm-chart' );
+
 	const [ copied, setCopied ] = useState( false );
 
 	function handleCopy() {
@@ -42,17 +46,19 @@ export default function ShortcodeAndImageRow() {
 				</Button>
 			</div>
 			<div className="column image">
-				{ imageUrl ? (
-					<div>
-						<TextControl
-							__next40pxDefaultSize
-							label={ __( 'Image', 'm-chart' ) }
-							name="m-chart[image]"
-							value={ imageUrl }
-							readOnly
-							onChange={ () => {} }
-							onClick={ ( e ) => e.target.select() }
-						/>
+				<div>
+					<TextControl
+						__next40pxDefaultSize
+						label={ __( 'Image', 'm-chart' ) }
+						name="m-chart[image]"
+						value={ imageUrl || '' }
+						placeholder={ imageUrl ? undefined : imagePlaceholder }
+						disabled={ ! imageUrl }
+						readOnly={ !! imageUrl }
+						onChange={ () => {} }
+						onClick={ ( e ) => { if ( imageUrl ) { e.target.select(); } } }
+					/>
+					{ imageUrl && (
 						<Button
 							variant="secondary"
 							type="button"
@@ -66,17 +72,8 @@ export default function ShortcodeAndImageRow() {
 								{ __( '(opens in a new tab)', 'm-chart' ) }
 							</span>
 						</Button>
-					</div>
-				) : (
-					<div>
-						<label htmlFor="m-chart-image">{ __( 'Image', 'm-chart' ) }</label><br />
-						{ imageDisabled ? (
-							<em>{ __( 'Image generation is disabled', 'm-chart' ) }</em>
-						) : (
-							<em>{ __( 'Save/Update this post to generate the image version', 'm-chart' ) }</em>
-						) }
-					</div>
-				) }
+					) }
+				</div>
 			</div>
 			<input
 				type="hidden"

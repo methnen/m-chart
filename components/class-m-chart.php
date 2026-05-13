@@ -30,6 +30,8 @@ class M_Chart {
 		'data_point_colors'  => false,
 		'mean_point'         => true,
 		'sample_points'      => false,
+		'constrain_y_axis'   => false,
+		'include_source'     => false,
 	];
 	public $get_chart_default_args = [
 		'show'  => 'chart',
@@ -453,6 +455,8 @@ class M_Chart {
 		$chart_meta['data_point_colors']  = false;
 		$chart_meta['mean_point']         = false;
 		$chart_meta['sample_points']      = false;
+		$chart_meta['constrain_y_axis']   = false;
+		$chart_meta['include_source']     = false;
 
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
@@ -463,7 +467,7 @@ class M_Chart {
 					$chart_meta[ $field ]['sets'] = $meta[ $field ];
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
-				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points' ] ) ) {
+				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );

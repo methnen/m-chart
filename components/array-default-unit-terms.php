@@ -38,6 +38,15 @@ return [
 		esc_html__( 'Meter', 'm-chart' ),
 		esc_html__( 'Kilometer', 'm-chart' ),
 	],
+	esc_html__( 'Weight', 'm-chart' )          => [
+		esc_html__( 'Tonnes', 'm-chart' ),
+		esc_html__( 'Tons', 'm-chart' ),
+		esc_html__( 'Kilograms', 'm-chart' ),
+		esc_html__( 'Grams', 'm-chart' ),
+		esc_html__( 'Milligrams', 'm-chart' ),
+		esc_html__( 'Pounds', 'm-chart' ),
+		esc_html__( 'Ounces', 'm-chart' ),
+	],
 	esc_html__( 'Other', 'm-chart' )           => [
 		esc_html__( 'Percent', 'm-chart' ),
 	],

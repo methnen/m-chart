@@ -2,6 +2,7 @@ import { useMemo } from '@wordpress/element';
 import TypeAndThemeRow      from './TypeAndThemeRow';
 import ParseAndFlagsRow     from './ParseAndFlagsRow';
 import AxisRows             from './AxisRows';
+import SourceRow            from './SourceRow';
 import ShortcodeAndImageRow from './ShortcodeAndImageRow';
 
 function DefaultSettings() {
@@ -10,6 +11,7 @@ function DefaultSettings() {
 			<TypeAndThemeRow />
 			<ParseAndFlagsRow />
 			<AxisRows />
+			<SourceRow />
 			<ShortcodeAndImageRow />
 		</>
 	);

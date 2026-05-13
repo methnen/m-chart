@@ -101,7 +101,22 @@ class M_Chart_Parse {
 
 		if ( '' == $this->data[0][0] ) {
 			return self::LABELS_BOTH;
-		} elseif ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
+		}
+
+		// Structural pre-check
+		// The simple single-series shape from creating-a-chart.md is unambiguous
+		// 2 effective columns (rows mode) or 2 effective rows (columns mode) means column 0 / row 0 holds labels
+		// Works regardless of whether the labels look numeric (years, ordinals, etc)
+		if ( self::PARSE_ROWS === $this->parse_in && 2 === $this->effective_max_columns() ) {
+			return self::LABELS_FIRST_COLUMN;
+		}
+
+		if ( self::PARSE_COLUMNS === $this->parse_in && 2 === $this->effective_row_count() ) {
+			return self::LABELS_FIRST_ROW;
+		}
+
+		// Existing content-based heuristic for 3+ effective columns/rows
+		if ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
 			// If the first row has multiple non-numeric headers and the data rows start
 			// with numeric values the entire first row is column labels (e.g. scatter format)
 			if (
@@ -115,6 +130,69 @@ class M_Chart_Parse {
 		}
 
 		return self::LABELS_FIRST_ROW;
+	}
+
+	/**
+	 * Max effective column count across rows
+	 * Rightmost non-empty cell index + 1, taken as a max over all rows
+	 * Trailing empty cells (typical of Jspreadsheet's minDimensions padding) don't count
+	 *
+	 * @return int
+	 */
+	private function effective_max_columns(): int {
+		if ( ! is_array( $this->data ) ) {
+			return 0;
+		}
+
+		$max = 0;
+
+		foreach ( $this->data as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+
+			for ( $i = count( $row ) - 1; $i >= 0; $i-- ) {
+				if ( '' !== trim( (string) ( $row[ $i ] ?? '' ) ) ) {
+					if ( $i + 1 > $max ) {
+						$max = $i + 1;
+					}
+
+					break;
+				}
+			}
+		}
+
+		return $max;
+	}
+
+	/**
+	 * Count of rows that contain at least one non-empty cell
+	 * Trailing empty rows (typical of Jspreadsheet's minDimensions padding) don't count
+	 *
+	 * @return int
+	 */
+	private function effective_row_count(): int {
+		if ( ! is_array( $this->data ) ) {
+			return 0;
+		}
+
+		$last = -1;
+
+		foreach ( $this->data as $i => $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+
+			foreach ( $row as $cell ) {
+				if ( '' !== trim( (string) ( $cell ?? '' ) ) ) {
+					$last = $i;
+
+					break;
+				}
+			}
+		}
+
+		return $last + 1;
 	}
 
 	/**

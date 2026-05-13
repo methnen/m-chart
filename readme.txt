@@ -34,6 +34,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 2.1 =
 
+* Added support for Source and Source URL meta into the Chart.js implementation
+	* Source can be used simply for admin purposes to track sources of Data or displayed as link/text annotation added to the chart
 * Added support for a [treemap](https://docs.mch.art/guide/chart-types) chart type
 	* Each row of [label, value] data becomes a rectangle sized by value
 	* Defaults to a single-color value-shaded look; can be switched to one color per rectangle via the new "Color per data point" toggle
