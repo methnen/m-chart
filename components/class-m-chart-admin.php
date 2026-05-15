@@ -161,9 +161,14 @@ class M_Chart_Admin {
 					$validated_settings[ $setting ] = $default;
 				}
 			} else {
-				// Make sure the value is safe before attempting to save it
-				if ( preg_match( '#^[a-zA-Z0-9-_]+$#', $submitted_settings[ $setting ] ) ) {
-					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
+				// Make sure the value is a string and matches the safe pattern before saving it
+				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back
+				// to the default; plugins that need to persist complex shapes should hook
+				// 'm_chart_validated_settings' below to inject their own validated value
+				$value = $submitted_settings[ $setting ];
+
+				if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $value ) ) {
+					$validated_settings[ $setting ] = $value;
 				} else {
 					$validated_settings[ $setting ] = $default;
 				}
