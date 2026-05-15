@@ -6,6 +6,7 @@ import SubtitleField        from './components/SubtitleField';
 import TypeAndThemeRow      from './components/TypeAndThemeRow';
 import ParseAndFlagsRow     from './components/ParseAndFlagsRow';
 import AxisRows             from './components/AxisRows';
+import SourceRow            from './components/SourceRow';
 import ShortcodeAndImageRow from './components/ShortcodeAndImageRow';
 
 // Expose shared context hook and settings row components for library plugins
@@ -15,6 +16,7 @@ window.m_chart = {
 	TypeAndThemeRow,
 	ParseAndFlagsRow,
 	AxisRows,
+	SourceRow,
 	ShortcodeAndImageRow,
 };
 

@@ -26,6 +26,11 @@ export function useImageGeneration( chartRef ) {
 		// via the m_chart.render_done action hook instead.
 		if ( ! chart.canvas ) {
 			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+
+			if ( window.wp?.hooks ) {
+				window.wp.hooks.doAction( 'm_chart.form_enabled', stateRef.current.postId );
+			}
+
 			return;
 		}
 
@@ -64,8 +69,17 @@ export function useImageGeneration( chartRef ) {
 			imgEl.value = img;
 		}
 
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( 'm_chart.image_capture_done', stateRef.current.postId, chart, img );
+		}
+
 		// Re-enable form submission.
 		dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( 'm_chart.form_enabled', stateRef.current.postId );
+		}
+
 		speak( __( 'Chart image generated', 'm-chart' ) );
 	}, [ chartRef, dispatch ] ); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -9,7 +9,7 @@ import ChartSettings from './ChartSettings';
  * Root component for the chart meta box.
  *
  * Owns the title state (read from the classic WP #title input) and wires useChartRefresh so chart args are re-fetched whenever settings or data change
- * The subtitle input is now a React-controlled SubtitleField component mounted via a separate portal — no DOM bridge needed here.
+ * The subtitle input is now a React-controlled SubtitleField component mounted via a separate portal — no DOM bridge needed here
  */
 export default function ChartMetaBox() {
 	const { state, dispatch } = useChartAdmin();

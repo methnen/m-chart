@@ -65,6 +65,10 @@ export function useChartRefresh( title ) {
 			dispatch( { type: 'SET_REFRESHING', payload: true } );
 			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
 
+			if ( window.wp?.hooks ) {
+				window.wp.hooks.doAction( 'm_chart.form_disabled', postId );
+			}
+
 			try {
 				// Start buidling the values we'll send to the m_chart_get_chart_args endpoint
 				const body = new URLSearchParams();
@@ -128,6 +132,10 @@ export function useChartRefresh( title ) {
 					// Otherwise ChartPreview's animation.onComplete enables it after capture
 					if ( 'default' !== performance || 'yes' !== imageSupport ) {
 						dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+
+						if ( window.wp?.hooks ) {
+							window.wp.hooks.doAction( 'm_chart.form_enabled', postId );
+						}
 					}
 				}
 			} catch ( err ) {

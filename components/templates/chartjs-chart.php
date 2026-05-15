@@ -75,9 +75,20 @@ $desc_id      = $canvas_id . '-desc';
 			rendered = true;
 
 			document.querySelectorAll( '.m-chart' ).forEach( el => {
+				// Build detail once so both dispatches carry identical data
+				const detail = { post_id: postId, instance };
+
+				// Canonical event name — matches the wp.hooks `m_chart.render_done` action on the admin side
+				// The chart instance type (Chart.js vs Highcharts) is identified by consumer context, not the event name
+				el.dispatchEvent( new CustomEvent( 'm_chart.render_done', {
+					bubbles: true,
+					detail,
+				} ) );
+
+				// Legacy name — deprecated, kept for one major version (planned removal in v3)
 				el.dispatchEvent( new CustomEvent( 'render_done', {
 					bubbles: true,
-					detail:  { post_id: postId, instance },
+					detail,
 				} ) );
 			} );
 		};

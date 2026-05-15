@@ -49,7 +49,7 @@ function prepareArgs( args ) {
 function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	const prepared = prepareArgs( args );
 
-	// Guard against null/undefined datasets or labels (Chart.js requires arrays).
+	// Guard against null/undefined datasets or labels (Chart.js requires arrays)
 	if ( ! prepared.data?.datasets ) {
 		prepared.data = { ...prepared.data, datasets: [] };
 	}
@@ -136,11 +136,20 @@ export default function ChartPreview() {
 			}
 
 			if ( needsImagesRef.current ) {
+				if ( window.wp?.hooks ) {
+					window.wp.hooks.doAction( 'm_chart.image_capture_start', postId, chartRef.current );
+				}
+
 				generateImage();
 			} else {
 				// No image generation — enable form submission immediately
 				// This also covers the initial page load where useChartRefresh skips its first run
 				dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+
+				if ( window.wp?.hooks ) {
+					window.wp.hooks.doAction( 'm_chart.form_enabled', postId );
+				}
+
 				isFirstRender.current = false;
 			}
 		}
@@ -170,7 +179,9 @@ export default function ChartPreview() {
 
 	}, [ chartArgs ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Deterministic signal for E2E tests — the submit gate releases on 'ready'
+	// Deterministic DOM signal for E2E tests — the submit gate releases on 'ready'
+	// JS consumers should prefer the wp.hooks actions m_chart.form_disabled / form_enabled
+	// and m_chart.image_capture_start / image_capture_done instead of polling this attribute
 	// idle: no chart args yet (initial mount before first refresh resolves)
 	// capturing: form is disabled mid-render-cycle and images are needed
 	// ready: form is enabled (image is in the textarea, or images not needed)

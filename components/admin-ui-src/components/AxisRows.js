@@ -58,8 +58,8 @@ export default function AxisRows() {
 		dispatch( { type: 'SET_POST_META', payload: { constrain_y_axis: checked } } );
 	}
 
-	// Always render axis rows so field values survive type switches on form save.
-	// Only hide them visually when the chart type doesn't need them.
+	// Always render axis rows so field values survive type switches on form save
+	// Only hide them visually when the chart type doesn't need them
 	const axisStyle       = showAxis ? {} : { display: 'none' };
 	const yMinStyle       = showAxis && showYMin ? {} : { display: 'none' };
 	const constrainYStyle = showAxis && showConstrainY ? {} : { display: 'none' };
