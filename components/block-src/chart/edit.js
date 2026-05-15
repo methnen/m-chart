@@ -1,8 +1,9 @@
-import { SelectControl, Spinner, ToolbarGroup, ToolbarButton, Placeholder, ExternalLink, PanelBody, SearchControl } from '@wordpress/components';
+import { Button, SelectControl, Spinner, ToolbarGroup, ToolbarButton, Placeholder, ExternalLink, PanelBody, SearchControl } from '@wordpress/components';
 import { getBlockType } from '@wordpress/blocks';
 import { useState, useEffect, useRef, useMemo, useCallback } from '@wordpress/element';
 import { useBlockProps, BlockControls, InspectorControls } from '@wordpress/block-editor';
 import { __, _n, sprintf } from '@wordpress/i18n';
+import { decodeEntities } from '@wordpress/html-entities';
 import apiFetch from '@wordpress/api-fetch';
 import debounce from 'lodash/debounce';
 import "./editor.scss";
@@ -32,6 +33,98 @@ export default function Edit( { attributes, setAttributes } ) {
 
     // Set a cache URL parameter based on the current moment in time to prevent cached images from messing up the UI
     const cacheBuster = `?cache=${performance.now()}`;
+
+    // Get option settings
+    const fetchOptions = () => {
+        apiFetch( { path: optionsUrl } ).then( result => {
+            setImageSupport( result.image_support );
+            setSiteUrl( result.siteurl );
+            setPostsAvailable( result.posts_avilable );
+        } );
+    };
+
+    // Get a single chart
+    const getChart = ( id ) => {
+        apiFetch( { path: `/m-chart/v1/chart/${ id }` } ).then( result => {
+            setSelectedChart( {
+                id: result.id,
+                title: decodeEntities( result.title || '-' ),
+                subtitle: decodeEntities( result.subtitle || '' ),
+                width: result.width,
+                height: result.height,
+                type: result.type || '',
+                src: result.url || ''
+            } );
+        } ).catch( () => {} );
+    };
+
+    // Stable across renders so the debounced search closure doesn't go stale
+    const getCharts = useCallback( ( value, getPage = 1 ) => {
+        setLoadProblem( false );
+
+        // If we're getting a subsequent page we're adding to the existing results
+        if ( getPage > 1 ) {
+            setLoadingMore( true );
+        }
+
+        // Build the parameters
+        const params = new URLSearchParams();
+
+        if ( value ) {
+            params.set( 's', value );
+        }
+
+        if ( getPage > 1 ) {
+            params.set( 'page', getPage );
+        }
+
+        const query = params.toString();
+
+        // Run the query and grab the results
+        apiFetch( { path: `/m-chart/v1/charts${ query ? '?' + query : '' }` } )
+            .then(
+                result => {
+                    const newCharts = result.posts.map( x => ( {
+                        id: x.id,
+                        title: decodeEntities( x.title || '-' ),
+                        subtitle: decodeEntities( x.subtitle || '' ),
+                        width: x.width,
+                        height: x.height,
+                        type: x.type || '',
+                        src: x.url || ''
+                    } ) );
+
+                    // Update the found value to match the current search
+                    setAvailable( result.found_posts );
+
+                    // Either append or replace the existing results
+                    if ( getPage === 1 ) {
+                        setResults( newCharts );
+                    } else {
+                        setResults( prev => [ ...prev, ...newCharts ] );
+                    }
+
+                    setLoaded( true );
+                    setLoadingMore( false );
+                } ).catch( ( error ) => {
+                    // If there's an error we'll note it
+                    if ( error.code === 'rest_no_route' ) {
+                        setLoadProblem( true );
+                    }
+
+                    setLoadingMore( false );
+                } );
+    }, [] );
+
+    // Actually actually carry out the debounced search
+    const doSearch = useMemo(
+        () => debounce( ( value ) => {
+            setSearch( value );
+            setPage( 1 );
+            getCharts( value );
+        }, 500 ),
+        [ getCharts ]
+    );
 
     // On load we fetch some option settings and run getCharts so we have some intiial reasults loaded into the UI
     useEffect( () => {
@@ -70,7 +163,9 @@ export default function Edit( { attributes, setAttributes } ) {
         el.addEventListener( 'scroll', handleScroll );
 
         return () => el.removeEventListener( 'scroll', handleScroll );
-    }, [ results, available, loadingMore, page, search, getCharts ] );
+        // attributes.chartId is intentional — the <ul ref> only mounts when chartId is falsy,
+        // so we need to re-run when chartId toggles to (re)attach the scroll handler
+    }, [ results, available, loadingMore, page, search, getCharts, attributes.chartId ] );
 
     // Build list of charts out of the results object
     const resultsList = results.map( ( x ) => {
@@ -110,98 +205,6 @@ export default function Edit( { attributes, setAttributes } ) {
     const handleSearch = ( value ) => {
         doSearch( value );
     };
-
-    // Get option settings
-    const fetchOptions = () => {
-        apiFetch( { path: optionsUrl } ).then( result => {
-            setImageSupport( result.image_support );
-            setSiteUrl( result.siteurl );
-            setPostsAvailable( result.posts_avilable );
-        } );
-    };
-
-    // Get a single chart
-    const getChart = ( id ) => {
-        apiFetch( { path: `/m-chart/v1/chart/${ id }` } ).then( result => {
-            setSelectedChart( {
-                id: result.id,
-                title: result.title || '-',
-                subtitle: result.subtitle,
-                width: result.width,
-                height: result.height,
-                type: result.type || '',
-                src: result.url || ''
-            } );
-        } ).catch( () => {} );
-    };
-
-    // Stable across renders so the debounced search closure doesn't go stale
-    const getCharts = useCallback( ( value, getPage = 1 ) => {
-        setLoadProblem( false );
-
-        // If we're getting a subsequent page we're adding to the existing results
-        if ( getPage > 1 ) {
-            setLoadingMore( true );
-        }
-
-        // Build the parameters
-        const params = new URLSearchParams();
-
-        if ( value ) {
-            params.set( 's', value );
-        }
-
-        if ( getPage > 1 ) {
-            params.set( 'page', getPage );
-        }
-
-        const query = params.toString();
-
-        // Run the query and grab the results
-        apiFetch( { path: `/m-chart/v1/charts${ query ? '?' + query : '' }` } )
-            .then(
-                result => {
-                    const newCharts = result.posts.map( x => ( {
-                        id: x.id,
-                        title: x.title || '-',
-                        subtitle: x.subtitle,
-                        width: x.width,
-                        height: x.height,
-                        type: x.type || '',
-                        src: x.url || ''
-                    } ) );
-
-                    // Update the found value to match the current search
-                    setAvailable( result.found_posts );
-
-                    // Either append or replace the existing results
-                    if ( getPage === 1 ) {
-                        setResults( newCharts );
-                    } else {
-                        setResults( prev => [ ...prev, ...newCharts ] );
-                    }
-
-                    setLoaded( true );
-                    setLoadingMore( false );
-                } ).catch( ( error ) => {
-                    // If there's an error we'll note it
-                    if ( error.code === 'rest_no_route' ) {
-                        setLoadProblem( true );
-                    }
-
-                    setLoadingMore( false );
-                } );
-    }, [] );
-
-    // Actually actually carry out the debounced search
-    const doSearch = useMemo(
-        () => debounce( ( value ) => {
-            setSearch( value );
-            setPage( 1 );
-            getCharts( value );
-        }, 500 ),
-        [ getCharts ]
-    );
 
     return (
         <div { ...blockProps }>
@@ -304,9 +307,9 @@ export default function Edit( { attributes, setAttributes } ) {
                                                         }
                                                         { ! loadingMore && results.length < available && (
                                                             <li className="load-more">
-                                                                <button
-                                                                    type="button"
-                                                                    className="button"
+                                                                <Button
+                                                                    variant="secondary"
+                                                                    size="compact"
                                                                     onClick={ () => {
                                                                         const nextPage = page + 1;
                                                                         setPage( nextPage );
@@ -314,7 +317,7 @@ export default function Edit( { attributes, setAttributes } ) {
                                                                     } }
                                                                 >
                                                                     { __( 'Load more results', 'm-chart' ) }
-                                                                </button>
+                                                                </Button>
                                                             </li>
                                                         ) }
                                                     </ul>

@@ -19,3 +19,4 @@ playwright-report/
 test-results/
 tests/junit/
 vendor/
+.screenshots/

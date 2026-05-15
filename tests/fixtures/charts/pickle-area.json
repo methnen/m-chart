@@ -1,27 +1,51 @@
 {
-    "library":    "chartjs",
-    "type":       "area",
-    "parse_in":   "rows",
-    "set_names":  [ "Kimchi exports" ],
-    "x_title":    "Year",
-    "y_title":    "Export value",
-    "y_units":    "usd",
-    "labels":     true,
-    "legend":     false,
-    "height":     500,
-    "source":     "Korea International Trade Association (KITA)",
+    "_post_title": "South Korean kimchi exports",
+    "library": "chartjs",
+    "type": "area",
+    "parse_in": "rows",
+    "set_names": [
+        "Kimchi exports"
+    ],
+    "x_title": "Year",
+    "y_title": "Export value",
+    "y_units": "usd",
+    "labels": true,
+    "legend": false,
+    "height": 500,
+    "source": "Korea International Trade Association (KITA)",
     "source_url": "https://www.kita.org/",
-    "subtitle":   "Source: KITA - 2017-2023 anchors firm, interim years interpolated",
+    "subtitle": "Source: KITA - 2017-2023 anchors firm, interim years interpolated",
     "data": {
         "sets": [
             [
-                [ "2017",  85000000 ],
-                [ "2018",  97000000 ],
-                [ "2019",  99000000 ],
-                [ "2020", 133000000 ],
-                [ "2021", 141000000 ],
-                [ "2022", 141000000 ],
-                [ "2023", 156000000 ]
+                [
+                    "2017",
+                    85000000
+                ],
+                [
+                    "2018",
+                    97000000
+                ],
+                [
+                    "2019",
+                    99000000
+                ],
+                [
+                    "2020",
+                    133000000
+                ],
+                [
+                    "2021",
+                    141000000
+                ],
+                [
+                    "2022",
+                    141000000
+                ],
+                [
+                    "2023",
+                    156000000
+                ]
             ]
         ]
     }

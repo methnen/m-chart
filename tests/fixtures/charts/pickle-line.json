@@ -1,6 +1,7 @@
 {
-    "library":    "chartjs",
-    "type":       "line",
+    "_post_title": "Cucumber yield by top producer country, 2014-2023",
+    "library":     "chartjs",
+    "type":        "line",
     "parse_in":   "rows",
     "set_names":  [ "Cucumber yield by country" ],
     "x_title":    "Year",

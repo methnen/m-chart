@@ -1,31 +1,64 @@
 {
-    "library":            "chartjs",
-    "type":               "column",
-    "parse_in":           "rows",
-    "set_names":          [ "2022 production" ],
-    "x_title":            "Country",
-    "y_title":            "Production",
-    "y_units":            "tonnes",
-    "labels":             true,
-    "legend":             false,
-    "height":             500,
-    "data_point_colors":  true,
-    "source":             "FAOSTAT — Cucumbers and gherkins, 2022 (via Wikipedia summary)",
-    "source_url":         "https://en.wikipedia.org/wiki/List_of_countries_by_cucumber_production",
-    "subtitle":           "Source: FAOSTAT (2022) - China produces ~81% of global cucumbers",
+    "_post_title": "Top cucumber-producing countries (2022)",
+    "library": "chartjs",
+    "type": "column",
+    "parse_in": "rows",
+    "set_names": [
+        "2022 production"
+    ],
+    "x_title": "Country",
+    "y_title": "Production",
+    "y_units": "tonnes",
+    "labels": true,
+    "legend": false,
+    "height": 500,
+    "data_point_colors": true,
+    "source": "FAOSTAT — Cucumbers and gherkins, 2022 (via Wikipedia summary)",
+    "source_url": "https://en.wikipedia.org/wiki/List_of_countries_by_cucumber_production",
+    "subtitle": "Source: FAOSTAT (2022) - China produces ~81% of global cucumbers",
     "data": {
         "sets": [
             [
-                [ "China",        77260000 ],
-                [ "Turkey",        1940000 ],
-                [ "Russia",        1640000 ],
-                [ "Mexico",        1080000 ],
-                [ "Uzbekistan",     900000 ],
-                [ "Ukraine",        830000 ],
-                [ "Spain",          770000 ],
-                [ "United States",  600000 ],
-                [ "Kazakhstan",     570000 ],
-                [ "Japan",          550000 ]
+                [
+                    "China",
+                    77260000
+                ],
+                [
+                    "Turkey",
+                    1940000
+                ],
+                [
+                    "Russia",
+                    1640000
+                ],
+                [
+                    "Mexico",
+                    1080000
+                ],
+                [
+                    "Uzbekistan",
+                    900000
+                ],
+                [
+                    "Ukraine",
+                    830000
+                ],
+                [
+                    "Spain",
+                    770000
+                ],
+                [
+                    "United States",
+                    600000
+                ],
+                [
+                    "Kazakhstan",
+                    570000
+                ],
+                [
+                    "Japan",
+                    550000
+                ]
             ]
         ]
     }

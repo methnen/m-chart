@@ -1,25 +1,76 @@
 {
-    "library":    "chartjs",
-    "type":       "stacked-bar",
-    "parse_in":   "rows",
-    "set_names":  [ "US pickle product mix by brand" ],
-    "x_title":    "Share",
-    "x_units":    "percent",
-    "labels":     true,
-    "legend":     true,
-    "height":     500,
-    "source":     "Grand View Research - Mordor Intelligence — Pickles & Pickle Products",
+    "_post_title": "US pickle product mix by retail brand",
+    "library": "chartjs",
+    "type": "stacked-bar",
+    "parse_in": "rows",
+    "set_names": [
+        "US pickle product mix by brand"
+    ],
+    "x_title": "Share",
+    "x_units": "percent",
+    "labels": true,
+    "legend": true,
+    "height": 500,
+    "source": "Grand View Research - Mordor Intelligence — Pickles & Pickle Products",
     "source_url": "https://www.grandviewresearch.com/industry-analysis/packed-pickles-market",
-    "subtitle":   "Source: Grand View Research + Mordor Intelligence - per-brand attribution representative",
+    "subtitle": "Source: Grand View Research + Mordor Intelligence - per-brand attribution representative",
     "data": {
         "sets": [
             [
-                [ "",          "Dill", "Sweet", "Bread & Butter", "Sour", "Gherkin", "Kosher" ],
-                [ "Vlasic",     35,     20,      20,               10,     10,        5 ],
-                [ "Mt. Olive",  30,     25,      20,               10,     10,        5 ],
-                [ "Claussen",   50,     10,      10,               10,     10,       10 ],
-                [ "Bay Valley", 35,     20,      25,                5,     10,        5 ],
-                [ "Best Maid",  25,     30,      25,               10,      5,        5 ]
+                [
+                    "",
+                    "Dill",
+                    "Sweet",
+                    "Bread & Butter",
+                    "Sour",
+                    "Gherkin",
+                    "Kosher"
+                ],
+                [
+                    "Vlasic",
+                    35,
+                    20,
+                    20,
+                    10,
+                    10,
+                    5
+                ],
+                [
+                    "Mt. Olive",
+                    30,
+                    25,
+                    20,
+                    10,
+                    10,
+                    5
+                ],
+                [
+                    "Claussen",
+                    50,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10
+                ],
+                [
+                    "Bay Valley",
+                    35,
+                    20,
+                    25,
+                    5,
+                    10,
+                    5
+                ],
+                [
+                    "Best Maid",
+                    25,
+                    30,
+                    25,
+                    10,
+                    5,
+                    5
+                ]
             ]
         ]
     }
