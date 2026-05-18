@@ -185,15 +185,15 @@ class M_Chart_Block {
 			return new WP_Error( 'not_found', __( 'Chart not found', 'm-chart' ), [ 'status' => 404 ] );
 		}
 
-		$post_meta         = get_post_meta( $post->ID, 'm-chart', true );
-		$post_thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
-		$chart_image       = m_chart()->get_chart_image( $post->ID );
+		$post_meta   = get_post_meta( $post->ID, 'm-chart', true );
+		// get_chart_image() returns false when image generation is off OR the chart has no captured PNG yet — coerce so ['key'] ?? default works
+		$chart_image = m_chart()->get_chart_image( $post->ID ) ?: [];
 
 		return [
 			'id'       => intval( $post->ID ),
 			'title'    => get_the_title( $post->ID ),
 			'subtitle' => isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '',
-			'url'      => $chart_image['url'],
+			'url'      => $chart_image['url'] ?? '',
 			'type'     => isset( $post_meta['type'] ) ? $post_meta['type'] : '',
 			'height'   => $chart_image['height'] ?? 800,
 			'width'    => $chart_image['width'] ?? 1200,
@@ -203,8 +203,8 @@ class M_Chart_Block {
 	/**
 	 * Fetch charts with an optional search term
 	 * 
-	 * @param WP_REST_Request $request The REST request object.
-	 * @return array|WP_Error Chart data array or WP_Error if not found.
+	 * @param WP_REST_Request $request The REST request object
+	 * @return array|WP_Error Chart data array or WP_Error if not found
 	 */
 	public function get_charts( $request ) {
 		$args = [
@@ -229,15 +229,15 @@ class M_Chart_Block {
 		
 		if ( $posts->have_posts() ) {
 			foreach ( $posts->posts as $post ) {
-				$post_meta         = get_post_meta( $post->ID, 'm-chart', true );
-				$post_thumbnail_id = get_post_meta( $post->ID, '_thumbnail_id', true );
-				$chart_image       = m_chart()->get_chart_image( $post->ID );
-				
+				$post_meta   = get_post_meta( $post->ID, 'm-chart', true );
+				// get_chart_image() returns false when image generation is off OR the chart has no captured PNG yet — coerce so ['key'] ?? default works
+				$chart_image = m_chart()->get_chart_image( $post->ID ) ?: [];
+
 				$result = [
 					'id'       => intval( $post->ID ),
 					'title'    => get_the_title( $post->ID ),
 					'subtitle' => isset( $post_meta ) && isset( $post_meta['subtitle'] ) ? $post_meta['subtitle'] : '',
-					'url'      => $chart_image['url'],
+					'url'      => $chart_image['url'] ?? '',
 					'type'     => isset( $post_meta ) && isset( $post_meta['type'] ) ? $post_meta['type'] : '',
 					'height'   => $chart_image['height'] ?? 800,
 					'width'    => $chart_image['width'] ?? 1200,
