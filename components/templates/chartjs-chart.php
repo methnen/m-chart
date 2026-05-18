@@ -33,10 +33,10 @@ $desc_id      = $canvas_id . '-desc';
 	<canvas id="<?php echo esc_attr( $canvas_id ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width ? ' width="' . absint( $width ) . '"' : ''; ?> role="img" aria-labelledby="<?php echo esc_attr( $caption_id ); ?>" aria-describedby="<?php echo esc_attr( $desc_id ); ?>" style="height: <?php echo esc_attr( $height ); ?>px; max-width: 100%;">
 		<p><?php echo esc_html( $title ); ?></p>
 	</canvas>
-	<figcaption id="<?php echo esc_attr( $caption_id ); ?>" class="screen-reader-text">
+	<figcaption id="<?php echo esc_attr( $caption_id ); ?>" class="screen-reader-text sr-only">
 		<?php echo esc_html( $title ); ?>
 	</figcaption>
-	<div id="<?php echo esc_attr( $desc_id ); ?>" class="screen-reader-text">
+	<div id="<?php echo esc_attr( $desc_id ); ?>" class="screen-reader-text sr-only">
 		<?php
 		// Render the data table(s) as an accessible description for screen-reader users.
 		// build_table() handles multi-sheet, parse_data, and template inclusion.
@@ -56,7 +56,12 @@ $desc_id      = $canvas_id . '-desc';
 		?>
 	</div>
 </figure>
-<script>
+<?php
+// Inside iframe.php the M_Chart instance has a CSP nonce set; outside (front-end / admin preview) it's empty
+// The inline <script> needs a matching nonce ONLY when rendered inside the CSP-protected iframe
+$iframe_nonce = m_chart()->iframe_csp_nonce ?? '';
+?>
+<script<?php echo $iframe_nonce ? ' nonce="' . esc_attr( $iframe_nonce ) . '"' : ''; ?>>
 	( () => {
 		const postId    = <?php echo absint( $post_id ); ?>;
 		const instance  = <?php echo absint( $this->instance ); ?>;

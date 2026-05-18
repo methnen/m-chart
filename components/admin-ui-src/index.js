@@ -9,8 +9,7 @@ import AxisRows             from './components/AxisRows';
 import SourceRow            from './components/SourceRow';
 import ShortcodeAndImageRow from './components/ShortcodeAndImageRow';
 
-// Expose shared context hook and settings row components for library plugins
-// that implement the m_chart.settings_component filter without a build step
+// Expose shared context hook and settings row components for library plugins that implement the m_chart.settings_component filter without a build step
 window.m_chart = {
 	useChartAdmin,
 	TypeAndThemeRow,
@@ -21,8 +20,8 @@ window.m_chart = {
 };
 
 /**
- * The admin UI spans multiple meta boxes and the title area, so we use a single
- * React root (in a hidden container) with portals to render into each mount point
+ * The admin UI spans multiple meta boxes and the title area
+ * We use a single React root (in a hidden container) with portals to render into each mount point
  * This ensures all components share a single ChartAdminContext instance
  */
 

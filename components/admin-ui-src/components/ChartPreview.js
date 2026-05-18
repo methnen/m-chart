@@ -180,8 +180,7 @@ export default function ChartPreview() {
 	}, [ chartArgs ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Deterministic DOM signal for E2E tests — the submit gate releases on 'ready'
-	// JS consumers should prefer the wp.hooks actions m_chart.form_disabled / form_enabled
-	// and m_chart.image_capture_start / image_capture_done instead of polling this attribute
+	// JS consumers should use the wp.hooks actions m_chart.form_disabled / form_enabled and m_chart.image_capture_start / image_capture_done
 	// idle: no chart args yet (initial mount before first refresh resolves)
 	// capturing: form is disabled mid-render-cycle and images are needed
 	// ready: form is enabled (image is in the textarea, or images not needed)

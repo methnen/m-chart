@@ -131,8 +131,8 @@ export default function SpreadsheetMetaBox() {
 		}
 
 		function handleSubmit( e ) {
-			// If chart is still refreshing, block this submit — the click handler
-			// already set pendingSubmit so it will auto-submit when ready
+			// If chart is still refreshing, block this submit
+			// The click handler already set pendingSubmit so it will auto-submit when ready
 			if ( ! formEnabledRef.current ) {
 				e.preventDefault();
 				return;
@@ -143,10 +143,13 @@ export default function SpreadsheetMetaBox() {
 		}
 
 		form.addEventListener( 'submit', handleSubmit );
-		return () => form.removeEventListener( 'submit', handleSubmit );
+		
+		return () => {
+			form.removeEventListener( 'submit', handleSubmit );
+		};
 	}, [ writeDataToForm ] );
 
-	// Allow external plugins to inject content between the sheet tabs and the spreadsheet
+	// Allow external plugins to inject content above the sheet tabs and spreadsheet
 	// The filter receives null as the default and the current { state, dispatch } as context
 	const metaboxExtension = wp.hooks.applyFilters(
 		'm_chart.spreadsheet_metabox_extension',
@@ -154,8 +157,8 @@ export default function SpreadsheetMetaBox() {
 		{ state, dispatch, getActiveWorksheet, setSheetDataOnWorksheet }
 	);
 
-	// Deterministic signal for E2E tests — pending means the submit gate engaged
-	// and form.submit() is deferred until chart refresh + image capture complete
+	// Deterministic signal for E2E tests
+	// pending: the submit gate engaged and form.submit() is deferred until chart refresh + image capture complete
 	const submitState = pendingSubmit ? 'pending' : 'idle';
 
 	return (

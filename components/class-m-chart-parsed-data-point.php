@@ -5,13 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Value object representing a single parsed data point cell.
+ * Value object representing a single parsed data point cell
  *
- * Numeric cells carry a float value alongside the prefix and suffix strings
- * that surrounded the number in the original cell (e.g. "$", "°F"), so they
- * can be reformatted for any locale while preserving display context.
+ * Numeric cells carry a float value alongside the prefix and suffix strings that surrounded the number in the original cell (e.g. "$", "°F")
+ * This allows them to be reformatted for any locale while preserving display context
  *
- * Non-numeric cells carry a plain text string and a null value.
+ * Non-numeric cells carry a plain text string and a null value
  */
 class M_Chart_Parsed_Data_Point {
 	public readonly ?float $value;
@@ -27,11 +26,11 @@ class M_Chart_Parsed_Data_Point {
 	}
 
 	/**
-	 * Creates a numeric data point with optional surrounding context.
+	 * Creates a numeric data point with optional surrounding context
 	 *
-	 * @param float  $value  The extracted numeric value.
-	 * @param string $prefix Everything before the number in the original string (e.g. "$").
-	 * @param string $suffix Everything after the number in the original string (e.g. "°F").
+	 * @param float  $value  The extracted numeric value
+	 * @param string $prefix Everything before the number in the original string (e.g. "$")
+	 * @param string $suffix Everything after the number in the original string (e.g. "°F")
 	 *
 	 * @return self
 	 */
@@ -40,9 +39,9 @@ class M_Chart_Parsed_Data_Point {
 	}
 
 	/**
-	 * Creates a non-numeric data point (e.g. "N/A", empty cell).
+	 * Creates a non-numeric data point (e.g. "N/A", empty cell)
 	 *
-	 * @param string $text The original cell string.
+	 * @param string $text The original cell string
 	 *
 	 * @return self
 	 */
@@ -51,7 +50,7 @@ class M_Chart_Parsed_Data_Point {
 	}
 
 	/**
-	 * Returns true if this data point contains a numeric value.
+	 * Returns true if this data point contains a numeric value
 	 *
 	 * @return bool
 	 */

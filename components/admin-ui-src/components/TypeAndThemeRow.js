@@ -6,16 +6,15 @@ import { measureTextWidth } from '../utils/measureTextWidth';
 
 // Chart types that support cycling palette colors per data point
 const DATA_POINT_COLOR_TYPES = new Set( [
-	'treemap',
 	'column',
 	'bar',
+	'treemap',
 	'boxplot',
 	'violin',
 ] );
 
 // Chart types where the per-point color toggle requires single-series (simple 2D) data
-// Treemap is in this set because hierarchical (3+ column) data uses parent-group coloring
-// rather than per-leaf cycling, so the toggle wouldn't apply.
+// Treemap is in this set because hierarchical (3+ column) data uses parent-group coloring rather than per-leaf cycling, so the toggle wouldn't apply
 // Boxplot/Violin are in this set because per-box cycling only makes sense with one dataset
 const TYPES_REQUIRING_SIMPLE_2D = new Set( [
 	'column',
@@ -37,12 +36,15 @@ function effectiveLength( row ) {
 	if ( ! Array.isArray( row ) ) {
 		return 0;
 	}
+
 	for ( let i = row.length - 1; i >= 0; i-- ) {
 		const cell = row[ i ];
+	
 		if ( cell !== '' && cell !== null && cell !== undefined ) {
 			return i + 1;
 		}
 	}
+
 	return 0;
 }
 

@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Server-side rendering of the `wtblocks/chart` block.
+ * Server-side rendering of the `wtblocks/chart` block
  *
- * $attributes (array): The block attributes.
- * $content (string): The block default content.
- * $block (WP_Block): The block instance.
+ * $attributes (array): The block attributes
+ * $content (string): The block default content
+ * $block (WP_Block): The block instance
  */
 
 $chart_id = $attributes['chartId'] ?? null;

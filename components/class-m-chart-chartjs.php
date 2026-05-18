@@ -70,6 +70,7 @@ class M_Chart_Chartjs {
 	public function __construct() {
 		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
 		add_filter( 'm_chart_iframe_scripts', [ $this, 'm_chart_iframe_scripts' ], 10, 2 );
+		add_action( 'm_chart_get_chart_begin', [ $this, 'm_chart_get_chart_begin' ], 10, 2 );
 
 		$this->points = self::get_points_defaults();
 
@@ -103,17 +104,14 @@ class M_Chart_Chartjs {
 	/**
 	 * Canonical Chart.js options scaffold that get_chart_args() builds on top of.
 	 *
-	 * Pure static defaults with no post-meta dependencies. Exposed so
-	 * extensions (e.g. m-chart-pro's theme builder preview) can read the
-	 * same literals m-chart will apply at render time, instead of mirroring
-	 * them and drifting.
+	 * Pure static defaults with no post-meta dependencie
+	 * Extensions read this to get the same literals m-chart will apply at render time
 	 *
 	 * @return array
 	 */
 	public static function get_chart_options_defaults() {
 		return [
-			// Override Chart.js's global default text color so axis ticks, legend
-			// labels, and tooltip text always pass WCAG 2.1 AA contrast on white
+			// Override Chart.js's global default text color so axis ticks, legend labels, and tooltip text always pass WCAG 2.1 AA contrast on white
 			'color'   => '#222222',
 			'plugins' => [
 				'title' => [
@@ -168,9 +166,8 @@ class M_Chart_Chartjs {
 	/**
 	 * Canonical per-dataset point defaults cycle.
 	 *
-	 * Each entry's `point` array is what core assigns to a dataset's
-	 * `elements` slot for line/scatter/radar charts. Extensions read this
-	 * to get pointStyle/hoverRadius/hitRadius without mirroring the values.
+	 * Each entry's `point` array is what core assigns to a dataset's `elements` slot for line/scatter/radar charts
+	 * Extensions read this to get the same literals m-chart will apply at render time
 	 *
 	 * @return array
 	 */
@@ -218,14 +215,10 @@ class M_Chart_Chartjs {
 	/**
 	 * Canonical chartjs-chart-treemap dataset defaults (style-only).
 	 *
-	 * Returns the static color/font/spacing values core writes onto every
-	 * treemap dataset. Per-instance flags (`captions.display`,
-	 * `labels.display`) are intentionally omitted — call-sites layer them
-	 * in based on the post's data shape and `labels` meta.
+	 * Returns the static color/font/spacing values core writes onto every treemap dataset
+	 * Per-instance flags (`captions.display`, `labels.display`) are intentionally omitted
 	 *
-	 * Exposed so extensions (e.g. m-chart-pro's theme builder preview) can
-	 * read the same literals m-chart will apply, instead of mirroring them
-	 * and drifting.
+	  * Extensions read this to get the same literals m-chart will apply at render time
 	 *
 	 * @return array
 	 */
@@ -269,7 +262,26 @@ class M_Chart_Chartjs {
 		}
 
 		$this->post_meta = m_chart()->get_post_meta( $this->post->ID );
+	}
 
+	/**
+	 * Hook: m_chart_get_chart_begin — enqueue Chart.js plugin scripts when a Chart.js chart is about to render
+	 *
+	 * Fires once per render via M_Chart::get_chart() right before the template loads
+	 *
+	 * @param int   $post_id The chart post ID
+	 * @param array $args    The chart shortcode args
+	 */
+	public function m_chart_get_chart_begin( $post_id, $args ) {
+		// Bail if this chart isn't using the Chart.js library
+		$library = m_chart()->get_post_meta( $post_id, 'library' );
+
+		if ( $library !== $this->library ) {
+			return;
+		}
+
+		// Ensure post_meta is populated so enqueue_chartjs_plugins() can read 'type' for the treemap/boxplot/violin branches
+		$this->post_meta = m_chart()->get_post_meta( $post_id );
 		$this->enqueue_chartjs_plugins();
 	}
 
@@ -306,8 +318,6 @@ class M_Chart_Chartjs {
 		$cache_key = $post_id . '-chart-args';
 
 		if ( ! $force && $chart_args = wp_cache_get( $cache_key, m_chart()->slug ) ) {
-			$this->enqueue_chartjs_plugins();
-
 			// The width can be set via the args so we'll override whatever the cache has with the arg value
 			$chart_args['graph']['width'] = isset( $this->args['width'] ) && is_numeric( $this->args['width'] ) ? $this->args['width'] : '';
 			return $chart_args;
@@ -391,7 +401,7 @@ class M_Chart_Chartjs {
 			$chart_args['options']['plugins']['legend']['display'] = false;
 		}
 
-		// Forcing a minimum value of 0 prevents the built in fudging which sometimes looks weird
+		// Forcing a minimum value prevents the built in fudging which sometimes looks weird
 		if (
 			$this->post_meta['y_min']
 			&& (
@@ -439,12 +449,6 @@ class M_Chart_Chartjs {
 			];
 		}
 
-		// @TODO: Bubble charts need a little massaging to look better by default (not sure how to properly do this yet)
-		if ( 'bubble' == $this->post_meta['type'] ) {
-			//$chart_args['options']['scales']['x']['min'] = -15;
-			//$chart_args['options']['scales']['y']['min'] = -15;
-		}
-
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
 
 		if (
@@ -484,14 +488,8 @@ class M_Chart_Chartjs {
 
 		$chart_args = $this->add_data_sets( $chart_args );
 
-		// This doesn't do anything unless the datalabels plugin is active but we need to set it later
-		//$chart_args['data']['datasets']['datalabels'] = array(
-		//	'align'  => 'end',
-		//	'anchor' => 'end',
-		//);
-
 		// Add some stuff for the helper plugin
-		$chart_args['locale']                                                    = m_chart()->get_settings( 'locale' );
+		$chart_args['locale']                                             = m_chart()->get_settings( 'locale' );
 		$chart_args['options']['plugins']['m-chart-helper']['labels_pos'] = m_chart()->parse()->value_labels_position;
 
 		// Chart.js 3.x.x requires at least some form of data set (even if it's empty) or the chart object doesn't get generated
@@ -526,29 +524,32 @@ class M_Chart_Chartjs {
 
 		$use_per_point_colors = ! empty( $this->post_meta['data_point_colors'] );
 
-		// Apply colors and point styles, yes this kind of sucks, but so does the Chart.js color system
+		// Apply colors and point styles, yes this kind of sucks, but so does the Chart.js system for handling this stuff
 		if ( 'treemap' === $chart_args['type'] && isset( $chart_args['data']['datasets'][0]['tree'] ) ) {
 			$ds = &$chart_args['data']['datasets'][0];
 
 			if ( ! empty( $ds['mChartTreemapHierarchical'] ) ) {
-				// Hierarchical: build a stable map from each unique top-level group VALUE to a palette color
-				// in first-seen order so downstream JS can paint top groups + alpha-shaded descendants
-				$top_field    = $ds['mChartTopGroupField'];
-				$top_colors   = [];
-				$top_rgb      = [];
+				// Hierarchical: build a stable map from each unique top-level group VALUE to a palette color in first-seen order
+				// This allows downstream JS to paint top groups + alpha-shaded descendants
+				$top_field  = $ds['mChartTopGroupField'];
+				$top_colors = [];
+				$top_rgb    = [];
 
 				foreach ( $ds['tree'] as $entry ) {
 					if ( ! isset( $entry[ $top_field ] ) ) {
 						continue;
 					}
+
 					$top_id = $entry[ $top_field ];
+					
 					if ( isset( $top_colors[ $top_id ] ) ) {
 						continue;
 					}
 
-					$hex                    = $this->colors[ count( $top_colors ) % $color_count ];
-					$top_colors[ $top_id ]  = $hex;
-					$top_rgb[ $top_id ]     = $this->hex_to_rgb( $hex );
+					$hex = $this->colors[ count( $top_colors ) % $color_count ];
+					
+					$top_colors[ $top_id ] = $hex;
+					$top_rgb[ $top_id ]    = $this->hex_to_rgb( $hex );
 				}
 
 				$ds['mChartTopGroupColors'] = $top_colors;
@@ -618,7 +619,7 @@ class M_Chart_Chartjs {
 					$chart_args['data']['datasets'][ $key ]['meanBorderColor']        = $hex;
 				}
 
-				$chart_args['data']['datasets'][ $key ]['borderWidth']        = 2;
+				$chart_args['data']['datasets'][ $key ]['borderWidth'] = 2;
 
 				// Outlier dots: solid filled circles in the box's color, no border
 				$chart_args['data']['datasets'][ $key ]['outlierRadius']      = 3;
@@ -769,7 +770,7 @@ class M_Chart_Chartjs {
 			$chart_args = m_chart()->array_merge_recursive( $chart_args, $theme );
 		}
 
-		// Expose the full resolved color palette so extensions can use it
+		// Expose the full resolved color palette so plugins can use it
 		$chart_args['colors'] = $this->colors;
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
@@ -921,19 +922,23 @@ class M_Chart_Chartjs {
 					}
 
 					$category = isset( $row[0] ) ? trim( (string) $row[0] ) : '';
+				
 					if ( '' === $category ) {
 						continue;
 					}
 
 					$values = [];
 					$cell_count = count( $row );
+					
 					for ( $i = 1; $i < $cell_count; $i++ ) {
 						$cell = isset( $row[ $i ] ) ? (string) $row[ $i ] : '';
+					
 						if ( '' === trim( $cell ) ) {
 							continue;
 						}
 
 						$parsed = m_chart()->parse()->parse_data_point( $cell );
+					
 						if ( null === $parsed->value ) {
 							continue;
 						}
@@ -964,8 +969,7 @@ class M_Chart_Chartjs {
 				}
 
 				// Pass raw value arrays to the library so it computes both stats AND the KDE
-				// (the violin controller needs the KDE to draw its density curve; pre-computed
-				// stats objects skip that construction and result in a blank violin).
+				// The violin controller needs the KDE to draw its density curve
 				$datasets[] = [
 					'label'               => isset( $set_names[ $sheet_index ] ) && '' !== $set_names[ $sheet_index ] ? $set_names[ $sheet_index ] : ( 'Sheet ' . ( $sheet_index + 1 ) ),
 					'data'                => $values_array,
@@ -1322,8 +1326,7 @@ class M_Chart_Chartjs {
 
 	/**
 	 * Detect and build a hierarchical tree config for a treemap from a raw spreadsheet
-	 * Returns null when the sheet is flat (<=2 columns/rows after orientation normalization)
-	 * so the caller can fall through to the existing flat treemap path
+	 * Returns null when the sheet is flat (<=2 columns/rows after orientation normalization) so the caller can fall through to the existing flat treemap path
 	 *
 	 * @param array  $sheet    Raw sheet, array of rows in Jspreadsheet getData() shape
 	 * @param string $parse_in 'rows' or 'columns'
@@ -1353,9 +1356,9 @@ class M_Chart_Chartjs {
 			return null;
 		}
 
-		// Effective column count: the rightmost column with any non-empty cell across all rows.
-		// Jspreadsheet pads sheets out to a minimum width (37 cols by default), so a raw max-width
-		// reading would include trailing padding columns that aren't real data.
+		// Effective column count: the rightmost column with any non-empty cell across all rows
+		// Jspreadsheet pads sheets out to a minimum width (37 cols by default)
+		// A raw max-width reading would include trailing padding columns that aren't real .data
 		$col_count = 0;
 		foreach ( $rows as $row ) {
 			if ( ! is_array( $row ) ) {
@@ -1385,8 +1388,8 @@ class M_Chart_Chartjs {
 			$value_field  = isset( $headers[ $col_count - 1 ] ) && '' !== $headers[ $col_count - 1 ] ? $headers[ $col_count - 1 ] : 'value';
 			$group_fields = [];
 
-			// Outermost group field (col 0) is always synthesized — the corner cell IS
-			// the empty-headers signal so there's no name there to read
+			// Outermost group field (col 0) is always synthesized
+			// The corner cell IS the empty-headers signal so there's no name there to read
 			$group_fields[] = 'group_1';
 
 			// Inner grouping fields (cols 1..col_count-2) take their names from row 0
@@ -1416,10 +1419,12 @@ class M_Chart_Chartjs {
 
 			for ( $i = 0; $i < $col_count - 1; $i++ ) {
 				$cell = isset( $row[ $i ] ) ? trim( (string) $row[ $i ] ) : '';
+				
 				if ( '' === $cell ) {
 					$skip = true;
 					break;
 				}
+				
 				$entry[ $group_fields[ $i ] ] = $cell;
 			}
 
@@ -1462,8 +1467,8 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Transpose a 2D sheet so columns become rows (used to normalize parse_in='columns'
-	 * to a row-oriented shape for hierarchical treemap construction)
+	 * Transpose a 2D sheet so columns become rows
+	 * Normalizes parse_in='columns' to a row-oriented shape for hierarchical treemap construction
 	 *
 	 * @param array $sheet array of rows
 	 *
@@ -1487,9 +1492,11 @@ class M_Chart_Chartjs {
 
 		for ( $c = 0; $c < $col_count; $c++ ) {
 			$new_row = [];
+			
 			for ( $r = 0; $r < $row_count; $r++ ) {
 				$new_row[] = isset( $sheet[ $r ][ $c ] ) ? $sheet[ $r ][ $c ] : '';
 			}
+			
 			$out[] = $new_row;
 		}
 
@@ -1497,8 +1504,7 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Ensure no two field names collide and that none collide with the value field
-	 * Appends _2, _3, etc. as needed to disambiguate
+	 * Ensure no two field names collide and that none collide with the value field Appends _2, _3, etc. as needed to disambiguate
 	 *
 	 * @param array  $group_fields array of group field names
 	 * @param string $value_field  the value field name
@@ -1519,7 +1525,8 @@ class M_Chart_Chartjs {
 			}
 
 			$seen[ $candidate ] = 1;
-			$out[]              = $candidate;
+			
+			$out[] = $candidate;
 		}
 
 		return $out;
@@ -1602,13 +1609,10 @@ class M_Chart_Chartjs {
 		}
 
 		/**
-		 * Filter the Chart.js theme list before it's returned to admin
-		 * consumers (chart-editor dropdown, settings-page default-theme
-		 * select). Extensions can append entries shaped like the built-in
-		 * theme objects — at minimum `slug` and `name` are required for
-		 * the dropdowns; `file` and `options` may be empty if the
-		 * extension applies the theme via the `m_chart_chart_args`
-		 * filter instead of a theme file on disk.
+		 * Filter the Chart.js theme list before it's returned to admin consumers (chart-editor dropdown, settings-page default-theme select)
+		 * Extensions can append entries shaped like the built-in theme objects
+		 * At minimum `slug` and `name` are required for the dropdowns
+		 * `file` and `options` may be empty if the extension applies the theme via the `m_chart_chart_args` filter instead of a theme file on disk
 		 *
 		 * @param array $themes Array of theme objects ( slug, name, file, options ).
 		 */

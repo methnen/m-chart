@@ -12,12 +12,12 @@ class M_Chart_Parse {
 	const PARSE_ROWS          = 'rows';
 	const PARSE_COLUMNS       = 'columns';
 
-	public array $data                  = [];
-	public array $value_labels          = [];
+	public array $data                   = [];
+	public array $value_labels           = [];
 	public string $value_labels_position = '';
-	public array $set_data              = [];
-	public array $raw_data              = [];
-	public string $parse_in             = '';
+	public array $set_data               = [];
+	public array $raw_data               = [];
+	public string $parse_in              = '';
 
 	private ?NumberFormatter $formatter = null;
 
@@ -42,6 +42,7 @@ class M_Chart_Parse {
 		$this->value_labels_position = $this->get_value_labels_position();
 		$this->parse_value_labels();
 		$this->parse_set_data();
+		
 		return $this;
 	}
 
@@ -104,8 +105,7 @@ class M_Chart_Parse {
 		}
 
 		// Structural pre-check
-		// The simple single-series shape from creating-a-chart.md is unambiguous
-		// 2 effective columns (rows mode) or 2 effective rows (columns mode) means column 0 / row 0 holds labels
+		// The simple single-series shape from creating-a-chart.md is unambiguous 2 effective columns (rows mode) or 2 effective rows (columns mode)
 		// Works regardless of whether the labels look numeric (years, ordinals, etc)
 		if ( self::PARSE_ROWS === $this->parse_in && 2 === $this->effective_max_columns() ) {
 			return self::LABELS_FIRST_COLUMN;
@@ -117,8 +117,7 @@ class M_Chart_Parse {
 
 		// Existing content-based heuristic for 3+ effective columns/rows
 		if ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
-			// If the first row has multiple non-numeric headers and the data rows start
-			// with numeric values the entire first row is column labels (e.g. scatter format)
+			// If the first row has multiple non-numeric headers and the data rows start with numeric values the entire first row is column labels (e.g. scatter format)
 			if (
 				   isset( $this->data[0][1] ) && ! is_numeric( trim( (string) $this->data[0][1] ) )
 				&& isset( $this->data[1][0] ) &&   is_numeric( trim( (string) $this->data[1][0] ) )
@@ -248,14 +247,12 @@ class M_Chart_Parse {
 	public function clean_labels( mixed $label ): string {
 		$label = trim( html_entity_decode( (string) $label, ENT_QUOTES ) );
 
-		// PHP's strip_tags() is case-insensitive, recursive, handles
-		// unclosed/malformed tags, and is XSS-safe — unlike the regex it replaces
+		// PHP's strip_tags() is case-insensitive, recursive, handles unclosed/malformed tags, and is XSS-safe
 		return strip_tags( $label );
 	}
 
 	/**
-	 * Populates $this->set_data and $this->raw_data by delegating to the appropriate
-	 * collector based on the parse direction and labels position, then normalizing both arrays
+	 * Populates $this->set_data and $this->raw_data by delegating to the appropriate collector based on the parse direction and labels position, then normalizing both arrays
 	 */
 	private function parse_set_data(): void {
 		if ( self::PARSE_ROWS == $this->parse_in && self::LABELS_FIRST_COLUMN == $this->value_labels_position ) {
@@ -278,7 +275,7 @@ class M_Chart_Parse {
 	/**
 	 * Collects data when parsing rows with labels in the first column
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 * @return array {0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_rows_first_column(): array {
 		$set_data_array = [];
@@ -301,7 +298,7 @@ class M_Chart_Parse {
 	/**
 	 * Collects data when parsing rows with labels in both the first row and first column
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 * @return array {0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_rows_both(): array {
 		$set_data_array = [];
@@ -343,7 +340,7 @@ class M_Chart_Parse {
 	/**
 	 * Collects data when parsing columns with labels in both the first row and first column
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 * @return array {0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_columns_both(): array {
 		$set_data_array = [];
@@ -387,7 +384,7 @@ class M_Chart_Parse {
 	/**
 	 * Collects data for the default case (first-row labels only, or no labels)
 	 *
-	 * @return array{0: array, 1: array} Two-element array of [set_data, raw_data]
+	 * @return array {0: array, 1: array} Two-element array of [set_data, raw_data]
 	 */
 	private function collect_default(): array {
 		$set_data_array = [];
@@ -463,6 +460,7 @@ class M_Chart_Parse {
 		if ( $raw->is_numeric() ) {
 			$formatter = $this->get_formatter();
 			$number    = $formatter ? $formatter->format( $raw->value ) : (string) $raw->value;
+			
 			return $raw->prefix . $number . $raw->suffix;
 		}
 
@@ -479,6 +477,7 @@ class M_Chart_Parse {
 			$locale          = m_chart()->get_settings( 'locale' );
 			$this->formatter = class_exists( 'NumberFormatter' ) ? new NumberFormatter( $locale, NumberFormatter::DECIMAL ) : null;
 		}
+		
 		return $this->formatter;
 	}
 }

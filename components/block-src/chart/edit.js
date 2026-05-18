@@ -137,6 +137,7 @@ export default function Edit( { attributes, setAttributes } ) {
     // Using attributes.chartId as a dependency handles the case where Gutenberg provides the saved attribute value after the initial render
     useEffect( () => {
         setSelectedChart( null );
+        
         if ( attributes.chartId ) {
             getChart( parseInt( attributes.chartId, 10 ) );
         }

@@ -46,6 +46,7 @@ class M_Chart {
 	public $plugin_url;
 	public $is_iframe    = false;
 	public $instance     = 1;
+	public $iframe_csp_nonce = '';
 	public $settings     = [
 		'library'          => 'chartjs',
 		'show_library'     => 'no',
@@ -298,7 +299,7 @@ class M_Chart {
 	}
 
 	/**
-	 * WP VIP's CDN was breaking Highcharts ability to handle embedded SVGs so this should circumvent that
+	 * WP VIP's CDN was breaking the chart library's ability to handle embedded SVGs so this should circumvent that
 	 * If you wanted to say, watermark your charts, SVGs suddenly become very important
 	 *
 	 * @param string $path option additional path to be used (e.g. components)
@@ -346,9 +347,8 @@ class M_Chart {
 
 		// Make sure the correct library is set in the default chart meta fields
 		if ( ! $post_meta ) {
-			// get_current_screen() is only defined in admin context. Guard the
-			// call so REST and front-end contexts (where the_content filter may
-			// fire on m-chart posts during excerpt generation) don't fatal
+			// get_current_screen() is only defined in admin context
+			// This guards the call so REST and front-end contexts don't fatal
 			$current_screen = is_admin() && function_exists( 'get_current_screen' )
 				? get_current_screen()
 				: null;
@@ -410,7 +410,7 @@ class M_Chart {
 	}
 
 	/**
-	 * Update the post meta based and set unit terms if appropriate
+	 * Update the post meta and set unit terms if appropriate
 	 *
 	 * @param int $post_id WP post ID of the post you want to attach post meta to
 	 * @param array $meta an array of the post meta you want to attach to the post
@@ -584,7 +584,8 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 'image' == $args['show']
+		if ( 
+			   'image' == $args['show']
 			|| is_feed()
 			|| $this->is_amp_endpoint()
 			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
@@ -609,7 +610,7 @@ class M_Chart {
 		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 		class="<?php echo esc_attr( $classes ); ?>"></amp-img>
 	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
-	<div class="screen-reader-text">
+	<div class="screen-reader-text sr-only">
 		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
 	</div>
 	<?php endif; ?>
@@ -625,7 +626,7 @@ class M_Chart {
 		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 		class="<?php echo esc_attr( $classes ); ?>" />
 	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
-	<div class="screen-reader-text">
+	<div class="screen-reader-text sr-only">
 		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
 	</div>
 	<?php endif; ?>
@@ -866,7 +867,7 @@ class M_Chart {
 		$post_id = $args['id'];
 		unset( $args['id'] );
 
-		// Did we get a chart ID?
+		// Did we get what looks like a chart ID?
 		if ( ! is_numeric( $post_id ) ) {
 			return;
 		}
@@ -912,7 +913,7 @@ class M_Chart {
 	}
 
 	/**
-	 * Helper function that returns the chart unit terms
+	 * Helper function that compiles the chart unit terms for use
 	 *
 	 * @param array an array of unit terms
 	 *
@@ -1093,9 +1094,9 @@ class M_Chart {
 	/**
 	 * Return the chart types that support multiple data sets (multi-sheet tab bar)
 	 *
-	 * This is the single authoritative source for this list. The value is passed to
-	 * window.m_chart_admin.multi_sheet_types so the React UI always stays in sync with PHP.
-	 * Filtered via 'm_chart_multi_sheet_types' so library plugins can add or remove types.
+	 * This is the single authoritative source for this list
+	 * The value is passed to window.m_chart_admin.multi_sheet_types so the React UI always stays in sync with PHP
+	 * Filtered via 'm_chart_multi_sheet_types' so library plugins can add or remove types
 	 *
 	 * @return array
 	 */

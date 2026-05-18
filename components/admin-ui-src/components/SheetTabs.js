@@ -12,7 +12,7 @@ import SheetTab from './SheetTab';
  * The entire bar is hidden when the current chart type only supports a single data set
  *
  * The authoritative list of multi-sheet types comes from PHP via window.m_chart_admin.multi_sheet_types
- * (see M_Chart::get_multi_sheet_types() and the 'm_chart_multi_sheet_types' PHP filter).
+ * See M_Chart::get_multi_sheet_types() and the 'm_chart_multi_sheet_types' PHP filter
  */
 export default function SheetTabs() {
 	const { state, dispatch } = useChartAdmin();
@@ -26,8 +26,7 @@ export default function SheetTabs() {
 
 	const showTabs = multiSheetTypes.has( postMeta.type );
 
-	// Defensive: if activeSheet ever lands out of bounds (e.g. mid-delete), fall back to 0
-	// so at least one tab is always in the tab order
+	// Defensive: if activeSheet ever lands out of bounds (e.g. mid-delete), fall back to 0 so at least one tab is always in the tab order
 	const validActive = sheetIds[ activeSheet ] !== undefined ? activeSheet : 0;
 
 	function handleAddSheet( e ) {

@@ -204,6 +204,8 @@
   display: block;
   max-width: 100%;
   height: auto;
+  border: none;
+  padding: 0;
 }
 .m-chart-selector .chart-selected .no-image {
   display: flex;

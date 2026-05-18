@@ -162,9 +162,8 @@ class M_Chart_Admin {
 				}
 			} else {
 				// Make sure the value is a string and matches the safe pattern before saving it
-				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back
-				// to the default; plugins that need to persist complex shapes should hook
-				// 'm_chart_validated_settings' below to inject their own validated value
+				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back o the default
+				// Plugins that need to persist complex shapes should hook 'm_chart_validated_settings' below to inject their own validated value
 				$value = $submitted_settings[ $setting ];
 
 				if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $value ) ) {
@@ -322,9 +321,10 @@ class M_Chart_Admin {
 
 			if ( 'chartjs' === $library ) {
 				// Chart.js libs — enqueued explicitly so the React preview has window.Chart
-				wp_enqueue_script( 'chartjs-datalabels' ); // also loads chartjs + chartjs-helpers
-				wp_enqueue_script( 'chartjs-treemap' );    // user can switch to treemap from any type
-				wp_enqueue_script( 'chartjs-boxplot' );    // user can switch to boxplot/violin from any type
+				// We load every plugin regardless of immediate need when in the edit view
+				wp_enqueue_script( 'chartjs-datalabels' );
+				wp_enqueue_script( 'chartjs-treemap' );
+				wp_enqueue_script( 'chartjs-boxplot' );
 			}
 
 			$post_meta        = m_chart()->get_post_meta( $post_id );
@@ -379,7 +379,7 @@ class M_Chart_Admin {
 				);
 			}
 
-			// Build CSV delimiter map for React's CsvControls component.
+			// Build CSV delimiter map for React's CsvControls component
 			$csv_delimiters = [];
 			foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
 				$csv_delimiters[ $delimiter ] = $delimiter_name;
@@ -908,8 +908,7 @@ class M_Chart_Admin {
 			return;
 		}
 
-		// Prevent CSV/formula injection by prefixing any cell that begins with a
-		// formula trigger so spreadsheet apps treat it as a literal string
+		// Prevent CSV/formula injection by prefixing any cell that begins with a formula trigger so spreadsheet apps see it as a literal string
 		array_walk_recursive( $data, function ( &$cell ) {
 			$cell = $this->neutralize_csv_cell( $cell );
 		} );
@@ -925,8 +924,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Prefix a cell value with a single quote when it starts with a character
-	 * that Excel/Sheets/Numbers would otherwise interpret as a formula trigger
+	 * Prefix a cell value with a single quote when it starts with a character that Excel/Sheets/Numbers interpret as a formula trigger
 	 *
 	 * @param mixed $cell The raw cell value
 	 * @return string The cell value, prefixed with ' if it would otherwise execute

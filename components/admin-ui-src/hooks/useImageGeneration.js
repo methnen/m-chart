@@ -22,8 +22,7 @@ export function useImageGeneration( chartRef ) {
 			return;
 		}
 
-		// Non-canvas libraries (e.g. Highcharts) handle image generation
-		// via the m_chart.render_done action hook instead.
+		// Non-canvas libraries (e.g. Highcharts) handle image generation via the m_chart.render_done action hook instead
 		if ( ! chart.canvas ) {
 			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 
@@ -54,7 +53,7 @@ export function useImageGeneration( chartRef ) {
 		ctx.fillRect( 0, 0, chart.width, chart.height );
 		ctx.restore();
 
-		// Capture PNG.
+		// Capture PNG
 		const img = chart.toBase64Image( 'image/png', 1 );
 
 		// Restore container to natural dimensions
@@ -73,7 +72,7 @@ export function useImageGeneration( chartRef ) {
 			window.wp.hooks.doAction( 'm_chart.image_capture_done', stateRef.current.postId, chart, img );
 		}
 
-		// Re-enable form submission.
+		// Re-enable form submission
 		dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 
 		if ( window.wp?.hooks ) {

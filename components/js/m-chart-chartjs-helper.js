@@ -698,6 +698,14 @@ const MChartHelper = {
 	 * Renders only when include_source is on AND source has a non-empty value
 	 * Caches the rendered text's bounding box on the chart instance for afterEvent hit-testing
 	 *
+	 * Reads optional `position` / `font` / `overrideFont` config keys from the
+	 * `mchart` plugin block. Core itself never writes these; they're populated
+	 * by extensions, currently m-chart-pro's "Source" theme element (see
+	 * m-chart-pro/components/class-m-chart-pro-themes.php's 'source' case in
+	 * m_chart_chart_args() and its JS twin in ThemePreview.js). When all three
+	 * are absent the render falls back to the original 12px-from-bottom-left,
+	 * default-font behavior — installs without m-chart-pro look unchanged.
+	 *
 	 * @param {Object} chart Chart.js chart instance
 	 */
 	afterDraw( chart ) {
@@ -708,32 +716,77 @@ const MChartHelper = {
 			return;
 		}
 
-		const ctx     = chart.ctx;
-		const padding = 12;
-		const text    = String( opts.source );
-		const family  = ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
-		const color   = ( window.Chart && window.Chart.defaults?.color ) || '#666666';
+		const ctx          = chart.ctx;
+		const text         = String( opts.source );
+		const useOverride  = !! opts.overrideFont;
+		const overrideFont = opts.font     || {};
+		const position     = opts.position || {};
+
+		const defaultFamily = ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
+		const defaultColor  = ( window.Chart && window.Chart.defaults?.color )        || '#666666';
+
+		const family = useOverride && overrideFont.family ? overrideFont.family : defaultFamily;
+		const size   = useOverride && overrideFont.size   ? Number( overrideFont.size ) : 12;
+		const weight = useOverride && overrideFont.weight ? overrideFont.weight : 'normal';
+		const style  = useOverride && overrideFont.style  ? overrideFont.style  : 'normal';
+		const color  = useOverride && overrideFont.color  ? overrideFont.color  : defaultColor;
 
 		ctx.save();
-		ctx.font         = '12px ' + family;
+		ctx.font         = `${ style } ${ weight } ${ size }px ${ family }`;
 		ctx.fillStyle    = color;
 		ctx.textAlign    = 'left';
-		ctx.textBaseline = 'bottom';
+		// textBaseline:'top' so drawY is the top edge of the text block — simpler
+		// position math (matches m-chart-pro's text-element paintText). Defaults
+		// below still place the text 12px from the canvas's bottom-left corner,
+		// so the visible position is identical to the pre-override behavior.
+		ctx.textBaseline = 'top';
 
-		const drawX = padding;
-		const drawY = chart.height - padding;
+		const metrics = ctx.measureText( text );
+		const blockW  = metrics.width;
+		const blockH  = size;
+
+		// Position math mirrors m-chart-pro's resolvePosition() in
+		// m-chart-pro-theme-helper.js — keep the two in sync so extensions
+		// and core stay visually consistent.
+		const units   = position.units || 'pixels';
+		const xKey    = position.x     || 'left';
+		const yKey    = position.y     || 'bottom';
+		const xRaw    = ( position.xOffset === undefined || position.xOffset === null || position.xOffset === '' )
+			? 12
+			: Number( position.xOffset );
+		const yRaw    = ( position.yOffset === undefined || position.yOffset === null || position.yOffset === '' )
+			? 12
+			: Number( position.yOffset );
+		const xOffset = 'percent' === units ? chart.width  * ( xRaw / 100 ) : xRaw;
+		const yOffset = 'percent' === units ? chart.height * ( yRaw / 100 ) : yRaw;
+
+		let drawX;
+		if ( 'right' === xKey ) {
+			drawX = chart.width - blockW - xOffset;
+		} else if ( 'center' === xKey ) {
+			drawX = ( chart.width - blockW ) / 2;
+		} else {
+			drawX = xOffset;
+		}
+
+		let drawY;
+		if ( 'top' === yKey ) {
+			drawY = yOffset;
+		} else if ( 'center' === yKey ) {
+			drawY = ( chart.height - blockH ) / 2;
+		} else {
+			drawY = chart.height - blockH - yOffset;
+		}
 
 		ctx.fillText( text, drawX, drawY );
 
-		// textBaseline:'bottom' means drawY is the bottom of the rendered text
-		// Pad the box slightly on every side so the click target is comfortable to hit
-		const metrics = ctx.measureText( text );
-
+		// Pad the click target slightly on each side so the hover/click
+		// affordance is comfortable.
 		chart.$mchartSourceBounds = {
 			left:   drawX - 2,
-			right:  drawX + metrics.width + 2,
-			top:    drawY - 14,
-			bottom: drawY + 2,
+			right:  drawX + blockW + 2,
+			top:    drawY - 2,
+			bottom: drawY + blockH + 2,
 		};
 
 		ctx.restore();

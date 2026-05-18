@@ -5,7 +5,7 @@ import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
  * Fires an AJAX request to get updated chart args whenever postMeta, spreadsheetData, setNames, or title changes
- * We pass title as a parameter because it's core WP and not present in the React environment
+ * We pass title as a parameter because it's core WP and not already present in the React environment
  *
  * @param {string} title The current post title (read from #title DOM input).
  */
@@ -27,8 +27,8 @@ export function useChartRefresh( title ) {
 	// Track unmount so we don't dispatch after the component is gone
 	useEffect( () => () => { isMountedRef.current = false; }, [] );
 
-	// Keep a ref to the values that aren't in the effect deps so the async callback
-	// always reads the latest version without needing them in the deps array
+	// Keep a ref to the values that aren't in the effect deps 
+	// This allows the async callback to have the latest version without needing them in the deps array
 	const latestRef = useRef( null );
 	latestRef.current = { postId, nonce, ajaxUrl, library, performance, imageSupport };
 
@@ -57,8 +57,7 @@ export function useChartRefresh( title ) {
 			// Bump the token so any older in-flight request that resolves later can detect it's stale
 			const myToken = ++requestTokenRef.current;
 
-			// Read from the ref so the async body always has the latest values even if
-			// the component re-rendered between when the timeout was scheduled and when it fires
+			// Read from the ref so the async body always has the latest values even if the component re-rendered between when the timeout was scheduled and when it fires
 			// eslint-disable-next-line no-shadow -- intentional: same names, fresh-via-ref values
 			const { postId, nonce, ajaxUrl, library, performance, imageSupport } = latestRef.current;
 
@@ -155,10 +154,10 @@ export function useChartRefresh( title ) {
 				clearTimeout( timerRef.current );
 			}
 		};
-		// chartArgs is intentionally excluded: it's read only on the first run via the
-		// isFirstRun ref guard; including it would re-fire on every successful refresh
-		// (since SET_CHART_ARGS updates chartArgs) and start an infinite fetch loop.
-		// dispatch is React-stable per the docs but still listed for completeness.
+
+		// chartArgs is intentionally excluded: it's read only on the first run via the isFirstRun ref guard
+		// Including it would re-fire on every successful refresh and create a loop (since SET_CHART_ARGS updates chartArgs)
+		// dispatch is React-stable per the docs but still listed for completeness
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ postMeta, spreadsheetData, setNames, title, dispatch ] );
 }

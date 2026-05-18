@@ -106,8 +106,7 @@ export default function SheetTab( {
 		setShowDeleteModal( false );
 		speak( __( 'Sheet deleted', 'm-chart' ) );
 
-		// Move focus to the now-active tab after React commits — Modal can't
-		// restore focus to this component because it unmounts on delete
+		// Move focus to the now-active tab after React commits — Modal can't restore focus to this component because it unmounts on delete
 		setTimeout( () => {
 			document.querySelector( '#spreadsheet-tabs [role="tab"][aria-selected="true"]' )?.focus();
 		}, 0 );
