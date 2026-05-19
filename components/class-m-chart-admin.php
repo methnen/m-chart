@@ -320,8 +320,9 @@ class M_Chart_Admin {
 			}
 
 			if ( 'chartjs' === $library ) {
-				// Chart.js libs — enqueued explicitly so the React preview has window.Chart
-				// We load every plugin regardless of immediate need when in the edit view
+				// Chart.js libs — enqueued explicitly so the React preview has window.Chart and window.MChartHelper available before m-chart-admin-ui runs its plugin registration
+				// We load every plugin regardless of immediate need when in the edit view since the user can switch chart types from the picker
+				wp_enqueue_script( 'chartjs-helper' );
 				wp_enqueue_script( 'chartjs-datalabels' );
 				wp_enqueue_script( 'chartjs-treemap' );
 				wp_enqueue_script( 'chartjs-boxplot' );

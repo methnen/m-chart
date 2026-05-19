@@ -15,7 +15,7 @@ function numberFormat( number, locale ) {
  * Preprocesses bubble chart data so bubble size is constrained but still relative to value
  * See https://chartio.com/learn/charts/bubble-chart-complete-guide/#scale-bubble-area-by-value
  *
- * @param {Object} data Chart.js data object.
+ * @param {Object} data Chart.js data object
  * @return {Object} The same data object with bubble radii rescaled
  */
 function preprocessBubbleData( data ) {
@@ -241,13 +241,11 @@ function chartTooltipLabel( item ) {
 /**
  * Compute tight y-axis bounds from the raw observation values in a boxplot/violin chart.data
  *
- * Boxplot/violin data is shaped as datasets[].data[row][] where each row is an array of
- * observations for a single box. Chart.js's default auto-fit plus the boxplot library's
- * whisker expansion leaves enough headroom that narrow IQRs collapse visually — this helper
- * returns a min/max that hugs the actual data with a small grace so the boxes stay legible
+ * Boxplot/violin data is shaped as datasets[].data[row][] where each row is an array of observations for a single box
+ * Chart.js's default auto-fit plus the boxplot library's whisker expansion leaves enough headroom that narrow IQRs collapse visually
+ * This helper returns a min/max that hugs the actual data with a small grace area to help the boxes stay legible
  *
- * Returns null when there's no usable data to bound (empty, non-numeric, or zero range)
- * so the caller can leave the library default in place
+ * Returns null when there's no usable data to bound (empty, non-numeric, or zero range) so the caller can leave the library default in place
  *
  * @param {Object} data Chart.js data object
  * @return {Object|null} { min, max } padded bounds, or null when bounds can't be computed
@@ -299,10 +297,9 @@ function computeBoxplotViolinYBounds( data ) {
 /**
  * Wrap a Chart.js title-or-subtitle plugin's text to fit within a maxWidth
  *
- * Reads the configured font, measures the original string in the canvas 2d context,
- * and if it doesn't fit on one line, breaks it at word boundaries into an array of lines
- * Stashes the original string on the chart instance under originalProp so subsequent
- * relayouts always wrap from the source (not from an already-wrapped array)
+ * Reads the configured font, measures the original string in the canvas 2d context
+ * If it doesn't fit on one line, it breaks it at word boundaries into an array of lines
+ * Stashes the original string on the chart instance under originalProp so future wraps are based on the original
  *
  * @param {Object} chart        Chart.js chart instance
  * @param {string} key          'title' or 'subtitle'
@@ -373,8 +370,11 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 /**
  * Chart.js plugin that sets up m-chart tooltip callbacks, datalabels formatter, and bubble data preprocessing
  *
+ * beforeLayout: runs before Chart.js calculates layout positions
  * beforeUpdate: runs before every render cycle (creation and updates)
- * preprocesses bubble radii, sets tooltip callbacks, and sets the datalabels formatter so they survive options replacement
+ * afterDataLimits: per-scale hook that fires after Chart.js computes auto-fit bounds but before layout calculations
+ * afterDraw: paint the optional in-chart source attribution in the bottom-left of the canvas
+ * afterEvent: hover cursor + click handling for the rendered source attribution
  */
 const MChartHelper = {
 	id: 'm-chart-helper',
@@ -382,9 +382,8 @@ const MChartHelper = {
 	/**
 	 * beforeLayout: runs before Chart.js calculates layout positions
 	 *
-	 * Wraps title and subtitle text at word boundaries when they don't fit the current
-	 * chart width — keeps font size constant and breaks across multiple lines instead of
-	 * letting the canvas CSS-scale and visually squish the text horizontally
+	 * Wraps title and subtitle text at word boundaries when they don't fit the current hart width
+	 * Keeps font size constant and breaks across multiple lines instead of squishing the text horizontally
 	 *
 	 * @param {Object} chart Chart.js chart instance
 	 */
@@ -451,6 +450,7 @@ const MChartHelper = {
 					if ( raw.l < leafLevel ) {
 						const restAlpha = groupBaseAlpha + raw.l * groupStepPerLevel;
 						const alpha     = active ? Math.min( 1, restAlpha + hoverAlphaBump ) : restAlpha;
+
 						return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ alpha.toFixed( 3 ) })`;
 					}
 
@@ -460,6 +460,7 @@ const MChartHelper = {
 					const ratio     = raw.v / denom;
 					const baseAlpha = Math.max( 0.35, Math.min( 1, ratio + 0.35 ) );
 					const finalA    = active ? Math.min( 1, baseAlpha + leafHoverBump ) : baseAlpha;
+
 					return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ finalA.toFixed( 3 ) })`;
 				};
 
@@ -467,6 +468,7 @@ const MChartHelper = {
 					if ( 'data' !== ctx.type ) {
 						return 'transparent';
 					}
+
 					return colorFor( ctx.raw, false );
 				};
 
@@ -474,38 +476,43 @@ const MChartHelper = {
 					if ( 'data' !== ctx.type ) {
 						return 'transparent';
 					}
+
 					return colorFor( ctx.raw, true );
 				};
 
 				const datasetPrefix = ds.mChartDatasetPrefix || '';
 				const datasetSuffix = ds.mChartDatasetSuffix || '';
 
-				// Format with locale + affixes. Leaves prefer their own _data prefix/suffix; parent
-				// rectangles fall back to the dataset-level affixes since the library aggregates
-				// them synthetically and they have no source row.
+				// Format with locale + affixes. Leaves prefer their own _data prefix/suffix
+				// parent rectangles fall back to the dataset-level affixes since the library aggregates
 				const formatWithAffixes = ( raw ) => {
 					const isLeaf  = raw.l >= leafLevel;
 					const leafRaw = isLeaf ? ( raw._data || {} ) : null;
 					const prefix  = isLeaf ? ( leafRaw.prefix || datasetPrefix ) : datasetPrefix;
 					const suffix  = isLeaf ? ( leafRaw.suffix || datasetSuffix ) : datasetSuffix;
+					
 					return prefix + numberFormat( raw.v, locale ) + suffix;
 				};
 
 				ds.captions = ds.captions || {};
+				
 				ds.captions.formatter = ( ctx ) => {
 					if ( 'data' !== ctx.type || ctx.raw.l >= leafLevel ) {
 						return '';
 					}
+
 					return ctx.raw.g + ': ' + formatWithAffixes( ctx.raw );
 				};
 
 				ds.labels = ds.labels || {};
+				
 				// Single-line label — value is in the tooltip on hover
 				// Combined with overflow: 'fit' (set in PHP defaults) small rectangles scale gracefully
 				ds.labels.formatter = ( ctx ) => {
 					if ( 'data' !== ctx.type || ctx.raw.l < leafLevel ) {
 						return '';
 					}
+
 					return String( ctx.raw.g );
 				};
 
@@ -520,10 +527,12 @@ const MChartHelper = {
 			// Flat treemap (Phase 1 path)
 			if ( ds && Array.isArray( ds.mChartColors ) ) {
 				const colors = ds.mChartColors;
+				
 				ds.backgroundColor = ( ctx ) => {
 					if ( 'data' !== ctx.type ) {
 						return 'transparent';
 					}
+
 					return colors[ ctx.dataIndex ] || colors[0];
 				};
 			}
@@ -543,29 +552,26 @@ const MChartHelper = {
 		} else if ( 'boxplot' === type || 'violin' === type ) {
 			const locale = chart.options.locale;
 
-			// Note: when constrain_y_axis is on, the scale bounds are applied in
-			// afterDataLimits below — that's the canonical Chart.js hook for axis bound
-			// manipulation and avoids the visible double-paint that beforeUpdate causes
+			// Note: when constrain_y_axis is on, the scale bounds are applied in fterDataLimits 
+			// This avoids the visible double-paint that beforeUpdate causes
 
 			// Format a single number with the dataset's prefix/suffix and locale formatting
 			const fmtForItem = ( item, value ) => {
 				if ( value === null || value === undefined || ! Number.isFinite( value ) ) {
 					return '';
 				}
+
 				const itemDs = item && item.dataset ? item.dataset : {};
 				const prefix = itemDs.mChartDatasetPrefix || '';
 				const suffix = itemDs.mChartDatasetSuffix || '';
+				
 				return prefix + numberFormat( value, locale ) + suffix;
 			};
 
 			chart.options.plugins.tooltip.callbacks = {
 				title: ( items ) => ( items && items.length && items[0].label ) ? String( items[0].label ) : '',
 				label: ( item ) => {
-					// chartjs-chart-boxplot overrides Chart.js's getLabelAndValue so that
-					// item.formattedValue is an OBJECT for boxplot/violin, with .raw carrying
-					// the parsed numeric stats (min, q1, median, q3, max, mean, whiskerMin,
-					// whiskerMax, outliers, items). Chart.js's tooltip filters item.parsed
-					// down to {x, y} for cartesian charts so the stats wouldn't be there.
+					// chartjs-chart-boxplot overrides Chart.js's getLabelAndValue so that item.formattedValue is an OBJECT for boxplot/violin
 					const fv    = item.formattedValue;
 					const stats = ( fv && 'object' === typeof fv && fv.raw ) ? fv.raw : ( item.parsed || {} );
 					const lines = [];
@@ -581,6 +587,7 @@ const MChartHelper = {
 					lines.push( 'Max: '    + fmtForItem( item, stats.max ) );
 
 					const outliers = Array.isArray( stats.outliers ) ? stats.outliers.length : 0;
+					
 					if ( outliers > 0 ) {
 						lines.push( '+ ' + outliers + ' outlier' + ( 1 === outliers ? '' : 's' ) );
 					}
@@ -657,12 +664,10 @@ const MChartHelper = {
 	},
 
 	/**
-	 * afterDataLimits: per-scale hook that fires after Chart.js computes auto-fit bounds
-	 * but before layout calculations
+	 * afterDataLimits: per-scale hook that fires after Chart.js computes auto-fit bounds but before layout calculations
 	 *
-	 * For boxplot/violin charts with constrain_y_axis on, overwrite the scale's min/max
-	 * with bounds tightened to the actual data so the chart paints once with the
-	 * constrained bounds — no double-paint flicker
+	 * For boxplot/violin charts with constrain_y_axis on, overwrite the scale's min/max with bounds tightened to the actual data 
+	 * This way the chart paints once with the constrained bounds — no double-paint flicker
 	 *
 	 * @param {Object} chart Chart.js chart instance
 	 * @param {Object} args  Hook args; args.scale is the scale being processed
@@ -698,13 +703,9 @@ const MChartHelper = {
 	 * Renders only when include_source is on AND source has a non-empty value
 	 * Caches the rendered text's bounding box on the chart instance for afterEvent hit-testing
 	 *
-	 * Reads optional `position` / `font` / `overrideFont` config keys from the
-	 * `mchart` plugin block. Core itself never writes these; they're populated
-	 * by extensions, currently m-chart-pro's "Source" theme element (see
-	 * m-chart-pro/components/class-m-chart-pro-themes.php's 'source' case in
-	 * m_chart_chart_args() and its JS twin in ThemePreview.js). When all three
-	 * are absent the render falls back to the original 12px-from-bottom-left,
-	 * default-font behavior — installs without m-chart-pro look unchanged.
+	 * Reads optional `position` / `font` / `overrideFont` config keys from the `mchart` plugin block
+	 * Core itself never writes these; they're potentially populated by extensions
+	 * When all three are absent the render falls back to the original 12px-from-bottom-left default
 	 *
 	 * @param {Object} chart Chart.js chart instance
 	 */
@@ -780,8 +781,7 @@ const MChartHelper = {
 
 		ctx.fillText( text, drawX, drawY );
 
-		// Pad the click target slightly on each side so the hover/click
-		// affordance is comfortable.
+		// Pad the click target slightly on each side so the hover/click affordance is comfortable.
 		chart.$mchartSourceBounds = {
 			left:   drawX - 2,
 			right:  drawX + blockW + 2,
@@ -795,7 +795,7 @@ const MChartHelper = {
 	/**
 	 * afterEvent: hover cursor + click handling for the rendered source attribution
 	 *
-	 * Mousemove inside the cached bounds switches to pointer cursor
+	 * Mousemove inside the cached bounds switches to pointer cursor 
 	 * Click inside the bounds opens source_url in a new tab (only when source_url is set)
 	 *
 	 * @param {Object} chart Chart.js chart instance
