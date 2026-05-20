@@ -3,7 +3,7 @@
 Plugin Name: M Chart
 Version: 2.1
 Plugin URI: http://github.com/methnen/m-chart
-Description: Manage data sets via a spreadsheet interface and display them as charts in WordPress.
+Description: Manage data sets via a spreadsheet interface and display them as charts via the Chart.js chart library and embed them via a shortcode or WordPress block.
 Author: Jamie Poitra
 Author URI: http://methnen.com
 Tags: chartjs, highcharts, graphs, charts, tables, data
