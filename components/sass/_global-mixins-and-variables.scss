@@ -81,8 +81,8 @@ $wp-admin-icon-color:                var( --m-chart-icon );
 $wp-admin-description-color:         var( --m-chart-text-muted );
 $wp-admin-inactive-text-color:       var( --m-chart-text-inactive );
 $wp-admin-inactive-icon-color:       var( --m-chart-icon-inactive );
-
-$wp-admin-outline-button-hover-blue: color-mix(in srgb, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) 4%, #fff);$wp-admin-alert-green: var( --m-chart-alert-success );
+$wp-admin-outline-button-hover-blue: color-mix(in srgb, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) 4%, #fff);
+$wp-admin-alert-green:               var( --m-chart-alert-success );
 $wp-admin-alert-yellow:              var( --m-chart-alert-warning );
 $wp-admin-alert-red:                 var( --m-chart-alert-error );
 $m-chart-disabled-button:            var( --m-chart-disabled );
