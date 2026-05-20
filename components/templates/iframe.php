@@ -90,11 +90,9 @@ $this->iframe_csp_nonce = $nonce;
 		}
 
 		// Inline CSS strings to inject into the iframe head
-		// Used by extensions that need to emit raw CSS — typically custom-uploaded
-		// @font-face rules where the producer's own sanitizer is the trust boundary
-		// Distinct from m_chart_iframe_fonts below, which generates @font-face from
-		// validated field-by-field descriptors — use this hook only when the CSS is
-		// already authored as CSS (e.g. m-chart-pro themes' customFontFace blocks)
+		// Used by extensions that need to emit raw CSS — typically custom-uploaded @font-face rules where the producer's own sanitizer is the trust boundary
+		// Distinct from m_chart_iframe_fonts below, which generates @font-face from validated field-by-field descriptors
+		// Use this hook only when the CSS is already authored as CSS (e.g. m-chart-pro themes' customFontFace blocks)
 		foreach ( $inline_styles as $css ) {
 			if ( '' === trim( (string) $css ) ) {
 				continue;
@@ -145,8 +143,7 @@ $this->iframe_csp_nonce = $nonce;
 		}
 		?>
 		<style>
-			/* This prevents the screenreader stuff from being visible just like it behaves in it's regular context in the site
-			   sr-only is included as a fallback for themes that use the Bootstrap-style class name instead of WP's canonical screen-reader-text */
+			/* This prevents the screenreader stuff from being visible just like it behaves in it's regular context in the site  */
 			.screen-reader-text {
 				border: 0;
 				clip-path: inset(50%);

@@ -748,18 +748,21 @@ const MChartHelper = {
 
 		// Position math mirrors m-chart-pro's resolvePosition() in
 		// m-chart-pro-theme-helper.js — keep the two in sync so extensions
-		// and core stay visually consistent.
-		const units   = position.units || 'pixels';
+		// and core stay visually consistent. Per-axis xOffsetUnits /
+		// yOffsetUnits (PositionGrid canonical shape) take precedence;
+		// fall back to the legacy single `units` field for older configs.
 		const xKey    = position.x     || 'left';
 		const yKey    = position.y     || 'bottom';
+		const xUnits  = position.xOffsetUnits || position.units || 'pixels';
+		const yUnits  = position.yOffsetUnits || position.units || 'pixels';
 		const xRaw    = ( position.xOffset === undefined || position.xOffset === null || position.xOffset === '' )
 			? 12
 			: Number( position.xOffset );
 		const yRaw    = ( position.yOffset === undefined || position.yOffset === null || position.yOffset === '' )
 			? 12
 			: Number( position.yOffset );
-		const xOffset = 'percent' === units ? chart.width  * ( xRaw / 100 ) : xRaw;
-		const yOffset = 'percent' === units ? chart.height * ( yRaw / 100 ) : yRaw;
+		const xOffset = 'percent' === xUnits ? chart.width  * ( xRaw / 100 ) : xRaw;
+		const yOffset = 'percent' === yUnits ? chart.height * ( yRaw / 100 ) : yRaw;
 
 		let drawX;
 		if ( 'right' === xKey ) {
