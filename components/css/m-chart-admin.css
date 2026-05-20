@@ -445,7 +445,7 @@
   top: 1.6875rem;
 }
 #m-chart .inside .row.seven .column.shortcode .m-chart-input-action-button:hover {
-  background-color: var(--m-chart-accent-bg-hover);
+  background-color: color-mix(in srgb, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) 4%, #fff);
 }
 #m-chart .inside .row.seven .column.image {
   position: relative;
@@ -463,7 +463,7 @@
   top: 1.6875rem;
 }
 #m-chart .inside .row.seven .column.image .m-chart-input-action-button:hover {
-  background-color: var(--m-chart-accent-bg-hover);
+  background-color: color-mix(in srgb, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) 4%, #fff);
 }
 @media (max-width: 782px) {
   #m-chart .inside .row.seven .column.image .button,

@@ -47,6 +47,7 @@
   gap: 0.5rem;
   padding: 0;
   margin-bottom: 0;
+  margin-left: 0;
 }
 .m-chart-selector ul.results li {
   flex-basis: 100%;
@@ -72,7 +73,7 @@
 }
 .m-chart-selector ul.results li.item button:hover {
   border: 1px solid var(--wp-admin-theme-color-darker-20, #1d35d4);
-  background: var(--m-chart-accent-bg-hover);
+  background: color-mix(in srgb, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) 4%, #fff);
 }
 @media (min-width: 600px) {
   .m-chart-selector ul.results li {
@@ -94,6 +95,9 @@
 .m-chart-selector ul.results li .type {
   width: 100%;
   border-radius: 2px;
+}
+.m-chart-selector ul.results li img {
+  border: none;
 }
 .m-chart-selector ul.results li h6.title {
   font-weight: normal;

@@ -41,6 +41,7 @@
 		gap: .5rem;
 		padding: 0;
 		margin-bottom: 0;
+		margin-left: 0;
 		
 		li {
 			flex-basis: 100%;
@@ -94,6 +95,10 @@
 				border-radius: 2px;
 			}
 			
+			img {
+				border: none;
+			}
+
 			h6.title {
 				font-weight: normal;
 				font-size: .8rem;
