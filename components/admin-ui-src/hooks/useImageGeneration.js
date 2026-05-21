@@ -80,7 +80,7 @@ export function useImageGeneration( chartRef ) {
 		}
 
 		speak( __( 'Chart image generated', 'm-chart' ) );
-	}, [ chartRef, dispatch ] ); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [ chartRef, dispatch ] );
 
 	return generateImage;
 }
