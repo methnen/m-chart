@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # All three of the entries below are devDependency transitives — they only run during local dev / CI builds and never ship in the deployed plugin
+      # Each one's earliest non-vulnerable version is out-of-reach because of how @wordpress/scripts pins it transitively
+      # Re-evaluate each entry when @wordpress/scripts is next bumped to a version that ships newer transitive constraints
+
+      # webpack-dev-server — runs only via `npm run watch` / `npm start` for local dev
+      - dependency-name: "webpack-dev-server"
+
+      # serialize-javascript — pulled in via copy-webpack-plugin (WP scripts transitive)
+      # CVE flags < 7.0.5; copy-webpack-plugin pins ^6.0.0 so we're capped at 6.0.2
+      - dependency-name: "serialize-javascript"
+
+      # minimatch — deep transitive in the webpack/jest dep tree
+      # CVE flags < 3.1.4; some intermediate dep pins ~3.0.x so we're capped at 3.0.8
+      - dependency-name: "minimatch"
