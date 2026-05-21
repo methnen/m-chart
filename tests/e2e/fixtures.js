@@ -84,7 +84,7 @@ const test = baseTest.extend( {
 		for ( const id of created ) {
 			try {
 				wpCli( `post delete ${ id } --force` );
-			} catch ( e ) {
+			} catch {
 				// best effort cleanup
 			}
 		}
@@ -225,7 +225,7 @@ async function getSavedPostMeta( postId ) {
 	}
 	try {
 		return JSON.parse( raw );
-	} catch ( e ) {
+	} catch {
 		return {};
 	}
 }

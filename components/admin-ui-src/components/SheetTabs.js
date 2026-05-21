@@ -50,10 +50,18 @@ export default function SheetTabs() {
 			const last = sheetIds.length - 1;
 			let target = fromIndex;
 
-			if ( 'ArrowLeft' === key )  target = fromIndex > 0 ? fromIndex - 1 : last;
-			if ( 'ArrowRight' === key ) target = fromIndex < last ? fromIndex + 1 : 0;
-			if ( 'Home' === key )       target = 0;
-			if ( 'End' === key )        target = last;
+			if ( 'ArrowLeft' === key ) {
+				target = fromIndex > 0 ? fromIndex - 1 : last;
+			}
+			if ( 'ArrowRight' === key ) {
+				target = fromIndex < last ? fromIndex + 1 : 0;
+			}
+			if ( 'Home' === key ) {
+				target = 0;
+			}
+			if ( 'End' === key ) {
+				target = last;
+			}
 
 			dispatch( { type: 'SET_ACTIVE_SHEET', payload: target } );
 

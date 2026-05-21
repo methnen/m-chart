@@ -179,10 +179,16 @@ function Edit({
   // Load more charts when scrolling near the bottom of the results list
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     const el = resultsRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     const handleScroll = () => {
-      if (loadingMore) return;
-      if (results.length >= available) return;
+      if (loadingMore) {
+        return;
+      }
+      if (results.length >= available) {
+        return;
+      }
 
       // If we're close enough to the bottom of the list load the next page
       if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {

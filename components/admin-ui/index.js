@@ -1481,10 +1481,18 @@ function SheetTabs() {
       } = e.detail;
       const last = sheetIds.length - 1;
       let target = fromIndex;
-      if ('ArrowLeft' === key) target = fromIndex > 0 ? fromIndex - 1 : last;
-      if ('ArrowRight' === key) target = fromIndex < last ? fromIndex + 1 : 0;
-      if ('Home' === key) target = 0;
-      if ('End' === key) target = last;
+      if ('ArrowLeft' === key) {
+        target = fromIndex > 0 ? fromIndex - 1 : last;
+      }
+      if ('ArrowRight' === key) {
+        target = fromIndex < last ? fromIndex + 1 : 0;
+      }
+      if ('Home' === key) {
+        target = 0;
+      }
+      if ('End' === key) {
+        target = last;
+      }
       dispatch({
         type: 'SET_ACTIVE_SHEET',
         payload: target
@@ -2782,8 +2790,7 @@ function useImageGeneration(chartRef) {
       window.wp.hooks.doAction('m_chart.form_enabled', stateRef.current.postId);
     }
     (0,_wordpress_a11y__WEBPACK_IMPORTED_MODULE_1__.speak)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Chart image generated', 'm-chart'));
-  }, [chartRef, dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [chartRef, dispatch]);
   return generateImage;
 }
 

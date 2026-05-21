@@ -2,7 +2,7 @@
 /.github
 /.gitignore
 /.distignore
-/.eslintrc.json
+/eslint.config.js
 /.phpunit.result.cache
 /.scss-lint.yml
 /.vscode

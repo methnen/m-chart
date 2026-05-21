@@ -6,18 +6,17 @@ Tested up to: 7.0
 Stable tag: 2.1
 License: MIT
 
-Manage data sets via a spreadsheet interface and display them as charts via the Chart.js chart library and embed them via a shortcode or WordPress block.
+Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
 
 == Description ==
 
-Manage data sets via a spreadsheet interface and display them as charts via the Chart.js chart library and embed them via a shortcode or WordPress block.
+Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
 
 **Note:*** Starting with M Chart version 2.0 the plugin uses a new React based UI as well as updated data parsing class. This means any third party libraries will need to be refactored to support this. Version 1.3 of the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) has the necssary changes implemented.
 
 **Note:** Starting with version 1.8 the Chart.js library is no longer on the 2.x.x branch which introduces some [breaking changes](https://www.chartjs.org/docs/latest/migration/v3-migration.html). This will probably only affect you if you were modifying the default Chart.js behavior in some way.
 
-**Note:** Starting with version 1.7 Highcharts is no longer included with this plugin by default. If you'd still like to use the features that require Higcharts please install the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) plugin before installing this update.
-
+ 
 **Accessibility:** M Chart targets WCAG 2.1 Level AA. Charts on the front end include a visually-hidden data table for screen-reader users, and a `Color Blind Safe` theme is bundled. Screen-reader users entering chart data should use the CSV Import feature — the spreadsheet widget has partial keyboard support but CSV import is fully accessible.
 
 For full documentation please see the [Documentation](https://docs.mch.art/).
