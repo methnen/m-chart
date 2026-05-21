@@ -1,0 +1,82 @@
+name: JS Tests
+
+on:
+  push:
+    branches: [ main, wordpress-7 ]
+  pull_request:
+
+# Required for the test reporter to post check results, PR comments, and source-line annotations
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  jest:
+    name: "Jest"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run Jest with coverage
+        run: npm run test:js:coverage -- --ci
+
+      - name: Upload Jest JUnit XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-junit
+          path: tests/junit/jest.xml
+          retention-days: 7
+
+      - name: Upload Jest coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage
+          path: coverage/
+          retention-days: 7
+
+      - name: Publish Jest test results
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: tests/junit/jest.xml
+          check_name: Jest
+          require_tests: false
+          fail_on_failure: true
+          detailed_summary: true
+
+      - name: Upload Jest coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage/lcov.info
+          flags: js
+          fail_ci_if_error: false
+
+  lint:
+    name: "ESLint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Scope lint to source directories only — `components/` also contains
+      # compiled webpack output (admin-ui/, block/) and vendored libraries
+      # (external/chartjs, jspreadsheet, jsuites, parsecsv) which would hang
+      # ESLint on multi-MB minified bundles.
+      - run: npm run lint:js

@@ -5,20 +5,24 @@
 #m-chart-spreadsheet {
 	border-left: none;
 
+	&.closed {
+		border-bottom: rem-calc( 1 ) solid $wp-admin-meta-border-color;
+	}
+
 	.postbox-header {
 		border-bottom: none;
 
 		h2 {
 			&.hndle {
 				border-bottom: none;
-				border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+				border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
 			}
 		}
 	}
 
 	h3 {
 		border-bottom: none;
-		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
+		border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
 	}
 
 	.handlediv {
@@ -30,108 +34,98 @@
 		padding: 0;
 	}
 
-	.nav-tab-wrapper {
+	.m-chart-sheet-tabs {
 		border-bottom: none;
-		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
-		border-top: rem-calc(1) solid $wp-admin-meta-border-color;
-		overflow-x: scroll;
+		border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
+		border-top: rem-calc( 1 ) solid $wp-admin-meta-border-color;
+		overflow-x: auto;
 		overflow-y: hidden;
-		padding-top: rem-calc( 7 );
 		white-space: nowrap;
-		margin-bottom: rem-calc( -4 );
 
-		@media (max-width: 600px) {
-			margin-bottom: rem-calc( -5 );
-		}
-
-		&.hide {
+		&.m-chart-hide {
 			display: none;
 		}
 
-		.add-sheet {
-			color: $wp-admin-inactive-icon-color;
-			float: left;
-			margin-top: rem-calc( 3 );
-			margin-bottom: 0;
-			margin-left: rem-calc( 7 );
-			margin-right: rem-calc( 7 );
-			text-decoration: none;
+		.m-chart-add-sheet {
+			color: $wp-admin-black;
+			align-self: center;
 
 			&:hover {
-				color: $wp-admin-black;
+				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 			}
 
-			span {
-				line-height: rem-calc( 38 );
-			}
-
-			@media (max-width: 782px) {
-				margin-top: rem-calc( 7 );
+			&:disabled {
+				color: $m-chart-disabled-button;
 			}
 		}
 
-		.nav-tab {
-			display: inline-block;
-			float: none;
-			position: relative;
-			padding-left: rem-calc( 27 );
-			height: rem-calc( 33 );
-			max-height: rem-calc( 33 );
-			overflow-y: hidden;
-			margin-left: 0;
-			margin-right: rem-calc( 7 );
+		.m-chart-sheet-tab {
+			display: flex;
+			align-items: center;
 
-			@media (max-width: 600px) {
-				margin-top: 0;
+			&:focus-visible {
+				outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+				outline-offset: -2px;
 			}
 
-			@media (max-width: 782px) {
-				height: rem-calc( 41 );
-				max-height: rem-calc( 41 );
-			}
-
-			span.dashicons-dismiss {
-				color: $wp-admin-inactive-text-color;
-				position: absolute;
-				left: rem-calc( 7 );
-				top: rem-calc( 11 );
+			.m-chart-sheet-tab-delete {
+				color: $wp-admin-black;
 
 				&:hover {
-					color: $wp-admin-red;
+					color: $wp-admin-alert-red;
+					background-color: color-mix( in srgb, var( --m-chart-alert-error ) 8%, transparent );
+					border-radius: 25px;
 				}
 
-				@media (max-width: 782px) {
-					top: rem-calc( 15 );
+				&:disabled {
+					color: $m-chart-disabled-button;
+				}
+
+				// Suppress WP <Button>'s focus ring after a mouse click — the ring lingers on the X icon after canceling a delete and leaves a stuck "active" state
+				// Keyboard focus (:focus-visible) is preserved so tab-nav still shows the ring
+				&:focus:not(:focus-visible) {
+					box-shadow: none;
+					outline:    none;
 				}
 			}
 
-			span.tab-title {
-				padding: rem-calc( 0 10 0 9 );
+			.m-chart-sheet-tab-title {
+				padding: rem-calc( 0 13 0 12 );
 				border: 1px solid transparent;
 				display: inline-block;
-				line-height: rem-calc( 27 );
-
-				@media (max-width: 782px) {
-					font-size: rem-calc( 16 );
-					line-height: rem-calc( 38 );
-					padding: rem-calc( 0 12 0 11 );
-				}
-
-				&.hide {
-					display: none;
-				}
 			}
 
 			input {
 				min-width: rem-calc( 30 );
+				height: rem-calc( 32 );
 			}
 
-			&.nav-tab-active {
-				span.dashicons-dismiss {
+			&:hover {
+				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+			}
+
+			&::after {
+				background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+				bottom: 0;
+				content: '';
+				height: 0;
+				left: 0;
+				pointer-events: none;
+				position: absolute;
+				right: 0;
+				transition: height 0.1s linear;
+			}
+
+			&.is-active {
+				&::after {
+					height: var(--wp-admin-border-width-focus, 2px);
+				}
+
+				.m-chart-sheet-tab-delete {
 					color: $wp-admin-black;
 
 					&:hover {
-						color: $wp-admin-red;
+						color: $wp-admin-alert-red;
 					}
 				}
 
@@ -140,16 +134,6 @@
 						color: $wp-admin-black;
 						-webkit-text-fill-color: $wp-admin-black;
 					}
-				}
-			}
-
-			&:last-of-type {
-				margin-right: rem-calc( 10 );
-			}
-
-			&.do-not-delete {
-				span {
-					display: none;
 				}
 			}
 		}
@@ -173,76 +157,88 @@
 	}
 
 	#m-chart-csv {
-		@include clearfix;
 		background-color: $wp-admin-dark-background-color;
-		border-left: rem-calc(1) solid $wp-admin-meta-border-color;
-		border-top: rem-calc(1) solid $wp-admin-border-color;
+		border-left: rem-calc( 1 ) solid $wp-admin-meta-border-color;
+		border-top: rem-calc( 1 ) solid $wp-admin-border-color;
 		padding: rem-calc( 15 10 10 );
 
-		&::after {
-			clear: both;
+		.m-chart-csv-heading {
+			@include wp-react-form-label;
+			margin: 0 0 rem-calc( 10 ) 0;
 		}
 
-		.button {
-			margin-top: rem-calc( 6 );
+		.actions {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: rem-calc( 10 );
+			flex-wrap: wrap;
 
-			&.select {
-				margin-right: rem-calc( 10 );
-			}
-		}
-
-		div {
-			&.import {
-				margin-right: rem-calc( 65 );
-			}
-
-			&.export {
-				float: right;
+			// WP admin adds `margin-bottom: 4px` to all .button elements at the 782px breakpoint
+			// This shifts flex centering and pushes the SelectControl visually below the buttons
+			// We zero it out so it stays aligned
+			.button {
+				margin-bottom: 0;
 			}
 
-			&.confirmation {
-				float: left;
-				margin-right: rem-calc( 10 );
+			.actions-left {
+				display: flex;
+				align-items: center;
+				gap: rem-calc( 10 );
+			}
 
-				select {
-					margin-top: rem-calc( 6 );
-					margin-bottom: rem-calc( 4 );
+			.confirmation {
+				display: flex;
+				align-items: center;
+				gap: rem-calc( 7 );
 
-					// Stop export button and select input from colliding on small screens
-					@media (max-width: 600px) {
-						display: block;
-					}
+				.components-base-control {
+					margin: 0;
 				}
 			}
+		}
 
-			&.file-info {
-				clear: left;
-				padding-top: rem-calc( 10 );
-			}
+		.file-info {
+			padding-top: rem-calc( 10 );
 		}
 
 		.warning,
 		.error {
-			color: $wp-admin-error-color;
+			color: $wp-admin-alert-red;
 		}
 
 		.error,
 		.in-progress {
 			margin: rem-calc( 10 0 0 5 );
-
-			&:not( .hide ) {
-				display: inline-block;
-			}
 		}
 
-		a {
-			&.dashicons {
-				color: $wp-admin-icon-color;
+		.m-chart-csv-cancel {
+			color: $wp-admin-black;
+			position: relative;
+			bottom: rem-calc( -7 );
+			left: rem-calc( -2 );
 
-				&:hover {
-					color: $wp-admin-error-color;
-				}
+			&:hover {
+				color: $wp-admin-alert-red;
+				background-color: color-mix( in srgb, var( --m-chart-alert-error ) 8%, transparent );
+				border-radius: 25px;
 			}
 		}
+	}
+}
+
+// Respect the user's reduced-motion preference
+@media ( prefers-reduced-motion: reduce ) {
+	#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab::after {
+		transition: none;
+	}
+}
+
+// Bump touch targets on coarse-pointer devices to meet 2.5.5 (44x44 minimum)
+@media ( pointer: coarse ) {
+	#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete,
+	#m-chart-spreadsheet #m-chart-csv .m-chart-csv-cancel {
+		min-width: rem-calc( 44 );
+		min-height: rem-calc( 44 );
 	}
 }

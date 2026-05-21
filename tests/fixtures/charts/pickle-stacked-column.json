@@ -1,0 +1,80 @@
+{
+    "_post_title": "Korean kimchi exports by destination",
+    "library": "chartjs",
+    "type": "stacked-column",
+    "parse_in": "rows",
+    "set_names": [
+        "Korean kimchi exports by destination"
+    ],
+    "x_title": "Year",
+    "y_title": "Export value",
+    "y_units": "usd",
+    "labels": true,
+    "legend": true,
+    "height": 700,
+    "source": "Korea International Trade Association (KITA) - Statista summaries citing KITA",
+    "source_url": "https://www.kita.org/",
+    "subtitle": "Source: KITA - figures in M USD, 2018-2023",
+    "data": {
+        "sets": [
+            [
+                [
+                    "",
+                    "Japan",
+                    "United States",
+                    "Netherlands",
+                    "Australia",
+                    "Others"
+                ],
+                [
+                    "2018",
+                    50000000,
+                    15000000,
+                    8000000,
+                    4000000,
+                    20000000
+                ],
+                [
+                    "2019",
+                    51000000,
+                    16000000,
+                    8000000,
+                    4000000,
+                    20000000
+                ],
+                [
+                    "2020",
+                    66000000,
+                    25000000,
+                    10000000,
+                    5000000,
+                    27000000
+                ],
+                [
+                    "2021",
+                    63000000,
+                    30000000,
+                    11000000,
+                    6000000,
+                    31000000
+                ],
+                [
+                    "2022",
+                    61000000,
+                    30000000,
+                    12000000,
+                    6000000,
+                    32000000
+                ],
+                [
+                    "2023",
+                    60000000,
+                    40000000,
+                    14000000,
+                    7000000,
+                    35000000
+                ]
+            ]
+        ]
+    }
+}

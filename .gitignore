@@ -4,5 +4,19 @@
 node_modules/
 deploy/
 build/
-package-lock.json
 .vscode/
+.php-cs-fixer.cache
+
+# Build artifacts
+m-chart-*.zip
+
+# Test artifacts
+.phpunit.cache/
+.phpunit.result.cache
+.playwright-auth-state.json
+coverage/
+playwright-report/
+test-results/
+tests/junit/
+vendor/
+.screenshots/

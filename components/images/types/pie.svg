@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="16.185 57.292 436.456 436.776" width="436.456" height="436.776" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style type="text/css">
-	.st0{fill:#494949;}
-</style>
-  </defs>
-  <path d="M 437.81 289.258 L 220.91 289.258 L 220.91 72.348 C 220.91 63.658 213.21 56.448 204.61 57.658 C 95.71 73.058 12.51 168.158 16.31 282.048 C 20.01 395.448 114.81 490.158 228.21 493.948 C 342.11 497.658 437.11 414.448 452.51 305.658 C 453.71 296.928 446.51 289.258 437.81 289.258 Z"/>
-  <path class="cls-1" d="M 248.448 57.201 C 240.148 56.601 233.048 63.701 233.048 72.001 L 233.048 276.501 L 437.548 276.501 C 445.948 276.501 452.948 269.501 452.348 261.101 C 444.808 151.901 357.608 64.751 248.448 57.201 Z" style="fill: rgb(73, 73, 73);"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+<g fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="256" cy="256" r="192"></circle>
+    <line x1="256" y1="256" x2="256" y2="64"></line>
+    <line x1="256" y1="256" x2="448" y2="256"></line>
+    <line x1="256" y1="256" x2="110" y2="380"></line>
+  </g>
 </svg>

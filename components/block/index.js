@@ -10,23 +10,27 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ edit)
+/* harmony export */   "default": () => (/* binding */ Edit)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
-/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./components/block-src/chart/editor.scss");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/html-entities */ "@wordpress/html-entities");
+/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./editor.scss */ "./components/block-src/chart/editor.scss");
 
 
 
@@ -36,190 +40,308 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function edit({
+
+function Edit({
   attributes,
   setAttributes
 }) {
-  // State.
-  const [options, setOptions] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)([]);
-  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)('');
-  const [maxAvailable, setMaxAvailable] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(0);
-  const [available, setAvailable] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(0);
-  const [loaded, setLoaded] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
-  const [charts, setCharts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)([]);
-  const [temp, setTemp] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
-  const [siteUrl, setSiteUrl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
-  const [imageSupport, setImageSupport] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(true);
-  const [loadProblem, setLoadProblem] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
-  // Url constants.
+  // State
+  const [results, setResults] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)([]);
+  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)('');
+  const [postsAvailable, setPostsAvailable] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [available, setAvailable] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(0);
+  const [loaded, setLoaded] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [selectedChart, setSelectedChart] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
+  const [siteUrl, setSiteUrl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
+  const [imageSupport, setImageSupport] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [loadProblem, setLoadProblem] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [page, setPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(1);
+  const [loadingMore, setLoadingMore] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const resultsRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
+
+  // URLs
   const newUrl = `${siteUrl}/wp-admin/post-new.php?post_type=m-chart`;
   const editUrl = `${siteUrl}/wp-admin/post.php?post=${attributes.chartId}&action=edit`;
   const optionsUrl = `/m-chart/v1/options`;
 
-  // Blockprops.
-  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)({
+  // Blockprops
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useBlockProps)({
     className: 'm-chart-block-chart-selector'
   });
-  // Miscellaneous
-  const random = `?random=${Math.round(Math.random() * 1000000)}`;
 
-  // On load we fetch all charts if none available we set a constant to show an error message.
-  // We then check if a chart is already chosen. If so we show that one else show all.
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    fetchOptions();
-    fetchGraphs(search);
-  }, []);
+  // Set a cache URL parameter based on the current moment in time to prevent cached images from messing up the UI
+  const cacheBuster = `?cache=${performance.now()}`;
 
-  // Compose preview list.
-  const optionsList = options.map(x => {
-    if (imageSupport) {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-        className: x.src ? 'item img' : 'item no-image',
-        key: x.id,
-        onClick: () => handleClick(x.id),
-        title: x.title
-      }, x.src ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
-        className: "title"
-      }, x.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-        src: x.src + random,
-        alt: x.title
-      })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "type"
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: 'icon ' + x.type
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
-        className: "title"
-      }, x.title))));
-    } else {
-      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-        className: "no-image",
-        key: x.id,
-        onClick: () => handleClick(x.id),
-        title: x.title
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-        className: "type"
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        className: 'icon ' + x.type
-      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
-        className: "title"
-      }, x.title)));
-    }
-  });
-  const selected = charts.filter(x => x.id === attributes.chartId)[0];
-  const handleClick = id => {
-    setAttributes({
-      chartId: id
-    });
-    setTemp(id);
-  };
-  const handleSearch = value => {
-    const regex = /[^a-zA-Z0-9\- , ]/gi;
-    value = value.replace(regex, '');
-    setSearch(value);
-    doDebounce(value);
-  };
+  // Get option settings
   const fetchOptions = () => {
-    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5___default()({
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default()({
       path: optionsUrl
     }).then(result => {
-      setImageSupport(result.image_support_active);
+      setImageSupport(result.image_support);
       setSiteUrl(result.siteurl);
-      setMaxAvailable(result.maxAvailable);
+      setPostsAvailable(result.posts_avilable);
     });
   };
-  const fetchGraphs = value => {
-    setLoadProblem(false);
-    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_5___default()({
-      path: `/m-chart/v1/graphs/${value}`
+
+  // Get a single chart
+  const getChart = id => {
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default()({
+      path: `/m-chart/v1/chart/${id}`
     }).then(result => {
-      let charts = [];
-      setAvailable(result[0]);
-      result[1].map(x => charts.push({
+      setSelectedChart({
+        id: result.id,
+        title: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6__.decodeEntities)(result.title || '-'),
+        subtitle: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6__.decodeEntities)(result.subtitle || ''),
+        width: result.width,
+        height: result.height,
+        type: result.type || '',
+        src: result.url || ''
+      });
+    }).catch(() => {});
+  };
+
+  // Stable across renders so the debounced search closure doesn't go stale
+  const getCharts = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)((value, getPage = 1) => {
+    setLoadProblem(false);
+
+    // If we're getting a subsequent page we're adding to the existing results
+    if (getPage > 1) {
+      setLoadingMore(true);
+    }
+
+    // Build the parameters
+    const params = new URLSearchParams();
+    if (value) {
+      params.set('s', value);
+    }
+    if (getPage > 1) {
+      params.set('page', getPage);
+    }
+    const query = params.toString();
+
+    // Run the query and grab the results
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default()({
+      path: `/m-chart/v1/charts${query ? '?' + query : ''}`
+    }).then(result => {
+      const newCharts = result.posts.map(x => ({
         id: x.id,
-        title: x.title || '-',
-        subtitle: x.subtitle,
+        title: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6__.decodeEntities)(x.title || '-'),
+        subtitle: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_6__.decodeEntities)(x.subtitle || ''),
         width: x.width,
         height: x.height,
         type: x.type || '',
         src: x.url || ''
       }));
-      setCharts(charts);
-      setOptions(charts);
+
+      // Update the found value to match the current search
+      setAvailable(result.found_posts);
+
+      // Either append or replace the existing results
+      if (getPage === 1) {
+        setResults(newCharts);
+      } else {
+        setResults(prev => [...prev, ...newCharts]);
+      }
       setLoaded(true);
+      setLoadingMore(false);
     }).catch(error => {
+      // If there's an error we'll note it
       if (error.code === 'rest_no_route') {
         setLoadProblem(true);
       }
-      ;
+      setLoadingMore(false);
     });
+  }, []);
+
+  // Actually actually carry out the debounced search
+  const doSearch = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => lodash_debounce__WEBPACK_IMPORTED_MODULE_8___default()(value => {
+    setSearch(value);
+    setPage(1);
+    getCharts(value);
+  }, 500), [getCharts]);
+
+  // On load we fetch some option settings and run getCharts so we have some intiial reasults loaded into the UI
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    fetchOptions();
+    getCharts(search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only initial fetch
+  }, []);
+
+  // Fetch the selected chart individually whenever chartId changes
+  // Using attributes.chartId as a dependency handles the case where Gutenberg provides the saved attribute value after the initial render
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    setSelectedChart(null);
+    if (attributes.chartId) {
+      getChart(parseInt(attributes.chartId, 10));
+    }
+  }, [attributes.chartId]);
+
+  // Load more charts when scrolling near the bottom of the results list
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+    const el = resultsRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      if (loadingMore) return;
+      if (results.length >= available) return;
+
+      // If we're close enough to the bottom of the list load the next page
+      if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        getCharts(search, nextPage);
+      }
+    };
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+    // attributes.chartId is intentional — the <ul ref> only mounts when chartId is falsy,
+    // so we need to re-run when chartId toggles to (re)attach the scroll handler
+  }, [results, available, loadingMore, page, search, getCharts, attributes.chartId]);
+
+  // Build list of charts out of the results object
+  const resultsList = results.map(x => {
+    /* translators: %s: the chart's title */
+    const aria = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Select chart: %s', 'm-chart'), x.title);
+    if (!imageSupport || !x.src) {
+      return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+        className: "item no-image",
+        key: x.id
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+        type: "button",
+        className: "select",
+        onClick: () => handleClick(x.id),
+        "aria-label": aria
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "type"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+        className: 'icon ' + x.type,
+        "aria-hidden": "true"
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
+        className: "title"
+      }, x.title))));
+    }
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+      className: "item image",
+      key: x.id
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+      type: "button",
+      className: "select",
+      onClick: () => handleClick(x.id),
+      "aria-label": aria
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
+      className: "title"
+    }, x.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: x.src + cacheBuster,
+      alt: ""
+    })));
+  });
+
+  // Handle clicks to a chart in the results list
+  const handleClick = id => {
+    setAttributes({
+      chartId: id
+    });
+    setSelectedChart(null);
   };
-  const doDebounce = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(lodash_debounce__WEBPACK_IMPORTED_MODULE_7___default()(fetchGraphs, 500), []);
+
+  // Handle user typing into the search field
+  const handleSearch = value => {
+    doSearch(value);
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.BlockControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, {
+  }, !!attributes.chartId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Display settings', 'm-chart')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Show', 'm-chart'),
+    value: attributes.show,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Chart', 'm-chart'),
+      value: 'chart'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Image', 'm-chart'),
+      value: 'image'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Table', 'm-chart'),
+      value: 'table'
+    }],
+    onChange: value => setAttributes({
+      show: value
+    })
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.BlockControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, {
     className: "m-chart-block"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
-    onClick: () => window.location.href = newUrl,
+  }, !attributes.chartId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
+    onClick: () => window.open(newUrl, "_blank"),
     icon: "external"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('New Chart', 'm-chart')), attributes.chartId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
-    onClick: () => window.location.href = editUrl,
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('New chart', 'm-chart')), !!attributes.chartId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
+    onClick: () => window.open(editUrl, "_blank"),
     icon: "external"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Edit Chart', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
-    onClick: () => handleClick('')
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Replace', 'm-chart'))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Edit chart', 'm-chart')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
+    onClick: () => handleClick(0)
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Replace', 'm-chart'))))), !!attributes.chartId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "wp-block m-chart-selector"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "components-placeholder block-editor-m-chart-placeholder is-large"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "components-placeholder__label"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "dashicons dashicons-chart-pie"
-  }), "Chart"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "viewbox"
-  }, loadProblem ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('There was a problem fetching charts', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, !loaded ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, !selectedChart ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "center"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, null)) : attributes.chartId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "chart-selected"
-  }, imageSupport ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "image-support"
-  }, selected?.src === '' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, !imageSupport || !selectedChart.src ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "no-image",
+    style: {
+      aspectRatio: selectedChart.width / selectedChart.height
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "type"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: 'icon ' + selected.type
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    className: 'icon ' + selectedChart.type
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
-  }, selected.title)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+  }, selectedChart.title), selectedChart.subtitle && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h6", {
+    className: "subtitle"
+  }, selectedChart.subtitle))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "image"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
     className: "preview",
-    src: selected?.src + random
-  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "no-image-support",
-    style: {
-      aspectRatio: selected.width / selected.height
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: 'type ' + selected.type
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    className: "title"
-  }, selected?.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, selected?.subtitle))) : maxAvailable === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    src: selectedChart.src + cacheBuster,
+    alt: selectedChart.title || ''
+  })))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "wp-block m-chart-selector"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+    className: "block-editor-m-chart-placeholder",
+    icon: (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.getBlockType)('m-chart/chart').icon.src,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Chart', 'm-chart')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "viewbox"
+  }, loadProblem ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('There was a problem loading charts', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, !loaded && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "center"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('No Charts found', 'm-chart'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, null)), loaded && postsAvailable === false && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No charts found', 'm-chart'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ExternalLink, {
     href: newUrl
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Create a new chart', 'm-chart'))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Create a new chart', 'm-chart')))), loaded && postsAvailable !== false && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "no-chart-selected"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "search-box"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SearchControl, {
     value: search,
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Search by title', 'm-chart'),
-    onChange: value => handleSearch(value),
-    autoFocus: true
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Search by title', 'm-chart'),
+    onChange: value => handleSearch(value)
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "count"
-  }, optionsList.length, " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)(' of ', 'm-chart'), available)), optionsList.length === 0 && search.length > 1 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('No Charts found using this search string', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+  }, /* translators: %d: number of charts found */
+  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__._n)('%d chart found', '%d charts found', available, 'm-chart'), available))), resultsList.length === 0 && search.length > 1 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('No charts found', 'm-chart')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    ref: resultsRef,
     className: imageSupport ? 'results image-support' : 'results no-image-support'
-  }, optionsList)))))));
+  }, resultsList, loadingMore && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    className: "loading-more"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Spinner, null)), !loadingMore && results.length < available && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    className: "load-more"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    size: "compact",
+    onClick: () => {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      getCharts(search, nextPage);
+    }
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Load more results', 'm-chart'))))))))));
 }
-;
 ;
 
 /***/ },
@@ -232,19 +354,60 @@ function edit({
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./components/block-src/chart/block.json");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./components/block-src/chart/edit.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./components/block-src/chart/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./components/block-src/chart/edit.js");
 
 
 
 
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_2__, {
-  edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
-  save: () => null
+
+const blockIcon = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  width: "24",
+  height: "24",
+  "aria-hidden": "true",
+  focusable: "false"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Path, {
+  d: "M 18.7 3 L 5.3 3 C 4 3 3 4 3 5.3 L 3 18.7 C 3 20 4 21 5.3 21 L 18.7 21 C 20 21 21 20 21 18.7 L 21 5.3 C 21 4 20 3 18.7 3 Z M 19.5 18.7 C 19.5 19.1 19.1 19.5 18.7 19.5 L 5.3 19.5 C 4.9 19.5 4.5 19.1 4.5 18.7 L 4.5 5.3 C 4.5 4.9 4.9 4.5 5.3 4.5 L 18.7 4.5 C 19.1 4.5 19.5 4.9 19.5 5.3 L 19.5 18.7 Z"
+}), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Path, {
+  d: "M 12.312 7 L 12.312 11.688 L 17 11.688 C 17 9.1 14.9 7 12.312 7 Z M 11.375 12.157 L 11.375 7.635 C 8.932 7.797 7 9.828 7 12.312 C 7 14.9 9.1 17 11.687 17 C 14.172 17 16.203 15.068 16.365 12.625 L 11.375 12.625 L 11.375 12.157 Z",
+  style: {
+    strokeWidth: 1
+  }
+}));
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_3__, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
+  save: () => null,
+  icon: blockIcon,
+  deprecated: [{
+    attributes: {
+      chartId: {
+        type: 'string',
+        default: ''
+      },
+      show: {
+        type: 'string',
+        default: 'chart'
+      }
+    },
+    save: () => null,
+    isEligible(attributes) {
+      return typeof attributes.chartId === 'string';
+    },
+    migrate(attributes) {
+      return {
+        ...attributes,
+        chartId: parseInt(attributes.chartId, 10) || 0
+      };
+    }
+  }]
 });
 
 /***/ },
@@ -988,6 +1151,17 @@ module.exports = window["wp"]["element"];
 
 /***/ },
 
+/***/ "@wordpress/html-entities"
+/*!**************************************!*\
+  !*** external ["wp","htmlEntities"] ***!
+  \**************************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["htmlEntities"];
+
+/***/ },
+
 /***/ "@wordpress/i18n"
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
@@ -1006,7 +1180,7 @@ module.exports = window["wp"]["i18n"];
 (module) {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"m-chart/chart","title":"M Chart","category":"layout","icon":"chart-pie","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"string","default":""}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"m-chart/chart","title":"Chart","category":"layout","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"integer","default":0},"show":{"type":"string","default":"chart"}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
 
 /***/ }
 

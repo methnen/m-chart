@@ -27,10 +27,11 @@
 }
 
 .column-m-chart-type {
-	span.type { // scss-lint:disable QualifyingElement
+	span.type {
 		display: block;
 		position: relative;
 		text-indent: -999rem;
+		height: rem-calc( 24 );
 		width: 100%;
 
 		&::after {
@@ -147,11 +148,32 @@
 				background-size: contain;
 			}
 		}
+
+		&.treemap {
+			&::after {
+				background-image: url( '../images/types/treemap.svg' );
+				background-size: contain;
+			}
+		}
+
+		&.boxplot {
+			&::after {
+				background-image: url( '../images/types/boxplot.svg' );
+				background-size: contain;
+			}
+		}
+
+		&.violin {
+			&::after {
+				background-image: url( '../images/types/violin.svg' );
+				background-size: contain;
+			}
+		}
 	}
 }
 
 .column-m-chart-library {
-	span.library { // scss-lint:disable QualifyingElement
+	span.library {
 		background-position: left center;
 		background-repeat: no-repeat;
 		display: block;

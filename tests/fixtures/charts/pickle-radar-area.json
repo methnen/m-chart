@@ -1,0 +1,111 @@
+{
+    "_post_title": "Nutritional profile (4 pickle types)",
+    "library": "chartjs",
+    "type": "radar-area",
+    "parse_in": "rows",
+    "set_names": [
+        "Dill pickle",
+        "Kimchi",
+        "Sauerkraut",
+        "Zha cai"
+    ],
+    "shared": true,
+    "labels": true,
+    "legend": true,
+    "height": 500,
+    "source": "USDA FoodData Central - supplemented for zha cai via regional databases",
+    "source_url": "https://fdc.nal.usda.gov/",
+    "subtitle": "Source: USDA FoodData Central - per-axis normalized to 0-100 for comparability",
+    "data": {
+        "sets": [
+            [
+                [
+                    "Sodium",
+                    30
+                ],
+                [
+                    "Vitamin K",
+                    89
+                ],
+                [
+                    "Vitamin C",
+                    6
+                ],
+                [
+                    "Fiber",
+                    38
+                ],
+                [
+                    "Calcium",
+                    31
+                ]
+            ],
+            [
+                [
+                    "Sodium",
+                    13
+                ],
+                [
+                    "Vitamin K",
+                    38
+                ],
+                [
+                    "Vitamin C",
+                    100
+                ],
+                [
+                    "Fiber",
+                    75
+                ],
+                [
+                    "Calcium",
+                    67
+                ]
+            ],
+            [
+                [
+                    "Sodium",
+                    18
+                ],
+                [
+                    "Vitamin K",
+                    16
+                ],
+                [
+                    "Vitamin C",
+                    83
+                ],
+                [
+                    "Fiber",
+                    91
+                ],
+                [
+                    "Calcium",
+                    40
+                ]
+            ],
+            [
+                [
+                    "Sodium",
+                    100
+                ],
+                [
+                    "Vitamin K",
+                    100
+                ],
+                [
+                    "Vitamin C",
+                    17
+                ],
+                [
+                    "Fiber",
+                    100
+                ],
+                [
+                    "Calcium",
+                    100
+                ]
+            ]
+        ]
+    }
+}

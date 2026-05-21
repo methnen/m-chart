@@ -1,0 +1,28 @@
+{
+    "library": "chartjs",
+    "type": "boxplot",
+    "parse_in": "rows",
+    "set_names": [ "Class A", "Class B" ],
+    "data": {
+        "sets": [
+            [
+                [ "",       "Score" ],
+                [ "Test 1", 72 ],
+                [ "Test 2", 85 ],
+                [ "Test 3", 90 ],
+                [ "Test 4", 78 ],
+                [ "Test 5", 65 ],
+                [ "Test 6", 88 ]
+            ],
+            [
+                [ "",       "Score" ],
+                [ "Test 1", 80 ],
+                [ "Test 2", 92 ],
+                [ "Test 3", 76 ],
+                [ "Test 4", 84 ],
+                [ "Test 5", 95 ],
+                [ "Test 6", 70 ]
+            ]
+        ]
+    }
+}
