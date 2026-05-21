@@ -1,0 +1,154 @@
+{
+    "_post_title": "Flavor profile of 5 globally distinct pickles",
+    "library": "chartjs",
+    "type": "radar",
+    "parse_in": "rows",
+    "set_names": [
+        "Dill pickle (US)",
+        "Kimchi (Korea)",
+        "Pao cai (China)",
+        "Tsukemono (Japan)",
+        "Achaar (India)"
+    ],
+    "shared": true,
+    "labels": true,
+    "legend": true,
+    "height": 500,
+    "source": "Synthesis of cited sensory & culinary sources (J Food Sci 2005, ScienceDirect 2021, regional culinary guides)",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/15797327/",
+    "subtitle": "Source: published sensory profiles - 1-10 ratings calibrated from cited descriptions",
+    "data": {
+        "sets": [
+            [
+                [
+                    "Sour",
+                    7
+                ],
+                [
+                    "Salty",
+                    7
+                ],
+                [
+                    "Sweet",
+                    2
+                ],
+                [
+                    "Umami",
+                    3
+                ],
+                [
+                    "Spicy",
+                    1
+                ],
+                [
+                    "Crunchy",
+                    8
+                ]
+            ],
+            [
+                [
+                    "Sour",
+                    7
+                ],
+                [
+                    "Salty",
+                    7
+                ],
+                [
+                    "Sweet",
+                    2
+                ],
+                [
+                    "Umami",
+                    8
+                ],
+                [
+                    "Spicy",
+                    8
+                ],
+                [
+                    "Crunchy",
+                    6
+                ]
+            ],
+            [
+                [
+                    "Sour",
+                    8
+                ],
+                [
+                    "Salty",
+                    6
+                ],
+                [
+                    "Sweet",
+                    3
+                ],
+                [
+                    "Umami",
+                    5
+                ],
+                [
+                    "Spicy",
+                    7
+                ],
+                [
+                    "Crunchy",
+                    7
+                ]
+            ],
+            [
+                [
+                    "Sour",
+                    5
+                ],
+                [
+                    "Salty",
+                    6
+                ],
+                [
+                    "Sweet",
+                    4
+                ],
+                [
+                    "Umami",
+                    6
+                ],
+                [
+                    "Spicy",
+                    1
+                ],
+                [
+                    "Crunchy",
+                    5
+                ]
+            ],
+            [
+                [
+                    "Sour",
+                    6
+                ],
+                [
+                    "Salty",
+                    7
+                ],
+                [
+                    "Sweet",
+                    3
+                ],
+                [
+                    "Umami",
+                    4
+                ],
+                [
+                    "Spicy",
+                    9
+                ],
+                [
+                    "Crunchy",
+                    4
+                ]
+            ]
+        ]
+    }
+}

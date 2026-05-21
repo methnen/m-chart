@@ -1,80 +1,79 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class M_Chart {
-	public $version           = '1.12';
+	public $version           = '2.1';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
-	public $chart_meta_fields = array(
-		'library'     => 'chartjs',
-		'type'        => 'line',
-		'parse_in'    => 'rows',
-		'labels'      => true,
-		'shared'      => false,
-		'subtitle'    => '',
-		'y_title'     => '',
-		'y_units'     => '',
-		'y_min'       => false,
-		'y_min_value' => 0,
-		'x_title'     => '',
-		'x_units'     => '',
-		'height'      => 400,
-		'legend'      => true,
-		'source'      => '',
-		'source_url'  => '',
-		'data'        => array(),
-		'set_names'   => array(),
-	);
-	public $get_chart_default_args = array(
+	public $chart_meta_fields = [
+		'library'           => 'chartjs',
+		'type'              => 'line',
+		'parse_in'          => 'rows',
+		'labels'            => true,
+		'shared'            => false,
+		'subtitle'          => '',
+		'y_title'           => '',
+		'y_units'           => '',
+		'y_min'             => false,
+		'y_min_value'       => 0,
+		'x_title'           => '',
+		'x_units'           => '',
+		'height'            => 400,
+		'legend'            => true,
+		'source'            => '',
+		'source_url'        => '',
+		'data'               => [],
+		'set_names'          => [],
+		'data_point_colors'  => false,
+		'mean_point'         => true,
+		'sample_points'      => false,
+		'constrain_y_axis'   => false,
+		'include_source'     => false,
+	];
+	public $get_chart_default_args = [
 		'show'  => 'chart',
 		'width' => 'responsive',
 		'share' => '',
-	);
-	public $parse_options = array(
+	];
+	public $parse_options = [
 		'columns',
 		'rows',
-	);
+	];
 	public $options_set;
 	public $plugin_url;
 	public $is_iframe    = false;
 	public $instance     = 1;
-	public $settings     = array(
+	public $iframe_csp_nonce = '';
+	public $settings     = [
 		'library'          => 'chartjs',
 		'show_library'     => 'no',
 		'performance'      => 'default',
 		'image_multiplier' => '2',
-		'image_width'      => '600',
+		'image_width'      => '900',
 		'embeds'           => '',
+		'defer_rendering'  => 'enabled',
 		'default_theme'    => '_default',
 		'locale'           => 'en-US',
 		'csv_delimiter'    => ',',
-		'lang_settings'    => array(
-			'decimalPoint'   => '.',
-			'thousandsSep'   => ',',
-			'numericSymbols' => array(
-				'K', // Thousands
-				'M', // Millions
-				'B', // Billions
-				'T', // Trillions
-				'P', // Quadrillions
-				'E', // Quintillions
-			),
-			'numericSymbolMagnitude' => 1000,
-		),
-	);
-	public $csv_delimiters = array(
+	];
+	public $csv_delimiters = [
 		','  => 'Comma',
 		"\t" => 'Tab',
 		' '  => 'Space',
 		';'  => 'Semicolon',
-	);
+	];
 	public $library_class;
+	public $icon = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY0IDY0IDI0IDI0IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij4KICA8cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0gNzYuNjU3IDY1LjUgTCA3Ni42NTcgNzUuMzQ0IEwgODYuNSA3NS4zNDQgQyA4Ni41IDY5LjkwOSA4Mi4wOTEgNjUuNSA3Ni42NTcgNjUuNSBaIE0gNzQuNjg4IDc2LjMyOCBMIDc0LjY4OCA2Ni44MzMgQyA2OS41NTcgNjcuMTc0IDY1LjUgNzEuNDM5IDY1LjUgNzYuNjU3IEMgNjUuNSA4Mi4wOTEgNjkuOTA5IDg2LjUgNzUuMzQzIDg2LjUgQyA4MC41NjIgODYuNSA4NC44MjggODIuNDQzIDg1LjE2NyA3Ny4zMTMgTCA3NC42ODggNzcuMzEzIEwgNzQuNjg4IDc2LjMyOCBaIi8+Cjwvc3ZnPg==';
 
 	private $admin;
 	private $parse;
 	private $block;
-	private $libraries = array(
+	private $libraries = [
 		'chartjs' => 'Chart.js',
-	);
+	];
 
 	/**
 	 * Constructor
@@ -82,24 +81,22 @@ class M_Chart {
 	public function __construct() {
 		$this->plugin_url = $this->plugin_url();
 
-		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
-		add_action( 'save_post', array( $this, 'save_post' ) );
-		add_action( 'shortcode_ui_before_do_shortcode', array( $this, 'shortcode_ui_before_do_shortcode' ) );
+		add_action( 'init', [ $this, 'init' ] );
+		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
+		add_action( 'save_post', [ $this, 'save_post' ] );
 		// Doing this early as possible because it sets is_iframe which we might need to use for other things
-		add_action( 'template_redirect', array( $this, 'template_redirect' ), 0 );
-		add_action( 'm_chart_update_post_meta', array( $this, 'm_chart_update_post_meta' ), 10, 2 );
+		add_action( 'template_redirect', [ $this, 'template_redirect' ], 0 );
+		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], 10, 2 );
 
 		// Doing this before the default so it's already done before anything else
-		add_filter( 'm_chart_get_chart_image_tag', array( $this, 'm_chart_get_chart_image_tag' ), 9, 3 );
-		add_filter( 'the_content', array( $this, 'the_content' ) );
-		add_filter( 'm_chart_image_support', array( $this, 'm_chart_image_support' ), 10, 2 );
-		add_filter( 'm_chart_instant_preview_support', array( $this, 'm_chart_instant_preview_support' ), 10, 2 );
-		add_filter( 'm_chart_library_class', array( $this, 'm_chart_library_class' ), 10, 2 );
+		add_filter( 'm_chart_get_chart_image_tag', [ $this, 'm_chart_get_chart_image_tag' ], 9, 3 );
+		add_filter( 'the_content', [ $this, 'the_content' ] );
+		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
+		add_filter( 'm_chart_instant_preview_support', [ $this, 'm_chart_instant_preview_support' ], 10, 2 );
+		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
-		add_shortcode( 'chart', array( $this, 'chart_shortcode' ) );
-		add_shortcode( 'chart-share', array( $this, 'share_shortcode' ) );
-		
+		add_shortcode( 'chart', [ $this, 'chart_shortcode' ] );
+
 		// Initiate the block class
 		$this->block();
 	}
@@ -144,6 +141,7 @@ class M_Chart {
 	 */
 	public function parse() {
 		if ( ! $this->parse ) {
+			require_once __DIR__ . '/class-m-chart-parsed-data-point.php';
 			require_once __DIR__ . '/class-m-chart-parse.php';
 			$this->parse = new M_Chart_Parse();
 		}
@@ -158,10 +156,10 @@ class M_Chart {
 		// Register the units taxonomy
 		register_taxonomy(
 			$this->slug . '-units',
-			array( $this->slug ),
-			array(
+			[ $this->slug ],
+			[
 				'hierarchical' => true,
-				'labels'       => array(
+				'labels'       => [
 					'name'              => esc_html__( 'Chart Units', 'm-chart' ),
 					'singular_name'     => esc_html__( 'Chart Unit', 'm-chart' ),
 					'search_items'      => esc_html__( 'Search Chart Units', 'm-chart' ),
@@ -173,34 +171,34 @@ class M_Chart {
 					'add_new_item'      => esc_html__( 'Add New Chart Unit', 'm-chart' ),
 					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
 					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
-				),
+				],
 				'show_ui'   => true,
 				'query_var' => true,
-				'rewrite'   => array(
+				'rewrite'   => [
 					'slug' => $this->slug . '-units',
-				),
-			)
+				],
+			]
 		);
 
 		// Register the library taxonomy
 		register_taxonomy(
 			$this->slug . '-library',
-			array( $this->slug ),
-			array(
+			[ $this->slug ],
+			[
 				'hierarchical' => false,
 				'show_ui'      => false,
 				'query_var'    => true,
-				'rewrite'      => array(
+				'rewrite'      => [
 					'slug' => $this->slug . '-library',
-				),
-			)
+				],
+			]
 		);
 
 		// Register the charts custom post type
 		register_post_type(
 			$this->slug,
-			array(
-				'labels' => array(
+			[
+				'labels' => [
 					'name'               => esc_html__( 'Charts', 'm-chart' ),
 					'singular_name'      => esc_html__( 'Chart', 'm-chart' ),
 					'add_new'            => esc_html__( 'Add Chart', 'm-chart' ),
@@ -213,59 +211,70 @@ class M_Chart {
 					'search_items'       => esc_html__( 'Search Charts', 'm-chart' ),
 					'not_found'          => esc_html__( 'No Charts found', 'm-chart' ),
 					'not_found_in_trash' => esc_html__( 'No Charts found in the Trash', 'm-chart' ),
-				),
-				'register_meta_box_cb' => is_admin() ? array( $this->admin(), 'meta_boxes' ) : null,
+				],
+				'register_meta_box_cb' => is_admin() ? [ $this->admin(), 'meta_boxes' ] : null,
 				'public'               => true,
 				'show_in_rest'         => true,
 				'hierarchical'         => false,
 				'exclude_from_search'  => false,
 				'menu_position'        => 9,
-				'menu_icon'            => 'dashicons-chart-pie',
+				'menu_icon'            => 'data:image/svg+xml;base64,' . $this->icon,
 				'query_var'            => true,
 				'can_export'           => true,
 				'has_archive'          => 'charts',
 				'description'          => esc_html__( 'Manage data sets and display them as charts in WordPress.', 'm-chart' ),
-				'rewrite'              => array(
+				'rewrite'              => [
 					'slug' => 'chart',
-				),
-				'supports' => array(
+				],
+				'supports' => [
 					'author',
 					'title',
 					'excerpt',
 					'comments',
-				),
-				'taxonomies' => array(
+				],
+				'taxonomies' => [
 					'category',
 					'post_tag',
 					$this->slug . '-units',
-				),
-			)
+				],
+			]
 		);
 
 		// Register the graphing library scripts
 		wp_register_script(
-			'chartjs-helpers',
-			$this->plugin_url . '/components/js/m-chart-chartjs-helpers.min.js',
-			array( 'jquery' ),
+			'chartjs',
+			$this->plugin_url . '/components/external/chartjs/chart.js',
+			[],
 			$this->version
 		);
 
 		wp_register_script(
-			'chartjs',
-			$this->plugin_url . '/components/external/chartjs/chart.js',
-			array( 'jquery', 'chartjs-helpers' ),
+			'chartjs-helper',
+			$this->plugin_url . '/components/js/m-chart-chartjs-helper.min.js',
+			[ 'chartjs' ],
 			$this->version
 		);
 
 		wp_register_script(
 			'chartjs-datalabels',
 			$this->plugin_url . '/components/external/chartjs/chartjs-plugin-datalabels.js',
-			array( 'jquery', 'chartjs' ),
+			[ 'chartjs' ],
 			$this->version
 		);
 
-		// jQuery needs to be in the header since the charts are inline
-		wp_enqueue_script( 'jquery', false, array(), false, false );
+		wp_register_script(
+			'chartjs-treemap',
+			$this->plugin_url . '/components/external/chartjs/chartjs-chart-treemap.min.js',
+			[ 'chartjs' ],
+			$this->version
+		);
+
+		wp_register_script(
+			'chartjs-boxplot',
+			$this->plugin_url . '/components/external/chartjs/chartjs-chart-boxplot.min.js',
+			[ 'chartjs' ],
+			$this->version
+		);
 
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', EP_PERMALINK );
@@ -290,7 +299,7 @@ class M_Chart {
 	}
 
 	/**
-	 * VIP's CDN was breaking Highcharts ability to handle embedded SVGs so this should circumvent that
+	 * WP VIP's CDN was breaking the chart library's ability to handle embedded SVGs so this should circumvent that
 	 * If you wanted to say, watermark your charts, SVGs suddenly become very important
 	 *
 	 * @param string $path option additional path to be used (e.g. components)
@@ -313,7 +322,12 @@ class M_Chart {
 			$port = ':' . $url_base['port'];
 		}
 
-		return $url_base['scheme'] . '://' . $url_base['host'] . $port . preg_replace( '#/$#', '', $url_path['path'] ) . ( empty( $url_path['query'] ) ? '' : '?' . $url_path['query'] );
+		$scheme = $url_base['scheme'] ?? 'https';
+		$host   = $url_base['host']   ?? '';
+		$path   = $url_path['path']   ?? '';
+		$query  = $url_path['query']  ?? '';
+
+		return $scheme . '://' . $host . $port . preg_replace( '#/$#', '', $path ) . ( '' === $query ? '' : '?' . $query );
 	}
 
 	/**
@@ -322,7 +336,7 @@ class M_Chart {
 	 * @param int $post_id WP post ID of the post you want post meta from
 	 * @param string $field optional field to be returend instead of all post meta
 	 *
-	 * @return string URL to the plugin directory with path if parameter was passed
+	 * @return array $post_meta the meta for a give post ID
 	 */
 	public function get_post_meta( $post_id, $field = false ) {
 		$raw_post_meta = get_post_meta( $post_id, $this->slug, true );
@@ -333,7 +347,11 @@ class M_Chart {
 
 		// Make sure the correct library is set in the default chart meta fields
 		if ( ! $post_meta ) {
-			$current_screen = get_current_screen();
+			// get_current_screen() is only defined in admin context
+			// This guards the call so REST and front-end contexts don't fatal
+			$current_screen = is_admin() && function_exists( 'get_current_screen' )
+				? get_current_screen()
+				: null;
 
 			// If we're we're adding a new chart and a library is specified in the get vars we use it
 			if (
@@ -371,13 +389,13 @@ class M_Chart {
 		// If the data has the old legacy format we need to update it
 		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
 			$data                        = $post_meta['data'];
-			$post_meta['data']           = array();
+			$post_meta['data']           = [];
 			$post_meta['data']['sets'][] = $data;
 		}
 
 		// If there's no set_names value set we'll set it to an empty array
 		if ( ! isset( $post_meta['set_names'] ) ) {
-			$post_meta['set_names'] = array();
+			$post_meta['set_names'] = [];
 		}
 
 		$post_meta = apply_filters( 'm_chart_get_post_meta', $post_meta, $raw_post_meta, $post_id );
@@ -392,7 +410,7 @@ class M_Chart {
 	}
 
 	/**
-	 * Update the post meta based and set unit terms if appropriate
+	 * Update the post meta and set unit terms if appropriate
 	 *
 	 * @param int $post_id WP post ID of the post you want to attach post meta to
 	 * @param array $meta an array of the post meta you want to attach to the post
@@ -402,7 +420,7 @@ class M_Chart {
 		$parsed_meta = $this->validate_post_meta( $meta );
 
 		// Set unit terms
-		$terms = array();
+		$terms = [];
 
 		if ( '' != $parsed_meta['y_units'] ) {
 			$terms[] = $parsed_meta['y_units'];
@@ -431,9 +449,14 @@ class M_Chart {
 	 */
 	public function validate_post_meta( $meta ) {
 		// Need to set checkboxes before checking or they can't be deselected
-		$chart_meta['labels'] = false;
-		$chart_meta['y_min']  = false;
-		$chart_meta['legend'] = false;
+		$chart_meta['labels']             = false;
+		$chart_meta['y_min']              = false;
+		$chart_meta['legend']             = false;
+		$chart_meta['data_point_colors']  = false;
+		$chart_meta['mean_point']         = false;
+		$chart_meta['sample_points']      = false;
+		$chart_meta['constrain_y_axis']   = false;
+		$chart_meta['include_source']     = false;
 
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
@@ -444,7 +467,7 @@ class M_Chart {
 					$chart_meta[ $field ]['sets'] = $meta[ $field ];
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
-				} elseif ( in_array( $field, array( 'labels', 'y_min', 'legend' ) ) ) {
+				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = absint( $meta[ $field ] );
@@ -470,9 +493,10 @@ class M_Chart {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
-		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet)
+		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet CE)
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
-			$chart_meta['data']['sets'] = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
+			$decoded = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
+			$chart_meta['data']['sets'] = is_array( $decoded ) ? $decoded : [];
 		}
 
 		// Validate the data array
@@ -529,7 +553,7 @@ class M_Chart {
 	 *
 	 * @return string HTML and Javascript needed to display a chart (or if appropriate an HTML image tag)
 	 */
-	public function get_chart( $post_id = null, $args = array() ) {
+	public function get_chart( $post_id = null, $args = [] ) {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
@@ -560,7 +584,8 @@ class M_Chart {
 		}
 
 		// If they want the image version or the request is happening from a feed we return the image tag
-		if ( 'image' == $args['show']
+		if ( 
+			   'image' == $args['show']
 			|| is_feed()
 			|| $this->is_amp_endpoint()
 			|| apply_filters( 'm_chart_show_image', false, $post_id, $args )
@@ -578,17 +603,34 @@ class M_Chart {
 
 			if ( $this->is_amp_endpoint() ) {
 				ob_start();
-				?><amp-img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>"
-	width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
-	class="<?php echo esc_attr( $classes ); ?>"></amp-img>
+				?>
+<figure class="m-chart-image-figure">
+	<amp-img src="<?php echo esc_url( $image['url'] ); ?>"
+		width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
+		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
+		class="<?php echo esc_attr( $classes ); ?>"></amp-img>
+	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
+	<div class="screen-reader-text sr-only">
+		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
+	</div>
+	<?php endif; ?>
+</figure>
 				<?php
 				return ob_get_clean();
 			} else {
 				ob_start();
 				?>
-<img src="<?php echo esc_url( $image['url'] ); ?>" alt="<?php echo esc_attr( $image['name'] ); ?>"
-	width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
-	alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" class="<?php echo esc_attr( $classes ); ?>" />
+<figure class="m-chart-image-figure">
+	<img src="<?php echo esc_url( $image['url'] ); ?>"
+		width="<?php echo absint( $image['width'] ); ?>" height="<?php echo absint( $image['height'] ); ?>"
+		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
+		class="<?php echo esc_attr( $classes ); ?>" />
+	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
+	<div class="screen-reader-text sr-only">
+		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
+	</div>
+	<?php endif; ?>
+</figure>
 				<?php
 				return ob_get_clean();
 			}
@@ -607,6 +649,7 @@ class M_Chart {
 		// If we haven't enqueued the right library yet lets do it
 		if ( ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
+			wp_enqueue_script( 'chartjs-helper' );
 		}
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
@@ -673,13 +716,13 @@ class M_Chart {
 			return false;
 		}
 
-		return array(
+		return [
 			'url'    => $thumbnail[0],
 			'file'   => basename( $thumbnail[0] ),
 			'width'  => $thumbnail[1],
 			'height' => $thumbnail[2],
 			'name'   => get_the_title( $thumbnail_id ),
-		);
+		];
 	}
 
 	/**
@@ -697,13 +740,13 @@ class M_Chart {
 
 		$url = $this->plugin_url . '/components/images/chart-placeholder.png';
 
-		return array(
+		return [
 			'url'    => $url,
 			'file'   => basename( $url ),
 			'width'  => 640,
 			'height' => 480,
 			'name'   => get_the_title( $post_id ),
-		);
+		];
 	}
 
 	/**
@@ -786,16 +829,19 @@ class M_Chart {
 	 *
 	 * @return string HTML needed to display a chart via an iframe
 	 */
-	public function get_chart_iframe( $post_id, $args = array() ) {
+	public function get_chart_iframe( $post_id, $args = [] ) {
 		$post_meta = $this->get_post_meta( $post_id );
 
 		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
+
+		$defer_lazy = 'enabled' === $this->get_settings( 'defer_rendering' );
 
 		ob_start();
 		?>
 <iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
 	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
-	src="<?php echo esc_url_raw( $src_url ); ?>" frameborder="0"></iframe>
+	title="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
+	src="<?php echo esc_url( $src_url ); ?>"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
 		<?php
 		if ( 'show' == $args['share'] ) {
 			unset( $args['share'] );
@@ -821,7 +867,7 @@ class M_Chart {
 		$post_id = $args['id'];
 		unset( $args['id'] );
 
-		// Did we get a chart ID?
+		// Did we get what looks like a chart ID?
 		if ( ! is_numeric( $post_id ) ) {
 			return;
 		}
@@ -857,7 +903,7 @@ class M_Chart {
 	 * @return array an array of generated and/or compiled unit terms
 	 */
 	public function get_unit_terms() {
-		$terms = get_terms( $this->slug . '-units', array( 'hide_empty' => false ) );
+		$terms = get_terms( $this->slug . '-units', [ 'hide_empty' => false ] );
 
 		if ( empty( $terms ) ) {
 			$terms = $this->generate_unit_terms();
@@ -867,15 +913,15 @@ class M_Chart {
 	}
 
 	/**
-	 * Helper function that returns the chart unit terms
+	 * Helper function that compiles the chart unit terms for use
 	 *
 	 * @param array an array of unit terms
 	 *
 	 * @return array an array of compiled unit terms
 	 */
 	public function compile_unit_terms( $terms ) {
-		$compiled_terms = array();
-		$parents        = array();
+		$compiled_terms = [];
+		$parents        = [];
 
 		foreach ( $terms as $unit ) {
 			if ( 0 == $unit->parent ) {
@@ -903,14 +949,14 @@ class M_Chart {
 		// Load the default terms array
 		$default_terms = require __DIR__ . '/array-default-unit-terms.php';
 
-		$terms = array();
+		$terms = [];
 
 		foreach ( $default_terms as $parent_term => $child_terms ) {
 			$parent  = (object) wp_insert_term( $parent_term, $this->slug . '-units' );
 			$terms[] = get_term( $parent->term_id, $this->slug . '-units' );
 
 			foreach ( $child_terms as $child_term ) {
-				$term    = (object) wp_insert_term( $child_term, $this->slug . '-units', array( 'parent' => $parent->term_id ) );
+				$term    = (object) wp_insert_term( $child_term, $this->slug . '-units', [ 'parent' => $parent->term_id ] );
 				$terms[] = get_term( $term->term_id, $this->slug . '-units' );
 			}
 		}
@@ -935,7 +981,7 @@ class M_Chart {
 			wp_die(
 				esc_html__( 'The chart could not be found', 'm-chart' ),
 				esc_html__( 'Chart not found', 'm-chart' ),
-				array( 'response' => 404 )
+				[ 'response' => 404 ]
 			);
 		}
 
@@ -945,17 +991,17 @@ class M_Chart {
 			wp_die(
 				esc_html__( 'Embeds of this type are not enabled', 'm-chart' ),
 				esc_html__( 'Embeds disabled', 'm-chart' ),
-				array( 'response' => 403 )
+				[ 'response' => 403 ]
 			);
 			exit;
 		}
 
 		$this->is_iframe = true;
 
-		$scripts = array(
+		$scripts = [
 			'jquery',
 			$this->get_post_meta( $post->ID, 'library' ),
-		);
+		];
 
 		unset( $_GET['action'], $_GET['share'] );
 
@@ -1020,9 +1066,6 @@ class M_Chart {
 		$settings = (array) get_option( $this->slug, $default_settings );
 		$settings = wp_parse_args( $settings, $default_settings );
 
-		// Make sure the lang_settings aren't missing anything we'll be expecting later on
-		$settings['lang_settings'] = wp_parse_args( $settings['lang_settings'], $this->settings['lang_settings'] );
-
 		// Make sure the set library is still valid
 		if ( ! $this->is_valid_library( $settings['library'] ) ) {
 			$settings['library'] = 'chartjs';
@@ -1049,6 +1092,26 @@ class M_Chart {
 	}
 
 	/**
+	 * Return the chart types that support multiple data sets (multi-sheet tab bar)
+	 *
+	 * This is the single authoritative source for this list
+	 * The value is passed to window.m_chart_admin.multi_sheet_types so the React UI always stays in sync with PHP
+	 * Filtered via 'm_chart_multi_sheet_types' so library plugins can add or remove types
+	 *
+	 * @return array
+	 */
+	public function get_multi_sheet_types() {
+		return apply_filters( 'm_chart_multi_sheet_types', [
+			'scatter',
+			'bubble',
+			'radar',
+			'radar-area',
+			'boxplot',
+			'violin',
+		] );
+	}
+
+	/**
 	 * Return the current library
 	 *
 	 * @return string current library
@@ -1064,10 +1127,27 @@ class M_Chart {
 	/**
 	 * Return the locale array
 	 *
+	 * When PHP's Intl extension is available, labels are generated in each locale's native language using Locale::getDisplayName()
+	 * Falls back to the English labels in array-locale-codes.php otherwise
+	 *
 	 * @return array locales as used by Intl.NumberFormat
 	 */
 	public function get_locales() {
-		return require __DIR__ . '/array-locale-codes.php';
+		$locales = require __DIR__ . '/array-locale-codes.php';
+
+		if ( ! class_exists( 'Locale' ) ) {
+			return $locales;
+		}
+
+		foreach ( $locales as $code => $english_label ) {
+			$native = Locale::getDisplayName( $code, $code );
+			
+			if ( $native ) {
+				$locales[ $code ] = esc_html( $native );
+			}
+		}
+
+		return $locales;
 	}
 
 	/**
@@ -1103,19 +1183,19 @@ class M_Chart {
 	public function upgrade_to_1_7() {
 		// Get all charts
 		$charts = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'highcharts',
 						'operator' => 'NOT IN',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		// Add highcharts post_tag to all charts
@@ -1133,19 +1213,19 @@ class M_Chart {
 	public function upgrade_to_1_7_4() {
 		// Get all charts tagged with highcharts
 		$highcharts_charts = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'highcharts',
 						'operator' => 'IN',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		foreach ( $highcharts_charts as $chart ) {
@@ -1157,19 +1237,19 @@ class M_Chart {
 
 		// Get all charts tagged with chartjs
 		$chartjs_charts = get_posts(
-			array(
+			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'tax_query'      => array(
-					array(
+				'tax_query'      => [
+					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'chartjs',
 						'operator' => 'IN',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		foreach ( $chartjs_charts as $chart ) {

@@ -1,0 +1,27 @@
+{
+    "_post_title": "Cucumber yield by top producer country, 2014-2023",
+    "library":     "chartjs",
+    "type":        "line",
+    "parse_in":   "rows",
+    "set_names":  [ "Cucumber yield by country" ],
+    "x_title":    "Year",
+    "y_title":    "Yield (tonnes/hectare)",
+    "shared":     true,
+    "labels":     true,
+    "legend":     true,
+    "height":     500,
+    "source":     "FAOSTAT — Crops and Livestock Products (Cucumbers and gherkins, yield)",
+    "source_url": "https://www.fao.org/faostat/en/#data/QCL",
+    "subtitle":   "Source: FAOSTAT - greenhouse-heavy Spain crushes open-field producers per hectare",
+    "data": {
+        "sets": [
+            [
+                [ "",              "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023" ],
+                [ "Spain",          67,     69,     71,     73,     76,     78,     80,     82,     85,     87 ],
+                [ "China",          49,     50,     52,     54,     55,     57,     58,     59,     60,     61 ],
+                [ "United States",  29,     30,     28,     31,     30,     32,     31,     30,     32,     33 ],
+                [ "Russia",         11,     11,     12,     12,     13,     13,     14,     13,     14,     14 ]
+            ]
+        ]
+    }
+}

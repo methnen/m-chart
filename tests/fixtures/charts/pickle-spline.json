@@ -1,0 +1,57 @@
+{
+    "_post_title": "Per-capita kimchi consumption in Korea",
+    "library": "chartjs",
+    "type": "spline",
+    "parse_in": "rows",
+    "set_names": [
+        "Per-capita kimchi"
+    ],
+    "x_title": "Year",
+    "y_title": "Per-capita daily consumption",
+    "y_units": "grams",
+    "shared": true,
+    "labels": true,
+    "legend": false,
+    "height": 600,
+    "source": "Korea National Health and Nutrition Examination Survey (KNHANES) - KOSIS",
+    "source_url": "https://kjcn.or.kr/journal/view.php?doi=10.5720/kjcn.2017.22.2.145",
+    "subtitle": "Source: KNHANES / KOSIS - grams per person per day, intermediate years interpolated",
+    "data": {
+        "sets": [
+            [
+                [
+                    "2005",
+                    100
+                ],
+                [
+                    "2008",
+                    92
+                ],
+                [
+                    "2010",
+                    87
+                ],
+                [
+                    "2013",
+                    80
+                ],
+                [
+                    "2015",
+                    72
+                ],
+                [
+                    "2017",
+                    70
+                ],
+                [
+                    "2020",
+                    65
+                ],
+                [
+                    "2023",
+                    60
+                ]
+            ]
+        ]
+    }
+}

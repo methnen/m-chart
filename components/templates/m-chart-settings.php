@@ -1,19 +1,24 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div id="m-chart-settings-page" class="wrap">
 	<h1><?php esc_html_e( 'M Chart Settings', 'm-chart' ); ?></h1>
-	<form method="post">
+	<form method="post" action="">
 		<?php wp_nonce_field( m_chart()->slug . '-save-settings', $this->get_field_name( 'nonce' ) ); ?>
 		<h2><?php esc_html_e( 'General Settings', 'm-chart' ); ?></h2>
 		<table class="form-table">
 			<tbody>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Default Library', 'm-chart' ); ?></th>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
+							<?php esc_html_e( 'Default Library', 'm-chart' ); ?>
+						</label>
+					</th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'library' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'library' ) ); ?>">
 							<?php
 							foreach ( m_chart()->get_libraries() as $library => $library_name ) {
 								?>
 								<option value="<?php echo esc_attr( $library ); ?>"<?php selected( $library, $settings['library'] ); ?>>
-									<?php esc_html_e( $library_name, 'm-chart' ); ?>
+									<?php echo esc_html( $library_name ); ?>
 								</option>
 								<?php
 							}
@@ -21,7 +26,7 @@
 						</select>
 						<p class="description">
 							<?php esc_html_e( 'Chart.js is the GPL compatible default library:', 'm-chart' ); ?>
-							<a href="https://github.com/methnen/m-chart/wiki/Libraries">https://github.com/methnen/m-chart/wiki/Libraries</a>
+							<a href="https://docs.mch.art/guide/libraries">https://docs.mch.art/guide/libraries</a>
 						</p>
 					</td>
 				</tr>
@@ -88,9 +93,13 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Image Width', 'm-chart' ); ?></th>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'image_width' ) ); ?>">
+							<?php esc_html_e( 'Image Width', 'm-chart' ); ?>
+						</label>
+					</th>
 					<td>
-						<input type="number" name="<?php echo esc_attr( m_chart()->admin()->get_field_name( 'image_width' ) ); ?>" value="<?php echo absint( $settings['image_width'] ); ?>" />
+						<input type="number" id="<?php echo esc_attr( $this->get_field_id( 'image_width' ) ); ?>" name="<?php echo esc_attr( m_chart()->admin()->get_field_name( 'image_width' ) ); ?>" value="<?php echo absint( $settings['image_width'] ); ?>" />
 						<p class="description">
 							<?php esc_html_e( 'The width of the image generated from your chart', 'm-chart' ); ?>
 						</p>
@@ -107,19 +116,34 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Defer Rendering', 'm-chart' ); ?></th>
+					<td>
+						<label>
+							<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'defer_rendering' ) ); ?>" value="" />
+							<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'defer_rendering' ) ); ?>" value="enabled"<?php checked( $settings['defer_rendering'], 'enabled' ); ?> />
+							<span><?php esc_html_e( 'Defer chart rendering until scrolled into view', 'm-chart' ); ?></span><br />
+							<span class="description"><?php esc_html_e( 'Charts below the fold will not initialize (or animate) until they enter the viewport', 'm-chart' ); ?></span>
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">
+							<?php esc_html_e( 'Default CSV Delimiter', 'm-chart' ); ?>
+						</label>
+					</th>
 					<td>
 						<select name="<?php echo esc_attr( $this->get_field_name( 'csv_delimiter' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'csv-delimiter' ) ); ?>">
 							<?php
 							foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
 								?>
 								<option value="<?php echo esc_attr( $delimiter ); ?>"<?php selected( $delimiter, $settings['csv_delimiter'] ); ?>>
-									<?php esc_html_e( $delimiter_name, 'm-chart' ); ?>
+									<?php echo esc_html( $delimiter_name ); ?>
 								</option>
 								<?php
 							}
 							?>
-						</select>
+						</select><br />
 						<span class="description"><?php esc_html_e( 'Default used when importing/exporting CSV files', 'm-chart' ); ?></span>
 					</td>
 				</tr>
@@ -127,7 +151,7 @@
 		</table>
 		<?php do_action( 'm_chart_settings_admin' ); ?>
 		<p class="submit">
-			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr_e( 'Save Changes', 'm-chart' ); ?>">
+			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr__( 'Save Changes', 'm-chart' ); ?>">
 		</p>
 	</form>
 </div>

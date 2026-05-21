@@ -1,0 +1,18 @@
+{
+    "library": "chartjs",
+    "type": "line",
+    "parse_in": "rows",
+    "set_names": [ "Sheet 1" ],
+    "_comment": "5x5 jagged: last two rows are short. Tests parse normalization.",
+    "data": {
+        "sets": [
+            [
+                [ "",       "Series A", "Series B", "Series C", "Series D" ],
+                [ "Row 1",  10,         20,         30,         40 ],
+                [ "Row 2",  11,         21,         31,         41 ],
+                [ "Row 3",  12,         22,         32 ],
+                [ "Row 4",  13,         23 ]
+            ]
+        ]
+    }
+}

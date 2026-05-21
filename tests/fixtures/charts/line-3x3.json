@@ -1,0 +1,16 @@
+{
+    "library": "chartjs",
+    "type": "line",
+    "parse_in": "rows",
+    "set_names": [ "Sheet 1" ],
+    "data": {
+        "sets": [
+            [
+                [ "",   "Series A", "Series B" ],
+                [ "Q1", 10,         15 ],
+                [ "Q2", 20,         25 ],
+                [ "Q3", 30,         35 ]
+            ]
+        ]
+    }
+}

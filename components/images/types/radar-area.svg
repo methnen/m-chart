@@ -1,20 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" focusable="false" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xmlns="http://www.w3.org/2000/svg">
-  <style type="text/css">
-	.st0{fill:none;stroke:#ABABAB;stroke-width:20;stroke-miterlimit:10;}
-	.st1{opacity:0.37;fill:#606060;enable-background:new    ;}
-	.st2{fill:none;stroke:#000000;stroke-width:20;stroke-miterlimit:10;}
-</style>
-  <g transform="matrix(1.053758, 0, 0, 1.053758, -13.800179, -14.90051)" style="">
-    <line class="st0" x1="255.9" y1="25" x2="255.9" y2="489.2"/>
-    <line class="st0" x1="488" y1="257.1" x2="23.8" y2="257.1"/>
-    <circle class="st0" cx="255.9" cy="257.1" r="232.1"/>
-    <circle class="st0" cx="255.9" cy="257.1" r="162.2"/>
-    <circle class="st0" cx="255.9" cy="257.1" r="81.9"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+<g fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="256" cy="256" r="192"></circle>
+    <circle cx="256" cy="256" r="128"></circle>
+    <circle cx="256" cy="256" r="64"></circle>
+    <line x1="256" y1="64" x2="256" y2="448"></line>
+    <line x1="64" y1="256" x2="448" y2="256"></line>
   </g>
-  <ellipse transform="matrix(0.066518, -0.997785, 0.997785, 0.066518, -181.905807, 262.999761)" cx="56.5" cy="224.4" rx="34.458" ry="34.458" style=""/>
-  <circle cx="325.194" cy="96.798" r="34.458" style=""/>
-  <circle cx="421.086" cy="432.841" r="34.458" style=""/>
-  <polygon class="st1" points="325.194 92.794 45.737 221.563 424.879 432.841" style=""/>
-  <polygon class="st2" points="325.194 92.794 45.737 221.563 424.879 432.841" style=""/>
+  <polygon points="256,80 416,360 96,280" fill-opacity="0.22"></polygon>
+  <polygon points="256,80 416,360 96,280" fill="none" stroke="currentColor" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"></polygon>
+  <circle cx="256" cy="80" r="14"></circle>
+  <circle cx="416" cy="360" r="14"></circle>
+  <circle cx="96" cy="280" r="14"></circle>
 </svg>

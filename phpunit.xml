@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+	bootstrap="tests/php/bootstrap.php"
+	colors="true"
+	cacheResultFile=".phpunit.cache/test-results"
+	failOnWarning="true"
+	failOnRisky="true"
+	convertDeprecationsToExceptions="true"
+>
+	<testsuites>
+		<testsuite name="unit">
+			<directory>tests/php/unit</directory>
+		</testsuite>
+		<testsuite name="integration">
+			<directory>tests/php/integration</directory>
+		</testsuite>
+	</testsuites>
+	<coverage>
+		<include>
+			<directory suffix=".php">components</directory>
+		</include>
+		<exclude>
+			<directory>components/external</directory>
+			<directory>components/admin-ui</directory>
+			<directory>components/block</directory>
+			<directory>components/languages</directory>
+		</exclude>
+	</coverage>
+</phpunit>

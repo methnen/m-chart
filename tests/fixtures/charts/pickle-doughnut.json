@@ -1,0 +1,45 @@
+{
+    "_post_title": "Kimchi varieties by share of consumption",
+    "library": "chartjs",
+    "type": "doughnut",
+    "parse_in": "rows",
+    "set_names": [
+        "Kimchi varieties"
+    ],
+    "labels": true,
+    "legend": true,
+    "height": 500,
+    "source": "World Institute of Kimchi - KNHANES - Wikipedia (cites WiKim)",
+    "source_url": "https://www.wikim.re.kr/menu.es?mid=a20501000000",
+    "subtitle": "Source: WiKim & KNHANES - baechu is ~70% of marketed kimchi",
+    "data": {
+        "sets": [
+            [
+                [
+                    "Baechu (napa cabbage)",
+                    "70%"
+                ],
+                [
+                    "Kkakdugi (cubed radish)",
+                    "15%"
+                ],
+                [
+                    "Chonggak (ponytail radish)",
+                    "5%"
+                ],
+                [
+                    "Oi-sobagi (stuffed cucumber)",
+                    "3%"
+                ],
+                [
+                    "Yeolmu (young radish)",
+                    "3%"
+                ],
+                [
+                    "Other (pa, gat, dongchimi, etc.)",
+                    "4%"
+                ]
+            ]
+        ]
+    }
+}

@@ -3,11 +3,25 @@
 @use 'sass:list';
 @use 'sass:math';
 
-@mixin clearfix {
-	&::after {
-		clear: both;
-		content: '';
-		display: table;
+@mixin wp-react-form-label {
+	font-size: rem-calc( 11 );
+	font-weight: 500;
+	line-height: 1.4;
+	text-transform: uppercase;
+	display: block;
+	margin-bottom: calc(rem-calc( 8 ));
+	padding-top: 0;
+}
+
+@mixin action-button {
+	height: rem-calc( 32 );
+	background-color: white;
+	position: absolute;
+	right: rem-calc( 4 );
+	top: rem-calc( 27 );
+
+	&:hover {
+		background-color: $wp-admin-outline-button-hover-blue;
 	}
 }
 
@@ -31,20 +45,44 @@ $rem-base: 16;
 	@return $rem-values;
 }
 
-$wp-admin-black: #000000;
-$wp-admin-red: #c80011;
-$wp-admin-border-color: #dddddd;
-$wp-admin-meta-border-color: #cdd0d4;
-$wp-admin-dark-background-color: #f5f5f5;
-$wp-admin-icon-color: #b8b8b8;
-$wp-admin-error-color: #b00000;
-$wp-admin-description-color: #666666;
-$wp-admin-inactive-text-color: #555555;
-$wp-admin-active-tab-color: #f1f1f1;
-$wp-admin-inactive-icon-color: #82878c;
+// m-chart's design tokens — exposed as CSS custom properties so library
+// plugins and theme authors can override our look without recompiling SASS.
+// Only --m-chart-accent chains through to a WordPress custom property (the
+// admin theme color, which is the one var() WP reliably emits on :root);
+// the rest hold hex defaults because @wordpress/components inlines its
+// gray/foreground/alert palette at build time and doesn't expose them as
+// usable custom properties at runtime. If WP ever publishes more :root-level
+// tokens, swap the hex for var( --wp-…, #fallback ) one line at a time.
+:root {
+	--m-chart-accent:           var( --wp-admin-theme-color, #3858e9 );
+	--m-chart-accent-bg-hover:  #f8f9fe;
+	--m-chart-text:             #000;
+	--m-chart-text-muted:       #666;
+	--m-chart-text-inactive:    #555;
+	--m-chart-border:           #ddd;
+	--m-chart-border-strong:    #cdd0d4;
+	--m-chart-bg-sectioned:     #f5f5f5;
+	--m-chart-icon:             #b8b8b8;
+	--m-chart-icon-inactive:    #82878c;
+	--m-chart-disabled:         #757575;
+	--m-chart-alert-error:      #cc1818;
+	--m-chart-alert-success:    #4ab866;
+	--m-chart-alert-warning:    #f0b849;
+}
 
-$wp-admin-dark-mode-border-color: #24282d;
-$wp-admin-dark-mode-meta-background-color: #33373c;
-$wp-admin-dark-mode-meta-border-color: #1a1f24;
-$wp-admin-dark-mode-field-background-color: #53616e;
-$wp-admin-dark-mode-tab-text-color: #bdc8d3;
+// SASS aliases — kept for source-level readability and to keep every existing
+// callsite untouched. All values resolve to --m-chart-* custom properties so
+// runtime overrides flow through to compiled output.
+$wp-admin-black:                     var( --m-chart-text );
+$wp-admin-border-color:              var( --m-chart-border );
+$wp-admin-meta-border-color:         var( --m-chart-border-strong );
+$wp-admin-dark-background-color:     var( --m-chart-bg-sectioned );
+$wp-admin-icon-color:                var( --m-chart-icon );
+$wp-admin-description-color:         var( --m-chart-text-muted );
+$wp-admin-inactive-text-color:       var( --m-chart-text-inactive );
+$wp-admin-inactive-icon-color:       var( --m-chart-icon-inactive );
+$wp-admin-outline-button-hover-blue: color-mix(in srgb, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) 4%, #fff);
+$wp-admin-alert-green:               var( --m-chart-alert-success );
+$wp-admin-alert-yellow:              var( --m-chart-alert-warning );
+$wp-admin-alert-red:                 var( --m-chart-alert-error );
+$m-chart-disabled-button:            var( --m-chart-disabled );

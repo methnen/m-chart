@@ -1,0 +1,45 @@
+{
+    "_post_title": "Chinese preserved-vegetable industry by category",
+    "library": "chartjs",
+    "type": "pie",
+    "parse_in": "rows",
+    "set_names": [
+        "Chinese preserved-vegetable industry"
+    ],
+    "labels": true,
+    "legend": true,
+    "height": 500,
+    "source": "Combined Chinese industry reports (ISO 24220:2020, China Daily, ChinaFoodIngredients)",
+    "source_url": "https://en.wikipedia.org/wiki/Pao_cai",
+    "subtitle": "Source: combined Chinese industry reports - output value in CNY billions, 2018-2020",
+    "data": {
+        "sets": [
+            [
+                [
+                    "Sichuan pao cai (泡菜)",
+                    "33 B CNY"
+                ],
+                [
+                    "Other regional pao cai",
+                    "14 B CNY"
+                ],
+                [
+                    "Other pickled vegetables",
+                    "10 B CNY"
+                ],
+                [
+                    "Fuling zha cai (榨菜)",
+                    "9 B CNY"
+                ],
+                [
+                    "Northeast suan cai (酸菜)",
+                    "8 B CNY"
+                ],
+                [
+                    "Mei cai & preserved mustard",
+                    "5 B CNY"
+                ]
+            ]
+        ]
+    }
+}

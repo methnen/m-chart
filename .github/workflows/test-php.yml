@@ -1,0 +1,132 @@
+name: PHP Tests
+
+on:
+  push:
+    branches: [ main, wordpress-7 ]
+  pull_request:
+
+# Required for the test reporter to post check results, PR comments, and source-line annotations
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  php-unit:
+    name: "Unit (PHP ${{ matrix.php }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.1', '8.2', '8.3' ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          coverage: none
+
+      - uses: ramsey/composer-install@v3
+
+      - name: Run PHP unit tests
+        run: |
+          mkdir -p tests/junit
+          vendor/bin/phpunit --testsuite unit --log-junit tests/junit/phpunit-unit.xml
+
+      - name: Upload PHPUnit JUnit XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-unit-junit-php${{ matrix.php }}
+          path: tests/junit/phpunit-unit.xml
+          retention-days: 7
+
+      - name: Publish unit-test results
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: tests/junit/phpunit-unit.xml
+          check_name: PHP Unit (PHP ${{ matrix.php }})
+          require_tests: false
+          fail_on_failure: true
+          detailed_summary: true
+
+  php-integration:
+    name: "Integration (PHP ${{ matrix.php }} × WP ${{ matrix.wp }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.2', '8.3' ]
+        wp:  [ '6.5', '6.6', '6.7' ]
+        include:
+          - { php: '8.2', wp: 'trunk' }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          coverage: ${{ matrix.php == '8.2' && matrix.wp == '6.7' && 'xdebug' || 'none' }}
+
+      - uses: ramsey/composer-install@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Start wp-env
+        # Note: 'trunk' in the matrix maps to the WordPress/WordPress repo's
+        # `master` branch, which is the auto-synced mirror of SVN trunk. The
+        # GitHub mirror has no Git branch literally named `trunk`.
+        run: npx wp-env start
+        env:
+          WP_ENV_CORE: ${{ matrix.wp == 'trunk' && 'WordPress/WordPress#master' || format('WordPress/WordPress#{0}', matrix.wp) }}
+          WP_ENV_PHP_VERSION: ${{ matrix.php }}
+
+      - name: Activate plugin and configure permalinks on tests instance
+        # wp-env auto-mounts the plugin but doesn't always activate it on the
+        # tests-cli instance. Activate explicitly and configure pretty
+        # permalinks so REST routes resolve at /wp-json/ instead of 404.
+        run: |
+          npx wp-env run tests-cli wp plugin activate m-chart
+          npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard
+          npx wp-env run tests-cli wp rewrite flush --hard
+
+      - name: Run integration tests
+        run: |
+          mkdir -p tests/junit
+          npx wp-env run tests-cli --env-cwd=wp-content/plugins/m-chart \
+            vendor/bin/phpunit --testsuite integration \
+            --log-junit tests/junit/phpunit-integration.xml
+
+      - name: Upload PHPUnit JUnit XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-integration-junit-php${{ matrix.php }}-wp${{ matrix.wp }}
+          path: tests/junit/phpunit-integration.xml
+          retention-days: 7
+
+      - name: Publish integration-test results
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: tests/junit/phpunit-integration.xml
+          check_name: PHP Integration (PHP ${{ matrix.php }} × WP ${{ matrix.wp }})
+          require_tests: false
+          fail_on_failure: true
+          detailed_summary: true
+
+      - name: Upload coverage
+        if: matrix.php == '8.2' && matrix.wp == '6.7'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
