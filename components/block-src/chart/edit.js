@@ -253,7 +253,7 @@ export default function Edit( { attributes, setAttributes } ) {
                             { ! imageSupport || ! selectedChart.src ?
                                 <div className="no-image" style={ { aspectRatio: selectedChart.width / selectedChart.height } }>
                                     <div className="type">
-                                        <span className={ 'icon ' + selectedChart.type }></span>
+                                        <span className={ 'icon ' + selectedChart.type } aria-hidden="true"></span>
                                         <h5 className="title">{ selectedChart.title }</h5>
                                         { selectedChart.subtitle && (<h6 className="subtitle">{ selectedChart.subtitle }</h6>)}
                                     </div>
@@ -297,7 +297,7 @@ export default function Edit( { attributes, setAttributes } ) {
                                                         placeholder={ __( 'Search by title', 'm-chart' ) }
                                                         onChange={ ( value ) => handleSearch( value ) }
                                                     />
-                                                    <p className="count">
+                                                    <p className="count" role="status" aria-live="polite">
                                                         {
                                                             /* translators: %d: number of charts found */
                                                             sprintf( _n( '%d chart found', '%d charts found', available, 'm-chart' ), available )

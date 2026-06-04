@@ -12,8 +12,194 @@ function numberFormat( number, locale ) {
 }
 
 /**
+ * Locale-format a value only when it is a finite number
+ *
+ * Guards against null/undefined data points that would otherwise render a localized "NaN"
+ *
+ * @param {*}      value  The value to format
+ * @param {string} locale BCP 47 locale string
+ * @return {string} The formatted number, or '' when the value is not finite
+ */
+function safeNumberFormat( value, locale ) {
+	const num = Number( value );
+
+	return Number.isFinite( num ) ? numberFormat( num, locale ) : '';
+}
+
+/**
+ * Returns true for charts produced by M Chart
+ *
+ * M Chart always writes a `labels_pos` into the `m-chart-helper` plugin options block (see class-m-chart-chartjs.php)
+ * Foreign charts on the same page never have it, so this gate keeps the plugin's hooks from touching them
+ * Note: the plugin intentionally declares no Chart.js `defaults` block — doing so would auto-create this options block on every chart and defeat the gate
+ *
+ * @param {Object} chart Chart.js chart instance
+ * @return {boolean} Whether this chart belongs to M Chart
+ */
+function isMChartChart( chart ) {
+	const opts = chart.options?.plugins?.[ 'm-chart-helper' ];
+
+	return !! opts && undefined !== opts.labels_pos;
+}
+
+/**
+ * Parse a CSS color string into an [r, g, b] triple
+ *
+ * Handles #rgb, #rrggbb, and rgb()/rgba() forms
+ * Returns null for anything else (gradients, patterns, named colors) so callers can fall back
+ *
+ * @param {string} color A CSS color string
+ * @return {Array|null} [r, g, b] in 0-255, or null when unparseable
+ */
+function parseRgb( color ) {
+	if ( 'string' !== typeof color ) {
+		return null;
+	}
+
+	const value = color.trim();
+
+	if ( '#' === value[0] ) {
+		if ( 4 === value.length ) {
+			return [
+				parseInt( value[1] + value[1], 16 ),
+				parseInt( value[2] + value[2], 16 ),
+				parseInt( value[3] + value[3], 16 ),
+			];
+		}
+
+		if ( 7 === value.length ) {
+			return [
+				parseInt( value.slice( 1, 3 ), 16 ),
+				parseInt( value.slice( 3, 5 ), 16 ),
+				parseInt( value.slice( 5, 7 ), 16 ),
+			];
+		}
+
+		return null;
+	}
+
+	const match = value.match( /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i );
+
+	if ( match ) {
+		return [ Number( match[1] ), Number( match[2] ), Number( match[3] ) ];
+	}
+
+	return null;
+}
+
+/**
+ * WCAG relative luminance for an [r, g, b] triple
+ *
+ * @param {Array} rgb [r, g, b] in 0-255
+ * @return {number} Relative luminance 0-1
+ */
+function relativeLuminance( rgb ) {
+	const channels = rgb.map( function ( raw ) {
+		const channel = raw / 255;
+
+		return channel <= 0.03928
+			? channel / 12.92
+			: Math.pow( ( channel + 0.055 ) / 1.055, 2.4 );
+	} );
+
+	return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+/**
+ * datalabels scriptable color: pick the darker or lighter ink for the best contrast
+ * against the element the label sits on
+ *
+ * Datalabels default to anchor/align center, so the value can land on top of a dark
+ * bar/slice fill where the default dark ink would drop below 4.5:1
+ * Falls back to the dark default when the fill can't be parsed (gradients, patterns)
+ *
+ * @param {Object} context chartjs-plugin-datalabels scriptable context
+ * @return {string} A hex color with the higher contrast ratio against the fill
+ */
+function datalabelContrastColor( context ) {
+	const dark  = '#222222';
+	const light = '#ffffff';
+
+	let fill = context.dataset && context.dataset.backgroundColor;
+
+	if ( Array.isArray( fill ) ) {
+		fill = fill[ context.dataIndex ];
+	}
+
+	const rgb = parseRgb( fill );
+
+	if ( ! rgb ) {
+		return dark;
+	}
+
+	const contrast = function ( a, b ) {
+		return ( Math.max( a, b ) + 0.05 ) / ( Math.min( a, b ) + 0.05 );
+	};
+
+	const fillLum = relativeLuminance( rgb );
+
+	// Compare the default dark ink against white and keep whichever contrasts better
+	return contrast( fillLum, 1 ) > contrast( fillLum, relativeLuminance( [ 34, 34, 34 ] ) )
+		? light
+		: dark;
+}
+
+/**
+ * Resolve the name to show for a bubble/scatter axis
+ *
+ * Prefers the documented scale title, then falls back to data.labels, then to '' so a missing label never prints "undefined"
+ *
+ * @param {Object} chart Chart.js chart instance
+ * @param {number} index 0 = x, 1 = y, 2 = r (radius has no scale and falls through to data.labels)
+ * @return {string} The axis name, or '' when none is available
+ */
+function axisName( chart, index ) {
+	const scaleKey  = [ 'x', 'y' ][ index ];
+	const titleText = scaleKey && chart.options?.scales?.[ scaleKey ]?.title?.text;
+
+	if ( titleText ) {
+		return String( titleText );
+	}
+
+	const label = chart.data?.labels?.[ index ];
+
+	return ( null == label ) ? '' : String( label );
+}
+
+/**
+ * Total horizontal layout padding (left + right) in canvas pixels
+ *
+ * options.layout.padding is either a number (applied to every side) or an object
+ * M Chart uses 16 by default and { top, right, bottom, left } when the source line is shown (see class-m-chart-chartjs.php)
+ *
+ * @param {Object} chart Chart.js chart instance
+ * @return {number} The combined left + right padding
+ */
+function horizontalLayoutPadding( chart ) {
+	const padding = chart.options?.layout?.padding;
+
+	if ( 'number' === typeof padding ) {
+		return padding * 2;
+	}
+
+	if ( padding && 'object' === typeof padding ) {
+		const left  = Number( padding.left  ?? padding.x ?? 0 );
+		const right = Number( padding.right ?? padding.x ?? 0 );
+
+		return left + right;
+	}
+
+	// Match the default options.layout.padding (16) in get_chart_options_defaults()
+	return 32;
+}
+
+/**
  * Preprocesses bubble chart data so bubble size is constrained but still relative to value
  * See https://chartio.com/learn/charts/bubble-chart-complete-guide/#scale-bubble-area-by-value
+ *
+ * The source value is stashed on each point as `.original`, and `.r` is overwritten with the computed pixel radius
+ * The `.original` stash makes re-runs idempotent — radii always scale from the true value, never from an already-scaled one
+ * The value range is computed across ALL datasets so bubble area stays proportional between series
  *
  * @param {Object} data Chart.js data object
  * @return {Object} The same data object with bubble radii rescaled
@@ -24,7 +210,22 @@ function preprocessBubbleData( data ) {
 	const pixelRange = pixelMax - pixelMin;
 
 	// Use the stored original value if available so re-runs always scale from the true value
-	const valueRange = data.datasets[0].data.reduce( ( acc, val ) => Math.max( acc, val.original ?? val.r ), 0 );
+	let valueRange = 0;
+
+	for ( const ds of data.datasets ) {
+		for ( const val of ds.data ) {
+			const v = Math.abs( val.original ?? val.r );
+
+			if ( v > valueRange ) {
+				valueRange = v;
+			}
+		}
+	}
+
+	// Avoid divide-by-zero when every value is 0
+	if ( 0 === valueRange ) {
+		valueRange = 1;
+	}
 
 	for ( const ds of data.datasets ) {
 		const rawData      = ds.rawData || [];
@@ -34,6 +235,8 @@ function preprocessBubbleData( data ) {
 			const trueR = d.original ?? d.r;
 			d.original  = trueR;
 
+			// rawData is a flat x/y/r triple stream when not structured — the radius lives at i * 3 + 2
+			// the structured form is one [ x, y, r ] array per point; this layout is defined in class-m-chart-chartjs.php
 			const rawR = isStructured ? ( rawData[ i ] && rawData[ i ][ 2 ] ) : rawData[ i * 3 + 2 ];
 			d.originalPrefix = ( rawR && rawR.prefix ) ? rawR.prefix : '';
 			d.originalSuffix = ( rawR && rawR.suffix ) ? rawR.suffix : '';
@@ -53,7 +256,8 @@ function preprocessBubbleData( data ) {
  * @return {string[]} Tooltip lines (label, x, y, value)
  */
 function bubbleChartTooltipLabel( item ) {
-	const locale = item.chart.options.locale;
+	const chart  = item.chart;
+	const locale = chart.options.locale;
 	const lines  = [];
 
 	// Dataset label lives in the tooltip title (see MChartHelper.beforeUpdate)
@@ -63,9 +267,9 @@ function bubbleChartTooltipLabel( item ) {
 	}
 
 	lines.push(
-		item.chart.data.labels[0] + ': ' + numberFormat( item.parsed.x, locale ),
-		item.chart.data.labels[1] + ': ' + numberFormat( item.parsed.y, locale ),
-		item.chart.data.labels[2] + ': ' + numberFormat( item.raw.original, locale ),
+		axisName( chart, 0 ) + ': ' + safeNumberFormat( item.parsed.x, locale ),
+		axisName( chart, 1 ) + ': ' + safeNumberFormat( item.parsed.y, locale ),
+		axisName( chart, 2 ) + ': ' + safeNumberFormat( item.raw.original, locale ),
 	);
 
 	return lines;
@@ -78,7 +282,8 @@ function bubbleChartTooltipLabel( item ) {
  * @return {string[]} Tooltip lines (label, x, y)
  */
 function scatterChartTooltipLabel( item ) {
-	const locale = item.chart.options.locale;
+	const chart  = item.chart;
+	const locale = chart.options.locale;
 	const lines  = [];
 
 	// Dataset label lives in the tooltip title (see MChartHelper.beforeUpdate)
@@ -88,8 +293,8 @@ function scatterChartTooltipLabel( item ) {
 	}
 
 	lines.push(
-		item.chart.data.labels[0] + ': ' + numberFormat( item.parsed.x, locale ),
-		item.chart.data.labels[1] + ': ' + numberFormat( item.parsed.y, locale ),
+		axisName( chart, 0 ) + ': ' + safeNumberFormat( item.parsed.x, locale ),
+		axisName( chart, 1 ) + ': ' + safeNumberFormat( item.parsed.y, locale ),
 	);
 
 	return lines;
@@ -182,45 +387,41 @@ function treemapTooltipLabel( item ) {
  * @return {string|null} Composed tooltip label, or null when the data point has no value
  */
 function chartTooltipLabel( item ) {
-	const type      = item.chart.config.type;
-	const labelsPos = item.chart.options.plugins?.[ 'm-chart-helper' ]?.labels_pos ?? '';
-	const locale    = item.chart.options.locale;
-
-	let label = item.dataset.label;
+	const chart        = item.chart;
+	const type         = chart.config.type;
+	const labelsPos    = chart.options.plugins?.[ 'm-chart-helper' ]?.labels_pos ?? '';
+	const locale       = chart.options.locale;
+	const datasetLabel = item.dataset.label;
 
 	// If raw value is null we don't return anything
 	if ( null == item.raw ) {
 		return null;
 	}
 
-	// Depending on the chart type or data format the label is usually in one of two places
-	if ( 'undefined' === typeof label ) {
-		label = item.label;
+	// Resolve the label shown before the value
+	// When labels_pos is not 'both' only the series (dataset) name is ever shown — the category sits in the tooltip title
+	let name = '';
+
+	if ( 'both' === labelsPos ) {
+		if ( 'bar' === type ) {
+			// Bar tooltips already get the category in the tooltip title, so only the series name is added here
+			name = datasetLabel || '';
+		} else if ( 'polarArea' === type ) {
+			// Polar charts carry the category in data.labels — combine it with the series name when they differ
+			const category = chart.data.labels[ item.dataIndex ];
+
+			name = ( undefined !== datasetLabel && category !== datasetLabel )
+				? String( category ) + datasetLabel
+				: String( category );
+		} else {
+			// Prefer the series name, falling back to the point label
+			name = ( undefined !== datasetLabel ) ? datasetLabel : item.label;
+		}
+	} else if ( undefined !== datasetLabel && '' !== datasetLabel ) {
+		name = datasetLabel;
 	}
 
-	// Bar tooltips already get the label in the tooltip title
-	if ( 'bar' === type ) {
-		label = '';
-	}
-
-	// Polar charts put the label in a strange place
-	if ( 'polarArea' === type ) {
-		label = item.chart.data.labels[ item.dataIndex ];
-	}
-
-	// Make sure we don't double labels
-	if ( 'both' !== labelsPos ) {
-		label = '';
-	}
-
-	// Handle stacked bar/column charts a bit better
-	if ( 'undefined' !== typeof item.dataset.label && label !== item.dataset.label ) {
-		label += item.dataset.label;
-	}
-
-	if ( '' !== label ) {
-		label += ': ';
-	}
+	const prefix = name ? name + ': ' : '';
 
 	// Format the value using the raw data struct (prefix + localized number + suffix)
 	// Fall back to a plain formatted number if rawData is not available
@@ -235,7 +436,7 @@ function chartTooltipLabel( item ) {
 		rawValue = numberFormat( item.raw, locale );
 	}
 
-	return label + rawValue;
+	return prefix + rawValue;
 }
 
 /**
@@ -332,6 +533,8 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 	chart.ctx.save();
 	chart.ctx.font = ( weight ? weight + ' ' : '' ) + fontSize + 'px ' + family;
 
+	// ctx.measureText returns widths in CSS pixels because Chart.js applies the devicePixelRatio transform to chart.ctx
+	// chart.width is also CSS pixels, so the comparison below is apples-to-apples even when image generation overrides the ratio
 	// Fast path: text already fits on one line
 	if ( chart.ctx.measureText( original ).width <= maxWidth ) {
 		chart.options.plugins[ key ].text = original;
@@ -368,7 +571,210 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 }
 
 /**
+ * Wire the tooltip callbacks, datalabels formatter, and dataset color/label scriptables for a treemap chart
+ *
+ * Called from beforeUpdate rather than once at install because the admin preview swaps chart.data and chart.options
+ * wholesale on every refresh (see ChartPreview.js), which would discard one-time wiring and can change the chart type in place
+ *
+ * @param {Object} chart Chart.js chart instance
+ */
+function wireTreemap( chart ) {
+	const ds     = chart.data.datasets[0];
+	const locale = chart.options.locale;
+
+	if ( ds && ds.mChartTreemapHierarchical ) {
+		const topColors = ds.mChartTopGroupColors || {};
+		const topRgb    = ds.mChartTopGroupRgb || {};
+		const topField  = ds.mChartTopGroupField;
+		const groups    = ds.groups || [];
+		// chartjs-chart-treemap renders leaves at level (groups.length - 1)
+		// — its draw() passes that number to the labels/captions render gate
+		const leafLevel = Math.max( 0, groups.length - 1 );
+
+		// Group rectangles get a progressive faint group-color tint that builds with depth:
+		// each nesting level adds a small alpha step over the previous. Hover darkens that
+		// level's tint slightly. Leaves remain alpha-shaded by their share of the top group.
+		const groupBaseAlpha    = 0.06;
+		const groupStepPerLevel = 0.06;
+		const hoverAlphaBump     = 0.06;
+		const leafHoverBump      = 0.18;
+
+		const colorFor = ( raw, active ) => {
+			// At l=0 the group identifier is on raw.g; at deeper levels and leaves we walk
+			// back to the top-level identifier via the original tree entry on raw._data
+			const topId = ( 0 === raw.l ) ? raw.g : ( raw._data && raw._data[ topField ] );
+			const rgb   = topRgb[ topId ];
+
+			if ( ! rgb ) {
+				return topColors[ topId ] || 'rgba(160,160,160,0.5)';
+			}
+
+			// Group rectangle (any non-leaf level) — light tint that builds with nesting depth
+			if ( raw.l < leafLevel ) {
+				const restAlpha = groupBaseAlpha + raw.l * groupStepPerLevel;
+				const alpha     = active ? Math.min( 1, restAlpha + hoverAlphaBump ) : restAlpha;
+
+				return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ alpha.toFixed( 3 ) })`;
+			}
+
+			// Leaf — alpha by share of top-group total; bumped on hover for the same
+			// "more saturated = darker = more important" feel that already encodes value visually
+			const denom     = raw.gs || raw.s || raw.v || 1;
+			const ratio     = raw.v / denom;
+			const baseAlpha = Math.max( 0.35, Math.min( 1, ratio + 0.35 ) );
+			const finalA    = active ? Math.min( 1, baseAlpha + leafHoverBump ) : baseAlpha;
+
+			return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ finalA.toFixed( 3 ) })`;
+		};
+
+		ds.backgroundColor = ( ctx ) => {
+			if ( 'data' !== ctx.type ) {
+				return 'transparent';
+			}
+
+			return colorFor( ctx.raw, false );
+		};
+
+		ds.hoverBackgroundColor = ( ctx ) => {
+			if ( 'data' !== ctx.type ) {
+				return 'transparent';
+			}
+
+			return colorFor( ctx.raw, true );
+		};
+
+		const datasetPrefix = ds.mChartDatasetPrefix || '';
+		const datasetSuffix = ds.mChartDatasetSuffix || '';
+
+		// Format with locale + affixes. Leaves prefer their own _data prefix/suffix
+		// parent rectangles fall back to the dataset-level affixes since the library aggregates
+		const formatWithAffixes = ( raw ) => {
+			const isLeaf  = raw.l >= leafLevel;
+			const leafRaw = isLeaf ? ( raw._data || {} ) : null;
+			const prefix  = isLeaf ? ( leafRaw.prefix || datasetPrefix ) : datasetPrefix;
+			const suffix  = isLeaf ? ( leafRaw.suffix || datasetSuffix ) : datasetSuffix;
+
+			// raw.v is the leaf value at leaves and the aggregated (summed) value at parent rectangles
+			return prefix + numberFormat( raw.v, locale ) + suffix;
+		};
+
+		ds.captions = ds.captions || {};
+
+		ds.captions.formatter = ( ctx ) => {
+			if ( 'data' !== ctx.type || ctx.raw.l >= leafLevel ) {
+				return '';
+			}
+
+			return ctx.raw.g + ': ' + formatWithAffixes( ctx.raw );
+		};
+
+		ds.labels = ds.labels || {};
+
+		// Single-line label — value is in the tooltip on hover
+		// Combined with overflow: 'fit' (set in PHP defaults) small rectangles scale gracefully
+		ds.labels.formatter = ( ctx ) => {
+			if ( 'data' !== ctx.type || ctx.raw.l < leafLevel ) {
+				return '';
+			}
+
+			return String( ctx.raw.g );
+		};
+
+		chart.options.plugins.tooltip.callbacks = {
+			title: () => '',
+			label: ( item ) => String( item.raw.g ) + ': ' + formatWithAffixes( item.raw ),
+		};
+
+		return;
+	}
+
+	// Flat treemap (Phase 1 path)
+	if ( ds && Array.isArray( ds.mChartColors ) ) {
+		const colors = ds.mChartColors;
+
+		ds.backgroundColor = ( ctx ) => {
+			if ( 'data' !== ctx.type ) {
+				return 'transparent';
+			}
+
+			return colors[ ctx.dataIndex ] || colors[0];
+		};
+	}
+
+	if ( ds ) {
+		ds.labels = ds.labels || {};
+		ds.labels.formatter = ( ctx ) => treemapItemText( ctx );
+	}
+
+	chart.options.plugins.tooltip.callbacks = {
+		title: () => '',
+		label: ( item ) => treemapTooltipLabel( item ),
+	};
+
+	// chartjs-plugin-datalabels has nothing useful to do for treemap
+}
+
+/**
+ * Wire the tooltip callbacks for a boxplot/violin chart
+ *
+ * Called from beforeUpdate for the same wholesale-swap reason as wireTreemap
+ *
+ * @param {Object} chart Chart.js chart instance
+ */
+function wireBoxplotViolin( chart ) {
+	const locale = chart.options.locale;
+
+	// Note: when constrain_y_axis is on, the scale bounds are applied in afterDataLimits
+	// This avoids the visible double-paint that beforeUpdate causes
+
+	// Format a single number with the dataset's prefix/suffix and locale formatting
+	const fmtForItem = ( item, value ) => {
+		if ( value === null || value === undefined || ! Number.isFinite( value ) ) {
+			return '';
+		}
+
+		const itemDs = item && item.dataset ? item.dataset : {};
+		const prefix = itemDs.mChartDatasetPrefix || '';
+		const suffix = itemDs.mChartDatasetSuffix || '';
+
+		return prefix + numberFormat( value, locale ) + suffix;
+	};
+
+	chart.options.plugins.tooltip.callbacks = {
+		title: ( items ) => ( items && items.length && items[0].label ) ? String( items[0].label ) : '',
+		label: ( item ) => {
+			// chartjs-chart-boxplot overrides Chart.js's getLabelAndValue so that item.formattedValue is an OBJECT for boxplot/violin
+			const fv    = item.formattedValue;
+			const stats = ( fv && 'object' === typeof fv && fv.raw ) ? fv.raw : ( item.parsed || {} );
+			const lines = [];
+
+			if ( item.dataset && item.dataset.label ) {
+				lines.push( String( item.dataset.label ) );
+			}
+
+			lines.push( 'Min: '    + fmtForItem( item, stats.min ) );
+			lines.push( 'Q1: '     + fmtForItem( item, stats.q1 ) );
+			lines.push( 'Median: ' + fmtForItem( item, stats.median ) );
+			lines.push( 'Q3: '     + fmtForItem( item, stats.q3 ) );
+			lines.push( 'Max: '    + fmtForItem( item, stats.max ) );
+
+			const outliers = Array.isArray( stats.outliers ) ? stats.outliers.length : 0;
+
+			if ( outliers > 0 ) {
+				lines.push( '+ ' + outliers + ' outlier' + ( 1 === outliers ? '' : 's' ) );
+			}
+
+			return lines;
+		},
+	};
+
+	// chartjs-plugin-datalabels is disabled in PHP for these types — nothing to wire here
+}
+
+/**
  * Chart.js plugin that sets up m-chart tooltip callbacks, datalabels formatter, and bubble data preprocessing
+ *
+ * Every hook early-returns for charts that are not M Chart's (see isMChartChart) so the global registration never touches foreign charts
  *
  * beforeLayout: runs before Chart.js calculates layout positions
  * beforeUpdate: runs before every render cycle (creation and updates)
@@ -382,29 +788,42 @@ const MChartHelper = {
 	/**
 	 * beforeLayout: runs before Chart.js calculates layout positions
 	 *
-	 * Wraps title and subtitle text at word boundaries when they don't fit the current hart width
+	 * Wraps title and subtitle text at word boundaries when they don't fit the current chart width
 	 * Keeps font size constant and breaks across multiple lines instead of squishing the text horizontally
 	 *
 	 * @param {Object} chart Chart.js chart instance
 	 */
 	beforeLayout( chart ) {
+		if ( ! isMChartChart( chart ) ) {
+			return;
+		}
+
 		if ( ! chart.ctx || ! chart.width ) {
 			return;
 		}
 
-		// Match the default options.layout.padding in get_chart_options_defaults()
-		const horizontalPadding = 16;
-		const maxWidth          = chart.width - ( horizontalPadding * 2 );
+		// Derive the available width from the configured layout padding so it tracks the PHP defaults
+		const maxWidth = chart.width - horizontalLayoutPadding( chart );
 
 		wrapPluginText( chart, 'title',    maxWidth, '$mchartTitleOriginal'    );
 		wrapPluginText( chart, 'subtitle', maxWidth, '$mchartSubtitleOriginal' );
 	},
 
 	beforeUpdate( chart ) {
+		if ( ! isMChartChart( chart ) ) {
+			return;
+		}
+
 		const type = chart.config.type;
 
 		if ( 'bubble' === type ) {
-			preprocessBubbleData( chart.config.data );
+			// Rescale radii only when the data object itself changed
+			// The admin preview swaps in a new data object on every refresh, so reference equality is the right gate
+			// preprocessBubbleData is idempotent via the stored .original value, so a stray re-run is harmless
+			if ( chart.$mchartBubbleData !== chart.config.data ) {
+				preprocessBubbleData( chart.config.data );
+				chart.$mchartBubbleData = chart.config.data;
+			}
 
 			chart.options.plugins.tooltip.callbacks = {
 				title: ( items ) => items[0]?.dataset?.label ?? '',
@@ -416,187 +835,12 @@ const MChartHelper = {
 				label: ( item ) => scatterChartTooltipLabel( item ),
 			};
 		} else if ( 'treemap' === type ) {
-			const ds     = chart.data.datasets[0];
-			const locale = chart.options.locale;
+			wireTreemap( chart );
 
-			if ( ds && ds.mChartTreemapHierarchical ) {
-				const topColors = ds.mChartTopGroupColors || {};
-				const topRgb    = ds.mChartTopGroupRgb || {};
-				const topField  = ds.mChartTopGroupField;
-				const groups    = ds.groups || [];
-				// chartjs-chart-treemap renders leaves at level (groups.length - 1)
-				// — its draw() passes that number to the labels/captions render gate
-				const leafLevel = Math.max( 0, groups.length - 1 );
-
-				// Group rectangles get a progressive faint group-color tint that builds with depth:
-				// each nesting level adds a small alpha step over the previous. Hover darkens that
-				// level's tint slightly. Leaves remain alpha-shaded by their share of the top group.
-				const groupBaseAlpha    = 0.06;
-				const groupStepPerLevel = 0.06;
-				const hoverAlphaBump    = 0.06;
-				const leafHoverBump     = 0.18;
-
-				const colorFor = ( raw, active ) => {
-					// At l=0 the group identifier is on raw.g; at deeper levels and leaves we walk
-					// back to the top-level identifier via the original tree entry on raw._data
-					const topId = ( 0 === raw.l ) ? raw.g : ( raw._data && raw._data[ topField ] );
-					const rgb   = topRgb[ topId ];
-
-					if ( ! rgb ) {
-						return topColors[ topId ] || 'rgba(160,160,160,0.5)';
-					}
-
-					// Group rectangle (any non-leaf level) — light tint that builds with nesting depth
-					if ( raw.l < leafLevel ) {
-						const restAlpha = groupBaseAlpha + raw.l * groupStepPerLevel;
-						const alpha     = active ? Math.min( 1, restAlpha + hoverAlphaBump ) : restAlpha;
-
-						return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ alpha.toFixed( 3 ) })`;
-					}
-
-					// Leaf — alpha by share of top-group total; bumped on hover for the same
-					// "more saturated = darker = more important" feel that already encodes value visually
-					const denom     = raw.gs || raw.s || raw.v || 1;
-					const ratio     = raw.v / denom;
-					const baseAlpha = Math.max( 0.35, Math.min( 1, ratio + 0.35 ) );
-					const finalA    = active ? Math.min( 1, baseAlpha + leafHoverBump ) : baseAlpha;
-
-					return `rgba(${ rgb.red }, ${ rgb.green }, ${ rgb.blue }, ${ finalA.toFixed( 3 ) })`;
-				};
-
-				ds.backgroundColor = ( ctx ) => {
-					if ( 'data' !== ctx.type ) {
-						return 'transparent';
-					}
-
-					return colorFor( ctx.raw, false );
-				};
-
-				ds.hoverBackgroundColor = ( ctx ) => {
-					if ( 'data' !== ctx.type ) {
-						return 'transparent';
-					}
-
-					return colorFor( ctx.raw, true );
-				};
-
-				const datasetPrefix = ds.mChartDatasetPrefix || '';
-				const datasetSuffix = ds.mChartDatasetSuffix || '';
-
-				// Format with locale + affixes. Leaves prefer their own _data prefix/suffix
-				// parent rectangles fall back to the dataset-level affixes since the library aggregates
-				const formatWithAffixes = ( raw ) => {
-					const isLeaf  = raw.l >= leafLevel;
-					const leafRaw = isLeaf ? ( raw._data || {} ) : null;
-					const prefix  = isLeaf ? ( leafRaw.prefix || datasetPrefix ) : datasetPrefix;
-					const suffix  = isLeaf ? ( leafRaw.suffix || datasetSuffix ) : datasetSuffix;
-					
-					return prefix + numberFormat( raw.v, locale ) + suffix;
-				};
-
-				ds.captions = ds.captions || {};
-				
-				ds.captions.formatter = ( ctx ) => {
-					if ( 'data' !== ctx.type || ctx.raw.l >= leafLevel ) {
-						return '';
-					}
-
-					return ctx.raw.g + ': ' + formatWithAffixes( ctx.raw );
-				};
-
-				ds.labels = ds.labels || {};
-				
-				// Single-line label — value is in the tooltip on hover
-				// Combined with overflow: 'fit' (set in PHP defaults) small rectangles scale gracefully
-				ds.labels.formatter = ( ctx ) => {
-					if ( 'data' !== ctx.type || ctx.raw.l < leafLevel ) {
-						return '';
-					}
-
-					return String( ctx.raw.g );
-				};
-
-				chart.options.plugins.tooltip.callbacks = {
-					title: () => '',
-					label: ( item ) => String( item.raw.g ) + ': ' + formatWithAffixes( item.raw ),
-				};
-
-				return;
-			}
-
-			// Flat treemap (Phase 1 path)
-			if ( ds && Array.isArray( ds.mChartColors ) ) {
-				const colors = ds.mChartColors;
-				
-				ds.backgroundColor = ( ctx ) => {
-					if ( 'data' !== ctx.type ) {
-						return 'transparent';
-					}
-
-					return colors[ ctx.dataIndex ] || colors[0];
-				};
-			}
-
-			if ( ds ) {
-				ds.labels = ds.labels || {};
-				ds.labels.formatter = ( ctx ) => treemapItemText( ctx );
-			}
-
-			chart.options.plugins.tooltip.callbacks = {
-				title: () => '',
-				label: ( item ) => treemapTooltipLabel( item ),
-			};
-
-			// chartjs-plugin-datalabels has nothing useful to do for treemap
 			return;
 		} else if ( 'boxplot' === type || 'violin' === type ) {
-			const locale = chart.options.locale;
+			wireBoxplotViolin( chart );
 
-			// Note: when constrain_y_axis is on, the scale bounds are applied in fterDataLimits 
-			// This avoids the visible double-paint that beforeUpdate causes
-
-			// Format a single number with the dataset's prefix/suffix and locale formatting
-			const fmtForItem = ( item, value ) => {
-				if ( value === null || value === undefined || ! Number.isFinite( value ) ) {
-					return '';
-				}
-
-				const itemDs = item && item.dataset ? item.dataset : {};
-				const prefix = itemDs.mChartDatasetPrefix || '';
-				const suffix = itemDs.mChartDatasetSuffix || '';
-				
-				return prefix + numberFormat( value, locale ) + suffix;
-			};
-
-			chart.options.plugins.tooltip.callbacks = {
-				title: ( items ) => ( items && items.length && items[0].label ) ? String( items[0].label ) : '',
-				label: ( item ) => {
-					// chartjs-chart-boxplot overrides Chart.js's getLabelAndValue so that item.formattedValue is an OBJECT for boxplot/violin
-					const fv    = item.formattedValue;
-					const stats = ( fv && 'object' === typeof fv && fv.raw ) ? fv.raw : ( item.parsed || {} );
-					const lines = [];
-
-					if ( item.dataset && item.dataset.label ) {
-						lines.push( String( item.dataset.label ) );
-					}
-
-					lines.push( 'Min: '    + fmtForItem( item, stats.min ) );
-					lines.push( 'Q1: '     + fmtForItem( item, stats.q1 ) );
-					lines.push( 'Median: ' + fmtForItem( item, stats.median ) );
-					lines.push( 'Q3: '     + fmtForItem( item, stats.q3 ) );
-					lines.push( 'Max: '    + fmtForItem( item, stats.max ) );
-
-					const outliers = Array.isArray( stats.outliers ) ? stats.outliers.length : 0;
-					
-					if ( outliers > 0 ) {
-						lines.push( '+ ' + outliers + ' outlier' + ( 1 === outliers ? '' : 's' ) );
-					}
-
-					return lines;
-				},
-			};
-
-			// chartjs-plugin-datalabels is disabled in PHP for these types — nothing to wire here
 			return;
 		} else {
 			chart.options.plugins.tooltip.callbacks = {
@@ -618,11 +862,14 @@ const MChartHelper = {
 				// Use prefix/suffix stored by preprocessBubbleData; show the original (pre-scaled) r value
 				const prefix = label.originalPrefix || '';
 				const suffix = label.originalSuffix || '';
-				return prefix + numberFormat( label.original, locale ) + suffix;
+				const value  = safeNumberFormat( label.original, locale );
+
+				return value ? prefix + value + suffix : '';
 			}
 
 			if ( 'scatter' === type ) {
 				// Show the Y value, rawData[dataIndex] is an array for LABELS_BOTH, a struct for flat
+				// the flat form is an x/y struct stream where the Y lives at dataIndex * 2 + 1 (layout defined in class-m-chart-chartjs.php)
 				const rawEntry = rawData && rawData[ dataIndex ];
 				let rawY;
 
@@ -640,7 +887,7 @@ const MChartHelper = {
 					return rawY.text;
 				}
 
-				return numberFormat( label.y, locale );
+				return safeNumberFormat( label.y, locale );
 			}
 
 			// Standard charts: use the raw data struct (prefix + localized number + suffix)
@@ -661,18 +908,29 @@ const MChartHelper = {
 
 			return label;
 		};
+
+		// Keep datalabel text legible when a value lands over a dark element fill
+		// Only enhance the default dark ink so a custom color set elsewhere is respected
+		// Once swapped for the function this guard is false on later cycles so it stays idempotent
+		if ( '#222222' === chart.options.plugins.datalabels.color ) {
+			chart.options.plugins.datalabels.color = datalabelContrastColor;
+		}
 	},
 
 	/**
 	 * afterDataLimits: per-scale hook that fires after Chart.js computes auto-fit bounds but before layout calculations
 	 *
-	 * For boxplot/violin charts with constrain_y_axis on, overwrite the scale's min/max with bounds tightened to the actual data 
+	 * For boxplot/violin charts with constrain_y_axis on, overwrite the scale's min/max with bounds tightened to the actual data
 	 * This way the chart paints once with the constrained bounds — no double-paint flicker
 	 *
 	 * @param {Object} chart Chart.js chart instance
 	 * @param {Object} args  Hook args; args.scale is the scale being processed
 	 */
 	afterDataLimits( chart, args ) {
+		if ( ! isMChartChart( chart ) ) {
+			return;
+		}
+
 		const type = chart.config.type;
 
 		if ( 'boxplot' !== type && 'violin' !== type ) {
@@ -710,6 +968,10 @@ const MChartHelper = {
 	 * @param {Object} chart Chart.js chart instance
 	 */
 	afterDraw( chart ) {
+		if ( ! isMChartChart( chart ) ) {
+			return;
+		}
+
 		const opts = chart.options.plugins?.mchart;
 
 		if ( ! opts?.include_source || ! opts?.source ) {
@@ -798,13 +1060,17 @@ const MChartHelper = {
 	/**
 	 * afterEvent: hover cursor + click handling for the rendered source attribution
 	 *
-	 * Mousemove inside the cached bounds switches to pointer cursor 
+	 * Mousemove inside the cached bounds switches to pointer cursor
 	 * Click inside the bounds opens source_url in a new tab (only when source_url is set)
 	 *
 	 * @param {Object} chart Chart.js chart instance
 	 * @param {Object} args  Hook args; args.event is the normalized event
 	 */
 	afterEvent( chart, args ) {
+		if ( ! isMChartChart( chart ) ) {
+			return;
+		}
+
 		const opts   = chart.options.plugins?.mchart;
 		const bounds = chart.$mchartSourceBounds;
 
@@ -818,7 +1084,20 @@ const MChartHelper = {
 
 		const e = args.event;
 
-		if ( ! e || 'number' !== typeof e.x || 'number' !== typeof e.y ) {
+		if ( ! e ) {
+			return;
+		}
+
+		// Reset the cursor when the pointer leaves the canvas so the pointer affordance never sticks
+		if ( 'mouseout' === e.type ) {
+			if ( chart.canvas && 'pointer' === chart.canvas.style.cursor ) {
+				chart.canvas.style.cursor = '';
+			}
+
+			return;
+		}
+
+		if ( 'number' !== typeof e.x || 'number' !== typeof e.y ) {
 			return;
 		}
 
@@ -831,7 +1110,12 @@ const MChartHelper = {
 		if ( 'mousemove' === e.type ) {
 			chart.canvas.style.cursor = inside ? 'pointer' : '';
 		} else if ( 'click' === e.type && inside ) {
-			window.open( opts.source_url, '_blank', 'noopener,noreferrer' );
+			// Null the opener defensively even though noopener is requested in the features string
+			const opened = window.open( opts.source_url, '_blank', 'noopener,noreferrer' );
+
+			if ( opened ) {
+				opened.opener = null;
+			}
 		}
 	},
 };

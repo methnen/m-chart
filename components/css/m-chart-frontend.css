@@ -1,0 +1,15 @@
+.m-chart-container .screen-reader-text,
+.m-chart-image-figure .screen-reader-text {
+  display: block;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*# sourceMappingURL=m-chart-frontend.css.map */

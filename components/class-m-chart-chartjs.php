@@ -711,9 +711,9 @@ class M_Chart_Chartjs {
 				$chart_args['data']['datasets'][ $key ]['borderColor']     = $color;
 
 				if ( 'spline' == $this->post_meta['type'] ) {
-					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0.25;
+					$chart_args['data']['datasets'][ $key ]['tension'] = 0.25;
 				} else {
-					$chart_args['data']['datasets'][ $key ]['lineTension'] = 0;
+					$chart_args['data']['datasets'][ $key ]['tension'] = 0;
 				}
 
 				if (
@@ -1300,6 +1300,10 @@ class M_Chart_Chartjs {
 		];
 
 		$string = str_replace( $find, $replace, $string );
+
+		// Strip any markup that entity-decoding may have resurrected
+		// keep only the <br /> line break markers this method intentionally emits
+		$string = wp_kses( $string, [ 'br' => [] ] );
 
 		// @TODO: See if this addslashes/stripslashes is still necessary (need to remember why I did it first...)
 		return addslashes( stripslashes( $string ) );

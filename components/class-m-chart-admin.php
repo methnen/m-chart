@@ -32,6 +32,7 @@ class M_Chart_Admin {
 
 		add_action( 'admin_init', [ $this, 'admin_init' ] );
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+		add_action( 'admin_print_footer_scripts', [ $this, 'admin_print_footer_scripts' ] );
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ $this, 'admin_footer' ] );
 		add_action( 'wp_ajax_m_chart_export_csv', [ $this, 'ajax_export_csv' ] );
@@ -111,6 +112,37 @@ class M_Chart_Admin {
 
 		// Gotta sort them so they're in the right order
 		ksort( $submenu[ 'edit.php?post_type=' . m_chart()->slug ] );
+
+		// Docs link — sits at the bottom of the Charts submenu
+		// The third array element is the href; WordPress treats it as a full URL when it includes a scheme
+		// target="_blank" is added by admin_print_footer_scripts() since WP's $submenu API doesn't accept link attributes
+		$submenu[ 'edit.php?post_type=' . m_chart()->slug ][ 100 ] = [
+			esc_html__( 'Docs', 'm-chart' ),
+			'edit_posts',
+			'https://docs.mch.art',
+		];
+	}
+
+	/**
+	 * Add target="_blank" to the Docs link in the Charts submenu
+	 *
+	 * WordPress's add_submenu_page() / $submenu API has no concept of link attributes, so we patch the
+	 * rendered <a> via a tiny footer script. Runs on every admin page since the menu is global, but the
+	 * selector is specific enough that it's a no-op everywhere else.
+	 */
+	public function admin_print_footer_scripts() {
+		?>
+<script>
+( () => {
+	const link = document.querySelector( '#adminmenu a[href="https://docs.mch.art"]' );
+
+	if ( link ) {
+		link.setAttribute( 'target', '_blank' );
+		link.setAttribute( 'rel', 'noopener noreferrer' );
+	}
+} )();
+</script>
+		<?php
 	}
 
 	/**

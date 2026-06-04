@@ -73,7 +73,7 @@ header( 'Content-Security-Policy: ' . $csp );
 $this->iframe_csp_nonce = $nonce;
 ?>
 <!doctype html>
-<html>
+<html <?php language_attributes(); ?>>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

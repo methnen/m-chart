@@ -1,4 +1,5 @@
 import { useEffect, useRef } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { useChartDispatch } from '../context/ChartAdminContext';
 
 // Jspreadsheet CE has a bunch of default menu items this is the list of the ones we actually want
@@ -142,14 +143,20 @@ export default function JspreadsheetWrapper( {
 	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<div
-			ref={ containerRef }
-			className="spreadsheet"
-			role="tabpanel"
-			id={ `spreadsheet-panel-${ sheetId }` }
-			aria-labelledby={ `spreadsheet-tab-${ sheetId }` }
-			tabIndex={ isActive ? 0 : -1 }
-			hidden={ ! isActive }
-		/>
+		<>
+			<p id={ `spreadsheet-hint-${ sheetId }` } className="screen-reader-text">
+				{ __( 'The spreadsheet grid has limited screen reader support. Use the CSV Import control to load data.', 'm-chart' ) }
+			</p>
+			<div
+				ref={ containerRef }
+				className="spreadsheet"
+				role="tabpanel"
+				id={ `spreadsheet-panel-${ sheetId }` }
+				aria-labelledby={ `spreadsheet-tab-${ sheetId }` }
+				aria-describedby={ `spreadsheet-hint-${ sheetId }` }
+				tabIndex={ isActive ? 0 : -1 }
+				hidden={ ! isActive }
+			/>
+		</>
 	);
 }

@@ -610,7 +610,8 @@ class M_Chart {
 		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 		class="<?php echo esc_attr( $classes ); ?>"></amp-img>
 	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
-	<div class="screen-reader-text sr-only">
+	<?php wp_enqueue_style( 'm-chart-frontend', $this->plugin_url . '/components/css/m-chart-frontend.css', [], $this->version ); ?>
+	<div class="screen-reader-text">
 		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
 	</div>
 	<?php endif; ?>
@@ -626,7 +627,8 @@ class M_Chart {
 		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 		class="<?php echo esc_attr( $classes ); ?>" />
 	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
-	<div class="screen-reader-text sr-only">
+	<?php wp_enqueue_style( 'm-chart-frontend', $this->plugin_url . '/components/css/m-chart-frontend.css', [], $this->version ); ?>
+	<div class="screen-reader-text">
 		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
 	</div>
 	<?php endif; ?>
@@ -651,6 +653,10 @@ class M_Chart {
 			wp_enqueue_script( $library );
 			wp_enqueue_script( 'chartjs-helper' );
 		}
+
+		// Ship the visually hidden rule the screen reader data table relies on
+		// so it never depends on the active theme defining .screen-reader-text
+		wp_enqueue_style( 'm-chart-frontend', $this->plugin_url . '/components/css/m-chart-frontend.css', [], $this->version );
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
