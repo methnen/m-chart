@@ -43,108 +43,6 @@ function isMChartChart( chart ) {
 }
 
 /**
- * Parse a CSS color string into an [r, g, b] triple
- *
- * Handles #rgb, #rrggbb, and rgb()/rgba() forms
- * Returns null for anything else (gradients, patterns, named colors) so callers can fall back
- *
- * @param {string} color A CSS color string
- * @return {Array|null} [r, g, b] in 0-255, or null when unparseable
- */
-function parseRgb( color ) {
-	if ( 'string' !== typeof color ) {
-		return null;
-	}
-
-	const value = color.trim();
-
-	if ( '#' === value[0] ) {
-		if ( 4 === value.length ) {
-			return [
-				parseInt( value[1] + value[1], 16 ),
-				parseInt( value[2] + value[2], 16 ),
-				parseInt( value[3] + value[3], 16 ),
-			];
-		}
-
-		if ( 7 === value.length ) {
-			return [
-				parseInt( value.slice( 1, 3 ), 16 ),
-				parseInt( value.slice( 3, 5 ), 16 ),
-				parseInt( value.slice( 5, 7 ), 16 ),
-			];
-		}
-
-		return null;
-	}
-
-	const match = value.match( /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i );
-
-	if ( match ) {
-		return [ Number( match[1] ), Number( match[2] ), Number( match[3] ) ];
-	}
-
-	return null;
-}
-
-/**
- * WCAG relative luminance for an [r, g, b] triple
- *
- * @param {Array} rgb [r, g, b] in 0-255
- * @return {number} Relative luminance 0-1
- */
-function relativeLuminance( rgb ) {
-	const channels = rgb.map( function ( raw ) {
-		const channel = raw / 255;
-
-		return channel <= 0.03928
-			? channel / 12.92
-			: Math.pow( ( channel + 0.055 ) / 1.055, 2.4 );
-	} );
-
-	return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
-}
-
-/**
- * datalabels scriptable color: pick the darker or lighter ink for the best contrast
- * against the element the label sits on
- *
- * Datalabels default to anchor/align center, so the value can land on top of a dark
- * bar/slice fill where the default dark ink would drop below 4.5:1
- * Falls back to the dark default when the fill can't be parsed (gradients, patterns)
- *
- * @param {Object} context chartjs-plugin-datalabels scriptable context
- * @return {string} A hex color with the higher contrast ratio against the fill
- */
-function datalabelContrastColor( context ) {
-	const dark  = '#222222';
-	const light = '#ffffff';
-
-	let fill = context.dataset && context.dataset.backgroundColor;
-
-	if ( Array.isArray( fill ) ) {
-		fill = fill[ context.dataIndex ];
-	}
-
-	const rgb = parseRgb( fill );
-
-	if ( ! rgb ) {
-		return dark;
-	}
-
-	const contrast = function ( a, b ) {
-		return ( Math.max( a, b ) + 0.05 ) / ( Math.min( a, b ) + 0.05 );
-	};
-
-	const fillLum = relativeLuminance( rgb );
-
-	// Compare the default dark ink against white and keep whichever contrasts better
-	return contrast( fillLum, 1 ) > contrast( fillLum, relativeLuminance( [ 34, 34, 34 ] ) )
-		? light
-		: dark;
-}
-
-/**
  * Resolve the name to show for a bubble/scatter axis
  *
  * Prefers the documented scale title, then falls back to data.labels, then to '' so a missing label never prints "undefined"
@@ -908,13 +806,6 @@ const MChartHelper = {
 
 			return label;
 		};
-
-		// Keep datalabel text legible when a value lands over a dark element fill
-		// Only enhance the default dark ink so a custom color set elsewhere is respected
-		// Once swapped for the function this guard is false on later cycles so it stays idempotent
-		if ( '#222222' === chart.options.plugins.datalabels.color ) {
-			chart.options.plugins.datalabels.color = datalabelContrastColor;
-		}
 	},
 
 	/**
