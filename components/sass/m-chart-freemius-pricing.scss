@@ -1,0 +1,103 @@
+// Restyle the Freemius pricing/upgrade page to match M Chart's admin branding
+// Loaded only on the pricing screen via the pricing/css_path Freemius filter (see M_Chart::freemius_filters)
+//
+// The React pricing app themes itself through --fs-ds-theme-* custom properties set on #fs_pricing_app
+// We point the accent at the WP admin color scheme so it matches the Upgrade pill and Pro badge
+
+#fs_pricing_app {
+	--fs-ds-theme-primary-accent-color:                  var( --wp-admin-theme-color, #3858e9 );
+	--fs-ds-theme-primary-accent-color-hover:            color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% );
+	--fs-ds-theme-button-primary-background-color:       var( --wp-admin-theme-color, #3858e9 );
+	--fs-ds-theme-button-primary-background-hover-color: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% );
+	--fs-ds-theme-button-primary-border-color:           var( --wp-admin-theme-color, #3858e9 );
+	--fs-ds-theme-package-popular-background:             color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), white 86% );
+	--fs-ds-theme-heading-text-color:                    #1d2327;
+	--fs-ds-theme-background-shade:                       color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), white 92% );
+
+	background-color: #fff;
+
+	// Tidy the layout
+	// Hide the plan tab strip, any free plan card, the currency selector, and the price cents
+	.fs-packages-tab,
+	.fs-package.fs-free-plan,
+	.fs-selected-pricing-amount-fraction,
+	.fs-section--currencies {
+		display: none !important;
+	}
+
+	// Constrain the paid plans to a clean centered two column
+	.fs-packages {
+		width:     80% !important;
+		min-width: 590px;
+		max-width: 860px;
+
+		.fs-package {
+			width: 50% !important;
+		}
+	}
+
+	.fs-section--packages .fs-packages-nav {
+		width: 100% !important;
+	}
+
+	// Differentiate the Pro features, the free features come first so everything from the 7th item on is Pro
+	// Bold and tinted with the darker accent we use elsewhere, plus a Pro badge matching the admin menu badge
+	.fs-plan-features li:nth-child( n + 7 ) .fs-feature-title {
+		font-weight: 700;
+		color:       color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% );
+
+		&::after {
+			content:        "Pro";
+			display:        inline-block;
+			margin-left:    6px;
+			padding:        0 6px;
+			border-radius:  3px;
+			background:     var( --wp-admin-theme-color, #3858e9 );
+			color:          #fff;
+			font-size:      10px;
+			font-weight:    600;
+			line-height:    16px;
+			letter-spacing: 0.5px;
+			vertical-align: middle;
+		}
+	}
+
+	// Make the in-page modals (refund policy, trial confirmation) feel like the plugin's @wordpress/components modals
+	// white rounded card, soft layered shadow, light backdrop, white header with a dark title and close X
+	// !important because the React bundle injects its own .fs-modal rules inline at runtime
+	.fs-modal {
+		background: rgba( 0, 0, 0, 0.35 ) !important;
+
+		.fs-modal-content-container {
+			border-radius: 8px !important;
+			overflow:      hidden;
+			box-shadow:    0 5px 15px #00000014, 0 15px 27px #00000012, 0 30px 36px #0000000a, 0 50px 43px #00000005 !important;
+			color:         #1e1e1e;
+		}
+
+		// The bundle paints the header with the accent color and white text, flip it to a white WP style header
+		.fs-modal-header {
+			background: #fff !important;
+			color:      #1e1e1e !important;
+
+			h3 {
+				color: #1e1e1e !important;
+			}
+
+			// Freemius hangs the close off the corner (top/right -12px) which our overflow: hidden clips
+			// Inset it so it sits visibly inside the top-right of the box
+			.fs-modal-close {
+				color: #1e1e1e !important;
+				top:   12px !important;
+				right: 12px !important;
+			}
+		}
+
+		// Neutral footer with right-aligned buttons, like the plugin's button row (trial modal)
+		.fs-modal-footer {
+			background: #fff !important;
+			text-align: right;
+			border-top: 1px solid var( --fs-ds-theme-divider-color );
+		}
+	}
+}

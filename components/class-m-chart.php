@@ -53,6 +53,7 @@ class M_Chart {
 		'performance'      => 'default',
 		'image_multiplier' => '2',
 		'image_width'      => '900',
+		'default_height'   => '400',
 		'embeds'           => '',
 		'defer_rendering'  => 'enabled',
 		'default_theme'    => '_default',
@@ -71,6 +72,7 @@ class M_Chart {
 	private $admin;
 	private $parse;
 	private $block;
+	private $fs;
 	private $libraries = [
 		'chartjs' => 'Chart.js',
 	];
@@ -79,6 +81,10 @@ class M_Chart {
 	 * Constructor
 	 */
 	public function __construct() {
+		// Initiate Freemius first so it loads as early as possible
+		// Must run synchronously here at file load so Freemius detects m-chart.php as the plugin file
+		$this->freemius();
+
 		$this->plugin_url = $this->plugin_url();
 
 		add_action( 'init', [ $this, 'init' ] );
@@ -99,6 +105,78 @@ class M_Chart {
 
 		// Initiate the block class
 		$this->block();
+	}
+
+	/**
+	 * Initiate and return the Freemius SDK instance
+	 *
+	 * Lazily builds the instance on first call and caches it
+	 * The SDK lives in components/external/freemius rather than the usual plugin root /freemius
+	 * M Chart core (m-chart) is the free version so is_premium is false
+	 * M Chart Pro (m-chart-pro) is a separate plugin sold under the same Freemius product via parallel activation
+	 *
+	 * @return Freemius the Freemius SDK instance for M Chart
+	 */
+	public function freemius() {
+		if ( isset( $this->fs ) ) {
+			return $this->fs;
+		}
+
+		require_once __DIR__ . '/external/freemius/start.php';
+
+		$this->fs = fs_dynamic_init( [
+			'id'                  => '30258',
+			'slug'                => 'm-chart',
+			'premium_slug'        => 'm-chart-pro',
+			'type'                => 'plugin',
+			'public_key'          => 'pk_b1eafc082abd31243874041aaaaab',
+			'is_premium'          => false,
+			'has_premium_version' => true,
+			'has_addons'          => false,
+			'has_paid_plans'      => true,
+			'is_org_compliant'    => true,
+			'parallel_activation' => [
+				'enabled'                  => true,
+				'premium_version_basename' => 'm-chart-pro/m-chart-pro.php',
+			],
+			'menu'                => [
+				'slug'    => 'm-chart-settings',
+				'account' => false,
+				'contact' => false,
+				'support' => false,
+				'parent'  => [
+					'slug' => 'edit.php?post_type=m-chart',
+				],
+			],
+		] );
+
+		$this->freemius_filters();
+
+		do_action( 'm_chart_fs_loaded' );
+
+		return $this->fs;
+	}
+
+	/**
+	 * Register Freemius filters that brand the pricing and opt-in screens
+	 *
+	 * pricing/css_path points Freemius at our stylesheet which is enqueued on the pricing page after its own CSS
+	 * pricing/show_annual_in_monthly shows the real annual price rather than the monthly equivalent of the annual plan
+	 *
+	 * The css_path and plugin_icon paths run through Freemius's fs_asset_url which maps a path to a URL by stripping WP_PLUGIN_DIR
+	 * __DIR__ resolves to the plugin's real path which differs from WP_PLUGIN_DIR when the plugin is symlinked
+	 * plugin_basename normalizes it back to the plugins-dir-relative path so the URL resolves in every install
+	 */
+	private function freemius_filters() {
+		$this->fs->add_filter( 'pricing/css_path', function () {
+			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/css/m-chart-freemius-pricing.css' );
+		} );
+
+		$this->fs->add_filter( 'plugin_icon', function () {
+			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/images/m-chart-icon.svg' );
+		} );
+
+		$this->fs->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
 	}
 
 	/**
@@ -367,6 +445,10 @@ class M_Chart {
 				$defaults['library'] = $this->get_library();
 			}
 		}
+
+		// Default chart height comes from the plugin settings so new charts honor the site default
+		// Saved charts already have a height so wp_parse_args leaves theirs alone
+		$defaults['height'] = (int) $this->get_settings( 'default_height' );
 
 		$post_meta = wp_parse_args( $post_meta, $defaults );
 
@@ -1281,4 +1363,16 @@ function m_chart() {
 	}
 
 	return $m_chart;
+}
+
+/**
+ * Freemius SDK accessor
+ *
+ * Thin global wrapper that delegates to the core class so Freemius ecosystem code and conventions keep working
+ * The actual configuration lives in M_Chart::freemius()
+ *
+ * @return Freemius the Freemius SDK instance for M Chart
+ */
+function m_chart_fs() {
+	return m_chart()->freemius();
 }
