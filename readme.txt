@@ -19,7 +19,7 @@ Manage your data via a spreadsheet interface or an accessible CSV import, displa
 * **Live preview** — the chart redraws instantly as you edit your data and settings, so you can see exactly what you'll get before publishing
 * **Multiple output formats** — render as a live interactive chart, a static image, or a plain HTML data table, all from the same chart
 * **Automatic image generation** — every chart is captured to a real PNG image automatically (no headless browser or external service required)
-	* With a configurable width and 1x–4x quality multiplier
+	* Images have a configurable width and 1x–4x quality multiplier
 	* Perfect for RSS feeds, emails, AMP pages, and anywhere JavaScript doesn't work
 * **Flexible embedding** — shortcode, native block editor block, or iframe for remote/cross-site embedding
 * **Accessibility (WCAG 2.1 AA)** — every front-end chart includes a visually-hidden data table for screen readers, and a Color Blind Safe theme is bundled
