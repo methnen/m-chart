@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: M Chart
-Version: 2.1
-Plugin URI: http://github.com/methnen/m-chart
+Version: 2.2
+Plugin URI: https://github.com/methnen/m-chart
 Description: Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
 Author: Jamie Poitra
-Author URI: http://methnen.com
+Author URI: https://methnen.com
 Tags: chartjs, highcharts, graphs, charts, tables, data
 Text Domain: m-chart
 Domain Path: /components/languages
