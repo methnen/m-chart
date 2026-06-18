@@ -25,13 +25,13 @@ class M_Chart {
 		'legend'            => true,
 		'source'            => '',
 		'source_url'        => '',
-		'data'               => [],
-		'set_names'          => [],
-		'data_point_colors'  => false,
-		'mean_point'         => true,
-		'sample_points'      => false,
-		'constrain_y_axis'   => false,
-		'include_source'     => false,
+		'data'              => [],
+		'set_names'         => [],
+		'data_point_colors' => false,
+		'mean_point'        => true,
+		'sample_points'     => false,
+		'constrain_y_axis'  => false,
+		'include_source'    => false,
 	];
 	public $get_chart_default_args = [
 		'show'  => 'chart',
@@ -140,13 +140,13 @@ class M_Chart {
 				'premium_version_basename' => 'm-chart-pro/m-chart-pro.php',
 			],
 			'menu'                => [
-				'slug'    => 'm-chart-settings',
-				'account' => false,
+				// Anchor on the Charts CPT itself so the Freemius pages are plugin-level (m-chart-account, m-chart-pricing)
+				// The CPT slug contains ".php?" so get_slug() falls back to the m-chart affix rather than an m-chart-settings- prefix
+				'slug'    => 'edit.php?post_type=m-chart',
+				// Surface the Freemius Account page as a submenu link under the Charts menu
+				'account' => true,
 				'contact' => false,
 				'support' => false,
-				'parent'  => [
-					'slug' => 'edit.php?post_type=m-chart',
-				],
 			],
 		] );
 
@@ -166,6 +166,9 @@ class M_Chart {
 	 * The css_path and plugin_icon paths run through Freemius's fs_asset_url which maps a path to a URL by stripping WP_PLUGIN_DIR
 	 * __DIR__ resolves to the plugin's real path which differs from WP_PLUGIN_DIR when the plugin is symlinked
 	 * plugin_basename normalizes it back to the plugins-dir-relative path so the URL resolves in every install
+	 *
+	 * The opt-in / connect screen has no css_path filter so we inline our stylesheet on the connect/before action instead
+	 * It prints after Freemius's own connect.css so equal-specificity overrides win on source order
 	 */
 	private function freemius_filters() {
 		$this->fs->add_filter( 'pricing/css_path', function () {
@@ -177,6 +180,33 @@ class M_Chart {
 		} );
 
 		$this->fs->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
+
+		$this->fs->add_action( 'connect/before', function () {
+			$css_path = __DIR__ . '/css/m-chart-freemius-connect.css';
+
+			if ( ! file_exists( $css_path ) ) {
+				return;
+			}
+
+			echo "<style id=\"m-chart-freemius-connect\">\n";
+			echo file_get_contents( $css_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset
+			echo "</style>\n";
+		} );
+
+		// Swap Freemius's casual interjection headings for professional wording
+		// These are admin-notice titles keyed by id and the trailing "!" / "..." is appended by the SDK so it carries over
+		// Values are left unescaped since Freemius escapes them at the output site
+		// Deferred to init since freemius() runs at construct and the __() calls would load the text domain before WordPress is ready
+		add_action( 'init', function () {
+			fs_override_i18n( [
+				'yee-haw'  => __( 'Success', 'm-chart' ),
+				'woot'     => __( 'Success', 'm-chart' ),
+				'right-on' => __( 'Success', 'm-chart' ),
+				'oops'     => __( 'Error', 'm-chart' ),
+				'hmm'      => __( 'Heads up', 'm-chart' ),
+				'hey'      => __( 'Hello', 'm-chart' ),
+			], $this->slug );
+		} );
 	}
 
 	/**
@@ -278,6 +308,10 @@ class M_Chart {
 			[
 				'labels' => [
 					'name'               => esc_html__( 'Charts', 'm-chart' ),
+					// Top-level admin menu label defaults to 'name' so we set it explicitly to brand the menu as M Chart
+					'menu_name'          => esc_html__( 'M Chart', 'm-chart' ),
+					// First submenu item label defaults to menu_name so we set it back to Charts (parent reads M Chart, list reads Charts)
+					'all_items'          => esc_html__( 'Charts', 'm-chart' ),
 					'singular_name'      => esc_html__( 'Chart', 'm-chart' ),
 					'add_new'            => esc_html__( 'Add Chart', 'm-chart' ),
 					'add_new_item'       => esc_html__( 'Add Chart', 'm-chart' ),

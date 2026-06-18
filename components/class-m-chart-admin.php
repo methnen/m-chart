@@ -108,6 +108,29 @@ class M_Chart_Admin {
 			}
 		}
 
+		// Pin the Freemius Account link to a predictable order just below Settings
+		// Parse the page slug out of the account URL so this survives the menu slug scheme rather than hardcoding it
+		// Freemius's own ordering can drift against our ksort so we set an explicit position
+		$account_slug = '';
+		$query        = wp_parse_url( m_chart()->freemius()->get_account_url(), PHP_URL_QUERY );
+
+		if ( $query ) {
+			parse_str( $query, $query_args );
+			$account_slug = $query_args['page'] ?? '';
+		}
+
+		if ( '' !== $account_slug && ! empty( $submenu[ $menu_slug ] ) ) {
+			foreach ( $submenu[ $menu_slug ] as $position => $item ) {
+				if ( isset( $item[2] ) && $item[2] === $account_slug ) {
+					unset( $submenu[ $menu_slug ][ $position ] );
+
+					$submenu[ $menu_slug ][96] = $item;
+
+					break;
+				}
+			}
+		}
+
 		// Docs link — sits at the bottom of the Charts submenu
 		// The third array element is the href; WordPress treats it as a full URL when it includes a scheme
 		// target="_blank" is added by admin_print_footer_scripts() since WP's $submenu API doesn't accept link attributes
@@ -183,24 +206,53 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Hook: admin_head — print an inline <style> that renders the Upgrade submenu link as a filled pill button with a trailing trendingUp icon
+	 * Hook: admin_head — print inline <style> for the Charts admin menu
 	 *
 	 * Lives inline rather than in the main SCSS bundle because the sidebar renders on every admin page
 	 * and that bundle only enqueues on chart screens
 	 *
+	 * First block hides Freemius's "↳" sub-item arrow on the Account link
+	 * Printed for every user since the Account link shows for paying users too
+	 *
+	 * Second block renders the Upgrade submenu link as a filled pill button with a trailing trendingUp icon
 	 * Only printed for free users since that is when the Upgrade link exists
 	 * The pill mimics the Pro plugin's menu badge - accent fill via --wp-admin-theme-color, white text, darker accent on hover
 	 * The icon is the trendingUp icon from @wordpress/icons masked so background-color: currentColor tints it white to match the text
 	 */
 	public function admin_head() {
+		// Freemius prefixes its sub-submenu items with a "↳" arrow via span.fs-submenu-item.fs-sub:before
+		// The #adminmenu prefix beats that selector so we can drop the glyph on our Account link
+		?>
+		<style id="m-chart-menu-account">
+			#adminmenu .fs-submenu-item.account.fs-sub::before {
+				display: none;
+			}
+		</style>
+		<?php
+
 		if ( ! m_chart()->freemius()->is_free_plan() ) {
 			return;
 		}
 
-		// Full page=m-chart-settings-pricing slug so we don't also match the Settings link
+		// Parse the pricing page slug from the upgrade URL so the selector tracks the Freemius menu slug scheme
+		// Matching the full page slug avoids also styling the Settings link
+		$pricing_slug = '';
+		$query        = wp_parse_url( m_chart()->freemius()->get_upgrade_url(), PHP_URL_QUERY );
+
+		if ( $query ) {
+			parse_str( $query, $query_args );
+			$pricing_slug = $query_args['page'] ?? '';
+		}
+
+		// No pricing slug means there's no Upgrade link to style
+		if ( '' === $pricing_slug ) {
+			return;
+		}
+
+		$pricing_attr = esc_attr( $pricing_slug );
 		?>
 		<style id="m-chart-menu-upgrade">
-			#adminmenu a[href*="page=m-chart-settings-pricing"] {
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"] {
 				display:       inline-block;
 				margin:        4px 0 4px 13px;
 				/* 
@@ -214,8 +266,8 @@ class M_Chart_Admin {
 				color:         #fff !important;
 			}
 
-			#adminmenu a[href*="page=m-chart-settings-pricing"]:hover,
-			#adminmenu a[href*="page=m-chart-settings-pricing"]:focus {
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]:hover,
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]:focus {
 				background: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% ) !important;
 				color:      #fff !important;
 				/* 
@@ -225,7 +277,7 @@ class M_Chart_Admin {
 				box-shadow: none !important;
 			}
 
-			#adminmenu a[href*="page=m-chart-settings-pricing"]::after {
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]::after {
 				content:          "";
 				display:          inline-block;
 				width:            18px;
@@ -242,11 +294,11 @@ class M_Chart_Admin {
 			This keeps the bigger size but matches the left padding to the right so the button looks normal
 			*/
 			@media screen and ( max-width: 782px ) {
-				#adminmenu a[href*="page=m-chart-settings-pricing"] {
+				#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"] {
 					padding: 10px !important;
 				}
 
-				#adminmenu a[href*="page=m-chart-settings-pricing"]::after {
+				#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]::after {
 					width:  23px;
 					height: 23px;
 				}
