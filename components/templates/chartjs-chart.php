@@ -38,6 +38,16 @@ $desc_id      = $canvas_id . '-desc';
 	</figcaption>
 	<div id="<?php echo esc_attr( $desc_id ); ?>" class="screen-reader-text">
 		<?php
+		// Surface the chart's excerpt as a human-written summary at the top of the screen-reader description
+		// Read the raw excerpt field rather than get_the_excerpt() so an empty field is not auto-generated from post content
+		$excerpt = get_post_field( 'post_excerpt', $post_id );
+
+		if ( '' !== trim( (string) $excerpt ) ) {
+			?>
+			<p class="m-chart-excerpt"><?php echo esc_html( $excerpt ); ?></p>
+			<?php
+		}
+
 		// Render the data table(s) as an accessible description for screen-reader users.
 		// build_table() handles multi-sheet, parse_data, and template inclusion.
 		echo m_chart()->build_table( $post_id );
