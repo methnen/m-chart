@@ -5,18 +5,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Theme Name: M Chart
+ * Theme Name: Chart.js
  */
 
 return array(
 	'colors' => array(
-		'#0f64ab', // Dark Blue
-		'#3b93c3', // Medium Blue
-		'#8ec3de', // Light Blue
-		'#47494b', // Gray
-		'#f6a382', // Peach
-		'#d75f4c', // Coral
-		'#b31529', // Red
+		'#56a0e5', // Blue
+		'#ed6d85', // Pink
+		'#6cbdbf', // Turquoise
+		'#f1a354', // Orange
+		'#9169f6', // Purple
+		'#f7cf6b', // Yellow
+		'#c9cbce', // Gray
 	),
 	'points' => array(
 		array(

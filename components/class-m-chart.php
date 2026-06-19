@@ -101,6 +101,8 @@ class M_Chart {
 		add_filter( 'm_chart_instant_preview_support', [ $this, 'm_chart_instant_preview_support' ], 10, 2 );
 		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
+		add_shortcode( 'm-chart', [ $this, 'chart_shortcode' ] );
+		// Backwards-compatible alias for content created before the rename
 		add_shortcode( 'chart', [ $this, 'chart_shortcode' ] );
 
 		// Initiate the block class
@@ -974,7 +976,9 @@ class M_Chart {
 	}
 
 	/**
-	 * Return a chart via the [chart id="x"] short code
+	 * Return a chart via the [m-chart id="x"] short code
+	 *
+	 * Also registered under the legacy [chart] name for backwards compatibility
 	 *
 	 * @param array $args an array of arguments passed by the WP short code API
 	 *

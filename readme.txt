@@ -34,7 +34,7 @@ For a detailed explanation of why M Chart Pro exists and what my plans are going
 
 The short version is that M Chart will continue to be supported and developed, I've been working on this plugin and providing it for free over 10 years now and that will continue to be the case.
 
-However, that support and development will continue to match my original scope for the plugin which was to provide an efficent and easy to use UI for managing datasets and displaying them as charts. Because of my limited ability to devote time to development of M Chart I've had to purposely not add some features that have been requested throughout the years. Not because those features were bad ideas but because I couldn't devote the kind of time necessary to do those features justice.
+However, that support and development will continue to match my original scope for the plugin which was to provide an efficent and easy to use UI for managing datasets and displaying them as charts and nothing more. Because of my limited ability to devote time to development of M Chart I've had to intentionally not add some features that have been requested throughout the years. Not because those features were bad ideas, but because I couldn't devote the kind of time necessary to do those features justice.
 
 M Chart Pro will be where I add those out of scope features as an addon to M Chart and since M Chart Pro will have a yearly subscription fee it will hopefully provide me with the financial stability to allow me to devote my time more fully to M Chart overall.
 
@@ -61,6 +61,9 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* This mostly prevents the squished text that you sometimes got with long tiles or subtitles
 * Made some efficiency and code improvements to the Chart.js helper plugin
 * Some minor accessibility improvements
+* Default theme is now M Chart specific and uses a new color palette
+* Tweaked the Color Blind Safe palette to use the well regarded Okabe and Ito palette
+	* Also added different point shapes to further differentiate data series
 
 = 2.1 =
 
