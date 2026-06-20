@@ -64,6 +64,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Default theme is now M Chart specific and uses a new color palette
 * Tweaked the Color Blind Safe palette to use the well regarded Okabe and Ito palette
 	* Also added different point shapes to further differentiate data series
+* Fixed an issue where data in an unexpected format could crash the Admin UI
 
 = 2.1 =
 

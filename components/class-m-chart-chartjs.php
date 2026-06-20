@@ -515,8 +515,8 @@ class M_Chart_Chartjs {
 			}
 		}
 
-		$this->colors = apply_filters( 'm_chart_chartjs_colors', $this->colors, $this->post );
-		$this->points = apply_filters( 'm_chart_chartjs_points', $this->points, $this->post );
+		$this->colors = apply_filters( 'm_chart_chartjs_colors', $this->colors, $this->post, $this->post_meta );
+		$this->points = apply_filters( 'm_chart_chartjs_points', $this->points, $this->post, $this->post_meta );
 
 		// It's possible to have more data points/sets than colors or point styles so we need to perform a modulo operation when iterating through them
 		$color_count = count( $this->colors );
