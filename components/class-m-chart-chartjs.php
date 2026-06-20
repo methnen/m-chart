@@ -775,6 +775,13 @@ class M_Chart_Chartjs {
 
 		$chart_args = apply_filters( 'm_chart_chart_args', $chart_args, $this->post, $this->post_meta, $this->args );
 
+		// Re-index the datasets so the list is always a JSON array
+		// Skipped null sets upstream can leave non-sequential keys which json_encode would turn into an object and crash Chart.js
+		// Only the outer order is re-keyed so each dataset keeps its own label and data
+		if ( isset( $chart_args['data']['datasets'] ) ) {
+			$chart_args['data']['datasets'] = array_values( $chart_args['data']['datasets'] );
+		}
+
 		// Set the cache, we'll regenerate this when someone updates the post
 		if ( $cache ) {
 			wp_cache_set( $cache_key, $chart_args, m_chart()->slug );
@@ -829,10 +836,16 @@ class M_Chart_Chartjs {
 	public function get_value_labels_array() {
 		$value_labels = m_chart()->parse()->value_labels;
 
-		if ( isset( $value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ] ) ) {
-			$label_key = M_Chart_Parse::PARSE_ROWS == $this->post_meta['parse_in'] ? M_Chart_Parse::LABELS_FIRST_ROW : M_Chart_Parse::LABELS_FIRST_COLUMN;
+		// In LABELS_BOTH mode value_labels is an associative map keyed by first_row / first_column
+		// We must return the relevant sub-array as a flat list
+		// Gating on the position (rather than isset of one sub-key) avoids returning the whole map when a side has no labels
+		// e.g. an empty A1 with a value in B1 - returning the map there would json_encode to an object and crash Chart.js (n.slice)
+		if ( M_Chart_Parse::LABELS_BOTH === m_chart()->parse()->value_labels_position ) {
+			$label_key = M_Chart_Parse::PARSE_ROWS == $this->post_meta['parse_in']
+				? M_Chart_Parse::LABELS_FIRST_ROW
+				: M_Chart_Parse::LABELS_FIRST_COLUMN;
 
-			return $value_labels[ $label_key ];
+			return $value_labels[ $label_key ] ?? [];
 		}
 
 		return $value_labels;
