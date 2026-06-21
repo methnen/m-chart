@@ -21,7 +21,7 @@ class M_Chart {
 		'y_min_value'       => 0,
 		'x_title'           => '',
 		'x_units'           => '',
-		'height'            => 400,
+		'height'            => 600,
 		'legend'            => true,
 		'source'            => '',
 		'source_url'        => '',
