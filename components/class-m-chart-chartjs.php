@@ -667,7 +667,8 @@ class M_Chart_Chartjs {
 						$chart_args['data']['datasets'][ $key ]['datalabels'] = [
 							'align'  => 'end',
 							'anchor' => 'end',
-							'color'  => $this->colors[ $key % $color_count ],
+							// When color per data point is on match each label to its bar so the per-point colors carry through
+							'color'  => ( $use_per_point_colors && $is_single_series ) ? $per_point : $this->colors[ $key % $color_count ],
 						];
 					}
 				}

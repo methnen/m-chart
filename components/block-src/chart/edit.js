@@ -268,7 +268,7 @@ export default function Edit( { attributes, setAttributes } ) {
                 </div>
             ) : (
                 <div className="wp-block m-chart-selector">
-                    <Placeholder className="block-editor-m-chart-placeholder" icon={ getBlockType( 'm-chart/chart' ).icon.src } label={ __( 'Chart', 'm-chart' ) }>
+                    <Placeholder className="block-editor-m-chart-placeholder" icon={ getBlockType( 'm-chart/chart' ).icon.src } label={ __( 'M Chart', 'm-chart' ) }>
                         <div className="viewbox">
                             { loadProblem ?
                                 <p>{ __( 'There was a problem loading charts', 'm-chart' ) }</p>

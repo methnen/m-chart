@@ -1,4 +1,1334 @@
-(()=>{var t={873(t,e,r){var a=r(325).Symbol;t.exports=a},552(t,e,r){var a=r(873),s=r(659),n=r(350),i=a?a.toStringTag:void 0;t.exports=function(t){return null==t?void 0===t?"[object Undefined]":"[object Null]":i&&i in Object(t)?s(t):n(t)}},128(t,e,r){var a=r(800),s=/^\s+/;t.exports=function(t){return t?t.slice(0,a(t)+1).replace(s,""):t}},840(t){var e="object"==typeof globalThis&&globalThis&&globalThis.Object===Object&&globalThis;t.exports=e},659(t,e,r){var a=r(873),s=Object.prototype,n=s.hasOwnProperty,i=s.toString,c=a?a.toStringTag:void 0;t.exports=function(t){var e=n.call(t,c),r=t[c];try{t[c]=void 0;var a=!0}catch(t){}var s=i.call(t);return a&&(e?t[c]=r:delete t[c]),s}},350(t){var e=Object.prototype.toString;t.exports=function(t){return e.call(t)}},325(t,e,r){var a=r(840),s="object"==typeof self&&self&&self.Object===Object&&self,n=a||s||Function("return this")();t.exports=n},800(t){var e=/\s/;t.exports=function(t){for(var r=t.length;r--&&e.test(t.charAt(r)););return r}},221(t,e,r){var a=r(805),s=r(124),n=r(374),i=Math.max,c=Math.min;t.exports=function(t,e,r){var l,o,h,d,u,p,m=0,f=!1,x=!1,v=!0;if("function"!=typeof t)throw new TypeError("Expected a function");function b(e){var r=l,a=o;return l=o=void 0,m=e,d=t.apply(a,r)}function j(t){var r=t-p;return void 0===p||r>=e||r<0||x&&t-m>=h}function g(){var t=s();if(j(t))return w(t);u=setTimeout(g,function(t){var r=e-(t-p);return x?c(r,h-(t-m)):r}(t))}function w(t){return u=void 0,v&&l?b(t):(l=o=void 0,d)}function y(){var t=s(),r=j(t);if(l=arguments,o=this,p=t,r){if(void 0===u)return function(t){return m=t,u=setTimeout(g,e),f?b(t):d}(p);if(x)return clearTimeout(u),u=setTimeout(g,e),b(p)}return void 0===u&&(u=setTimeout(g,e)),d}return e=n(e)||0,a(r)&&(f=!!r.leading,h=(x="maxWait"in r)?i(n(r.maxWait)||0,e):h,v="trailing"in r?!!r.trailing:v),y.cancel=function(){void 0!==u&&clearTimeout(u),m=0,l=p=o=u=void 0},y.flush=function(){return void 0===u?d:w(s())},y}},805(t){t.exports=function(t){var e=typeof t;return null!=t&&("object"==e||"function"==e)}},346(t){t.exports=function(t){return null!=t&&"object"==typeof t}},394(t,e,r){var a=r(552),s=r(346);t.exports=function(t){return"symbol"==typeof t||s(t)&&"[object Symbol]"==a(t)}},124(t,e,r){var a=r(325);t.exports=function(){return a.Date.now()}},374(t,e,r){var a=r(128),s=r(805),n=r(394),i=/^[-+]0x[0-9a-f]+$/i,c=/^0b[01]+$/i,l=/^0o[0-7]+$/i,o=parseInt;t.exports=function(t){if("number"==typeof t)return t;if(n(t))return NaN;if(s(t)){var e="function"==typeof t.valueOf?t.valueOf():t;t=s(e)?e+"":e}if("string"!=typeof t)return 0===t?t:+t;t=a(t);var r=c.test(t);return r||l.test(t)?o(t.slice(2),r?2:8):i.test(t)?NaN:+t}}},e={};function r(a){var s=e[a];if(void 0!==s)return s.exports;var n=e[a]={exports:{}};return t[a](n,n.exports,r),n.exports}r.n=t=>{var e=t&&t.__esModule?()=>t.default:()=>t;return r.d(e,{a:e}),e},r.d=(t,e)=>{for(var a in e)r.o(e,a)&&!r.o(t,a)&&Object.defineProperty(t,a,{enumerable:!0,get:e[a]})},r.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),(()=>{"use strict";const t=window.wp.blocks,e=window.wp.components,a=JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"m-chart/chart","title":"M Chart","category":"layout","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"integer","default":0},"show":{"type":"string","default":"chart"}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}'),s=window.wp.element,n=window.wp.blockEditor,i=window.wp.i18n,c=window.wp.htmlEntities,l=window.wp.apiFetch;var o=r.n(l),h=r(221),d=r.n(h);const u=window.ReactJSXRuntime,p=(0,u.jsxs)(e.SVG,{viewBox:"0 0 24 24",xmlns:"http://www.w3.org/2000/svg",width:"24",height:"24","aria-hidden":"true",focusable:"false",children:[(0,u.jsx)(e.Path,{d:"M 18.7 3 L 5.3 3 C 4 3 3 4 3 5.3 L 3 18.7 C 3 20 4 21 5.3 21 L 18.7 21 C 20 21 21 20 21 18.7 L 21 5.3 C 21 4 20 3 18.7 3 Z M 19.5 18.7 C 19.5 19.1 19.1 19.5 18.7 19.5 L 5.3 19.5 C 4.9 19.5 4.5 19.1 4.5 18.7 L 4.5 5.3 C 4.5 4.9 4.9 4.5 5.3 4.5 L 18.7 4.5 C 19.1 4.5 19.5 4.9 19.5 5.3 L 19.5 18.7 Z"}),(0,u.jsx)(e.Path,{d:"M 12.312 7 L 12.312 11.688 L 17 11.688 C 17 9.1 14.9 7 12.312 7 Z M 11.375 12.157 L 11.375 7.635 C 8.932 7.797 7 9.828 7 12.312 C 7 14.9 9.1 17 11.687 17 C 14.172 17 16.203 15.068 16.365 12.625 L 11.375 12.625 L 11.375 12.157 Z",style:{strokeWidth:1}})]});(0,t.registerBlockType)(a,{edit:function({attributes:r,setAttributes:a}){const[l,h]=(0,s.useState)([]),[p,m]=(0,s.useState)(""),[f,x]=(0,s.useState)(!1),[v,b]=(0,s.useState)(0),[j,g]=(0,s.useState)(!1),[w,y]=(0,s.useState)(null),[_,N]=(0,s.useState)(null),[S,C]=(0,s.useState)(!1),[k,T]=(0,s.useState)(!1),[I,L]=(0,s.useState)(1),[E,O]=(0,s.useState)(!1),B=(0,s.useRef)(null),M=`${_}/wp-admin/post-new.php?post_type=m-chart`,P=`${_}/wp-admin/post.php?post=${r.chartId}&action=edit`,$=(0,n.useBlockProps)({className:"m-chart-block-chart-selector"}),R=`?cache=${performance.now()}`,F=(0,s.useCallback)((t,e=1)=>{T(!1),e>1&&O(!0);const r=new URLSearchParams;t&&r.set("s",t),e>1&&r.set("page",e);const a=r.toString();o()({path:"/m-chart/v1/charts"+(a?"?"+a:"")}).then(t=>{const r=t.posts.map(t=>({id:t.id,title:(0,c.decodeEntities)(t.title||"-"),subtitle:(0,c.decodeEntities)(t.subtitle||""),width:t.width,height:t.height,type:t.type||"",src:t.url||""}));b(t.found_posts),h(1===e?r:t=>[...t,...r]),g(!0),O(!1)}).catch(t=>{"rest_no_route"===t.code&&T(!0),O(!1)})},[]),Z=(0,s.useMemo)(()=>d()(t=>{m(t),L(1),F(t)},500),[F]);(0,s.useEffect)(()=>{o()({path:"/m-chart/v1/options"}).then(t=>{C(t.image_support),N(t.siteurl),x(t.posts_avilable)}),F(p)},[]),(0,s.useEffect)(()=>{var t;y(null),r.chartId&&(t=parseInt(r.chartId,10),o()({path:`/m-chart/v1/chart/${t}`}).then(t=>{y({id:t.id,title:(0,c.decodeEntities)(t.title||"-"),subtitle:(0,c.decodeEntities)(t.subtitle||""),width:t.width,height:t.height,type:t.type||"",src:t.url||""})}).catch(()=>{}))},[r.chartId]),(0,s.useEffect)(()=>{const t=B.current;if(!t)return;const e=()=>{if(!E&&!(l.length>=v)&&t.scrollTop+t.clientHeight>=t.scrollHeight-100){const t=I+1;L(t),F(p,t)}};return t.addEventListener("scroll",e),()=>t.removeEventListener("scroll",e)},[l,v,E,I,p,F,r.chartId]);const W=l.map(t=>{
-/* translators: %s: the chart's title */
-const e=(0,i.sprintf)((0,i.__)("Select chart: %s","m-chart"),t.title);return S&&t.src?(0,u.jsx)("li",{className:"item image",children:(0,u.jsxs)("button",{type:"button",className:"select",onClick:()=>A(t.id),"aria-label":e,children:[(0,u.jsx)("h6",{className:"title",children:t.title}),(0,u.jsx)("img",{src:t.src+R,alt:""})]})},t.id):(0,u.jsx)("li",{className:"item no-image",children:(0,u.jsx)("button",{type:"button",className:"select",onClick:()=>A(t.id),"aria-label":e,children:(0,u.jsxs)("div",{className:"type",children:[(0,u.jsx)("span",{className:"icon "+t.type,"aria-hidden":"true"}),(0,u.jsx)("h6",{className:"title",children:t.title})]})})},t.id)}),A=t=>{a({chartId:t}),y(null)};return(0,u.jsxs)("div",{...$,children:[!!r.chartId&&(0,u.jsx)(n.InspectorControls,{children:(0,u.jsx)(e.PanelBody,{title:(0,i.__)("Display settings","m-chart"),children:(0,u.jsx)(e.SelectControl,{label:(0,i.__)("Show","m-chart"),value:r.show,options:[{label:(0,i.__)("Chart","m-chart"),value:"chart"},{label:(0,i.__)("Image","m-chart"),value:"image"},{label:(0,i.__)("Table","m-chart"),value:"table"}],onChange:t=>a({show:t})})})}),(0,u.jsx)(n.BlockControls,{children:(0,u.jsxs)(e.ToolbarGroup,{className:"m-chart-block",children:[!r.chartId&&(0,u.jsx)(e.ToolbarButton,{onClick:()=>window.open(M,"_blank"),icon:"external",children:(0,i.__)("New chart","m-chart")}),!!r.chartId&&(0,u.jsxs)(u.Fragment,{children:[(0,u.jsx)(e.ToolbarButton,{onClick:()=>window.open(P,"_blank"),icon:"external",children:(0,i.__)("Edit chart","m-chart")}),(0,u.jsx)(e.ToolbarButton,{onClick:()=>A(0),children:(0,i.__)("Replace","m-chart")})]})]})}),r.chartId?(0,u.jsx)("div",{className:"wp-block m-chart-selector",children:w?(0,u.jsx)("div",{className:"chart-selected",children:S&&w.src?(0,u.jsx)("div",{className:"image",children:(0,u.jsx)("img",{className:"preview",src:w.src+R,alt:w.title||""})}):(0,u.jsx)("div",{className:"no-image",style:{aspectRatio:w.width/w.height},children:(0,u.jsxs)("div",{className:"type",children:[(0,u.jsx)("span",{className:"icon "+w.type,"aria-hidden":"true"}),(0,u.jsx)("h5",{className:"title",children:w.title}),w.subtitle&&(0,u.jsx)("h6",{className:"subtitle",children:w.subtitle})]})})}):(0,u.jsx)("p",{className:"center",children:(0,u.jsx)(e.Spinner,{})})}):(0,u.jsx)("div",{className:"wp-block m-chart-selector",children:(0,u.jsx)(e.Placeholder,{className:"block-editor-m-chart-placeholder",icon:(0,t.getBlockType)("m-chart/chart").icon.src,label:(0,i.__)("Chart","m-chart"),children:(0,u.jsx)("div",{className:"viewbox",children:k?(0,u.jsx)("p",{children:(0,i.__)("There was a problem loading charts","m-chart")}):(0,u.jsxs)(u.Fragment,{children:[!j&&(0,u.jsx)("p",{className:"center",children:(0,u.jsx)(e.Spinner,{})}),j&&!1===f&&(0,u.jsxs)("div",{children:[(0,u.jsxs)("p",{children:[(0,i.__)("No charts found","m-chart"),(0,u.jsx)("br",{})]}),(0,u.jsx)("p",{children:(0,u.jsx)(e.ExternalLink,{href:M,children:(0,i.__)("Create a new chart","m-chart")})})]}),j&&!1!==f&&(0,u.jsxs)("div",{className:"no-chart-selected",children:[(0,u.jsxs)("div",{className:"search-box",children:[(0,u.jsx)(e.SearchControl,{value:p,placeholder:(0,i.__)("Search by title","m-chart"),onChange:t=>(t=>{Z(t)})(t)}),(0,u.jsx)("p",{className:"count",role:"status","aria-live":"polite",children:/* translators: %d: number of charts found */ /* translators: %d: number of charts found */
-(0,i.sprintf)((0,i._n)("%d chart found","%d charts found",v,"m-chart"),v)})]}),0===W.length&&p.length>1?(0,u.jsx)("p",{children:(0,i.__)("No charts found","m-chart")}):(0,u.jsxs)("ul",{ref:B,className:S?"results image-support":"results no-image-support",children:[W,E&&(0,u.jsx)("li",{className:"loading-more",children:(0,u.jsx)(e.Spinner,{})}),!E&&l.length<v&&(0,u.jsx)("li",{className:"load-more",children:(0,u.jsx)(e.Button,{variant:"secondary",size:"compact",onClick:()=>{const t=I+1;L(t),F(p,t)},children:(0,i.__)("Load more results","m-chart")})})]})]})]})})})})]})},save:()=>null,icon:p,deprecated:[{attributes:{chartId:{type:"string",default:""},show:{type:"string",default:"chart"}},save:()=>null,isEligible:t=>"string"==typeof t.chartId,migrate:t=>({...t,chartId:parseInt(t.chartId,10)||0})}]})})()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./components/block-src/chart/edit.js"
+/*!********************************************!*\
+  !*** ./components/block-src/chart/edit.js ***!
+  \********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Edit)
+/* harmony export */ });
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/html-entities */ "@wordpress/html-entities");
+/* harmony import */ var _wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./editor.scss */ "./components/block-src/chart/editor.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
+
+
+
+
+
+
+
+function Edit({
+  attributes,
+  setAttributes
+}) {
+  // State
+  const [results, setResults] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)([]);
+  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)('');
+  const [postsAvailable, setPostsAvailable] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [available, setAvailable] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(0);
+  const [loaded, setLoaded] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [selectedChart, setSelectedChart] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [siteUrl, setSiteUrl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [imageSupport, setImageSupport] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [loadProblem, setLoadProblem] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [page, setPage] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(1);
+  const [loadingMore, setLoadingMore] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const resultsRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
+
+  // URLs
+  const newUrl = `${siteUrl}/wp-admin/post-new.php?post_type=m-chart`;
+  const editUrl = `${siteUrl}/wp-admin/post.php?post=${attributes.chartId}&action=edit`;
+  const optionsUrl = `/m-chart/v1/options`;
+
+  // Blockprops
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)({
+    className: 'm-chart-block-chart-selector'
+  });
+
+  // Set a cache URL parameter based on the current moment in time to prevent cached images from messing up the UI
+  const cacheBuster = `?cache=${performance.now()}`;
+
+  // Get option settings
+  const fetchOptions = () => {
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
+      path: optionsUrl
+    }).then(result => {
+      setImageSupport(result.image_support);
+      setSiteUrl(result.siteurl);
+      setPostsAvailable(result.posts_avilable);
+    });
+  };
+
+  // Get a single chart
+  const getChart = id => {
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
+      path: `/m-chart/v1/chart/${id}`
+    }).then(result => {
+      setSelectedChart({
+        id: result.id,
+        title: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5__.decodeEntities)(result.title || '-'),
+        subtitle: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5__.decodeEntities)(result.subtitle || ''),
+        width: result.width,
+        height: result.height,
+        type: result.type || '',
+        src: result.url || ''
+      });
+    }).catch(() => {});
+  };
+
+  // Stable across renders so the debounced search closure doesn't go stale
+  const getCharts = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useCallback)((value, getPage = 1) => {
+    setLoadProblem(false);
+
+    // If we're getting a subsequent page we're adding to the existing results
+    if (getPage > 1) {
+      setLoadingMore(true);
+    }
+
+    // Build the parameters
+    const params = new URLSearchParams();
+    if (value) {
+      params.set('s', value);
+    }
+    if (getPage > 1) {
+      params.set('page', getPage);
+    }
+    const query = params.toString();
+
+    // Run the query and grab the results
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
+      path: `/m-chart/v1/charts${query ? '?' + query : ''}`
+    }).then(result => {
+      const newCharts = result.posts.map(x => ({
+        id: x.id,
+        title: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5__.decodeEntities)(x.title || '-'),
+        subtitle: (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_5__.decodeEntities)(x.subtitle || ''),
+        width: x.width,
+        height: x.height,
+        type: x.type || '',
+        src: x.url || ''
+      }));
+
+      // Update the found value to match the current search
+      setAvailable(result.found_posts);
+
+      // Either append or replace the existing results
+      if (getPage === 1) {
+        setResults(newCharts);
+      } else {
+        setResults(prev => [...prev, ...newCharts]);
+      }
+      setLoaded(true);
+      setLoadingMore(false);
+    }).catch(error => {
+      // If there's an error we'll note it
+      if (error.code === 'rest_no_route') {
+        setLoadProblem(true);
+      }
+      setLoadingMore(false);
+    });
+  }, []);
+
+  // Actually actually carry out the debounced search
+  const doSearch = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useMemo)(() => lodash_debounce__WEBPACK_IMPORTED_MODULE_7___default()(value => {
+    setSearch(value);
+    setPage(1);
+    getCharts(value);
+  }, 500), [getCharts]);
+
+  // On load we fetch some option settings and run getCharts so we have some intiial reasults loaded into the UI
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    fetchOptions();
+    getCharts(search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only initial fetch
+  }, []);
+
+  // Fetch the selected chart individually whenever chartId changes
+  // Using attributes.chartId as a dependency handles the case where Gutenberg provides the saved attribute value after the initial render
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    setSelectedChart(null);
+    if (attributes.chartId) {
+      getChart(parseInt(attributes.chartId, 10));
+    }
+  }, [attributes.chartId]);
+
+  // Load more charts when scrolling near the bottom of the results list
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    const el = resultsRef.current;
+    if (!el) {
+      return;
+    }
+    const handleScroll = () => {
+      if (loadingMore) {
+        return;
+      }
+      if (results.length >= available) {
+        return;
+      }
+
+      // If we're close enough to the bottom of the list load the next page
+      if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        getCharts(search, nextPage);
+      }
+    };
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+    // attributes.chartId is intentional — the <ul ref> only mounts when chartId is falsy,
+    // so we need to re-run when chartId toggles to (re)attach the scroll handler
+  }, [results, available, loadingMore, page, search, getCharts, attributes.chartId]);
+
+  // Build list of charts out of the results object
+  const resultsList = results.map(x => {
+    /* translators: %s: the chart's title */
+    const aria = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Select chart: %s', 'm-chart'), x.title);
+    if (!imageSupport || !x.src) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+        className: "item no-image",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
+          type: "button",
+          className: "select",
+          onClick: () => handleClick(x.id),
+          "aria-label": aria,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            className: "type",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+              className: 'icon ' + x.type,
+              "aria-hidden": "true"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
+              className: "title",
+              children: x.title
+            })]
+          })
+        })
+      }, x.id);
+    }
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+      className: "item image",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("button", {
+        type: "button",
+        className: "select",
+        onClick: () => handleClick(x.id),
+        "aria-label": aria,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
+          className: "title",
+          children: x.title
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
+          src: x.src + cacheBuster,
+          alt: ""
+        })]
+      })
+    }, x.id);
+  });
+
+  // Handle clicks to a chart in the results list
+  const handleClick = id => {
+    setAttributes({
+      chartId: id
+    });
+    setSelectedChart(null);
+  };
+
+  // Handle user typing into the search field
+  const handleSearch = value => {
+    doSearch(value);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    ...blockProps,
+    children: [!!attributes.chartId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Display settings', 'm-chart'),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Show', 'm-chart'),
+          value: attributes.show,
+          options: [{
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Chart', 'm-chart'),
+            value: 'chart'
+          }, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Image', 'm-chart'),
+            value: 'image'
+          }, {
+            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Table', 'm-chart'),
+            value: 'table'
+          }],
+          onChange: value => setAttributes({
+            show: value
+          })
+        })
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.BlockControls, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ToolbarGroup, {
+        className: "m-chart-block",
+        children: [!attributes.chartId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ToolbarButton, {
+          onClick: () => window.open(newUrl, "_blank"),
+          icon: "external",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('New chart', 'm-chart')
+        }), !!attributes.chartId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ToolbarButton, {
+            onClick: () => window.open(editUrl, "_blank"),
+            icon: "external",
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Edit chart', 'm-chart')
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ToolbarButton, {
+            onClick: () => handleClick(0),
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Replace', 'm-chart')
+          })]
+        })]
+      })
+    }), !!attributes.chartId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      className: "wp-block m-chart-selector",
+      children: !selectedChart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+        className: "center",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Spinner, {})
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        className: "chart-selected",
+        children: !imageSupport || !selectedChart.src ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+          className: "no-image",
+          style: {
+            aspectRatio: selectedChart.width / selectedChart.height
+          },
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            className: "type",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+              className: 'icon ' + selectedChart.type,
+              "aria-hidden": "true"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h5", {
+              className: "title",
+              children: selectedChart.title
+            }), selectedChart.subtitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
+              className: "subtitle",
+              children: selectedChart.subtitle
+            })]
+          })
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+          className: "image",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
+            className: "preview",
+            src: selectedChart.src + cacheBuster,
+            alt: selectedChart.title || ''
+          })
+        })
+      })
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      className: "wp-block m-chart-selector",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Placeholder, {
+        className: "block-editor-m-chart-placeholder",
+        icon: (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.getBlockType)('m-chart/chart').icon.src,
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('M Chart', 'm-chart'),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+          className: "viewbox",
+          children: loadProblem ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('There was a problem loading charts', 'm-chart')
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+            children: [!loaded && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+              className: "center",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Spinner, {})
+            }), loaded && postsAvailable === false && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("p", {
+                children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('No charts found', 'm-chart'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {})]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.ExternalLink, {
+                  href: newUrl,
+                  children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Create a new chart', 'm-chart')
+                })
+              })]
+            }), loaded && postsAvailable !== false && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+              className: "no-chart-selected",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+                className: "search-box",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SearchControl, {
+                  value: search,
+                  placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Search by title', 'm-chart'),
+                  onChange: value => handleSearch(value)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+                  className: "count",
+                  role: "status",
+                  "aria-live": "polite",
+                  children: /* translators: %d: number of charts found */
+                  (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__._n)('%d chart found', '%d charts found', available, 'm-chart'), available)
+                })]
+              }), resultsList.length === 0 && search.length > 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+                children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('No charts found', 'm-chart')
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("ul", {
+                ref: resultsRef,
+                className: imageSupport ? 'results image-support' : 'results no-image-support',
+                children: [resultsList, loadingMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+                  className: "loading-more",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Spinner, {})
+                }), !loadingMore && results.length < available && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+                  className: "load-more",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+                    variant: "secondary",
+                    size: "compact",
+                    onClick: () => {
+                      const nextPage = page + 1;
+                      setPage(nextPage);
+                      getCharts(search, nextPage);
+                    },
+                    children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Load more results', 'm-chart')
+                  })
+                })]
+              })]
+            })]
+          })
+        })
+      })
+    })]
+  });
+}
+;
+
+/***/ },
+
+/***/ "./components/block-src/chart/index.js"
+/*!*********************************************!*\
+  !*** ./components/block-src/chart/index.js ***!
+  \*********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./components/block-src/chart/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./components/block-src/chart/edit.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+const blockIcon = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  width: "24",
+  height: "24",
+  "aria-hidden": "true",
+  focusable: "false",
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Path, {
+    d: "M 18.7 3 L 5.3 3 C 4 3 3 4 3 5.3 L 3 18.7 C 3 20 4 21 5.3 21 L 18.7 21 C 20 21 21 20 21 18.7 L 21 5.3 C 21 4 20 3 18.7 3 Z M 19.5 18.7 C 19.5 19.1 19.1 19.5 18.7 19.5 L 5.3 19.5 C 4.9 19.5 4.5 19.1 4.5 18.7 L 4.5 5.3 C 4.5 4.9 4.9 4.5 5.3 4.5 L 18.7 4.5 C 19.1 4.5 19.5 4.9 19.5 5.3 L 19.5 18.7 Z"
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Path, {
+    d: "M 12.312 7 L 12.312 11.688 L 17 11.688 C 17 9.1 14.9 7 12.312 7 Z M 11.375 12.157 L 11.375 7.635 C 8.932 7.797 7 9.828 7 12.312 C 7 14.9 9.1 17 11.687 17 C 14.172 17 16.203 15.068 16.365 12.625 L 11.375 12.625 L 11.375 12.157 Z",
+    style: {
+      strokeWidth: 1
+    }
+  })]
+});
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_2__, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
+  save: () => null,
+  icon: blockIcon,
+  deprecated: [{
+    attributes: {
+      chartId: {
+        type: 'string',
+        default: ''
+      },
+      show: {
+        type: 'string',
+        default: 'chart'
+      }
+    },
+    save: () => null,
+    isEligible(attributes) {
+      return typeof attributes.chartId === 'string';
+    },
+    migrate(attributes) {
+      return {
+        ...attributes,
+        chartId: parseInt(attributes.chartId, 10) || 0
+      };
+    }
+  }]
+});
+
+/***/ },
+
+/***/ "./node_modules/lodash/_Symbol.js"
+/*!****************************************!*\
+  !*** ./node_modules/lodash/_Symbol.js ***!
+  \****************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var root = __webpack_require__(/*! ./_root */ "./node_modules/lodash/_root.js");
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_baseGetTag.js"
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseGetTag.js ***!
+  \********************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js"),
+    getRawTag = __webpack_require__(/*! ./_getRawTag */ "./node_modules/lodash/_getRawTag.js"),
+    objectToString = __webpack_require__(/*! ./_objectToString */ "./node_modules/lodash/_objectToString.js");
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_baseTrim.js"
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_baseTrim.js ***!
+  \******************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var trimmedEndIndex = __webpack_require__(/*! ./_trimmedEndIndex */ "./node_modules/lodash/_trimmedEndIndex.js");
+
+/** Used to match leading whitespace. */
+var reTrimStart = /^\s+/;
+
+/**
+ * The base implementation of `_.trim`.
+ *
+ * @private
+ * @param {string} string The string to trim.
+ * @returns {string} Returns the trimmed string.
+ */
+function baseTrim(string) {
+  return string
+    ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+    : string;
+}
+
+module.exports = baseTrim;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_freeGlobal.js"
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_freeGlobal.js ***!
+  \********************************************/
+(module) {
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof globalThis == 'object' && globalThis && globalThis.Object === Object && globalThis;
+
+module.exports = freeGlobal;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_getRawTag.js"
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_getRawTag.js ***!
+  \*******************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js");
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_objectToString.js"
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_objectToString.js ***!
+  \************************************************/
+(module) {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_root.js"
+/*!**************************************!*\
+  !*** ./node_modules/lodash/_root.js ***!
+  \**************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ "./node_modules/lodash/_freeGlobal.js");
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/_trimmedEndIndex.js"
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_trimmedEndIndex.js ***!
+  \*************************************************/
+(module) {
+
+/** Used to match a single whitespace character. */
+var reWhitespace = /\s/;
+
+/**
+ * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+ * character of `string`.
+ *
+ * @private
+ * @param {string} string The string to inspect.
+ * @returns {number} Returns the index of the last non-whitespace character.
+ */
+function trimmedEndIndex(string) {
+  var index = string.length;
+
+  while (index-- && reWhitespace.test(string.charAt(index))) {}
+  return index;
+}
+
+module.exports = trimmedEndIndex;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/debounce.js"
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/debounce.js ***!
+  \*****************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js"),
+    now = __webpack_require__(/*! ./now */ "./node_modules/lodash/now.js"),
+    toNumber = __webpack_require__(/*! ./toNumber */ "./node_modules/lodash/toNumber.js");
+
+/** Error message constants. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = toNumber(wait) || 0;
+  if (isObject(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        timeWaiting = wait - timeSinceLastCall;
+
+    return maxing
+      ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+      : timeWaiting;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now());
+  }
+
+  function debounced() {
+    var time = now(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        clearTimeout(timerId);
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+module.exports = debounce;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/isObject.js"
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isObject.js ***!
+  \*****************************************/
+(module) {
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+module.exports = isObject;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/isObjectLike.js"
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/isObjectLike.js ***!
+  \*********************************************/
+(module) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/isSymbol.js"
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isSymbol.js ***!
+  \*****************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ "./node_modules/lodash/_baseGetTag.js"),
+    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "./node_modules/lodash/isObjectLike.js");
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+}
+
+module.exports = isSymbol;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/now.js"
+/*!************************************!*\
+  !*** ./node_modules/lodash/now.js ***!
+  \************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var root = __webpack_require__(/*! ./_root */ "./node_modules/lodash/_root.js");
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return root.Date.now();
+};
+
+module.exports = now;
+
+
+/***/ },
+
+/***/ "./node_modules/lodash/toNumber.js"
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/toNumber.js ***!
+  \*****************************************/
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var baseTrim = __webpack_require__(/*! ./_baseTrim */ "./node_modules/lodash/_baseTrim.js"),
+    isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js"),
+    isSymbol = __webpack_require__(/*! ./isSymbol */ "./node_modules/lodash/isSymbol.js");
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = baseTrim(value);
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = toNumber;
+
+
+/***/ },
+
+/***/ "./components/block-src/chart/editor.scss"
+/*!************************************************!*\
+  !*** ./components/block-src/chart/editor.scss ***!
+  \************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
+/***/ "react/jsx-runtime"
+/*!**********************************!*\
+  !*** external "ReactJSXRuntime" ***!
+  \**********************************/
+(module) {
+
+"use strict";
+module.exports = window["ReactJSXRuntime"];
+
+/***/ },
+
+/***/ "@wordpress/api-fetch"
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["apiFetch"];
+
+/***/ },
+
+/***/ "@wordpress/block-editor"
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["blockEditor"];
+
+/***/ },
+
+/***/ "@wordpress/blocks"
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["blocks"];
+
+/***/ },
+
+/***/ "@wordpress/components"
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["components"];
+
+/***/ },
+
+/***/ "@wordpress/element"
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["element"];
+
+/***/ },
+
+/***/ "@wordpress/html-entities"
+/*!**************************************!*\
+  !*** external ["wp","htmlEntities"] ***!
+  \**************************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["htmlEntities"];
+
+/***/ },
+
+/***/ "@wordpress/i18n"
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+(module) {
+
+"use strict";
+module.exports = window["wp"]["i18n"];
+
+/***/ },
+
+/***/ "./components/block-src/chart/block.json"
+/*!***********************************************!*\
+  !*** ./components/block-src/chart/block.json ***!
+  \***********************************************/
+(module) {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"m-chart/chart","title":"M Chart","category":"layout","description":"Embed a chart made with M Chart into your posts and pages","textdomain":"m-chart","attributes":{"chartId":{"type":"integer","default":0},"show":{"type":"string","default":"chart"}},"supports":{"html":false},"editorScript":"m-chart-editor","editorStyle":"m-chart-editor-style","render":"file:./render.php"}');
+
+/***/ }
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
+(() => {
+"use strict";
+/*!***************************************!*\
+  !*** ./components/block-src/index.js ***!
+  \***************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _chart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chart */ "./components/block-src/chart/index.js");
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=index.js.map
