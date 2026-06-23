@@ -2,14 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: M Chart 1.10.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
-"POT-Creation-Date: 2026-04-09T01:36:28+00:00\n"
-"PO-Revision-Date: 2026-04-09 15:26-0700\n"
+"POT-Creation-Date: 2026-06-23T03:20:06+00:00\n"
+"PO-Revision-Date: 2026-06-22 23:07-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.9\n"
 "X-Domain: m-chart\n"
 "X-Poedit-Basepath: ../..\n"
@@ -26,2739 +27,581 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-2: components/external\n"
 
 #. Plugin Name of the plugin
+#: components/class-m-chart.php:314
 msgid "M Chart"
 msgstr "M Chart"
 
 #. Plugin URI of the plugin
-msgid "http://github.com/methnen/m-chart"
-msgstr "http://github.com/methnen/m-chart"
+#| msgid "http://github.com/methnen/m-chart"
+msgid "https://github.com/methnen/m-chart"
+msgstr "https://github.com/methnen/m-chart"
 
 #. Description of the plugin
+#| msgid ""
+#| "Manage data sets via a spreadsheet interface and display them as charts "
+#| "in WordPress."
 msgid ""
-"Manage data sets via a spreadsheet interface and display them as charts in "
-"WordPress."
+"Manage data sets via a spreadsheet interface, display them as charts via the "
+"Chart.js chart library, and embed them via a shortcode or block."
 msgstr ""
-"Beheer datasets via een spreadsheetinterface en geef ze weer als grafieken "
-"in WordPress."
+"Beheer datasets via een spreadsheet-interface, geef ze weer als grafieken "
+"met behulp van de Chart.js-grafiekbibliotheek en sluit ze in via een "
+"shortcode of een blok."
 
 #. Author of the plugin
 msgid "Jamie Poitra"
 msgstr "Jamie Poitra"
 
 #. Author URI of the plugin
-msgid "http://methnen.com"
-msgstr "http://methnen.com"
+#| msgid "http://methnen.com"
+msgid "https://methnen.com"
+msgstr "https://methnen.com"
 
-#: components/array-default-unit-terms.php:8
+#: components/array-default-unit-terms.php:12
 msgid "Time"
 msgstr "Tijd"
 
-#: components/array-default-unit-terms.php:9
+#: components/array-default-unit-terms.php:13
 msgid "Seconds"
 msgstr "Seconden"
 
-#: components/array-default-unit-terms.php:10
+#: components/array-default-unit-terms.php:14
 msgid "Minutes"
 msgstr "Minuten"
 
-#: components/array-default-unit-terms.php:11
+#: components/array-default-unit-terms.php:15
 msgid "Hours"
 msgstr "Uren"
 
-#: components/array-default-unit-terms.php:12
+#: components/array-default-unit-terms.php:16
 msgid "Days"
 msgstr "Dagen"
 
-#: components/array-default-unit-terms.php:13
+#: components/array-default-unit-terms.php:17
 msgid "Weeks"
 msgstr "Weken"
 
-#: components/array-default-unit-terms.php:14
+#: components/array-default-unit-terms.php:18
 msgid "Months"
 msgstr "Maanden"
 
-#: components/array-default-unit-terms.php:15
+#: components/array-default-unit-terms.php:19
 msgid "Quarter"
 msgstr "Kwartaal"
 
-#: components/array-default-unit-terms.php:16
+#: components/array-default-unit-terms.php:20
 msgid "Years"
 msgstr "Jaren"
 
-#: components/array-default-unit-terms.php:17
+#: components/array-default-unit-terms.php:21
 msgid "Decades"
 msgstr "Tientallen jaren"
 
-#: components/array-default-unit-terms.php:18
+#: components/array-default-unit-terms.php:22
 msgid "Centuries"
 msgstr "Eeuwen"
 
-#: components/array-default-unit-terms.php:20
+#: components/array-default-unit-terms.php:24
 msgid "Money"
 msgstr "Geld"
 
-#: components/array-default-unit-terms.php:21
+#: components/array-default-unit-terms.php:25
 msgid "USD"
 msgstr "Dollar"
 
-#: components/array-default-unit-terms.php:22
+#: components/array-default-unit-terms.php:26
 msgid "EUR"
 msgstr "Euro"
 
-#: components/array-default-unit-terms.php:23
+#: components/array-default-unit-terms.php:27
 msgid "GBP"
 msgstr "Pond"
 
-#: components/array-default-unit-terms.php:24
+#: components/array-default-unit-terms.php:28
 msgid "JPY"
 msgstr "Yen"
 
-#: components/array-default-unit-terms.php:25
+#: components/array-default-unit-terms.php:29
 msgid "CNY"
 msgstr "Yuan"
 
-#: components/array-default-unit-terms.php:27
+#: components/array-default-unit-terms.php:31
 msgid "Length"
 msgstr "Lengte"
 
-#: components/array-default-unit-terms.php:28
+#: components/array-default-unit-terms.php:32
 msgid "Inch"
 msgstr "Inch"
 
-#: components/array-default-unit-terms.php:29
+#: components/array-default-unit-terms.php:33
 msgid "Foot"
 msgstr "Voet"
 
-#: components/array-default-unit-terms.php:30
+#: components/array-default-unit-terms.php:34
 msgid "Yard"
 msgstr "Yard"
 
-#: components/array-default-unit-terms.php:31
+#: components/array-default-unit-terms.php:35
 msgid "Mile"
 msgstr "Mijl"
 
-#: components/array-default-unit-terms.php:32
+#: components/array-default-unit-terms.php:36
 msgid "Millimeter"
 msgstr "Millimeter"
 
-#: components/array-default-unit-terms.php:33
+#: components/array-default-unit-terms.php:37
 msgid "Centimeter"
 msgstr "Centimeter"
 
-#: components/array-default-unit-terms.php:34
+#: components/array-default-unit-terms.php:38
 msgid "Meter"
 msgstr "Meter"
 
-#: components/array-default-unit-terms.php:35
+#: components/array-default-unit-terms.php:39
 msgid "Kilometer"
 msgstr "Kilometer"
 
-#: components/array-default-unit-terms.php:37
+#: components/array-default-unit-terms.php:41
+msgid "Weight"
+msgstr "Gewicht"
+
+#: components/array-default-unit-terms.php:42
+msgid "Tonnes"
+msgstr "Tonnen"
+
+#: components/array-default-unit-terms.php:43
+msgid "Tons"
+msgstr "Tonnen"
+
+#: components/array-default-unit-terms.php:44
+msgid "Kilograms"
+msgstr "Kilogrammen"
+
+#: components/array-default-unit-terms.php:45
+msgid "Grams"
+msgstr "Grammen"
+
+#: components/array-default-unit-terms.php:46
+msgid "Milligrams"
+msgstr "Milligram"
+
+#: components/array-default-unit-terms.php:47
+msgid "Pounds"
+msgstr "Ponden"
+
+#: components/array-default-unit-terms.php:48
+msgid "Ounces"
+msgstr "Ounces"
+
+#: components/array-default-unit-terms.php:50
 msgid "Other"
 msgstr "Anders"
 
-#: components/array-default-unit-terms.php:38
+#: components/array-default-unit-terms.php:51
 msgid "Percent"
 msgstr "Procent"
 
-#: components/array-default-unit-terms.php:40
+#: components/array-default-unit-terms.php:53
 msgid "Website/Traffic"
 msgstr "Website/Verkeer"
 
-#: components/array-default-unit-terms.php:41
+#: components/array-default-unit-terms.php:54
 msgid "Visitors"
 msgstr "Bezoekers"
 
-#: components/array-default-unit-terms.php:42
+#: components/array-default-unit-terms.php:55
 msgid "Unique Visitors"
 msgstr "Unieke Bezoekers"
 
-#: components/array-default-unit-terms.php:43
+#: components/array-default-unit-terms.php:56
 msgid "Clicks"
 msgstr "Klikken"
 
-#: components/array-default-unit-terms.php:44
+#: components/array-default-unit-terms.php:57
 msgid "Referrers"
 msgstr "Verwijzers"
 
-#: components/array-default-unit-terms.php:45
+#: components/array-default-unit-terms.php:58
 msgid "Active Users"
 msgstr "Actieve gebruikers"
 
-#: components/array-default-unit-terms.php:46
+#: components/array-default-unit-terms.php:59
 msgid "Pages"
 msgstr "Pagina’s"
 
-#: components/array-default-unit-terms.php:48
+#: components/array-default-unit-terms.php:61
 msgid "Sales"
 msgstr "Verkoop"
 
-#: components/array-default-unit-terms.php:49
-#: components/admin-ui-src/components/AxisRows.js:82
-#: components/admin-ui-src/components/AxisRows.js:133
-#: components/admin-ui/index.js:110 components/admin-ui/index.js:159
-#: components/admin-ui/index.js:82 components/admin-ui/index.js:133
+#: components/array-default-unit-terms.php:62
+#: components/admin-ui-src/components/AxisRows.js:99
+#: components/admin-ui-src/components/AxisRows.js:152
+#: components/admin-ui/index.js:1
 msgid "Units"
 msgstr "Eenheden"
 
-#: components/array-default-unit-terms.php:50
+#: components/array-default-unit-terms.php:63
 msgid "CPM"
 msgstr "Kosten per mijl"
 
-#: components/array-locale-codes.php:9
-msgid "Afrikaans"
-msgstr "Afrikaans"
-
-#: components/array-locale-codes.php:10
-msgid "Afrikaans (Namibia)"
-msgstr "Afrikaans (Namibië)"
-
-#: components/array-locale-codes.php:11
-msgid "Afrikaans (South Africa)"
-msgstr "Afrikaans (Zuid-Afrika)"
-
-#: components/array-locale-codes.php:12
-msgid "Akan"
-msgstr "Akan"
-
-#: components/array-locale-codes.php:13
-msgid "Akan (Ghana)"
-msgstr "Akan (Ghana)"
-
-#: components/array-locale-codes.php:14
-msgid "Albanian"
-msgstr "Albanees"
-
-#: components/array-locale-codes.php:15
-msgid "Albanian (Albania)"
-msgstr "Albanees (Albanië)"
-
-#: components/array-locale-codes.php:16
-msgid "Albanian (Kosovo)"
-msgstr "Albanees (Kosovo)"
-
-#: components/array-locale-codes.php:17
-msgid "Albanian (Macedonia)"
-msgstr "Albanees (Macedonië)"
-
-#: components/array-locale-codes.php:18
-msgid "Amharic"
-msgstr "Amhaars"
-
-#: components/array-locale-codes.php:19
-msgid "Amharic (Ethiopia)"
-msgstr "Amhaars (Ethiopië)"
-
-#: components/array-locale-codes.php:20
-msgid "Arabic"
-msgstr "Arabisch"
-
-#: components/array-locale-codes.php:21
-msgid "Arabic (Algeria)"
-msgstr "Arabisch (Algerije)"
-
-#: components/array-locale-codes.php:22
-msgid "Arabic (Bahrain)"
-msgstr "Arabisch (Bahrein)"
-
-#: components/array-locale-codes.php:23
-msgid "Arabic (Chad)"
-msgstr "Arabisch (Tsjaad)"
-
-#: components/array-locale-codes.php:24
-msgid "Arabic (Comoros)"
-msgstr "Arabisch (Comoren)"
-
-#: components/array-locale-codes.php:25
-msgid "Arabic (Djibouti)"
-msgstr "Arabisch (Djibouti)"
-
-#: components/array-locale-codes.php:26
-msgid "Arabic (Egypt)"
-msgstr "Arabisch (Egypte)"
-
-#: components/array-locale-codes.php:27
-msgid "Arabic (Eritrea)"
-msgstr "Arabisch (Eritrea)"
-
-#: components/array-locale-codes.php:28
-msgid "Arabic (Iraq)"
-msgstr "Arabisch (Irak)"
-
-#: components/array-locale-codes.php:29
-msgid "Arabic (Israel)"
-msgstr "Arabisch (Israël)"
-
-#: components/array-locale-codes.php:30
-msgid "Arabic (Jordan)"
-msgstr "Arabisch (Jordanië)"
-
-#: components/array-locale-codes.php:31
-msgid "Arabic (Kuwait)"
-msgstr "Arabisch (Koeweit)"
-
-#: components/array-locale-codes.php:32
-msgid "Arabic (Lebanon)"
-msgstr "Arabisch (Libanon)"
-
-#: components/array-locale-codes.php:33
-msgid "Arabic (Libya)"
-msgstr "Arabisch (Libië)"
-
-#: components/array-locale-codes.php:34
-msgid "Arabic (Mauritania)"
-msgstr "Arabisch (Mauritanië)"
-
-#: components/array-locale-codes.php:35
-msgid "Arabic (Morocco)"
-msgstr "Arabisch (Marokko)"
-
-#: components/array-locale-codes.php:36
-msgid "Arabic (Oman)"
-msgstr "Arabisch (Oman)"
-
-#: components/array-locale-codes.php:37
-msgid "Arabic (Palestinian Territories)"
-msgstr "Arabisch (Palestijnse Gebieden)"
-
-#: components/array-locale-codes.php:38
-msgid "Arabic (Qatar)"
-msgstr "Arabisch (Qatar)"
-
-#: components/array-locale-codes.php:39
-msgid "Arabic (Saudi Arabia)"
-msgstr "Arabisch (Saoedi-Arabië)"
-
-#: components/array-locale-codes.php:40
-msgid "Arabic (Somalia)"
-msgstr "Arabisch (Somalië)"
-
-#: components/array-locale-codes.php:41
-msgid "Arabic (South Sudan)"
-msgstr "Arabisch (Zuid-Soedan)"
-
-#: components/array-locale-codes.php:42
-msgid "Arabic (Sudan)"
-msgstr "Arabisch (Soedan)"
-
-#: components/array-locale-codes.php:43
-msgid "Arabic (Syria)"
-msgstr "Arabisch (Syrië)"
-
-#: components/array-locale-codes.php:44
-msgid "Arabic (Tunisia)"
-msgstr "Arabisch (Tunesië)"
-
-#: components/array-locale-codes.php:45
-msgid "Arabic (United Arab Emirates)"
-msgstr "Arabisch (Verenigde Arabische Emiraten)"
-
-#: components/array-locale-codes.php:46
-msgid "Arabic (Western Sahara)"
-msgstr "Arabisch (Westelijke Sahara)"
-
-#: components/array-locale-codes.php:47
-msgid "Arabic (Yemen)"
-msgstr "Arabisch (Jemen)"
-
-#: components/array-locale-codes.php:48
-msgid "Armenian"
-msgstr "Armeens"
-
-#: components/array-locale-codes.php:49
-msgid "Armenian (Armenia)"
-msgstr "Armeens (Armenië)"
-
-#: components/array-locale-codes.php:50
-msgid "Assamese"
-msgstr "Assamees"
-
-#: components/array-locale-codes.php:51
-msgid "Assamese (India)"
-msgstr "Assamees (India)"
-
-#: components/array-locale-codes.php:52
-msgid "Azerbaijani"
-msgstr "Azerbeidzjaans"
-
-#: components/array-locale-codes.php:53
-msgid "Azerbaijani (Azerbaijan)"
-msgstr "Azerbeidzjaans (Azerbeidzjan)"
-
-#: components/array-locale-codes.php:54
-msgid "Azerbaijani (Cyrillic, Azerbaijan)"
-msgstr "Azerbeidzjaans (Cyrillisch, Azerbeidzjan)"
-
-#: components/array-locale-codes.php:55
-msgid "Azerbaijani (Cyrillic)"
-msgstr "Azerbeidzjaans (Cyrillisch)"
-
-#: components/array-locale-codes.php:56
-msgid "Azerbaijani (Latin, Azerbaijan)"
-msgstr "Azerbeidzjaans (Latijns alfabet, Azerbeidzjan)"
-
-#: components/array-locale-codes.php:57
-msgid "Azerbaijani (Latin)"
-msgstr "Azerbeidzjaans (Latijns alfabet)"
-
-#: components/array-locale-codes.php:58
-msgid "Bambara"
-msgstr "Bambara"
-
-#: components/array-locale-codes.php:59
-msgid "Bambara (Latin, Mali)"
-msgstr "Bambara (Latijn, Mali)"
-
-#: components/array-locale-codes.php:60
-msgid "Bambara (Latin)"
-msgstr "Bambara (Latijn)"
-
-#: components/array-locale-codes.php:61
-msgid "Basque"
-msgstr "Baskisch"
-
-#: components/array-locale-codes.php:62
-msgid "Basque (Spain)"
-msgstr "Baskisch (Spanje)"
-
-#: components/array-locale-codes.php:63
-msgid "Belarusian"
-msgstr "Wit Russisch"
-
-#: components/array-locale-codes.php:64
-msgid "Belarusian (Belarus)"
-msgstr "Wit-Russisch (Wit-Rusland)"
-
-#: components/array-locale-codes.php:65
-msgid "Bengali"
-msgstr "Bengalees"
-
-#: components/array-locale-codes.php:66
-msgid "Bengali (Bangladesh)"
-msgstr "Bengaals (Bangladesh)"
-
-#: components/array-locale-codes.php:67
-msgid "Bengali (India)"
-msgstr "Bengaals (India)"
-
-#: components/array-locale-codes.php:68
-msgid "Bosnian"
-msgstr "Bosnisch"
-
-#: components/array-locale-codes.php:69
-msgid "Bosnian (Bosnia & Herzegovina)"
-msgstr "Bosnisch (Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:70
-msgid "Bosnian (Cyrillic, Bosnia & Herzegovina)"
-msgstr "Bosnisch (Cyrillisch, Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:71
-msgid "Bosnian (Cyrillic)"
-msgstr "Bosnisch (Cyrillisch)"
-
-#: components/array-locale-codes.php:72
-msgid "Bosnian (Latin, Bosnia & Herzegovina)"
-msgstr "Bosnisch (Latijns alfabet, Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:73
-msgid "Bosnian (Latin)"
-msgstr "Bosnisch (Latijns alfabet)"
-
-#: components/array-locale-codes.php:74
-msgid "Breton"
-msgstr "Bretons"
-
-#: components/array-locale-codes.php:75
-msgid "Breton (France)"
-msgstr "Bretagne (Frankrijk)"
-
-#: components/array-locale-codes.php:76
-msgid "Bulgarian"
-msgstr "Bulgaars"
-
-#: components/array-locale-codes.php:77
-msgid "Bulgarian (Bulgaria)"
-msgstr "Bulgaars (Bulgarije)"
-
-#: components/array-locale-codes.php:78
-msgid "Burmese"
-msgstr "Birmees"
-
-#: components/array-locale-codes.php:79
-msgid "Burmese (Myanmar (Burma))"
-msgstr "Birmaans (Myanmar (Birma))"
-
-#: components/array-locale-codes.php:80
-msgid "Catalan"
-msgstr "Catalaans"
-
-#: components/array-locale-codes.php:81
-msgid "Catalan (Andorra)"
-msgstr "Catalaans (Andorra)"
-
-#: components/array-locale-codes.php:82
-msgid "Catalan (France)"
-msgstr "Catalaans (Frankrijk)"
-
-#: components/array-locale-codes.php:83
-msgid "Catalan (Italy)"
-msgstr "Catalaans (Italië)"
-
-#: components/array-locale-codes.php:84
-msgid "Catalan (Spain)"
-msgstr "Catalaans (Spanje)"
-
-#: components/array-locale-codes.php:85
-msgid "Chinese"
-msgstr "Chinees"
-
-#: components/array-locale-codes.php:86
-msgid "Chinese (China)"
-msgstr "Chinees (China)"
-
-#: components/array-locale-codes.php:87
-msgid "Chinese (Hong Kong SAR China)"
-msgstr "Chinees (Speciale Administratieve Regio Hongkong, China)"
-
-#: components/array-locale-codes.php:88
-msgid "Chinese (Macau SAR China)"
-msgstr "Chinees (Speciale Administratieve Regio Macau, China)"
-
-#: components/array-locale-codes.php:89
-msgid "Chinese (Simplified, China)"
-msgstr "Chinees (vereenvoudigd, China)"
-
-#: components/array-locale-codes.php:90
-msgid "Chinese (Simplified, Hong Kong SAR China)"
-msgstr "Chinees (vereenvoudigd, Hongkong SAR, China)"
-
-#: components/array-locale-codes.php:91
-msgid "Chinese (Simplified, Macau SAR China)"
-msgstr "Chinees (vereenvoudigd, Speciale Administratieve Regio Macau, China)"
-
-#: components/array-locale-codes.php:92
-msgid "Chinese (Simplified, Singapore)"
-msgstr "Chinees (vereenvoudigd, Singapore)"
-
-#: components/array-locale-codes.php:93
-msgid "Chinese (Simplified)"
-msgstr "Chinees (vereenvoudigd)"
-
-#: components/array-locale-codes.php:94
-msgid "Chinese (Singapore)"
-msgstr "Chinees (Singapore)"
-
-#: components/array-locale-codes.php:95
-msgid "Chinese (Taiwan)"
-msgstr "Chinees (Taiwan)"
-
-#: components/array-locale-codes.php:96
-msgid "Chinese (Traditional, Hong Kong SAR China)"
-msgstr ""
-"Chinees (traditioneel, Hongkong, Speciale Administratieve Regio van China)"
-
-#: components/array-locale-codes.php:97
-msgid "Chinese (Traditional, Macau SAR China)"
-msgstr "Chinees (traditioneel, Speciale Administratieve Regio Macau, China)"
-
-#: components/array-locale-codes.php:98
-msgid "Chinese (Traditional, Taiwan)"
-msgstr "Chinees (traditioneel, Taiwan)"
-
-#: components/array-locale-codes.php:99
-msgid "Chinese (Traditional)"
-msgstr "Chinees (Traditioneel)"
-
-#: components/array-locale-codes.php:100
-msgid "Cornish"
-msgstr "Cornisch"
-
-#: components/array-locale-codes.php:101
-msgid "Cornish (United Kingdom)"
-msgstr "Cornish (Verenigd Koninkrijk)"
-
-#: components/array-locale-codes.php:102
-msgid "Croatian"
-msgstr "Kroatisch"
-
-#: components/array-locale-codes.php:103
-msgid "Croatian (Bosnia & Herzegovina)"
-msgstr "Kroatisch (Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:104
-msgid "Croatian (Croatia)"
-msgstr "Kroatisch (Kroatië)"
-
-#: components/array-locale-codes.php:105
-msgid "Czech"
-msgstr "Tsjechisch"
-
-#: components/array-locale-codes.php:106
-msgid "Czech (Czech Republic)"
-msgstr "Tsjechisch (Tsjechië)"
-
-#: components/array-locale-codes.php:107
-msgid "Danish"
-msgstr "Deens"
-
-#: components/array-locale-codes.php:108
-msgid "Danish (Denmark)"
-msgstr "Deens (Denemarken)"
-
-#: components/array-locale-codes.php:109
-msgid "Danish (Greenland)"
-msgstr "Deens (Groenland)"
-
-#: components/array-locale-codes.php:110
-msgid "Dutch"
-msgstr "Nederlands"
-
-#: components/array-locale-codes.php:111
-msgid "Dutch (Aruba)"
-msgstr "Nederlands (Aruba)"
-
-#: components/array-locale-codes.php:112
-msgid "Dutch (Belgium)"
-msgstr "Nederlands (België)"
-
-#: components/array-locale-codes.php:113
-msgid "Dutch (Caribbean Netherlands)"
-msgstr "Nederlands (Caribisch Nederland)"
-
-#: components/array-locale-codes.php:114
-msgid "Dutch (Curaçao)"
-msgstr "Nederlands (Curaçao)"
-
-#: components/array-locale-codes.php:115
-msgid "Dutch (Netherlands)"
-msgstr "Nederlands (Nederland)"
-
-#: components/array-locale-codes.php:116
-msgid "Dutch (Sint Maarten)"
-msgstr "Nederlands (Sint Maarten)"
-
-#: components/array-locale-codes.php:117
-msgid "Dutch (Suriname)"
-msgstr "Nederlands (Suriname)"
-
-#: components/array-locale-codes.php:118
-msgid "Dzongkha"
-msgstr "Dzongkha"
-
-#: components/array-locale-codes.php:119
-msgid "Dzongkha (Bhutan)"
-msgstr "Dzongkha (Bhutan)"
-
-#: components/array-locale-codes.php:120
-msgid "English"
-msgstr "Engels"
-
-#: components/array-locale-codes.php:121
-msgid "English (American Samoa)"
-msgstr "Engels (Amerikaans Samoa)"
-
-#: components/array-locale-codes.php:122
-msgid "English (Anguilla)"
-msgstr "Engels (Anguilla)"
-
-#: components/array-locale-codes.php:123
-msgid "English (Antigua & Barbuda)"
-msgstr "Engels (Antigua en Barbuda)"
-
-#: components/array-locale-codes.php:124
-msgid "English (Australia)"
-msgstr "Nederlands (Nederland)"
-
-#: components/array-locale-codes.php:125
-msgid "English (Bahamas)"
-msgstr "Engels (Bahama's)"
-
-#: components/array-locale-codes.php:126
-msgid "English (Barbados)"
-msgstr "Engels (Barbados)"
-
-#: components/array-locale-codes.php:127
-msgid "English (Belgium)"
-msgstr "Engels (België)"
-
-#: components/array-locale-codes.php:128
-msgid "English (Belize)"
-msgstr "Engels (Belize)"
-
-#: components/array-locale-codes.php:129
-msgid "English (Bermuda)"
-msgstr "Engels (Bermuda)"
-
-#: components/array-locale-codes.php:130
-msgid "English (Botswana)"
-msgstr "Engels (Botswana)"
-
-#: components/array-locale-codes.php:131
-msgid "English (British Indian Ocean Territory)"
-msgstr "Engels (Brits Indische Oceaanterritorium)"
-
-#: components/array-locale-codes.php:132
-msgid "English (British Virgin Islands)"
-msgstr "Engels (Britse Maagdeneilanden)"
-
-#: components/array-locale-codes.php:133
-msgid "English (Cameroon)"
-msgstr "Engels (Kameroen)"
-
-#: components/array-locale-codes.php:134
-msgid "English (Canada)"
-msgstr "Engels (Canada)"
-
-#: components/array-locale-codes.php:135
-msgid "English (Cayman Islands)"
-msgstr "Engels (Kaaimaneilanden)"
-
-#: components/array-locale-codes.php:136
-msgid "English (Christmas Island)"
-msgstr "Engels (Kerst-eiland)"
-
-#: components/array-locale-codes.php:137
-msgid "English (Cocos (Keeling) Islands)"
-msgstr "Nederlands (Cocos (Keeling) Eilanden)"
-
-#: components/array-locale-codes.php:138
-msgid "English (Cook Islands)"
-msgstr "Engels (Cookeilanden)"
-
-#: components/array-locale-codes.php:139
-msgid "English (Diego Garcia)"
-msgstr "Nederlands (Diego Garcia)"
-
-#: components/array-locale-codes.php:140
-msgid "English (Dominica)"
-msgstr "Engels (Dominica)"
-
-#: components/array-locale-codes.php:141
-msgid "English (Eritrea)"
-msgstr "Engels (Eritrea)"
-
-#: components/array-locale-codes.php:142
-msgid "English (Falkland Islands)"
-msgstr "Engels (Falklandeilanden)"
-
-#: components/array-locale-codes.php:143
-msgid "English (Fiji)"
-msgstr "Engels (Fiji)"
-
-#: components/array-locale-codes.php:144
-msgid "English (Gambia)"
-msgstr "Engels (Gambia)"
-
-#: components/array-locale-codes.php:145
-msgid "English (Ghana)"
-msgstr "Engels (Ghana)"
-
-#: components/array-locale-codes.php:146
-msgid "English (Gibraltar)"
-msgstr "Engels (Gibraltar)"
-
-#: components/array-locale-codes.php:147
-msgid "English (Grenada)"
-msgstr "Engels (Grenada)"
-
-#: components/array-locale-codes.php:148
-msgid "English (Guam)"
-msgstr "Engels (Guam)"
-
-#: components/array-locale-codes.php:149
-msgid "English (Guernsey)"
-msgstr "Engels (Guernsey)"
-
-#: components/array-locale-codes.php:150
-msgid "English (Guyana)"
-msgstr "Engels (Guyana)"
-
-#: components/array-locale-codes.php:151
-msgid "English (Hong Kong SAR China)"
-msgstr "Engels (Speciale Administratieve Regio Hongkong, China)"
-
-#: components/array-locale-codes.php:152
-msgid "English (India)"
-msgstr "Engels (India)"
-
-#: components/array-locale-codes.php:153
-msgid "English (Ireland)"
-msgstr "Engels (Ierland)"
-
-#: components/array-locale-codes.php:154
-msgid "English (Isle of Man)"
-msgstr "Engels (Eiland Man)"
-
-#: components/array-locale-codes.php:155
-msgid "English (Jamaica)"
-msgstr "Engels (Jamaica)"
-
-#: components/array-locale-codes.php:156
-msgid "English (Jersey)"
-msgstr "Engels (Jersey)"
-
-#: components/array-locale-codes.php:157
-msgid "English (Kenya)"
-msgstr "Engels (Kenia)"
-
-#: components/array-locale-codes.php:158
-msgid "English (Kiribati)"
-msgstr "Engels (Kiribati)"
-
-#: components/array-locale-codes.php:159
-msgid "English (Lesotho)"
-msgstr "Engels (Lesotho)"
-
-#: components/array-locale-codes.php:160
-msgid "English (Liberia)"
-msgstr "Engels (Liberia)"
-
-#: components/array-locale-codes.php:161
-msgid "English (Macau SAR China)"
-msgstr "Engels (Speciale Administratieve Regio Macau, China)"
-
-#: components/array-locale-codes.php:162
-msgid "English (Madagascar)"
-msgstr "Engels (Madagaskar)"
-
-#: components/array-locale-codes.php:163
-msgid "English (Malawi)"
-msgstr "Engels (Malawi)"
-
-#: components/array-locale-codes.php:164
-msgid "English (Malaysia)"
-msgstr "Engels (Maleisië)"
-
-#: components/array-locale-codes.php:165
-msgid "English (Malta)"
-msgstr "Engels (Malta)"
-
-#: components/array-locale-codes.php:166
-msgid "English (Marshall Islands)"
-msgstr "Engels (Marshalleilanden)"
-
-#: components/array-locale-codes.php:167
-msgid "English (Mauritius)"
-msgstr "Engels (Mauritius)"
-
-#: components/array-locale-codes.php:168
-msgid "English (Micronesia)"
-msgstr "Engels (Micronesië)"
-
-#: components/array-locale-codes.php:169
-msgid "English (Montserrat)"
-msgstr "Engels (Montserrat)"
-
-#: components/array-locale-codes.php:170
-msgid "English (Namibia)"
-msgstr "Engels (Namibië)"
-
-#: components/array-locale-codes.php:171
-msgid "English (Nauru)"
-msgstr "Engels (Nauru)"
-
-#: components/array-locale-codes.php:172
-msgid "English (New Zealand)"
-msgstr "Engels (Nieuw-Zeeland)"
-
-#: components/array-locale-codes.php:173
-msgid "English (Nigeria)"
-msgstr "Engels (Nigeria)"
-
-#: components/array-locale-codes.php:174
-msgid "English (Niue)"
-msgstr "Engels (Niue)"
-
-#: components/array-locale-codes.php:175
-msgid "English (Norfolk Island)"
-msgstr "Engels (Norfolk)"
-
-#: components/array-locale-codes.php:176
-msgid "English (Northern Mariana Islands)"
-msgstr "Engels (Noordelijke Marianen)"
-
-#: components/array-locale-codes.php:177
-msgid "English (Pakistan)"
-msgstr "Engels (Pakistan)"
-
-#: components/array-locale-codes.php:178
-msgid "English (Palau)"
-msgstr "Engels (Palau)"
-
-#: components/array-locale-codes.php:179
-msgid "English (Papua New Guinea)"
-msgstr "Engels (Papoea-Nieuw-Guinea)"
-
-#: components/array-locale-codes.php:180
-msgid "English (Philippines)"
-msgstr "Engels (Filippijnen)"
-
-#: components/array-locale-codes.php:181
-msgid "English (Pitcairn Islands)"
-msgstr "Engels (Pitcairneilanden)"
-
-#: components/array-locale-codes.php:182
-msgid "English (Puerto Rico)"
-msgstr "Engels (Puerto Rico)"
-
-#: components/array-locale-codes.php:183
-msgid "English (Rwanda)"
-msgstr "Engels (Rwanda)"
-
-#: components/array-locale-codes.php:184
-msgid "English (Samoa)"
-msgstr "Engels (Samoa)"
-
-#: components/array-locale-codes.php:185
-msgid "English (Seychelles)"
-msgstr "Engels (Seychellen)"
-
-#: components/array-locale-codes.php:186
-msgid "English (Sierra Leone)"
-msgstr "Engels (Sierra Leone)"
-
-#: components/array-locale-codes.php:187
-msgid "English (Singapore)"
-msgstr "Engels (Singapore)"
-
-#: components/array-locale-codes.php:188
-msgid "English (Sint Maarten)"
-msgstr "Engels (Sint Maarten)"
-
-#: components/array-locale-codes.php:189
-msgid "English (Solomon Islands)"
-msgstr "Engels (Salomonseilanden)"
-
-#: components/array-locale-codes.php:190
-msgid "English (South Africa)"
-msgstr "Engels (Zuid-Afrika)"
-
-#: components/array-locale-codes.php:191
-msgid "English (South Sudan)"
-msgstr "Engels (Zuid-Soedan)"
-
-#: components/array-locale-codes.php:192
-msgid "English (St. Helena)"
-msgstr "Engels (Sint-Helena)"
-
-#: components/array-locale-codes.php:193
-msgid "English (St. Kitts & Nevis)"
-msgstr "Engels (Saint Kitts en Nevis)"
-
-#: components/array-locale-codes.php:194
-msgid "English (St. Lucia)"
-msgstr "Engels (Saint Lucia)"
-
-#: components/array-locale-codes.php:195
-msgid "English (St. Vincent & Grenadines)"
-msgstr "Engels (Saint Vincent en de Grenadines)"
-
-#: components/array-locale-codes.php:196
-msgid "English (Sudan)"
-msgstr "Engels (Soedan)"
-
-#: components/array-locale-codes.php:197
-msgid "English (Swaziland)"
-msgstr "Engels (Swaziland)"
-
-#: components/array-locale-codes.php:198
-msgid "English (Tanzania)"
-msgstr "Engels (Tanzania)"
-
-#: components/array-locale-codes.php:199
-msgid "English (Tokelau)"
-msgstr "Engels (Tokelau)"
-
-#: components/array-locale-codes.php:200
-msgid "English (Tonga)"
-msgstr "Engels (Tonga)"
-
-#: components/array-locale-codes.php:201
-msgid "English (Trinidad & Tobago)"
-msgstr "Engels (Trinidad en Tobago)"
-
-#: components/array-locale-codes.php:202
-msgid "English (Turks & Caicos Islands)"
-msgstr "Engels (Turks- en Caicoseilanden)"
-
-#: components/array-locale-codes.php:203
-msgid "English (Tuvalu)"
-msgstr "Engels (Tuvalu)"
-
-#: components/array-locale-codes.php:204
-msgid "English (U.S. Outlying Islands)"
-msgstr "Engels (Amerikaanse afgelegen eilanden)"
-
-#: components/array-locale-codes.php:205
-msgid "English (U.S. Virgin Islands)"
-msgstr "Engels (Amerikaanse Maagdeneilanden)"
-
-#: components/array-locale-codes.php:206
-msgid "English (Uganda)"
-msgstr "Engels (Oeganda)"
-
-#: components/array-locale-codes.php:207
-msgid "English (United Kingdom)"
-msgstr "Engels (Verenigd Koninkrijk)"
-
-#: components/array-locale-codes.php:208
-msgid "English (United States)"
-msgstr "Engels (Verenigde Staten)"
-
-#: components/array-locale-codes.php:209
-msgid "English (Vanuatu)"
-msgstr "Engels (Vanuatu)"
-
-#: components/array-locale-codes.php:210
-msgid "English (Zambia)"
-msgstr "Engels (Zambia)"
-
-#: components/array-locale-codes.php:211
-msgid "English (Zimbabwe)"
-msgstr "Engels (Zimbabwe)"
-
-#: components/array-locale-codes.php:212
-msgid "Esperanto"
-msgstr "Esperanto"
-
-#: components/array-locale-codes.php:213
-msgid "Estonian"
-msgstr "Ests"
-
-#: components/array-locale-codes.php:214
-msgid "Estonian (Estonia)"
-msgstr "Ests (Estland)"
-
-#: components/array-locale-codes.php:215
-msgid "Ewe"
-msgstr "Ewe"
-
-#: components/array-locale-codes.php:216
-msgid "Ewe (Ghana)"
-msgstr "Ewe (Ghana)"
-
-#: components/array-locale-codes.php:217
-msgid "Ewe (Togo)"
-msgstr "Ewe (Togo)"
-
-#: components/array-locale-codes.php:218
-msgid "Faroese"
-msgstr "Faeröers"
-
-#: components/array-locale-codes.php:219
-msgid "Faroese (Faroe Islands)"
-msgstr "Faeröers (Faeröer)"
-
-#: components/array-locale-codes.php:220
-msgid "Finnish"
-msgstr "Fins"
-
-#: components/array-locale-codes.php:221
-msgid "Finnish (Finland)"
-msgstr "Fins (Finland)"
-
-#: components/array-locale-codes.php:222
-msgid "French"
-msgstr "Frans"
-
-#: components/array-locale-codes.php:223
-msgid "French (Algeria)"
-msgstr "Frans (Algerije)"
-
-#: components/array-locale-codes.php:224
-msgid "French (Belgium)"
-msgstr "Frans (België)"
-
-#: components/array-locale-codes.php:225
-msgid "French (Benin)"
-msgstr "Frans (Benin)"
-
-#: components/array-locale-codes.php:226
-msgid "French (Burkina Faso)"
-msgstr "Frans (Burkina Faso)"
-
-#: components/array-locale-codes.php:227
-msgid "French (Burundi)"
-msgstr "Frans (Burundi)"
-
-#: components/array-locale-codes.php:228
-msgid "French (Cameroon)"
-msgstr "Frans (Kameroen)"
-
-#: components/array-locale-codes.php:229
-msgid "French (Canada)"
-msgstr "Frans (Canada)"
-
-#: components/array-locale-codes.php:230
-msgid "French (Central African Republic)"
-msgstr "Frans (Centraal-Afrikaanse Republiek)"
-
-#: components/array-locale-codes.php:231
-msgid "French (Chad)"
-msgstr "Frans (Tsjaad)"
-
-#: components/array-locale-codes.php:232
-msgid "French (Comoros)"
-msgstr "Frans (Comoren)"
-
-#: components/array-locale-codes.php:233
-msgid "French (Congo - Brazzaville)"
-msgstr "Frans (Congo - Brazzaville)"
-
-#: components/array-locale-codes.php:234
-msgid "French (Congo - Kinshasa)"
-msgstr "Frans (Congo - Kinshasa)"
-
-#: components/array-locale-codes.php:235
-msgid "French (Côte d’Ivoire)"
-msgstr "Frans (Ivoorkust)"
-
-#: components/array-locale-codes.php:236
-msgid "French (Djibouti)"
-msgstr "Frans (Djibouti)"
-
-#: components/array-locale-codes.php:237
-msgid "French (Equatorial Guinea)"
-msgstr "Frans (Equatoriaal-Guinea)"
-
-#: components/array-locale-codes.php:238
-msgid "French (France)"
-msgstr "Frans (Frankrijk)"
-
-#: components/array-locale-codes.php:239
-msgid "French (French Guiana)"
-msgstr "Frans (Frans-Guyana)"
-
-#: components/array-locale-codes.php:240
-msgid "French (French Polynesia)"
-msgstr "Frans (Frans-Polynesië)"
-
-#: components/array-locale-codes.php:241
-msgid "French (Gabon)"
-msgstr "Frans (Gabon)"
-
-#: components/array-locale-codes.php:242
-msgid "French (Guadeloupe)"
-msgstr "Frans (Guadeloupe)"
-
-#: components/array-locale-codes.php:243
-msgid "French (Guinea)"
-msgstr "Frans (Guinee)"
-
-#: components/array-locale-codes.php:244
-msgid "French (Haiti)"
-msgstr "Frans (Haïti)"
-
-#: components/array-locale-codes.php:245
-msgid "French (Luxembourg)"
-msgstr "Frans (Luxemburg)"
-
-#: components/array-locale-codes.php:246
-msgid "French (Madagascar)"
-msgstr "Frans (Madagaskar)"
-
-#: components/array-locale-codes.php:247
-msgid "French (Mali)"
-msgstr "Frans (Mali)"
-
-#: components/array-locale-codes.php:248
-msgid "French (Martinique)"
-msgstr "Frans (Martinique)"
-
-#: components/array-locale-codes.php:249
-msgid "French (Mauritania)"
-msgstr "Frans (Mauritanië)"
-
-#: components/array-locale-codes.php:250
-msgid "French (Mauritius)"
-msgstr "Frans (Mauritius)"
-
-#: components/array-locale-codes.php:251
-msgid "French (Mayotte)"
-msgstr "Frans (Mayotte)"
-
-#: components/array-locale-codes.php:252
-msgid "French (Monaco)"
-msgstr "Frans (Monaco)"
-
-#: components/array-locale-codes.php:253
-msgid "French (Morocco)"
-msgstr "Frans (Marokko)"
-
-#: components/array-locale-codes.php:254
-msgid "French (New Caledonia)"
-msgstr "Frans (Nieuw-Caledonië)"
-
-#: components/array-locale-codes.php:255
-msgid "French (Niger)"
-msgstr "Frans (Niger)"
-
-#: components/array-locale-codes.php:256
-msgid "French (Réunion)"
-msgstr "Frans (Réunion)"
-
-#: components/array-locale-codes.php:257
-msgid "French (Rwanda)"
-msgstr "Frans (Rwanda)"
-
-#: components/array-locale-codes.php:258
-msgid "French (Senegal)"
-msgstr "Frans (Senegal)"
-
-#: components/array-locale-codes.php:259
-msgid "French (Seychelles)"
-msgstr "Frans (Seychellen)"
-
-#: components/array-locale-codes.php:260
-msgid "French (St. Barthélemy)"
-msgstr "Frans (Saint-Barthélemy)"
-
-#: components/array-locale-codes.php:261
-msgid "French (St. Martin)"
-msgstr "Frans (Sint-Maarten)"
-
-#: components/array-locale-codes.php:262
-msgid "French (St. Pierre & Miquelon)"
-msgstr "Frans (Saint-Pierre en Miquelon)"
-
-#: components/array-locale-codes.php:263
-msgid "French (Switzerland)"
-msgstr "Frans (Zwitserland)"
-
-#: components/array-locale-codes.php:264
-msgid "French (Syria)"
-msgstr "Frans (Syrië)"
-
-#: components/array-locale-codes.php:265
-msgid "French (Togo)"
-msgstr "Frans (Togo)"
-
-#: components/array-locale-codes.php:266
-msgid "French (Tunisia)"
-msgstr "Frans (Tunesië)"
-
-#: components/array-locale-codes.php:267
-msgid "French (Vanuatu)"
-msgstr "Frans (Vanuatu)"
-
-#: components/array-locale-codes.php:268
-msgid "French (Wallis & Futuna)"
-msgstr "Frans (Wallis en Futuna)"
-
-#: components/array-locale-codes.php:269
-msgid "Fulah"
-msgstr "Fula"
-
-#: components/array-locale-codes.php:270
-msgid "Fulah (Cameroon)"
-msgstr "Fula (Kameroen)"
-
-#: components/array-locale-codes.php:271
-msgid "Fulah (Guinea)"
-msgstr "Fula (Guinee)"
-
-#: components/array-locale-codes.php:272
-msgid "Fulah (Mauritania)"
-msgstr "Fula (Mauritanië)"
-
-#: components/array-locale-codes.php:273
-msgid "Fulah (Senegal)"
-msgstr "Fula (Senegal)"
-
-#: components/array-locale-codes.php:274
-msgid "Galician"
-msgstr "Galicisch"
-
-#: components/array-locale-codes.php:275
-msgid "Galician (Spain)"
-msgstr "Galicisch (Spanje)"
-
-#: components/array-locale-codes.php:276
-msgid "Ganda"
-msgstr "Ganda"
-
-#: components/array-locale-codes.php:277
-msgid "Ganda (Uganda)"
-msgstr "Ganda (Oeganda)"
-
-#: components/array-locale-codes.php:278
-msgid "Georgian"
-msgstr "Georgisch"
-
-#: components/array-locale-codes.php:279
-msgid "Georgian (Georgia)"
-msgstr "Georgië (Georgië)"
-
-#: components/array-locale-codes.php:280
-msgid "German"
-msgstr "Duits"
-
-#: components/array-locale-codes.php:281
-msgid "German (Austria)"
-msgstr "Duits (Oostenrijk)"
-
-#: components/array-locale-codes.php:282
-msgid "German (Belgium)"
-msgstr "Duits (België)"
-
-#: components/array-locale-codes.php:283
-msgid "German (Germany)"
-msgstr "Duits (Duitsland)"
-
-#: components/array-locale-codes.php:284
-msgid "German (Liechtenstein)"
-msgstr "Duits (Liechtenstein)"
-
-#: components/array-locale-codes.php:285
-msgid "German (Luxembourg)"
-msgstr "Duits (Luxemburg)"
-
-#: components/array-locale-codes.php:286
-msgid "German (Switzerland)"
-msgstr "Duits (Zwitserland)"
-
-#: components/array-locale-codes.php:287
-msgid "Greek"
-msgstr "Grieks"
-
-#: components/array-locale-codes.php:288
-msgid "Greek (Cyprus)"
-msgstr "Grieks (Cyprus)"
-
-#: components/array-locale-codes.php:289
-msgid "Greek (Greece)"
-msgstr "Grieks (Griekenland)"
-
-#: components/array-locale-codes.php:290
-msgid "Gujarati"
-msgstr "Gujarati"
-
-#: components/array-locale-codes.php:291
-msgid "Gujarati (India)"
-msgstr "Gujarati (India)"
-
-#: components/array-locale-codes.php:292
-msgid "Hausa"
-msgstr "Hausa"
-
-#: components/array-locale-codes.php:293
-msgid "Hausa (Ghana)"
-msgstr "Hausa (Ghana)"
-
-#: components/array-locale-codes.php:294
-msgid "Hausa (Latin, Ghana)"
-msgstr "Hausa (Latijn, Ghana)"
-
-#: components/array-locale-codes.php:295
-msgid "Hausa (Latin, Niger)"
-msgstr "Hausa (Latijn, Niger)"
-
-#: components/array-locale-codes.php:296
-msgid "Hausa (Latin, Nigeria)"
-msgstr "Hausa (Latijn, Nigeria)"
-
-#: components/array-locale-codes.php:297
-msgid "Hausa (Latin)"
-msgstr "Hausa (Latijn)"
-
-#: components/array-locale-codes.php:298
-msgid "Hausa (Niger)"
-msgstr "Hausa (Niger)"
-
-#: components/array-locale-codes.php:299
-msgid "Hausa (Nigeria)"
-msgstr "Hausa (Nigeria)"
-
-#: components/array-locale-codes.php:300
-msgid "Hebrew"
-msgstr "Hebreeuws"
-
-#: components/array-locale-codes.php:301
-msgid "Hebrew (Israel)"
-msgstr "Hebreeuws (Israël)"
-
-#: components/array-locale-codes.php:302
-msgid "Hindi"
-msgstr "Hindi"
-
-#: components/array-locale-codes.php:303
-msgid "Hindi (India)"
-msgstr "Hindi (India)"
-
-#: components/array-locale-codes.php:304
-msgid "Hungarian"
-msgstr "Hongaars"
-
-#: components/array-locale-codes.php:305
-msgid "Hungarian (Hungary)"
-msgstr "Hongaars (Hongarije)"
-
-#: components/array-locale-codes.php:306
-msgid "Icelandic"
-msgstr "IJslands"
-
-#: components/array-locale-codes.php:307
-msgid "Icelandic (Iceland)"
-msgstr "IJslands (IJsland)"
-
-#: components/array-locale-codes.php:308
-msgid "Igbo"
-msgstr "Igbo"
-
-#: components/array-locale-codes.php:309
-msgid "Igbo (Nigeria)"
-msgstr "Igbo (Nigeria)"
-
-#: components/array-locale-codes.php:310
-msgid "Indonesian"
-msgstr "Indonesisch"
-
-#: components/array-locale-codes.php:311
-msgid "Indonesian (Indonesia)"
-msgstr "Indonesisch (Indonesië)"
-
-#: components/array-locale-codes.php:312
-msgid "Irish"
-msgstr "Iers"
-
-#: components/array-locale-codes.php:313
-msgid "Irish (Ireland)"
-msgstr "Iers (Ierland)"
-
-#: components/array-locale-codes.php:314
-msgid "Italian"
-msgstr "Italiaans"
-
-#: components/array-locale-codes.php:315
-msgid "Italian (Italy)"
-msgstr "Italiaans (Italië)"
-
-#: components/array-locale-codes.php:316
-msgid "Italian (San Marino)"
-msgstr "Italiaans (San Marino)"
-
-#: components/array-locale-codes.php:317
-msgid "Italian (Switzerland)"
-msgstr "Italiaans (Zwitserland)"
-
-#: components/array-locale-codes.php:318
-msgid "Japanese"
-msgstr "Japans"
-
-#: components/array-locale-codes.php:319
-msgid "Japanese (Japan)"
-msgstr "Japans (Japan)"
-
-#: components/array-locale-codes.php:320
-msgid "Kalaallisut"
-msgstr "Groenlands"
-
-#: components/array-locale-codes.php:321
-msgid "Kalaallisut (Greenland)"
-msgstr "Kalaallisut (Groenland)"
-
-#: components/array-locale-codes.php:322
-msgid "Kannada"
-msgstr "Canada"
-
-#: components/array-locale-codes.php:323
-msgid "Kannada (India)"
-msgstr "Kannada (India)"
-
-#: components/array-locale-codes.php:324
-msgid "Kashmiri"
-msgstr "Kasjmirs"
-
-#: components/array-locale-codes.php:325
-msgid "Kashmiri (Arabic, India)"
-msgstr "Kashmiri (Arabisch, India)"
-
-#: components/array-locale-codes.php:326
-msgid "Kashmiri (Arabic)"
-msgstr "Kashmiri (Arabisch)"
-
-#: components/array-locale-codes.php:327
-msgid "Kashmiri (India)"
-msgstr "Kashmiri (India)"
-
-#: components/array-locale-codes.php:328
-msgid "Kazakh"
-msgstr "Kazachs"
-
-#: components/array-locale-codes.php:329
-msgid "Kazakh (Cyrillic, Kazakhstan)"
-msgstr "Kazachs (Cyrillisch, Kazachstan)"
-
-#: components/array-locale-codes.php:330
-msgid "Kazakh (Cyrillic)"
-msgstr "Kazachs (Cyrillisch)"
-
-#: components/array-locale-codes.php:331
-msgid "Kazakh (Kazakhstan)"
-msgstr "Kazachs (Kazachstan)"
-
-#: components/array-locale-codes.php:332
-msgid "Khmer"
-msgstr "Khmer"
-
-#: components/array-locale-codes.php:333
-msgid "Khmer (Cambodia)"
-msgstr "Khmer (Cambodja)"
-
-#: components/array-locale-codes.php:334
-msgid "Kikuyu"
-msgstr "Gikuyu"
-
-#: components/array-locale-codes.php:335
-msgid "Kikuyu (Kenya)"
-msgstr "Kikuyu (Kenia)"
-
-#: components/array-locale-codes.php:336
-msgid "Kinyarwanda"
-msgstr "Kinyarwanda"
-
-#: components/array-locale-codes.php:337
-msgid "Kinyarwanda (Rwanda)"
-msgstr "Kinyarwanda (Rwanda)"
-
-#: components/array-locale-codes.php:338
-msgid "Korean"
-msgstr "Koreaans"
-
-#: components/array-locale-codes.php:339
-msgid "Korean (North Korea)"
-msgstr "Koreaans (Noord-Korea)"
-
-#: components/array-locale-codes.php:340
-msgid "Korean (South Korea)"
-msgstr "Koreaans (Zuid-Korea)"
-
-#: components/array-locale-codes.php:341
-msgid "Kyrgyz"
-msgstr "Kirgizisch"
-
-#: components/array-locale-codes.php:342
-msgid "Kyrgyz (Cyrillic, Kyrgyzstan)"
-msgstr "Kirgizisch (Cyrillisch, Kirgizië)"
-
-#: components/array-locale-codes.php:343
-msgid "Kyrgyz (Cyrillic)"
-msgstr "Kirgizisch (Cyrillisch)"
-
-#: components/array-locale-codes.php:344
-msgid "Kyrgyz (Kyrgyzstan)"
-msgstr "Kirgizisch (Kirgizië)"
-
-#: components/array-locale-codes.php:345
-msgid "Lao"
-msgstr "LAO"
-
-#: components/array-locale-codes.php:346
-msgid "Lao (Laos)"
-msgstr "Laotisch (Laos)"
-
-#: components/array-locale-codes.php:347
-msgid "Latvian"
-msgstr "Lets"
-
-#: components/array-locale-codes.php:348
-msgid "Latvian (Latvia)"
-msgstr "Lets (Letland)"
-
-#: components/array-locale-codes.php:349
-msgid "Lingala"
-msgstr "Lingala"
-
-#: components/array-locale-codes.php:350
-msgid "Lingala (Angola)"
-msgstr "Lingala (Angola)"
-
-#: components/array-locale-codes.php:351
-msgid "Lingala (Central African Republic)"
-msgstr "Lingala (Centraal-Afrikaanse Republiek)"
-
-#: components/array-locale-codes.php:352
-msgid "Lingala (Congo - Brazzaville)"
-msgstr "Lingala (Congo - Brazzaville)"
-
-#: components/array-locale-codes.php:353
-msgid "Lingala (Congo - Kinshasa)"
-msgstr "Lingala (Congo - Kinshasa)"
-
-#: components/array-locale-codes.php:354
-msgid "Lithuanian"
-msgstr "Litouws"
-
-#: components/array-locale-codes.php:355
-msgid "Lithuanian (Lithuania)"
-msgstr "Litouws (Litouwen)"
-
-#: components/array-locale-codes.php:356
-msgid "Luba-Katanga"
-msgstr "Luba Katanga"
-
-#: components/array-locale-codes.php:357
-msgid "Luba-Katanga (Congo - Kinshasa)"
-msgstr "Luba-Katanga (Congo - Kinshasa)"
-
-#: components/array-locale-codes.php:358
-msgid "Luxembourgish"
-msgstr "Luxemburgs"
-
-#: components/array-locale-codes.php:359
-msgid "Luxembourgish (Luxembourg)"
-msgstr "Luxemburgs (Luxemburg)"
-
-#: components/array-locale-codes.php:360
-msgid "Macedonian"
-msgstr "Macedonisch"
-
-#: components/array-locale-codes.php:361
-msgid "Macedonian (Macedonia)"
-msgstr "Macedonisch (Macedonië)"
-
-#: components/array-locale-codes.php:362
-msgid "Malagasy"
-msgstr "Malagassisch"
-
-#: components/array-locale-codes.php:363
-msgid "Malagasy (Madagascar)"
-msgstr "Malagassisch (Madagaskar)"
-
-#: components/array-locale-codes.php:364
-msgid "Malay"
-msgstr "Maleis"
-
-#: components/array-locale-codes.php:365
-msgid "Malay (Brunei)"
-msgstr "Maleis (Brunei)"
-
-#: components/array-locale-codes.php:366
-msgid "Malay (Latin, Brunei)"
-msgstr "Maleis (Latijns, Brunei)"
-
-#: components/array-locale-codes.php:367
-msgid "Malay (Latin, Malaysia)"
-msgstr "Maleis (Latijn, Maleisië)"
-
-#: components/array-locale-codes.php:368
-msgid "Malay (Latin, Singapore)"
-msgstr "Maleis (Latijns alfabet, Singapore)"
-
-#: components/array-locale-codes.php:369
-msgid "Malay (Latin)"
-msgstr "Maleis (Latijn)"
-
-#: components/array-locale-codes.php:370
-msgid "Malay (Malaysia)"
-msgstr "Maleis (Maleisië)"
-
-#: components/array-locale-codes.php:371
-msgid "Malay (Singapore)"
-msgstr "Maleis (Singapore)"
-
-#: components/array-locale-codes.php:372
-msgid "Malayalam"
-msgstr "Malayalam"
-
-#: components/array-locale-codes.php:373
-msgid "Malayalam (India)"
-msgstr "Malayalam (India)"
-
-#: components/array-locale-codes.php:374
-msgid "Maltese"
-msgstr "Maltees"
-
-#: components/array-locale-codes.php:375
-msgid "Maltese (Malta)"
-msgstr "Maltese (Malta)"
-
-#: components/array-locale-codes.php:376
-msgid "Manx"
-msgstr "Manx-Gaelisch"
-
-#: components/array-locale-codes.php:377
-msgid "Manx (Isle of Man)"
-msgstr "Manx (Eiland Man)"
-
-#: components/array-locale-codes.php:378
-msgid "Marathi"
-msgstr "Marathi"
-
-#: components/array-locale-codes.php:379
-msgid "Marathi (India)"
-msgstr "Marathi (India)"
-
-#: components/array-locale-codes.php:380
-msgid "Mongolian"
-msgstr "Mongools"
-
-#: components/array-locale-codes.php:381
-msgid "Mongolian (Cyrillic, Mongolia)"
-msgstr "Mongools (Cyrillisch, Mongolië)"
-
-#: components/array-locale-codes.php:382
-msgid "Mongolian (Cyrillic)"
-msgstr "Mongools (Cyrillisch)"
-
-#: components/array-locale-codes.php:383
-msgid "Mongolian (Mongolia)"
-msgstr "Mongools (Mongolië)"
-
-#: components/array-locale-codes.php:384
-msgid "Nepali"
-msgstr "Nepalees"
-
-#: components/array-locale-codes.php:385
-msgid "Nepali (India)"
-msgstr "Nepalees (India)"
-
-#: components/array-locale-codes.php:386
-msgid "Nepali (Nepal)"
-msgstr "Nepalees (Nepal)"
-
-#: components/array-locale-codes.php:387
-msgid "North Ndebele"
-msgstr "Noord Ndebele"
-
-#: components/array-locale-codes.php:388
-msgid "North Ndebele (Zimbabwe)"
-msgstr "Noord-Ndebele (Zimbabwe)"
-
-#: components/array-locale-codes.php:389
-msgid "Northern Sami"
-msgstr "Noord Samisch"
-
-#: components/array-locale-codes.php:390
-msgid "Northern Sami (Finland)"
-msgstr "Noord-Samisch (Finland)"
-
-#: components/array-locale-codes.php:391
-msgid "Northern Sami (Norway)"
-msgstr "Noord-Samisch (Noorwegen)"
-
-#: components/array-locale-codes.php:392
-msgid "Northern Sami (Sweden)"
-msgstr "Noord-Samisch (Zweden)"
-
-#: components/array-locale-codes.php:393
-msgid "Norwegian"
-msgstr "Norwegisch"
-
-#: components/array-locale-codes.php:394
-msgid "Norwegian (Norway)"
-msgstr "Noors (Noorwegen)"
-
-#: components/array-locale-codes.php:395
-msgid "Norwegian Bokmål"
-msgstr "Noors (Bokmål)"
-
-#: components/array-locale-codes.php:396
-msgid "Norwegian Bokmål (Norway)"
-msgstr "Noors Bokmål (Noorwegen)"
-
-#: components/array-locale-codes.php:397
-msgid "Norwegian Bokmål (Svalbard & Jan Mayen)"
-msgstr "Noors (Bokmål) (Svalbard en Jan Mayen)"
-
-#: components/array-locale-codes.php:398
-msgid "Norwegian Nynorsk"
-msgstr "Noors (Nynorsk)"
-
-#: components/array-locale-codes.php:399
-msgid "Norwegian Nynorsk (Norway)"
-msgstr "Noors Nynorsk (Noorwegen)"
-
-#: components/array-locale-codes.php:400
-msgid "Oriya"
-msgstr "Odia"
-
-#: components/array-locale-codes.php:401
-msgid "Oriya (India)"
-msgstr "Oriya (India)"
-
-#: components/array-locale-codes.php:402
-msgid "Oromo"
-msgstr "Afaan Oromo"
-
-#: components/array-locale-codes.php:403
-msgid "Oromo (Ethiopia)"
-msgstr "Oromo (Ethiopië)"
-
-#: components/array-locale-codes.php:404
-msgid "Oromo (Kenya)"
-msgstr "Oromo (Kenia)"
-
-#: components/array-locale-codes.php:405
-msgid "Ossetic"
-msgstr "Ossetisch"
-
-#: components/array-locale-codes.php:406
-msgid "Ossetic (Georgia)"
-msgstr "Ossetisch (Georgië)"
-
-#: components/array-locale-codes.php:407
-msgid "Ossetic (Russia)"
-msgstr "Ossetisch (Rusland)"
-
-#: components/array-locale-codes.php:408
-msgid "Pashto"
-msgstr "Pasjtoe"
-
-#: components/array-locale-codes.php:409
-msgid "Pashto (Afghanistan)"
-msgstr "Pashto (Afghanistan)"
-
-#: components/array-locale-codes.php:410
-msgid "Persian"
-msgstr "Perzisch"
-
-#: components/array-locale-codes.php:411
-msgid "Persian (Afghanistan)"
-msgstr "Perzisch (Afghanistan)"
-
-#: components/array-locale-codes.php:412
-msgid "Persian (Iran)"
-msgstr "Perzisch (Iran)"
-
-#: components/array-locale-codes.php:413
-msgid "Polish"
-msgstr "Pools"
-
-#: components/array-locale-codes.php:414
-msgid "Polish (Poland)"
-msgstr "Pools (Polen)"
-
-#: components/array-locale-codes.php:415
-msgid "Portuguese"
-msgstr "Portugees"
-
-#: components/array-locale-codes.php:416
-msgid "Portuguese (Angola)"
-msgstr "Portugees (Angola)"
-
-#: components/array-locale-codes.php:417
-msgid "Portuguese (Brazil)"
-msgstr "Portugees (Brazilië)"
-
-#: components/array-locale-codes.php:418
-msgid "Portuguese (Cape Verde)"
-msgstr "Portugees (Kaapverdië)"
-
-#: components/array-locale-codes.php:419
-msgid "Portuguese (Guinea-Bissau)"
-msgstr "Portugees (Guinee-Bissau)"
-
-#: components/array-locale-codes.php:420
-msgid "Portuguese (Macau SAR China)"
-msgstr "Portugees (Speciale Administratieve Regio Macau, China)"
-
-#: components/array-locale-codes.php:421
-msgid "Portuguese (Mozambique)"
-msgstr "Portugees (Mozambique)"
-
-#: components/array-locale-codes.php:422
-msgid "Portuguese (Portugal)"
-msgstr "Portugees (Portugal)"
-
-#: components/array-locale-codes.php:423
-msgid "Portuguese (São Tomé & Príncipe)"
-msgstr "Portugees (São Tomé en Príncipe)"
-
-#: components/array-locale-codes.php:424
-msgid "Portuguese (Timor-Leste)"
-msgstr "Portugees (Oost-Timor)"
-
-#: components/array-locale-codes.php:425
-msgid "Punjabi"
-msgstr "Punjabi"
-
-#: components/array-locale-codes.php:426
-msgid "Punjabi (Arabic, Pakistan)"
-msgstr "Punjabi (Arabisch, Pakistan)"
-
-#: components/array-locale-codes.php:427
-msgid "Punjabi (Arabic)"
-msgstr "Punjabi (Arabisch)"
-
-#: components/array-locale-codes.php:428
-msgid "Punjabi (Gurmukhi, India)"
-msgstr "Punjabi (Gurmukhi, India)"
-
-#: components/array-locale-codes.php:429
-msgid "Punjabi (Gurmukhi)"
-msgstr "Punjabi (Gurmukhi)"
-
-#: components/array-locale-codes.php:430
-msgid "Punjabi (India)"
-msgstr "Punjabi (India)"
-
-#: components/array-locale-codes.php:431
-msgid "Punjabi (Pakistan)"
-msgstr "Punjabi (Pakistan)"
-
-#: components/array-locale-codes.php:432
-msgid "Quechua"
-msgstr "Quechua"
-
-#: components/array-locale-codes.php:433
-msgid "Quechua (Bolivia)"
-msgstr "Quechua (Bolivia)"
-
-#: components/array-locale-codes.php:434
-msgid "Quechua (Ecuador)"
-msgstr "Quechua (Ecuador)"
-
-#: components/array-locale-codes.php:435
-msgid "Quechua (Peru)"
-msgstr "Quechua (Peru)"
-
-#: components/array-locale-codes.php:436
-msgid "Romanian"
-msgstr "Roemeens"
-
-#: components/array-locale-codes.php:437
-msgid "Romanian (Moldova)"
-msgstr "Roemeens (Moldavië)"
-
-#: components/array-locale-codes.php:438
-msgid "Romanian (Romania)"
-msgstr "Roemeens (Roemenië)"
-
-#: components/array-locale-codes.php:439
-msgid "Romansh"
-msgstr "Reto-Romaans"
-
-#: components/array-locale-codes.php:440
-msgid "Romansh (Switzerland)"
-msgstr "Reto-Romaans (Zwitserland)"
-
-#: components/array-locale-codes.php:441
-msgid "Rundi"
-msgstr "Rundi"
-
-#: components/array-locale-codes.php:442
-msgid "Rundi (Burundi)"
-msgstr "Rundi (Burundi)"
-
-#: components/array-locale-codes.php:443
-msgid "Russian"
-msgstr "Russisch"
-
-#: components/array-locale-codes.php:444
-msgid "Russian (Belarus)"
-msgstr "Russisch (Wit-Rusland)"
-
-#: components/array-locale-codes.php:445
-msgid "Russian (Kazakhstan)"
-msgstr "Russisch (Kazachstan)"
-
-#: components/array-locale-codes.php:446
-msgid "Russian (Kyrgyzstan)"
-msgstr "Russisch (Kirgizië)"
-
-#: components/array-locale-codes.php:447
-msgid "Russian (Moldova)"
-msgstr "Russisch (Moldavië)"
-
-#: components/array-locale-codes.php:448
-msgid "Russian (Russia)"
-msgstr "Russisch (Rusland)"
-
-#: components/array-locale-codes.php:449
-msgid "Russian (Ukraine)"
-msgstr "Russisch (Oekraïne)"
-
-#: components/array-locale-codes.php:450
-msgid "Sango"
-msgstr "Sango"
-
-#: components/array-locale-codes.php:451
-msgid "Sango (Central African Republic)"
-msgstr "Sango (Centraal-Afrikaanse Republiek)"
-
-#: components/array-locale-codes.php:452
-msgid "Scottish Gaelic"
-msgstr "Schots-Gaelisch"
-
-#: components/array-locale-codes.php:453
-msgid "Scottish Gaelic (United Kingdom)"
-msgstr "Schots-Gaelisch (Verenigd Koninkrijk)"
-
-#: components/array-locale-codes.php:454
-msgid "Serbian"
-msgstr "Servisch"
-
-#: components/array-locale-codes.php:455
-msgid "Serbian (Bosnia & Herzegovina)"
-msgstr "Servisch (Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:456
-msgid "Serbian (Cyrillic, Bosnia & Herzegovina)"
-msgstr "Servisch (Cyrillisch, Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:457
-msgid "Serbian (Cyrillic, Kosovo)"
-msgstr "Servisch (Cyrillisch, Kosovo)"
-
-#: components/array-locale-codes.php:458
-msgid "Serbian (Cyrillic, Montenegro)"
-msgstr "Servisch (Cyrillisch, Montenegro)"
-
-#: components/array-locale-codes.php:459
-msgid "Serbian (Cyrillic, Serbia)"
-msgstr "Servisch (Cyrillisch, Servië)"
-
-#: components/array-locale-codes.php:460
-msgid "Serbian (Cyrillic)"
-msgstr "Servisch (Cyrillisch)"
-
-#: components/array-locale-codes.php:461
-msgid "Serbian (Kosovo)"
-msgstr "Servisch (Kosovo)"
-
-#: components/array-locale-codes.php:462
-msgid "Serbian (Latin, Bosnia & Herzegovina)"
-msgstr "Servisch (Latijns alfabet, Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:463
-msgid "Serbian (Latin, Kosovo)"
-msgstr "Servisch (Latijns alfabet, Kosovo)"
-
-#: components/array-locale-codes.php:464
-msgid "Serbian (Latin, Montenegro)"
-msgstr "Servisch (Latijns alfabet, Montenegro)"
-
-#: components/array-locale-codes.php:465
-msgid "Serbian (Latin, Serbia)"
-msgstr "Servisch (Latijns alfabet, Servië)"
-
-#: components/array-locale-codes.php:466
-msgid "Serbian (Latin)"
-msgstr "Servisch (Latijns alfabet)"
-
-#: components/array-locale-codes.php:467
-msgid "Serbian (Montenegro)"
-msgstr "Servisch (Montenegro)"
-
-#: components/array-locale-codes.php:468
-msgid "Serbian (Serbia)"
-msgstr "Servisch (Servië)"
-
-#: components/array-locale-codes.php:469
-msgid "Serbo-Croatian"
-msgstr "Servo-Kroatisch"
-
-#: components/array-locale-codes.php:470
-msgid "Serbo-Croatian (Bosnia & Herzegovina)"
-msgstr "Servo-Kroatisch (Bosnië en Herzegovina)"
-
-#: components/array-locale-codes.php:471
-msgid "Shona"
-msgstr "Shona"
-
-#: components/array-locale-codes.php:472
-msgid "Shona (Zimbabwe)"
-msgstr "Shona (Zimbabwe)"
-
-#: components/array-locale-codes.php:473
-msgid "Sichuan Yi"
-msgstr "Sichuan Yi"
-
-#: components/array-locale-codes.php:474
-msgid "Sichuan Yi (China)"
-msgstr "Sichuan Yi (China)"
-
-#: components/array-locale-codes.php:475
-msgid "Sinhala"
-msgstr "Singalees"
-
-#: components/array-locale-codes.php:476
-msgid "Sinhala (Sri Lanka)"
-msgstr "Sinhala (Sri Lanka)"
-
-#: components/array-locale-codes.php:477
-msgid "Slovak"
-msgstr "Slowaaks"
-
-#: components/array-locale-codes.php:478
-msgid "Slovak (Slovakia)"
-msgstr "Slowaaks (Slowakije)"
-
-#: components/array-locale-codes.php:479
-msgid "Slovenian"
-msgstr "Sloveens"
-
-#: components/array-locale-codes.php:480
-msgid "Slovenian (Slovenia)"
-msgstr "Sloveens (Slovenië)"
-
-#: components/array-locale-codes.php:481
-msgid "Somali"
-msgstr "Somalisch"
-
-#: components/array-locale-codes.php:482
-msgid "Somali (Djibouti)"
-msgstr "Somalisch (Djibouti)"
-
-#: components/array-locale-codes.php:483
-msgid "Somali (Ethiopia)"
-msgstr "Somali (Ethiopië)"
-
-#: components/array-locale-codes.php:484
-msgid "Somali (Kenya)"
-msgstr "Somalisch (Kenia)"
-
-#: components/array-locale-codes.php:485
-msgid "Somali (Somalia)"
-msgstr "Somalisch (Somalië)"
-
-#: components/array-locale-codes.php:486
-msgid "Spanish"
-msgstr "Spaans"
-
-#: components/array-locale-codes.php:487
-msgid "Spanish (Argentina)"
-msgstr "Spaans (Argentinië)"
-
-#: components/array-locale-codes.php:488
-msgid "Spanish (Bolivia)"
-msgstr "Spaans (Bolivia)"
-
-#: components/array-locale-codes.php:489
-msgid "Spanish (Canary Islands)"
-msgstr "Spaans (Canarische Eilanden)"
-
-#: components/array-locale-codes.php:490
-msgid "Spanish (Ceuta & Melilla)"
-msgstr "Spaans (Ceuta en Melilla)"
-
-#: components/array-locale-codes.php:491
-msgid "Spanish (Chile)"
-msgstr "Spaans (Chili)"
-
-#: components/array-locale-codes.php:492
-msgid "Spanish (Colombia)"
-msgstr "Spaans (Colombia)"
-
-#: components/array-locale-codes.php:493
-msgid "Spanish (Costa Rica)"
-msgstr "Spaans (Costa Rica)"
-
-#: components/array-locale-codes.php:494
-msgid "Spanish (Cuba)"
-msgstr "Spaans (Cuba)"
-
-#: components/array-locale-codes.php:495
-msgid "Spanish (Dominican Republic)"
-msgstr "Spaans (Dominicaanse Republiek)"
-
-#: components/array-locale-codes.php:496
-msgid "Spanish (Ecuador)"
-msgstr "Spaans (Ecuador)"
-
-#: components/array-locale-codes.php:497
-msgid "Spanish (El Salvador)"
-msgstr "Spaans (El Salvador)"
-
-#: components/array-locale-codes.php:498
-msgid "Spanish (Equatorial Guinea)"
-msgstr "Spaans (Equatoriaal-Guinea)"
-
-#: components/array-locale-codes.php:499
-msgid "Spanish (Guatemala)"
-msgstr "Spaans (Guatemala)"
-
-#: components/array-locale-codes.php:500
-msgid "Spanish (Honduras)"
-msgstr "Spaans (Honduras)"
-
-#: components/array-locale-codes.php:501
-msgid "Spanish (Mexico)"
-msgstr "Spaans (Mexico)"
-
-#: components/array-locale-codes.php:502
-msgid "Spanish (Nicaragua)"
-msgstr "Spaans (Nicaragua)"
-
-#: components/array-locale-codes.php:503
-msgid "Spanish (Panama)"
-msgstr "Spaans (Panama)"
-
-#: components/array-locale-codes.php:504
-msgid "Spanish (Paraguay)"
-msgstr "Spaans (Paraguay)"
-
-#: components/array-locale-codes.php:505
-msgid "Spanish (Peru)"
-msgstr "Spaans (Peru)"
-
-#: components/array-locale-codes.php:506
-msgid "Spanish (Philippines)"
-msgstr "Spaans (Filippijnen)"
-
-#: components/array-locale-codes.php:507
-msgid "Spanish (Puerto Rico)"
-msgstr "Spaans (Puerto Rico)"
-
-#: components/array-locale-codes.php:508
-msgid "Spanish (Spain)"
-msgstr "Spaans (Spanje)"
-
-#: components/array-locale-codes.php:509
-msgid "Spanish (United States)"
-msgstr "Spaans (Verenigde Staten)"
-
-#: components/array-locale-codes.php:510
-msgid "Spanish (Uruguay)"
-msgstr "Spaans (Uruguay)"
-
-#: components/array-locale-codes.php:511
-msgid "Spanish (Venezuela)"
-msgstr "Spaans (Venezuela)"
-
-#: components/array-locale-codes.php:512
-msgid "Swahili"
-msgstr "Swahili"
-
-#: components/array-locale-codes.php:513
-msgid "Swahili (Kenya)"
-msgstr "Swahili (Kenia)"
-
-#: components/array-locale-codes.php:514
-msgid "Swahili (Tanzania)"
-msgstr "Swahili (Tanzania)"
-
-#: components/array-locale-codes.php:515
-msgid "Swahili (Uganda)"
-msgstr "Swahili (Oeganda)"
-
-#: components/array-locale-codes.php:516
-msgid "Swedish"
-msgstr "Zweeds"
-
-#: components/array-locale-codes.php:517
-msgid "Swedish (Åland Islands)"
-msgstr "Zweeds (Ålandseilanden)"
-
-#: components/array-locale-codes.php:518
-msgid "Swedish (Finland)"
-msgstr "Zweeds (Finland)"
-
-#: components/array-locale-codes.php:519
-msgid "Swedish (Sweden)"
-msgstr "Zweeds (Zweden)"
-
-#: components/array-locale-codes.php:520
-msgid "Tagalog"
-msgstr "Tagalog"
-
-#: components/array-locale-codes.php:521
-msgid "Tagalog (Philippines)"
-msgstr "Tagalog (Filippijnen)"
-
-#: components/array-locale-codes.php:522
-msgid "Tamil"
-msgstr "Tamil"
-
-#: components/array-locale-codes.php:523
-msgid "Tamil (India)"
-msgstr "Tamil (India)"
-
-#: components/array-locale-codes.php:524
-msgid "Tamil (Malaysia)"
-msgstr "Tamil (Maleisië)"
-
-#: components/array-locale-codes.php:525
-msgid "Tamil (Singapore)"
-msgstr "Tamil (Singapore)"
-
-#: components/array-locale-codes.php:526
-msgid "Tamil (Sri Lanka)"
-msgstr "Tamil (Sri Lanka)"
-
-#: components/array-locale-codes.php:527
-msgid "Telugu"
-msgstr "Telugu"
-
-#: components/array-locale-codes.php:528
-msgid "Telugu (India)"
-msgstr "Telugu (India)"
-
-#: components/array-locale-codes.php:529
-msgid "Thai"
-msgstr "Thais"
-
-#: components/array-locale-codes.php:530
-msgid "Thai (Thailand)"
-msgstr "Thais (Thailand)"
-
-#: components/array-locale-codes.php:531
-msgid "Tibetan"
-msgstr "Tibetaans"
-
-#: components/array-locale-codes.php:532
-msgid "Tibetan (China)"
-msgstr "Tibetaans (China)"
-
-#: components/array-locale-codes.php:533
-msgid "Tibetan (India)"
-msgstr "Tibetaans (India)"
-
-#: components/array-locale-codes.php:534
-msgid "Tigrinya"
-msgstr "Tigrinya"
-
-#: components/array-locale-codes.php:535
-msgid "Tigrinya (Eritrea)"
-msgstr "Tigrinya (Eritrea)"
-
-#: components/array-locale-codes.php:536
-msgid "Tigrinya (Ethiopia)"
-msgstr "Tigrinya (Ethiopië)"
-
-#: components/array-locale-codes.php:537
-msgid "Tongan"
-msgstr "Tongaans"
-
-#: components/array-locale-codes.php:538
-msgid "Tongan (Tonga)"
-msgstr "Tongaans (Tonga)"
-
-#: components/array-locale-codes.php:539
-msgid "Turkish"
-msgstr "Turks"
-
-#: components/array-locale-codes.php:540
-msgid "Turkish (Cyprus)"
-msgstr "Turks (Cyprus)"
-
-#: components/array-locale-codes.php:541
-msgid "Turkish (Turkey)"
-msgstr "Turks (Turkije)"
-
-#: components/array-locale-codes.php:542
-msgid "Ukrainian"
-msgstr "Oekraïens"
-
-#: components/array-locale-codes.php:543
-msgid "Ukrainian (Ukraine)"
-msgstr "Oekraïens (Oekraïne)"
-
-#: components/array-locale-codes.php:544
-msgid "Urdu"
-msgstr "Urdu"
-
-#: components/array-locale-codes.php:545
-msgid "Urdu (India)"
-msgstr "Urdu (India)"
-
-#: components/array-locale-codes.php:546
-msgid "Urdu (Pakistan)"
-msgstr "Urdu (Pakistan)"
-
-#: components/array-locale-codes.php:547
-msgid "Uyghur"
-msgstr "Oeigoeren"
-
-#: components/array-locale-codes.php:548
-msgid "Uyghur (Arabic, China)"
-msgstr "Oeigoers (Arabisch, China)"
-
-#: components/array-locale-codes.php:549
-msgid "Uyghur (Arabic)"
-msgstr "Oeigoers (Arabisch)"
-
-#: components/array-locale-codes.php:550
-msgid "Uyghur (China)"
-msgstr "Oeigoers (China)"
-
-#: components/array-locale-codes.php:551
-msgid "Uzbek"
-msgstr "Oezbeeks"
-
-#: components/array-locale-codes.php:552
-msgid "Uzbek (Afghanistan)"
-msgstr "Oezbeeks (Afghanistan)"
-
-#: components/array-locale-codes.php:553
-msgid "Uzbek (Arabic, Afghanistan)"
-msgstr "Oezbeeks (Arabisch, Afghanistan)"
-
-#: components/array-locale-codes.php:554
-msgid "Uzbek (Arabic)"
-msgstr "Oezbeeks (Arabisch)"
-
-#: components/array-locale-codes.php:555
-msgid "Uzbek (Cyrillic, Uzbekistan)"
-msgstr "Oezbeeks (Cyrillisch, Oezbekistan)"
-
-#: components/array-locale-codes.php:556
-msgid "Uzbek (Cyrillic)"
-msgstr "Oezbeeks (Cyrillisch)"
-
-#: components/array-locale-codes.php:557
-msgid "Uzbek (Latin, Uzbekistan)"
-msgstr "Oezbeeks (Latijns alfabet, Oezbekistan)"
-
-#: components/array-locale-codes.php:558
-msgid "Uzbek (Latin)"
-msgstr "Oezbeeks (Latijns alfabet)"
-
-#: components/array-locale-codes.php:559
-msgid "Uzbek (Uzbekistan)"
-msgstr "Oezbeeks (Oezbekistan)"
-
-#: components/array-locale-codes.php:560
-msgid "Vietnamese"
-msgstr "Vietnamees"
-
-#: components/array-locale-codes.php:561
-msgid "Vietnamese (Vietnam)"
-msgstr "Vietnamees (Vietnam)"
-
-#: components/array-locale-codes.php:562
-msgid "Welsh"
-msgstr "Welsh"
-
-#: components/array-locale-codes.php:563
-msgid "Welsh (United Kingdom)"
-msgstr "Welsh (Verenigd Koninkrijk)"
-
-#: components/array-locale-codes.php:564
-msgid "Western Frisian"
-msgstr "West Fries"
-
-#: components/array-locale-codes.php:565
-msgid "Western Frisian (Netherlands)"
-msgstr "West-Fries (Nederland)"
-
-#: components/array-locale-codes.php:566
-msgid "Yiddish"
-msgstr "Jiddisch"
-
-#: components/array-locale-codes.php:567
-msgid "Yoruba"
-msgstr "Yoruba"
-
-#: components/array-locale-codes.php:568
-msgid "Yoruba (Benin)"
-msgstr "Yoruba (Benin)"
-
-#: components/array-locale-codes.php:569
-msgid "Yoruba (Nigeria)"
-msgstr "Yoruba (Nigeria)"
-
-#: components/array-locale-codes.php:570
-msgid "Zulu"
-msgstr "Zoeloe"
-
-#: components/array-locale-codes.php:571
-msgid "Zulu (South Africa)"
-msgstr "Zoeloe (Zuid-Afrika)"
-
-#: components/class-m-chart-admin.php:54
-#: components/templates/m-chart-settings.php:2
+#: components/class-m-chart-admin.php:67
+#: components/templates/m-chart-settings.php:3
 msgid "M Chart Settings"
 msgstr "M chart instellingen"
 
-#: components/class-m-chart-admin.php:55
+#: components/class-m-chart-admin.php:68
 msgid "Settings"
 msgstr "Instellingen"
 
-#: components/class-m-chart-admin.php:179
+#: components/class-m-chart-admin.php:103
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: components/class-m-chart-admin.php:138
+msgid "Docs"
+msgstr "Documentatie"
+
+#: components/class-m-chart-admin.php:399
 msgid "Settings saved"
 msgstr "Instellingen opgeslagen"
 
-#: components/class-m-chart-admin.php:215
-#: components/class-m-chart-admin.php:216
-#: components/templates/chart-meta-box.php:8
-#: components/templates/chart-meta-box.php:9
+#: components/class-m-chart-admin.php:435
+#: components/class-m-chart-admin.php:436
+#: components/templates/chart-meta-box.php:12
+#: components/templates/chart-meta-box.php:13
 msgid "M Chart Highcharts Library"
 msgstr "M Chart Highcharts Bibliotheek"
 
-#: components/class-m-chart-admin.php:217
+#: components/class-m-chart-admin.php:437
 msgid "You have charts that require the M Chart Highcharts Library plugin."
 msgstr "U hebt grafieken waarvoor de M Chart Highcharts plugin vereist is."
 
-#: components/class-m-chart-admin.php:221
+#: components/class-m-chart-admin.php:441
 msgid "These charts will no longer display unless you install the plugin:"
 msgstr ""
 "Deze grafieken kunnen niet getoond worden tenzij u deze plugin installeert:"
 
-#: components/class-m-chart-admin.php:223
-#: components/templates/chart-meta-box.php:15
+#: components/class-m-chart-admin.php:443
+#: components/templates/chart-meta-box.php:19
 msgid "Learn More"
 msgstr "Kom meer te weten"
 
-#: components/class-m-chart-admin.php:378
-msgid "Are you sure you want to delete this spreadsheet?"
-msgstr "Bent u zeker dat u deze spreadsheet wil verwijderen?"
-
-#: components/class-m-chart-admin.php:422
+#: components/class-m-chart-admin.php:646
 msgid "Data"
 msgstr "Data"
 
-#: components/class-m-chart-admin.php:431 components/class-m-chart.php:194
-#: components/block-src/chart/edit.js:196
-#: components/block-src/chart/edit.js:242 components/block/index.js:248
-#: components/block/index.js:299 components/block/index.js:196
-#: components/block/index.js:242
+#: components/class-m-chart-admin.php:655 components/class-m-chart.php:317
+#: components/block-src/chart/edit.js:225
+#: components/block-src/chart/edit.js:271 components/block/index.js:3
 msgid "Chart"
 msgstr "Grafiek"
 
-#: components/class-m-chart-admin.php:516
+#: components/class-m-chart-admin.php:741
 msgid "Library not found"
 msgstr "Bibliotheek niet gevonden"
 
-#: components/class-m-chart-admin.php:730
-#: components/class-m-chart-admin.php:740
+#: components/class-m-chart-admin.php:967
+#: components/class-m-chart-admin.php:979
 msgid "Wrong post type"
 msgstr "Verkeerd bericht type"
 
-#: components/class-m-chart-admin.php:735
-#: components/class-m-chart-admin.php:871
+#: components/class-m-chart-admin.php:974
+#: components/class-m-chart-admin.php:1154
 msgid "Invalid nonce"
 msgstr "Ongeldige beveiligingssleutel"
 
-#: components/class-m-chart-admin.php:745
+#: components/class-m-chart-admin.php:984
 msgid "No file to import"
 msgstr "Geen bestand om te importeren"
 
-#: components/class-m-chart-admin.php:752
+#: components/class-m-chart-admin.php:989
+msgid "File upload error"
+msgstr "Fout bij het uploaden van een bestand"
+
+#: components/class-m-chart-admin.php:993
+msgid "Invalid upload"
+msgstr "Upload mislukt"
+
+#: components/class-m-chart-admin.php:1004
 msgid "Only CSV files can be imported"
 msgstr "Er kunnen alleen CSV-bestanden worden geïmporteerd"
 
-#: components/class-m-chart-admin.php:759
+#: components/class-m-chart-admin.php:1011
 msgid "File path not found"
 msgstr "Bestands pad niet gevonden"
 
-#: components/class-m-chart-admin.php:765
+#: components/class-m-chart-admin.php:1016
+msgid "CSV file too large (max 2MB)"
+msgstr "CSV-bestand te groot (max. 2 MB)"
+
+#: components/class-m-chart-admin.php:1022
 msgid "CSV file was empty"
 msgstr "CSV bestand is leeg"
 
-#: components/class-m-chart-admin.php:879
+#: components/class-m-chart-admin.php:1093
+msgid "Unauthorized access"
+msgstr "Onbevoegde toegang"
+
+#: components/class-m-chart-admin.php:1093
+msgid "You do not have permission to do that"
+msgstr "Je hebt geen toestemming om dat te doen"
+
+#: components/class-m-chart-admin.php:1162
 msgid "Invalid post"
 msgstr "Ongeldig bericht"
 
-#: components/class-m-chart-admin.php:883
-#: components/class-m-chart-admin.php:888
+#: components/class-m-chart-admin.php:1166
+#: components/class-m-chart-admin.php:1171
 msgid "Permission error"
 msgstr "Geen rechten"
 
-#: components/class-m-chart-admin.php:901
+#: components/class-m-chart-admin.php:1186
+#: components/class-m-chart-admin.php:1199
 msgid "Invalid library"
 msgstr "Ongeldige bibliotheek"
 
-#: components/class-m-chart-block.php:170 components/class-m-chart.php:927
+#: components/class-m-chart-block.php:185 components/class-m-chart.php:1109
 msgid "Chart not found"
 msgstr "Grafiek niet gevonden"
 
-#: components/class-m-chart-chartjs.php:98
+#: components/class-m-chart-chartjs.php:84
 msgid "Line"
 msgstr "Lijn"
 
-#: components/class-m-chart-chartjs.php:99
+#: components/class-m-chart-chartjs.php:85
 msgid "Spline"
 msgstr "Gebogen lijn"
 
-#: components/class-m-chart-chartjs.php:100
+#: components/class-m-chart-chartjs.php:86
 msgid "Area"
 msgstr "Gebied"
 
-#: components/class-m-chart-chartjs.php:101
+#: components/class-m-chart-chartjs.php:87
 msgid "Column"
 msgstr "Kolom"
 
-#: components/class-m-chart-chartjs.php:102
+#: components/class-m-chart-chartjs.php:88
 msgid "Stacked Column"
 msgstr "Gestapelde kolom"
 
-#: components/class-m-chart-chartjs.php:103
+#: components/class-m-chart-chartjs.php:89
 msgid "Bar"
 msgstr "Balk"
 
-#: components/class-m-chart-chartjs.php:104
+#: components/class-m-chart-chartjs.php:90
 msgid "Stacked Bar"
 msgstr "Gestapelde balk"
 
-#: components/class-m-chart-chartjs.php:105
+#: components/class-m-chart-chartjs.php:91
 msgid "Pie"
 msgstr "Taart"
 
-#: components/class-m-chart-chartjs.php:106
+#: components/class-m-chart-chartjs.php:92
 msgid "Doughnut"
 msgstr "Donut"
 
-#: components/class-m-chart-chartjs.php:107
+#: components/class-m-chart-chartjs.php:93
 msgid "Scatter"
 msgstr "Puntenwolk"
 
-#: components/class-m-chart-chartjs.php:108
+#: components/class-m-chart-chartjs.php:94
 msgid "Bubble"
 msgstr "Bubbel"
 
-#: components/class-m-chart-chartjs.php:109
+#: components/class-m-chart-chartjs.php:95
 msgid "Radar"
 msgstr "Radar"
 
-#: components/class-m-chart-chartjs.php:110
+#: components/class-m-chart-chartjs.php:96
 msgid "Radar Area"
 msgstr "Radar gebied"
 
-#: components/class-m-chart-chartjs.php:111
+#: components/class-m-chart-chartjs.php:97
 msgid "Polar"
 msgstr "Polair"
 
-#: components/class-m-chart.php:154 components/class-m-chart.php:164
+#: components/class-m-chart-chartjs.php:98
+msgid "Treemap"
+msgstr "Treemap"
+
+#: components/class-m-chart-chartjs.php:99
+msgid "Boxplot"
+msgstr "Boxplot"
+
+#: components/class-m-chart-chartjs.php:100
+msgid "Violin"
+msgstr "Viool"
+
+#: components/class-m-chart.php:204 components/class-m-chart.php:205
+#: components/class-m-chart.php:206
+msgid "Success"
+msgstr "Succes"
+
+#: components/class-m-chart.php:207
+msgid "Error"
+msgstr "Fout"
+
+#: components/class-m-chart.php:208
+msgid "Heads up"
+msgstr "Let op"
+
+#: components/class-m-chart.php:209
+msgid "Hello"
+msgstr "Hallo"
+
+#: components/class-m-chart.php:273 components/class-m-chart.php:283
 msgid "Chart Units"
 msgstr "Grafiek eenheden"
 
-#: components/class-m-chart.php:155
+#: components/class-m-chart.php:274
 msgid "Chart Unit"
 msgstr "Grafiek eenheid"
 
-#: components/class-m-chart.php:156
+#: components/class-m-chart.php:275
 msgid "Search Chart Units"
 msgstr "Doorzoek grafiek eenheden"
 
-#: components/class-m-chart.php:157
+#: components/class-m-chart.php:276
 msgid "All Chart Units"
 msgstr "Alle grafiek eenheden"
 
-#: components/class-m-chart.php:158
+#: components/class-m-chart.php:277
 msgid "Parent Chart Unit"
 msgstr "Hoofd grafiek eenheid"
 
-#: components/class-m-chart.php:159
+#: components/class-m-chart.php:278
 msgid "Parent Chart Unit:"
 msgstr "Ouder grafiek eenheid:"
 
-#: components/class-m-chart.php:160
+#: components/class-m-chart.php:279
 msgid "Edit Chart Unit"
 msgstr "Grafiek eenheid bewerken"
 
-#: components/class-m-chart.php:161
+#: components/class-m-chart.php:280
 msgid "Update Chart Unit"
 msgstr "Grafiek eenheid updaten"
 
-#: components/class-m-chart.php:162
+#: components/class-m-chart.php:281
 msgid "Add New Chart Unit"
 msgstr "Nieuwe grafiek eenheid toevoegen"
 
-#: components/class-m-chart.php:163
+#: components/class-m-chart.php:282
 msgid "Chart Unit Name"
 msgstr "Grafiek eenheid naam"
 
-#: components/class-m-chart.php:193
+#: components/class-m-chart.php:312 components/class-m-chart.php:316
 msgid "Charts"
 msgstr "Grafieken"
 
-#: components/class-m-chart.php:195 components/class-m-chart.php:196
+#: components/class-m-chart.php:318 components/class-m-chart.php:319
 msgid "Add Chart"
 msgstr "Grafiek toevoegen"
 
-#: components/class-m-chart.php:197
+#: components/class-m-chart.php:320
 msgid "Edit"
 msgstr "Berwerken"
 
-#: components/class-m-chart.php:198
+#: components/class-m-chart.php:321
 msgid "Edit Chart"
 msgstr "Grafiek bewerken"
 
-#: components/class-m-chart.php:199
+#: components/class-m-chart.php:322
 msgid "New Chart"
 msgstr "Nieuwe grafiek"
 
-#: components/class-m-chart.php:200
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:56
-#: components/admin-ui/index.js:1315 components/admin-ui/index.js:1204
+#: components/class-m-chart.php:323
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:70
+#: components/admin-ui/index.js:1
 msgid "View"
 msgstr "Bekijken"
 
-#: components/class-m-chart.php:201
+#: components/class-m-chart.php:324
 msgid "View Chart"
 msgstr "Grafiek bekijken"
 
-#: components/class-m-chart.php:202
+#: components/class-m-chart.php:325
 msgid "Search Charts"
 msgstr "Grafieken doorzoeken"
 
-#: components/class-m-chart.php:203
+#: components/class-m-chart.php:326
 msgid "No Charts found"
 msgstr "Geen grafieken gevonden"
 
-#: components/class-m-chart.php:204
+#: components/class-m-chart.php:327
 msgid "No Charts found in the Trash"
 msgstr "Geen grafieken gevonden in de prullenbak"
 
-#: components/class-m-chart.php:216
+#: components/class-m-chart.php:339
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr "Data sets beheren & als grafieken tonen in WordPress."
 
-#: components/class-m-chart.php:926
+#: components/class-m-chart.php:1108
 msgid "The chart could not be found"
 msgstr "De grafiek is niet gevonden"
 
-#: components/class-m-chart.php:936
+#: components/class-m-chart.php:1118
 msgid "Embeds of this type are not enabled"
 msgstr "Het invoegen van dit type bestand is niet toegestaan"
 
-#: components/class-m-chart.php:937
+#: components/class-m-chart.php:1119
 msgid "Embeds disabled"
 msgstr "Invoegen niet toegestaan"
 
-#: components/templates/chart-meta-box.php:10
+#: components/templates/chart-meta-box.php:14
 msgid "This chart requires the M Chart Highcharts Library plugin."
 msgstr "Deze grafiek vereist de M Chart Highlights plugin."
 
-#: components/templates/chart-meta-box.php:14
+#: components/templates/chart-meta-box.php:18
 msgid "This chart will no longer display unless you install the plugin:"
 msgstr "Deze grafiek kan niet getoond worden tenzij u deze plugin installeert:"
 
-#: components/templates/m-chart-settings-chartjs.php:1
+#. translators: %s is the chart's data source name and optional URL
+#: components/templates/chartjs-chart.php:71
+msgid "Source: %s"
+msgstr "Bron: %s"
+
+#: components/templates/m-chart-settings-chartjs.php:2
 msgid "Chart.js Settings"
 msgstr "Chart.js Instellingen"
 
-#: components/templates/m-chart-settings-chartjs.php:7
+#: components/templates/m-chart-settings-chartjs.php:8
 msgid "Default Chart.js Theme"
 msgstr "Standaard Chart.js Thema"
 
-#: components/templates/m-chart-settings-chartjs.php:23
+#: components/templates/m-chart-settings-chartjs.php:24
 msgid "See the M Chart documentation for more info on how to use themes:"
 msgstr ""
 "Lees de M Chart documentatie voor meer informatie over hoe de thema’s te "
 "gebruiken:"
 
-#: components/templates/m-chart-settings-chartjs.php:29
+#: components/templates/m-chart-settings-chartjs.php:32
 msgid "Number Format Locale"
 msgstr "Regio nummer weergave"
 
-#: components/templates/m-chart-settings-chartjs.php:43
+#: components/templates/m-chart-settings-chartjs.php:48
 msgid ""
 "The locale you want Intl.NumberFormat to use when parsing the numbers in the "
 "chart"
 msgstr ""
 "De gewenste landinstelling bij het weergeven van de getallen in het diagram"
 
-#: components/templates/m-chart-settings.php:5
+#: components/templates/m-chart-settings.php:6
 msgid "General Settings"
 msgstr "Algemene instellingen"
 
-#: components/templates/m-chart-settings.php:9
+#: components/templates/m-chart-settings.php:12
 msgid "Default Library"
 msgstr "Standaard bibliotheek"
 
-#: components/templates/m-chart-settings.php:23
+#: components/templates/m-chart-settings.php:28
 msgid "Chart.js is the GPL compatible default library:"
 msgstr "Chart.js is the GPL compatibele standaard bibliotheek:"
 
-#: components/templates/m-chart-settings.php:33
+#: components/templates/m-chart-settings.php:38
 msgid "Show Library in Edit Posts Screen"
 msgstr "Toon de bibliotheek in bewerk schermen"
 
-#: components/templates/m-chart-settings.php:34
+#: components/templates/m-chart-settings.php:39
 msgid ""
 "Displays an icon indicating the library used for a chart in Edit Posts "
 "Screen of the WP Admin"
@@ -2766,356 +609,2205 @@ msgstr ""
 "Toont een icoon dat de gebruikte grafiek bibliotheek aangeeft in het bewerk "
 "bericht scherm van WP Admin"
 
-#: components/templates/m-chart-settings.php:39
-#: components/templates/m-chart-settings.php:43
+#: components/templates/m-chart-settings.php:44
+#: components/templates/m-chart-settings.php:48
 msgid "Performance"
 msgstr "Uitvoering"
 
-#: components/templates/m-chart-settings.php:47
+#: components/templates/m-chart-settings.php:52
 msgid "Default"
 msgstr "Standaard"
 
-#: components/templates/m-chart-settings.php:48
+#: components/templates/m-chart-settings.php:53
 msgid "Provides all functionality"
 msgstr "Alle functionaliteit: voorbeeld weergave en aanmaken van een beeld"
 
-#: components/templates/m-chart-settings.php:52
+#: components/templates/m-chart-settings.php:57
 msgid "No Images"
 msgstr "Geen beelden"
 
-#: components/templates/m-chart-settings.php:53
+#: components/templates/m-chart-settings.php:58
 msgid "No generation of chart images"
 msgstr "Van een grafiek wordt geen beeld gemaakt"
 
-#: components/templates/m-chart-settings.php:57
+#: components/templates/m-chart-settings.php:62
 msgid "No Instant Preview"
 msgstr "Geen voorbeeld weergave"
 
-#: components/templates/m-chart-settings.php:58
+#: components/templates/m-chart-settings.php:63
 msgid "No instant preview and no generation of chart images"
 msgstr "Geen voorbeeld weergave en geen grafiek beeld"
 
-#: components/templates/m-chart-settings.php:64
-#: components/templates/m-chart-settings.php:68
+#: components/templates/m-chart-settings.php:69
+#: components/templates/m-chart-settings.php:73
 msgid "Image Multiplier"
 msgstr "Beeld vergroter"
 
-#: components/templates/m-chart-settings.php:72
+#: components/templates/m-chart-settings.php:77
 msgid "1x"
 msgstr "1x"
 
-#: components/templates/m-chart-settings.php:76
+#: components/templates/m-chart-settings.php:81
 msgid "2x"
 msgstr "2x"
 
-#: components/templates/m-chart-settings.php:80
+#: components/templates/m-chart-settings.php:85
 msgid "3x"
 msgstr "3x"
 
-#: components/templates/m-chart-settings.php:84
+#: components/templates/m-chart-settings.php:89
 msgid "4x"
 msgstr "4x"
 
-#: components/templates/m-chart-settings.php:86
+#: components/templates/m-chart-settings.php:91
 msgid ""
 "The higher the multiplier the better the images will look on high DPI screens"
 msgstr ""
 "Hoe hoger de factor, des te beter de afbeeldingen er op schermen met een "
 "hoge resolutie uit zullen zien"
 
-#: components/templates/m-chart-settings.php:91
+#: components/templates/m-chart-settings.php:98
 msgid "Image Width"
 msgstr "Beeld breedte"
 
-#: components/templates/m-chart-settings.php:95
+#: components/templates/m-chart-settings.php:104
 msgid "The width of the image generated from your chart"
 msgstr "De breedte van het beeld van de grafiek"
 
-#: components/templates/m-chart-settings.php:100
+#: components/templates/m-chart-settings.php:111
+msgid "Default Chart Height"
+msgstr "Standaardhoogte van de grafiek"
+
+#: components/templates/m-chart-settings.php:117
+msgid "The default starting height for new charts"
+msgstr "De standaard beginhoogte voor nieuwe grafieken"
+
+#: components/templates/m-chart-settings.php:122
 msgid "Embeds"
 msgstr "Integraties"
 
-#: components/templates/m-chart-settings.php:104
+#: components/templates/m-chart-settings.php:126
 msgid "Enable iframe embeds"
 msgstr "Iframe integratie toestaan"
 
-#: components/templates/m-chart-settings.php:105
+#: components/templates/m-chart-settings.php:127
 msgid "Allow charts to be remotely embedded via iframes"
 msgstr "Toestaan dat een grafiek door een externe website gebruikt kan worden"
 
-#: components/templates/m-chart-settings.php:110
+#: components/templates/m-chart-settings.php:132
+msgid "Defer Rendering"
+msgstr "Weergave uitstellen"
+
+#: components/templates/m-chart-settings.php:137
+msgid "Defer chart rendering until scrolled into view"
+msgstr ""
+"Het weergeven van de grafiek uitstellen totdat deze in beeld is gekomen"
+
+#: components/templates/m-chart-settings.php:138
+msgid ""
+"Charts below the fold will not initialize (or animate) until they enter the "
+"viewport"
+msgstr ""
+"Grafieken onder de vouw worden pas geladen (of geanimeerd) zodra ze in het "
+"weergavegebied verschijnen"
+
+#: components/templates/m-chart-settings.php:145
 msgid "Default CSV Delimiter"
 msgstr "Standaard CSV scheidingsteken"
 
-#: components/templates/m-chart-settings.php:123
+#: components/templates/m-chart-settings.php:160
 msgid "Default used when importing/exporting CSV files"
 msgstr "Standaard gebruikt voor het importeren van CSV bestanden"
 
-#: components/templates/m-chart-settings.php:130
+#: components/templates/m-chart-settings.php:167
 msgid "Save Changes"
 msgstr "Opslaan"
 
-#: components/templates/share.php:24
+#: components/templates/share.php:20
 msgid "Share:"
 msgstr "Delen:"
 
-#: components/admin-ui-src/components/AxisRows.js:54
-#: components/admin-ui/index.js:79 components/admin-ui/index.js:54
+#: components/admin-ui-src/components/AxisRows.js:69
+#: components/admin-ui/index.js:1
 msgid "N/A"
 msgstr "N/B"
 
-#: components/admin-ui-src/components/AxisRows.js:70
-#: components/admin-ui/index.js:96 components/admin-ui/index.js:70
+#: components/admin-ui-src/components/AxisRows.js:88
+#: components/admin-ui/index.js:1
 msgid "Vertical axis title"
 msgstr "Titel verticale as"
 
-#: components/admin-ui-src/components/AxisRows.js:105
-#: components/admin-ui/index.js:128 components/admin-ui/index.js:105
-msgid " Force vertical axis minimum: "
-msgstr " Minimumwaarde verticale as opleggen: "
+#: components/admin-ui-src/components/AxisRows.js:112
+#: components/admin-ui/index.js:1
+msgid "Force vertical axis minimum:"
+msgstr "Minimumwaarde verticale as opleggen:"
 
-#: components/admin-ui-src/components/AxisRows.js:121
-#: components/admin-ui/index.js:145 components/admin-ui/index.js:121
+#: components/admin-ui-src/components/AxisRows.js:131
+#: components/admin-ui/index.js:1
+msgid "Constrain vertical axis"
+msgstr "Verticale as beperken"
+
+#: components/admin-ui-src/components/AxisRows.js:141
+#: components/admin-ui/index.js:1
 msgid "Horizontal axis title"
 msgstr "Titel horizontale as"
 
-#: components/admin-ui-src/components/CsvControls.js:107
-#: components/admin-ui/index.js:578 components/admin-ui/index.js:511
-msgid "Import failed"
-msgstr "Importeren mislukt"
-
-#: components/admin-ui-src/components/CsvControls.js:127
-#: components/admin-ui/index.js:599 components/admin-ui/index.js:531
-msgid "Import error: %s"
-msgstr "Importfout: %s"
-
-#: components/admin-ui-src/components/CsvControls.js:186
-#: components/admin-ui/index.js:652 components/admin-ui/index.js:590
-msgid "Export CSV"
-msgstr "CSV exporteren"
-
-#: components/admin-ui-src/components/CsvControls.js:190
-#: components/admin-ui/index.js:655 components/admin-ui/index.js:594
-msgid "Export"
-msgstr "Exporteren"
-
-#: components/admin-ui-src/components/CsvControls.js:194
-#: components/admin-ui/index.js:657 components/admin-ui/index.js:598
-msgid "CSV Import/Export"
-msgstr "CSV importeren/exporteren"
-
-#: components/admin-ui-src/components/CsvControls.js:208
-#: components/admin-ui/index.js:669 components/admin-ui/index.js:612
-msgid "Select CSV File"
-msgstr "Kies CSV bestand"
-
-#: components/admin-ui-src/components/CsvControls.js:212
-#: components/admin-ui/index.js:672 components/admin-ui/index.js:616
-msgid "Select File"
-msgstr "Kies bestand"
-
-#: components/admin-ui-src/components/CsvControls.js:220
-#: components/admin-ui-src/components/CsvControls.js:224
-#: components/admin-ui/index.js:676 components/admin-ui/index.js:679
-#: components/admin-ui/index.js:624 components/admin-ui/index.js:628
-msgid "Import"
-msgstr "Importeren"
-
-#: components/admin-ui-src/components/CsvControls.js:233
-#: components/admin-ui/index.js:686 components/admin-ui/index.js:637
-msgid "%s Delimited"
-msgstr "%s Gescheiden door"
-
-#: components/admin-ui-src/components/CsvControls.js:240
-#: components/admin-ui/index.js:688 components/admin-ui/index.js:644
+#: components/admin-ui-src/components/CsvControls.js:54
+#: components/admin-ui-src/components/CsvControls.js:263
+#: components/admin-ui/index.js:5 components/admin-ui/index.js:8
 msgid "You can only import CSV files"
 msgstr "Alleen CSV bestanden kunnen worden geïmporteerd"
 
-#: components/admin-ui-src/components/CsvControls.js:246
-#: components/admin-ui/index.js:692 components/admin-ui/index.js:650
+#: components/admin-ui-src/components/CsvControls.js:87
+#: components/admin-ui/index.js:5
+msgid "Importing CSV file"
+msgstr "Een CSV-bestand importeren"
+
+#: components/admin-ui-src/components/CsvControls.js:112
+#: components/admin-ui/index.js:5
+msgid "Import failed"
+msgstr "Importeren mislukt"
+
+#: components/admin-ui-src/components/CsvControls.js:134
+#: components/admin-ui/index.js:5
+msgid "CSV file imported"
+msgstr "CSV-bestand geïmporteerd"
+
+#. translators: %s: the underlying error message
+#: components/admin-ui-src/components/CsvControls.js:137
+#: components/admin-ui/index.js:7
+msgid "Import error: %s"
+msgstr "Importfout: %s"
+
+#: components/admin-ui-src/components/CsvControls.js:197
+#: components/admin-ui/index.js:5
+msgid "CSV Import/Export"
+msgstr "CSV importeren/exporteren"
+
+#: components/admin-ui-src/components/CsvControls.js:205
+#: components/admin-ui/index.js:5
+msgid "CSV file to import"
+msgstr "CSV-bestand om te importeren"
+
+#: components/admin-ui-src/components/CsvControls.js:218
+#: components/admin-ui/index.js:5
+msgid "Select File"
+msgstr "Kies bestand"
+
+#: components/admin-ui-src/components/CsvControls.js:228
+#: components/admin-ui/index.js:7
+msgid "Import"
+msgstr "Importeren"
+
+#: components/admin-ui-src/components/CsvControls.js:232
+#: components/admin-ui/index.js:7
+msgid "CSV delimiter"
+msgstr "CSV scheidingsteken"
+
+#. translators: %s: the delimiter character name (e.g. Comma, Tab, Semicolon)
+#: components/admin-ui-src/components/CsvControls.js:242
+#: components/admin-ui/index.js:8
+msgid "%s Delimited"
+msgstr "%s Gescheiden door"
+
+#: components/admin-ui-src/components/CsvControls.js:257
+#: components/admin-ui/index.js:8
+msgid "Export"
+msgstr "Exporteren"
+
+#: components/admin-ui-src/components/CsvControls.js:272
+#: components/admin-ui/index.js:8
 msgid "Importing file"
 msgstr "Bestand importeren"
 
-#: components/admin-ui-src/components/CsvControls.js:253
-#: components/admin-ui/index.js:696 components/admin-ui/index.js:657
+#: components/admin-ui-src/components/CsvControls.js:283
+#: components/admin-ui/index.js:8
 msgid "Cancel Import"
 msgstr "Importeren annuleren"
 
-#: components/admin-ui-src/components/CsvControls.js:257
-#: components/admin-ui/index.js:699 components/admin-ui/index.js:661
+#. translators: %s: the selected file's name
+#: components/admin-ui-src/components/CsvControls.js:288
+#: components/admin-ui/index.js:9
 msgid "File: %s"
 msgstr "Bestand: %s"
 
-#: components/admin-ui-src/components/CsvControls.js:259
-#: components/admin-ui/index.js:701 components/admin-ui/index.js:663
+#: components/admin-ui-src/components/CsvControls.js:291
+#: components/admin-ui/index.js:9
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr ""
 "Dit bestand importeren zal alle bestaande data in dit werkblad overschrijven"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:5
-#: components/admin-ui/index.js:883 components/admin-ui/index.js:829
+#: components/admin-ui-src/components/JspreadsheetWrapper.js:148
+#: components/admin-ui/index.js:1
+msgid ""
+"The spreadsheet grid has limited screen reader support. Use the CSV Import "
+"control to load data."
+msgstr ""
+"Het raster van de spreadsheet biedt beperkte ondersteuning voor "
+"schermlezers. Gebruik het CSV-importveld om gegevens te laden."
+
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:6
+#: components/admin-ui/index.js:1
 msgid "Columns"
 msgstr "Kolommen"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:6
-#: components/admin-ui/index.js:884 components/admin-ui/index.js:830
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:7
+#: components/admin-ui/index.js:1
 msgid "Rows"
 msgstr "Rijen"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:35
-#: components/admin-ui/index.js:918 components/admin-ui/index.js:859
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:60
+#: components/admin-ui/index.js:1
 msgid "Parse data in"
 msgstr "Gegevens inlezen"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:59
-#: components/admin-ui/index.js:938 components/admin-ui/index.js:883
-msgid " Show labels"
-msgstr " Labels weergeven"
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:77
+#: components/admin-ui/index.js:1
+msgid "Show labels"
+msgstr "Toon labels"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:73
-#: components/admin-ui/index.js:949 components/admin-ui/index.js:897
-msgid " Show legend"
-msgstr " Legenda weergeven"
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:89
+#: components/admin-ui/index.js:1
+msgid "Show legend"
+msgstr "Toon de legenda"
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:88
-#: components/admin-ui/index.js:960 components/admin-ui/index.js:912
-msgid " Shared tooltip"
-msgstr " Gedeelde tooltip"
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:101
+#: components/admin-ui/index.js:1
+msgid "Show mean point"
+msgstr "Gemiddeld punt weergeven"
 
-#: components/admin-ui-src/components/SheetTabs.js:39
-#: components/admin-ui/index.js:1216 components/admin-ui/index.js:1129
-msgid "Sheet %d"
-msgstr "Blad %d"
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:112
+#: components/admin-ui/index.js:1
+msgid "Show sample points"
+msgstr "Voorbeeldpunten weergeven"
 
-#: components/admin-ui-src/components/SheetTabs.js:49
-#: components/admin-ui/index.js:1223 components/admin-ui/index.js:1139
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:124
+#: components/admin-ui/index.js:1
+msgid "Shared tooltip"
+msgstr "Gedeelde tooltip"
+
+#: components/admin-ui-src/components/SheetTab.js:107
+#: components/admin-ui/index.js:4
+msgid "Sheet deleted"
+msgstr "Blad verwijderd"
+
+#. translators: %s: the sheet's new name
+#: components/admin-ui-src/components/SheetTab.js:123
+#: components/admin-ui/index.js:4
+msgid "Sheet renamed to %s"
+msgstr "Het blad is hernoemd naar %s"
+
+#: components/admin-ui-src/components/SheetTab.js:202
+#: components/admin-ui/index.js:4
+msgid "Rename sheet"
+msgstr "Blad hernoemen"
+
+#: components/admin-ui-src/components/SheetTab.js:219
+#: components/admin-ui/index.js:4
+msgid "Delete Sheet"
+msgstr "Werkblad verwijderen"
+
+#: components/admin-ui-src/components/SheetTab.js:223
+#: components/admin-ui/index.js:4
+msgid "Are you sure you want to delete this sheet?"
+msgstr "Weet je zeker dat je dit werkblad wilt verwijderen?"
+
+#: components/admin-ui-src/components/SheetTab.js:230
+#: components/admin-ui/index.js:4
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: components/admin-ui-src/components/SheetTab.js:236
+#: components/admin-ui/index.js:4
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: components/admin-ui-src/components/SheetTabs.js:36
+#: components/admin-ui/index.js:4
+msgid "New sheet added"
+msgstr "Nieuw blad toegevoegd"
+
+#: components/admin-ui-src/components/SheetTabs.js:84
+#: components/admin-ui/index.js:4
+msgid "Spreadsheet sheets"
+msgstr "Werkbladen"
+
+#: components/admin-ui-src/components/SheetTabs.js:91
+#: components/admin-ui/index.js:4
 msgid "Add Sheet"
 msgstr "Werkblad toevoegen"
 
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:26
-#: components/admin-ui/index.js:1280 components/admin-ui/index.js:1174
-msgid "Shortcode"
-msgstr "Shortcode"
+#. translators: %d: the sheet's 1-based ordinal (e.g. "Sheet 2")
+#: components/admin-ui-src/components/SheetTabs.js:103
+#: components/admin-ui/index.js:5
+msgid "Sheet %d"
+msgstr "Blad %d"
 
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:38
-#: components/admin-ui/index.js:1295 components/admin-ui/index.js:1186
-msgid "Copied!"
-msgstr "Gekopieerd!"
-
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:38
-#: components/admin-ui/index.js:1295 components/admin-ui/index.js:1186
-msgid "Copy"
-msgstr "Kopiëren"
-
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:42
-#: components/admin-ui/index.js:1299 components/block-src/chart/edit.js:197
-#: components/block/index.js:251 components/admin-ui/index.js:1190
-#: components/block/index.js:197
-msgid "Image"
-msgstr "Afbeelding"
-
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:60
-#: components/admin-ui/index.js:1315 components/admin-ui/index.js:1208
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:17
+#: components/admin-ui/index.js:1
 msgid "Image generation is disabled"
 msgstr "Het genereren van afbeeldingen is uitgeschakeld"
 
-#: components/admin-ui-src/components/ShortcodeAndImageRow.js:62
-#: components/admin-ui/index.js:1315 components/admin-ui/index.js:1210
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:18
+#: components/admin-ui/index.js:1
 msgid "Save/Update this post to generate the image version"
 msgstr ""
 "Sla dit bericht op of werk het bij om de afbeeldingsversie te genereren"
 
-#: components/admin-ui-src/components/SubtitleField.js:20
-#: components/admin-ui/index.js:1558 components/admin-ui/index.js:1421
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:25
+#: components/admin-ui/index.js:1
+msgid "Shortcode copied to clipboard"
+msgstr "Shortcode naar het klembord gekopieerd"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:36
+#: components/admin-ui/index.js:1
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:45
+#: components/admin-ui/index.js:1
+msgid "Copied!"
+msgstr "Gekopieerd!"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:45
+#: components/admin-ui/index.js:1
+msgid "Copy"
+msgstr "Kopiëren"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:52
+#: components/admin-ui/index.js:1 components/block-src/chart/edit.js:226
+#: components/block/index.js:3
+msgid "Image"
+msgstr "Afbeelding"
+
+#: components/admin-ui-src/components/ShortcodeAndImageRow.js:72
+#: components/admin-ui/index.js:1
+msgid "(opens in a new tab)"
+msgstr "(opent in een nieuw tabblad)"
+
+#: components/admin-ui-src/components/SourceRow.js:24
+#: components/admin-ui/index.js:1
+msgid "Source"
+msgstr "Bron"
+
+#: components/admin-ui-src/components/SourceRow.js:36
+#: components/admin-ui/index.js:1
+msgid "Source URL"
+msgstr "Bron URL"
+
+#: components/admin-ui-src/components/SourceRow.js:47
+#: components/admin-ui/index.js:1
+msgid "Include source in chart"
+msgstr "Bron in de grafiek vermelden"
+
+#: components/admin-ui-src/components/SubtitleField.js:17
+#: components/admin-ui/index.js:9
+msgid "Subtitle"
+msgstr "Ondertitel"
+
+#: components/admin-ui-src/components/SubtitleField.js:21
+#: components/admin-ui/index.js:9
 msgid "Enter subtitle here"
 msgstr "Ondertitel"
 
-#: components/admin-ui-src/components/TypeAndThemeRow.js:24
-#: components/admin-ui/index.js:1622 components/admin-ui/index.js:1453
+#: components/admin-ui-src/components/TypeAndThemeRow.js:122
+#: components/admin-ui/index.js:1
 msgid "Type"
 msgstr "Type"
 
-#: components/admin-ui-src/components/TypeAndThemeRow.js:40
-#: components/admin-ui/index.js:1633 components/admin-ui/index.js:1469
+#: components/admin-ui-src/components/TypeAndThemeRow.js:139
+#: components/admin-ui/index.js:1
 msgid "Theme"
 msgstr "Thema"
 
-#: components/admin-ui-src/components/TypeAndThemeRow.js:55
-#: components/admin-ui/index.js:1643 components/admin-ui/index.js:1484
+#: components/admin-ui-src/components/TypeAndThemeRow.js:158
+#: components/admin-ui/index.js:1
+msgid "Color per data point"
+msgstr "Kleur per gegevenspunt"
+
+#: components/admin-ui-src/components/TypeAndThemeRow.js:169
+#: components/admin-ui/index.js:1
 msgid "Height"
 msgstr "Hoogte"
 
-#: components/block-src/chart/edit.js:191 components/block/index.js:243
-#: components/block/index.js:191
+#: components/admin-ui-src/hooks/useChartRefresh.js:124
+#: components/admin-ui/index.js:1
+msgid "Chart refreshed"
+msgstr "Grafiek vernieuwd"
+
+#: components/admin-ui-src/hooks/useImageGeneration.js:82
+#: components/admin-ui/index.js:1
+msgid "Chart image generated"
+msgstr "Grafiek afbeelding gegenereerd"
+
+#. translators: %s: the chart's title
+#: components/block-src/chart/edit.js:180 components/block/index.js:3
+msgid "Select chart: %s"
+msgstr "Selecteer grafiek: %s"
+
+#: components/block-src/chart/edit.js:220 components/block/index.js:3
 msgid "Display settings"
 msgstr "Weergave instellingen"
 
-#: components/block-src/chart/edit.js:193 components/block/index.js:245
-#: components/block/index.js:193
+#: components/block-src/chart/edit.js:222 components/block/index.js:3
 msgid "Show"
 msgstr "Toon"
 
-#: components/block-src/chart/edit.js:198 components/block/index.js:254
-#: components/block/index.js:198
+#: components/block-src/chart/edit.js:227 components/block/index.js:3
 msgid "Table"
 msgstr "Tabel"
 
-#: components/block-src/chart/edit.js:208 components/block/index.js:265
-#: components/block/index.js:208
+#: components/block-src/chart/edit.js:237 components/block/index.js:3
 msgid "New chart"
 msgstr "Nieuwe hitlijst"
 
-#: components/block-src/chart/edit.js:212 components/block/index.js:268
-#: components/block/index.js:212
+#: components/block-src/chart/edit.js:241 components/block/index.js:3
 msgid "Edit chart"
 msgstr "Bewerkt de hitlijst"
 
-#: components/block-src/chart/edit.js:213 components/block/index.js:270
-#: components/block/index.js:213
+#: components/block-src/chart/edit.js:242 components/block/index.js:3
 msgid "Replace"
 msgstr "Vervangen"
 
-#: components/block-src/chart/edit.js:245 components/block/index.js:302
-#: components/block/index.js:245
+#: components/block-src/chart/edit.js:274 components/block/index.js:3
 msgid "There was a problem loading charts"
 msgstr "Er is een probleem opgetreden bij het laden van de grafieken"
 
-#: components/block-src/chart/edit.js:256
-#: components/block-src/chart/edit.js:274 components/block/index.js:304
-#: components/block/index.js:317 components/block/index.js:256
-#: components/block/index.js:274
+#: components/block-src/chart/edit.js:285
+#: components/block-src/chart/edit.js:308 components/block/index.js:3
+#: components/block/index.js:4
 msgid "No charts found"
 msgstr "Geen hitlijsten gevonden"
 
-#: components/block-src/chart/edit.js:259 components/block/index.js:306
-#: components/block/index.js:259
+#: components/block-src/chart/edit.js:288 components/block/index.js:3
 msgid "Create a new chart"
 msgstr "Maak een nieuwe grafiek"
 
-#: components/block-src/chart/edit.js:267 components/block/index.js:312
-#: components/block/index.js:267
+#: components/block-src/chart/edit.js:297 components/block/index.js:3
 msgid "Search by title"
 msgstr "Zoeken op titel"
 
-#: components/block-src/chart/edit.js:271 components/block/index.js:317
-#: components/block/index.js:271
+#. translators: %d: number of charts found
+#: components/block-src/chart/edit.js:303 components/block/index.js:4
 msgid "%d chart found"
-msgstr "%d grafiek gevonden"
+msgid_plural "%d charts found"
+msgstr[0] "%d grafiek gevonden"
+msgstr[1] "%d grafiek gevonden"
 
-#: components/block-src/chart/edit.js:271 components/block/index.js:317
-#: components/block/index.js:271
-msgid "%d charts found"
-msgstr "%d grafieken gevonden"
+#: components/block-src/chart/edit.js:326 components/block/index.js:4
+msgid "Load more results"
+msgstr "Laad meer resultaten"
 
 #: components/block-src/chart/block.json components/block/chart/block.json
 msgctxt "block title"
-msgid "Chart"
-msgstr "Grafiek"
+msgid "M Chart"
+msgstr "M Chart"
 
 #: components/block-src/chart/block.json components/block/chart/block.json
 msgctxt "block description"
 msgid "Embed a chart made with M Chart into your posts and pages"
 msgstr "Voeg een met M Chart gemaakte grafiek toe aan je berichten en pagina’s"
+
+#~ msgid "Afrikaans"
+#~ msgstr "Afrikaans"
+
+#~ msgid "Afrikaans (Namibia)"
+#~ msgstr "Afrikaans (Namibië)"
+
+#~ msgid "Afrikaans (South Africa)"
+#~ msgstr "Afrikaans (Zuid-Afrika)"
+
+#~ msgid "Akan"
+#~ msgstr "Akan"
+
+#~ msgid "Akan (Ghana)"
+#~ msgstr "Akan (Ghana)"
+
+#~ msgid "Albanian"
+#~ msgstr "Albanees"
+
+#~ msgid "Albanian (Albania)"
+#~ msgstr "Albanees (Albanië)"
+
+#~ msgid "Albanian (Kosovo)"
+#~ msgstr "Albanees (Kosovo)"
+
+#~ msgid "Albanian (Macedonia)"
+#~ msgstr "Albanees (Macedonië)"
+
+#~ msgid "Amharic"
+#~ msgstr "Amhaars"
+
+#~ msgid "Amharic (Ethiopia)"
+#~ msgstr "Amhaars (Ethiopië)"
+
+#~ msgid "Arabic"
+#~ msgstr "Arabisch"
+
+#~ msgid "Arabic (Algeria)"
+#~ msgstr "Arabisch (Algerije)"
+
+#~ msgid "Arabic (Bahrain)"
+#~ msgstr "Arabisch (Bahrein)"
+
+#~ msgid "Arabic (Chad)"
+#~ msgstr "Arabisch (Tsjaad)"
+
+#~ msgid "Arabic (Comoros)"
+#~ msgstr "Arabisch (Comoren)"
+
+#~ msgid "Arabic (Djibouti)"
+#~ msgstr "Arabisch (Djibouti)"
+
+#~ msgid "Arabic (Egypt)"
+#~ msgstr "Arabisch (Egypte)"
+
+#~ msgid "Arabic (Eritrea)"
+#~ msgstr "Arabisch (Eritrea)"
+
+#~ msgid "Arabic (Iraq)"
+#~ msgstr "Arabisch (Irak)"
+
+#~ msgid "Arabic (Israel)"
+#~ msgstr "Arabisch (Israël)"
+
+#~ msgid "Arabic (Jordan)"
+#~ msgstr "Arabisch (Jordanië)"
+
+#~ msgid "Arabic (Kuwait)"
+#~ msgstr "Arabisch (Koeweit)"
+
+#~ msgid "Arabic (Lebanon)"
+#~ msgstr "Arabisch (Libanon)"
+
+#~ msgid "Arabic (Libya)"
+#~ msgstr "Arabisch (Libië)"
+
+#~ msgid "Arabic (Mauritania)"
+#~ msgstr "Arabisch (Mauritanië)"
+
+#~ msgid "Arabic (Morocco)"
+#~ msgstr "Arabisch (Marokko)"
+
+#~ msgid "Arabic (Oman)"
+#~ msgstr "Arabisch (Oman)"
+
+#~ msgid "Arabic (Palestinian Territories)"
+#~ msgstr "Arabisch (Palestijnse Gebieden)"
+
+#~ msgid "Arabic (Qatar)"
+#~ msgstr "Arabisch (Qatar)"
+
+#~ msgid "Arabic (Saudi Arabia)"
+#~ msgstr "Arabisch (Saoedi-Arabië)"
+
+#~ msgid "Arabic (Somalia)"
+#~ msgstr "Arabisch (Somalië)"
+
+#~ msgid "Arabic (South Sudan)"
+#~ msgstr "Arabisch (Zuid-Soedan)"
+
+#~ msgid "Arabic (Sudan)"
+#~ msgstr "Arabisch (Soedan)"
+
+#~ msgid "Arabic (Syria)"
+#~ msgstr "Arabisch (Syrië)"
+
+#~ msgid "Arabic (Tunisia)"
+#~ msgstr "Arabisch (Tunesië)"
+
+#~ msgid "Arabic (United Arab Emirates)"
+#~ msgstr "Arabisch (Verenigde Arabische Emiraten)"
+
+#~ msgid "Arabic (Western Sahara)"
+#~ msgstr "Arabisch (Westelijke Sahara)"
+
+#~ msgid "Arabic (Yemen)"
+#~ msgstr "Arabisch (Jemen)"
+
+#~ msgid "Armenian"
+#~ msgstr "Armeens"
+
+#~ msgid "Armenian (Armenia)"
+#~ msgstr "Armeens (Armenië)"
+
+#~ msgid "Assamese"
+#~ msgstr "Assamees"
+
+#~ msgid "Assamese (India)"
+#~ msgstr "Assamees (India)"
+
+#~ msgid "Azerbaijani"
+#~ msgstr "Azerbeidzjaans"
+
+#~ msgid "Azerbaijani (Azerbaijan)"
+#~ msgstr "Azerbeidzjaans (Azerbeidzjan)"
+
+#~ msgid "Azerbaijani (Cyrillic, Azerbaijan)"
+#~ msgstr "Azerbeidzjaans (Cyrillisch, Azerbeidzjan)"
+
+#~ msgid "Azerbaijani (Cyrillic)"
+#~ msgstr "Azerbeidzjaans (Cyrillisch)"
+
+#~ msgid "Azerbaijani (Latin, Azerbaijan)"
+#~ msgstr "Azerbeidzjaans (Latijns alfabet, Azerbeidzjan)"
+
+#~ msgid "Azerbaijani (Latin)"
+#~ msgstr "Azerbeidzjaans (Latijns alfabet)"
+
+#~ msgid "Bambara"
+#~ msgstr "Bambara"
+
+#~ msgid "Bambara (Latin, Mali)"
+#~ msgstr "Bambara (Latijn, Mali)"
+
+#~ msgid "Bambara (Latin)"
+#~ msgstr "Bambara (Latijn)"
+
+#~ msgid "Basque"
+#~ msgstr "Baskisch"
+
+#~ msgid "Basque (Spain)"
+#~ msgstr "Baskisch (Spanje)"
+
+#~ msgid "Belarusian"
+#~ msgstr "Wit Russisch"
+
+#~ msgid "Belarusian (Belarus)"
+#~ msgstr "Wit-Russisch (Wit-Rusland)"
+
+#~ msgid "Bengali"
+#~ msgstr "Bengalees"
+
+#~ msgid "Bengali (Bangladesh)"
+#~ msgstr "Bengaals (Bangladesh)"
+
+#~ msgid "Bengali (India)"
+#~ msgstr "Bengaals (India)"
+
+#~ msgid "Bosnian"
+#~ msgstr "Bosnisch"
+
+#~ msgid "Bosnian (Bosnia & Herzegovina)"
+#~ msgstr "Bosnisch (Bosnië en Herzegovina)"
+
+#~ msgid "Bosnian (Cyrillic, Bosnia & Herzegovina)"
+#~ msgstr "Bosnisch (Cyrillisch, Bosnië en Herzegovina)"
+
+#~ msgid "Bosnian (Cyrillic)"
+#~ msgstr "Bosnisch (Cyrillisch)"
+
+#~ msgid "Bosnian (Latin, Bosnia & Herzegovina)"
+#~ msgstr "Bosnisch (Latijns alfabet, Bosnië en Herzegovina)"
+
+#~ msgid "Bosnian (Latin)"
+#~ msgstr "Bosnisch (Latijns alfabet)"
+
+#~ msgid "Breton"
+#~ msgstr "Bretons"
+
+#~ msgid "Breton (France)"
+#~ msgstr "Bretagne (Frankrijk)"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Bulgaars"
+
+#~ msgid "Bulgarian (Bulgaria)"
+#~ msgstr "Bulgaars (Bulgarije)"
+
+#~ msgid "Burmese"
+#~ msgstr "Birmees"
+
+#~ msgid "Burmese (Myanmar (Burma))"
+#~ msgstr "Birmaans (Myanmar (Birma))"
+
+#~ msgid "Catalan"
+#~ msgstr "Catalaans"
+
+#~ msgid "Catalan (Andorra)"
+#~ msgstr "Catalaans (Andorra)"
+
+#~ msgid "Catalan (France)"
+#~ msgstr "Catalaans (Frankrijk)"
+
+#~ msgid "Catalan (Italy)"
+#~ msgstr "Catalaans (Italië)"
+
+#~ msgid "Catalan (Spain)"
+#~ msgstr "Catalaans (Spanje)"
+
+#~ msgid "Chinese"
+#~ msgstr "Chinees"
+
+#~ msgid "Chinese (China)"
+#~ msgstr "Chinees (China)"
+
+#~ msgid "Chinese (Hong Kong SAR China)"
+#~ msgstr "Chinees (Speciale Administratieve Regio Hongkong, China)"
+
+#~ msgid "Chinese (Macau SAR China)"
+#~ msgstr "Chinees (Speciale Administratieve Regio Macau, China)"
+
+#~ msgid "Chinese (Simplified, China)"
+#~ msgstr "Chinees (vereenvoudigd, China)"
+
+#~ msgid "Chinese (Simplified, Hong Kong SAR China)"
+#~ msgstr "Chinees (vereenvoudigd, Hongkong SAR, China)"
+
+#~ msgid "Chinese (Simplified, Macau SAR China)"
+#~ msgstr ""
+#~ "Chinees (vereenvoudigd, Speciale Administratieve Regio Macau, China)"
+
+#~ msgid "Chinese (Simplified, Singapore)"
+#~ msgstr "Chinees (vereenvoudigd, Singapore)"
+
+#~ msgid "Chinese (Simplified)"
+#~ msgstr "Chinees (vereenvoudigd)"
+
+#~ msgid "Chinese (Singapore)"
+#~ msgstr "Chinees (Singapore)"
+
+#~ msgid "Chinese (Taiwan)"
+#~ msgstr "Chinees (Taiwan)"
+
+#~ msgid "Chinese (Traditional, Hong Kong SAR China)"
+#~ msgstr ""
+#~ "Chinees (traditioneel, Hongkong, Speciale Administratieve Regio van China)"
+
+#~ msgid "Chinese (Traditional, Macau SAR China)"
+#~ msgstr "Chinees (traditioneel, Speciale Administratieve Regio Macau, China)"
+
+#~ msgid "Chinese (Traditional, Taiwan)"
+#~ msgstr "Chinees (traditioneel, Taiwan)"
+
+#~ msgid "Chinese (Traditional)"
+#~ msgstr "Chinees (Traditioneel)"
+
+#~ msgid "Cornish"
+#~ msgstr "Cornisch"
+
+#~ msgid "Cornish (United Kingdom)"
+#~ msgstr "Cornish (Verenigd Koninkrijk)"
+
+#~ msgid "Croatian"
+#~ msgstr "Kroatisch"
+
+#~ msgid "Croatian (Bosnia & Herzegovina)"
+#~ msgstr "Kroatisch (Bosnië en Herzegovina)"
+
+#~ msgid "Croatian (Croatia)"
+#~ msgstr "Kroatisch (Kroatië)"
+
+#~ msgid "Czech"
+#~ msgstr "Tsjechisch"
+
+#~ msgid "Czech (Czech Republic)"
+#~ msgstr "Tsjechisch (Tsjechië)"
+
+#~ msgid "Danish"
+#~ msgstr "Deens"
+
+#~ msgid "Danish (Denmark)"
+#~ msgstr "Deens (Denemarken)"
+
+#~ msgid "Danish (Greenland)"
+#~ msgstr "Deens (Groenland)"
+
+#~ msgid "Dutch"
+#~ msgstr "Nederlands"
+
+#~ msgid "Dutch (Aruba)"
+#~ msgstr "Nederlands (Aruba)"
+
+#~ msgid "Dutch (Belgium)"
+#~ msgstr "Nederlands (België)"
+
+#~ msgid "Dutch (Caribbean Netherlands)"
+#~ msgstr "Nederlands (Caribisch Nederland)"
+
+#~ msgid "Dutch (Curaçao)"
+#~ msgstr "Nederlands (Curaçao)"
+
+#~ msgid "Dutch (Netherlands)"
+#~ msgstr "Nederlands (Nederland)"
+
+#~ msgid "Dutch (Sint Maarten)"
+#~ msgstr "Nederlands (Sint Maarten)"
+
+#~ msgid "Dutch (Suriname)"
+#~ msgstr "Nederlands (Suriname)"
+
+#~ msgid "Dzongkha"
+#~ msgstr "Dzongkha"
+
+#~ msgid "Dzongkha (Bhutan)"
+#~ msgstr "Dzongkha (Bhutan)"
+
+#~ msgid "English"
+#~ msgstr "Engels"
+
+#~ msgid "English (American Samoa)"
+#~ msgstr "Engels (Amerikaans Samoa)"
+
+#~ msgid "English (Anguilla)"
+#~ msgstr "Engels (Anguilla)"
+
+#~ msgid "English (Antigua & Barbuda)"
+#~ msgstr "Engels (Antigua en Barbuda)"
+
+#~ msgid "English (Australia)"
+#~ msgstr "Nederlands (Nederland)"
+
+#~ msgid "English (Bahamas)"
+#~ msgstr "Engels (Bahama's)"
+
+#~ msgid "English (Barbados)"
+#~ msgstr "Engels (Barbados)"
+
+#~ msgid "English (Belgium)"
+#~ msgstr "Engels (België)"
+
+#~ msgid "English (Belize)"
+#~ msgstr "Engels (Belize)"
+
+#~ msgid "English (Bermuda)"
+#~ msgstr "Engels (Bermuda)"
+
+#~ msgid "English (Botswana)"
+#~ msgstr "Engels (Botswana)"
+
+#~ msgid "English (British Indian Ocean Territory)"
+#~ msgstr "Engels (Brits Indische Oceaanterritorium)"
+
+#~ msgid "English (British Virgin Islands)"
+#~ msgstr "Engels (Britse Maagdeneilanden)"
+
+#~ msgid "English (Cameroon)"
+#~ msgstr "Engels (Kameroen)"
+
+#~ msgid "English (Canada)"
+#~ msgstr "Engels (Canada)"
+
+#~ msgid "English (Cayman Islands)"
+#~ msgstr "Engels (Kaaimaneilanden)"
+
+#~ msgid "English (Christmas Island)"
+#~ msgstr "Engels (Kerst-eiland)"
+
+#~ msgid "English (Cocos (Keeling) Islands)"
+#~ msgstr "Nederlands (Cocos (Keeling) Eilanden)"
+
+#~ msgid "English (Cook Islands)"
+#~ msgstr "Engels (Cookeilanden)"
+
+#~ msgid "English (Diego Garcia)"
+#~ msgstr "Nederlands (Diego Garcia)"
+
+#~ msgid "English (Dominica)"
+#~ msgstr "Engels (Dominica)"
+
+#~ msgid "English (Eritrea)"
+#~ msgstr "Engels (Eritrea)"
+
+#~ msgid "English (Falkland Islands)"
+#~ msgstr "Engels (Falklandeilanden)"
+
+#~ msgid "English (Fiji)"
+#~ msgstr "Engels (Fiji)"
+
+#~ msgid "English (Gambia)"
+#~ msgstr "Engels (Gambia)"
+
+#~ msgid "English (Ghana)"
+#~ msgstr "Engels (Ghana)"
+
+#~ msgid "English (Gibraltar)"
+#~ msgstr "Engels (Gibraltar)"
+
+#~ msgid "English (Grenada)"
+#~ msgstr "Engels (Grenada)"
+
+#~ msgid "English (Guam)"
+#~ msgstr "Engels (Guam)"
+
+#~ msgid "English (Guernsey)"
+#~ msgstr "Engels (Guernsey)"
+
+#~ msgid "English (Guyana)"
+#~ msgstr "Engels (Guyana)"
+
+#~ msgid "English (Hong Kong SAR China)"
+#~ msgstr "Engels (Speciale Administratieve Regio Hongkong, China)"
+
+#~ msgid "English (India)"
+#~ msgstr "Engels (India)"
+
+#~ msgid "English (Ireland)"
+#~ msgstr "Engels (Ierland)"
+
+#~ msgid "English (Isle of Man)"
+#~ msgstr "Engels (Eiland Man)"
+
+#~ msgid "English (Jamaica)"
+#~ msgstr "Engels (Jamaica)"
+
+#~ msgid "English (Jersey)"
+#~ msgstr "Engels (Jersey)"
+
+#~ msgid "English (Kenya)"
+#~ msgstr "Engels (Kenia)"
+
+#~ msgid "English (Kiribati)"
+#~ msgstr "Engels (Kiribati)"
+
+#~ msgid "English (Lesotho)"
+#~ msgstr "Engels (Lesotho)"
+
+#~ msgid "English (Liberia)"
+#~ msgstr "Engels (Liberia)"
+
+#~ msgid "English (Macau SAR China)"
+#~ msgstr "Engels (Speciale Administratieve Regio Macau, China)"
+
+#~ msgid "English (Madagascar)"
+#~ msgstr "Engels (Madagaskar)"
+
+#~ msgid "English (Malawi)"
+#~ msgstr "Engels (Malawi)"
+
+#~ msgid "English (Malaysia)"
+#~ msgstr "Engels (Maleisië)"
+
+#~ msgid "English (Malta)"
+#~ msgstr "Engels (Malta)"
+
+#~ msgid "English (Marshall Islands)"
+#~ msgstr "Engels (Marshalleilanden)"
+
+#~ msgid "English (Mauritius)"
+#~ msgstr "Engels (Mauritius)"
+
+#~ msgid "English (Micronesia)"
+#~ msgstr "Engels (Micronesië)"
+
+#~ msgid "English (Montserrat)"
+#~ msgstr "Engels (Montserrat)"
+
+#~ msgid "English (Namibia)"
+#~ msgstr "Engels (Namibië)"
+
+#~ msgid "English (Nauru)"
+#~ msgstr "Engels (Nauru)"
+
+#~ msgid "English (New Zealand)"
+#~ msgstr "Engels (Nieuw-Zeeland)"
+
+#~ msgid "English (Nigeria)"
+#~ msgstr "Engels (Nigeria)"
+
+#~ msgid "English (Niue)"
+#~ msgstr "Engels (Niue)"
+
+#~ msgid "English (Norfolk Island)"
+#~ msgstr "Engels (Norfolk)"
+
+#~ msgid "English (Northern Mariana Islands)"
+#~ msgstr "Engels (Noordelijke Marianen)"
+
+#~ msgid "English (Pakistan)"
+#~ msgstr "Engels (Pakistan)"
+
+#~ msgid "English (Palau)"
+#~ msgstr "Engels (Palau)"
+
+#~ msgid "English (Papua New Guinea)"
+#~ msgstr "Engels (Papoea-Nieuw-Guinea)"
+
+#~ msgid "English (Philippines)"
+#~ msgstr "Engels (Filippijnen)"
+
+#~ msgid "English (Pitcairn Islands)"
+#~ msgstr "Engels (Pitcairneilanden)"
+
+#~ msgid "English (Puerto Rico)"
+#~ msgstr "Engels (Puerto Rico)"
+
+#~ msgid "English (Rwanda)"
+#~ msgstr "Engels (Rwanda)"
+
+#~ msgid "English (Samoa)"
+#~ msgstr "Engels (Samoa)"
+
+#~ msgid "English (Seychelles)"
+#~ msgstr "Engels (Seychellen)"
+
+#~ msgid "English (Sierra Leone)"
+#~ msgstr "Engels (Sierra Leone)"
+
+#~ msgid "English (Singapore)"
+#~ msgstr "Engels (Singapore)"
+
+#~ msgid "English (Sint Maarten)"
+#~ msgstr "Engels (Sint Maarten)"
+
+#~ msgid "English (Solomon Islands)"
+#~ msgstr "Engels (Salomonseilanden)"
+
+#~ msgid "English (South Africa)"
+#~ msgstr "Engels (Zuid-Afrika)"
+
+#~ msgid "English (South Sudan)"
+#~ msgstr "Engels (Zuid-Soedan)"
+
+#~ msgid "English (St. Helena)"
+#~ msgstr "Engels (Sint-Helena)"
+
+#~ msgid "English (St. Kitts & Nevis)"
+#~ msgstr "Engels (Saint Kitts en Nevis)"
+
+#~ msgid "English (St. Lucia)"
+#~ msgstr "Engels (Saint Lucia)"
+
+#~ msgid "English (St. Vincent & Grenadines)"
+#~ msgstr "Engels (Saint Vincent en de Grenadines)"
+
+#~ msgid "English (Sudan)"
+#~ msgstr "Engels (Soedan)"
+
+#~ msgid "English (Swaziland)"
+#~ msgstr "Engels (Swaziland)"
+
+#~ msgid "English (Tanzania)"
+#~ msgstr "Engels (Tanzania)"
+
+#~ msgid "English (Tokelau)"
+#~ msgstr "Engels (Tokelau)"
+
+#~ msgid "English (Tonga)"
+#~ msgstr "Engels (Tonga)"
+
+#~ msgid "English (Trinidad & Tobago)"
+#~ msgstr "Engels (Trinidad en Tobago)"
+
+#~ msgid "English (Turks & Caicos Islands)"
+#~ msgstr "Engels (Turks- en Caicoseilanden)"
+
+#~ msgid "English (Tuvalu)"
+#~ msgstr "Engels (Tuvalu)"
+
+#~ msgid "English (U.S. Outlying Islands)"
+#~ msgstr "Engels (Amerikaanse afgelegen eilanden)"
+
+#~ msgid "English (U.S. Virgin Islands)"
+#~ msgstr "Engels (Amerikaanse Maagdeneilanden)"
+
+#~ msgid "English (Uganda)"
+#~ msgstr "Engels (Oeganda)"
+
+#~ msgid "English (United Kingdom)"
+#~ msgstr "Engels (Verenigd Koninkrijk)"
+
+#~ msgid "English (United States)"
+#~ msgstr "Engels (Verenigde Staten)"
+
+#~ msgid "English (Vanuatu)"
+#~ msgstr "Engels (Vanuatu)"
+
+#~ msgid "English (Zambia)"
+#~ msgstr "Engels (Zambia)"
+
+#~ msgid "English (Zimbabwe)"
+#~ msgstr "Engels (Zimbabwe)"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Estonian"
+#~ msgstr "Ests"
+
+#~ msgid "Estonian (Estonia)"
+#~ msgstr "Ests (Estland)"
+
+#~ msgid "Ewe"
+#~ msgstr "Ewe"
+
+#~ msgid "Ewe (Ghana)"
+#~ msgstr "Ewe (Ghana)"
+
+#~ msgid "Ewe (Togo)"
+#~ msgstr "Ewe (Togo)"
+
+#~ msgid "Faroese"
+#~ msgstr "Faeröers"
+
+#~ msgid "Faroese (Faroe Islands)"
+#~ msgstr "Faeröers (Faeröer)"
+
+#~ msgid "Finnish"
+#~ msgstr "Fins"
+
+#~ msgid "Finnish (Finland)"
+#~ msgstr "Fins (Finland)"
+
+#~ msgid "French"
+#~ msgstr "Frans"
+
+#~ msgid "French (Algeria)"
+#~ msgstr "Frans (Algerije)"
+
+#~ msgid "French (Belgium)"
+#~ msgstr "Frans (België)"
+
+#~ msgid "French (Benin)"
+#~ msgstr "Frans (Benin)"
+
+#~ msgid "French (Burkina Faso)"
+#~ msgstr "Frans (Burkina Faso)"
+
+#~ msgid "French (Burundi)"
+#~ msgstr "Frans (Burundi)"
+
+#~ msgid "French (Cameroon)"
+#~ msgstr "Frans (Kameroen)"
+
+#~ msgid "French (Canada)"
+#~ msgstr "Frans (Canada)"
+
+#~ msgid "French (Central African Republic)"
+#~ msgstr "Frans (Centraal-Afrikaanse Republiek)"
+
+#~ msgid "French (Chad)"
+#~ msgstr "Frans (Tsjaad)"
+
+#~ msgid "French (Comoros)"
+#~ msgstr "Frans (Comoren)"
+
+#~ msgid "French (Congo - Brazzaville)"
+#~ msgstr "Frans (Congo - Brazzaville)"
+
+#~ msgid "French (Congo - Kinshasa)"
+#~ msgstr "Frans (Congo - Kinshasa)"
+
+#~ msgid "French (Côte d’Ivoire)"
+#~ msgstr "Frans (Ivoorkust)"
+
+#~ msgid "French (Djibouti)"
+#~ msgstr "Frans (Djibouti)"
+
+#~ msgid "French (Equatorial Guinea)"
+#~ msgstr "Frans (Equatoriaal-Guinea)"
+
+#~ msgid "French (France)"
+#~ msgstr "Frans (Frankrijk)"
+
+#~ msgid "French (French Guiana)"
+#~ msgstr "Frans (Frans-Guyana)"
+
+#~ msgid "French (French Polynesia)"
+#~ msgstr "Frans (Frans-Polynesië)"
+
+#~ msgid "French (Gabon)"
+#~ msgstr "Frans (Gabon)"
+
+#~ msgid "French (Guadeloupe)"
+#~ msgstr "Frans (Guadeloupe)"
+
+#~ msgid "French (Guinea)"
+#~ msgstr "Frans (Guinee)"
+
+#~ msgid "French (Haiti)"
+#~ msgstr "Frans (Haïti)"
+
+#~ msgid "French (Luxembourg)"
+#~ msgstr "Frans (Luxemburg)"
+
+#~ msgid "French (Madagascar)"
+#~ msgstr "Frans (Madagaskar)"
+
+#~ msgid "French (Mali)"
+#~ msgstr "Frans (Mali)"
+
+#~ msgid "French (Martinique)"
+#~ msgstr "Frans (Martinique)"
+
+#~ msgid "French (Mauritania)"
+#~ msgstr "Frans (Mauritanië)"
+
+#~ msgid "French (Mauritius)"
+#~ msgstr "Frans (Mauritius)"
+
+#~ msgid "French (Mayotte)"
+#~ msgstr "Frans (Mayotte)"
+
+#~ msgid "French (Monaco)"
+#~ msgstr "Frans (Monaco)"
+
+#~ msgid "French (Morocco)"
+#~ msgstr "Frans (Marokko)"
+
+#~ msgid "French (New Caledonia)"
+#~ msgstr "Frans (Nieuw-Caledonië)"
+
+#~ msgid "French (Niger)"
+#~ msgstr "Frans (Niger)"
+
+#~ msgid "French (Réunion)"
+#~ msgstr "Frans (Réunion)"
+
+#~ msgid "French (Rwanda)"
+#~ msgstr "Frans (Rwanda)"
+
+#~ msgid "French (Senegal)"
+#~ msgstr "Frans (Senegal)"
+
+#~ msgid "French (Seychelles)"
+#~ msgstr "Frans (Seychellen)"
+
+#~ msgid "French (St. Barthélemy)"
+#~ msgstr "Frans (Saint-Barthélemy)"
+
+#~ msgid "French (St. Martin)"
+#~ msgstr "Frans (Sint-Maarten)"
+
+#~ msgid "French (St. Pierre & Miquelon)"
+#~ msgstr "Frans (Saint-Pierre en Miquelon)"
+
+#~ msgid "French (Switzerland)"
+#~ msgstr "Frans (Zwitserland)"
+
+#~ msgid "French (Syria)"
+#~ msgstr "Frans (Syrië)"
+
+#~ msgid "French (Togo)"
+#~ msgstr "Frans (Togo)"
+
+#~ msgid "French (Tunisia)"
+#~ msgstr "Frans (Tunesië)"
+
+#~ msgid "French (Vanuatu)"
+#~ msgstr "Frans (Vanuatu)"
+
+#~ msgid "French (Wallis & Futuna)"
+#~ msgstr "Frans (Wallis en Futuna)"
+
+#~ msgid "Fulah"
+#~ msgstr "Fula"
+
+#~ msgid "Fulah (Cameroon)"
+#~ msgstr "Fula (Kameroen)"
+
+#~ msgid "Fulah (Guinea)"
+#~ msgstr "Fula (Guinee)"
+
+#~ msgid "Fulah (Mauritania)"
+#~ msgstr "Fula (Mauritanië)"
+
+#~ msgid "Fulah (Senegal)"
+#~ msgstr "Fula (Senegal)"
+
+#~ msgid "Galician"
+#~ msgstr "Galicisch"
+
+#~ msgid "Galician (Spain)"
+#~ msgstr "Galicisch (Spanje)"
+
+#~ msgid "Ganda"
+#~ msgstr "Ganda"
+
+#~ msgid "Ganda (Uganda)"
+#~ msgstr "Ganda (Oeganda)"
+
+#~ msgid "Georgian"
+#~ msgstr "Georgisch"
+
+#~ msgid "Georgian (Georgia)"
+#~ msgstr "Georgië (Georgië)"
+
+#~ msgid "German"
+#~ msgstr "Duits"
+
+#~ msgid "German (Austria)"
+#~ msgstr "Duits (Oostenrijk)"
+
+#~ msgid "German (Belgium)"
+#~ msgstr "Duits (België)"
+
+#~ msgid "German (Germany)"
+#~ msgstr "Duits (Duitsland)"
+
+#~ msgid "German (Liechtenstein)"
+#~ msgstr "Duits (Liechtenstein)"
+
+#~ msgid "German (Luxembourg)"
+#~ msgstr "Duits (Luxemburg)"
+
+#~ msgid "German (Switzerland)"
+#~ msgstr "Duits (Zwitserland)"
+
+#~ msgid "Greek"
+#~ msgstr "Grieks"
+
+#~ msgid "Greek (Cyprus)"
+#~ msgstr "Grieks (Cyprus)"
+
+#~ msgid "Greek (Greece)"
+#~ msgstr "Grieks (Griekenland)"
+
+#~ msgid "Gujarati"
+#~ msgstr "Gujarati"
+
+#~ msgid "Gujarati (India)"
+#~ msgstr "Gujarati (India)"
+
+#~ msgid "Hausa"
+#~ msgstr "Hausa"
+
+#~ msgid "Hausa (Ghana)"
+#~ msgstr "Hausa (Ghana)"
+
+#~ msgid "Hausa (Latin, Ghana)"
+#~ msgstr "Hausa (Latijn, Ghana)"
+
+#~ msgid "Hausa (Latin, Niger)"
+#~ msgstr "Hausa (Latijn, Niger)"
+
+#~ msgid "Hausa (Latin, Nigeria)"
+#~ msgstr "Hausa (Latijn, Nigeria)"
+
+#~ msgid "Hausa (Latin)"
+#~ msgstr "Hausa (Latijn)"
+
+#~ msgid "Hausa (Niger)"
+#~ msgstr "Hausa (Niger)"
+
+#~ msgid "Hausa (Nigeria)"
+#~ msgstr "Hausa (Nigeria)"
+
+#~ msgid "Hebrew"
+#~ msgstr "Hebreeuws"
+
+#~ msgid "Hebrew (Israel)"
+#~ msgstr "Hebreeuws (Israël)"
+
+#~ msgid "Hindi"
+#~ msgstr "Hindi"
+
+#~ msgid "Hindi (India)"
+#~ msgstr "Hindi (India)"
+
+#~ msgid "Hungarian"
+#~ msgstr "Hongaars"
+
+#~ msgid "Hungarian (Hungary)"
+#~ msgstr "Hongaars (Hongarije)"
+
+#~ msgid "Icelandic"
+#~ msgstr "IJslands"
+
+#~ msgid "Icelandic (Iceland)"
+#~ msgstr "IJslands (IJsland)"
+
+#~ msgid "Igbo"
+#~ msgstr "Igbo"
+
+#~ msgid "Igbo (Nigeria)"
+#~ msgstr "Igbo (Nigeria)"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonesisch"
+
+#~ msgid "Indonesian (Indonesia)"
+#~ msgstr "Indonesisch (Indonesië)"
+
+#~ msgid "Irish"
+#~ msgstr "Iers"
+
+#~ msgid "Irish (Ireland)"
+#~ msgstr "Iers (Ierland)"
+
+#~ msgid "Italian"
+#~ msgstr "Italiaans"
+
+#~ msgid "Italian (Italy)"
+#~ msgstr "Italiaans (Italië)"
+
+#~ msgid "Italian (San Marino)"
+#~ msgstr "Italiaans (San Marino)"
+
+#~ msgid "Italian (Switzerland)"
+#~ msgstr "Italiaans (Zwitserland)"
+
+#~ msgid "Japanese"
+#~ msgstr "Japans"
+
+#~ msgid "Japanese (Japan)"
+#~ msgstr "Japans (Japan)"
+
+#~ msgid "Kalaallisut"
+#~ msgstr "Groenlands"
+
+#~ msgid "Kalaallisut (Greenland)"
+#~ msgstr "Kalaallisut (Groenland)"
+
+#~ msgid "Kannada"
+#~ msgstr "Canada"
+
+#~ msgid "Kannada (India)"
+#~ msgstr "Kannada (India)"
+
+#~ msgid "Kashmiri"
+#~ msgstr "Kasjmirs"
+
+#~ msgid "Kashmiri (Arabic, India)"
+#~ msgstr "Kashmiri (Arabisch, India)"
+
+#~ msgid "Kashmiri (Arabic)"
+#~ msgstr "Kashmiri (Arabisch)"
+
+#~ msgid "Kashmiri (India)"
+#~ msgstr "Kashmiri (India)"
+
+#~ msgid "Kazakh"
+#~ msgstr "Kazachs"
+
+#~ msgid "Kazakh (Cyrillic, Kazakhstan)"
+#~ msgstr "Kazachs (Cyrillisch, Kazachstan)"
+
+#~ msgid "Kazakh (Cyrillic)"
+#~ msgstr "Kazachs (Cyrillisch)"
+
+#~ msgid "Kazakh (Kazakhstan)"
+#~ msgstr "Kazachs (Kazachstan)"
+
+#~ msgid "Khmer"
+#~ msgstr "Khmer"
+
+#~ msgid "Khmer (Cambodia)"
+#~ msgstr "Khmer (Cambodja)"
+
+#~ msgid "Kikuyu"
+#~ msgstr "Gikuyu"
+
+#~ msgid "Kikuyu (Kenya)"
+#~ msgstr "Kikuyu (Kenia)"
+
+#~ msgid "Kinyarwanda"
+#~ msgstr "Kinyarwanda"
+
+#~ msgid "Kinyarwanda (Rwanda)"
+#~ msgstr "Kinyarwanda (Rwanda)"
+
+#~ msgid "Korean"
+#~ msgstr "Koreaans"
+
+#~ msgid "Korean (North Korea)"
+#~ msgstr "Koreaans (Noord-Korea)"
+
+#~ msgid "Korean (South Korea)"
+#~ msgstr "Koreaans (Zuid-Korea)"
+
+#~ msgid "Kyrgyz"
+#~ msgstr "Kirgizisch"
+
+#~ msgid "Kyrgyz (Cyrillic, Kyrgyzstan)"
+#~ msgstr "Kirgizisch (Cyrillisch, Kirgizië)"
+
+#~ msgid "Kyrgyz (Cyrillic)"
+#~ msgstr "Kirgizisch (Cyrillisch)"
+
+#~ msgid "Kyrgyz (Kyrgyzstan)"
+#~ msgstr "Kirgizisch (Kirgizië)"
+
+#~ msgid "Lao"
+#~ msgstr "LAO"
+
+#~ msgid "Lao (Laos)"
+#~ msgstr "Laotisch (Laos)"
+
+#~ msgid "Latvian"
+#~ msgstr "Lets"
+
+#~ msgid "Latvian (Latvia)"
+#~ msgstr "Lets (Letland)"
+
+#~ msgid "Lingala"
+#~ msgstr "Lingala"
+
+#~ msgid "Lingala (Angola)"
+#~ msgstr "Lingala (Angola)"
+
+#~ msgid "Lingala (Central African Republic)"
+#~ msgstr "Lingala (Centraal-Afrikaanse Republiek)"
+
+#~ msgid "Lingala (Congo - Brazzaville)"
+#~ msgstr "Lingala (Congo - Brazzaville)"
+
+#~ msgid "Lingala (Congo - Kinshasa)"
+#~ msgstr "Lingala (Congo - Kinshasa)"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Litouws"
+
+#~ msgid "Lithuanian (Lithuania)"
+#~ msgstr "Litouws (Litouwen)"
+
+#~ msgid "Luba-Katanga"
+#~ msgstr "Luba Katanga"
+
+#~ msgid "Luba-Katanga (Congo - Kinshasa)"
+#~ msgstr "Luba-Katanga (Congo - Kinshasa)"
+
+#~ msgid "Luxembourgish"
+#~ msgstr "Luxemburgs"
+
+#~ msgid "Luxembourgish (Luxembourg)"
+#~ msgstr "Luxemburgs (Luxemburg)"
+
+#~ msgid "Macedonian"
+#~ msgstr "Macedonisch"
+
+#~ msgid "Macedonian (Macedonia)"
+#~ msgstr "Macedonisch (Macedonië)"
+
+#~ msgid "Malagasy"
+#~ msgstr "Malagassisch"
+
+#~ msgid "Malagasy (Madagascar)"
+#~ msgstr "Malagassisch (Madagaskar)"
+
+#~ msgid "Malay"
+#~ msgstr "Maleis"
+
+#~ msgid "Malay (Brunei)"
+#~ msgstr "Maleis (Brunei)"
+
+#~ msgid "Malay (Latin, Brunei)"
+#~ msgstr "Maleis (Latijns, Brunei)"
+
+#~ msgid "Malay (Latin, Malaysia)"
+#~ msgstr "Maleis (Latijn, Maleisië)"
+
+#~ msgid "Malay (Latin, Singapore)"
+#~ msgstr "Maleis (Latijns alfabet, Singapore)"
+
+#~ msgid "Malay (Latin)"
+#~ msgstr "Maleis (Latijn)"
+
+#~ msgid "Malay (Malaysia)"
+#~ msgstr "Maleis (Maleisië)"
+
+#~ msgid "Malay (Singapore)"
+#~ msgstr "Maleis (Singapore)"
+
+#~ msgid "Malayalam"
+#~ msgstr "Malayalam"
+
+#~ msgid "Malayalam (India)"
+#~ msgstr "Malayalam (India)"
+
+#~ msgid "Maltese"
+#~ msgstr "Maltees"
+
+#~ msgid "Maltese (Malta)"
+#~ msgstr "Maltese (Malta)"
+
+#~ msgid "Manx"
+#~ msgstr "Manx-Gaelisch"
+
+#~ msgid "Manx (Isle of Man)"
+#~ msgstr "Manx (Eiland Man)"
+
+#~ msgid "Marathi"
+#~ msgstr "Marathi"
+
+#~ msgid "Marathi (India)"
+#~ msgstr "Marathi (India)"
+
+#~ msgid "Mongolian"
+#~ msgstr "Mongools"
+
+#~ msgid "Mongolian (Cyrillic, Mongolia)"
+#~ msgstr "Mongools (Cyrillisch, Mongolië)"
+
+#~ msgid "Mongolian (Cyrillic)"
+#~ msgstr "Mongools (Cyrillisch)"
+
+#~ msgid "Mongolian (Mongolia)"
+#~ msgstr "Mongools (Mongolië)"
+
+#~ msgid "Nepali"
+#~ msgstr "Nepalees"
+
+#~ msgid "Nepali (India)"
+#~ msgstr "Nepalees (India)"
+
+#~ msgid "Nepali (Nepal)"
+#~ msgstr "Nepalees (Nepal)"
+
+#~ msgid "North Ndebele"
+#~ msgstr "Noord Ndebele"
+
+#~ msgid "North Ndebele (Zimbabwe)"
+#~ msgstr "Noord-Ndebele (Zimbabwe)"
+
+#~ msgid "Northern Sami"
+#~ msgstr "Noord Samisch"
+
+#~ msgid "Northern Sami (Finland)"
+#~ msgstr "Noord-Samisch (Finland)"
+
+#~ msgid "Northern Sami (Norway)"
+#~ msgstr "Noord-Samisch (Noorwegen)"
+
+#~ msgid "Northern Sami (Sweden)"
+#~ msgstr "Noord-Samisch (Zweden)"
+
+#~ msgid "Norwegian"
+#~ msgstr "Norwegisch"
+
+#~ msgid "Norwegian (Norway)"
+#~ msgstr "Noors (Noorwegen)"
+
+#~ msgid "Norwegian Bokmål"
+#~ msgstr "Noors (Bokmål)"
+
+#~ msgid "Norwegian Bokmål (Norway)"
+#~ msgstr "Noors Bokmål (Noorwegen)"
+
+#~ msgid "Norwegian Bokmål (Svalbard & Jan Mayen)"
+#~ msgstr "Noors (Bokmål) (Svalbard en Jan Mayen)"
+
+#~ msgid "Norwegian Nynorsk"
+#~ msgstr "Noors (Nynorsk)"
+
+#~ msgid "Norwegian Nynorsk (Norway)"
+#~ msgstr "Noors Nynorsk (Noorwegen)"
+
+#~ msgid "Oriya"
+#~ msgstr "Odia"
+
+#~ msgid "Oriya (India)"
+#~ msgstr "Oriya (India)"
+
+#~ msgid "Oromo"
+#~ msgstr "Afaan Oromo"
+
+#~ msgid "Oromo (Ethiopia)"
+#~ msgstr "Oromo (Ethiopië)"
+
+#~ msgid "Oromo (Kenya)"
+#~ msgstr "Oromo (Kenia)"
+
+#~ msgid "Ossetic"
+#~ msgstr "Ossetisch"
+
+#~ msgid "Ossetic (Georgia)"
+#~ msgstr "Ossetisch (Georgië)"
+
+#~ msgid "Ossetic (Russia)"
+#~ msgstr "Ossetisch (Rusland)"
+
+#~ msgid "Pashto"
+#~ msgstr "Pasjtoe"
+
+#~ msgid "Pashto (Afghanistan)"
+#~ msgstr "Pashto (Afghanistan)"
+
+#~ msgid "Persian"
+#~ msgstr "Perzisch"
+
+#~ msgid "Persian (Afghanistan)"
+#~ msgstr "Perzisch (Afghanistan)"
+
+#~ msgid "Persian (Iran)"
+#~ msgstr "Perzisch (Iran)"
+
+#~ msgid "Polish"
+#~ msgstr "Pools"
+
+#~ msgid "Polish (Poland)"
+#~ msgstr "Pools (Polen)"
+
+#~ msgid "Portuguese"
+#~ msgstr "Portugees"
+
+#~ msgid "Portuguese (Angola)"
+#~ msgstr "Portugees (Angola)"
+
+#~ msgid "Portuguese (Brazil)"
+#~ msgstr "Portugees (Brazilië)"
+
+#~ msgid "Portuguese (Cape Verde)"
+#~ msgstr "Portugees (Kaapverdië)"
+
+#~ msgid "Portuguese (Guinea-Bissau)"
+#~ msgstr "Portugees (Guinee-Bissau)"
+
+#~ msgid "Portuguese (Macau SAR China)"
+#~ msgstr "Portugees (Speciale Administratieve Regio Macau, China)"
+
+#~ msgid "Portuguese (Mozambique)"
+#~ msgstr "Portugees (Mozambique)"
+
+#~ msgid "Portuguese (Portugal)"
+#~ msgstr "Portugees (Portugal)"
+
+#~ msgid "Portuguese (São Tomé & Príncipe)"
+#~ msgstr "Portugees (São Tomé en Príncipe)"
+
+#~ msgid "Portuguese (Timor-Leste)"
+#~ msgstr "Portugees (Oost-Timor)"
+
+#~ msgid "Punjabi"
+#~ msgstr "Punjabi"
+
+#~ msgid "Punjabi (Arabic, Pakistan)"
+#~ msgstr "Punjabi (Arabisch, Pakistan)"
+
+#~ msgid "Punjabi (Arabic)"
+#~ msgstr "Punjabi (Arabisch)"
+
+#~ msgid "Punjabi (Gurmukhi, India)"
+#~ msgstr "Punjabi (Gurmukhi, India)"
+
+#~ msgid "Punjabi (Gurmukhi)"
+#~ msgstr "Punjabi (Gurmukhi)"
+
+#~ msgid "Punjabi (India)"
+#~ msgstr "Punjabi (India)"
+
+#~ msgid "Punjabi (Pakistan)"
+#~ msgstr "Punjabi (Pakistan)"
+
+#~ msgid "Quechua"
+#~ msgstr "Quechua"
+
+#~ msgid "Quechua (Bolivia)"
+#~ msgstr "Quechua (Bolivia)"
+
+#~ msgid "Quechua (Ecuador)"
+#~ msgstr "Quechua (Ecuador)"
+
+#~ msgid "Quechua (Peru)"
+#~ msgstr "Quechua (Peru)"
+
+#~ msgid "Romanian"
+#~ msgstr "Roemeens"
+
+#~ msgid "Romanian (Moldova)"
+#~ msgstr "Roemeens (Moldavië)"
+
+#~ msgid "Romanian (Romania)"
+#~ msgstr "Roemeens (Roemenië)"
+
+#~ msgid "Romansh"
+#~ msgstr "Reto-Romaans"
+
+#~ msgid "Romansh (Switzerland)"
+#~ msgstr "Reto-Romaans (Zwitserland)"
+
+#~ msgid "Rundi"
+#~ msgstr "Rundi"
+
+#~ msgid "Rundi (Burundi)"
+#~ msgstr "Rundi (Burundi)"
+
+#~ msgid "Russian"
+#~ msgstr "Russisch"
+
+#~ msgid "Russian (Belarus)"
+#~ msgstr "Russisch (Wit-Rusland)"
+
+#~ msgid "Russian (Kazakhstan)"
+#~ msgstr "Russisch (Kazachstan)"
+
+#~ msgid "Russian (Kyrgyzstan)"
+#~ msgstr "Russisch (Kirgizië)"
+
+#~ msgid "Russian (Moldova)"
+#~ msgstr "Russisch (Moldavië)"
+
+#~ msgid "Russian (Russia)"
+#~ msgstr "Russisch (Rusland)"
+
+#~ msgid "Russian (Ukraine)"
+#~ msgstr "Russisch (Oekraïne)"
+
+#~ msgid "Sango"
+#~ msgstr "Sango"
+
+#~ msgid "Sango (Central African Republic)"
+#~ msgstr "Sango (Centraal-Afrikaanse Republiek)"
+
+#~ msgid "Scottish Gaelic"
+#~ msgstr "Schots-Gaelisch"
+
+#~ msgid "Scottish Gaelic (United Kingdom)"
+#~ msgstr "Schots-Gaelisch (Verenigd Koninkrijk)"
+
+#~ msgid "Serbian"
+#~ msgstr "Servisch"
+
+#~ msgid "Serbian (Bosnia & Herzegovina)"
+#~ msgstr "Servisch (Bosnië en Herzegovina)"
+
+#~ msgid "Serbian (Cyrillic, Bosnia & Herzegovina)"
+#~ msgstr "Servisch (Cyrillisch, Bosnië en Herzegovina)"
+
+#~ msgid "Serbian (Cyrillic, Kosovo)"
+#~ msgstr "Servisch (Cyrillisch, Kosovo)"
+
+#~ msgid "Serbian (Cyrillic, Montenegro)"
+#~ msgstr "Servisch (Cyrillisch, Montenegro)"
+
+#~ msgid "Serbian (Cyrillic, Serbia)"
+#~ msgstr "Servisch (Cyrillisch, Servië)"
+
+#~ msgid "Serbian (Cyrillic)"
+#~ msgstr "Servisch (Cyrillisch)"
+
+#~ msgid "Serbian (Kosovo)"
+#~ msgstr "Servisch (Kosovo)"
+
+#~ msgid "Serbian (Latin, Bosnia & Herzegovina)"
+#~ msgstr "Servisch (Latijns alfabet, Bosnië en Herzegovina)"
+
+#~ msgid "Serbian (Latin, Kosovo)"
+#~ msgstr "Servisch (Latijns alfabet, Kosovo)"
+
+#~ msgid "Serbian (Latin, Montenegro)"
+#~ msgstr "Servisch (Latijns alfabet, Montenegro)"
+
+#~ msgid "Serbian (Latin, Serbia)"
+#~ msgstr "Servisch (Latijns alfabet, Servië)"
+
+#~ msgid "Serbian (Latin)"
+#~ msgstr "Servisch (Latijns alfabet)"
+
+#~ msgid "Serbian (Montenegro)"
+#~ msgstr "Servisch (Montenegro)"
+
+#~ msgid "Serbian (Serbia)"
+#~ msgstr "Servisch (Servië)"
+
+#~ msgid "Serbo-Croatian"
+#~ msgstr "Servo-Kroatisch"
+
+#~ msgid "Serbo-Croatian (Bosnia & Herzegovina)"
+#~ msgstr "Servo-Kroatisch (Bosnië en Herzegovina)"
+
+#~ msgid "Shona"
+#~ msgstr "Shona"
+
+#~ msgid "Shona (Zimbabwe)"
+#~ msgstr "Shona (Zimbabwe)"
+
+#~ msgid "Sichuan Yi"
+#~ msgstr "Sichuan Yi"
+
+#~ msgid "Sichuan Yi (China)"
+#~ msgstr "Sichuan Yi (China)"
+
+#~ msgid "Sinhala"
+#~ msgstr "Singalees"
+
+#~ msgid "Sinhala (Sri Lanka)"
+#~ msgstr "Sinhala (Sri Lanka)"
+
+#~ msgid "Slovak"
+#~ msgstr "Slowaaks"
+
+#~ msgid "Slovak (Slovakia)"
+#~ msgstr "Slowaaks (Slowakije)"
+
+#~ msgid "Slovenian"
+#~ msgstr "Sloveens"
+
+#~ msgid "Slovenian (Slovenia)"
+#~ msgstr "Sloveens (Slovenië)"
+
+#~ msgid "Somali"
+#~ msgstr "Somalisch"
+
+#~ msgid "Somali (Djibouti)"
+#~ msgstr "Somalisch (Djibouti)"
+
+#~ msgid "Somali (Ethiopia)"
+#~ msgstr "Somali (Ethiopië)"
+
+#~ msgid "Somali (Kenya)"
+#~ msgstr "Somalisch (Kenia)"
+
+#~ msgid "Somali (Somalia)"
+#~ msgstr "Somalisch (Somalië)"
+
+#~ msgid "Spanish"
+#~ msgstr "Spaans"
+
+#~ msgid "Spanish (Argentina)"
+#~ msgstr "Spaans (Argentinië)"
+
+#~ msgid "Spanish (Bolivia)"
+#~ msgstr "Spaans (Bolivia)"
+
+#~ msgid "Spanish (Canary Islands)"
+#~ msgstr "Spaans (Canarische Eilanden)"
+
+#~ msgid "Spanish (Ceuta & Melilla)"
+#~ msgstr "Spaans (Ceuta en Melilla)"
+
+#~ msgid "Spanish (Chile)"
+#~ msgstr "Spaans (Chili)"
+
+#~ msgid "Spanish (Colombia)"
+#~ msgstr "Spaans (Colombia)"
+
+#~ msgid "Spanish (Costa Rica)"
+#~ msgstr "Spaans (Costa Rica)"
+
+#~ msgid "Spanish (Cuba)"
+#~ msgstr "Spaans (Cuba)"
+
+#~ msgid "Spanish (Dominican Republic)"
+#~ msgstr "Spaans (Dominicaanse Republiek)"
+
+#~ msgid "Spanish (Ecuador)"
+#~ msgstr "Spaans (Ecuador)"
+
+#~ msgid "Spanish (El Salvador)"
+#~ msgstr "Spaans (El Salvador)"
+
+#~ msgid "Spanish (Equatorial Guinea)"
+#~ msgstr "Spaans (Equatoriaal-Guinea)"
+
+#~ msgid "Spanish (Guatemala)"
+#~ msgstr "Spaans (Guatemala)"
+
+#~ msgid "Spanish (Honduras)"
+#~ msgstr "Spaans (Honduras)"
+
+#~ msgid "Spanish (Mexico)"
+#~ msgstr "Spaans (Mexico)"
+
+#~ msgid "Spanish (Nicaragua)"
+#~ msgstr "Spaans (Nicaragua)"
+
+#~ msgid "Spanish (Panama)"
+#~ msgstr "Spaans (Panama)"
+
+#~ msgid "Spanish (Paraguay)"
+#~ msgstr "Spaans (Paraguay)"
+
+#~ msgid "Spanish (Peru)"
+#~ msgstr "Spaans (Peru)"
+
+#~ msgid "Spanish (Philippines)"
+#~ msgstr "Spaans (Filippijnen)"
+
+#~ msgid "Spanish (Puerto Rico)"
+#~ msgstr "Spaans (Puerto Rico)"
+
+#~ msgid "Spanish (Spain)"
+#~ msgstr "Spaans (Spanje)"
+
+#~ msgid "Spanish (United States)"
+#~ msgstr "Spaans (Verenigde Staten)"
+
+#~ msgid "Spanish (Uruguay)"
+#~ msgstr "Spaans (Uruguay)"
+
+#~ msgid "Spanish (Venezuela)"
+#~ msgstr "Spaans (Venezuela)"
+
+#~ msgid "Swahili"
+#~ msgstr "Swahili"
+
+#~ msgid "Swahili (Kenya)"
+#~ msgstr "Swahili (Kenia)"
+
+#~ msgid "Swahili (Tanzania)"
+#~ msgstr "Swahili (Tanzania)"
+
+#~ msgid "Swahili (Uganda)"
+#~ msgstr "Swahili (Oeganda)"
+
+#~ msgid "Swedish"
+#~ msgstr "Zweeds"
+
+#~ msgid "Swedish (Åland Islands)"
+#~ msgstr "Zweeds (Ålandseilanden)"
+
+#~ msgid "Swedish (Finland)"
+#~ msgstr "Zweeds (Finland)"
+
+#~ msgid "Swedish (Sweden)"
+#~ msgstr "Zweeds (Zweden)"
+
+#~ msgid "Tagalog"
+#~ msgstr "Tagalog"
+
+#~ msgid "Tagalog (Philippines)"
+#~ msgstr "Tagalog (Filippijnen)"
+
+#~ msgid "Tamil"
+#~ msgstr "Tamil"
+
+#~ msgid "Tamil (India)"
+#~ msgstr "Tamil (India)"
+
+#~ msgid "Tamil (Malaysia)"
+#~ msgstr "Tamil (Maleisië)"
+
+#~ msgid "Tamil (Singapore)"
+#~ msgstr "Tamil (Singapore)"
+
+#~ msgid "Tamil (Sri Lanka)"
+#~ msgstr "Tamil (Sri Lanka)"
+
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#~ msgid "Telugu (India)"
+#~ msgstr "Telugu (India)"
+
+#~ msgid "Thai"
+#~ msgstr "Thais"
+
+#~ msgid "Thai (Thailand)"
+#~ msgstr "Thais (Thailand)"
+
+#~ msgid "Tibetan"
+#~ msgstr "Tibetaans"
+
+#~ msgid "Tibetan (China)"
+#~ msgstr "Tibetaans (China)"
+
+#~ msgid "Tibetan (India)"
+#~ msgstr "Tibetaans (India)"
+
+#~ msgid "Tigrinya"
+#~ msgstr "Tigrinya"
+
+#~ msgid "Tigrinya (Eritrea)"
+#~ msgstr "Tigrinya (Eritrea)"
+
+#~ msgid "Tigrinya (Ethiopia)"
+#~ msgstr "Tigrinya (Ethiopië)"
+
+#~ msgid "Tongan"
+#~ msgstr "Tongaans"
+
+#~ msgid "Tongan (Tonga)"
+#~ msgstr "Tongaans (Tonga)"
+
+#~ msgid "Turkish"
+#~ msgstr "Turks"
+
+#~ msgid "Turkish (Cyprus)"
+#~ msgstr "Turks (Cyprus)"
+
+#~ msgid "Turkish (Turkey)"
+#~ msgstr "Turks (Turkije)"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Oekraïens"
+
+#~ msgid "Ukrainian (Ukraine)"
+#~ msgstr "Oekraïens (Oekraïne)"
+
+#~ msgid "Urdu"
+#~ msgstr "Urdu"
+
+#~ msgid "Urdu (India)"
+#~ msgstr "Urdu (India)"
+
+#~ msgid "Urdu (Pakistan)"
+#~ msgstr "Urdu (Pakistan)"
+
+#~ msgid "Uyghur"
+#~ msgstr "Oeigoeren"
+
+#~ msgid "Uyghur (Arabic, China)"
+#~ msgstr "Oeigoers (Arabisch, China)"
+
+#~ msgid "Uyghur (Arabic)"
+#~ msgstr "Oeigoers (Arabisch)"
+
+#~ msgid "Uyghur (China)"
+#~ msgstr "Oeigoers (China)"
+
+#~ msgid "Uzbek"
+#~ msgstr "Oezbeeks"
+
+#~ msgid "Uzbek (Afghanistan)"
+#~ msgstr "Oezbeeks (Afghanistan)"
+
+#~ msgid "Uzbek (Arabic, Afghanistan)"
+#~ msgstr "Oezbeeks (Arabisch, Afghanistan)"
+
+#~ msgid "Uzbek (Arabic)"
+#~ msgstr "Oezbeeks (Arabisch)"
+
+#~ msgid "Uzbek (Cyrillic, Uzbekistan)"
+#~ msgstr "Oezbeeks (Cyrillisch, Oezbekistan)"
+
+#~ msgid "Uzbek (Cyrillic)"
+#~ msgstr "Oezbeeks (Cyrillisch)"
+
+#~ msgid "Uzbek (Latin, Uzbekistan)"
+#~ msgstr "Oezbeeks (Latijns alfabet, Oezbekistan)"
+
+#~ msgid "Uzbek (Latin)"
+#~ msgstr "Oezbeeks (Latijns alfabet)"
+
+#~ msgid "Uzbek (Uzbekistan)"
+#~ msgstr "Oezbeeks (Oezbekistan)"
+
+#~ msgid "Vietnamese (Vietnam)"
+#~ msgstr "Vietnamees (Vietnam)"
+
+#~ msgid "Welsh"
+#~ msgstr "Welsh"
+
+#~ msgid "Welsh (United Kingdom)"
+#~ msgstr "Welsh (Verenigd Koninkrijk)"
+
+#~ msgid "Western Frisian"
+#~ msgstr "West Fries"
+
+#~ msgid "Western Frisian (Netherlands)"
+#~ msgstr "West-Fries (Nederland)"
+
+#~ msgid "Yiddish"
+#~ msgstr "Jiddisch"
+
+#~ msgid "Yoruba"
+#~ msgstr "Yoruba"
+
+#~ msgid "Yoruba (Benin)"
+#~ msgstr "Yoruba (Benin)"
+
+#~ msgid "Yoruba (Nigeria)"
+#~ msgstr "Yoruba (Nigeria)"
+
+#~ msgid "Zulu"
+#~ msgstr "Zoeloe"
+
+#~ msgid "Zulu (South Africa)"
+#~ msgstr "Zoeloe (Zuid-Afrika)"
+
+#~ msgid "Export CSV"
+#~ msgstr "CSV exporteren"
+
+#~ msgid "Select CSV File"
+#~ msgstr "Kies CSV bestand"
+
+#~ msgid "%d charts found"
+#~ msgstr "%d grafieken gevonden"
+
+#~ msgctxt "block title"
+#~ msgid "Chart"
+#~ msgstr "Grafiek"
 
 #~ msgid "Double click or long press tab to edit name"
 #~ msgstr "Dubbel klik of houdt lang ingedrukt om de naam te bewerken"
