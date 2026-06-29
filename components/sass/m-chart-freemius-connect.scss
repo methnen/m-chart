@@ -6,10 +6,28 @@
 
 #fs_connect {
 
-	// Square off the plugin icon tile
-	// The M Chart mark is not perfectly round so a circular background looked off-center
+	// Let the plugin icon show in full
+	// The M Chart mark is a complete rounded-square app icon with its own corners and background
+	// so let it fill the tile edge to edge instead of being cropped to a circle inside a white frame
+	// !important is needed because Freemius enqueues connect.css after this inline style on the opt-in screen
 	.fs-header .fs-plugin-icon {
-		border-radius: 8px;
+		background:    none !important;
+		border:        0 !important;
+		border-radius: 0 !important;
+		overflow:      visible !important;
+		padding:       0 !important;
+	}
+
+	// Freemius also rounds the icon <img> itself via a generic ".fs-header img" rule
+	// undo that so the logo's own rounded-square shape shows instead of a circle
+	.fs-header .fs-plugin-icon img {
+		border-radius: 0 !important;
+	}
+
+	// Brand the opt-in box
+	// blue band behind the logo
+	.fs-box-container {
+		background: #0f64ab !important;
 	}
 
 	// Swap the unicode arrow on the primary button for the M Chart arrow icon
@@ -42,4 +60,10 @@
 		box-shadow: none;
 		outline:    none;
 	}
+}
+
+// Tint the admin page behind the opt-in box
+// this style is only injected on the connect/before action so it only affects the opt-in screen
+body {
+	background: #f2f7fb !important;
 }

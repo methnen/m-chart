@@ -37,7 +37,7 @@
     "build:css:pricing": "sass --source-map --style=expanded components/sass/m-chart-freemius-pricing.scss components/css/m-chart-freemius-pricing.css",
     "build:css:connect": "sass --source-map --style=expanded components/sass/m-chart-freemius-connect.scss components/css/m-chart-freemius-connect.css",
     "build:js": "uglifyjs components/js/m-chart-chartjs-helper.js -o components/js/m-chart-chartjs-helper.min.js",
-    "build:readme": "wp-readme-to-md --screenshot-url=https://methnen.com/misc/m-chart/{screenshot}.png",
+    "build:readme": "wp-readme-to-md --screenshot-url=https://mch.art/misc/m-chart/{screenshot}.png",
     "build:i18n": "node scripts/merge-i18n-json.js",
     "build:example-charts": "node scripts/generate-example-charts-wxr.js",
     "build:zip": "node scripts/build-zip.js",

@@ -40,6 +40,26 @@
 		width: 100% !important;
 	}
 
+	// Tint the FAQ section to match the opt-in screen's page background
+	// !important because Freemius paints it with var( --fs-ds-theme-background-shade ) at a higher specificity
+	.fs-section--faq {
+		background: #f2f7fb !important;
+	}
+
+	// Drop the framed box around the header logo and title
+	// Freemius wraps it in a bordered card, let it sit flush instead
+	.fs-app-header .fs-plugin-title-and-logo {
+		background:    none !important;
+		border:        0 !important;
+		border-radius: 0 !important;
+	}
+
+	// Remove the divider lines above and below the testimonials section
+	.fs-section--testimonials {
+		border-top:    0 !important;
+		border-bottom: 0 !important;
+	}
+
 	// Differentiate the Pro features, the free features come first so everything from the 7th item on is Pro
 	// Bold and tinted with the darker accent we use elsewhere, plus a Pro badge matching the admin menu badge
 	.fs-plan-features li:nth-child( n + 7 ) .fs-feature-title {

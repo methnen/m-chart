@@ -1,5 +1,15 @@
 #fs_connect .fs-header .fs-plugin-icon {
-  border-radius: 8px;
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+#fs_connect .fs-header .fs-plugin-icon img {
+  border-radius: 0 !important;
+}
+#fs_connect .fs-box-container {
+  background: #0f64ab !important;
 }
 #fs_connect .fs-actions .button.button-primary:after {
   content: "";
@@ -21,6 +31,10 @@
 #fs_connect .fs-permissions .fs-trigger:focus {
   box-shadow: none;
   outline: none;
+}
+
+body {
+  background: #f2f7fb !important;
 }
 
 /*# sourceMappingURL=m-chart-freemius-connect.css.map */

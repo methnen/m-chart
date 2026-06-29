@@ -230,6 +230,24 @@ class M_Chart_Admin {
 		</style>
 		<?php
 
+		// Recolor the top-level menu logo so it adapts to the admin color scheme
+		// WP prints the menu_icon SVG as a non-recolorable background-image and our logo has no fill so it renders black
+		// Masking it with currentColor makes it follow the menu link color - white on the active/hover item, scheme gray otherwise
+		?>
+		<style id="m-chart-menu-icon">
+			#adminmenu #menu-posts-<?php echo esc_attr( m_chart()->slug ); ?> .wp-menu-image.svg {
+				/* WP sets the background-image via an inline style attribute so this needs !important */
+				background-image:  none !important;
+				background-color:  currentColor;
+				-webkit-mask:      url("data:image/svg+xml;base64,<?php echo esc_attr( m_chart()->logo ); ?>") no-repeat center;
+				mask:              url("data:image/svg+xml;base64,<?php echo esc_attr( m_chart()->logo ); ?>") no-repeat center;
+				/* Match WP's .wp-menu-image.svg background-size */
+				-webkit-mask-size: 20px auto;
+				mask-size:         20px auto;
+			}
+		</style>
+		<?php
+
 		if ( ! m_chart()->freemius()->is_free_plan() ) {
 			return;
 		}

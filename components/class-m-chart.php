@@ -68,6 +68,7 @@ class M_Chart {
 	];
 	public $library_class;
 	public $icon = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY0IDY0IDI0IDI0IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij4KICA8cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0gNzYuNjU3IDY1LjUgTCA3Ni42NTcgNzUuMzQ0IEwgODYuNSA3NS4zNDQgQyA4Ni41IDY5LjkwOSA4Mi4wOTEgNjUuNSA3Ni42NTcgNjUuNSBaIE0gNzQuNjg4IDc2LjMyOCBMIDc0LjY4OCA2Ni44MzMgQyA2OS41NTcgNjcuMTc0IDY1LjUgNzEuNDM5IDY1LjUgNzYuNjU3IEMgNjUuNSA4Mi4wOTEgNjkuOTA5IDg2LjUgNzUuMzQzIDg2LjUgQyA4MC41NjIgODYuNSA4NC44MjggODIuNDQzIDg1LjE2NyA3Ny4zMTMgTCA3NC42ODggNzcuMzEzIEwgNzQuNjg4IDc2LjMyOCBaIi8+Cjwvc3ZnPg==';
+	public $logo = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBpZD0idXVpZC03OGNkNDE3YS0zN2NjLTQ0NTAtODU2ZC00MzBlMTliYjhmOTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDQzNyAzNzAuMDU2Ij4KICA8ZyBpZD0idXVpZC1hMDM3MTk0ZS1hN2QzLTQ4NTktOGEwZi0wMmIzMWI0YmQ3MzEiIHRyYW5zZm9ybT0ibWF0cml4KDEsIDAsIDAsIDEsIDM4LjQwMzk5OSwgNTUuOTM3MDA0KSI+CiAgICA8cmVjdCB4PSIyODEuNDAxIiB5PSIxNDguNTExIiB3aWR0aD0iODguNzEiIGhlaWdodD0iMTQxLjQ1IiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyIvPgogICAgPHJlY3QgeD0iLTkuOTE5IiB5PSIyNjQuODIxIiB3aWR0aD0iODguNzEiIGhlaWdodD0iMjUuMTMiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cmVjdCB4PSItOS45MTkiIHk9Ii0zMS43NzkiIHdpZHRoPSI4OC43MSIgaGVpZ2h0PSIyODQuMjEiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cmVjdCB4PSIyODEuNDAxIiB5PSItMzEuNzc5IiB3aWR0aD0iODguNzEiIGhlaWdodD0iMTY3Ljg3IiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyIvPgogICAgPHJlY3QgeD0iMTg2LjI4MSIgeT0iMTk0LjU1MSIgd2lkdGg9IjgyLjc5IiBoZWlnaHQ9Ijk1LjQiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cmVjdCB4PSI5MS4wODEiIHk9IjIzNS40MTEiIHdpZHRoPSI4Mi45NCIgaGVpZ2h0PSI1NC41NSIgc3R5bGU9InN0cm9rZS13aWR0aDogMTsiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iMjgxLjQwMSAtMzEuNzc5IDE4MC4xMDEgNjUuMTExIDE4MC4xMDEgMTc2LjcwMSAyODEuNDAxIDc5LjcxMSAyODEuNDAxIC0zMS43NzkiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cG9seWdvbiBwb2ludHM9Ijc4LjgwMSA3OS43MTEgMTgwLjEwMSAxNzYuNzAxIDE4MC4xMDEgNjUuMTExIDc4LjgwMSAtMzEuNzc5IDc4LjgwMSA3OS43MTEiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgPC9nPgo8L3N2Zz4=';
 
 	private $admin;
 	private $parse;
@@ -177,8 +178,23 @@ class M_Chart {
 			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/css/m-chart-freemius-pricing.css' );
 		} );
 
+		// Re-point the pricing page contact links at M Chart's own support/contact pages
+		// Freemius wraps the pricing output in this filter so the inline script is scoped to that screen
+		$this->fs->add_filter( 'templates/pricing.php', function ( $html ) {
+			$script_path = __DIR__ . '/js/m-chart-freemius-pricing.js';
+
+			if ( ! file_exists( $script_path ) ) {
+				return $html;
+			}
+
+			return $html
+				. "<script id=\"m-chart-freemius-pricing\">\n"
+				. file_get_contents( $script_path ) // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset
+				. "</script>\n";
+		} );
+
 		$this->fs->add_filter( 'plugin_icon', function () {
-			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/images/m-chart-icon.svg' );
+			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/images/m-chart-logo-square-rounded.svg' );
 		} );
 
 		$this->fs->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
@@ -332,7 +348,7 @@ class M_Chart {
 				'hierarchical'         => false,
 				'exclude_from_search'  => false,
 				'menu_position'        => 9,
-				'menu_icon'            => 'data:image/svg+xml;base64,' . $this->icon,
+				'menu_icon'            => 'data:image/svg+xml;base64,' . $this->logo,
 				'query_var'            => true,
 				'can_export'           => true,
 				'has_archive'          => 'charts',
