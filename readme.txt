@@ -58,7 +58,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Added support for M Chart Pro
 * Added title/subtitle wrapping to the helper plugin
-	* This mostly prevents the squished text that you sometimes got with long tiles or subtitles
+	* This mostly prevents the squished text that you sometimes got with long titles or subtitles
 * Made some efficiency and code improvements to the Chart.js helper plugin
 * Some minor accessibility improvements
 * Default theme is now M Chart specific and uses a new color palette
