@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.0",
-    "@wordpress/a11y": "^4.46.0",
+    "@wordpress/a11y": "^4.49.0",
     "@wordpress/api-fetch": "^7.46.0",
     "@wordpress/components": "^28.13.0",
     "@wordpress/element": "^8.1.0",
