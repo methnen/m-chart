@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class M_Chart {
-	public $version           = '2.1';
+	public $version           = '2.2';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
@@ -21,17 +21,17 @@ class M_Chart {
 		'y_min_value'       => 0,
 		'x_title'           => '',
 		'x_units'           => '',
-		'height'            => 400,
+		'height'            => 600,
 		'legend'            => true,
 		'source'            => '',
 		'source_url'        => '',
-		'data'               => [],
-		'set_names'          => [],
-		'data_point_colors'  => false,
-		'mean_point'         => true,
-		'sample_points'      => false,
-		'constrain_y_axis'   => false,
-		'include_source'     => false,
+		'data'              => [],
+		'set_names'         => [],
+		'data_point_colors' => false,
+		'mean_point'        => true,
+		'sample_points'     => false,
+		'constrain_y_axis'  => false,
+		'include_source'    => false,
 	];
 	public $get_chart_default_args = [
 		'show'  => 'chart',
@@ -53,6 +53,7 @@ class M_Chart {
 		'performance'      => 'default',
 		'image_multiplier' => '2',
 		'image_width'      => '900',
+		'default_height'   => '400',
 		'embeds'           => '',
 		'defer_rendering'  => 'enabled',
 		'default_theme'    => '_default',
@@ -67,10 +68,12 @@ class M_Chart {
 	];
 	public $library_class;
 	public $icon = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY0IDY0IDI0IDI0IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij4KICA8cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0gNzYuNjU3IDY1LjUgTCA3Ni42NTcgNzUuMzQ0IEwgODYuNSA3NS4zNDQgQyA4Ni41IDY5LjkwOSA4Mi4wOTEgNjUuNSA3Ni42NTcgNjUuNSBaIE0gNzQuNjg4IDc2LjMyOCBMIDc0LjY4OCA2Ni44MzMgQyA2OS41NTcgNjcuMTc0IDY1LjUgNzEuNDM5IDY1LjUgNzYuNjU3IEMgNjUuNSA4Mi4wOTEgNjkuOTA5IDg2LjUgNzUuMzQzIDg2LjUgQyA4MC41NjIgODYuNSA4NC44MjggODIuNDQzIDg1LjE2NyA3Ny4zMTMgTCA3NC42ODggNzcuMzEzIEwgNzQuNjg4IDc2LjMyOCBaIi8+Cjwvc3ZnPg==';
+	public $logo = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBpZD0idXVpZC03OGNkNDE3YS0zN2NjLTQ0NTAtODU2ZC00MzBlMTliYjhmOTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDQzNyAzNzAuMDU2Ij4KICA8ZyBpZD0idXVpZC1hMDM3MTk0ZS1hN2QzLTQ4NTktOGEwZi0wMmIzMWI0YmQ3MzEiIHRyYW5zZm9ybT0ibWF0cml4KDEsIDAsIDAsIDEsIDM4LjQwMzk5OSwgNTUuOTM3MDA0KSI+CiAgICA8cmVjdCB4PSIyODEuNDAxIiB5PSIxNDguNTExIiB3aWR0aD0iODguNzEiIGhlaWdodD0iMTQxLjQ1IiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyIvPgogICAgPHJlY3QgeD0iLTkuOTE5IiB5PSIyNjQuODIxIiB3aWR0aD0iODguNzEiIGhlaWdodD0iMjUuMTMiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cmVjdCB4PSItOS45MTkiIHk9Ii0zMS43NzkiIHdpZHRoPSI4OC43MSIgaGVpZ2h0PSIyODQuMjEiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cmVjdCB4PSIyODEuNDAxIiB5PSItMzEuNzc5IiB3aWR0aD0iODguNzEiIGhlaWdodD0iMTY3Ljg3IiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyIvPgogICAgPHJlY3QgeD0iMTg2LjI4MSIgeT0iMTk0LjU1MSIgd2lkdGg9IjgyLjc5IiBoZWlnaHQ9Ijk1LjQiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cmVjdCB4PSI5MS4wODEiIHk9IjIzNS40MTEiIHdpZHRoPSI4Mi45NCIgaGVpZ2h0PSI1NC41NSIgc3R5bGU9InN0cm9rZS13aWR0aDogMTsiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iMjgxLjQwMSAtMzEuNzc5IDE4MC4xMDEgNjUuMTExIDE4MC4xMDEgMTc2LjcwMSAyODEuNDAxIDc5LjcxMSAyODEuNDAxIC0zMS43NzkiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgICA8cG9seWdvbiBwb2ludHM9Ijc4LjgwMSA3OS43MTEgMTgwLjEwMSAxNzYuNzAxIDE4MC4xMDEgNjUuMTExIDc4LjgwMSAtMzEuNzc5IDc4LjgwMSA3OS43MTEiIHN0eWxlPSJzdHJva2Utd2lkdGg6IDE7Ii8+CiAgPC9nPgo8L3N2Zz4=';
 
 	private $admin;
 	private $parse;
 	private $block;
+	private $fs;
 	private $libraries = [
 		'chartjs' => 'Chart.js',
 	];
@@ -79,6 +82,10 @@ class M_Chart {
 	 * Constructor
 	 */
 	public function __construct() {
+		// Initiate Freemius first so it loads as early as possible
+		// Must run synchronously here at file load so Freemius detects m-chart.php as the plugin file
+		$this->freemius();
+
 		$this->plugin_url = $this->plugin_url();
 
 		add_action( 'init', [ $this, 'init' ] );
@@ -95,10 +102,129 @@ class M_Chart {
 		add_filter( 'm_chart_instant_preview_support', [ $this, 'm_chart_instant_preview_support' ], 10, 2 );
 		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
+		add_shortcode( 'm-chart', [ $this, 'chart_shortcode' ] );
+		// Backwards-compatible alias for content created before the rename
 		add_shortcode( 'chart', [ $this, 'chart_shortcode' ] );
 
 		// Initiate the block class
 		$this->block();
+	}
+
+	/**
+	 * Initiate and return the Freemius SDK instance
+	 *
+	 * Lazily builds the instance on first call and caches it
+	 * The SDK lives in components/external/freemius rather than the usual plugin root /freemius
+	 * M Chart core (m-chart) is the free version so is_premium is false
+	 * M Chart Pro (m-chart-pro) is a separate plugin sold under the same Freemius product via parallel activation
+	 *
+	 * @return Freemius the Freemius SDK instance for M Chart
+	 */
+	public function freemius() {
+		if ( isset( $this->fs ) ) {
+			return $this->fs;
+		}
+
+		require_once __DIR__ . '/external/freemius/start.php';
+
+		$this->fs = fs_dynamic_init( [
+			'id'                  => '30258',
+			'slug'                => 'm-chart',
+			'premium_slug'        => 'm-chart-pro',
+			'type'                => 'plugin',
+			'public_key'          => 'pk_b1eafc082abd31243874041aaaaab',
+			'is_premium'          => false,
+			'has_premium_version' => true,
+			'has_addons'          => false,
+			'has_paid_plans'      => true,
+			'is_org_compliant'    => true,
+			'parallel_activation' => [
+				'enabled'                  => true,
+				'premium_version_basename' => 'm-chart-pro/m-chart-pro.php',
+			],
+			'menu'                => [
+				// Anchor on the Charts CPT itself so the Freemius pages are plugin-level (m-chart-account, m-chart-pricing)
+				// The CPT slug contains ".php?" so get_slug() falls back to the m-chart affix rather than an m-chart-settings- prefix
+				'slug'    => 'edit.php?post_type=m-chart',
+				// Surface the Freemius Account page as a submenu link under the Charts menu
+				'account' => true,
+				'contact' => false,
+				'support' => false,
+			],
+		] );
+
+		$this->freemius_filters();
+
+		do_action( 'm_chart_fs_loaded' );
+
+		return $this->fs;
+	}
+
+	/**
+	 * Register Freemius filters that brand the pricing and opt-in screens
+	 *
+	 * pricing/css_path points Freemius at our stylesheet which is enqueued on the pricing page after its own CSS
+	 * pricing/show_annual_in_monthly shows the real annual price rather than the monthly equivalent of the annual plan
+	 *
+	 * The css_path and plugin_icon paths run through Freemius's fs_asset_url which maps a path to a URL by stripping WP_PLUGIN_DIR
+	 * __DIR__ resolves to the plugin's real path which differs from WP_PLUGIN_DIR when the plugin is symlinked
+	 * plugin_basename normalizes it back to the plugins-dir-relative path so the URL resolves in every install
+	 *
+	 * The opt-in / connect screen has no css_path filter so we inline our stylesheet on the connect/before action instead
+	 * It prints after Freemius's own connect.css so equal-specificity overrides win on source order
+	 */
+	private function freemius_filters() {
+		$this->fs->add_filter( 'pricing/css_path', function () {
+			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/css/m-chart-freemius-pricing.css' );
+		} );
+
+		// Re-point the pricing page contact links at M Chart's own support/contact pages
+		// Freemius wraps the pricing output in this filter so the inline script is scoped to that screen
+		$this->fs->add_filter( 'templates/pricing.php', function ( $html ) {
+			$script_path = __DIR__ . '/js/m-chart-freemius-pricing.js';
+
+			if ( ! file_exists( $script_path ) ) {
+				return $html;
+			}
+
+			return $html
+				. "<script id=\"m-chart-freemius-pricing\">\n"
+				. file_get_contents( $script_path ) // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset
+				. "</script>\n";
+		} );
+
+		$this->fs->add_filter( 'plugin_icon', function () {
+			return WP_PLUGIN_DIR . '/' . plugin_basename( __DIR__ . '/images/m-chart-logo-square-rounded.svg' );
+		} );
+
+		$this->fs->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
+
+		$this->fs->add_action( 'connect/before', function () {
+			$css_path = __DIR__ . '/css/m-chart-freemius-connect.css';
+
+			if ( ! file_exists( $css_path ) ) {
+				return;
+			}
+
+			echo "<style id=\"m-chart-freemius-connect\">\n";
+			echo file_get_contents( $css_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset
+			echo "</style>\n";
+		} );
+
+		// Swap Freemius's casual interjection headings for professional wording
+		// These are admin-notice titles keyed by id and the trailing "!" / "..." is appended by the SDK so it carries over
+		// Values are left unescaped since Freemius escapes them at the output site
+		// Deferred to init since freemius() runs at construct and the __() calls would load the text domain before WordPress is ready
+		add_action( 'init', function () {
+			fs_override_i18n( [
+				'yee-haw'  => __( 'Success', 'm-chart' ),
+				'woot'     => __( 'Success', 'm-chart' ),
+				'right-on' => __( 'Success', 'm-chart' ),
+				'oops'     => __( 'Error', 'm-chart' ),
+				'hmm'      => __( 'Heads up', 'm-chart' ),
+				'hey'      => __( 'Hello', 'm-chart' ),
+			], $this->slug );
+		} );
 	}
 
 	/**
@@ -200,6 +326,10 @@ class M_Chart {
 			[
 				'labels' => [
 					'name'               => esc_html__( 'Charts', 'm-chart' ),
+					// Top-level admin menu label defaults to 'name' so we set it explicitly to brand the menu as M Chart
+					'menu_name'          => esc_html__( 'M Chart', 'm-chart' ),
+					// First submenu item label defaults to menu_name so we set it back to Charts (parent reads M Chart, list reads Charts)
+					'all_items'          => esc_html__( 'Charts', 'm-chart' ),
 					'singular_name'      => esc_html__( 'Chart', 'm-chart' ),
 					'add_new'            => esc_html__( 'Add Chart', 'm-chart' ),
 					'add_new_item'       => esc_html__( 'Add Chart', 'm-chart' ),
@@ -218,7 +348,7 @@ class M_Chart {
 				'hierarchical'         => false,
 				'exclude_from_search'  => false,
 				'menu_position'        => 9,
-				'menu_icon'            => 'data:image/svg+xml;base64,' . $this->icon,
+				'menu_icon'            => 'data:image/svg+xml;base64,' . $this->logo,
 				'query_var'            => true,
 				'can_export'           => true,
 				'has_archive'          => 'charts',
@@ -367,6 +497,10 @@ class M_Chart {
 				$defaults['library'] = $this->get_library();
 			}
 		}
+
+		// Default chart height comes from the plugin settings so new charts honor the site default
+		// Saved charts already have a height so wp_parse_args leaves theirs alone
+		$defaults['height'] = (int) $this->get_settings( 'default_height' );
 
 		$post_meta = wp_parse_args( $post_meta, $defaults );
 
@@ -610,7 +744,8 @@ class M_Chart {
 		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 		class="<?php echo esc_attr( $classes ); ?>"></amp-img>
 	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
-	<div class="screen-reader-text sr-only">
+	<?php wp_enqueue_style( 'm-chart-frontend', $this->plugin_url . '/components/css/m-chart-frontend.css', [], $this->version ); ?>
+	<div class="screen-reader-text">
 		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
 	</div>
 	<?php endif; ?>
@@ -626,7 +761,8 @@ class M_Chart {
 		alt="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 		class="<?php echo esc_attr( $classes ); ?>" />
 	<?php if ( has_action( 'm_chart_screen_reader_text' ) ) : ?>
-	<div class="screen-reader-text sr-only">
+	<?php wp_enqueue_style( 'm-chart-frontend', $this->plugin_url . '/components/css/m-chart-frontend.css', [], $this->version ); ?>
+	<div class="screen-reader-text">
 		<?php do_action( 'm_chart_screen_reader_text', $post_id, $args ); ?>
 	</div>
 	<?php endif; ?>
@@ -651,6 +787,10 @@ class M_Chart {
 			wp_enqueue_script( $library );
 			wp_enqueue_script( 'chartjs-helper' );
 		}
+
+		// Ship the visually hidden rule the screen reader data table relies on
+		// so it never depends on the active theme defining .screen-reader-text
+		wp_enqueue_style( 'm-chart-frontend', $this->plugin_url . '/components/css/m-chart-frontend.css', [], $this->version );
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
@@ -852,7 +992,9 @@ class M_Chart {
 	}
 
 	/**
-	 * Return a chart via the [chart id="x"] short code
+	 * Return a chart via the [m-chart id="x"] short code
+	 *
+	 * Also registered under the legacy [chart] name for backwards compatibility
 	 *
 	 * @param array $args an array of arguments passed by the WP short code API
 	 *
@@ -1275,4 +1417,16 @@ function m_chart() {
 	}
 
 	return $m_chart;
+}
+
+/**
+ * Freemius SDK accessor
+ *
+ * Thin global wrapper that delegates to the core class so Freemius ecosystem code and conventions keep working
+ * The actual configuration lives in M_Chart::freemius()
+ *
+ * @return Freemius the Freemius SDK instance for M Chart
+ */
+function m_chart_fs() {
+	return m_chart()->freemius();
 }

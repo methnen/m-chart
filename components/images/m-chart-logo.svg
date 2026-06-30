@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="uuid-78cd417a-37cc-4450-856d-430e19bb8f91" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 437 370.056">
+  <g id="uuid-a037194e-a7d3-4859-8a0f-02b31b4bd731" transform="matrix(1, 0, 0, 1, 38.403999, 55.937004)">
+    <rect x="281.401" y="148.511" width="88.71" height="141.45" style="stroke-width: 1;"/>
+    <rect x="-9.919" y="264.821" width="88.71" height="25.13" style="stroke-width: 1;"/>
+    <rect x="-9.919" y="-31.779" width="88.71" height="284.21" style="stroke-width: 1;"/>
+    <rect x="281.401" y="-31.779" width="88.71" height="167.87" style="stroke-width: 1;"/>
+    <rect x="186.281" y="194.551" width="82.79" height="95.4" style="stroke-width: 1;"/>
+    <rect x="91.081" y="235.411" width="82.94" height="54.55" style="stroke-width: 1;"/>
+    <polygon points="281.401 -31.779 180.101 65.111 180.101 176.701 281.401 79.711 281.401 -31.779" style="stroke-width: 1;"/>
+    <polygon points="78.801 79.711 180.101 176.701 180.101 65.111 78.801 -31.779 78.801 79.711" style="stroke-width: 1;"/>
+  </g>
+</svg>

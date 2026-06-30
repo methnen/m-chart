@@ -32,6 +32,11 @@ class M_Chart_Admin {
 
 		add_action( 'admin_init', [ $this, 'admin_init' ] );
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+		// Runs after Freemius adds its own submenu links so we can relabel/reposition the Upgrade link
+		// Freemius hooks its menu at WP_FS__LOWEST_PRIORITY so we go one higher
+		add_action( 'admin_menu', [ $this, 'admin_submenu_links' ], ( defined( 'WP_FS__LOWEST_PRIORITY' ) ? WP_FS__LOWEST_PRIORITY : 999999998 ) + 1 );
+		add_action( 'admin_print_footer_scripts', [ $this, 'admin_print_footer_scripts' ] );
+		add_action( 'admin_head', [ $this, 'admin_head' ] );
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ $this, 'admin_footer' ] );
 		add_action( 'wp_ajax_m_chart_export_csv', [ $this, 'ajax_export_csv' ] );
@@ -65,52 +70,259 @@ class M_Chart_Admin {
 			m_chart()->slug . '-settings',
 			[ $this, 'm_chart_settings' ]
 		);
+	}
+
+	/**
+	 * Arrange the extra Charts submenu links
+	 *
+	 * Runs at a priority above Freemius so its pricing link already exists when we relabel and reposition it
+	 * Handles the Upgrade link, the Docs link, and the per library Add Chart links all in one place so ordering is predictable
+	 */
+	public function admin_submenu_links() {
+		global $submenu;
+
+		$menu_slug = 'edit.php?post_type=' . m_chart()->slug;
+
+		// Freemius adds its own pricing/upgrade submenu link for free users
+		// We relabel it to Upgrade and move it just above the Docs link
+		// Parsing the page slug out of the upgrade URL lets us find Freemius's entry without relying on its internals
+		// Repositioning leaves the page route registered so the link still works
+		$pricing_slug = '';
+		$query        = wp_parse_url( m_chart()->freemius()->get_upgrade_url(), PHP_URL_QUERY );
+
+		if ( $query ) {
+			parse_str( $query, $query_args );
+			$pricing_slug = $query_args['page'] ?? '';
+		}
+
+		if ( '' !== $pricing_slug && ! empty( $submenu[ $menu_slug ] ) ) {
+			foreach ( $submenu[ $menu_slug ] as $position => $item ) {
+				if ( isset( $item[2] ) && $item[2] === $pricing_slug ) {
+					unset( $submenu[ $menu_slug ][ $position ] );
+
+					$item[0]                   = esc_html__( 'Upgrade', 'm-chart' );
+					$submenu[ $menu_slug ][99] = $item;
+
+					break;
+				}
+			}
+		}
+
+		// Pin the Freemius Account link to a predictable order just below Settings
+		// Parse the page slug out of the account URL so this survives the menu slug scheme rather than hardcoding it
+		// Freemius's own ordering can drift against our ksort so we set an explicit position
+		$account_slug = '';
+		$query        = wp_parse_url( m_chart()->freemius()->get_account_url(), PHP_URL_QUERY );
+
+		if ( $query ) {
+			parse_str( $query, $query_args );
+			$account_slug = $query_args['page'] ?? '';
+		}
+
+		if ( '' !== $account_slug && ! empty( $submenu[ $menu_slug ] ) ) {
+			foreach ( $submenu[ $menu_slug ] as $position => $item ) {
+				if ( isset( $item[2] ) && $item[2] === $account_slug ) {
+					unset( $submenu[ $menu_slug ][ $position ] );
+
+					$submenu[ $menu_slug ][96] = $item;
+
+					break;
+				}
+			}
+		}
+
+		// Docs link — sits at the bottom of the Charts submenu
+		// The third array element is the href; WordPress treats it as a full URL when it includes a scheme
+		// target="_blank" is added by admin_print_footer_scripts() since WP's $submenu API doesn't accept link attributes
+		$submenu[ $menu_slug ][100] = [
+			esc_html__( 'Docs', 'm-chart' ),
+			'edit_posts',
+			'https://docs.mch.art',
+		];
 
 		// If multiple libraries are active we'll give you the option of using each one
 		// @TODO As written this will break if there's ever more than 10 active libraries... so yeah
-		global $submenu;
-
 		$libraries = m_chart()->get_libraries();
 
-		// If there's only one library we stop here as it's unnecessary
-		if ( 1 === count( $libraries ) ) {
-			return;
-		}
-
-		// Put the default library into the admin menu first
-		$args = [
-			'post_type' => m_chart()->slug,
-			'library'   => m_chart()->get_library(),
-		];
-
-		$submenu[ 'edit.php?post_type=' . m_chart()->slug ][10] = [
-			'Add ' . $libraries[ m_chart()->get_library() ] . ' Chart',
-			'edit_posts',
-			add_query_arg( $args, admin_url( 'post-new.php' ) ),
-		];
-
-		unset( $libraries[ m_chart()->get_library() ] );
-
-		// Add a Add Chart option for each active library that isn't the current default
-		$key = 11;
-
-		foreach ( $libraries as $library => $library_name ) {
+		if ( 1 < count( $libraries ) ) {
+			// Put the default library into the admin menu first
 			$args = [
 				'post_type' => m_chart()->slug,
-				'library'   => $library,
+				'library'   => m_chart()->get_library(),
 			];
 
-			$submenu[ 'edit.php?post_type=' . m_chart()->slug ][ $key ] = [
-				'Add ' . $library_name . ' Chart',
+			$submenu[ $menu_slug ][10] = [
+				'Add ' . $libraries[ m_chart()->get_library() ] . ' Chart',
 				'edit_posts',
 				add_query_arg( $args, admin_url( 'post-new.php' ) ),
 			];
 
-			$key++;
+			unset( $libraries[ m_chart()->get_library() ] );
+
+			// Add a Add Chart option for each active library that isn't the current default
+			$key = 11;
+
+			foreach ( $libraries as $library => $library_name ) {
+				$args = [
+					'post_type' => m_chart()->slug,
+					'library'   => $library,
+				];
+
+				$submenu[ $menu_slug ][ $key ] = [
+					'Add ' . $library_name . ' Chart',
+					'edit_posts',
+					add_query_arg( $args, admin_url( 'post-new.php' ) ),
+				];
+
+				$key++;
+			}
 		}
 
 		// Gotta sort them so they're in the right order
-		ksort( $submenu[ 'edit.php?post_type=' . m_chart()->slug ] );
+		if ( ! empty( $submenu[ $menu_slug ] ) ) {
+			ksort( $submenu[ $menu_slug ] );
+		}
+	}
+
+	/**
+	 * Add target="_blank" to the Docs link in the Charts submenu
+	 *
+	 * WordPress's add_submenu_page() / $submenu API has no concept of link attributes
+	 * So we do it via a tiny footer script that runs on every admin page since the menu is global
+	 */
+	public function admin_print_footer_scripts() {
+		?>
+<script>
+( () => {
+	const link = document.querySelector( '#adminmenu a[href="https://docs.mch.art"]' );
+
+	if ( link ) {
+		link.setAttribute( 'target', '_blank' );
+		link.setAttribute( 'rel', 'noopener noreferrer' );
+	}
+} )();
+</script>
+		<?php
+	}
+
+	/**
+	 * Hook: admin_head — print inline <style> for the Charts admin menu
+	 *
+	 * Lives inline rather than in the main SCSS bundle because the sidebar renders on every admin page
+	 * and that bundle only enqueues on chart screens
+	 *
+	 * First block hides Freemius's "↳" sub-item arrow on the Account link
+	 * Printed for every user since the Account link shows for paying users too
+	 *
+	 * Second block renders the Upgrade submenu link as a filled pill button with a trailing trendingUp icon
+	 * Only printed for free users since that is when the Upgrade link exists
+	 * The pill mimics the Pro plugin's menu badge - accent fill via --wp-admin-theme-color, white text, darker accent on hover
+	 * The icon is the trendingUp icon from @wordpress/icons masked so background-color: currentColor tints it white to match the text
+	 */
+	public function admin_head() {
+		// Freemius prefixes its sub-submenu items with a "↳" arrow via span.fs-submenu-item.fs-sub:before
+		// The #adminmenu prefix beats that selector so we can drop the glyph on our Account link
+		?>
+		<style id="m-chart-menu-account">
+			#adminmenu .fs-submenu-item.account.fs-sub::before {
+				display: none;
+			}
+		</style>
+		<?php
+
+		// Recolor the top-level menu logo so it adapts to the admin color scheme
+		// WP prints the menu_icon SVG as a non-recolorable background-image and our logo has no fill so it renders black
+		// Masking it with currentColor makes it follow the menu link color - white on the active/hover item, scheme gray otherwise
+		?>
+		<style id="m-chart-menu-icon">
+			#adminmenu #menu-posts-<?php echo esc_attr( m_chart()->slug ); ?> .wp-menu-image.svg {
+				/* WP sets the background-image via an inline style attribute so this needs !important */
+				background-image:  none !important;
+				background-color:  currentColor;
+				-webkit-mask:      url("data:image/svg+xml;base64,<?php echo esc_attr( m_chart()->logo ); ?>") no-repeat center;
+				mask:              url("data:image/svg+xml;base64,<?php echo esc_attr( m_chart()->logo ); ?>") no-repeat center;
+				/* Match WP's .wp-menu-image.svg background-size */
+				-webkit-mask-size: 20px auto;
+				mask-size:         20px auto;
+			}
+		</style>
+		<?php
+
+		if ( ! m_chart()->freemius()->is_free_plan() ) {
+			return;
+		}
+
+		// Parse the pricing page slug from the upgrade URL so the selector tracks the Freemius menu slug scheme
+		// Matching the full page slug avoids also styling the Settings link
+		$pricing_slug = '';
+		$query        = wp_parse_url( m_chart()->freemius()->get_upgrade_url(), PHP_URL_QUERY );
+
+		if ( $query ) {
+			parse_str( $query, $query_args );
+			$pricing_slug = $query_args['page'] ?? '';
+		}
+
+		// No pricing slug means there's no Upgrade link to style
+		if ( '' === $pricing_slug ) {
+			return;
+		}
+
+		$pricing_attr = esc_attr( $pricing_slug );
+		?>
+		<style id="m-chart-menu-upgrade">
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"] {
+				display:       inline-block;
+				margin:        4px 0 4px 13px;
+				/* 
+				Using !important to beat WordPress's own submenu link padding (5px 12px)
+				the mobile media query overrides this again under 782px so the button can still grow
+				*/
+				padding:       2px 10px !important;
+				border-radius: 2px;
+				font-weight:   600;
+				background:    var( --wp-admin-theme-color, #3858e9 ) !important;
+				color:         #fff !important;
+			}
+
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]:hover,
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]:focus {
+				background: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% ) !important;
+				color:      #fff !important;
+				/* 
+				WordPress paints an inset 4px left bar on submenu hover/focus
+				We remove it so the button stays clean 
+				*/
+				box-shadow: none !important;
+			}
+
+			#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]::after {
+				content:          "";
+				display:          inline-block;
+				width:            18px;
+				height:           18px;
+				margin-left:      4px;
+				vertical-align:   middle;
+				background-color: currentColor;
+				-webkit-mask:     url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M3.445%2016.505a.75.75%200%20001.06.05l5.005-4.55%204.024%203.521%204.716-4.715V14h1.5V8.25H14v1.5h3.19l-3.724%203.723L9.49%209.995l-5.995%205.45a.75.75%200%2000-.05%201.06z'/%3E%3C/svg%3E") no-repeat center / contain;
+				mask:             url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M3.445%2016.505a.75.75%200%20001.06.05l5.005-4.55%204.024%203.521%204.716-4.715V14h1.5V8.25H14v1.5h3.19l-3.724%203.723L9.49%209.995l-5.995%205.45a.75.75%200%2000-.05%201.06z'/%3E%3C/svg%3E") no-repeat center / contain;
+			}
+
+			/* 
+			Under 782px WordPress enlarges submenu links for touch with an asymmetric 10px 10px 10px 20px padding
+			This keeps the bigger size but matches the left padding to the right so the button looks normal
+			*/
+			@media screen and ( max-width: 782px ) {
+				#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"] {
+					padding: 10px !important;
+				}
+
+				#adminmenu a[href*="page=<?php echo $pricing_attr; ?>"]::after {
+					width:  23px;
+					height: 23px;
+				}
+			}
+		</style>
+		<?php
 	}
 
 	/**
@@ -148,6 +360,12 @@ class M_Chart_Admin {
 		foreach ( $default_settings as $setting => $default ) {
 			if ( ! isset( $submitted_settings[ $setting ] ) ) {
 				$validated_settings[ $setting ] = $default;
+				continue;
+			}
+
+			// Default chart height is numeric so clamp it to the same range as the per-chart height field
+			if ( 'default_height' === $setting ) {
+				$validated_settings[ $setting ] = min( 1500, max( 300, absint( $submitted_settings[ $setting ] ) ) );
 				continue;
 			}
 
@@ -257,7 +475,7 @@ class M_Chart_Admin {
 
 		// Only load these if we are on a post page
 		if ( 'post' === $screen->base ) {
-			// Jspreadsheet CE — needed by both chartjs (React) and other libraries (jQuery).
+			// Jspreadsheet CE — needed by both chartjs (React) and other libraries (jQuery)
 			wp_enqueue_style(
 				'jspreadsheet',
 				$this->plugin_url . '/components/external/jspreadsheet/jspreadsheet.css',
@@ -272,7 +490,7 @@ class M_Chart_Admin {
 				m_chart()->version
 			);
 
-			// jSuites — required by Jspreadsheet.
+			// jSuites — required by Jspreadsheet
 			wp_enqueue_style(
 				'jsuites',
 				$this->plugin_url . '/components/external/jsuites/jsuites.css',
@@ -320,7 +538,8 @@ class M_Chart_Admin {
 			}
 
 			if ( 'chartjs' === $library ) {
-				// Chart.js libs — enqueued explicitly so the React preview has window.Chart and window.MChartHelper available before m-chart-admin-ui runs its plugin registration
+				// Chart.js libs — enqueued explicitly so the React preview has window.Chart and window
+				// MChartHelper available before m-chart-admin-ui runs its plugin registration
 				// We load every plugin regardless of immediate need when in the edit view since the user can switch chart types from the picker
 				wp_enqueue_script( 'chartjs-helper' );
 				wp_enqueue_script( 'chartjs-datalabels' );

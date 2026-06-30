@@ -772,6 +772,8 @@ function CsvControls({
                 children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Import', 'm-chart')
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.SelectControl, {
                 __next40pxDefaultSize: true,
+                label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('CSV delimiter', 'm-chart'),
+                hideLabelFromVision: true,
                 name: "m-chart[csv_delimiter]",
                 value: csvDelimiter,
                 onChange: value => setCsvDelimiter(value),
@@ -839,9 +841,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ChartAdminContext */ "./components/admin-ui-src/context/ChartAdminContext.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -911,7 +916,7 @@ function JspreadsheetWrapper({
   onMounted,
   onUnmounted
 }) {
-  const dispatch = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_1__.useChartDispatch)();
+  const dispatch = (0,_context_ChartAdminContext__WEBPACK_IMPORTED_MODULE_2__.useChartDispatch)();
   const containerRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const worksheetRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
@@ -971,14 +976,21 @@ function JspreadsheetWrapper({
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    ref: containerRef,
-    className: "spreadsheet",
-    role: "tabpanel",
-    id: `spreadsheet-panel-${sheetId}`,
-    "aria-labelledby": `spreadsheet-tab-${sheetId}`,
-    tabIndex: isActive ? 0 : -1,
-    hidden: !isActive
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+      id: `spreadsheet-hint-${sheetId}`,
+      className: "screen-reader-text",
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The spreadsheet grid has limited screen reader support. Use the CSV Import control to load data.', 'm-chart')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      ref: containerRef,
+      className: "spreadsheet",
+      role: "tabpanel",
+      id: `spreadsheet-panel-${sheetId}`,
+      "aria-labelledby": `spreadsheet-tab-${sheetId}`,
+      "aria-describedby": `spreadsheet-hint-${sheetId}`,
+      tabIndex: isActive ? 0 : -1,
+      hidden: !isActive
+    })]
   });
 }
 
@@ -1569,7 +1581,7 @@ function ShortcodeAndImageRow() {
     performance,
     imageSupport
   } = state;
-  const shortcode = `[chart id="${postId}"]`;
+  const shortcode = `[m-chart id="${postId}"]`;
   const showImageField = 'default' === performance && 'yes' === imageSupport;
   const imageDisabled = !showImageField;
   const imagePlaceholder = imageDisabled ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Image generation is disabled', 'm-chart') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save/Update this post to generate the image version', 'm-chart');

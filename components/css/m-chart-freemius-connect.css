@@ -1,0 +1,40 @@
+#fs_connect .fs-header .fs-plugin-icon {
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+#fs_connect .fs-header .fs-plugin-icon img {
+  border-radius: 0 !important;
+}
+#fs_connect .fs-box-container {
+  background: #0f64ab !important;
+}
+#fs_connect .fs-actions .button.button-primary:after {
+  content: "";
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-left: 8px;
+  vertical-align: -2px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20640'%3E%3Cpath%20d='M566.6%20342.6C579.1%20330.1%20579.1%20309.8%20566.6%20297.3L406.6%20137.3C394.1%20124.8%20373.8%20124.8%20361.3%20137.3C348.8%20149.8%20348.8%20170.1%20361.3%20182.6L466.7%20288L96%20288C78.3%20288%2064%20302.3%2064%20320C64%20337.7%2078.3%20352%2096%20352L466.7%20352L361.3%20457.4C348.8%20469.9%20348.8%20490.2%20361.3%20502.7C373.8%20515.2%20394.1%20515.2%20406.6%20502.7L566.6%20342.7z'/%3E%3C/svg%3E") no-repeat center/contain;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20640'%3E%3Cpath%20d='M566.6%20342.6C579.1%20330.1%20579.1%20309.8%20566.6%20297.3L406.6%20137.3C394.1%20124.8%20373.8%20124.8%20361.3%20137.3C348.8%20149.8%20348.8%20170.1%20361.3%20182.6L466.7%20288L96%20288C78.3%20288%2064%20302.3%2064%20320C64%20337.7%2078.3%20352%2096%20352L466.7%20352L361.3%20457.4C348.8%20469.9%20348.8%20490.2%20361.3%20502.7C373.8%20515.2%20394.1%20515.2%20406.6%20502.7L566.6%20342.7z'/%3E%3C/svg%3E") no-repeat center/contain;
+}
+#fs_connect .fs-actions .button.button-primary.fs-loading:after {
+  display: none;
+}
+#fs_connect .fs-permissions .fs-switch.fs-round.fs-on {
+  background: var(--wp-admin-theme-color, #3858e9);
+}
+#fs_connect .fs-permissions .fs-trigger:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+body {
+  background: #f2f7fb !important;
+}
+
+/*# sourceMappingURL=m-chart-freemius-connect.css.map */

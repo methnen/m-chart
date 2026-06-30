@@ -10,12 +10,35 @@ Manage data sets via a spreadsheet interface, display them as charts via the Cha
 
 == Description ==
 
-Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
+Manage your data via a spreadsheet interface or an accessible CSV import, display it as any of 17 chart types using the bundled Chart.js library, and embed it anywhere via a shortcode, or the block editor.
+
+**Features:**
+
+* **17 chart types** — line, spline, area, column, stacked column, bar, stacked bar, pie, doughnut, scatter, bubble, radar, radar area, polar, treemap, boxplot, and violin
+* **Two ways to enter data** — a spreadsheet UI (Jspreadsheet CE) with multi-sheet support, or a fully keyboard-accessible CSV import with configurable delimiters
+* **Live preview** — the chart redraws instantly as you edit your data and settings, so you can see exactly what you'll get before publishing
+* **Multiple output formats** — render as a live interactive chart, a static image, or a plain HTML data table, all from the same chart
+* **Automatic image generation** — every chart is captured to a real PNG image automatically (no headless browser or external service required)
+	* Images have a configurable width and 1x–4x quality multiplier
+	* Perfect for RSS feeds, emails, AMP pages, and anywhere JavaScript doesn't work
+* **Flexible embedding** — shortcode, native block editor block, or iframe for remote/cross-site embedding
+* **Accessibility (WCAG 2.1 AA)** — every front-end chart includes a visually-hidden data table for screen readers, and a Color Blind Safe theme is bundled
+* **Themes** — bundled Chart.js themes, switchable per install, including a Color Blind Safe palette
+* **Responsive and fast** — charts size to their container, defer rendering until scrolled into view, and lazy-load in the block editor
+* **Localization** — locale-aware number formatting, plus full translation support
+* **Per-chart customization** — title/subtitle, axis titles and units, forced axis minimum, legend and shared-tooltip toggles, data-point labels, source attribution, and "color per data point"
+
+**Note:** Version 2.2 adds support for [M Chart Pro](https://mch.art/) which adds some additional premium features. 
+
+For a detailed explanation of why M Chart Pro exists and what my plans are going forwards read [Why M Chart Pro](https://mch.art/why-m-chart-pro/). 
+
+The short version is that M Chart will continue to be supported and developed, I've been working on this plugin and providing it for free over 10 years now and that will continue to be the case.
+
+However, that support and development will continue to match my original scope for the plugin which was to provide an efficent and easy to use UI for managing datasets and displaying them as charts and nothing more. Because of my limited ability to devote time to development of M Chart I've had to intentionally not add some features that have been requested throughout the years. Not because those features were bad ideas, but because I couldn't devote the kind of time necessary to do those features justice.
+
+M Chart Pro will be where I add those out of scope features as an addon to M Chart and since M Chart Pro will have a yearly subscription fee it will hopefully provide me with the financial stability to allow me to devote my time more fully to M Chart overall.
 
 **Note:** Starting with M Chart version 2.0 the plugin uses a new React based UI as well as updated data parsing class. This means any third party libraries will need to be refactored to support this. Version 1.3 of the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) has the necssary changes implemented.
-
-**Note:** Starting with version 1.8 the Chart.js library is no longer on the 2.x.x branch which introduces some [breaking changes](https://www.chartjs.org/docs/latest/migration/v3-migration.html). This will probably only affect you if you were modifying the default Chart.js behavior in some way.
-
  
 **Accessibility:** M Chart targets WCAG 2.1 Level AA. Charts on the front end include a visually-hidden data table for screen-reader users, and a `Color Blind Safe` theme is bundled. Screen-reader users entering chart data should use the CSV Import feature — the spreadsheet widget has partial keyboard support but CSV import is fully accessible.
 
@@ -30,6 +53,18 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 3. M Chart Block UI
 
 == Changelog ==
+
+= 2.2 =
+
+* Added support for M Chart Pro
+* Added title/subtitle wrapping to the helper plugin
+	* This mostly prevents the squished text that you sometimes got with long tiles or subtitles
+* Made some efficiency and code improvements to the Chart.js helper plugin
+* Some minor accessibility improvements
+* Default theme is now M Chart specific and uses a new color palette
+* Tweaked the Color Blind Safe palette to use the well regarded Okabe and Ito palette
+	* Also added different point shapes to further differentiate data series
+* Fixed an issue where data in an unexpected format could crash the Admin UI
 
 = 2.1 =
 
