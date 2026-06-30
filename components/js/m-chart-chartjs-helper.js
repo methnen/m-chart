@@ -412,8 +412,10 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 		return;
 	}
 
-	// First-touch: stash the original string so subsequent layouts wrap from the source
-	if ( ! chart[ originalProp ] ) {
+	// First-touch, or the source text changed, stash/re-stash the original so we wrap from the new source
+	// opt.text is a plain string for a fresh source; the wrap step below rewrites it to an array of lines
+	// So an array means this is a re-layout (resize) of already-wrapped text and the existing stash must stand
+	if ( ! chart[ originalProp ] || ( ! Array.isArray( opt.text ) && opt.text !== chart[ originalProp ] ) ) {
 		chart[ originalProp ] = Array.isArray( opt.text ) ? opt.text.join( ' ' ) : ( opt.text || '' );
 	}
 
