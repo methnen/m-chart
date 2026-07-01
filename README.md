@@ -44,7 +44,7 @@ M Chart Pro will be where I add those out of scope features as an addon to M Cha
 
 For full documentation please see the [Documentation](https://docs.mch.art/).
 
-To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
+To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart). 
 
 ## Screenshots ##
 
