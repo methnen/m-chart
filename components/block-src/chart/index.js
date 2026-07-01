@@ -1,12 +1,20 @@
 import { registerBlockType } from '@wordpress/blocks';
-import { SVG, Path } from '@wordpress/components';
+import { SVG, G, Rect, Polygon } from '@wordpress/components';
 import blockJson from './block.json';
 import Edit from './edit';
 
 const blockIcon = (
-<SVG viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" aria-hidden="true" focusable="false">
-    <Path d="M 18.7 3 L 5.3 3 C 4 3 3 4 3 5.3 L 3 18.7 C 3 20 4 21 5.3 21 L 18.7 21 C 20 21 21 20 21 18.7 L 21 5.3 C 21 4 20 3 18.7 3 Z M 19.5 18.7 C 19.5 19.1 19.1 19.5 18.7 19.5 L 5.3 19.5 C 4.9 19.5 4.5 19.1 4.5 18.7 L 4.5 5.3 C 4.5 4.9 4.9 4.5 5.3 4.5 L 18.7 4.5 C 19.1 4.5 19.5 4.9 19.5 5.3 L 19.5 18.7 Z" />
-    <Path d="M 12.312 7 L 12.312 11.688 L 17 11.688 C 17 9.1 14.9 7 12.312 7 Z M 11.375 12.157 L 11.375 7.635 C 8.932 7.797 7 9.828 7 12.312 C 7 14.9 9.1 17 11.687 17 C 14.172 17 16.203 15.068 16.365 12.625 L 11.375 12.625 L 11.375 12.157 Z" style={{ strokeWidth: 1 }} />
+<SVG viewBox="0 0 437 370.056" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <G transform="matrix(1, 0, 0, 1, 38.403999, 55.937004)">
+        <Rect x="281.401" y="148.511" width="88.71" height="141.45" />
+        <Rect x="-9.919" y="264.821" width="88.71" height="25.13" />
+        <Rect x="-9.919" y="-31.779" width="88.71" height="284.21" />
+        <Rect x="281.401" y="-31.779" width="88.71" height="167.87" />
+        <Rect x="186.281" y="194.551" width="82.79" height="95.4" />
+        <Rect x="91.081" y="235.411" width="82.94" height="54.55" />
+        <Polygon points="281.401 -31.779 180.101 65.111 180.101 176.701 281.401 79.711 281.401 -31.779" />
+        <Polygon points="78.801 79.711 180.101 176.701 180.101 65.111 78.801 -31.779 78.801 79.711" />
+    </G>
 </SVG>
 );
 

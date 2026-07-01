@@ -8,7 +8,7 @@ export default function ShortcodeAndImageRow() {
 	const { state } = useChartAdmin();
 	const { postId, postMeta, imageUrl, performance, imageSupport } = state;
 
-	const shortcode = `[chart id="${ postId }"]`;
+	const shortcode = `[m-chart id="${ postId }"]`;
 
 	const showImageField = 'default' === performance && 'yes' === imageSupport;
 	const imageDisabled  = ! showImageField;

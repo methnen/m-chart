@@ -106,6 +106,19 @@
 					</td>
 				</tr>
 				<tr>
+					<th scope="row">
+						<label for="<?php echo esc_attr( $this->get_field_id( 'default_height' ) ); ?>">
+							<?php esc_html_e( 'Default Chart Height', 'm-chart' ); ?>
+						</label>
+					</th>
+					<td>
+						<input type="number" id="<?php echo esc_attr( $this->get_field_id( 'default_height' ) ); ?>" name="<?php echo esc_attr( m_chart()->admin()->get_field_name( 'default_height' ) ); ?>" value="<?php echo absint( $settings['default_height'] ); ?>" />
+						<p class="description">
+							<?php esc_html_e( 'The default starting height for new charts', 'm-chart' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr>
 					<th scope="row"><?php esc_html_e( 'Embeds', 'm-chart' ); ?></th>
 					<td>
 						<label>

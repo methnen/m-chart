@@ -1,0 +1,21 @@
+// Front-end styles loaded whenever a chart renders inline (shortcode or block)
+// Ships the visually-hidden rule the plugin relies on so the screen-reader data table never depends on the active theme defining .screen-reader-text
+//
+// Scoped to the plugin's own containers and pins display:block so a theme or utility framework that sets .sr-only { display: none } 
+// Can't pull the aria-describedby target out of the accessibility tree
+//
+// The iframe embed inlines an equivalent rule in templates/iframe.php
+
+.m-chart-container .screen-reader-text,
+.m-chart-image-figure .screen-reader-text {
+	display: block;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

@@ -45,14 +45,11 @@ $rem-base: 16;
 	@return $rem-values;
 }
 
-// m-chart's design tokens — exposed as CSS custom properties so library
-// plugins and theme authors can override our look without recompiling SASS.
-// Only --m-chart-accent chains through to a WordPress custom property (the
-// admin theme color, which is the one var() WP reliably emits on :root);
-// the rest hold hex defaults because @wordpress/components inlines its
-// gray/foreground/alert palette at build time and doesn't expose them as
-// usable custom properties at runtime. If WP ever publishes more :root-level
-// tokens, swap the hex for var( --wp-…, #fallback ) one line at a time.
+// m-chart's design tokens, exposed as CSS custom properties so library plugins and theme authors can override our look without recompiling SASS
+// Only --m-chart-accent chains through to a WordPress custom property (the admin theme color, which is the one var() WP reliably emits on :root)
+// The rest hold hex defaults because @wordpress/components inlines it gray/foreground/alert palette at build time
+// These aren't exposed  as usable custom properties at runtime 
+// If WP ever publishes more :root-level tokens, swap the hex for var( --wp-…, #fallback ) one line at a time
 :root {
 	--m-chart-accent:           var( --wp-admin-theme-color, #3858e9 );
 	--m-chart-accent-bg-hover:  #f8f9fe;
@@ -70,9 +67,8 @@ $rem-base: 16;
 	--m-chart-alert-warning:    #f0b849;
 }
 
-// SASS aliases — kept for source-level readability and to keep every existing
-// callsite untouched. All values resolve to --m-chart-* custom properties so
-// runtime overrides flow through to compiled output.
+// SASS aliases, kept for source-level readability and to keep every existing callsite untouched
+// All values resolve to --m-chart-* custom properties so runtime overrides flow through to compiled output
 $wp-admin-black:                     var( --m-chart-text );
 $wp-admin-border-color:              var( --m-chart-border );
 $wp-admin-meta-border-color:         var( --m-chart-border-strong );

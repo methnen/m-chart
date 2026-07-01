@@ -73,8 +73,10 @@ Individual watch targets are also available:
 To create a new .pot file with any new string run:
 
 ```
-wp i18n make-pot . components/languages/m-chart.pot
+wp i18n make-pot . components/languages/m-chart.pot --exclude=components/admin-ui,components/block
 ```
+
+The `--exclude` skips the compiled bundle directories. Their `index.js` files still contain the same translatable strings as the `-src` sources, so without the exclude `make-pot` would also reference `components/admin-ui/index.js` and `components/block/index.js`. `wp i18n make-json` then emits a stray hash-named JSON for each of those bundle paths that the `build:i18n` merge step does not clean up (it only consumes `-src` sourced files), leaving leftover `m-chart-{locale}-{md5}.json` files behind.
 
 PHP translations use `.po` / `.mo` files managed in Poedit. JavaScript translations require additional steps because `wp-scripts` bundles multiple source files into a single compiled file, and WordPress needs handle-named JSON files to load them.
 

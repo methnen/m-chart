@@ -229,6 +229,8 @@ export default function CsvControls( { getActiveWorksheet } ) {
 									</Button>
 									<SelectControl
 										__next40pxDefaultSize
+										label={ __( 'CSV delimiter', 'm-chart' ) }
+										hideLabelFromVision
 										name="m-chart[csv_delimiter]"
 										value={ csvDelimiter }
 										onChange={ ( value ) => setCsvDelimiter( value ) }

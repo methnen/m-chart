@@ -1,0 +1,86 @@
+#fs_pricing_app {
+  --fs-ds-theme-primary-accent-color: var( --wp-admin-theme-color, #3858e9 );
+  --fs-ds-theme-primary-accent-color-hover: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% );
+  --fs-ds-theme-button-primary-background-color: var( --wp-admin-theme-color, #3858e9 );
+  --fs-ds-theme-button-primary-background-hover-color: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), black 10% );
+  --fs-ds-theme-button-primary-border-color: var( --wp-admin-theme-color, #3858e9 );
+  --fs-ds-theme-package-popular-background: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), white 86% );
+  --fs-ds-theme-heading-text-color: #1d2327;
+  --fs-ds-theme-background-shade: color-mix( in srgb, var( --wp-admin-theme-color, #3858e9 ), white 92% );
+  background-color: #fff;
+}
+#fs_pricing_app .fs-packages-tab,
+#fs_pricing_app .fs-package.fs-free-plan,
+#fs_pricing_app .fs-selected-pricing-amount-fraction,
+#fs_pricing_app .fs-section--currencies {
+  display: none !important;
+}
+#fs_pricing_app .fs-packages {
+  width: 80% !important;
+  min-width: 590px;
+  max-width: 860px;
+}
+#fs_pricing_app .fs-packages .fs-package {
+  width: 50% !important;
+}
+#fs_pricing_app .fs-section--packages .fs-packages-nav {
+  width: 100% !important;
+}
+#fs_pricing_app .fs-section--faq {
+  background: #f2f7fb !important;
+}
+#fs_pricing_app .fs-app-header .fs-plugin-title-and-logo {
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+#fs_pricing_app .fs-section--testimonials {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+#fs_pricing_app .fs-plan-features li:nth-child(n+7) .fs-feature-title {
+  font-weight: 700;
+  color: color-mix(in srgb, var(--wp-admin-theme-color, #3858e9), black 10%);
+}
+#fs_pricing_app .fs-plan-features li:nth-child(n+7) .fs-feature-title::after {
+  content: "Pro";
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--wp-admin-theme-color, #3858e9);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+#fs_pricing_app .fs-modal {
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+#fs_pricing_app .fs-modal .fs-modal-content-container {
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.0784313725), 0 15px 27px rgba(0, 0, 0, 0.0705882353), 0 30px 36px rgba(0, 0, 0, 0.0392156863), 0 50px 43px rgba(0, 0, 0, 0.0196078431) !important;
+  color: #1e1e1e;
+}
+#fs_pricing_app .fs-modal .fs-modal-header {
+  background: #fff !important;
+  color: #1e1e1e !important;
+}
+#fs_pricing_app .fs-modal .fs-modal-header h3 {
+  color: #1e1e1e !important;
+}
+#fs_pricing_app .fs-modal .fs-modal-header .fs-modal-close {
+  color: #1e1e1e !important;
+  top: 12px !important;
+  right: 12px !important;
+}
+#fs_pricing_app .fs-modal .fs-modal-footer {
+  background: #fff !important;
+  text-align: right;
+  border-top: 1px solid var(--fs-ds-theme-divider-color);
+}
+
+/*# sourceMappingURL=m-chart-freemius-pricing.css.map */
