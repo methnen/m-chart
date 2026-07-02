@@ -93,6 +93,8 @@ All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
 
 ```
 wp i18n make-json components/languages/m-chart-zh_CN.po --no-purge
+wp i18n make-json components/languages/m-chart-nl_NL.po --no-purge
+wp i18n make-json components/languages/m-chart-ja_JP.po --no-purge
 ```
 
 6. Merge the hash-based JSON files into handle-named files that WordPress can find:
