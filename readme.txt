@@ -64,7 +64,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Data tables now include row headers in more cases when appropriate
 * Various small code quality and efficiency improvements
 * Fixed an issue in tooltips where empty data points could show a 0 or leave orphaned labels behind
-* Fixed an inconsistency where new charts could get a different default height than the one in the settings
+* Fixed an issue where new charts could get a different default height than the one in the settings
 	* The Default Chart Height setting now also indicates its allowed range (300-1500)
 * Fixed an issue where titles, subtitles, and axis titles containing special characters (e.g. &) could render as HTML entities on the chart
 

@@ -62,22 +62,22 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ### 2.2.1 ###
 
-* Fixed an issue where titles, subtitles, and axis titles containing special characters (e.g. &) could render as HTML entities on the chart
 * Improved the accessibility of the source attribution
 	* The source is now a real link that keyboard and screen reader users can reach, and it becomes visible when focused
 * Improved the screen reader experience for charts
-	* Charts now announce a short summary (chart type, subtitle, source, and data table dimensions, or the chart's excerpt when one is set) instead of reading out every data value at once
+	* Charts now announce a short summary (chart type, subtitle, and source, or the chart's excerpt when one is set)
 	* The full data table is still available and can now be navigated as a proper table
-	* Data tables now include row headers in more cases
-* Fixed an inconsistency where new charts could get a different default height than the one shown in the settings
-	* The Default Chart Height setting now also indicates its allowed range (300-1500)
-* Restored the larger point hover targets on line, scatter, and radar charts when using the bundled themes
-* Tooltip polish: empty data points no longer show as 0 or leave orphaned labels behind
+	* Data tables now include row headers in more cases when appropriate
 * Various small code quality and efficiency improvements
+* Fixed an issue in tooltips where empty data points could show a 0 or leave orphaned labels behind
+* Fixed an issue where new charts could get a different default height than the one in the settings
+	* The Default Chart Height setting now also indicates its allowed range (300-1500)
+* Fixed an issue where titles, subtitles, and axis titles containing special characters (e.g. &) could render as HTML entities on the chart
 
 ### 2.2 ###
 
 * Added support for M Chart Pro
+	* [Why M Chart Pro?](https://mch.art/why-m-chart-pro/)
 * Added title/subtitle wrapping to the helper plugin
 	* This mostly prevents the squished text that you sometimes got with long titles or subtitles
 * Made some efficiency and code improvements to the Chart.js helper plugin
@@ -126,7 +126,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Show attribute can now be controlled from the block UI
 	* Better handling of charts when Chart is missing an image or M Chart performance settings have disabled images
 * Lots of additional code modernization and style improvements that didn't effect functionality but should make code easier to maintain going forward
-* Fixed an issue where a duplicate localization call could cause localization in the Block ui to not always load
+* Fixed an issue where a duplicate localization call could cause localization in the Block UI to not always load
 * Fixed an issue where changing a cell value and then clicking Update could result in lost data and/or an incorrect image
 
 ### 1.12 ###
