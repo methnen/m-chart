@@ -62,13 +62,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 	* Charts now announce a short summary (chart type, subtitle, and source, or the chart's excerpt when one is set)
 	* The full data table is still available and can now be navigated as a proper table
 	* Data tables now include row headers in more cases when appropriate
+* Added a Japanese (ja_JP) translation
 * Various small code quality and efficiency improvements
 * Fixed an issue in tooltips where empty data points could show a 0 or leave orphaned labels behind
 * Fixed an issue where new charts could get a different default height than the one in the settings
 	* The Default Chart Height setting now also indicates its allowed range (300-1500)
 * Fixed an issue where titles, subtitles, and axis titles containing special characters (e.g. &) could render as HTML entities on the chart
-* Added an initial Japanese (日本語) translation
-	* This was very much a first run at the translation so feel free to submit your corrections
 
 = 2.2 =
 
