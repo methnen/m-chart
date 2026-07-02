@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class M_Chart {
-	public $version           = '2.2';
+	public $version           = '2.2.1';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
@@ -53,7 +53,7 @@ class M_Chart {
 		'performance'      => 'default',
 		'image_multiplier' => '2',
 		'image_width'      => '900',
-		'default_height'   => '400',
+		'default_height'   => '600',
 		'embeds'           => '',
 		'defer_rendering'  => 'enabled',
 		'default_theme'    => '_default',
@@ -74,6 +74,7 @@ class M_Chart {
 	private $parse;
 	private $block;
 	private $fs;
+	private $resolved_settings;
 	private $libraries = [
 		'chartjs' => 'Chart.js',
 	];
@@ -618,7 +619,12 @@ class M_Chart {
 				}
 			} elseif ( ! isset( $chart_meta[ $field ] ) ) {
 				// Fall back on the default value if there wasn't one in the given meta
-				$chart_meta[ $field ] = $default;
+				// Height honors the default_height setting so the save path agrees with get_post_meta()
+				if ( 'height' === $field ) {
+					$chart_meta[ $field ] = (int) $this->get_settings( 'default_height' );
+				} else {
+					$chart_meta[ $field ] = $default;
+				}
 			}
 		}
 
@@ -1202,18 +1208,27 @@ class M_Chart {
 	 * @return array current settings
 	 */
 	public function get_settings( $setting = false ) {
-		// Allow third party libraries to modify the default settings
-		$default_settings = apply_filters( 'm_chart_default_settings', $this->settings );
+		// Memoize the resolved settings, get_post_meta() calls this on every invocation
+		// and the option + filter pipeline doesn't need to re-run within a request
+		// Invalidated via reset_settings() when the settings are saved
+		if ( isset( $this->resolved_settings ) ) {
+			$settings = $this->resolved_settings;
+		} else {
+			// Allow third party libraries to modify the default settings
+			$default_settings = apply_filters( 'm_chart_default_settings', $this->settings );
 
-		$settings = (array) get_option( $this->slug, $default_settings );
-		$settings = wp_parse_args( $settings, $default_settings );
+			$settings = (array) get_option( $this->slug, $default_settings );
+			$settings = wp_parse_args( $settings, $default_settings );
 
-		// Make sure the set library is still valid
-		if ( ! $this->is_valid_library( $settings['library'] ) ) {
-			$settings['library'] = 'chartjs';
+			// Make sure the set library is still valid
+			if ( ! $this->is_valid_library( $settings['library'] ) ) {
+				$settings['library'] = 'chartjs';
+			}
+
+			$settings = apply_filters( 'm_chart_get_settings', $settings );
+
+			$this->resolved_settings = $settings;
 		}
-
-		$settings = apply_filters( 'm_chart_get_settings', $settings );
 
 		if ( $setting && isset( $settings[ $setting ] ) ) {
 			return $settings[ $setting ];
@@ -1222,6 +1237,15 @@ class M_Chart {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Drop the memoized settings so the next get_settings() call re-resolves them
+	 *
+	 * Called after the settings option is updated
+	 */
+	public function reset_settings() {
+		$this->resolved_settings = null;
 	}
 
 	/**

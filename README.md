@@ -3,7 +3,7 @@
 **Tags:** chartjs, graphs, charts, tables, data  
 **Requires PHP:** 8.1  
 **Tested up to:** 7.0  
-**Stable tag:** 2.2  
+**Stable tag:** 2.2.1  
 **License:** MIT  
 
 Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
@@ -59,6 +59,21 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 2.2.1 ###
+
+* Fixed an issue where titles, subtitles, and axis titles containing special characters (e.g. &) could render as HTML entities on the chart
+* Improved the accessibility of the source attribution
+	* The source is now a real link that keyboard and screen reader users can reach, and it becomes visible when focused
+* Improved the screen reader experience for charts
+	* Charts now announce a short summary (chart type, subtitle, source, and data table dimensions, or the chart's excerpt when one is set) instead of reading out every data value at once
+	* The full data table is still available and can now be navigated as a proper table
+	* Data tables now include row headers in more cases
+* Fixed an inconsistency where new charts could get a different default height than the one shown in the settings
+	* The Default Chart Height setting now also indicates its allowed range (300-1500)
+* Restored the larger point hover targets on line, scatter, and radar charts when using the bundled themes
+* Tooltip polish: empty data points no longer show as 0 or leave orphaned labels behind
+* Various small code quality and efficiency improvements
 
 ### 2.2 ###
 

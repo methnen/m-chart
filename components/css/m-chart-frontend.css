@@ -12,4 +12,15 @@
   white-space: nowrap;
 }
 
+.m-chart-container .m-chart-source.screen-reader-text:focus-within,
+.m-chart-image-figure .m-chart-source.screen-reader-text:focus-within {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+}
+
 /*# sourceMappingURL=m-chart-frontend.css.map */

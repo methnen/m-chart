@@ -783,6 +783,13 @@ class M_Chart_Chartjs {
 			$chart_args['data']['datasets'] = array_values( $chart_args['data']['datasets'] );
 		}
 
+		// Same treatment for the labels
+		// A filter that unsets entries would otherwise leave non-sequential keys
+		// Only act when it's a flat list since the LABELS_BOTH map is intentionally associative
+		if ( isset( $chart_args['data']['labels'] ) && is_array( $chart_args['data']['labels'] ) && ! isset( $chart_args['data']['labels'][ M_Chart_Parse::LABELS_FIRST_ROW ] ) ) {
+			$chart_args['data']['labels'] = array_values( $chart_args['data']['labels'] );
+		}
+
 		// Set the cache, we'll regenerate this when someone updates the post
 		if ( $cache ) {
 			wp_cache_set( $cache_key, $chart_args, m_chart()->slug );
@@ -1317,7 +1324,12 @@ class M_Chart_Chartjs {
 
 		// Strip any markup that entity-decoding may have resurrected
 		// keep only the <br /> line break markers this method intentionally emits
-		$string = wp_kses( $string, [ 'br' => [] ] );
+		// wp_strip_all_tags rather than wp_kses since wp_kses re-encodes entities (& becomes &amp;)
+		// and Chart.js paints these strings with fillText which does no HTML decoding
+		// The markers hide behind a token during the strip since strip_tags would eat them (and any null byte placeholder)
+		$string = str_replace( '<br />', '{{m-chart-br}}', $string );
+		$string = wp_strip_all_tags( $string );
+		$string = str_replace( '{{m-chart-br}}', '<br />', $string );
 
 		// @TODO: See if this addslashes/stripslashes is still necessary (need to remember why I did it first...)
 		return addslashes( stripslashes( $string ) );
