@@ -73,6 +73,8 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 * Fixed an issue where new charts could get a different default height than the one in the settings
 	* The Default Chart Height setting now also indicates its allowed range (300-1500)
 * Fixed an issue where titles, subtitles, and axis titles containing special characters (e.g. &) could render as HTML entities on the chart
+* Added an initial Japanese (日本語) translation
+	* This was very much a first run at the translation so feel free to submit your corrections
 
 ### 2.2 ###
 
