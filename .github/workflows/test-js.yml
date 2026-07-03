@@ -2,7 +2,7 @@ name: JS Tests
 
 on:
   push:
-    branches: [ main, wordpress-7 ]
+    branches: [ main, wordpress-7, pro-support ]
   pull_request:
 
 # Required for the test reporter to post check results, PR comments, and source-line annotations

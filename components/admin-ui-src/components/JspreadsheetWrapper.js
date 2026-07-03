@@ -136,6 +136,14 @@ export default function JspreadsheetWrapper( {
 		worksheetRef.current = instance[ 0 ];
 		onMounted( sheetId, worksheetRef.current );
 
+		// jsuites marks its tab-panel wrapper role="region" but leaves it unfocusable,
+		// so keyboard users can't scroll the grid viewport (axe: scrollable-region-focusable)
+		const tabsContent = containerRef.current.querySelector( '.jtabs-content' );
+
+		if ( tabsContent ) {
+			tabsContent.setAttribute( 'tabindex', '0' );
+		}
+
 		return () => {
 			onUnmounted( sheetId );
 			worksheetRef.current = null;

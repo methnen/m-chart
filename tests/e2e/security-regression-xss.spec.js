@@ -11,10 +11,49 @@
  * assert is undefined. This is the layer that catches a regression even if
  * unit + integration mitigation gets bypassed somehow at render time.
  *
+ * Each test first asserts the chart/table actually rendered — without that, a
+ * broken embed would mean the payload never reaches the page and the __pwned
+ * check would pass vacuously.
+ *
  * Tagged @security so this runs on every CI push, not just nightly.
  */
 
 const { test, expect } = require( './fixtures' );
+
+/**
+ * Registers a document-level listener (before any page script runs) that
+ * flips a flag when the helper dispatches m_chart.render_done on the canvas.
+ * Waiting on this instead of a fixed sleep is deterministic: once the chart
+ * has rendered, any inline script smuggled through the pipeline would have
+ * executed too.
+ *
+ * @param {Object} page Playwright page
+ */
+async function trackChartRender( page ) {
+	await page.addInitScript( () => {
+		window.__mchartRenderDone = false;
+		document.addEventListener(
+			'm_chart.render_done',
+			() => { window.__mchartRenderDone = true; },
+			true
+		);
+	} );
+}
+
+/**
+ * Waits for the chart to be present and fully rendered.
+ *
+ * @param {Object} page Playwright page
+ */
+async function expectChartRendered( page ) {
+	const container = page.locator( '.m-chart-container' );
+
+	await expect( container ).toBeVisible();
+
+	// Deferred rendering waits for the container to enter the viewport
+	await container.scrollIntoViewIfNeeded();
+	await page.waitForFunction( () => true === window.__mchartRenderDone );
+}
 
 test.describe( '@security XSS regression — Wordfence M-Chart-194', () => {
 	test( 'Contributor XSS payload in axis label does not execute on chart page', async ( {
@@ -33,16 +72,16 @@ test.describe( '@security XSS regression — Wordfence M-Chart-194', () => {
 			},
 		} );
 
-		// Embed the chart on a published post and visit it as anonymous
-		const postId = await requestUtils.createPost( {
+		// Embed the chart on a published post and visit it
+		const post = await requestUtils.createPost( {
 			content: `[chart id="${ chart.id }"]`,
 			status:  'publish',
+			title:   'XSS axis label test',
 		} );
 
-		await page.goto( `/?p=${ postId }` );
-
-		// Wait long enough that any deferred script in the chart payload would have executed
-		await page.waitForTimeout( 1500 );
+		await trackChartRender( page );
+		await page.goto( `/?p=${ post.id }` );
+		await expectChartRendered( page );
 
 		const pwned = await page.evaluate( () => window.__pwned );
 		expect( pwned ).toBeUndefined();
@@ -63,13 +102,17 @@ test.describe( '@security XSS regression — Wordfence M-Chart-194', () => {
 			},
 		} );
 
-		const postId = await requestUtils.createPost( {
+		const post = await requestUtils.createPost( {
 			content: `[chart id="${ chart.id }" show="table"]`,
 			status:  'publish',
+			title:   'XSS table test',
 		} );
 
-		await page.goto( `/?p=${ postId }` );
-		await page.waitForTimeout( 1500 );
+		await page.goto( `/?p=${ post.id }` );
+
+		// The table markup is server-rendered — presence means the payload
+		// made the full round trip through the escaping pipeline
+		await expect( page.locator( 'table.m-chart-table' ) ).toBeVisible();
 
 		const pwned = await page.evaluate( () => window.__pwned );
 		expect( pwned ).toBeUndefined();
@@ -90,13 +133,15 @@ test.describe( '@security XSS regression — Wordfence M-Chart-194', () => {
 			},
 		} );
 
-		const postId = await requestUtils.createPost( {
+		const post = await requestUtils.createPost( {
 			content: `[chart id="${ chart.id }"]`,
 			status:  'publish',
+			title:   'XSS onerror test',
 		} );
 
-		await page.goto( `/?p=${ postId }` );
-		await page.waitForTimeout( 1500 );
+		await trackChartRender( page );
+		await page.goto( `/?p=${ post.id }` );
+		await expectChartRendered( page );
 
 		const pwned = await page.evaluate( () => window.__pwned );
 		expect( pwned ).toBeUndefined();

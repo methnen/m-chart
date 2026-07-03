@@ -4,8 +4,8 @@
  * Re-exports `test` and `expect` from `@wordpress/e2e-test-utils-playwright`
  * with additional fixtures for chart creation, navigation to the edit screen,
  * and Jspreadsheet cell-editor manipulation. Creation uses wp-env's tests-cli
- * container (bypasses REST). REST creation triggers the the_content filter
- * chain which currently mis-renders for m-chart posts — a separate plugin bug.
+ * container rather than REST — the m-chart REST response shape has quirks
+ * around excerpt generation, and wp-cli sidesteps needing REST meta support.
  *
  * Usage:
  *   import { test, expect } from './fixtures';
@@ -19,24 +19,102 @@
  *   } );
  */
 const { test: baseTest, expect } = require( '@wordpress/e2e-test-utils-playwright' );
-const { execSync } = require( 'child_process' );
+const { execFileSync } = require( 'child_process' );
 const crypto = require( 'crypto' );
+const fs = require( 'fs' );
+const os = require( 'os' );
+const path = require( 'path' );
 
+// Cross-process mutex for wp-env CLI calls — see wpCli() below
+const WP_ENV_LOCK_DIR = path.join( os.tmpdir(), 'm-chart-wp-env-cli.lock' );
+const LOCK_TIMEOUT_MS = 120000;
+const LOCK_STALE_MS   = 60000;
+
+/**
+ * Synchronous sleep that doesn't spin the CPU
+ *
+ * @param {number} ms milliseconds to sleep
+ */
+function sleepSync( ms ) {
+	Atomics.wait( new Int32Array( new SharedArrayBuffer( 4 ) ), 0, 0, ms );
+}
+
+/**
+ * Acquire the wp-env CLI lock (mkdir is atomic across processes).
+ * Locks older than LOCK_STALE_MS are treated as leftovers from a crashed
+ * worker and cleared.
+ */
+function acquireWpEnvLock() {
+	const deadline = Date.now() + LOCK_TIMEOUT_MS;
+
+	for ( ;; ) {
+		try {
+			fs.mkdirSync( WP_ENV_LOCK_DIR );
+			return;
+		} catch {
+			if ( Date.now() > deadline ) {
+				throw new Error( 'Timed out waiting for the wp-env CLI lock' );
+			}
+
+			try {
+				if ( Date.now() - fs.statSync( WP_ENV_LOCK_DIR ).mtimeMs > LOCK_STALE_MS ) {
+					fs.rmdirSync( WP_ENV_LOCK_DIR );
+					continue;
+				}
+			} catch {
+				// Lock vanished between checks — retry immediately
+				continue;
+			}
+
+			sleepSync( 100 + Math.floor( 150 * Math.random() ) );
+		}
+	}
+}
+
+function releaseWpEnvLock() {
+	try {
+		fs.rmdirSync( WP_ENV_LOCK_DIR );
+	} catch {
+		// already gone
+	}
+}
+
+/**
+ * Run a wp-cli command in the wp-env tests container.
+ *
+ * Takes an argv ARRAY rather than a shell string — execFileSync passes each
+ * element through as-is, so titles and JSON payloads never need shell quoting
+ * (and can't break out of it). Works the same on macOS, Linux, and Windows.
+ *
+ * Calls are serialized across Playwright workers via a tmpdir lock: every
+ * `wp-env run` rewrites wp-env's config cache, so concurrent invocations from
+ * parallel workers corrupt each other and fail with a spurious
+ * "Environment not initialized" error.
+ *
+ * @param {string[]} args wp-cli arguments, e.g. [ 'post', 'create', '--porcelain' ]
+ * @return {string} Trimmed wp-cli stdout with wp-env's banner lines stripped
+ */
 function wpCli( args ) {
-	const raw = execSync(
-		`npx wp-env run tests-cli wp ${ args }`,
-		{ encoding: 'utf-8', stdio: [ 'ignore', 'pipe', 'pipe' ] }
-	);
+	acquireWpEnvLock();
 
-	// wp-env prepends/appends banner lines like "ℹ Starting ..." and
-	// "✔ Ran ..." on its own. Strip them so callers get just the wp-cli output.
+	let raw;
+
+	try {
+		raw = execFileSync(
+			'npx',
+			[ 'wp-env', 'run', 'tests-cli', 'wp', ...args ],
+			{ encoding: 'utf-8', stdio: [ 'ignore', 'pipe', 'pipe' ] }
+		);
+	} finally {
+		releaseWpEnvLock();
+	}
+
+	// wp-env prepends/appends its own banner lines ("ℹ Starting ...",
+	// "✔ Ran ..."). Strip by their marker glyphs so wp-cli output that merely
+	// contains the word "Starting" survives.
 	return raw
 		.split( '\n' )
-		.filter( line =>
-			! line.includes( 'Starting' ) &&
-			! line.includes( '✔ Ran' ) &&
-			! line.includes( 'ℹ' )
-		)
+		.filter( line => ! /^[ℹ✔✖⚠]/.test( line.trim() ) )
 		.join( '\n' )
 		.trim();
 }
@@ -49,10 +127,13 @@ const test = baseTest.extend( {
 			const { title = 'Test chart', meta = {}, status = 'publish' } = overrides;
 
 			// Create the post via WP-CLI
-			const idStr = wpCli(
-				`post create --post_type=m-chart --post_status=${ status } ` +
-				`--post_title='${ title.replace( /'/g, "'\\''" ) }' --porcelain`
-			);
+			const idStr = wpCli( [
+				'post', 'create',
+				'--post_type=m-chart',
+				`--post_status=${ status }`,
+				`--post_title=${ title }`,
+				'--porcelain',
+			] );
 			const id = parseInt( idStr, 10 );
 
 			// Set m-chart meta with a sane default merged with overrides
@@ -68,10 +149,12 @@ const test = baseTest.extend( {
 			};
 
 			// WP-CLI accepts --format=json for serialized meta values
-			const metaJson = JSON.stringify( fullMeta ).replace( /'/g, "'\\''" );
-			wpCli(
-				`post meta update ${ id } m-chart '${ metaJson }' --format=json`
-			);
+			// The argv-array wpCli means the JSON needs no shell escaping
+			wpCli( [
+				'post', 'meta', 'update', String( id ), 'm-chart',
+				JSON.stringify( fullMeta ),
+				'--format=json',
+			] );
 
 			created.push( id );
 
@@ -83,7 +166,7 @@ const test = baseTest.extend( {
 		// Cleanup created charts
 		for ( const id of created ) {
 			try {
-				wpCli( `post delete ${ id } --force` );
+				wpCli( [ 'post', 'delete', String( id ), '--force' ] );
 			} catch {
 				// best effort cleanup
 			}
@@ -219,7 +302,7 @@ async function getChartImageTextarea( page ) {
  * @return {Promise<Object>} parsed meta object
  */
 async function getSavedPostMeta( postId ) {
-	const raw = wpCli( `post meta get ${ postId } m-chart --format=json` );
+	const raw = wpCli( [ 'post', 'meta', 'get', String( postId ), 'm-chart', '--format=json' ] );
 	if ( ! raw ) {
 		return {};
 	}
