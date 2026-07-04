@@ -2,7 +2,7 @@ name: E2E Tests
 
 on:
   push:
-    branches: [ main, wordpress-7 ]
+    branches: [ main, wordpress-7, pro-support ]
   pull_request:
   schedule:
     # Nightly run with the full browser matrix
@@ -52,17 +52,9 @@ jobs:
         run: npm run build
 
       - name: Start wp-env
+        # Plugin activation and pretty permalinks happen in the afterStart
+        # lifecycle script in .wp-env.json so local runs and CI stay identical
         run: npx wp-env start
-
-      - name: Activate plugin and configure permalinks on tests instance
-        # wp-env auto-mounts the plugin but doesn't always activate it on the
-        # tests-cli instance. Activate explicitly and configure pretty
-        # permalinks so REST routes resolve at /wp-json/ and the chart
-        # post-type permalink (/chart/{slug}) returns 200 instead of 404.
-        run: |
-          npx wp-env run tests-cli wp plugin activate m-chart
-          npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard
-          npx wp-env run tests-cli wp rewrite flush --hard
 
       - name: Run E2E tests
         run: npm run test:e2e -- --project=${{ matrix.browser }}

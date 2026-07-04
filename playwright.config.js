@@ -4,6 +4,10 @@ const { STORAGE_STATE_PATH } = require( './tests/e2e/global-setup' );
 module.exports = defineConfig( {
 	testDir: './tests/e2e',
 	fullyParallel: true,
+	// Default is 30s; chart fixtures shell out to wp-env's CLI and those calls
+	// are serialized across workers (see wpCli in fixtures.js), so tests queued
+	// behind other workers' fixture setup need the extra headroom
+	timeout: 60000,
 	forbidOnly: !! process.env.CI,
 	retries: process.env.CI ? 2 : 0,
 	workers: process.env.CI ? 2 : undefined,
