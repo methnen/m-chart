@@ -22,8 +22,9 @@
 			return;
 		}
 
-		var topic = decodeURIComponent( match[ 1 ] );
-		var dest  = 'refund' === topic ? SUPPORT_URL : CONTACT_URL;
+		// Compare the raw param rather than decoding it
+		// The expected values contain no encoded characters and decodeURIComponent throws on malformed sequences
+		var dest = 'refund' === match[ 1 ] ? SUPPORT_URL : CONTACT_URL;
 
 		if ( a.getAttribute( 'href' ) !== dest ) {
 			a.setAttribute( 'href', dest );
@@ -49,8 +50,15 @@
 
 		// The React app renders links after load and portals the refund modal onto the body
 		// So watch the whole body and rewrite links as they appear
+		// href attribute mutations are watched too since a React re-render can rewrite an existing anchor in place
+		// The href !== dest guard in rewrite() keeps our own setAttribute from looping the observer
 		var observer = new MutationObserver( function ( mutations ) {
 			for ( var i = 0; i < mutations.length; i++ ) {
+				if ( 'attributes' === mutations[ i ].type ) {
+					rewrite( mutations[ i ].target );
+					continue;
+				}
+
 				var added = mutations[ i ].addedNodes;
 
 				for ( var j = 0; j < added.length; j++ ) {
@@ -69,7 +77,12 @@
 			}
 		} );
 
-		observer.observe( document.body, { childList: true, subtree: true } );
+		observer.observe( document.body, {
+			childList:       true,
+			subtree:         true,
+			attributes:      true,
+			attributeFilter: [ 'href' ],
+		} );
 	}
 
 	if ( 'loading' === document.readyState ) {

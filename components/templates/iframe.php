@@ -156,6 +156,16 @@ $this->iframe_csp_nonce = $nonce;
 				word-wrap: normal !important;
 			}
 
+			/* Un-hide the source attribution while its link has keyboard focus, mirrors m-chart-frontend.scss */
+			.m-chart-source.screen-reader-text:focus-within {
+				position: static;
+				width: auto;
+				height: auto;
+				margin: 0;
+				overflow: visible;
+				clip-path: none;
+			}
+
 			/* Strip user-agent margin from <figure> so the chart fills the iframe edge-to-edge */
 			body, figure { margin: 0; }
 		</style>

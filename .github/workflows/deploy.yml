@@ -4,9 +4,42 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Fast pre-deploy gate: PHP unit (Brain Monkey) + Jest, no Docker needed.
+  # Cheap insurance against shipping a red tree — the fuller integration and
+  # E2E matrices run on push/PR and nightly.
+  test:
+    name: Pre-deploy tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+          coverage: none
+
+      - uses: ramsey/composer-install@v3
+
+      - name: Run PHP unit tests
+        run: vendor/bin/phpunit --testsuite unit
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run Jest
+        run: npm run test:js -- --ci
+
   deploy:
     name: Deploy to WordPress.org
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,9 +54,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
+      # npm ci for a reproducible build from package-lock.json
+      # (the postinstall hook runs the full asset build)
       - name: Install dependencies and build
-        run: npm install
+        run: npm ci
 
       - name: Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable

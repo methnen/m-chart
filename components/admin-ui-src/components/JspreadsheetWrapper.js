@@ -136,16 +136,32 @@ export default function JspreadsheetWrapper( {
 		worksheetRef.current = instance[ 0 ];
 		onMounted( sheetId, worksheetRef.current );
 
+		// jsuites marks its tab-panel wrapper role="region" but leaves it unfocusable,
+		// so keyboard users can't scroll the grid viewport (axe: scrollable-region-focusable)
+		const tabsContent = containerRef.current.querySelector( '.jtabs-content' );
+
+		if ( tabsContent ) {
+			tabsContent.setAttribute( 'tabindex', '0' );
+		}
+
 		return () => {
 			onUnmounted( sheetId );
 			worksheetRef.current = null;
 		};
 	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
+	// The CSV Import control only renders when editing is allowed 
+	// So the read-only hint must not point at it
+	// Hidden tracks the active tab like the panel itself
+	// aria-describedby still resolves on the active sheet
+	const hint = readOnly
+		? __( 'The spreadsheet grid has limited screen reader support. This spreadsheet is read only.', 'm-chart' )
+		: __( 'The spreadsheet grid has limited screen reader support. Use the CSV Import control to load data.', 'm-chart' );
+
 	return (
 		<>
-			<p id={ `spreadsheet-hint-${ sheetId }` } className="screen-reader-text">
-				{ __( 'The spreadsheet grid has limited screen reader support. Use the CSV Import control to load data.', 'm-chart' ) }
+			<p id={ `spreadsheet-hint-${ sheetId }` } className="screen-reader-text" hidden={ ! isActive }>
+				{ hint }
 			</p>
 			<div
 				ref={ containerRef }

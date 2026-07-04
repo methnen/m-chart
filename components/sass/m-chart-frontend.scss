@@ -19,3 +19,17 @@
 	clip-path: inset(50%);
 	white-space: nowrap;
 }
+
+// Skip-link pattern for the source attribution
+// The visually painted source line on the canvas isn't operable so the real link lives in a hidden paragraph
+// When a keyboard user tabs onto the link the paragraph un-hides below the chart so sighted keyboard users can see what has focus
+.m-chart-container .m-chart-source.screen-reader-text:focus-within,
+.m-chart-image-figure .m-chart-source.screen-reader-text:focus-within {
+	position: static;
+	width: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	clip-path: none;
+	white-space: normal;
+}

@@ -57,10 +57,22 @@
 		<?php
 	} else {
 		$first_row = m_chart()->parse()->value_labels;
+
+		// Chunk the flat cell stream into rows of one label-width each
+		// Multi-row bodies get a generated row header so every data cell has row context
+		$columns   = count( $first_row );
+		$rows      = $columns ? array_chunk( m_chart()->parse()->raw_data, $columns ) : [];
+		$multi_row = 1 < count( $rows );
 		?>
 		<thead>
 			<tr>
 				<?php
+				if ( $multi_row ) {
+					?>
+					<td></td>
+					<?php
+				}
+
 				foreach ( $first_row as $label ) {
 					?>
 					<th scope="col"><?php echo esc_html( $label ); ?></th>
@@ -70,28 +82,32 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<?php
-				$row_count  = 1;
-				$total_rows = count( m_chart()->parse()->raw_data ) / count( $first_row );
-
-				foreach ( m_chart()->parse()->raw_data as $key => $raw ) {
-					?>
-					<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
-					<?php
-
-					if ( ( $key + 1 ) / ( count( $first_row ) * $row_count ) == 1 ) {
-						$row_count++;
-
-						if ( $row_count <= $total_rows ) {
-							?>
-							</tr><tr>
-							<?php
-						}
-					}
-				}
+			<?php
+			foreach ( $rows as $row => $cells ) {
 				?>
-			</tr>
+				<tr>
+					<?php
+					if ( $multi_row ) {
+						?>
+						<th scope="row">
+							<?php
+							// translators: %d is the row number in the chart's data table
+							echo esc_html( sprintf( __( 'Row %d', 'm-chart' ), $row + 1 ) );
+							?>
+						</th>
+						<?php
+					}
+
+					foreach ( $cells as $raw ) {
+						?>
+						<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
+						<?php
+					}
+					?>
+				</tr>
+				<?php
+			}
+			?>
 		</tbody>
 	<?php
 	}

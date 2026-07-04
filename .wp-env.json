@@ -12,5 +12,8 @@
   },
   "mappings": {
     "wp-content/plugins/m-chart-highcharts-library": "../m-chart-highcharts-library"
+  },
+  "lifecycleScripts": {
+    "afterStart": "npx wp-env run tests-cli wp theme activate twentytwentyfive && npx wp-env run tests-cli wp plugin activate m-chart && npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard && npx wp-env run cli wp theme activate twentytwentyfive && npx wp-env run cli wp plugin activate m-chart && npx wp-env run cli wp rewrite structure '/%postname%/' --hard"
   }
 }

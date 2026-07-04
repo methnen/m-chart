@@ -93,6 +93,8 @@ All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
 
 ```
 wp i18n make-json components/languages/m-chart-zh_CN.po --no-purge
+wp i18n make-json components/languages/m-chart-nl_NL.po --no-purge
+wp i18n make-json components/languages/m-chart-ja_JP.po --no-purge
 ```
 
 6. Merge the hash-based JSON files into handle-named files that WordPress can find:
@@ -132,6 +134,10 @@ npm ci                  # JS dev dependencies (Jest, Playwright, wp-env)
 npx playwright install  # Playwright browser binaries (only needed once per machine)
 ```
 
+Integration and E2E tests run WordPress in Docker via wp-env, so Docker must be running first (`colima start` or Docker Desktop). The `test:e2e` / `test:a11y` scripts run a preflight check and fail with a friendly message if it isn't.
+
+`wp-env start` handles plugin activation and pretty permalinks automatically via the `lifecycleScripts.afterStart` entry in `.wp-env.json` — the same setup runs locally and in CI.
+
 ### PHP unit tests (Brain Monkey, no WP)
 
 Fast, no Docker, runs against the source directly:
@@ -166,15 +172,23 @@ Covers the `ChartAdminContext` reducer (every action type) and `useChartRefresh`
 
 ### E2E tests (Playwright)
 
-The `pretest:e2e` script runs `npm run build` and starts wp-env automatically:
-
 ```bash
-npm run test:e2e             # all chromium specs
+npm run test:e2e             # all chromium specs (fast loop — reuses a running wp-env, starts one if needed)
 npm run test:e2e:ui          # interactive Playwright UI
-npm run test:a11y            # axe-core accessibility gate
+npm run test:a11y            # axe-core accessibility suite only (tests/e2e/a11y)
+npm run test:e2e:full        # one-shot: build assets + start wp-env + run everything
 ```
 
-For the visual-regression suite (Tier 3), see `tests/e2e/visual/` and `npm run test:e2e:visual`.
+`test:e2e` does NOT rebuild assets — after changing plugin source, run `npm run build` first (or use `test:e2e:full`). wp-env is left running between test runs so iteration stays fast; stop it with `npm run wp-env stop` when you're done.
+
+### Accessibility tests (axe-core)
+
+`tests/e2e/a11y/` scans the plugin's own markup against the WCAG 2.1 A/AA axe rule set:
+
+- `frontend.spec.js` — the rendered chart region (canvas ARIA wiring, screen-reader summary/table/source link) and the `show="table"` output
+- `editor.spec.js` — the chart edit screen's React mounts (the Jspreadsheet grid internals are excluded; the CSV Import flow is the accessible data-entry path)
+
+These run as part of the regular chromium E2E pass in CI. Tag: `@a11y`.
 
 ### CVE regression suite
 
@@ -197,10 +211,13 @@ npm run lint:js:watch        # re-lint on file save
 
 ### CI
 
-Three GitHub Actions workflows under `.github/workflows/`:
-- `test-php.yml` — PHP unit + integration matrix (PHP 8.1/8.2/8.3 × WP 6.5/6.6/6.7/trunk)
+Four GitHub Actions workflows under `.github/workflows/`:
+- `test-php.yml` — PHP unit matrix (PHP 8.1–8.4) + integration matrix (PHP 8.2–8.4 × WP 6.8/7.0, plus WP trunk); the PHP 8.3 × WP 7.0 cell collects clover coverage inside the wp-env container and uploads it to Codecov
 - `test-js.yml` — Jest + ESLint
-- `test-e2e.yml` — Playwright (chromium on PR, full firefox/webkit nightly)
+- `test-e2e.yml` — Playwright including the a11y suite (chromium on push/PR, full firefox/webkit nightly)
+- `deploy.yml` — manual WordPress.org deploy, gated on a fast PHP-unit + Jest job
+
+Test workflows trigger on pushes to `main`, `wordpress-7`, and `pro-support`, and on all PRs.
 
 ---
 

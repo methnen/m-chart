@@ -116,6 +116,8 @@ export default function AxisRows() {
 				<TextControl
 					__next40pxDefaultSize
 					type="number"
+					label={ __( 'Vertical axis minimum value', 'm-chart' ) }
+					hideLabelFromVision
 					name="m-chart[y_min_value]"
 					ref={ yMinRef }
 					value={ postMeta.y_min_value }

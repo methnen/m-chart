@@ -22,36 +22,48 @@ return array(
 		'#d55e00', // Vermillion
 		'#cc79a7', // Reddish Purple
 	),
+	// hoverRadius/hitRadius match get_points_defaults(), theme points replace the defaults wholesale
+	// so leaving them out would drop to Chart.js's much smaller hover targets
 	'points' => array(
 		array(
 			'point' => array(
 				// Circle
-				'pointStyle' => 'circle',
+				'pointStyle'  => 'circle',
+				'hoverRadius' => 7,
+				'hitRadius'   => 13,
 			),
 		),
 		array(
 			'point' => array(
 				// Diamond
-				'pointStyle' => 'rectRot',
+				'pointStyle'  => 'rectRot',
+				'hoverRadius' => 7,
+				'hitRadius'   => 13,
 			),
 		),
 		array(
 			'point' => array(
 				// Square
-				'pointStyle' => 'rect',
+				'pointStyle'  => 'rect',
+				'hoverRadius' => 7,
+				'hitRadius'   => 13,
 			),
 		),
 		array(
 			'point' => array(
 				// Up Triangle
-				'pointStyle' => 'triangle',
+				'pointStyle'  => 'triangle',
+				'hoverRadius' => 7,
+				'hitRadius'   => 13,
 			),
 		),
 		array(
 			'point' => array(
 				// Down Triangle
-				'pointStyle' => 'triangle',
-				'rotation'   => 180,
+				'pointStyle'  => 'triangle',
+				'rotation'    => 180,
+				'hoverRadius' => 7,
+				'hitRadius'   => 13,
 			),
 		),
 	),

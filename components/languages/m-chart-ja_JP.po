@@ -2,1033 +2,1054 @@
 # This file is distributed under the MIT.
 msgid ""
 msgstr ""
-"Project-Id-Version: M Chart 2.2.1\n"
+"Project-Id-Version: M Chart 2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2026-07-02T22:23:18+00:00\n"
+"PO-Revision-Date: 2026-07-02 15:56-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-02T22:23:18+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 "X-Domain: m-chart\n"
 
 #. Plugin Name of the plugin
-#: components/class-m-chart.php:331
-#: components/block-src/chart/edit.js:271
+#: components/class-m-chart.php:331 components/block-src/chart/edit.js:271
 msgid "M Chart"
-msgstr ""
+msgstr "M Chart"
 
 #. Plugin URI of the plugin
 msgid "https://github.com/methnen/m-chart"
-msgstr ""
+msgstr "https://github.com/methnen/m-chart"
 
 #. Description of the plugin
-msgid "Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block."
+msgid ""
+"Manage data sets via a spreadsheet interface, display them as charts via the "
+"Chart.js chart library, and embed them via a shortcode or block."
 msgstr ""
+"スプレッドシート形式のインターフェースでデータセットを管理し、Chart.js チャー"
+"トライブラリを使ってグラフとして表示し、ショートコードやブロックを使って埋め"
+"込むことができます。"
 
 #. Author of the plugin
 msgid "Jamie Poitra"
-msgstr ""
+msgstr "Jamie Poitra"
 
 #. Author URI of the plugin
 msgid "https://methnen.com"
-msgstr ""
+msgstr "https://methnen.com"
 
 #: components/array-default-unit-terms.php:12
 msgid "Time"
-msgstr ""
+msgstr "時間"
 
 #: components/array-default-unit-terms.php:13
 msgid "Seconds"
-msgstr ""
+msgstr "秒"
 
 #: components/array-default-unit-terms.php:14
 msgid "Minutes"
-msgstr ""
+msgstr "分"
 
 #: components/array-default-unit-terms.php:15
 msgid "Hours"
-msgstr ""
+msgstr "時間"
 
 #: components/array-default-unit-terms.php:16
 msgid "Days"
-msgstr ""
+msgstr "日"
 
 #: components/array-default-unit-terms.php:17
 msgid "Weeks"
-msgstr ""
+msgstr "週"
 
 #: components/array-default-unit-terms.php:18
 msgid "Months"
-msgstr ""
+msgstr "月"
 
 #: components/array-default-unit-terms.php:19
 msgid "Quarter"
-msgstr ""
+msgstr "四半期"
 
 #: components/array-default-unit-terms.php:20
 msgid "Years"
-msgstr ""
+msgstr "年"
 
 #: components/array-default-unit-terms.php:21
 msgid "Decades"
-msgstr ""
+msgstr "数十年"
 
 #: components/array-default-unit-terms.php:22
 msgid "Centuries"
-msgstr ""
+msgstr "世紀"
 
 #: components/array-default-unit-terms.php:24
 msgid "Money"
-msgstr ""
+msgstr "金額"
 
 #: components/array-default-unit-terms.php:25
 msgid "USD"
-msgstr ""
+msgstr "USD"
 
 #: components/array-default-unit-terms.php:26
 msgid "EUR"
-msgstr ""
+msgstr "ユーロ"
 
 #: components/array-default-unit-terms.php:27
 msgid "GBP"
-msgstr ""
+msgstr "英ポンド"
 
 #: components/array-default-unit-terms.php:28
 msgid "JPY"
-msgstr ""
+msgstr "日本円"
 
 #: components/array-default-unit-terms.php:29
 msgid "CNY"
-msgstr ""
+msgstr "人民元"
 
 #: components/array-default-unit-terms.php:31
 msgid "Length"
-msgstr ""
+msgstr "長さ"
 
 #: components/array-default-unit-terms.php:32
 msgid "Inch"
-msgstr ""
+msgstr "インチ"
 
 #: components/array-default-unit-terms.php:33
 msgid "Foot"
-msgstr ""
+msgstr "フィート"
 
 #: components/array-default-unit-terms.php:34
 msgid "Yard"
-msgstr ""
+msgstr "ヤード"
 
 #: components/array-default-unit-terms.php:35
 msgid "Mile"
-msgstr ""
+msgstr "マイル"
 
 #: components/array-default-unit-terms.php:36
 msgid "Millimeter"
-msgstr ""
+msgstr "ミリメートル"
 
 #: components/array-default-unit-terms.php:37
 msgid "Centimeter"
-msgstr ""
+msgstr "センチメートル"
 
 #: components/array-default-unit-terms.php:38
 msgid "Meter"
-msgstr ""
+msgstr "メートル"
 
 #: components/array-default-unit-terms.php:39
 msgid "Kilometer"
-msgstr ""
+msgstr "キロメートル"
 
 #: components/array-default-unit-terms.php:41
 msgid "Weight"
-msgstr ""
+msgstr "重量"
 
 #: components/array-default-unit-terms.php:42
 msgid "Tonnes"
-msgstr ""
+msgstr "トン"
 
 #: components/array-default-unit-terms.php:43
 msgid "Tons"
-msgstr ""
+msgstr "トン"
 
 #: components/array-default-unit-terms.php:44
 msgid "Kilograms"
-msgstr ""
+msgstr "キログラム"
 
 #: components/array-default-unit-terms.php:45
 msgid "Grams"
-msgstr ""
+msgstr "グラム"
 
 #: components/array-default-unit-terms.php:46
 msgid "Milligrams"
-msgstr ""
+msgstr "ミリグラム"
 
 #: components/array-default-unit-terms.php:47
 msgid "Pounds"
-msgstr ""
+msgstr "ポンド"
 
 #: components/array-default-unit-terms.php:48
 msgid "Ounces"
-msgstr ""
+msgstr "オンス"
 
 #: components/array-default-unit-terms.php:50
 msgid "Other"
-msgstr ""
+msgstr "その他"
 
 #: components/array-default-unit-terms.php:51
 msgid "Percent"
-msgstr ""
+msgstr "パーセント"
 
 #: components/array-default-unit-terms.php:53
 msgid "Website/Traffic"
-msgstr ""
+msgstr "ウェブサイト／トラフィック"
 
 #: components/array-default-unit-terms.php:54
 msgid "Visitors"
-msgstr ""
+msgstr "訪問者"
 
 #: components/array-default-unit-terms.php:55
 msgid "Unique Visitors"
-msgstr ""
+msgstr "初回訪問者"
 
 #: components/array-default-unit-terms.php:56
 msgid "Clicks"
-msgstr ""
+msgstr "クリック数"
 
 #: components/array-default-unit-terms.php:57
 msgid "Referrers"
-msgstr ""
+msgstr "リファラー"
 
 #: components/array-default-unit-terms.php:58
 msgid "Active Users"
-msgstr ""
+msgstr "アクティブユーザー"
 
 #: components/array-default-unit-terms.php:59
 msgid "Pages"
-msgstr ""
+msgstr "ページ"
 
 #: components/array-default-unit-terms.php:61
 msgid "Sales"
-msgstr ""
+msgstr "セールス"
 
 #: components/array-default-unit-terms.php:62
 #: components/admin-ui-src/components/AxisRows.js:99
 #: components/admin-ui-src/components/AxisRows.js:152
 msgid "Units"
-msgstr ""
+msgstr "単位"
 
 #: components/array-default-unit-terms.php:63
 msgid "CPM"
-msgstr ""
+msgstr "CPM"
 
 #: components/class-m-chart-admin.php:70
 #: components/templates/m-chart-settings.php:3
 msgid "M Chart Settings"
-msgstr ""
+msgstr "M Chart 設定"
 
 #: components/class-m-chart-admin.php:71
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: components/class-m-chart-admin.php:140
 msgid "Upgrade"
-msgstr ""
+msgstr "アップグレード"
 
 #: components/class-m-chart-admin.php:169
 msgid "Docs"
-msgstr ""
+msgstr "ドキュメント"
 
 #: components/class-m-chart-admin.php:458
 msgid "Settings saved"
-msgstr ""
+msgstr "設定が保存されました"
 
 #: components/class-m-chart-admin.php:494
 #: components/class-m-chart-admin.php:495
 #: components/templates/chart-meta-box.php:12
 #: components/templates/chart-meta-box.php:13
 msgid "M Chart Highcharts Library"
-msgstr ""
+msgstr "Mチャート・ハイチャートライブラリ"
 
 #: components/class-m-chart-admin.php:496
 msgid "You have charts that require the M Chart Highcharts Library plugin."
-msgstr ""
+msgstr "M Chart Highcharts Library プラグインを必要とするチャートがあります。"
 
 #: components/class-m-chart-admin.php:500
 msgid "These charts will no longer display unless you install the plugin:"
 msgstr ""
+"プラグインをインストールしない限り、これらのチャートは表示されなくなります:"
 
 #: components/class-m-chart-admin.php:502
 #: components/templates/chart-meta-box.php:19
 msgid "Learn More"
-msgstr ""
+msgstr "詳細はこちら"
 
 #: components/class-m-chart-admin.php:705
 msgid "Data"
-msgstr ""
+msgstr "データ"
 
-#: components/class-m-chart-admin.php:714
-#: components/class-m-chart.php:334
+#: components/class-m-chart-admin.php:714 components/class-m-chart.php:334
 #: components/block-src/chart/edit.js:225
 msgid "Chart"
-msgstr ""
+msgstr "グラフ"
 
 #: components/class-m-chart-admin.php:800
 msgid "Library not found"
-msgstr ""
+msgstr "ライブラリが見つかりません"
 
 #: components/class-m-chart-admin.php:1026
 #: components/class-m-chart-admin.php:1038
 msgid "Wrong post type"
-msgstr ""
+msgstr "間違った投稿タイプ"
 
 #: components/class-m-chart-admin.php:1033
 #: components/class-m-chart-admin.php:1213
 msgid "Invalid nonce"
-msgstr ""
+msgstr "無効な nonce"
 
 #: components/class-m-chart-admin.php:1043
 msgid "No file to import"
-msgstr ""
+msgstr "インポートするファイルがありません"
 
 #: components/class-m-chart-admin.php:1048
 msgid "File upload error"
-msgstr ""
+msgstr "ファイルアップロードエラー"
 
 #: components/class-m-chart-admin.php:1052
 msgid "Invalid upload"
-msgstr ""
+msgstr "アップロードに失敗しました"
 
 #: components/class-m-chart-admin.php:1063
 msgid "Only CSV files can be imported"
-msgstr ""
+msgstr "インポートできるのはCSVファイルのみです"
 
 #: components/class-m-chart-admin.php:1070
 msgid "File path not found"
-msgstr ""
+msgstr "ファイルパスが見つかりません"
 
 #: components/class-m-chart-admin.php:1075
 msgid "CSV file too large (max 2MB)"
-msgstr ""
+msgstr "CSVファイルが大きすぎます（最大2MB）"
 
 #: components/class-m-chart-admin.php:1081
 msgid "CSV file was empty"
-msgstr ""
+msgstr "CSVファイルが空でした"
 
 #: components/class-m-chart-admin.php:1152
 msgid "Unauthorized access"
-msgstr ""
+msgstr "不正アクセス"
 
 #: components/class-m-chart-admin.php:1152
 msgid "You do not have permission to do that"
-msgstr ""
+msgstr "操作を実行する権限がありません"
 
 #: components/class-m-chart-admin.php:1221
 msgid "Invalid post"
-msgstr ""
+msgstr "無効な投稿"
 
 #: components/class-m-chart-admin.php:1225
 #: components/class-m-chart-admin.php:1230
 msgid "Permission error"
-msgstr ""
+msgstr "許可エラー"
 
 #: components/class-m-chart-admin.php:1245
 #: components/class-m-chart-admin.php:1258
 msgid "Invalid library"
-msgstr ""
+msgstr "無効なライブラリ"
 
-#: components/class-m-chart-block.php:185
-#: components/class-m-chart.php:1131
+#: components/class-m-chart-block.php:185 components/class-m-chart.php:1131
 msgid "Chart not found"
-msgstr ""
+msgstr "チャートが見つかりませんでした"
 
 #: components/class-m-chart-chartjs.php:84
 msgid "Line"
-msgstr ""
+msgstr "ライン"
 
 #: components/class-m-chart-chartjs.php:85
 msgid "Spline"
-msgstr ""
+msgstr "曲線"
 
 #: components/class-m-chart-chartjs.php:86
 msgid "Area"
-msgstr ""
+msgstr "エリア"
 
 #: components/class-m-chart-chartjs.php:87
 msgid "Column"
-msgstr ""
+msgstr "列"
 
 #: components/class-m-chart-chartjs.php:88
 msgid "Stacked Column"
-msgstr ""
+msgstr "積み重ねられた列"
 
 #: components/class-m-chart-chartjs.php:89
 msgid "Bar"
-msgstr ""
+msgstr "バー"
 
 #: components/class-m-chart-chartjs.php:90
 msgid "Stacked Bar"
-msgstr ""
+msgstr "積み重ね棒グラフ"
 
 #: components/class-m-chart-chartjs.php:91
 msgid "Pie"
-msgstr ""
+msgstr "円グラフ"
 
 #: components/class-m-chart-chartjs.php:92
 msgid "Doughnut"
-msgstr ""
+msgstr "ドーナツグラフ"
 
 #: components/class-m-chart-chartjs.php:93
 msgid "Scatter"
-msgstr ""
+msgstr "スキャッター(放射)"
 
 #: components/class-m-chart-chartjs.php:94
 msgid "Bubble"
-msgstr ""
+msgstr "バブル"
 
 #: components/class-m-chart-chartjs.php:95
 msgid "Radar"
-msgstr ""
+msgstr "レーダー"
 
 #: components/class-m-chart-chartjs.php:96
 msgid "Radar Area"
-msgstr ""
+msgstr "レーダーエリア"
 
 #: components/class-m-chart-chartjs.php:97
 msgid "Polar"
-msgstr ""
+msgstr "極地"
 
 #: components/class-m-chart-chartjs.php:98
 msgid "Treemap"
-msgstr ""
+msgstr "ツリーマップ"
 
 #: components/class-m-chart-chartjs.php:99
 msgid "Boxplot"
-msgstr ""
+msgstr "箱ひげ図"
 
 #: components/class-m-chart-chartjs.php:100
 msgid "Violin"
-msgstr ""
+msgstr "ヴァイオリン"
 
-#: components/class-m-chart.php:221
-#: components/class-m-chart.php:222
+#: components/class-m-chart.php:221 components/class-m-chart.php:222
 #: components/class-m-chart.php:223
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: components/class-m-chart.php:224
 msgid "Error"
-msgstr ""
+msgstr "エラー"
 
 #: components/class-m-chart.php:225
 msgid "Heads up"
-msgstr ""
+msgstr "注意"
 
 #: components/class-m-chart.php:226
 msgid "Hello"
-msgstr ""
+msgstr "こんにちは"
 
-#: components/class-m-chart.php:290
-#: components/class-m-chart.php:300
+#: components/class-m-chart.php:290 components/class-m-chart.php:300
 msgid "Chart Units"
-msgstr ""
+msgstr "チャート単位"
 
 #: components/class-m-chart.php:291
 msgid "Chart Unit"
-msgstr ""
+msgstr "チャート単位"
 
 #: components/class-m-chart.php:292
 msgid "Search Chart Units"
-msgstr ""
+msgstr "チャート単位の検索"
 
 #: components/class-m-chart.php:293
 msgid "All Chart Units"
-msgstr ""
+msgstr "すべてのチャート単位"
 
 #: components/class-m-chart.php:294
 msgid "Parent Chart Unit"
-msgstr ""
+msgstr "親チャート単位"
 
 #: components/class-m-chart.php:295
 msgid "Parent Chart Unit:"
-msgstr ""
+msgstr "親チャート単位:"
 
 #: components/class-m-chart.php:296
 msgid "Edit Chart Unit"
-msgstr ""
+msgstr "チャート単位の編集"
 
 #: components/class-m-chart.php:297
 msgid "Update Chart Unit"
-msgstr ""
+msgstr "チャート単位の更新"
 
 #: components/class-m-chart.php:298
 msgid "Add New Chart Unit"
-msgstr ""
+msgstr "新しいチャート単位を追加する"
 
 #: components/class-m-chart.php:299
 msgid "Chart Unit Name"
-msgstr ""
+msgstr "チャート単位名"
 
-#: components/class-m-chart.php:329
-#: components/class-m-chart.php:333
+#: components/class-m-chart.php:329 components/class-m-chart.php:333
 msgid "Charts"
-msgstr ""
+msgstr "チャート"
 
-#: components/class-m-chart.php:335
-#: components/class-m-chart.php:336
+#: components/class-m-chart.php:335 components/class-m-chart.php:336
 msgid "Add Chart"
-msgstr ""
+msgstr "チャートを追加"
 
 #: components/class-m-chart.php:337
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: components/class-m-chart.php:338
 msgid "Edit Chart"
-msgstr ""
+msgstr "チャートを編集"
 
 #: components/class-m-chart.php:339
 msgid "New Chart"
-msgstr ""
+msgstr "新しいチャート"
 
 #: components/class-m-chart.php:340
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:70
 msgid "View"
-msgstr ""
+msgstr "表示"
 
 #: components/class-m-chart.php:341
 msgid "View Chart"
-msgstr ""
+msgstr "チャートを見る"
 
 #: components/class-m-chart.php:342
 msgid "Search Charts"
-msgstr ""
+msgstr "チャートを検索"
 
 #: components/class-m-chart.php:343
 msgid "No Charts found"
-msgstr ""
+msgstr "チャートが見つかりません"
 
 #: components/class-m-chart.php:344
 msgid "No Charts found in the Trash"
-msgstr ""
+msgstr "ゴミ箱にチャートが見つかりません"
 
 #: components/class-m-chart.php:356
 msgid "Manage data sets and display them as charts in WordPress."
-msgstr ""
+msgstr "データセットを管理し、それらをWordPressでチャートとして表示します。"
 
 #: components/class-m-chart.php:1130
 msgid "The chart could not be found"
-msgstr ""
+msgstr "チャートが見つかりませんでした"
 
 #: components/class-m-chart.php:1140
 msgid "Embeds of this type are not enabled"
-msgstr ""
+msgstr "このタイプの埋め込みは有効になっていません"
 
 #: components/class-m-chart.php:1141
 msgid "Embeds disabled"
-msgstr ""
+msgstr "埋め込みを無効"
 
 #: components/templates/chart-meta-box.php:14
 msgid "This chart requires the M Chart Highcharts Library plugin."
-msgstr ""
+msgstr "このチャートにはM Chart Highcharts Library プラグインが必要です。"
 
 #: components/templates/chart-meta-box.php:18
 msgid "This chart will no longer display unless you install the plugin:"
 msgstr ""
+"このチャートは、プラグインをインストールしない限り表示されなくなります:"
 
 #. translators: %s is the chart type (line, bar, pie, etc)
 #: components/templates/chartjs-chart.php:52
 msgid "%s chart."
-msgstr ""
+msgstr "%s 図。"
 
 #. translators: %s is the chart's data source name
 #: components/templates/chartjs-chart.php:60
 msgid "Source: %s."
-msgstr ""
+msgstr "ソース：%s。"
 
 #. translators: %d is the number of data tables
 #: components/templates/chartjs-chart.php:70
 msgid "%d data tables follow."
-msgstr ""
+msgstr "%d データ表は以下の通りです。"
 
 #. translators: 1: number of rows 2: number of columns
 #: components/templates/chartjs-chart.php:92
 msgid "Data table with %1$d rows and %2$d columns follows."
-msgstr ""
+msgstr "以下に、行数 %1$d、列数 %2$d のデータ表を示します。"
 
 #: components/templates/chartjs-chart.php:133
 msgid "Source:"
-msgstr ""
+msgstr "ソース:"
 
 #: components/templates/m-chart-settings-chartjs.php:2
 msgid "Chart.js Settings"
-msgstr ""
+msgstr "Chart.js の設定"
 
 #: components/templates/m-chart-settings-chartjs.php:8
 msgid "Default Chart.js Theme"
-msgstr ""
+msgstr "Chart.js のデフォルトテーマ"
 
 #: components/templates/m-chart-settings-chartjs.php:24
 msgid "See the M Chart documentation for more info on how to use themes:"
-msgstr ""
+msgstr "テーマの使い方の詳細についてはM Chartのドキュメントを参照してください:"
 
 #: components/templates/m-chart-settings-chartjs.php:32
 msgid "Number Format Locale"
-msgstr ""
+msgstr "数値の書式設定ロケール"
 
 #: components/templates/m-chart-settings-chartjs.php:48
-msgid "The locale you want Intl.NumberFormat to use when parsing the numbers in the chart"
-msgstr ""
+msgid ""
+"The locale you want Intl.NumberFormat to use when parsing the numbers in the "
+"chart"
+msgstr "チャート内の数値を解析する際に、Intl.NumberFormat で使用するロケール"
 
 #: components/templates/m-chart-settings.php:6
 msgid "General Settings"
-msgstr ""
+msgstr "一般設定"
 
 #: components/templates/m-chart-settings.php:12
 msgid "Default Library"
-msgstr ""
+msgstr "デフォルトのライブラリ"
 
 #: components/templates/m-chart-settings.php:28
 msgid "Chart.js is the GPL compatible default library:"
-msgstr ""
+msgstr "Chart.js は、GPL 互換のデフォルトライブラリです："
 
 #: components/templates/m-chart-settings.php:38
 msgid "Show Library in Edit Posts Screen"
-msgstr ""
+msgstr "「投稿の編集」画面にライブラリを表示する"
 
 #: components/templates/m-chart-settings.php:39
-msgid "Displays an icon indicating the library used for a chart in Edit Posts Screen of the WP Admin"
+msgid ""
+"Displays an icon indicating the library used for a chart in Edit Posts "
+"Screen of the WP Admin"
 msgstr ""
+"WP管理画面の「投稿編集」画面で、チャートに使用されているライブラリを示すアイ"
+"コンを表示します"
 
 #: components/templates/m-chart-settings.php:44
 #: components/templates/m-chart-settings.php:48
 msgid "Performance"
-msgstr ""
+msgstr "パフォーマンス"
 
 #: components/templates/m-chart-settings.php:52
 msgid "Default"
-msgstr ""
+msgstr "デフォルト"
 
 #: components/templates/m-chart-settings.php:53
 msgid "Provides all functionality"
-msgstr ""
+msgstr "すべての機能を提供"
 
 #: components/templates/m-chart-settings.php:57
 msgid "No Images"
-msgstr ""
+msgstr "画像がありません"
 
 #: components/templates/m-chart-settings.php:58
 msgid "No generation of chart images"
-msgstr ""
+msgstr "チャート画像を生成しない"
 
 #: components/templates/m-chart-settings.php:62
 msgid "No Instant Preview"
-msgstr ""
+msgstr "プレビューなし"
 
 #: components/templates/m-chart-settings.php:63
 msgid "No instant preview and no generation of chart images"
-msgstr ""
+msgstr "プレビューやチャート画像を生成しない"
 
 #: components/templates/m-chart-settings.php:69
 #: components/templates/m-chart-settings.php:73
 msgid "Image Multiplier"
-msgstr ""
+msgstr "画像倍増機能"
 
 #: components/templates/m-chart-settings.php:77
 msgid "1x"
-msgstr ""
+msgstr "1x"
 
 #: components/templates/m-chart-settings.php:81
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: components/templates/m-chart-settings.php:85
 msgid "3x"
-msgstr ""
+msgstr "3x"
 
 #: components/templates/m-chart-settings.php:89
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: components/templates/m-chart-settings.php:91
-msgid "The higher the multiplier the better the images will look on high DPI screens"
-msgstr ""
+msgid ""
+"The higher the multiplier the better the images will look on high DPI screens"
+msgstr "乗数が大きいほど、高DPIの画面での画像の表示品質が向上します"
 
 #: components/templates/m-chart-settings.php:98
 msgid "Image Width"
-msgstr ""
+msgstr "画像の幅"
 
 #: components/templates/m-chart-settings.php:104
 msgid "The width of the image generated from your chart"
-msgstr ""
+msgstr "チャートから生成された画像の幅"
 
 #: components/templates/m-chart-settings.php:111
 msgid "Default Chart Height"
-msgstr ""
+msgstr "チャートのデフォルトの高さ"
 
 #: components/templates/m-chart-settings.php:117
 msgid "The default starting height for new charts (300–1500)"
-msgstr ""
+msgstr "新しいグラフの初期の高さ（300～1500）"
 
 #: components/templates/m-chart-settings.php:122
 msgid "Embeds"
-msgstr ""
+msgstr "埋め込み"
 
 #: components/templates/m-chart-settings.php:126
 msgid "Enable iframe embeds"
-msgstr ""
+msgstr "iframe埋め込みを有効にする"
 
 #: components/templates/m-chart-settings.php:127
 msgid "Allow charts to be remotely embedded via iframes"
-msgstr ""
+msgstr "チャートをiframe経由でリモートで埋め込むことを許可する"
 
 #: components/templates/m-chart-settings.php:132
 msgid "Defer Rendering"
-msgstr ""
+msgstr "レンダリングを遅延させる"
 
 #: components/templates/m-chart-settings.php:137
 msgid "Defer chart rendering until scrolled into view"
-msgstr ""
+msgstr "画面に表示されるまでチャートの描画を遅延させる"
 
 #: components/templates/m-chart-settings.php:138
-msgid "Charts below the fold will not initialize (or animate) until they enter the viewport"
+msgid ""
+"Charts below the fold will not initialize (or animate) until they enter the "
+"viewport"
 msgstr ""
+"スクロールして表示される範囲より下のチャートは、ビューポート内に表示されるま"
+"で初期化（またはアニメーション）されません"
 
 #: components/templates/m-chart-settings.php:145
 msgid "Default CSV Delimiter"
-msgstr ""
+msgstr "CSVのデフォルトの区切り文字"
 
 #: components/templates/m-chart-settings.php:160
 msgid "Default used when importing/exporting CSV files"
-msgstr ""
+msgstr "CSVファイルのインポート／エクスポート時に使用されるデフォルト設定"
 
 #: components/templates/m-chart-settings.php:167
 msgid "Save Changes"
-msgstr ""
+msgstr "変更を保存"
 
 #: components/templates/share.php:20
 msgid "Share:"
-msgstr ""
+msgstr "シェア:"
 
 #. translators: %d is the row number in the chart's data table
 #: components/templates/table.php:95
 msgid "Row %d"
-msgstr ""
+msgstr "行 %d"
 
 #: components/admin-ui-src/components/AxisRows.js:69
 msgid "N/A"
-msgstr ""
+msgstr "該当なし"
 
 #: components/admin-ui-src/components/AxisRows.js:88
 msgid "Vertical axis title"
-msgstr ""
+msgstr "縦軸のタイトル"
 
 #: components/admin-ui-src/components/AxisRows.js:112
 msgid "Force vertical axis minimum:"
-msgstr ""
+msgstr "縦軸の最小値を強制する："
 
 #: components/admin-ui-src/components/AxisRows.js:131
 msgid "Constrain vertical axis"
-msgstr ""
+msgstr "縦軸を制限する"
 
 #: components/admin-ui-src/components/AxisRows.js:141
 msgid "Horizontal axis title"
-msgstr ""
+msgstr "横軸のタイトル"
 
 #: components/admin-ui-src/components/CsvControls.js:54
 #: components/admin-ui-src/components/CsvControls.js:263
 msgid "You can only import CSV files"
-msgstr ""
+msgstr "入力できるのはCSVファイルだけです"
 
 #: components/admin-ui-src/components/CsvControls.js:87
 msgid "Importing CSV file"
-msgstr ""
+msgstr "CSVファイルのインポート"
 
 #: components/admin-ui-src/components/CsvControls.js:112
 msgid "Import failed"
-msgstr ""
+msgstr "インポート失敗"
 
 #: components/admin-ui-src/components/CsvControls.js:134
 msgid "CSV file imported"
-msgstr ""
+msgstr "CSVファイルのインポートが完了しました"
 
 #. translators: %s: the underlying error message
 #: components/admin-ui-src/components/CsvControls.js:137
 msgid "Import error: %s"
-msgstr ""
+msgstr "インポートエラー：%s"
 
 #: components/admin-ui-src/components/CsvControls.js:197
 msgid "CSV Import/Export"
-msgstr ""
+msgstr "CSVファイルのインポート／エクスポート"
 
 #: components/admin-ui-src/components/CsvControls.js:205
 msgid "CSV file to import"
-msgstr ""
+msgstr "インポートするCSVファイル"
 
 #: components/admin-ui-src/components/CsvControls.js:218
 msgid "Select File"
-msgstr ""
+msgstr "ファイル選択"
 
 #: components/admin-ui-src/components/CsvControls.js:228
 msgid "Import"
-msgstr ""
+msgstr "インポート"
 
 #: components/admin-ui-src/components/CsvControls.js:232
 msgid "CSV delimiter"
-msgstr ""
+msgstr "CSV区切り文字"
 
 #. translators: %s: the delimiter character name (e.g. Comma, Tab, Semicolon)
 #: components/admin-ui-src/components/CsvControls.js:242
 msgid "%s Delimited"
-msgstr ""
+msgstr "%s 区切り文字付き"
 
 #: components/admin-ui-src/components/CsvControls.js:257
 msgid "Export"
-msgstr ""
+msgstr "エクスポート"
 
 #: components/admin-ui-src/components/CsvControls.js:272
 msgid "Importing file"
-msgstr ""
+msgstr "インポートするファイル"
 
 #: components/admin-ui-src/components/CsvControls.js:283
 msgid "Cancel Import"
-msgstr ""
+msgstr "インポートをキャンセル"
 
 #. translators: %s: the selected file's name
 #: components/admin-ui-src/components/CsvControls.js:288
 msgid "File: %s"
-msgstr ""
+msgstr "ファイル：%s"
 
 #: components/admin-ui-src/components/CsvControls.js:291
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr ""
+"このファイルを入力すると、このシートの既存のデータがすべて置き換えられます"
 
 #: components/admin-ui-src/components/JspreadsheetWrapper.js:150
-msgid "The spreadsheet grid has limited screen reader support. This spreadsheet is read only."
+msgid ""
+"The spreadsheet grid has limited screen reader support. This spreadsheet is "
+"read only."
 msgstr ""
+"このスプレッドシートのグリッドは、スクリーンリーダーへの対応が限定的です。こ"
+"のスプレッドシートは読み取り専用です。"
 
 #: components/admin-ui-src/components/JspreadsheetWrapper.js:151
-msgid "The spreadsheet grid has limited screen reader support. Use the CSV Import control to load data."
+msgid ""
+"The spreadsheet grid has limited screen reader support. Use the CSV Import "
+"control to load data."
 msgstr ""
+"このスプレッドシートのグリッドは、スクリーンリーダーへの対応が限定的です。"
+"データを読み込むには、CSVインポートコントロールをご利用ください。"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:6
 msgid "Columns"
-msgstr ""
+msgstr "カラム"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:7
 msgid "Rows"
-msgstr ""
+msgstr "行"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:60
 msgid "Parse data in"
-msgstr ""
+msgstr "でデータを解析する"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:77
 msgid "Show labels"
-msgstr ""
+msgstr "ラベルを表示"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:89
 msgid "Show legend"
-msgstr ""
+msgstr "凡例を表示"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:101
 msgid "Show mean point"
-msgstr ""
+msgstr "平均点を表示する"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:112
 msgid "Show sample points"
-msgstr ""
+msgstr "サンプルポイントを表示"
 
 #: components/admin-ui-src/components/ParseAndFlagsRow.js:124
 msgid "Shared tooltip"
-msgstr ""
+msgstr "「共有する」のツールチップ"
 
 #: components/admin-ui-src/components/SheetTab.js:107
 msgid "Sheet deleted"
-msgstr ""
+msgstr "シートが削除されました"
 
 #. translators: %s: the sheet's new name
 #: components/admin-ui-src/components/SheetTab.js:123
 msgid "Sheet renamed to %s"
-msgstr ""
+msgstr "シートの名前が %s に変更されました"
 
 #: components/admin-ui-src/components/SheetTab.js:202
 msgid "Rename sheet"
-msgstr ""
+msgstr "シートの名前を変更する"
 
 #: components/admin-ui-src/components/SheetTab.js:219
 msgid "Delete Sheet"
-msgstr ""
+msgstr "シートを削除"
 
 #: components/admin-ui-src/components/SheetTab.js:223
 msgid "Are you sure you want to delete this sheet?"
-msgstr ""
+msgstr "このシートを削除してもよろしいですか？"
 
 #: components/admin-ui-src/components/SheetTab.js:230
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: components/admin-ui-src/components/SheetTab.js:236
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: components/admin-ui-src/components/SheetTabs.js:36
 msgid "New sheet added"
-msgstr ""
+msgstr "新しいシートが追加されました"
 
 #: components/admin-ui-src/components/SheetTabs.js:84
 msgid "Spreadsheet sheets"
-msgstr ""
+msgstr "スプレッドシートのシート"
 
 #: components/admin-ui-src/components/SheetTabs.js:91
 msgid "Add Sheet"
-msgstr ""
+msgstr "シートを追加"
 
 #. translators: %d: the sheet's 1-based ordinal (e.g. "Sheet 2")
 #: components/admin-ui-src/components/SheetTabs.js:103
 msgid "Sheet %d"
-msgstr ""
+msgstr "シート %d"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:17
 msgid "Image generation is disabled"
-msgstr ""
+msgstr "画像生成は無効です"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:18
 msgid "Save/Update this post to generate the image version"
-msgstr ""
+msgstr "この投稿を保存／更新して画像のバージョンを生成する"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:25
 msgid "Shortcode copied to clipboard"
-msgstr ""
+msgstr "ショート コードがクリップボードにコピーされます"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:36
 msgid "Shortcode"
-msgstr ""
+msgstr "ショートコード"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:45
 msgid "Copied!"
-msgstr ""
+msgstr "コピーしました!"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:45
 msgid "Copy"
-msgstr ""
+msgstr "コピー"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:52
 #: components/block-src/chart/edit.js:226
 msgid "Image"
-msgstr ""
+msgstr "画像"
 
 #: components/admin-ui-src/components/ShortcodeAndImageRow.js:72
 msgid "(opens in a new tab)"
-msgstr ""
+msgstr "新しいタブで開く"
 
 #: components/admin-ui-src/components/SourceRow.js:24
 msgid "Source"
-msgstr ""
+msgstr "ソース"
 
 #: components/admin-ui-src/components/SourceRow.js:36
 msgid "Source URL"
-msgstr ""
+msgstr "出典URL"
 
 #: components/admin-ui-src/components/SourceRow.js:47
 msgid "Include source in chart"
-msgstr ""
+msgstr "グラフにソースを含める"
 
 #: components/admin-ui-src/components/SubtitleField.js:17
 msgid "Subtitle"
-msgstr ""
+msgstr "サブタイトル"
 
 #: components/admin-ui-src/components/SubtitleField.js:21
 msgid "Enter subtitle here"
-msgstr ""
+msgstr "ここにサブタイトルを入力してください"
 
 #: components/admin-ui-src/components/TypeAndThemeRow.js:122
 msgid "Type"
-msgstr ""
+msgstr "タイプ"
 
 #: components/admin-ui-src/components/TypeAndThemeRow.js:139
 msgid "Theme"
-msgstr ""
+msgstr "テーマ"
 
 #: components/admin-ui-src/components/TypeAndThemeRow.js:158
 msgid "Color per data point"
-msgstr ""
+msgstr "データポイントごとの色"
 
 #: components/admin-ui-src/components/TypeAndThemeRow.js:169
 msgid "Height"
-msgstr ""
+msgstr "高さ"
 
 #: components/admin-ui-src/hooks/useChartRefresh.js:124
 msgid "Chart refreshed"
-msgstr ""
+msgstr "グラフが更新されました"
 
 #: components/admin-ui-src/hooks/useImageGeneration.js:82
 msgid "Chart image generated"
-msgstr ""
+msgstr "グラフ画像が生成されました"
 
 #. translators: %s: the chart's title
 #: components/block-src/chart/edit.js:180
 msgid "Select chart: %s"
-msgstr ""
+msgstr "グラフを選択：%s"
 
 #: components/block-src/chart/edit.js:220
 msgid "Display settings"
-msgstr ""
+msgstr "表示設定"
 
 #: components/block-src/chart/edit.js:222
 msgid "Show"
-msgstr ""
+msgstr "表示"
 
 #: components/block-src/chart/edit.js:227
 msgid "Table"
-msgstr ""
+msgstr "テーブル"
 
 #: components/block-src/chart/edit.js:237
 msgid "New chart"
-msgstr ""
+msgstr "新しいチャート"
 
 #: components/block-src/chart/edit.js:241
 msgid "Edit chart"
-msgstr ""
+msgstr "グラフを編集"
 
 #: components/block-src/chart/edit.js:242
 msgid "Replace"
-msgstr ""
+msgstr "置換"
 
 #: components/block-src/chart/edit.js:274
 msgid "There was a problem loading charts"
-msgstr ""
+msgstr "チャートの読み込みに問題が発生しました"
 
 #: components/block-src/chart/edit.js:285
 #: components/block-src/chart/edit.js:308
 msgid "No charts found"
-msgstr ""
+msgstr "チャートが見つかりませんでした"
 
 #: components/block-src/chart/edit.js:288
 msgid "Create a new chart"
-msgstr ""
+msgstr "新しいグラフを作成する"
 
 #: components/block-src/chart/edit.js:297
 msgid "Search by title"
-msgstr ""
+msgstr "タイトルで検索"
 
 #. translators: %d: number of charts found
 #: components/block-src/chart/edit.js:303
 msgid "%d chart found"
 msgid_plural "%d charts found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d グラフが見つかりました"
 
 #: components/block-src/chart/edit.js:326
 msgid "Load more results"
-msgstr ""
+msgstr "さらに結果を表示"
 
 #: components/block-src/chart/block.json
 msgctxt "block title"
 msgid "M Chart"
-msgstr ""
+msgstr "M Chart"
 
 #: components/block-src/chart/block.json
 msgctxt "block description"
 msgid "Embed a chart made with M Chart into your posts and pages"
-msgstr ""
+msgstr "M Chartで作成したチャートを投稿やページに埋め込む"

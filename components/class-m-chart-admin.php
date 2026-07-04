@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class M_Chart_Admin {
+	// Used by both the Docs submenu entry and the footer script that adds target="_blank" to it
+	const DOCS_URL = 'https://docs.mch.art';
+
 	private $safe_settings = [
 		'performance' => [
 			'default',
@@ -73,6 +76,47 @@ class M_Chart_Admin {
 	}
 
 	/**
+	 * Parse the admin page slug out of a Freemius page URL
+	 *
+	 * Lets us find/style Freemius's submenu entries without relying on its internals
+	 *
+	 * @param string $url a Freemius admin page URL (upgrade, account, etc)
+	 *
+	 * @return string the page slug, or '' when the URL has none
+	 */
+	private function freemius_page_slug( $url ) {
+		$query = wp_parse_url( $url, PHP_URL_QUERY );
+
+		if ( ! $query ) {
+			return '';
+		}
+
+		parse_str( $query, $query_args );
+
+		return $query_args['page'] ?? '';
+	}
+
+	/**
+	 * Find the first free submenu position at or after the requested one
+	 *
+	 * Keeps our hardcoded ordering positions from silently clobbering entries another plugin may have placed there
+	 *
+	 * @param string $menu_slug the parent menu slug
+	 * @param int    $position  the preferred position
+	 *
+	 * @return int the first unoccupied position
+	 */
+	private function free_submenu_position( $menu_slug, $position ) {
+		global $submenu;
+
+		while ( isset( $submenu[ $menu_slug ][ $position ] ) ) {
+			$position++;
+		}
+
+		return $position;
+	}
+
+	/**
 	 * Arrange the extra Charts submenu links
 	 *
 	 * Runs at a priority above Freemius so its pricing link already exists when we relabel and reposition it
@@ -85,23 +129,17 @@ class M_Chart_Admin {
 
 		// Freemius adds its own pricing/upgrade submenu link for free users
 		// We relabel it to Upgrade and move it just above the Docs link
-		// Parsing the page slug out of the upgrade URL lets us find Freemius's entry without relying on its internals
 		// Repositioning leaves the page route registered so the link still works
-		$pricing_slug = '';
-		$query        = wp_parse_url( m_chart()->freemius()->get_upgrade_url(), PHP_URL_QUERY );
-
-		if ( $query ) {
-			parse_str( $query, $query_args );
-			$pricing_slug = $query_args['page'] ?? '';
-		}
+		$pricing_slug = $this->freemius_page_slug( m_chart()->freemius()->get_upgrade_url() );
 
 		if ( '' !== $pricing_slug && ! empty( $submenu[ $menu_slug ] ) ) {
 			foreach ( $submenu[ $menu_slug ] as $position => $item ) {
 				if ( isset( $item[2] ) && $item[2] === $pricing_slug ) {
 					unset( $submenu[ $menu_slug ][ $position ] );
 
-					$item[0]                   = esc_html__( 'Upgrade', 'm-chart' );
-					$submenu[ $menu_slug ][99] = $item;
+					$item[0] = esc_html__( 'Upgrade', 'm-chart' );
+
+					$submenu[ $menu_slug ][ $this->free_submenu_position( $menu_slug, 99 ) ] = $item;
 
 					break;
 				}
@@ -109,22 +147,15 @@ class M_Chart_Admin {
 		}
 
 		// Pin the Freemius Account link to a predictable order just below Settings
-		// Parse the page slug out of the account URL so this survives the menu slug scheme rather than hardcoding it
 		// Freemius's own ordering can drift against our ksort so we set an explicit position
-		$account_slug = '';
-		$query        = wp_parse_url( m_chart()->freemius()->get_account_url(), PHP_URL_QUERY );
-
-		if ( $query ) {
-			parse_str( $query, $query_args );
-			$account_slug = $query_args['page'] ?? '';
-		}
+		$account_slug = $this->freemius_page_slug( m_chart()->freemius()->get_account_url() );
 
 		if ( '' !== $account_slug && ! empty( $submenu[ $menu_slug ] ) ) {
 			foreach ( $submenu[ $menu_slug ] as $position => $item ) {
 				if ( isset( $item[2] ) && $item[2] === $account_slug ) {
 					unset( $submenu[ $menu_slug ][ $position ] );
 
-					$submenu[ $menu_slug ][96] = $item;
+					$submenu[ $menu_slug ][ $this->free_submenu_position( $menu_slug, 96 ) ] = $item;
 
 					break;
 				}
@@ -134,10 +165,10 @@ class M_Chart_Admin {
 		// Docs link — sits at the bottom of the Charts submenu
 		// The third array element is the href; WordPress treats it as a full URL when it includes a scheme
 		// target="_blank" is added by admin_print_footer_scripts() since WP's $submenu API doesn't accept link attributes
-		$submenu[ $menu_slug ][100] = [
+		$submenu[ $menu_slug ][ $this->free_submenu_position( $menu_slug, 100 ) ] = [
 			esc_html__( 'Docs', 'm-chart' ),
 			'edit_posts',
-			'https://docs.mch.art',
+			self::DOCS_URL,
 		];
 
 		// If multiple libraries are active we'll give you the option of using each one
@@ -191,10 +222,15 @@ class M_Chart_Admin {
 	 * So we do it via a tiny footer script that runs on every admin page since the menu is global
 	 */
 	public function admin_print_footer_scripts() {
+		// The Charts menu only renders for users who can edit posts so everyone else can skip this
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
 		?>
 <script>
 ( () => {
-	const link = document.querySelector( '#adminmenu a[href="https://docs.mch.art"]' );
+	const link = document.querySelector( '#adminmenu a[href="<?php echo esc_url( self::DOCS_URL ); ?>"]' );
 
 	if ( link ) {
 		link.setAttribute( 'target', '_blank' );
@@ -220,6 +256,11 @@ class M_Chart_Admin {
 	 * The icon is the trendingUp icon from @wordpress/icons masked so background-color: currentColor tints it white to match the text
 	 */
 	public function admin_head() {
+		// The Charts menu only renders for users who can edit posts so everyone else can skip all of this
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
 		// Freemius prefixes its sub-submenu items with a "↳" arrow via span.fs-submenu-item.fs-sub:before
 		// The #adminmenu prefix beats that selector so we can drop the glyph on our Account link
 		?>
@@ -254,13 +295,7 @@ class M_Chart_Admin {
 
 		// Parse the pricing page slug from the upgrade URL so the selector tracks the Freemius menu slug scheme
 		// Matching the full page slug avoids also styling the Settings link
-		$pricing_slug = '';
-		$query        = wp_parse_url( m_chart()->freemius()->get_upgrade_url(), PHP_URL_QUERY );
-
-		if ( $query ) {
-			parse_str( $query, $query_args );
-			$pricing_slug = $query_args['page'] ?? '';
-		}
+		$pricing_slug = $this->freemius_page_slug( m_chart()->freemius()->get_upgrade_url() );
 
 		// No pricing slug means there's no Upgrade link to style
 		if ( '' === $pricing_slug ) {
@@ -364,8 +399,11 @@ class M_Chart_Admin {
 			}
 
 			// Default chart height is numeric so clamp it to the same range as the per-chart height field
+			// Non-scalar submissions fall back to the default rather than tripping absint's array warning
 			if ( 'default_height' === $setting ) {
-				$validated_settings[ $setting ] = min( 1500, max( 300, absint( $submitted_settings[ $setting ] ) ) );
+				$validated_settings[ $setting ] = is_scalar( $submitted_settings[ $setting ] )
+					? min( 1500, max( 300, absint( $submitted_settings[ $setting ] ) ) )
+					: $default;
 				continue;
 			}
 
@@ -396,6 +434,9 @@ class M_Chart_Admin {
 		$validated_settings = apply_filters( 'm_chart_validated_settings', $validated_settings, $submitted_settings );
 
 		update_option( m_chart()->slug, $validated_settings );
+
+		// Drop the memoized settings so anything later in this request sees the new values
+		m_chart()->reset_settings();
 
 		// Only flush rewrite rules when the embed endpoint is actually being toggled
 		$previous_embeds = $previous_settings['embeds'] ?? '';

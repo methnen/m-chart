@@ -21,6 +21,12 @@ function numberFormat( number, locale ) {
  * @return {string} The formatted number, or '' when the value is not finite
  */
 function safeNumberFormat( value, locale ) {
+	// Number( null ) and Number( '' ) are both 0 which would pass the finite check
+	// Empty cells should format to '' so they render as blank rather than a zero
+	if ( null == value || '' === value ) {
+		return '';
+	}
+
 	const num = Number( value );
 
 	return Number.isFinite( num ) ? numberFormat( num, locale ) : '';
@@ -148,6 +154,24 @@ function preprocessBubbleData( data ) {
 }
 
 /**
+ * Compose a "name: value" tooltip line
+ *
+ * Returns null when the value is empty so callers can drop the line entirely
+ * rather than showing an orphaned label ("Weight: ") or a bare value with a leading colon (": 5")
+ *
+ * @param {string} name  The label half of the line, may be ''
+ * @param {string} value The formatted value half of the line, may be ''
+ * @return {string|null} The composed line, or null when there is no value to show
+ */
+function tooltipLine( name, value ) {
+	if ( '' === value ) {
+		return null;
+	}
+
+	return name ? name + ': ' + value : value;
+}
+
+/**
  * Tooltip label for bubble charts
  *
  * @param {Object} item Chart.js tooltip item
@@ -165,12 +189,12 @@ function bubbleChartTooltipLabel( item ) {
 	}
 
 	lines.push(
-		axisName( chart, 0 ) + ': ' + safeNumberFormat( item.parsed.x, locale ),
-		axisName( chart, 1 ) + ': ' + safeNumberFormat( item.parsed.y, locale ),
-		axisName( chart, 2 ) + ': ' + safeNumberFormat( item.raw.original, locale ),
+		tooltipLine( axisName( chart, 0 ), safeNumberFormat( item.parsed.x, locale ) ),
+		tooltipLine( axisName( chart, 1 ), safeNumberFormat( item.parsed.y, locale ) ),
+		tooltipLine( axisName( chart, 2 ), safeNumberFormat( item.raw.original, locale ) ),
 	);
 
-	return lines;
+	return lines.filter( ( line ) => null !== line );
 }
 
 /**
@@ -191,11 +215,11 @@ function scatterChartTooltipLabel( item ) {
 	}
 
 	lines.push(
-		axisName( chart, 0 ) + ': ' + safeNumberFormat( item.parsed.x, locale ),
-		axisName( chart, 1 ) + ': ' + safeNumberFormat( item.parsed.y, locale ),
+		tooltipLine( axisName( chart, 0 ), safeNumberFormat( item.parsed.x, locale ) ),
+		tooltipLine( axisName( chart, 1 ), safeNumberFormat( item.parsed.y, locale ) ),
 	);
 
-	return lines;
+	return lines.filter( ( line ) => null !== line );
 }
 
 /**
@@ -309,7 +333,7 @@ function chartTooltipLabel( item ) {
 			const category = chart.data.labels[ item.dataIndex ];
 
 			name = ( undefined !== datasetLabel && category !== datasetLabel )
-				? String( category ) + datasetLabel
+				? String( category ) + ': ' + datasetLabel
 				: String( category );
 		} else {
 			// Prefer the series name, falling back to the point label
@@ -412,11 +436,18 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 		return;
 	}
 
-	// First-touch, or the source text changed, stash/re-stash the original so we wrap from the new source
-	// opt.text is a plain string for a fresh source; the wrap step below rewrites it to an array of lines
-	// So an array means this is a re-layout (resize) of already-wrapped text and the existing stash must stand
-	if ( ! chart[ originalProp ] || ( ! Array.isArray( opt.text ) && opt.text !== chart[ originalProp ] ) ) {
-		chart[ originalProp ] = Array.isArray( opt.text ) ? opt.text.join( ' ' ) : ( opt.text || '' );
+	// Ownership is tracked by identity against the wrapped array this function produced last time
+	// - our own wrapped output → re-wrap from the stashed original (resize/re-layout)
+	// - a plain string → the source text, stash/re-stash it and wrap
+	// - a foreign array → an extension's intentional multi-line text, leave it untouched
+	const wrappedProp = originalProp + 'Wrapped';
+
+	if ( Array.isArray( opt.text ) ) {
+		if ( opt.text !== chart[ wrappedProp ] ) {
+			return;
+		}
+	} else if ( opt.text !== chart[ originalProp ] ) {
+		chart[ originalProp ] = opt.text || '';
 	}
 
 	const original = chart[ originalProp ];
@@ -438,6 +469,7 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 	// Fast path: text already fits on one line
 	if ( chart.ctx.measureText( original ).width <= maxWidth ) {
 		chart.options.plugins[ key ].text = original;
+		chart[ wrappedProp ]              = null;
 		chart.ctx.restore();
 		return;
 	}
@@ -466,7 +498,10 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 		lines.push( line );
 	}
 
-	chart.options.plugins[ key ].text = lines.length > 1 ? lines : original;
+	const wrapped = lines.length > 1 ? lines : original;
+
+	chart.options.plugins[ key ].text = wrapped;
+	chart[ wrappedProp ]              = Array.isArray( wrapped ) ? wrapped : null;
 	chart.ctx.restore();
 }
 
@@ -496,8 +531,8 @@ function wireTreemap( chart ) {
 		// level's tint slightly. Leaves remain alpha-shaded by their share of the top group.
 		const groupBaseAlpha    = 0.06;
 		const groupStepPerLevel = 0.06;
-		const hoverAlphaBump     = 0.06;
-		const leafHoverBump      = 0.18;
+		const hoverAlphaBump    = 0.06;
+		const leafHoverBump     = 0.18;
 
 		const colorFor = ( raw, active ) => {
 			// At l=0 the group identifier is on raw.g; at deeper levels and leaves we walk
@@ -652,11 +687,14 @@ function wireBoxplotViolin( chart ) {
 				lines.push( String( item.dataset.label ) );
 			}
 
-			lines.push( 'Min: '    + fmtForItem( item, stats.min ) );
-			lines.push( 'Q1: '     + fmtForItem( item, stats.q1 ) );
-			lines.push( 'Median: ' + fmtForItem( item, stats.median ) );
-			lines.push( 'Q3: '     + fmtForItem( item, stats.q3 ) );
-			lines.push( 'Max: '    + fmtForItem( item, stats.max ) );
+			// tooltipLine drops any stat that formats to '' so a non-finite value never shows an orphaned "Min: " line
+			lines.push(
+				tooltipLine( 'Min',    fmtForItem( item, stats.min ) ),
+				tooltipLine( 'Q1',     fmtForItem( item, stats.q1 ) ),
+				tooltipLine( 'Median', fmtForItem( item, stats.median ) ),
+				tooltipLine( 'Q3',     fmtForItem( item, stats.q3 ) ),
+				tooltipLine( 'Max',    fmtForItem( item, stats.max ) ),
+			);
 
 			const outliers = Array.isArray( stats.outliers ) ? stats.outliers.length : 0;
 
@@ -664,7 +702,7 @@ function wireBoxplotViolin( chart ) {
 				lines.push( '+ ' + outliers + ' outlier' + ( 1 === outliers ? '' : 's' ) );
 			}
 
-			return lines;
+			return lines.filter( ( line ) => null !== line );
 		},
 	};
 
