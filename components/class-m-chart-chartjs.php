@@ -1142,7 +1142,7 @@ class M_Chart_Chartjs {
 							$new_data_array[] = [
 								'x'     => $x,
 								'y'     => $data_array[1][ $i ],
-								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $i ],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $i ] ?? '',
 							];
 						}
 					} else {
@@ -1151,7 +1151,7 @@ class M_Chart_Chartjs {
 							$new_data_array[] = [
 								'x'     => $data[0],
 								'y'     => $data[1],
-								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $data_key ],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $data_key ] ?? '',
 							];
 						}
 					}
@@ -1196,7 +1196,7 @@ class M_Chart_Chartjs {
 								'x'     => $x,
 								'y'     => $data_array[1][ $i ],
 								'r'     => $data_array[2][ $i ],
-								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $i ],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $i ] ?? '',
 							];
 						}
 					} else {
@@ -1206,7 +1206,7 @@ class M_Chart_Chartjs {
 								'x'     => $data[0],
 								'y'     => $data[1],
 								'r'     => $data[2],
-								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $data_key ],
+								'label' => $parse->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ][ $data_key ] ?? '',
 							];
 						}
 					}
@@ -1241,7 +1241,7 @@ class M_Chart_Chartjs {
 
 			foreach ( $data_array as $key => $data_chunk ) {
 				$set_data[ $key ] = [
-					'label'   => m_chart()->parse()->value_labels[ $label_key ][ $key ],
+					'label'   => m_chart()->parse()->value_labels[ $label_key ][ $key ] ?? '',
 					'data'    => [],
 					'rawData' => isset( $raw_data[ $key ] ) ? $raw_data[ $key ] : [],
 				];
@@ -1331,8 +1331,7 @@ class M_Chart_Chartjs {
 		$string = wp_strip_all_tags( $string );
 		$string = str_replace( '{{m-chart-br}}', '<br />', $string );
 
-		// @TODO: See if this addslashes/stripslashes is still necessary (need to remember why I did it first...)
-		return addslashes( stripslashes( $string ) );
+		return $string;
 	}
 
 	/**

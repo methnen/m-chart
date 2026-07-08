@@ -44,7 +44,7 @@ M Chart Pro will be where I add those out of scope features as an addon to M Cha
 
 For full documentation please see the [Documentation](https://docs.mch.art/).
 
-To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart). 
+To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
 
 ## Screenshots ##
 
@@ -59,6 +59,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 2.2.2 ###
+
+* Added a new m_chart_admin_initial_chart_args filter so extensions can modify or replace the chart args used for the editor's initial preview render
+* Fixed an issue where titles, subtitles, and axis titles containing an apostrophe or quote could show a stray backslash on the chart
+	* Removed some legacy slash-escaping left over from the pre-2.0 rendering stack and tightened up the JSON encoding of chart args along the way
 
 ### 2.2.1 ###
 
