@@ -152,7 +152,7 @@ $iframe_nonce = m_chart()->iframe_csp_nonce ?? '';
 	( () => {
 		const postId    = <?php echo absint( $post_id ); ?>;
 		const instance  = <?php echo absint( $this->instance ); ?>;
-		const chartArgs = <?php echo $this->unicode_aware_stripslashes( json_encode( $this->library( 'chartjs' )->get_chart_args( $post_id, $args ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT ) ); ?>;
+		const chartArgs = <?php echo json_encode( $this->library( 'chartjs' )->get_chart_args( $post_id, $args ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT ); ?>;
 		const canvas    = document.getElementById( 'm-chart-' + postId + '-' + instance ).getContext( '2d' );
 		<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
 

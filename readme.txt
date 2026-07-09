@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
 Tested up to: 7.0
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: MIT
 
 Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
@@ -53,6 +53,11 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 3. M Chart Block UI
 
 == Changelog ==
+
+= 2.2.2 =
+
+* Added a new m_chart_admin_initial_chart_args filter so extensions can modify or replace the chart args used for the editor's initial preview render
+* Removed some legacy slash-escaping left over from the pre-2.0 rendering stack and tightened up the JSON encoding of chart args along the way
 
 = 2.2.1 =
 

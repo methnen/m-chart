@@ -640,6 +640,9 @@ class M_Chart_Admin {
 				);
 			}
 
+			// Allow extensions to modify or replace the chart args used for the editor's initial preview render
+			$initial_chart_args = apply_filters( 'm_chart_admin_initial_chart_args', $initial_chart_args, $post_id, $library );
+
 			// Build CSV delimiter map for React's CsvControls component
 			$csv_delimiters = [];
 			foreach ( m_chart()->csv_delimiters as $delimiter => $delimiter_name ) {
