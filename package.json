@@ -17,7 +17,7 @@
     "@wordpress/jest-preset-default": "^12.5.0",
     "@wordpress/scripts": "^32.5.1",
     "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.0.0",
+    "concurrently": "^10.0.3",
     "jest-axe": "^10.0.0",
     "jest-junit": "^17.0.0",
     "msw": "^2.6.0",
