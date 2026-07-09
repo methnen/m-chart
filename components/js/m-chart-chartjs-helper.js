@@ -266,8 +266,8 @@ function treemapFormatValue( entry, locale ) {
 
 /**
  * In-rectangle label content for treemap
- * Returns just the entity label as a single-line string — the value is surfaced via the tooltip on hover
- * Single-line labels combine with `overflow: 'fit'` so small rectangles scale gracefully instead of clipping
+ * Returns just the entity label — the value is surfaced via the tooltip on hover
+ * Callers pass this through wrapTreemapLabel() so long labels wrap to the rectangle width
  *
  * @param {Object} ctx chartjs-chart-treemap labels formatter context
  * @return {string} The entity label, or empty string when no label is available
@@ -418,6 +418,44 @@ function computeBoxplotViolinYBounds( data ) {
 }
 
 /**
+ * Greedy word-boundary wrap of text into lines that fit within maxWidth
+ *
+ * Measures with whatever font is currently set on ctx2d, so callers set the font first
+ * A single word wider than maxWidth is accepted on its own line rather than broken mid-word
+ *
+ * @param {CanvasRenderingContext2D} ctx2d    Canvas 2d context with the measuring font already applied
+ * @param {string}                   text     The text to wrap
+ * @param {number}                   maxWidth Available width in the same pixel space ctx2d measures in
+ * @return {string[]} The wrapped lines
+ */
+function greedyWrapLines( ctx2d, text, maxWidth ) {
+	const words = text.split( /\s+/ ).filter( Boolean );
+	const lines = [];
+	let   line  = '';
+
+	for ( const word of words ) {
+		const trial = line ? line + ' ' + word : word;
+
+		if ( ctx2d.measureText( trial ).width <= maxWidth ) {
+			line = trial;
+		} else {
+			if ( line ) {
+				lines.push( line );
+			}
+
+			// If a single word is itself wider than maxWidth, accept it on its own line
+			line = word;
+		}
+	}
+
+	if ( line ) {
+		lines.push( line );
+	}
+
+	return lines;
+}
+
+/**
  * Wrap a Chart.js title-or-subtitle plugin's text to fit within a maxWidth
  *
  * Reads the configured font, measures the original string in the canvas 2d context
@@ -475,34 +513,74 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 	}
 
 	// Greedy word-break wrap
-	const words = original.split( /\s+/ ).filter( Boolean );
-	const lines = [];
-	let   line  = '';
-
-	for ( const word of words ) {
-		const trial = line ? line + ' ' + word : word;
-
-		if ( chart.ctx.measureText( trial ).width <= maxWidth ) {
-			line = trial;
-		} else {
-			if ( line ) {
-				lines.push( line );
-			}
-
-			// If a single word is itself wider than maxWidth, accept it on its own line
-			line = word;
-		}
-	}
-
-	if ( line ) {
-		lines.push( line );
-	}
-
+	const lines   = greedyWrapLines( chart.ctx, original, maxWidth );
 	const wrapped = lines.length > 1 ? lines : original;
 
 	chart.options.plugins[ key ].text = wrapped;
 	chart[ wrappedProp ]              = Array.isArray( wrapped ) ? wrapped : null;
 	chart.ctx.restore();
+}
+
+/**
+ * Wrap a treemap rectangle label to its rectangle's width
+ *
+ * Returns an array of lines when the label needs more than one — chartjs-chart-treemap
+ * renders array labels as multi-line text
+ * Wrapping happens before the plugin applies its `overflow: 'fit'` scaling (set in the
+ * PHP dataset defaults), so 'fit' only has to absorb the widest word or a too-short
+ * rectangle instead of shrinking the entire label to fit on one line
+ *
+ * Results are memoized per chart keyed by label + rectangle width since the formatter
+ * runs on every draw frame during hover animations
+ * wireTreemap() recreates the cache on each update so resizes and data swaps re-wrap
+ *
+ * @param {Object} chart Chart.js chart instance
+ * @param {Object} ctx   chartjs-chart-treemap labels formatter context
+ * @param {string} text  The label text
+ * @return {string|string[]} The original string when it fits on one line, otherwise wrapped lines
+ */
+function wrapTreemapLabel( chart, ctx, text ) {
+	const raw = ctx.raw;
+
+	if ( ! text || ! raw || ! Number.isFinite( raw.w ) ) {
+		return text;
+	}
+
+	const cache = chart.$mChartTreemapLabelCache;
+	const key   = text + '|' + Math.round( raw.w );
+
+	if ( cache && cache.has( key ) ) {
+		return cache.get( key );
+	}
+
+	const labels   = chart.data.datasets[0]?.labels || {};
+	const padding  = Number.isFinite( labels.padding ) ? labels.padding : 3;
+	const maxWidth = raw.w - 2 * padding;
+
+	const fontSize = labels.font?.size || ( window.Chart && window.Chart.defaults?.font?.size ) || 12;
+	const family   = labels.font?.family || ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
+	const weight   = labels.font?.weight || '';
+
+	chart.ctx.save();
+	chart.ctx.font = ( weight ? weight + ' ' : '' ) + fontSize + 'px ' + family;
+
+	let result = text;
+
+	if ( chart.ctx.measureText( text ).width > maxWidth ) {
+		const lines = greedyWrapLines( chart.ctx, text, maxWidth );
+
+		if ( lines.length > 1 ) {
+			result = lines;
+		}
+	}
+
+	chart.ctx.restore();
+
+	if ( cache ) {
+		cache.set( key, result );
+	}
+
+	return result;
 }
 
 /**
@@ -516,6 +594,9 @@ function wrapPluginText( chart, key, maxWidth, originalProp ) {
 function wireTreemap( chart ) {
 	const ds     = chart.data.datasets[0];
 	const locale = chart.options.locale;
+
+	// Fresh label-wrap cache on every update — rectangle geometry may have changed (resize, data swap)
+	chart.$mChartTreemapLabelCache = new Map();
 
 	if ( ds && ds.mChartTreemapHierarchical ) {
 		const topColors = ds.mChartTopGroupColors || {};
@@ -605,14 +686,14 @@ function wireTreemap( chart ) {
 
 		ds.labels = ds.labels || {};
 
-		// Single-line label — value is in the tooltip on hover
-		// Combined with overflow: 'fit' (set in PHP defaults) small rectangles scale gracefully
+		// Label only — value is in the tooltip on hover
+		// Wrapped to the rectangle width; overflow: 'fit' (set in PHP defaults) absorbs the rest
 		ds.labels.formatter = ( ctx ) => {
 			if ( 'data' !== ctx.type || ctx.raw.l < leafLevel ) {
 				return '';
 			}
 
-			return String( ctx.raw.g );
+			return wrapTreemapLabel( chart, ctx, String( ctx.raw.g ) );
 		};
 
 		chart.options.plugins.tooltip.callbacks = {
@@ -638,7 +719,7 @@ function wireTreemap( chart ) {
 
 	if ( ds ) {
 		ds.labels = ds.labels || {};
-		ds.labels.formatter = ( ctx ) => treemapItemText( ctx );
+		ds.labels.formatter = ( ctx ) => wrapTreemapLabel( chart, ctx, treemapItemText( ctx ) );
 	}
 
 	chart.options.plugins.tooltip.callbacks = {
