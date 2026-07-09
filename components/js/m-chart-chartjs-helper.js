@@ -417,6 +417,34 @@ function computeBoxplotViolinYBounds( data ) {
 	};
 }
 
+// Chart.js toFont() default lineHeight multiplier
+// Used to compute the treemap caption band height in paintTreemapCaptions()
+const TREEMAP_CAPTION_LINE_HEIGHT = 1.2;
+
+/**
+ * Truncate text with a trailing ellipsis so it fits within maxWidth
+ *
+ * Measures with whatever font is currently set on ctx2d, so callers set the font first
+ *
+ * @param {CanvasRenderingContext2D} ctx2d    Canvas 2d context with the measuring font already applied
+ * @param {string}                   text     The text to truncate
+ * @param {number}                   maxWidth Available width in the same pixel space ctx2d measures in
+ * @return {string} The text, truncated with an ellipsis when it doesn't fit
+ */
+function ellipsize( ctx2d, text, maxWidth ) {
+	if ( ctx2d.measureText( text ).width <= maxWidth ) {
+		return text;
+	}
+
+	let truncated = text;
+
+	while ( truncated.length > 1 && ctx2d.measureText( truncated + '…' ).width > maxWidth ) {
+		truncated = truncated.slice( 0, -1 );
+	}
+
+	return truncated.trimEnd() + '…';
+}
+
 /**
  * Greedy word-boundary wrap of text into lines that fit within maxWidth
  *
@@ -584,6 +612,174 @@ function wrapTreemapLabel( chart, ctx, text ) {
 }
 
 /**
+ * Decide whether treemap group captions need a second line
+ *
+ * Estimates each top-level group's rectangle width from its share of the total value —
+ * squarify sizes rectangles roughly proportionally, with a safety factor applied — and
+ * measures each caption string against that estimate using the caption font
+ * Estimating rather than measuring the laid-out rectangles avoids a layout feedback loop:
+ * the caption band height feeds the layout that would otherwise feed this decision
+ * A wrong guess degrades to the library's native clip or to an ellipsis, never to overlap
+ *
+ * @param {Object}   chart       Chart.js chart instance
+ * @param {Object}   ds          The treemap dataset
+ * @param {number}   leafLevel   Level at which leaves render (groups.length - 1)
+ * @param {Function} captionText Builds the caption string from a rect-like object
+ * @return {number} 1 for the library's native single-line captions, 2 for the wrapped band
+ */
+function decideTreemapCaptionLines( chart, ds, leafLevel, captionText ) {
+	// With a single grouping level the library renders no captions at all
+	if ( leafLevel < 1 || ! chart.width || ! Array.isArray( ds.tree ) || ! ds.tree.length ) {
+		return 1;
+	}
+
+	const topField = ds.mChartTopGroupField;
+	const valueKey = ds.key || 'value';
+	const totals   = {};
+	let   grand    = 0;
+
+	for ( const entry of ds.tree ) {
+		const id    = entry[ topField ];
+		const value = Number( entry[ valueKey ] ) || 0;
+
+		totals[ id ] = ( totals[ id ] || 0 ) + value;
+		grand       += value;
+	}
+
+	if ( grand <= 0 ) {
+		return 1;
+	}
+
+	const captions = ds.captions || {};
+	const padding  = Number.isFinite( captions.padding ) ? captions.padding : 3;
+	const fontSize = captions.font?.size || ( window.Chart && window.Chart.defaults?.font?.size ) || 12;
+	const family   = captions.font?.family || ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
+	const weight   = captions.font?.weight || '';
+
+	chart.ctx.save();
+	chart.ctx.font = ( weight ? weight + ' ' : '' ) + fontSize + 'px ' + family;
+
+	let lines = 1;
+
+	for ( const id of Object.keys( totals ) ) {
+		// 0.8 safety factor since squarify only approximates proportional widths
+		const estimated = chart.width * ( totals[ id ] / grand ) * 0.8 - 2 * padding;
+		const text      = captionText( { g: id, v: totals[ id ], l: 0 } );
+
+		if ( chart.ctx.measureText( text ).width > estimated ) {
+			lines = 2;
+			break;
+		}
+	}
+
+	chart.ctx.restore();
+
+	return lines;
+}
+
+/**
+ * Paint wrapped group captions for a treemap in two-line caption mode
+ *
+ * The treemap library reserves exactly one caption band (font lineHeight + 2x padding) per
+ * group and paints captions with a single fillText, so it can't wrap them itself
+ * When wireTreemap() detects long group names it doubles the band via font.lineHeight and
+ * blanks the library's own caption paint — this paints the real text in that band: up to
+ * two greedy-wrapped lines per group, ellipsized when a line still overflows
+ *
+ * Mirrors the library's band size gate so nothing is painted on groups the library
+ * considered too small for a caption band
+ *
+ * @param {Object} chart Chart.js chart instance
+ */
+function paintTreemapCaptions( chart ) {
+	if ( 2 !== chart.$mChartTreemapCaptionLines || ! chart.$mChartTreemapCaptionText ) {
+		return;
+	}
+
+	const ds = chart.data.datasets[0];
+
+	if ( ! ds || ! ds.mChartTreemapHierarchical ) {
+		return;
+	}
+
+	const meta = chart.getDatasetMeta( 0 );
+
+	if ( ! meta || ! meta.data || ! meta.data.length ) {
+		return;
+	}
+
+	const groups    = ds.groups || [];
+	const leafLevel = Math.max( 0, groups.length - 1 );
+	const captions  = ds.captions || {};
+
+	const padding    = Number.isFinite( captions.padding ) ? captions.padding : 3;
+	const spacing    = Number.isFinite( ds.spacing ) ? ds.spacing : 3;
+	const fontSize   = captions.font?.size || ( window.Chart && window.Chart.defaults?.font?.size ) || 12;
+	const family     = captions.font?.family || ( window.Chart && window.Chart.defaults?.font?.family ) || 'sans-serif';
+	const weight     = captions.font?.weight || '';
+	const align      = captions.align || 'left';
+	const color      = captions.color || '#000000';
+	const hoverColor = captions.hoverColor || color;
+
+	const baseLineHeight = fontSize * TREEMAP_CAPTION_LINE_HEIGHT;
+	const bandLineHeight = baseLineHeight * 2;
+
+	const ctx = chart.ctx;
+
+	ctx.save();
+	ctx.font         = ( weight ? weight + ' ' : '' ) + fontSize + 'px ' + family;
+	ctx.textBaseline = 'middle';
+	ctx.textAlign    = align;
+
+	for ( const el of meta.data ) {
+		const raw = el.$context?.raw;
+
+		if ( ! raw || ! Number.isFinite( raw.l ) || raw.l >= leafLevel ) {
+			continue;
+		}
+
+		// Animated per-frame geometry, matching what the library paints with
+		const { x, y, width, height } = el.getProps( [ 'x', 'y', 'width', 'height' ] );
+
+		// The library's caption band gate — skip groups it reserved no band for
+		const clampedPadding = Math.min( 2 * padding, Math.min( width, height ) );
+
+		if ( width - clampedPadding <= bandLineHeight || height - clampedPadding <= bandLineHeight ) {
+			continue;
+		}
+
+		const maxWidth = width - 2 * padding;
+		const text     = chart.$mChartTreemapCaptionText( raw );
+		let   lines    = ctx.measureText( text ).width <= maxWidth ? [ text ] : greedyWrapLines( ctx, text, maxWidth );
+
+		if ( lines.length > 2 ) {
+			lines = [ lines[0], lines.slice( 1 ).join( ' ' ) ];
+		}
+
+		// Any line can still overflow (a single word wider than the group) — ellipsize it
+		lines = lines.map( ( line ) => ellipsize( ctx, line, maxWidth ) );
+
+		const textX = 'right' === align ? x + width - padding : ( 'center' === align ? x + width / 2 : x + padding );
+		let   textY = y + padding + spacing + baseLineHeight / 2;
+
+		ctx.save();
+		ctx.beginPath();
+		ctx.rect( x, y, width, height );
+		ctx.clip();
+		ctx.fillStyle = el.active ? hoverColor : color;
+
+		for ( const line of lines ) {
+			ctx.fillText( line, textX, textY );
+			textY += baseLineHeight;
+		}
+
+		ctx.restore();
+	}
+
+	ctx.restore();
+}
+
+/**
  * Wire the tooltip callbacks, datalabels formatter, and dataset color/label scriptables for a treemap chart
  *
  * Called from beforeUpdate rather than once at install because the admin preview swaps chart.data and chart.options
@@ -597,6 +793,10 @@ function wireTreemap( chart ) {
 
 	// Fresh label-wrap cache on every update — rectangle geometry may have changed (resize, data swap)
 	chart.$mChartTreemapLabelCache = new Map();
+
+	// Reset caption mode; the hierarchical branch below re-enables two-line mode when needed
+	chart.$mChartTreemapCaptionLines = 1;
+	chart.$mChartTreemapCaptionText  = null;
 
 	if ( ds && ds.mChartTreemapHierarchical ) {
 		const topColors = ds.mChartTopGroupColors || {};
@@ -615,10 +815,23 @@ function wireTreemap( chart ) {
 		const hoverAlphaBump    = 0.06;
 		const leafHoverBump     = 0.18;
 
+		// The original tree entry behind a rectangle
+		// Grouped rectangles only carry the fields from their own level down on _data —
+		// the source rows sit under _data.children, and children[0] always has every field
+		// including the top-level group needed for color lookups at 3+ nesting levels
+		const sourceEntry = ( raw ) => {
+			if ( ! raw._data ) {
+				return null;
+			}
+
+			return raw._data.children?.[0] || raw._data;
+		};
+
 		const colorFor = ( raw, active ) => {
 			// At l=0 the group identifier is on raw.g; at deeper levels and leaves we walk
-			// back to the top-level identifier via the original tree entry on raw._data
-			const topId = ( 0 === raw.l ) ? raw.g : ( raw._data && raw._data[ topField ] );
+			// back to the top-level identifier via the original tree entry
+			const entry = sourceEntry( raw );
+			const topId = ( 0 === raw.l ) ? raw.g : ( entry && entry[ topField ] );
 			const rgb   = topRgb[ topId ];
 
 			if ( ! rgb ) {
@@ -666,7 +879,7 @@ function wireTreemap( chart ) {
 		// parent rectangles fall back to the dataset-level affixes since the library aggregates
 		const formatWithAffixes = ( raw ) => {
 			const isLeaf  = raw.l >= leafLevel;
-			const leafRaw = isLeaf ? ( raw._data || {} ) : null;
+			const leafRaw = isLeaf ? ( sourceEntry( raw ) || {} ) : null;
 			const prefix  = isLeaf ? ( leafRaw.prefix || datasetPrefix ) : datasetPrefix;
 			const suffix  = isLeaf ? ( leafRaw.suffix || datasetSuffix ) : datasetSuffix;
 
@@ -676,13 +889,40 @@ function wireTreemap( chart ) {
 
 		ds.captions = ds.captions || {};
 
-		ds.captions.formatter = ( ctx ) => {
-			if ( 'data' !== ctx.type || ctx.raw.l >= leafLevel ) {
-				return '';
+		const captionText = ( raw ) => raw.g + ': ' + formatWithAffixes( raw );
+
+		// Long group names get two-line captions painted by paintTreemapCaptions()
+		// The library itself can't wrap captions (single fillText, one reserved band line)
+		// so two-line mode doubles the band via font.lineHeight and blanks the library's paint
+		const captionLines = decideTreemapCaptionLines( chart, ds, leafLevel, captionText );
+
+		chart.$mChartTreemapCaptionLines = captionLines;
+		chart.$mChartTreemapCaptionText  = captionText;
+
+		if ( 2 === captionLines ) {
+			// Doubled lineHeight makes the library reserve a two-line band for every group
+			ds.captions.font = Object.assign( {}, ds.captions.font, { lineHeight: TREEMAP_CAPTION_LINE_HEIGHT * 2 } );
+			chart.$mChartTreemapBandInflated = true;
+
+			// A lone space keeps the library's own caption paint invisible without
+			// falling back to raw.g the way an empty string would (formatter || raw.g)
+			ds.captions.formatter = () => ' ';
+		} else {
+			// Undo a band inflation this code applied on an earlier update (e.g. resize made room)
+			if ( chart.$mChartTreemapBandInflated && ds.captions.font ) {
+				delete ds.captions.font.lineHeight;
 			}
 
-			return ctx.raw.g + ': ' + formatWithAffixes( ctx.raw );
-		};
+			chart.$mChartTreemapBandInflated = false;
+
+			ds.captions.formatter = ( ctx ) => {
+				if ( 'data' !== ctx.type || ctx.raw.l >= leafLevel ) {
+					return '';
+				}
+
+				return captionText( ctx.raw );
+			};
+		}
 
 		ds.labels = ds.labels || {};
 
@@ -965,6 +1205,23 @@ const MChartHelper = {
 
 		args.scale.min = bounds.min;
 		args.scale.max = bounds.max;
+	},
+
+	/**
+	 * afterDatasetsDraw: paint wrapped treemap group captions when two-line caption mode is active
+	 *
+	 * Runs after the rectangles (and the library's blanked caption pass) but before tooltips
+	 *
+	 * @param {Object} chart Chart.js chart instance
+	 */
+	afterDatasetsDraw( chart ) {
+		if ( ! isMChartChart( chart ) ) {
+			return;
+		}
+
+		if ( 'treemap' === chart.config.type ) {
+			paintTreemapCaptions( chart );
+		}
 	},
 
 	/**

@@ -60,6 +60,12 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 ## Changelog ##
 
+### 2.3 ###
+
+* Treemap labels now wrap to fit their rectangle so long labels stay readable instead of shrinking to fit on a single line
+* Treemap group captions now wrap onto a second line when long group names need the room
+* Fixed an issue where treemaps with 3 or more grouping levels could render gray instead of using the theme colors
+
 ### 2.2.2 ###
 
 * Added a new m_chart_admin_initial_chart_args filter so extensions can modify or replace the chart args used for the editor's initial preview render
