@@ -971,6 +971,134 @@ function wireTreemap( chart ) {
 }
 
 /**
+ * Wire the tooltip callbacks, region color scriptables, and value-label formatting for a venn/euler chart
+ *
+ * Called from beforeUpdate for the same wholesale-swap reason as wireTreemap
+ *
+ * @param {Object} chart Chart.js chart instance
+ */
+function wireVenn( chart ) {
+	const ds     = chart.data.datasets[0];
+	const locale = chart.options.locale;
+
+	if ( ! ds || ! ds.mChartIsVenn ) {
+		return;
+	}
+
+	const setRgb    = ds.mChartVennSetRgb || {};
+	const setColors = ds.mChartVennSetColors || {};
+	const prefix    = ds.mChartDatasetPrefix || '';
+	const suffix    = ds.mChartDatasetSuffix || '';
+
+	// Optional theme-supplied fill opacity (0-1) scales the whole alpha ramp so deeper
+	// intersections still read more opaque; undefined leaves the stock ramp untouched
+	const fillOpacity = 'number' === typeof ds.mChartVennFillOpacity
+		? Math.max( 0, Math.min( 1, ds.mChartVennFillOpacity ) )
+		: 1;
+
+	const neutral = `rgba(160, 160, 160, ${ ( 0.5 * fillOpacity ).toFixed( 3 ) })`;
+
+	// Region color: the set's palette color for single-set regions, an RGB average of the
+	// member sets for intersections — deeper intersections read slightly darker via alpha
+	// Hover bumps the alpha the same way treemap rectangles do
+	const colorFor = ( raw, active ) => {
+		const sets = ( raw && raw.sets ) || [];
+
+		if ( ! sets.length ) {
+			return neutral;
+		}
+
+		let red   = 0;
+		let green = 0;
+		let blue  = 0;
+		let found = 0;
+
+		for ( const name of sets ) {
+			const rgb = setRgb[ name ];
+
+			if ( rgb ) {
+				red   += rgb.red;
+				green += rgb.green;
+				blue  += rgb.blue;
+				found++;
+			}
+		}
+
+		if ( ! found ) {
+			return setColors[ sets[0] ] || neutral;
+		}
+
+		red   = Math.round( red / found );
+		green = Math.round( green / found );
+		blue  = Math.round( blue / found );
+
+		const baseAlpha = Math.min( 0.9, 0.55 + 0.12 * ( sets.length - 1 ) ) * fillOpacity;
+		const alpha     = active ? Math.min( 1, baseAlpha + 0.15 ) : baseAlpha;
+
+		return `rgba(${ red }, ${ green }, ${ blue }, ${ alpha.toFixed( 3 ) })`;
+	};
+
+	ds.backgroundColor      = ( ctx ) => 'data' === ctx.type ? colorFor( ctx.raw, false ) : 'transparent';
+	ds.hoverBackgroundColor = ( ctx ) => 'data' === ctx.type ? colorFor( ctx.raw, true ) : 'transparent';
+
+	// The library prints in-region value labels through scales.x.ticks.callback
+	// Format them with the chart locale and dataset affixes, and hide the 0 labels
+	// that zero-filled regions would otherwise print all over larger diagrams
+	// This MUST go on chart.config.options (the raw config) — assigning into the live
+	// chart.options.scales proxy corrupts the scale option resolver and crashes the draw
+	const cfgOptions = chart.config.options = chart.config.options || {};
+
+	cfgOptions.scales         = cfgOptions.scales || {};
+	cfgOptions.scales.x       = cfgOptions.scales.x || {};
+	cfgOptions.scales.x.ticks = cfgOptions.scales.x.ticks || {};
+
+	cfgOptions.scales.x.ticks.callback = ( value ) => {
+		const num = Number( value );
+
+		if ( ! Number.isFinite( num ) || 0 === num ) {
+			return '';
+		}
+
+		return prefix + numberFormat( num, locale ) + suffix;
+	};
+
+	const meta = Array.isArray( ds.mChartVennMeta ) ? ds.mChartVennMeta : [];
+
+	// Zero-value regions exist only because the venn layout requires all 2^n - 1 regions
+	// They're noise in tooltips just as they are in the painted labels (see ticks.callback above)
+	// and their sliver-shaped hit areas can otherwise piggyback onto a real region's tooltip
+	chart.options.plugins.tooltip.filter = ( item ) => {
+		const value = Number( item.raw && item.raw.value );
+
+		return Number.isFinite( value ) && 0 !== value;
+	};
+
+	chart.options.plugins.tooltip.callbacks = {
+		title: () => '',
+		label: ( item ) => {
+			const raw   = item.raw || {};
+			const sets  = raw.sets || [];
+			const name  = sets.join( ' ∩ ' );
+			const value = prefix + numberFormat( Number( raw.value ) || 0, locale ) + suffix;
+			const lines = [ name ? name + ': ' + value : value ];
+
+			// Membership-format charts know which elements are in each region — show a few
+			const members = meta[ item.dataIndex ] && meta[ item.dataIndex ].members;
+
+			if ( Array.isArray( members ) && members.length ) {
+				const shown = members.slice( 0, 5 );
+
+				lines.push( shown.join( ', ' ) + ( members.length > shown.length ? ', …' : '' ) );
+			}
+
+			return lines;
+		},
+	};
+
+	// chartjs-plugin-datalabels has nothing useful to do for venn — the library draws its own labels
+}
+
+/**
  * Wire the tooltip callbacks for a boxplot/violin chart
  *
  * Called from beforeUpdate for the same wholesale-swap reason as wireTreemap
@@ -1095,6 +1223,10 @@ const MChartHelper = {
 			};
 		} else if ( 'treemap' === type ) {
 			wireTreemap( chart );
+
+			return;
+		} else if ( 'venn' === type || 'euler' === type ) {
+			wireVenn( chart );
 
 			return;
 		} else if ( 'boxplot' === type || 'violin' === type ) {

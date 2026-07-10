@@ -10,11 +10,11 @@ Manage data sets via a spreadsheet interface, display them as charts via the Cha
 
 == Description ==
 
-Manage your data via a spreadsheet interface or an accessible CSV import, display it as any of 17 chart types using the bundled Chart.js library, and embed it anywhere via a shortcode, or the block editor.
+Manage your data via a spreadsheet interface or an accessible CSV import, display it as any of 19 chart types using the bundled Chart.js library, and embed it anywhere via a shortcode, or the block editor.
 
 **Features:**
 
-* **17 chart types** — line, spline, area, column, stacked column, bar, stacked bar, pie, doughnut, scatter, bubble, radar, radar area, polar, treemap, boxplot, and violin
+* **19 chart types** — line, spline, area, column, stacked column, bar, stacked bar, pie, doughnut, scatter, bubble, radar, radar area, polar, treemap, boxplot, violin, venn, and euler
 * **Two ways to enter data** — a spreadsheet UI (Jspreadsheet CE) with multi-sheet support, or a fully keyboard-accessible CSV import with configurable delimiters
 * **Live preview** — the chart redraws instantly as you edit your data and settings, so you can see exactly what you'll get before publishing
 * **Multiple output formats** — render as a live interactive chart, a static image, or a plain HTML data table, all from the same chart
@@ -56,6 +56,9 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 = 2.3 =
 
+* Added support for [venn](https://docs.mch.art/guide/chart-types) and [euler](https://docs.mch.art/guide/chart-types) chart types
+	* Supports up to 5 sets
+	* Venn uses the classic fixed layout while euler sizes the circles proportionally to their totals
 * Treemap labels now wrap to fit their rectangle so long labels stay readable instead of shrinking to fit on a single line
 * Treemap group captions now wrap onto a second line when long group names need the room
 * Fixed an issue where treemaps with 3 or more grouping levels could render gray instead of using the theme colors

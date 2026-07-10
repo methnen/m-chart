@@ -10,7 +10,7 @@
 	<title>M Chart — Pickle example charts</title>
 	<link>https://example.com/</link>
 	<description>17 example m-chart posts (one per chart type) using real pickle-themed data</description>
-	<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+	<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
 	<wp:base_site_url>https://example.com/</wp:base_site_url>
@@ -21,15 +21,15 @@
 		<category domain="m-chart-units" nicename="usd"><![CDATA[USD]]></category>
 		<title><![CDATA[South Korean kimchi exports]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1000</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1000</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1000</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-area]]></wp:post_name>
@@ -41,7 +41,7 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:14:{s:7:"library";s:7:"chartjs";s:4:"type";s:4:"area";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:14:"Kimchi exports";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:12:"Export value";s:7:"y_units";s:3:"usd";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:44:"Korea International Trade Association (KITA)";s:10:"source_url";s:21:"https://www.kita.org/";s:8:"subtitle";s:65:"Source: KITA - 2017-2023 anchors firm, interim years interpolated";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:7:{i:0;a:2:{i:0;s:4:"2017";i:1;i:85000000;}i:1;a:2:{i:0;s:4:"2018";i:1;i:97000000;}i:2;a:2:{i:0;s:4:"2019";i:1;i:99000000;}i:3;a:2:{i:0;s:4:"2020";i:1;i:133000000;}i:4;a:2:{i:0;s:4:"2021";i:1;i:141000000;}i:5;a:2:{i:0;s:4:"2022";i:1;i:141000000;}i:6;a:2:{i:0;s:4:"2023";i:1;i:156000000;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:15:{s:11:"_post_title";s:27:"South Korean kimchi exports";s:7:"library";s:7:"chartjs";s:4:"type";s:4:"area";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:14:"Kimchi exports";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:12:"Export value";s:7:"y_units";s:3:"usd";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:44:"Korea International Trade Association (KITA)";s:10:"source_url";s:21:"https://www.kita.org/";s:8:"subtitle";s:65:"Source: KITA - 2017-2023 anchors firm, interim years interpolated";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:7:{i:0;a:2:{i:0;s:4:"2017";i:1;i:85000000;}i:1;a:2:{i:0;s:4:"2018";i:1;i:97000000;}i:2;a:2:{i:0;s:4:"2019";i:1;i:99000000;}i:3;a:2:{i:0;s:4:"2020";i:1;i:133000000;}i:4;a:2:{i:0;s:4:"2021";i:1;i:141000000;}i:5;a:2:{i:0;s:4:"2022";i:1;i:141000000;}i:6;a:2:{i:0;s:4:"2023";i:1;i:156000000;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
@@ -49,15 +49,15 @@
 		<category domain="m-chart-units" nicename="milligrams"><![CDATA[Milligrams]]></category>
 		<title><![CDATA[Sodium content of signature pickles]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1001</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1001</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1001</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-bar]]></wp:post_name>
@@ -69,22 +69,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:14:{s:7:"library";s:7:"chartjs";s:4:"type";s:3:"bar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:14:"Sodium content";}s:7:"x_title";s:25:"Sodium (per 100g serving)";s:7:"x_units";s:10:"milligrams";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:17:"data_point_colors";b:1;s:6:"source";s:73:"USDA FoodData Central - supplemented for non-US varieties (zha cai, gari)";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:80:"Source: USDA FoodData Central - per-100g typical values, rounded to nearest 10mg";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:10:{i:0;a:2:{i:0;s:33:"Zha cai (Chinese pickled mustard)";i:1;i:3700;}i:1;a:2:{i:0;s:30:"Gari (Japanese pickled ginger)";i:1;i:1300;}i:2;a:2:{i:0;s:16:"Dill pickle (US)";i:1;i:1100;}i:3;a:2:{i:0;s:14:"Olives (table)";i:1;i:730;}i:4;a:2:{i:0;s:25:"Sauerkraut (German-style)";i:1;i:660;}i:5;a:2:{i:0;s:18:"Sweet gherkin (UK)";i:1;i:570;}i:6;a:2:{i:0;s:38:"Đồ chua (Vietnamese pickled daikon)";i:1;i:600;}i:7;a:2:{i:0;s:15:"Kimchi (Korean)";i:1;i:500;}i:8;a:2:{i:0;s:28:"Bread-and-butter pickle (US)";i:1;i:470;}i:9;a:2:{i:0;s:17:"Sweet pickle (US)";i:1;i:460;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:15:{s:11:"_post_title";s:35:"Sodium content of signature pickles";s:7:"library";s:7:"chartjs";s:4:"type";s:3:"bar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:14:"Sodium content";}s:7:"x_title";s:25:"Sodium (per 100g serving)";s:7:"x_units";s:10:"milligrams";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:17:"data_point_colors";b:1;s:6:"source";s:73:"USDA FoodData Central - supplemented for non-US varieties (zha cai, gari)";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:80:"Source: USDA FoodData Central - per-100g typical values, rounded to nearest 10mg";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:10:{i:0;a:2:{i:0;s:33:"Zha cai (Chinese pickled mustard)";i:1;i:3700;}i:1;a:2:{i:0;s:30:"Gari (Japanese pickled ginger)";i:1;i:1300;}i:2;a:2:{i:0;s:16:"Dill pickle (US)";i:1;i:1100;}i:3;a:2:{i:0;s:14:"Olives (table)";i:1;i:730;}i:4;a:2:{i:0;s:25:"Sauerkraut (German-style)";i:1;i:660;}i:5;a:2:{i:0;s:18:"Sweet gherkin (UK)";i:1;i:570;}i:6;a:2:{i:0;s:38:"Đồ chua (Vietnamese pickled daikon)";i:1;i:600;}i:7;a:2:{i:0;s:15:"Kimchi (Korean)";i:1;i:500;}i:8;a:2:{i:0;s:28:"Bread-and-butter pickle (US)";i:1;i:470;}i:9;a:2:{i:0;s:17:"Sweet pickle (US)";i:1;i:460;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Finished pH across 5 commercial pickle types]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1002</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1002</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1002</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-boxplot]]></wp:post_name>
@@ -96,7 +96,7 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:16:{s:7:"library";s:7:"chartjs";s:4:"type";s:7:"boxplot";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:19:"Finished product pH";}s:7:"x_title";s:11:"Pickle type";s:7:"y_title";s:2:"pH";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:10:"mean_point";b:1;s:13:"sample_points";b:1;s:16:"constrain_y_axis";b:1;s:6:"source";s:85:"USDA FoodData Central + FDA pH-of-foods reference + published food-science literature";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:80:"Source: USDA FoodData Central + FDA pH reference - 10 brand samples per category";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:5:{i:0;a:11:{i:0;s:11:"Dill pickle";i:1;d:3.4;i:2;d:3.48;i:3;d:3.55;i:4;d:3.6;i:5;d:3.65;i:6;d:3.7;i:7;d:3.75;i:8;d:3.82;i:9;d:3.9;i:10;i:4;}i:1;a:11:{i:0;s:16:"Bread-and-butter";i:1;d:3.05;i:2;d:3.1;i:3;d:3.15;i:4;d:3.2;i:5;d:3.25;i:6;d:3.3;i:7;d:3.35;i:8;d:3.42;i:9;d:3.5;i:10;d:3.6;}i:2;a:11:{i:0;s:10:"Sauerkraut";i:1;d:3.35;i:2;d:3.42;i:3;d:3.5;i:4;d:3.58;i:5;d:3.65;i:6;d:3.72;i:7;d:3.78;i:8;d:3.82;i:9;d:3.88;i:10;d:3.95;}i:3;a:11:{i:0;s:6:"Kimchi";i:1;d:3.85;i:2;d:3.95;i:3;d:4.05;i:4;d:4.1;i:5;d:4.18;i:6;d:4.25;i:7;d:4.32;i:8;d:4.4;i:9;d:4.5;i:10;d:4.65;}i:4;a:11:{i:0;s:17:"Pao cai (Sichuan)";i:1;d:3.45;i:2;d:3.55;i:3;d:3.6;i:4;d:3.65;i:5;d:3.72;i:6;d:3.78;i:7;d:3.85;i:8;d:3.92;i:9;i:4;i:10;d:4.1;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:17:{s:11:"_post_title";s:44:"Finished pH across 5 commercial pickle types";s:7:"library";s:7:"chartjs";s:4:"type";s:7:"boxplot";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:19:"Finished product pH";}s:7:"x_title";s:11:"Pickle type";s:7:"y_title";s:2:"pH";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:10:"mean_point";b:1;s:13:"sample_points";b:1;s:16:"constrain_y_axis";b:1;s:6:"source";s:85:"USDA FoodData Central + FDA pH-of-foods reference + published food-science literature";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:80:"Source: USDA FoodData Central + FDA pH reference - 10 brand samples per category";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:5:{i:0;a:11:{i:0;s:11:"Dill pickle";i:1;d:3.4;i:2;d:3.48;i:3;d:3.55;i:4;d:3.6;i:5;d:3.65;i:6;d:3.7;i:7;d:3.75;i:8;d:3.82;i:9;d:3.9;i:10;i:4;}i:1;a:11:{i:0;s:16:"Bread-and-butter";i:1;d:3.05;i:2;d:3.1;i:3;d:3.15;i:4;d:3.2;i:5;d:3.25;i:6;d:3.3;i:7;d:3.35;i:8;d:3.42;i:9;d:3.5;i:10;d:3.6;}i:2;a:11:{i:0;s:10:"Sauerkraut";i:1;d:3.35;i:2;d:3.42;i:3;d:3.5;i:4;d:3.58;i:5;d:3.65;i:6;d:3.72;i:7;d:3.78;i:8;d:3.82;i:9;d:3.88;i:10;d:3.95;}i:3;a:11:{i:0;s:6:"Kimchi";i:1;d:3.85;i:2;d:3.95;i:3;d:4.05;i:4;d:4.1;i:5;d:4.18;i:6;d:4.25;i:7;d:4.32;i:8;d:4.4;i:9;d:4.5;i:10;d:4.65;}i:4;a:11:{i:0;s:17:"Pao cai (Sichuan)";i:1;d:3.45;i:2;d:3.55;i:3;d:3.6;i:4;d:3.65;i:5;d:3.72;i:6;d:3.78;i:7;d:3.85;i:8;d:3.92;i:9;i:4;i:10;d:4.1;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
@@ -105,15 +105,15 @@
 		<category domain="m-chart-units" nicename="kilograms"><![CDATA[Kilograms]]></category>
 		<title><![CDATA[Cucumber consumption × production × exports]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1003</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1003</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1003</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-bubble]]></wp:post_name>
@@ -125,7 +125,7 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:15:{s:7:"library";s:7:"chartjs";s:4:"type";s:6:"bubble";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:26:"Cucumbers & gherkins, 2022";}s:7:"x_title";s:29:"Per-capita annual consumption";s:7:"x_units";s:9:"kilograms";s:7:"y_title";s:28:"Per-capita annual production";s:7:"y_units";s:9:"kilograms";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:48:"FAOSTAT (production) - UN Comtrade (trade flows)";s:10:"source_url";s:40:"https://www.fao.org/faostat/en/#data/QCL";s:8:"subtitle";s:61:"Source: FAOSTAT + UN Comtrade - bubble radius = export volume";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:9:{i:0;a:4:{i:0;s:0:"";i:1;s:11:"Consumption";i:2;s:10:"Production";i:3;s:13:"Export volume";}i:1;a:4:{i:0;s:5:"China";i:1;i:55;i:2;i:55;i:3;i:80;}i:2;a:4:{i:0;s:6:"Turkey";i:1;i:32;i:2;i:23;i:3;i:100;}i:3;a:4:{i:0;s:6:"Russia";i:1;i:12;i:2;i:11;i:3;i:5;}i:4;a:4:{i:0;s:6:"Mexico";i:1;i:8;i:2;i:8;i:3;i:500;}i:5;a:4:{i:0;s:5:"Spain";i:1;i:15;i:2;i:16;i:3;i:200;}i:6;a:4:{i:0;s:4:"Iran";i:1;i:26;i:2;i:26;i:3;i:10;}i:7;a:4:{i:0;s:7:"Ukraine";i:1;i:18;i:2;i:36;i:3;i:30;}i:8;a:4:{i:0;s:2:"US";i:1;d:1.8;i:2;d:1.8;i:3;i:30;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:16:{s:11:"_post_title";s:45:"Cucumber consumption × production × exports";s:7:"library";s:7:"chartjs";s:4:"type";s:6:"bubble";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:26:"Cucumbers & gherkins, 2022";}s:7:"x_title";s:29:"Per-capita annual consumption";s:7:"x_units";s:9:"kilograms";s:7:"y_title";s:28:"Per-capita annual production";s:7:"y_units";s:9:"kilograms";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:48:"FAOSTAT (production) - UN Comtrade (trade flows)";s:10:"source_url";s:40:"https://www.fao.org/faostat/en/#data/QCL";s:8:"subtitle";s:61:"Source: FAOSTAT + UN Comtrade - bubble radius = export volume";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:9:{i:0;a:4:{i:0;s:0:"";i:1;s:11:"Consumption";i:2;s:10:"Production";i:3;s:13:"Export volume";}i:1;a:4:{i:0;s:5:"China";i:1;i:55;i:2;i:55;i:3;i:80;}i:2;a:4:{i:0;s:6:"Turkey";i:1;i:32;i:2;i:23;i:3;i:100;}i:3;a:4:{i:0;s:6:"Russia";i:1;i:12;i:2;i:11;i:3;i:5;}i:4;a:4:{i:0;s:6:"Mexico";i:1;i:8;i:2;i:8;i:3;i:500;}i:5;a:4:{i:0;s:5:"Spain";i:1;i:15;i:2;i:16;i:3;i:200;}i:6;a:4:{i:0;s:4:"Iran";i:1;i:26;i:2;i:26;i:3;i:10;}i:7;a:4:{i:0;s:7:"Ukraine";i:1;i:18;i:2;i:36;i:3;i:30;}i:8;a:4:{i:0;s:2:"US";i:1;d:1.8;i:2;d:1.8;i:3;i:30;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
@@ -133,15 +133,15 @@
 		<category domain="m-chart-units" nicename="tonnes"><![CDATA[Tonnes]]></category>
 		<title><![CDATA[Top cucumber-producing countries (2022)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1004</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1004</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1004</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-column]]></wp:post_name>
@@ -153,22 +153,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:15:{s:7:"library";s:7:"chartjs";s:4:"type";s:6:"column";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:15:"2022 production";}s:7:"x_title";s:7:"Country";s:7:"y_title";s:10:"Production";s:7:"y_units";s:6:"tonnes";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:17:"data_point_colors";b:1;s:6:"source";s:64:"FAOSTAT — Cucumbers and gherkins, 2022 (via Wikipedia summary)";s:10:"source_url";s:70:"https://en.wikipedia.org/wiki/List_of_countries_by_cucumber_production";s:8:"subtitle";s:64:"Source: FAOSTAT (2022) - China produces ~81% of global cucumbers";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:10:{i:0;a:2:{i:0;s:5:"China";i:1;i:77260000;}i:1;a:2:{i:0;s:6:"Turkey";i:1;i:1940000;}i:2;a:2:{i:0;s:6:"Russia";i:1;i:1640000;}i:3;a:2:{i:0;s:6:"Mexico";i:1;i:1080000;}i:4;a:2:{i:0;s:10:"Uzbekistan";i:1;i:900000;}i:5;a:2:{i:0;s:7:"Ukraine";i:1;i:830000;}i:6;a:2:{i:0;s:5:"Spain";i:1;i:770000;}i:7;a:2:{i:0;s:13:"United States";i:1;i:600000;}i:8;a:2:{i:0;s:10:"Kazakhstan";i:1;i:570000;}i:9;a:2:{i:0;s:5:"Japan";i:1;i:550000;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:16:{s:11:"_post_title";s:39:"Top cucumber-producing countries (2022)";s:7:"library";s:7:"chartjs";s:4:"type";s:6:"column";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:15:"2022 production";}s:7:"x_title";s:7:"Country";s:7:"y_title";s:10:"Production";s:7:"y_units";s:6:"tonnes";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:17:"data_point_colors";b:1;s:6:"source";s:64:"FAOSTAT — Cucumbers and gherkins, 2022 (via Wikipedia summary)";s:10:"source_url";s:70:"https://en.wikipedia.org/wiki/List_of_countries_by_cucumber_production";s:8:"subtitle";s:64:"Source: FAOSTAT (2022) - China produces ~81% of global cucumbers";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:10:{i:0;a:2:{i:0;s:5:"China";i:1;i:77260000;}i:1;a:2:{i:0;s:6:"Turkey";i:1;i:1940000;}i:2;a:2:{i:0;s:6:"Russia";i:1;i:1640000;}i:3;a:2:{i:0;s:6:"Mexico";i:1;i:1080000;}i:4;a:2:{i:0;s:10:"Uzbekistan";i:1;i:900000;}i:5;a:2:{i:0;s:7:"Ukraine";i:1;i:830000;}i:6;a:2:{i:0;s:5:"Spain";i:1;i:770000;}i:7;a:2:{i:0;s:13:"United States";i:1;i:600000;}i:8;a:2:{i:0;s:10:"Kazakhstan";i:1;i:570000;}i:9;a:2:{i:0;s:5:"Japan";i:1;i:550000;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Kimchi varieties by share of consumption]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1005</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1005</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1005</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-doughnut]]></wp:post_name>
@@ -180,22 +180,49 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:11:{s:7:"library";s:7:"chartjs";s:4:"type";s:8:"doughnut";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:16:"Kimchi varieties";}s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:61:"World Institute of Kimchi - KNHANES - Wikipedia (cites WiKim)";s:10:"source_url";s:48:"https://www.wikim.re.kr/menu.es?mid=a20501000000";s:8:"subtitle";s:59:"Source: WiKim & KNHANES - baechu is ~70% of marketed kimchi";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:6:{i:0;a:2:{i:0;s:21:"Baechu (napa cabbage)";i:1;s:3:"70%";}i:1;a:2:{i:0;s:23:"Kkakdugi (cubed radish)";i:1;s:3:"15%";}i:2;a:2:{i:0;s:26:"Chonggak (ponytail radish)";i:1;s:2:"5%";}i:3;a:2:{i:0;s:28:"Oi-sobagi (stuffed cucumber)";i:1;s:2:"3%";}i:4;a:2:{i:0;s:21:"Yeolmu (young radish)";i:1;s:2:"3%";}i:5;a:2:{i:0;s:32:"Other (pa, gat, dongchimi, etc.)";i:1;s:2:"4%";}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:12:{s:11:"_post_title";s:40:"Kimchi varieties by share of consumption";s:7:"library";s:7:"chartjs";s:4:"type";s:8:"doughnut";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:16:"Kimchi varieties";}s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:61:"World Institute of Kimchi - KNHANES - Wikipedia (cites WiKim)";s:10:"source_url";s:48:"https://www.wikim.re.kr/menu.es?mid=a20501000000";s:8:"subtitle";s:59:"Source: WiKim & KNHANES - baechu is ~70% of marketed kimchi";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:6:{i:0;a:2:{i:0;s:21:"Baechu (napa cabbage)";i:1;s:3:"70%";}i:1;a:2:{i:0;s:23:"Kkakdugi (cubed radish)";i:1;s:3:"15%";}i:2;a:2:{i:0;s:26:"Chonggak (ponytail radish)";i:1;s:2:"5%";}i:3;a:2:{i:0;s:28:"Oi-sobagi (stuffed cucumber)";i:1;s:2:"3%";}i:4;a:2:{i:0;s:21:"Yeolmu (young radish)";i:1;s:2:"3%";}i:5;a:2:{i:0;s:32:"Other (pa, gat, dongchimi, etc.)";i:1;s:2:"4%";}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
-		<title><![CDATA[Cucumber yield by top producer country, 2014-2023]]></title>
+		<title><![CDATA[Shared ingredients: kimchi, dill pickles, sauerkraut]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1006</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1006</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1006</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[pickle-euler]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type><![CDATA[m-chart]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:12:{s:11:"_post_title";s:52:"Shared ingredients: kimchi, dill pickles, sauerkraut";s:7:"library";s:7:"chartjs";s:4:"type";s:5:"euler";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:23:"Traditional ingredients";}s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:61:"Wikipedia (Kimchi) + Clemson HGIC (Dill Pickles & Sauerkraut)";s:10:"source_url";s:59:"https://hgic.clemson.edu/factsheet/dill-pickles-sauerkraut/";s:8:"subtitle";s:113:"Traditional core ingredients - napa and green cabbage both counted as cabbage, water and optional spices excluded";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:3:{i:0;a:8:{i:0;s:6:"Kimchi";i:1;s:7:"Cabbage";i:2;s:4:"Salt";i:3;s:6:"Garlic";i:4;s:6:"Ginger";i:5;s:12:"Chili flakes";i:6;s:9:"Scallions";i:7;s:10:"Fish sauce";}i:1;a:8:{i:0;s:12:"Dill pickles";i:1;s:9:"Cucumbers";i:2;s:4:"Salt";i:3;s:6:"Garlic";i:4;s:4:"Dill";i:5;s:0:"";i:6;s:0:"";i:7;s:0:"";}i:2;a:8:{i:0;s:10:"Sauerkraut";i:1;s:7:"Cabbage";i:2;s:4:"Salt";i:3;s:0:"";i:4;s:0:"";i:5;s:0:"";i:6;s:0:"";i:7;s:0:"";}}}}}]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
+		<title><![CDATA[Cucumber yield by top producer country, 2014-2023]]></title>
+		<link>https://example.com/?post_type=m-chart&amp;p=1007</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1007</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1007</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-line]]></wp:post_name>
@@ -207,22 +234,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:14:{s:7:"library";s:7:"chartjs";s:4:"type";s:4:"line";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:25:"Cucumber yield by country";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:22:"Yield (tonnes/hectare)";s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:72:"FAOSTAT — Crops and Livestock Products (Cucumbers and gherkins, yield)";s:10:"source_url";s:40:"https://www.fao.org/faostat/en/#data/QCL";s:8:"subtitle";s:81:"Source: FAOSTAT - greenhouse-heavy Spain crushes open-field producers per hectare";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:5:{i:0;a:11:{i:0;s:0:"";i:1;s:4:"2014";i:2;s:4:"2015";i:3;s:4:"2016";i:4;s:4:"2017";i:5;s:4:"2018";i:6;s:4:"2019";i:7;s:4:"2020";i:8;s:4:"2021";i:9;s:4:"2022";i:10;s:4:"2023";}i:1;a:11:{i:0;s:5:"Spain";i:1;i:67;i:2;i:69;i:3;i:71;i:4;i:73;i:5;i:76;i:6;i:78;i:7;i:80;i:8;i:82;i:9;i:85;i:10;i:87;}i:2;a:11:{i:0;s:5:"China";i:1;i:49;i:2;i:50;i:3;i:52;i:4;i:54;i:5;i:55;i:6;i:57;i:7;i:58;i:8;i:59;i:9;i:60;i:10;i:61;}i:3;a:11:{i:0;s:13:"United States";i:1;i:29;i:2;i:30;i:3;i:28;i:4;i:31;i:5;i:30;i:6;i:32;i:7;i:31;i:8;i:30;i:9;i:32;i:10;i:33;}i:4;a:11:{i:0;s:6:"Russia";i:1;i:11;i:2;i:11;i:3;i:12;i:4;i:12;i:5;i:13;i:6;i:13;i:7;i:14;i:8;i:13;i:9;i:14;i:10;i:14;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:15:{s:11:"_post_title";s:49:"Cucumber yield by top producer country, 2014-2023";s:7:"library";s:7:"chartjs";s:4:"type";s:4:"line";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:25:"Cucumber yield by country";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:22:"Yield (tonnes/hectare)";s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:72:"FAOSTAT — Crops and Livestock Products (Cucumbers and gherkins, yield)";s:10:"source_url";s:40:"https://www.fao.org/faostat/en/#data/QCL";s:8:"subtitle";s:81:"Source: FAOSTAT - greenhouse-heavy Spain crushes open-field producers per hectare";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:5:{i:0;a:11:{i:0;s:0:"";i:1;s:4:"2014";i:2;s:4:"2015";i:3;s:4:"2016";i:4;s:4:"2017";i:5;s:4:"2018";i:6;s:4:"2019";i:7;s:4:"2020";i:8;s:4:"2021";i:9;s:4:"2022";i:10;s:4:"2023";}i:1;a:11:{i:0;s:5:"Spain";i:1;i:67;i:2;i:69;i:3;i:71;i:4;i:73;i:5;i:76;i:6;i:78;i:7;i:80;i:8;i:82;i:9;i:85;i:10;i:87;}i:2;a:11:{i:0;s:5:"China";i:1;i:49;i:2;i:50;i:3;i:52;i:4;i:54;i:5;i:55;i:6;i:57;i:7;i:58;i:8;i:59;i:9;i:60;i:10;i:61;}i:3;a:11:{i:0;s:13:"United States";i:1;i:29;i:2;i:30;i:3;i:28;i:4;i:31;i:5;i:30;i:6;i:32;i:7;i:31;i:8;i:30;i:9;i:32;i:10;i:33;}i:4;a:11:{i:0;s:6:"Russia";i:1;i:11;i:2;i:11;i:3;i:12;i:4;i:12;i:5;i:13;i:6;i:13;i:7;i:14;i:8;i:13;i:9;i:14;i:10;i:14;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Chinese preserved-vegetable industry by category]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1007</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1008</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1007</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1008</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1007</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1008</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-pie]]></wp:post_name>
@@ -234,22 +261,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:11:{s:7:"library";s:7:"chartjs";s:4:"type";s:3:"pie";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:36:"Chinese preserved-vegetable industry";}s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:85:"Combined Chinese industry reports (ISO 24220:2020, China Daily, ChinaFoodIngredients)";s:10:"source_url";s:37:"https://en.wikipedia.org/wiki/Pao_cai";s:8:"subtitle";s:83:"Source: combined Chinese industry reports - output value in CNY billions, 2018-2020";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:6:{i:0;a:2:{i:0;s:24:"Sichuan pao cai (泡菜)";i:1;s:8:"33 B CNY";}i:1;a:2:{i:0;s:22:"Other regional pao cai";i:1;s:8:"14 B CNY";}i:2;a:2:{i:0;s:24:"Other pickled vegetables";i:1;s:8:"10 B CNY";}i:3;a:2:{i:0;s:23:"Fuling zha cai (榨菜)";i:1;s:7:"9 B CNY";}i:4;a:2:{i:0;s:27:"Northeast suan cai (酸菜)";i:1;s:7:"8 B CNY";}i:5;a:2:{i:0;s:27:"Mei cai & preserved mustard";i:1;s:7:"5 B CNY";}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:12:{s:11:"_post_title";s:48:"Chinese preserved-vegetable industry by category";s:7:"library";s:7:"chartjs";s:4:"type";s:3:"pie";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:36:"Chinese preserved-vegetable industry";}s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:85:"Combined Chinese industry reports (ISO 24220:2020, China Daily, ChinaFoodIngredients)";s:10:"source_url";s:37:"https://en.wikipedia.org/wiki/Pao_cai";s:8:"subtitle";s:83:"Source: combined Chinese industry reports - output value in CNY billions, 2018-2020";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:6:{i:0;a:2:{i:0;s:24:"Sichuan pao cai (泡菜)";i:1;s:8:"33 B CNY";}i:1;a:2:{i:0;s:22:"Other regional pao cai";i:1;s:8:"14 B CNY";}i:2;a:2:{i:0;s:24:"Other pickled vegetables";i:1;s:8:"10 B CNY";}i:3;a:2:{i:0;s:23:"Fuling zha cai (榨菜)";i:1;s:7:"9 B CNY";}i:4;a:2:{i:0;s:27:"Northeast suan cai (酸菜)";i:1;s:7:"8 B CNY";}i:5;a:2:{i:0;s:27:"Mei cai & preserved mustard";i:1;s:7:"5 B CNY";}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Google Trends interest in "pickling" (US)]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1008</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1009</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1008</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1009</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1008</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1009</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-polar]]></wp:post_name>
@@ -261,22 +288,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:11:{s:7:"library";s:7:"chartjs";s:4:"type";s:5:"polar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:15:"Search interest";}s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:43:"Google Trends — "pickling", United States";s:10:"source_url";s:58:"https://trends.google.com/trends/explore?q=pickling&geo=US";s:8:"subtitle";s:73:"Source: Google Trends - relative-interest index (0-100), peak month = 100";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:12:{i:0;a:2:{i:0;s:3:"Jan";i:1;s:3:"30%";}i:1;a:2:{i:0;s:3:"Feb";i:1;s:3:"25%";}i:2;a:2:{i:0;s:3:"Mar";i:1;s:3:"25%";}i:3;a:2:{i:0;s:3:"Apr";i:1;s:3:"30%";}i:4;a:2:{i:0;s:3:"May";i:1;s:3:"40%";}i:5;a:2:{i:0;s:3:"Jun";i:1;s:3:"60%";}i:6;a:2:{i:0;s:3:"Jul";i:1;s:3:"80%";}i:7;a:2:{i:0;s:3:"Aug";i:1;s:3:"95%";}i:8;a:2:{i:0;s:3:"Sep";i:1;s:4:"100%";}i:9;a:2:{i:0;s:3:"Oct";i:1;s:3:"70%";}i:10;a:2:{i:0;s:3:"Nov";i:1;s:3:"50%";}i:11;a:2:{i:0;s:3:"Dec";i:1;s:3:"35%";}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:12:{s:11:"_post_title";s:41:"Google Trends interest in "pickling" (US)";s:7:"library";s:7:"chartjs";s:4:"type";s:5:"polar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:15:"Search interest";}s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:43:"Google Trends — "pickling", United States";s:10:"source_url";s:58:"https://trends.google.com/trends/explore?q=pickling&geo=US";s:8:"subtitle";s:73:"Source: Google Trends - relative-interest index (0-100), peak month = 100";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:12:{i:0;a:2:{i:0;s:3:"Jan";i:1;s:3:"30%";}i:1;a:2:{i:0;s:3:"Feb";i:1;s:3:"25%";}i:2;a:2:{i:0;s:3:"Mar";i:1;s:3:"25%";}i:3;a:2:{i:0;s:3:"Apr";i:1;s:3:"30%";}i:4;a:2:{i:0;s:3:"May";i:1;s:3:"40%";}i:5;a:2:{i:0;s:3:"Jun";i:1;s:3:"60%";}i:6;a:2:{i:0;s:3:"Jul";i:1;s:3:"80%";}i:7;a:2:{i:0;s:3:"Aug";i:1;s:3:"95%";}i:8;a:2:{i:0;s:3:"Sep";i:1;s:4:"100%";}i:9;a:2:{i:0;s:3:"Oct";i:1;s:3:"70%";}i:10;a:2:{i:0;s:3:"Nov";i:1;s:3:"50%";}i:11;a:2:{i:0;s:3:"Dec";i:1;s:3:"35%";}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Nutritional profile (4 pickle types)]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1009</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1010</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1009</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1010</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1009</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1010</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-radar-area]]></wp:post_name>
@@ -288,22 +315,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:12:{s:7:"library";s:7:"chartjs";s:4:"type";s:10:"radar-area";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:4:{i:0;s:11:"Dill pickle";i:1;s:6:"Kimchi";i:2;s:10:"Sauerkraut";i:3;s:7:"Zha cai";}s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:71:"USDA FoodData Central - supplemented for zha cai via regional databases";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:78:"Source: USDA FoodData Central - per-axis normalized to 0-100 for comparability";s:4:"data";a:1:{s:4:"sets";a:4:{i:0;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:30;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:89;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:6;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:38;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:31;}}i:1;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:13;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:38;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:100;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:75;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:67;}}i:2;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:18;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:16;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:83;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:91;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:40;}}i:3;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:100;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:100;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:17;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:100;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:100;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:13:{s:11:"_post_title";s:36:"Nutritional profile (4 pickle types)";s:7:"library";s:7:"chartjs";s:4:"type";s:10:"radar-area";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:4:{i:0;s:11:"Dill pickle";i:1;s:6:"Kimchi";i:2;s:10:"Sauerkraut";i:3;s:7:"Zha cai";}s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:71:"USDA FoodData Central - supplemented for zha cai via regional databases";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:78:"Source: USDA FoodData Central - per-axis normalized to 0-100 for comparability";s:4:"data";a:1:{s:4:"sets";a:4:{i:0;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:30;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:89;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:6;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:38;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:31;}}i:1;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:13;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:38;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:100;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:75;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:67;}}i:2;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:18;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:16;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:83;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:91;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:40;}}i:3;a:5:{i:0;a:2:{i:0;s:6:"Sodium";i:1;i:100;}i:1;a:2:{i:0;s:9:"Vitamin K";i:1;i:100;}i:2;a:2:{i:0;s:9:"Vitamin C";i:1;i:17;}i:3;a:2:{i:0;s:5:"Fiber";i:1;i:100;}i:4;a:2:{i:0;s:7:"Calcium";i:1;i:100;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Flavor profile of 5 globally distinct pickles]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1010</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1011</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1010</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1011</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1010</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1011</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-radar]]></wp:post_name>
@@ -315,23 +342,23 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:12:{s:7:"library";s:7:"chartjs";s:4:"type";s:5:"radar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:5:{i:0;s:16:"Dill pickle (US)";i:1;s:14:"Kimchi (Korea)";i:2;s:15:"Pao cai (China)";i:3;s:17:"Tsukemono (Japan)";i:4;s:14:"Achaar (India)";}s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:109:"Synthesis of cited sensory & culinary sources (J Food Sci 2005, ScienceDirect 2021, regional culinary guides)";s:10:"source_url";s:41:"https://pubmed.ncbi.nlm.nih.gov/15797327/";s:8:"subtitle";s:84:"Source: published sensory profiles - 1-10 ratings calibrated from cited descriptions";s:4:"data";a:1:{s:4:"sets";a:5:{i:0;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:7;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:7;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:2;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:3;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:1;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:8;}}i:1;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:7;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:7;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:2;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:8;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:8;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:6;}}i:2;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:8;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:6;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:3;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:5;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:7;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:7;}}i:3;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:5;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:6;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:4;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:6;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:1;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:5;}}i:4;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:6;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:7;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:3;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:4;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:9;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:4;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:13:{s:11:"_post_title";s:45:"Flavor profile of 5 globally distinct pickles";s:7:"library";s:7:"chartjs";s:4:"type";s:5:"radar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:5:{i:0;s:16:"Dill pickle (US)";i:1;s:14:"Kimchi (Korea)";i:2;s:15:"Pao cai (China)";i:3;s:17:"Tsukemono (Japan)";i:4;s:14:"Achaar (India)";}s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:109:"Synthesis of cited sensory & culinary sources (J Food Sci 2005, ScienceDirect 2021, regional culinary guides)";s:10:"source_url";s:41:"https://pubmed.ncbi.nlm.nih.gov/15797327/";s:8:"subtitle";s:84:"Source: published sensory profiles - 1-10 ratings calibrated from cited descriptions";s:4:"data";a:1:{s:4:"sets";a:5:{i:0;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:7;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:7;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:2;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:3;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:1;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:8;}}i:1;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:7;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:7;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:2;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:8;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:8;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:6;}}i:2;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:8;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:6;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:3;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:5;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:7;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:7;}}i:3;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:5;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:6;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:4;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:6;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:1;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:5;}}i:4;a:6:{i:0;a:2:{i:0;s:4:"Sour";i:1;i:6;}i:1;a:2:{i:0;s:5:"Salty";i:1;i:7;}i:2;a:2:{i:0;s:5:"Sweet";i:1;i:3;}i:3;a:2:{i:0;s:5:"Umami";i:1;i:4;}i:4;a:2:{i:0;s:5:"Spicy";i:1;i:9;}i:5;a:2:{i:0;s:7:"Crunchy";i:1;i:4;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<category domain="m-chart-units" nicename="days"><![CDATA[Days]]></category>
 		<title><![CDATA[Fermentation time vs final pH (4 pickle types)]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1011</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1012</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1011</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1012</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1011</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1012</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-scatter]]></wp:post_name>
@@ -343,23 +370,23 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:14:{s:7:"library";s:7:"chartjs";s:4:"type";s:7:"scatter";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:4:{i:0;s:14:"Kimchi (15°C)";i:1;s:10:"Sauerkraut";i:2;s:19:"Dill pickle (lacto)";i:3;s:17:"Pao cai (Sichuan)";}s:7:"x_title";s:17:"Fermentation time";s:7:"x_units";s:4:"days";s:7:"y_title";s:2:"pH";s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:73:"Synthesis of cited fermentation studies (PMC 12385461, PMC 8997386, JMBE)";s:10:"source_url";s:50:"https://pmc.ncbi.nlm.nih.gov/articles/PMC12385461/";s:8:"subtitle";s:86:"Source: multiple fermentation studies - curves synthesized from per-study trajectories";s:4:"data";a:1:{s:4:"sets";a:4:{i:0;a:8:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:5.6;}i:2;a:3:{i:0;s:5:"Day 1";i:1;i:1;i:2;d:5.4;}i:3;a:3:{i:0;s:5:"Day 3";i:1;i:3;i:2;d:4.7;}i:4;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:4.4;}i:5;a:3:{i:0;s:5:"Day 7";i:1;i:7;i:2;d:4.3;}i:6;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.9;}i:7;a:3:{i:0;s:6:"Day 21";i:1;i:21;i:2;d:3.85;}}i:1;a:7:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:6.2;}i:2;a:3:{i:0;s:5:"Day 2";i:1;i:2;i:2;d:5.5;}i:3;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:4.2;}i:4;a:3:{i:0;s:6:"Day 10";i:1;i:10;i:2;d:3.6;}i:5;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.4;}i:6;a:3:{i:0;s:6:"Day 21";i:1;i:21;i:2;d:3.3;}}i:2;a:7:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:5.5;}i:2;a:3:{i:0;s:5:"Day 1";i:1;i:1;i:2;i:5;}i:3;a:3:{i:0;s:5:"Day 3";i:1;i:3;i:2;i:4;}i:4;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:3.6;}i:5;a:3:{i:0;s:5:"Day 7";i:1;i:7;i:2;d:3.5;}i:6;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.3;}}i:3;a:7:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:5.4;}i:2;a:3:{i:0;s:5:"Day 1";i:1;i:1;i:2;d:4.9;}i:3;a:3:{i:0;s:5:"Day 3";i:1;i:3;i:2;d:4.1;}i:4;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:3.9;}i:5;a:3:{i:0;s:5:"Day 7";i:1;i:7;i:2;d:3.8;}i:6;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.7;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:15:{s:11:"_post_title";s:46:"Fermentation time vs final pH (4 pickle types)";s:7:"library";s:7:"chartjs";s:4:"type";s:7:"scatter";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:4:{i:0;s:14:"Kimchi (15°C)";i:1;s:10:"Sauerkraut";i:2;s:19:"Dill pickle (lacto)";i:3;s:17:"Pao cai (Sichuan)";}s:7:"x_title";s:17:"Fermentation time";s:7:"x_units";s:4:"days";s:7:"y_title";s:2:"pH";s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:73:"Synthesis of cited fermentation studies (PMC 12385461, PMC 8997386, JMBE)";s:10:"source_url";s:50:"https://pmc.ncbi.nlm.nih.gov/articles/PMC12385461/";s:8:"subtitle";s:86:"Source: multiple fermentation studies - curves synthesized from per-study trajectories";s:4:"data";a:1:{s:4:"sets";a:4:{i:0;a:8:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:5.6;}i:2;a:3:{i:0;s:5:"Day 1";i:1;i:1;i:2;d:5.4;}i:3;a:3:{i:0;s:5:"Day 3";i:1;i:3;i:2;d:4.7;}i:4;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:4.4;}i:5;a:3:{i:0;s:5:"Day 7";i:1;i:7;i:2;d:4.3;}i:6;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.9;}i:7;a:3:{i:0;s:6:"Day 21";i:1;i:21;i:2;d:3.85;}}i:1;a:7:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:6.2;}i:2;a:3:{i:0;s:5:"Day 2";i:1;i:2;i:2;d:5.5;}i:3;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:4.2;}i:4;a:3:{i:0;s:6:"Day 10";i:1;i:10;i:2;d:3.6;}i:5;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.4;}i:6;a:3:{i:0;s:6:"Day 21";i:1;i:21;i:2;d:3.3;}}i:2;a:7:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:5.5;}i:2;a:3:{i:0;s:5:"Day 1";i:1;i:1;i:2;i:5;}i:3;a:3:{i:0;s:5:"Day 3";i:1;i:3;i:2;i:4;}i:4;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:3.6;}i:5;a:3:{i:0;s:5:"Day 7";i:1;i:7;i:2;d:3.5;}i:6;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.3;}}i:3;a:7:{i:0;a:3:{i:0;s:0:"";i:1;s:4:"Days";i:2;s:2:"pH";}i:1;a:3:{i:0;s:5:"Day 0";i:1;i:0;i:2;d:5.4;}i:2;a:3:{i:0;s:5:"Day 1";i:1;i:1;i:2;d:4.9;}i:3;a:3:{i:0;s:5:"Day 3";i:1;i:3;i:2;d:4.1;}i:4;a:3:{i:0;s:5:"Day 5";i:1;i:5;i:2;d:3.9;}i:5;a:3:{i:0;s:5:"Day 7";i:1;i:7;i:2;d:3.8;}i:6;a:3:{i:0;s:6:"Day 14";i:1;i:14;i:2;d:3.7;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<category domain="m-chart-units" nicename="grams"><![CDATA[Grams]]></category>
 		<title><![CDATA[Per-capita kimchi consumption in Korea]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1012</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1013</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1012</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1013</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1012</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1013</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-spline]]></wp:post_name>
@@ -371,23 +398,23 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:15:{s:7:"library";s:7:"chartjs";s:4:"type";s:6:"spline";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:17:"Per-capita kimchi";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:28:"Per-capita daily consumption";s:7:"y_units";s:5:"grams";s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:600;s:6:"source";s:72:"Korea National Health and Nutrition Examination Survey (KNHANES) - KOSIS";s:10:"source_url";s:66:"https://kjcn.or.kr/journal/view.php?doi=10.5720/kjcn.2017.22.2.145";s:8:"subtitle";s:83:"Source: KNHANES / KOSIS - grams per person per day, intermediate years interpolated";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:8:{i:0;a:2:{i:0;s:4:"2005";i:1;i:100;}i:1;a:2:{i:0;s:4:"2008";i:1;i:92;}i:2;a:2:{i:0;s:4:"2010";i:1;i:87;}i:3;a:2:{i:0;s:4:"2013";i:1;i:80;}i:4;a:2:{i:0;s:4:"2015";i:1;i:72;}i:5;a:2:{i:0;s:4:"2017";i:1;i:70;}i:6;a:2:{i:0;s:4:"2020";i:1;i:65;}i:7;a:2:{i:0;s:4:"2023";i:1;i:60;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:16:{s:11:"_post_title";s:38:"Per-capita kimchi consumption in Korea";s:7:"library";s:7:"chartjs";s:4:"type";s:6:"spline";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:17:"Per-capita kimchi";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:28:"Per-capita daily consumption";s:7:"y_units";s:5:"grams";s:6:"shared";b:1;s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:600;s:6:"source";s:72:"Korea National Health and Nutrition Examination Survey (KNHANES) - KOSIS";s:10:"source_url";s:66:"https://kjcn.or.kr/journal/view.php?doi=10.5720/kjcn.2017.22.2.145";s:8:"subtitle";s:83:"Source: KNHANES / KOSIS - grams per person per day, intermediate years interpolated";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:8:{i:0;a:2:{i:0;s:4:"2005";i:1;i:100;}i:1;a:2:{i:0;s:4:"2008";i:1;i:92;}i:2;a:2:{i:0;s:4:"2010";i:1;i:87;}i:3;a:2:{i:0;s:4:"2013";i:1;i:80;}i:4;a:2:{i:0;s:4:"2015";i:1;i:72;}i:5;a:2:{i:0;s:4:"2017";i:1;i:70;}i:6;a:2:{i:0;s:4:"2020";i:1;i:65;}i:7;a:2:{i:0;s:4:"2023";i:1;i:60;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<category domain="m-chart-units" nicename="percent"><![CDATA[Percent]]></category>
 		<title><![CDATA[US pickle product mix by retail brand]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1013</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1014</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1013</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1014</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1013</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1014</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-stacked-bar]]></wp:post_name>
@@ -399,23 +426,23 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:13:{s:7:"library";s:7:"chartjs";s:4:"type";s:11:"stacked-bar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:30:"US pickle product mix by brand";}s:7:"x_title";s:5:"Share";s:7:"x_units";s:7:"percent";s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:71:"Grand View Research - Mordor Intelligence — Pickles & Pickle Products";s:10:"source_url";s:73:"https://www.grandviewresearch.com/industry-analysis/packed-pickles-market";s:8:"subtitle";s:88:"Source: Grand View Research + Mordor Intelligence - per-brand attribution representative";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:6:{i:0;a:7:{i:0;s:0:"";i:1;s:4:"Dill";i:2;s:5:"Sweet";i:3;s:14:"Bread & Butter";i:4;s:4:"Sour";i:5;s:7:"Gherkin";i:6;s:6:"Kosher";}i:1;a:7:{i:0;s:6:"Vlasic";i:1;i:35;i:2;i:20;i:3;i:20;i:4;i:10;i:5;i:10;i:6;i:5;}i:2;a:7:{i:0;s:9:"Mt. Olive";i:1;i:30;i:2;i:25;i:3;i:20;i:4;i:10;i:5;i:10;i:6;i:5;}i:3;a:7:{i:0;s:8:"Claussen";i:1;i:50;i:2;i:10;i:3;i:10;i:4;i:10;i:5;i:10;i:6;i:10;}i:4;a:7:{i:0;s:10:"Bay Valley";i:1;i:35;i:2;i:20;i:3;i:25;i:4;i:5;i:5;i:10;i:6;i:5;}i:5;a:7:{i:0;s:9:"Best Maid";i:1;i:25;i:2;i:30;i:3;i:25;i:4;i:10;i:5;i:5;i:6;i:5;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:14:{s:11:"_post_title";s:37:"US pickle product mix by retail brand";s:7:"library";s:7:"chartjs";s:4:"type";s:11:"stacked-bar";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:30:"US pickle product mix by brand";}s:7:"x_title";s:5:"Share";s:7:"x_units";s:7:"percent";s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:500;s:6:"source";s:71:"Grand View Research - Mordor Intelligence — Pickles & Pickle Products";s:10:"source_url";s:73:"https://www.grandviewresearch.com/industry-analysis/packed-pickles-market";s:8:"subtitle";s:88:"Source: Grand View Research + Mordor Intelligence - per-brand attribution representative";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:6:{i:0;a:7:{i:0;s:0:"";i:1;s:4:"Dill";i:2;s:5:"Sweet";i:3;s:14:"Bread & Butter";i:4;s:4:"Sour";i:5;s:7:"Gherkin";i:6;s:6:"Kosher";}i:1;a:7:{i:0;s:6:"Vlasic";i:1;i:35;i:2;i:20;i:3;i:20;i:4;i:10;i:5;i:10;i:6;i:5;}i:2;a:7:{i:0;s:9:"Mt. Olive";i:1;i:30;i:2;i:25;i:3;i:20;i:4;i:10;i:5;i:10;i:6;i:5;}i:3;a:7:{i:0;s:8:"Claussen";i:1;i:50;i:2;i:10;i:3;i:10;i:4;i:10;i:5;i:10;i:6;i:10;}i:4;a:7:{i:0;s:10:"Bay Valley";i:1;i:35;i:2;i:20;i:3;i:25;i:4;i:5;i:5;i:10;i:6;i:5;}i:5;a:7:{i:0;s:9:"Best Maid";i:1;i:25;i:2;i:30;i:3;i:25;i:4;i:10;i:5;i:5;i:6;i:5;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<category domain="m-chart-units" nicename="usd"><![CDATA[USD]]></category>
 		<title><![CDATA[Korean kimchi exports by destination]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1014</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1015</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1014</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1015</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1014</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1015</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-stacked-column]]></wp:post_name>
@@ -427,22 +454,22 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:14:{s:7:"library";s:7:"chartjs";s:4:"type";s:14:"stacked-column";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:36:"Korean kimchi exports by destination";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:12:"Export value";s:7:"y_units";s:3:"usd";s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:700;s:6:"source";s:77:"Korea International Trade Association (KITA) - Statista summaries citing KITA";s:10:"source_url";s:21:"https://www.kita.org/";s:8:"subtitle";s:42:"Source: KITA - figures in M USD, 2018-2023";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:7:{i:0;a:6:{i:0;s:0:"";i:1;s:5:"Japan";i:2;s:13:"United States";i:3;s:11:"Netherlands";i:4;s:9:"Australia";i:5;s:6:"Others";}i:1;a:6:{i:0;s:4:"2018";i:1;i:50000000;i:2;i:15000000;i:3;i:8000000;i:4;i:4000000;i:5;i:20000000;}i:2;a:6:{i:0;s:4:"2019";i:1;i:51000000;i:2;i:16000000;i:3;i:8000000;i:4;i:4000000;i:5;i:20000000;}i:3;a:6:{i:0;s:4:"2020";i:1;i:66000000;i:2;i:25000000;i:3;i:10000000;i:4;i:5000000;i:5;i:27000000;}i:4;a:6:{i:0;s:4:"2021";i:1;i:63000000;i:2;i:30000000;i:3;i:11000000;i:4;i:6000000;i:5;i:31000000;}i:5;a:6:{i:0;s:4:"2022";i:1;i:61000000;i:2;i:30000000;i:3;i:12000000;i:4;i:6000000;i:5;i:32000000;}i:6;a:6:{i:0;s:4:"2023";i:1;i:60000000;i:2;i:40000000;i:3;i:14000000;i:4;i:7000000;i:5;i:35000000;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:15:{s:11:"_post_title";s:36:"Korean kimchi exports by destination";s:7:"library";s:7:"chartjs";s:4:"type";s:14:"stacked-column";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:36:"Korean kimchi exports by destination";}s:7:"x_title";s:4:"Year";s:7:"y_title";s:12:"Export value";s:7:"y_units";s:3:"usd";s:6:"labels";b:1;s:6:"legend";b:1;s:6:"height";i:700;s:6:"source";s:77:"Korea International Trade Association (KITA) - Statista summaries citing KITA";s:10:"source_url";s:21:"https://www.kita.org/";s:8:"subtitle";s:42:"Source: KITA - figures in M USD, 2018-2023";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:7:{i:0;a:6:{i:0;s:0:"";i:1;s:5:"Japan";i:2;s:13:"United States";i:3;s:11:"Netherlands";i:4;s:9:"Australia";i:5;s:6:"Others";}i:1;a:6:{i:0;s:4:"2018";i:1;i:50000000;i:2;i:15000000;i:3;i:8000000;i:4;i:4000000;i:5;i:20000000;}i:2;a:6:{i:0;s:4:"2019";i:1;i:51000000;i:2;i:16000000;i:3;i:8000000;i:4;i:4000000;i:5;i:20000000;}i:3;a:6:{i:0;s:4:"2020";i:1;i:66000000;i:2;i:25000000;i:3;i:10000000;i:4;i:5000000;i:5;i:27000000;}i:4;a:6:{i:0;s:4:"2021";i:1;i:63000000;i:2;i:30000000;i:3;i:11000000;i:4;i:6000000;i:5;i:31000000;}i:5;a:6:{i:0;s:4:"2022";i:1;i:61000000;i:2;i:30000000;i:3;i:12000000;i:4;i:6000000;i:5;i:32000000;}i:6;a:6:{i:0;s:4:"2023";i:1;i:60000000;i:2;i:40000000;i:3;i:14000000;i:4;i:7000000;i:5;i:35000000;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Top table olive producers by region (2022/23)]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1015</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1016</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1015</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1016</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1015</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1016</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-treemap]]></wp:post_name>
@@ -454,23 +481,50 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:12:{s:7:"library";s:7:"chartjs";s:4:"type";s:7:"treemap";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:22:"Table olive production";}s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:700;s:17:"data_point_colors";b:1;s:6:"source";s:61:"International Olive Council (IOC) - World Table Olive Figures";s:10:"source_url";s:81:"https://www.internationaloliveoil.org/what-we-do/economic-affairs-promotion-unit/";s:8:"subtitle";s:92:"Source: IOC - 2022/23 crop year, Mediterranean basin dominates global table olive production";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:12:{i:0;a:3:{i:0;s:0:"";i:1;s:7:"Country";i:2;s:10:"Production";}i:1;a:3:{i:0;s:13:"Mediterranean";i:1;s:6:"Turkey";i:2;s:13:"750000 Tonnes";}i:2;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Egypt";i:2;s:13:"690000 Tonnes";}i:3;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Spain";i:2;s:13:"540000 Tonnes";}i:4;a:3:{i:0;s:13:"Mediterranean";i:1;s:7:"Algeria";i:2;s:13:"280000 Tonnes";}i:5;a:3:{i:0;s:13:"Mediterranean";i:1;s:6:"Greece";i:2;s:13:"200000 Tonnes";}i:6;a:3:{i:0;s:13:"Mediterranean";i:1;s:7:"Morocco";i:2;s:13:"110000 Tonnes";}i:7;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Syria";i:2;s:13:"100000 Tonnes";}i:8;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Italy";i:2;s:12:"70000 Tonnes";}i:9;a:3:{i:0;s:8:"Americas";i:1;s:9:"Argentina";i:2;s:13:"150000 Tonnes";}i:10;a:3:{i:0;s:8:"Americas";i:1;s:4:"Peru";i:2;s:13:"100000 Tonnes";}i:11;a:3:{i:0;s:8:"Americas";i:1;s:13:"United States";i:2;s:13:"100000 Tonnes";}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:13:{s:11:"_post_title";s:45:"Top table olive producers by region (2022/23)";s:7:"library";s:7:"chartjs";s:4:"type";s:7:"treemap";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:22:"Table olive production";}s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:700;s:17:"data_point_colors";b:1;s:6:"source";s:61:"International Olive Council (IOC) - World Table Olive Figures";s:10:"source_url";s:81:"https://www.internationaloliveoil.org/what-we-do/economic-affairs-promotion-unit/";s:8:"subtitle";s:92:"Source: IOC - 2022/23 crop year, Mediterranean basin dominates global table olive production";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:12:{i:0;a:3:{i:0;s:0:"";i:1;s:7:"Country";i:2;s:10:"Production";}i:1;a:3:{i:0;s:13:"Mediterranean";i:1;s:6:"Turkey";i:2;s:13:"750000 Tonnes";}i:2;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Egypt";i:2;s:13:"690000 Tonnes";}i:3;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Spain";i:2;s:13:"540000 Tonnes";}i:4;a:3:{i:0;s:13:"Mediterranean";i:1;s:7:"Algeria";i:2;s:13:"280000 Tonnes";}i:5;a:3:{i:0;s:13:"Mediterranean";i:1;s:6:"Greece";i:2;s:13:"200000 Tonnes";}i:6;a:3:{i:0;s:13:"Mediterranean";i:1;s:7:"Morocco";i:2;s:13:"110000 Tonnes";}i:7;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Syria";i:2;s:13:"100000 Tonnes";}i:8;a:3:{i:0;s:13:"Mediterranean";i:1;s:5:"Italy";i:2;s:12:"70000 Tonnes";}i:9;a:3:{i:0;s:8:"Americas";i:1;s:9:"Argentina";i:2;s:13:"150000 Tonnes";}i:10;a:3:{i:0;s:8:"Americas";i:1;s:4:"Peru";i:2;s:13:"100000 Tonnes";}i:11;a:3:{i:0;s:8:"Americas";i:1;s:13:"United States";i:2;s:13:"100000 Tonnes";}}}}}]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
+		<title><![CDATA[Pickling-crop production overlap (FAOSTAT top 8)]]></title>
+		<link>https://example.com/?post_type=m-chart&amp;p=1017</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1017</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1017</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[pickle-venn]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type><![CDATA[m-chart]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:12:{s:11:"_post_title";s:48:"Pickling-crop production overlap (FAOSTAT top 8)";s:7:"library";s:7:"chartjs";s:4:"type";s:4:"venn";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:14:"Pickling crops";}s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:6:"source";s:44:"FAOSTAT - Crops and livestock products (QCL)";s:10:"source_url";s:40:"https://www.fao.org/faostat/en/#data/QCL";s:8:"subtitle";s:97:"Countries in each crop's FAOSTAT top-8 producer list - cucumbers and chillies 2023, cabbages 2022";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:7:{i:0;a:2:{i:0;s:9:"Cucumbers";i:1;s:1:"2";}i:1;a:2:{i:0;s:8:"Cabbages";i:1;s:1:"4";}i:2;a:2:{i:0;s:8:"Chillies";i:1;s:1:"3";}i:3;a:2:{i:0;s:20:"Cucumbers & Cabbages";i:1;s:1:"2";}i:4;a:2:{i:0;s:20:"Cucumbers & Chillies";i:1;s:1:"3";}i:5;a:2:{i:0;s:19:"Cabbages & Chillies";i:1;s:1:"1";}i:6;a:2:{i:0;s:31:"Cucumbers & Cabbages & Chillies";i:1;s:1:"1";}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<category domain="m-chart-units" nicename="milligrams"><![CDATA[Milligrams]]></category>
 		<title><![CDATA[Sodium content across commercial pickle brands]]></title>
-		<link>https://example.com/?post_type=m-chart&amp;p=1016</link>
-		<pubDate>Wed, 13 May 2026 20:44:57 GMT</pubDate>
+		<link>https://example.com/?post_type=m-chart&amp;p=1018</link>
+		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1016</guid>
+		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1018</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
-		<wp:post_id>1016</wp:post_id>
-		<wp:post_date><![CDATA[2026-05-13 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-05-13 00:00:00]]></wp:post_date_gmt>
+		<wp:post_id>1018</wp:post_id>
+		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-violin]]></wp:post_name>
@@ -482,7 +536,7 @@
 		<wp:is_sticky>0</wp:is_sticky>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[m-chart]]></wp:meta_key>
-			<wp:meta_value><![CDATA[a:16:{s:7:"library";s:7:"chartjs";s:4:"type";s:6:"violin";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:19:"Sodium distribution";}s:7:"x_title";s:11:"Pickle type";s:7:"y_title";s:15:"Sodium per 100g";s:7:"y_units";s:10:"milligrams";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:10:"mean_point";b:1;s:17:"data_point_colors";b:1;s:6:"source";s:48:"USDA FoodData Central — Branded Foods database";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:77:"Source: USDA FoodData Central - 10 brands sampled per type from Branded Foods";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:4:{i:0;a:11:{i:0;s:11:"Dill pickle";i:1;i:950;i:2;i:980;i:3;i:1050;i:4;i:1100;i:5;i:1150;i:6;i:1180;i:7;i:1210;i:8;i:1250;i:9;i:1300;i:10;i:1350;}i:1;a:11:{i:0;s:12:"Sweet pickle";i:1;i:380;i:2;i:410;i:3;i:440;i:4;i:460;i:5;i:470;i:6;i:490;i:7;i:510;i:8;i:540;i:9;i:580;i:10;i:620;}i:2;a:11:{i:0;s:6:"Kimchi";i:1;i:380;i:2;i:420;i:3;i:450;i:4;i:470;i:5;i:490;i:6;i:500;i:7;i:520;i:8;i:560;i:9;i:600;i:10;i:650;}i:3;a:11:{i:0;s:10:"Sauerkraut";i:1;i:500;i:2;i:550;i:3;i:580;i:4;i:620;i:5;i:660;i:6;i:680;i:7;i:710;i:8;i:740;i:9;i:780;i:10;i:820;}}}}}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[a:17:{s:11:"_post_title";s:46:"Sodium content across commercial pickle brands";s:7:"library";s:7:"chartjs";s:4:"type";s:6:"violin";s:8:"parse_in";s:4:"rows";s:9:"set_names";a:1:{i:0;s:19:"Sodium distribution";}s:7:"x_title";s:11:"Pickle type";s:7:"y_title";s:15:"Sodium per 100g";s:7:"y_units";s:10:"milligrams";s:6:"labels";b:1;s:6:"legend";b:0;s:6:"height";i:500;s:10:"mean_point";b:1;s:17:"data_point_colors";b:1;s:6:"source";s:48:"USDA FoodData Central — Branded Foods database";s:10:"source_url";s:25:"https://fdc.nal.usda.gov/";s:8:"subtitle";s:77:"Source: USDA FoodData Central - 10 brands sampled per type from Branded Foods";s:4:"data";a:1:{s:4:"sets";a:1:{i:0;a:4:{i:0;a:11:{i:0;s:11:"Dill pickle";i:1;i:950;i:2;i:980;i:3;i:1050;i:4;i:1100;i:5;i:1150;i:6;i:1180;i:7;i:1210;i:8;i:1250;i:9;i:1300;i:10;i:1350;}i:1;a:11:{i:0;s:12:"Sweet pickle";i:1;i:380;i:2;i:410;i:3;i:440;i:4;i:460;i:5;i:470;i:6;i:490;i:7;i:510;i:8;i:540;i:9;i:580;i:10;i:620;}i:2;a:11:{i:0;s:6:"Kimchi";i:1;i:380;i:2;i:420;i:3;i:450;i:4;i:470;i:5;i:490;i:6;i:500;i:7;i:520;i:8;i:560;i:9;i:600;i:10;i:650;}i:3;a:11:{i:0;s:10:"Sauerkraut";i:1;i:500;i:2;i:550;i:3;i:580;i:4;i:620;i:5;i:660;i:6;i:680;i:7;i:710;i:8;i:740;i:9;i:780;i:10;i:820;}}}}}]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 

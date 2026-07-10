@@ -1,8 +1,8 @@
 # M Chart example charts — pickle data library
 
-This document accompanies a library of 17 example charts (one per chart type the plugin supports) using real-world pickle / fermented-vegetable data. Each section below shows the recommended chart configuration, the data laid out as a table you can paste straight into the Jspreadsheet meta box, and the source(s) the data is drawn from.
+This document accompanies a library of 19 example charts (one per chart type the plugin supports) using real-world pickle / fermented-vegetable data. Each section below shows the recommended chart configuration, the data laid out as a table you can paste straight into the Jspreadsheet meta box, and the source(s) the data is drawn from.
 
-The canonical machine-readable copies of each chart live at [`tests/fixtures/charts/pickle-<slug>.json`](../tests/fixtures/charts/). A pre-built WordPress import file (`pickle-charts.wxr.xml`) is also available under [`example-charts/`](../example-charts/) — import it via **Tools → Import → WordPress** to get all 17 charts as drafts on any WP install.
+The canonical machine-readable copies of each chart live at [`tests/fixtures/charts/pickle-<slug>.json`](../tests/fixtures/charts/). A pre-built WordPress import file (`pickle-charts.wxr.xml`) is also available under [`example-charts/`](../example-charts/) — import it via **Tools → Import → WordPress** to get all 19 charts as drafts on any WP install.
 
 ## How to read this document
 
@@ -19,13 +19,14 @@ A quick map of which traditions show up where:
 | Region / tradition | Charts |
 |---|---|
 | **United States** | line, bar, stacked-bar, radar-area, violin, polar, boxplot, treemap |
-| **Korea** | spline, area, doughnut, radar, radar-area, scatter, boxplot |
+| **Korea** | spline, area, doughnut, radar, radar-area, scatter, boxplot, euler (kimchi) |
 | **China** | column, pie, radar, radar-area, boxplot |
 | **Japan** | radar |
 | **India** | radar |
 | **Mediterranean** | treemap (Turkey, Egypt, Spain, Algeria, Greece, Morocco, Syria, Italy) |
-| **Europe** | stacked-column (Korean exports → NL, but EU-bound), radar-area (sauerkraut) |
+| **Europe** | stacked-column (Korean exports → NL, but EU-bound), radar-area (sauerkraut), euler (sauerkraut) |
 | **Americas (non-US)** | treemap (Argentina, Peru) |
+| **Global (FAOSTAT)** | venn (top producers of cucumbers, cabbages, chillies) |
 
 ---
 
@@ -502,6 +503,56 @@ Per the docs, each row is one category followed by individual observations in se
 - [USDA FoodData Central — Branded Foods database](https://fdc.nal.usda.gov/) — primary, all four types
 
 **Caveat:** 10 commercial brands sampled per type from the Branded Foods database. Exact brand names are omitted to keep the chart focused on the distribution; values are real USDA-FDC-reported figures from real brand entries.
+
+---
+
+## 18. Venn — Pickling-crop production overlap (FAOSTAT top 8)
+
+**Chart type:** `venn` - **parse_in:** `rows` - **single sheet, region-counts layout**
+
+Which countries appear in FAOSTAT's top-8 producer lists for the three classic pickling crops? China is the only country in all three lists. Russia and Uzbekistan pair cucumbers with cabbages; Türkiye, Mexico, and Spain pair cucumbers with chillies; Indonesia pairs cabbages with chillies.
+
+This example uses the **region-counts layout**: one row per region, set names joined with `&`, and the count for exactly that region in the value column. Every set sums to 8 (its full top-8 list), which makes the chart self-verifying.
+
+| Region | Countries |
+|---|---|
+| Cucumbers | 2 |
+| Cabbages | 4 |
+| Chillies | 3 |
+| Cucumbers & Cabbages | 2 |
+| Cucumbers & Chillies | 3 |
+| Cabbages & Chillies | 1 |
+| Cucumbers & Cabbages & Chillies | 1 |
+
+The underlying top-8 lists: cucumbers & gherkins (2023) — China, Türkiye, Russia, Mexico, Uzbekistan, Ukraine, Spain, United States; cabbages & other brassicas (2022) — China, India, Russia, South Korea, Japan, Indonesia, Poland, Uzbekistan; green chillies & peppers (2023) — China, Mexico, Türkiye, Indonesia, Spain, Egypt, Nigeria, Algeria.
+
+**Sources:**
+- [FAOSTAT — Crops and livestock products (QCL)](https://www.fao.org/faostat/en/#data/QCL) — primary
+- [List of countries by cucumber production — Wikipedia](https://en.wikipedia.org/wiki/List_of_countries_by_cucumber_production) — convenient FAOSTAT mirror
+
+**Caveat:** Reference years are mixed by necessity — cucumbers and chillies use 2023 rankings, cabbages 2022 (the latest FAOSTAT year confirmed for each at authoring time). The subtitle states this on the chart.
+
+---
+
+## 19. Euler — Shared ingredients: kimchi, dill pickles, sauerkraut
+
+**Chart type:** `euler` - **parse_in:** `rows` - **single sheet, membership-lists layout**
+
+The traditional core ingredient lists of three iconic pickles — and a story the proportional euler layout tells on its own: classic sauerkraut is just cabbage and salt, both of which kimchi also uses, so the sauerkraut circle nests entirely inside kimchi's. Salt sits at the center of all three; garlic bridges kimchi and dill pickles.
+
+This example uses the **membership-lists layout**: one row per set — the set name in the first cell, its member names in the cells after it (the same row-per-entity shape boxplot uses). Matching names across rows create the overlaps, and hovering a region shows the actual ingredient names in the tooltip.
+
+| Set | Members |||||||
+|---|---|---|---|---|---|---|---|
+| Kimchi | Cabbage | Salt | Garlic | Ginger | Chili flakes | Scallions | Fish sauce |
+| Dill pickles | Cucumbers | Salt | Garlic | Dill | | | |
+| Sauerkraut | Cabbage | Salt | | | | | |
+
+**Sources:**
+- [Kimchi — Wikipedia](https://en.wikipedia.org/wiki/Kimchi) — core baechu-kimchi ingredient breakdown
+- [Dill Pickles & Sauerkraut — Clemson HGIC factsheet](https://hgic.clemson.edu/factsheet/dill-pickles-sauerkraut/) — traditional fermented dill pickle and sauerkraut ingredient lists
+
+**Caveat:** "Core traditional" lists only — napa cabbage (kimchi) and green cabbage (sauerkraut) are both counted as "cabbage" for overlap purposes, and water plus optional spices (pickling spice, dried chilies in some dill recipes) are excluded. The subtitle states this on the chart.
 
 ---
 

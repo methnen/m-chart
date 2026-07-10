@@ -169,6 +169,20 @@
 				background-size: contain;
 			}
 		}
+
+		&.venn {
+			&::after {
+				background-image: url( '../images/types/venn.svg' );
+				background-size: contain;
+			}
+		}
+
+		&.euler {
+			&::after {
+				background-image: url( '../images/types/euler.svg' );
+				background-size: contain;
+			}
+		}
 	}
 }
 

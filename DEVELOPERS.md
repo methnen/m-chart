@@ -242,11 +242,11 @@ Available tokens:
 
 ## Example charts ##
 
-The repo ships a library of 17 pickle-themed example charts (one per chart type) — useful for documentation, screenshots, and as data fixtures.
+The repo ships a library of 19 pickle-themed example charts (one per chart type) — useful for documentation, screenshots, and as data fixtures.
 
 - **Canonical data:** [`tests/fixtures/charts/pickle-*.json`](tests/fixtures/charts/) — one JSON file per chart type with the full meta + `data.sets` payload
 - **Human-readable doc:** [`docs/example-charts.md`](docs/example-charts.md) — concept blurb, data table, and source citations per chart
-- **WP-importable file:** [`example-charts/pickle-charts.wxr.xml`](example-charts/) — WordPress eXtended RSS (WXR) export creating all 17 posts as drafts
+- **WP-importable file:** [`example-charts/pickle-charts.wxr.xml`](example-charts/) — WordPress eXtended RSS (WXR) export creating all 19 posts as drafts
 
 Each example exercises a different real-world dataset (FAOSTAT cucumber production, KITA kimchi exports, USDA FoodData Central sodium figures, Chinese pao cai / zha cai industry data, Korean kimchi fermentation studies, Google Trends, etc.) and includes a `subtitle` field that surfaces any data caveats (rounding, interpolation, normalization) directly on the rendered chart.
 
@@ -266,7 +266,7 @@ Implementation lives at [`scripts/generate-example-charts-wxr.js`](scripts/gener
 npx wp-env run cli wp import example-charts/pickle-charts.wxr.xml --authors=skip
 ```
 
-…or through the WP admin: **Tools → Import → WordPress** (install the WP Importer plugin if prompted), then upload `example-charts/pickle-charts.wxr.xml`. The 17 example charts will appear as drafts under **M Chart → All Chart Posts**.
+…or through the WP admin: **Tools → Import → WordPress** (install the WP Importer plugin if prompted), then upload `example-charts/pickle-charts.wxr.xml`. The 19 example charts will appear as drafts under **M Chart → All Chart Posts**.
 
 ### Adding a new example chart
 

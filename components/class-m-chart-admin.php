@@ -586,6 +586,7 @@ class M_Chart_Admin {
 				wp_enqueue_script( 'chartjs-datalabels' );
 				wp_enqueue_script( 'chartjs-treemap' );
 				wp_enqueue_script( 'chartjs-boxplot' );
+				wp_enqueue_script( 'chartjs-venn' );
 			}
 
 			$post_meta        = m_chart()->get_post_meta( $post_id );

@@ -72,6 +72,8 @@ const TITLES = {
 	'treemap':        'Top table olive producers by region (2022/23)',
 	'boxplot':        'Finished pH across 5 commercial pickle types',
 	'violin':         'Sodium content across commercial pickle brands',
+	'venn':           'Pickling-crop production overlap (FAOSTAT top 8)',
+	'euler':          'Shared ingredients: kimchi, dill pickles, sauerkraut',
 };
 
 /**

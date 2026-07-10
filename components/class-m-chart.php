@@ -407,6 +407,14 @@ class M_Chart {
 			$this->version
 		);
 
+		// The venn UMD build reads the global Chart at load time so the chartjs dependency is required
+		wp_register_script(
+			'chartjs-venn',
+			$this->plugin_url . '/components/external/chartjs/chartjs-chart-venn.min.js',
+			[ 'chartjs' ],
+			$this->version
+		);
+
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', EP_PERMALINK );
 
