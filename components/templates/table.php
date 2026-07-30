@@ -13,11 +13,8 @@
 		$first_row = m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_ROW ];
 		$labels    = m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_COLUMN ];
 
-		$row_column = false;
-
-		if ( isset( m_chart()->parse()->raw_data[0] ) && count( $first_row ) == count( m_chart()->parse()->raw_data[0] ) ) {
-			$row_column = true;
-		}
+		// Rows parsing collects the data as raw_data[ row ][ column ] while columns parsing collects it as raw_data[ column ][ row ]
+		$row_column = M_Chart_Parse::PARSE_ROWS === m_chart()->parse()->parse_in;
 		?>
 		<thead>
 			<tr>
@@ -44,6 +41,37 @@
 						} else {
 							$raw = m_chart()->parse()->raw_data[ $column ][ $row ] ?? null;
 						}
+						?>
+						<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
+						<?php
+					}
+					?>
+				</tr>
+				<?php
+			}
+			?>
+		</tbody>
+		<?php
+	} elseif (
+		   M_Chart_Parse::LABELS_FIRST_COLUMN === m_chart()->parse()->value_labels_position
+		&& M_Chart_Parse::PARSE_ROWS === m_chart()->parse()->parse_in
+		&& [] !== m_chart()->parse()->value_labels
+	) {
+		// The labels came from the first column of the spreadsheet
+		// Render one table row per label so the table matches the spreadsheet's vertical arrangement
+		$labels  = m_chart()->parse()->value_labels;
+		$raw     = m_chart()->parse()->raw_data;
+		$per_row = (int) ceil( count( $raw ) / count( $labels ) );
+		$chunks  = $per_row ? array_chunk( $raw, $per_row ) : [];
+		?>
+		<tbody>
+			<?php
+			foreach ( $labels as $row => $label ) {
+				?>
+				<tr>
+					<th scope="row"><?php echo esc_html( $label ); ?></th>
+					<?php
+					foreach ( $chunks[ $row ] ?? [] as $raw ) {
 						?>
 						<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
 						<?php

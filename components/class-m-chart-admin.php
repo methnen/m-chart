@@ -59,6 +59,9 @@ class M_Chart_Admin {
 		$this->save_settings();
 
 		add_action( 'admin_notices', [ $this, 'library_warning' ] );
+		add_action( 'admin_notices', [ $this, 'migration_success_notice' ] );
+		add_action( 'admin_post_m_chart_migrate_highcharts', [ $this, 'admin_post_migrate_highcharts' ] );
+		add_action( 'admin_post_m_chart_dismiss_migration_notice', [ $this, 'admin_post_dismiss_migration_notice' ] );
 	}
 
 	/**
@@ -461,18 +464,32 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Display an admin notice when the site has charts that use Highcharts but M Chart Highcharts Library is not active/installed
+	 * Display a deprecation/migration notice when the site has charts built with Highcharts
+	 *
+	 * The M Chart Highcharts Library is deprecated so every site with Highcharts charts sees
+	 * this — not just sites where the library plugin is inactive
+	 * With the library plugin active the charts still work, so that variant can be dismissed
+	 * (persisted via the m_chart_hide_migration_notice option); with it inactive the charts
+	 * are actually broken and the notice always shows
+	 * One-click migration to Chart.js is the primary action in both variants
 	 */
 	public function library_warning() {
-		if ( is_plugin_active( 'm-chart-highcharts-library/m-chart-highcharts-library.php' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
-		$highcharts_check = get_posts(
+		$library_active = is_plugin_active( 'm-chart-highcharts-library/m-chart-highcharts-library.php' );
+
+		if ( $library_active && get_option( 'm_chart_hide_migration_notice' ) ) {
+			return;
+		}
+
+		$highcharts_query = new WP_Query(
 			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => 1,
 				'post_status'    => 'any',
+				'fields'         => 'ids',
 				'tax_query'      => [
 					[
 						'taxonomy' => m_chart()->slug . '-library',
@@ -483,23 +500,202 @@ class M_Chart_Admin {
 			]
 		);
 
-		if ( ! $highcharts_check ) {
+		$count = (int) $highcharts_query->found_posts;
+
+		if ( ! $count ) {
 			return;
 		}
 		?>
 <div class="warning notice notice-warning">
 	<p>
+		<strong>
 		<?php
-				echo str_replace(
-					esc_html__( 'M Chart Highcharts Library', 'm-chart' ),
-					'<strong>' . esc_html__( 'M Chart Highcharts Library', 'm-chart' ) . '</strong>',
-					esc_html__( 'You have charts that require the M Chart Highcharts Library plugin.', 'm-chart' )
+		if ( $library_active ) {
+				echo esc_html(
+					sprintf(
+						/* translators: %d: number of Highcharts charts */
+						_n(
+							'The M Chart Highcharts Library is deprecated and will not receive further updates. You have %d chart built with it.',
+							'The M Chart Highcharts Library is deprecated and will not receive further updates. You have %d charts built with it.',
+							$count,
+							'm-chart'
+						),
+						$count
+					)
 				);
+		} else {
+				echo esc_html(
+					sprintf(
+						/* translators: %d: number of Highcharts charts */
+						_n(
+							'You have %d chart built with the Highcharts library, which is not active — that chart currently won\'t display. The M Chart Highcharts Library is deprecated and will not receive further updates.',
+							'You have %d charts built with the Highcharts library, which is not active — those charts currently won\'t display. The M Chart Highcharts Library is deprecated and will not receive further updates.',
+							$count,
+							'm-chart'
+						),
+						$count
+					)
+				);
+		}
+		?>
+		</strong>
+	</p>
+	<p><?php esc_html_e( 'You can migrate them to Chart.js with one click. The M Chart implementation of Chart.js now matches Highcharts feature-for-feature, supports additional chart types, works with M Chart Pro, is more performant, and isn\'t burdened by expensive commercial licensing requirements.', 'm-chart' ); ?></p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="m_chart_migrate_highcharts" />
+		<?php wp_nonce_field( 'm-chart-migrate-highcharts' ); ?>
+		<p>
+			<button type="submit" class="button-primary"><?php esc_html_e( 'Migrate charts to Chart.js', 'm-chart' ); ?></button>
+			<?php if ( $library_active ) { ?>
+			<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=m_chart_dismiss_migration_notice' ), 'm-chart-dismiss-migration-notice' ) ); ?>" style="margin-left: 8px;"><?php esc_html_e( 'Dismiss', 'm-chart' ); ?></a>
+			<?php } else { ?>
+			<a href="https://github.com/methnen/m-chart-highcharts-library/" style="margin-left: 8px;"><?php esc_html_e( 'or install the M Chart Highcharts Library plugin', 'm-chart' ); ?></a>
+			<?php } ?>
+		</p>
+	</form>
+</div>
+		<?php
+	}
+
+	/**
+	 * Persist dismissal of the Highcharts deprecation/migration notice
+	 *
+	 * Only suppresses the library-active variant — the broken-charts warning
+	 * always shows regardless of this option
+	 */
+	public function admin_post_dismiss_migration_notice() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Permission error', 'm-chart' ) );
+		}
+
+		check_admin_referer( 'm-chart-dismiss-migration-notice' );
+
+		update_option( 'm_chart_hide_migration_notice', 1, false );
+
+		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php?post_type=' . m_chart()->slug ) );
+		exit;
+	}
+
+	/**
+	 * Migrate a single Highcharts chart post to Chart.js
+	 *
+	 * Pure meta/term surgery — deliberately never touches the Highcharts library class
+	 * so it works identically whether that plugin is active or not
+	 * The stored chart data itself needs no conversion: the per-chart meta schema is identical
+	 * between the two libraries and Chart.js's type list is a strict superset of Highcharts's
+	 * Only the theme slug may need remapping (Highcharts legacy themes have no Chart.js file)
+	 *
+	 * @param int $post_id WP post ID of the chart to migrate
+	 *
+	 * @return bool whether the chart was migrated
+	 */
+	public function migrate_highcharts_chart( $post_id ) {
+		$post_meta = get_post_meta( $post_id, m_chart()->slug, true );
+
+		if ( ! is_array( $post_meta ) || ! isset( $post_meta['library'] ) || 'highcharts' !== $post_meta['library'] ) {
+			return false;
+		}
+
+		$post_meta['library'] = 'chartjs';
+
+		// Highcharts theme slugs without a Chart.js theme file get remapped
+		// Slugs left unmapped degrade gracefully to Chart.js's built-in palette
+		$theme_map = apply_filters(
+			'm_chart_migrate_theme_map',
+			[
+				'legacy-v2' => 'highcharts-v4',
+				'legacy-v3' => 'highcharts-v4',
+			]
+		);
+
+		if ( isset( $post_meta['theme'], $theme_map[ $post_meta['theme'] ] ) ) {
+			$post_meta['theme'] = $theme_map[ $post_meta['theme'] ];
+		}
+
+		// Core's update_post_meta validates the meta and replaces the m-chart-library taxonomy term
+		m_chart()->update_post_meta( $post_id, $post_meta );
+
+		// Core only ever overwrites this cache key, never deletes it
+		// Clear it so persistent object caches don't serve Highcharts args to the Chart.js renderer
+		wp_cache_delete( $post_id . '-chart-args', m_chart()->slug );
+
+		return true;
+	}
+
+	/**
+	 * Handle the migrate-to-Chart.js submission from the library warning notice
+	 *
+	 * Migrates every chart post carrying the highcharts library term and redirects
+	 * back with a count for the success notice
+	 */
+	public function admin_post_migrate_highcharts() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Permission error', 'm-chart' ) );
+		}
+
+		check_admin_referer( 'm-chart-migrate-highcharts' );
+
+		$highcharts_query = new WP_Query(
+			[
+				'post_type'      => m_chart()->slug,
+				'posts_per_page' => -1,
+				'post_status'    => 'any',
+				'fields'         => 'ids',
+				'tax_query'      => [
+					[
+						'taxonomy' => m_chart()->slug . '-library',
+						'field'    => 'slug',
+						'terms'    => 'highcharts',
+					],
+				],
+			]
+		);
+
+		$migrated = 0;
+
+		foreach ( $highcharts_query->posts as $post_id ) {
+			if ( $this->migrate_highcharts_chart( $post_id ) ) {
+				$migrated++;
+			}
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				'm-chart-migrated',
+				$migrated,
+				wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php?post_type=' . m_chart()->slug )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Display a success notice after a Highcharts migration run
+	 */
+	public function migration_success_notice() {
+		if ( ! isset( $_GET['m-chart-migrated'] ) ) {
+			return;
+		}
+
+		$migrated = absint( $_GET['m-chart-migrated'] );
+		?>
+<div class="updated notice notice-success is-dismissible">
+	<p>
+		<?php
+			echo esc_html(
+				sprintf(
+					/* translators: %d: number of migrated charts */
+					_n(
+						'Migrated %d chart to Chart.js. Chart images will refresh the next time each chart is saved.',
+						'Migrated %d charts to Chart.js. Chart images will refresh the next time each chart is saved.',
+						$migrated,
+						'm-chart'
+					),
+					$migrated
+				)
+			);
 		?>
 	</p>
-	<p><?php esc_html_e( 'These charts will no longer display unless you install the plugin:', 'm-chart' ); ?></p>
-	<p><a href="https://github.com/methnen/m-chart-highcharts-library/"
-			class="button-primary"><?php esc_html_e( 'Learn More', 'm-chart' ); ?></a></p>
 </div>
 		<?php
 	}

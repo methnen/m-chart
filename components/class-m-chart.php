@@ -1177,7 +1177,15 @@ class M_Chart {
 	 * @param array $parsed_meta the parsed chart meta passed by the action hook
 	 */
 	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
-		$this->library( $parsed_meta['library'] )->m_chart_update_post_meta( $post_id, $parsed_meta );
+		$library = $this->library( $parsed_meta['library'] );
+
+		// The chart's library plugin may be inactive (e.g. Highcharts charts after the
+		// extension was removed) in which case there's no library object to notify
+		if ( ! is_object( $library ) || ! method_exists( $library, 'm_chart_update_post_meta' ) ) {
+			return;
+		}
+
+		$library->m_chart_update_post_meta( $post_id, $parsed_meta );
 	}
 
 	/**

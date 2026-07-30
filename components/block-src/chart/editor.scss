@@ -233,6 +233,14 @@
 					&.violin:before {
 						background-image: url('../../images/types/violin.svg');
 					}
+
+					&.venn:before {
+						background-image: url('../../images/types/venn.svg');
+					}
+
+					&.euler:before {
+						background-image: url('../../images/types/euler.svg');
+					}
 				}
 			}
 		}
@@ -335,8 +343,16 @@
 					&.violin:before {
 						background-image: url('../../images/types/violin.svg');
 					}
+
+					&.venn:before {
+						background-image: url('../../images/types/venn.svg');
+					}
+
+					&.euler:before {
+						background-image: url('../../images/types/euler.svg');
+					}
 				}
-				
+
 				h5.title {
 					font-weight: normal;
 					font-size: 23px;
