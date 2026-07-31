@@ -1,0 +1,28 @@
+{
+    "_post_title": "Pickling-crop production overlap (FAOSTAT top 8)",
+    "library": "chartjs",
+    "type": "venn",
+    "parse_in": "rows",
+    "set_names": [
+        "Pickling crops"
+    ],
+    "labels": true,
+    "legend": false,
+    "height": 500,
+    "source": "FAOSTAT - Crops and livestock products (QCL)",
+    "source_url": "https://www.fao.org/faostat/en/#data/QCL",
+    "subtitle": "Countries in each crop's FAOSTAT top-8 producer list - cucumbers and chillies 2023, cabbages 2022",
+    "data": {
+        "sets": [
+            [
+                [ "Cucumbers", "2" ],
+                [ "Cabbages", "4" ],
+                [ "Chillies", "3" ],
+                [ "Cucumbers & Cabbages", "2" ],
+                [ "Cucumbers & Chillies", "3" ],
+                [ "Cabbages & Chillies", "1" ],
+                [ "Cucumbers & Cabbages & Chillies", "1" ]
+            ]
+        ]
+    }
+}

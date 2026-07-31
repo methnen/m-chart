@@ -19,10 +19,12 @@ const SHARED_TYPES = new Set( [
 // Chart types where the legend toggle has no meaningful effect
 const NO_LEGEND_TYPES = new Set( [
 	'treemap',
+	'venn',
+	'euler',
 ] );
 
 // Chart types where the data labels toggle has no meaningful effect
-// Treemap is intentionally NOT here - it uses the same checkbox to control its native labels
+// Treemap and venn/euler are intentionally NOT here - they use the same checkbox to control their native labels
 const NO_LABELS_TYPES = new Set( [
 	'boxplot',
 	'violin',

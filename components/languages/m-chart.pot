@@ -2,14 +2,14 @@
 # This file is distributed under the MIT.
 msgid ""
 msgstr ""
-"Project-Id-Version: M Chart 2.2.1\n"
+"Project-Id-Version: M Chart 2.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/m-chart\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-02T22:23:18+00:00\n"
+"POT-Creation-Date: 2026-07-31T18:45:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: m-chart\n"
@@ -214,7 +214,7 @@ msgstr ""
 
 #: components/array-default-unit-terms.php:62
 #: components/admin-ui-src/components/AxisRows.js:99
-#: components/admin-ui-src/components/AxisRows.js:152
+#: components/admin-ui-src/components/AxisRows.js:154
 msgid "Units"
 msgstr ""
 
@@ -222,192 +222,219 @@ msgstr ""
 msgid "CPM"
 msgstr ""
 
-#: components/class-m-chart-admin.php:70
+#: components/class-m-chart-admin.php:73
 #: components/templates/m-chart-settings.php:3
 msgid "M Chart Settings"
 msgstr ""
 
-#: components/class-m-chart-admin.php:71
+#: components/class-m-chart-admin.php:74
 msgid "Settings"
 msgstr ""
 
-#: components/class-m-chart-admin.php:140
+#: components/class-m-chart-admin.php:143
 msgid "Upgrade"
 msgstr ""
 
-#: components/class-m-chart-admin.php:169
+#: components/class-m-chart-admin.php:172
 msgid "Docs"
 msgstr ""
 
-#: components/class-m-chart-admin.php:458
+#: components/class-m-chart-admin.php:461
 msgid "Settings saved"
 msgstr ""
 
-#: components/class-m-chart-admin.php:494
-#: components/class-m-chart-admin.php:495
-#: components/templates/chart-meta-box.php:12
-#: components/templates/chart-meta-box.php:13
-msgid "M Chart Highcharts Library"
+#. translators: %d: number of Highcharts charts
+#: components/class-m-chart-admin.php:517
+msgid "The M Chart Highcharts Library is deprecated and will not receive further updates. You have %d chart built with it."
+msgid_plural "The M Chart Highcharts Library is deprecated and will not receive further updates. You have %d charts built with it."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of Highcharts charts
+#: components/class-m-chart-admin.php:530
+msgid "You have %d chart built with the Highcharts library, which is not active — that chart currently won't display. The M Chart Highcharts Library is deprecated and will not receive further updates."
+msgid_plural "You have %d charts built with the Highcharts library, which is not active — those charts currently won't display. The M Chart Highcharts Library is deprecated and will not receive further updates."
+msgstr[0] ""
+msgstr[1] ""
+
+#: components/class-m-chart-admin.php:543
+msgid "You can migrate them to Chart.js with one click. The M Chart implementation of Chart.js now matches Highcharts feature-for-feature, supports additional chart types, works with M Chart Pro, is more performant, and isn't burdened by expensive commercial licensing requirements."
 msgstr ""
 
-#: components/class-m-chart-admin.php:496
-msgid "You have charts that require the M Chart Highcharts Library plugin."
+#: components/class-m-chart-admin.php:548
+msgid "Migrate charts to Chart.js"
 msgstr ""
 
-#: components/class-m-chart-admin.php:500
-msgid "These charts will no longer display unless you install the plugin:"
+#: components/class-m-chart-admin.php:550
+msgid "Dismiss"
 msgstr ""
 
-#: components/class-m-chart-admin.php:502
-#: components/templates/chart-meta-box.php:19
-msgid "Learn More"
+#: components/class-m-chart-admin.php:552
+msgid "or install the M Chart Highcharts Library plugin"
 msgstr ""
 
-#: components/class-m-chart-admin.php:705
+#: components/class-m-chart-admin.php:568
+#: components/class-m-chart-admin.php:633
+#: components/class-m-chart-admin.php:1425
+#: components/class-m-chart-admin.php:1430
+msgid "Permission error"
+msgstr ""
+
+#. translators: %d: number of migrated charts
+#: components/class-m-chart-admin.php:688
+msgid "Migrated %d chart to Chart.js. Chart images will refresh the next time each chart is saved."
+msgid_plural "Migrated %d charts to Chart.js. Chart images will refresh the next time each chart is saved."
+msgstr[0] ""
+msgstr[1] ""
+
+#: components/class-m-chart-admin.php:905
 msgid "Data"
 msgstr ""
 
-#: components/class-m-chart-admin.php:714
+#: components/class-m-chart-admin.php:914
 #: components/class-m-chart.php:334
 #: components/block-src/chart/edit.js:225
 msgid "Chart"
 msgstr ""
 
-#: components/class-m-chart-admin.php:800
+#: components/class-m-chart-admin.php:1000
 msgid "Library not found"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1026
-#: components/class-m-chart-admin.php:1038
+#: components/class-m-chart-admin.php:1226
+#: components/class-m-chart-admin.php:1238
 msgid "Wrong post type"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1033
-#: components/class-m-chart-admin.php:1213
+#: components/class-m-chart-admin.php:1233
+#: components/class-m-chart-admin.php:1413
 msgid "Invalid nonce"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1043
+#: components/class-m-chart-admin.php:1243
 msgid "No file to import"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1048
+#: components/class-m-chart-admin.php:1248
 msgid "File upload error"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1052
+#: components/class-m-chart-admin.php:1252
 msgid "Invalid upload"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1063
+#: components/class-m-chart-admin.php:1263
 msgid "Only CSV files can be imported"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1070
+#: components/class-m-chart-admin.php:1270
 msgid "File path not found"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1075
+#: components/class-m-chart-admin.php:1275
 msgid "CSV file too large (max 2MB)"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1081
+#: components/class-m-chart-admin.php:1281
 msgid "CSV file was empty"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1152
+#: components/class-m-chart-admin.php:1352
 msgid "Unauthorized access"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1152
+#: components/class-m-chart-admin.php:1352
 msgid "You do not have permission to do that"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1221
+#: components/class-m-chart-admin.php:1421
 msgid "Invalid post"
 msgstr ""
 
-#: components/class-m-chart-admin.php:1225
-#: components/class-m-chart-admin.php:1230
-msgid "Permission error"
-msgstr ""
-
-#: components/class-m-chart-admin.php:1245
-#: components/class-m-chart-admin.php:1258
+#: components/class-m-chart-admin.php:1445
+#: components/class-m-chart-admin.php:1458
 msgid "Invalid library"
 msgstr ""
 
 #: components/class-m-chart-block.php:185
-#: components/class-m-chart.php:1131
+#: components/class-m-chart.php:1139
 msgid "Chart not found"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:84
+#: components/class-m-chart-chartjs.php:88
 msgid "Line"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:85
+#: components/class-m-chart-chartjs.php:89
 msgid "Spline"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:86
+#: components/class-m-chart-chartjs.php:90
 msgid "Area"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:87
+#: components/class-m-chart-chartjs.php:91
 msgid "Column"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:88
+#: components/class-m-chart-chartjs.php:92
 msgid "Stacked Column"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:89
+#: components/class-m-chart-chartjs.php:93
 msgid "Bar"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:90
+#: components/class-m-chart-chartjs.php:94
 msgid "Stacked Bar"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:91
+#: components/class-m-chart-chartjs.php:95
 msgid "Pie"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:92
+#: components/class-m-chart-chartjs.php:96
 msgid "Doughnut"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:93
+#: components/class-m-chart-chartjs.php:97
 msgid "Scatter"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:94
+#: components/class-m-chart-chartjs.php:98
 msgid "Bubble"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:95
+#: components/class-m-chart-chartjs.php:99
 msgid "Radar"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:96
+#: components/class-m-chart-chartjs.php:100
 msgid "Radar Area"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:97
+#: components/class-m-chart-chartjs.php:101
 msgid "Polar"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:98
+#: components/class-m-chart-chartjs.php:102
 msgid "Treemap"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:99
+#: components/class-m-chart-chartjs.php:103
 msgid "Boxplot"
 msgstr ""
 
-#: components/class-m-chart-chartjs.php:100
+#: components/class-m-chart-chartjs.php:104
 msgid "Violin"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:105
+msgid "Venn"
+msgstr ""
+
+#: components/class-m-chart-chartjs.php:106
+msgid "Euler"
 msgstr ""
 
 #: components/class-m-chart.php:221
@@ -516,16 +543,21 @@ msgstr ""
 msgid "Manage data sets and display them as charts in WordPress."
 msgstr ""
 
-#: components/class-m-chart.php:1130
+#: components/class-m-chart.php:1138
 msgid "The chart could not be found"
 msgstr ""
 
-#: components/class-m-chart.php:1140
+#: components/class-m-chart.php:1148
 msgid "Embeds of this type are not enabled"
 msgstr ""
 
-#: components/class-m-chart.php:1141
+#: components/class-m-chart.php:1149
 msgid "Embeds disabled"
+msgstr ""
+
+#: components/templates/chart-meta-box.php:12
+#: components/templates/chart-meta-box.php:13
+msgid "M Chart Highcharts Library"
 msgstr ""
 
 #: components/templates/chart-meta-box.php:14
@@ -534,6 +566,10 @@ msgstr ""
 
 #: components/templates/chart-meta-box.php:18
 msgid "This chart will no longer display unless you install the plugin:"
+msgstr ""
+
+#: components/templates/chart-meta-box.php:19
+msgid "Learn More"
 msgstr ""
 
 #. translators: %s is the chart type (line, bar, pie, etc)
@@ -711,7 +747,7 @@ msgid "Share:"
 msgstr ""
 
 #. translators: %d is the row number in the chart's data table
-#: components/templates/table.php:95
+#: components/templates/table.php:123
 msgid "Row %d"
 msgstr ""
 
@@ -727,11 +763,15 @@ msgstr ""
 msgid "Force vertical axis minimum:"
 msgstr ""
 
-#: components/admin-ui-src/components/AxisRows.js:131
+#: components/admin-ui-src/components/AxisRows.js:119
+msgid "Vertical axis minimum value"
+msgstr ""
+
+#: components/admin-ui-src/components/AxisRows.js:133
 msgid "Constrain vertical axis"
 msgstr ""
 
-#: components/admin-ui-src/components/AxisRows.js:141
+#: components/admin-ui-src/components/AxisRows.js:143
 msgid "Horizontal axis title"
 msgstr ""
 
@@ -803,11 +843,11 @@ msgstr ""
 msgid "Importing this file will replace all existing data in this sheet"
 msgstr ""
 
-#: components/admin-ui-src/components/JspreadsheetWrapper.js:150
+#: components/admin-ui-src/components/JspreadsheetWrapper.js:158
 msgid "The spreadsheet grid has limited screen reader support. This spreadsheet is read only."
 msgstr ""
 
-#: components/admin-ui-src/components/JspreadsheetWrapper.js:151
+#: components/admin-ui-src/components/JspreadsheetWrapper.js:159
 msgid "The spreadsheet grid has limited screen reader support. Use the CSV Import control to load data."
 msgstr ""
 
@@ -819,27 +859,27 @@ msgstr ""
 msgid "Rows"
 msgstr ""
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:60
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:62
 msgid "Parse data in"
 msgstr ""
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:77
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:79
 msgid "Show labels"
 msgstr ""
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:89
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:91
 msgid "Show legend"
 msgstr ""
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:101
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:103
 msgid "Show mean point"
 msgstr ""
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:112
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:114
 msgid "Show sample points"
 msgstr ""
 
-#: components/admin-ui-src/components/ParseAndFlagsRow.js:124
+#: components/admin-ui-src/components/ParseAndFlagsRow.js:126
 msgid "Shared tooltip"
 msgstr ""
 

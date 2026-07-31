@@ -1,0 +1,24 @@
+{
+    "_post_title": "Shared ingredients: kimchi, dill pickles, sauerkraut",
+    "library": "chartjs",
+    "type": "euler",
+    "parse_in": "rows",
+    "set_names": [
+        "Traditional ingredients"
+    ],
+    "labels": true,
+    "legend": false,
+    "height": 500,
+    "source": "Wikipedia (Kimchi) + Clemson HGIC (Dill Pickles & Sauerkraut)",
+    "source_url": "https://hgic.clemson.edu/factsheet/dill-pickles-sauerkraut/",
+    "subtitle": "Traditional core ingredients - napa and green cabbage both counted as cabbage, water and optional spices excluded",
+    "data": {
+        "sets": [
+            [
+                [ "Kimchi", "Cabbage", "Salt", "Garlic", "Ginger", "Chili flakes", "Scallions", "Fish sauce" ],
+                [ "Dill pickles", "Cucumbers", "Salt", "Garlic", "Dill", "", "", "" ],
+                [ "Sauerkraut", "Cabbage", "Salt", "", "", "", "", "" ]
+            ]
+        ]
+    }
+}

@@ -10,11 +10,11 @@ Manage data sets via a spreadsheet interface, display them as charts via the Cha
 
 ## Description ##
 
-Manage your data via a spreadsheet interface or an accessible CSV import, display it as any of 17 chart types using the bundled Chart.js library, and embed it anywhere via a shortcode, or the block editor.
+Manage your data via a spreadsheet interface or an accessible CSV import, display it as any of 19 chart types using the bundled Chart.js library, and embed it anywhere via a shortcode, or the block editor.
 
 **Features:**
 
-* **17 chart types** — line, spline, area, column, stacked column, bar, stacked bar, pie, doughnut, scatter, bubble, radar, radar area, polar, treemap, boxplot, and violin
+* **19 chart types** — line, spline, area, column, stacked column, bar, stacked bar, pie, doughnut, scatter, bubble, radar, radar area, polar, treemap, boxplot, violin, venn, and euler
 * **Two ways to enter data** — a spreadsheet UI (Jspreadsheet CE) with multi-sheet support, or a fully keyboard-accessible CSV import with configurable delimiters
 * **Live preview** — the chart redraws instantly as you edit your data and settings, so you can see exactly what you'll get before publishing
 * **Multiple output formats** — render as a live interactive chart, a static image, or a plain HTML data table, all from the same chart
@@ -38,7 +38,7 @@ However, that support and development will continue to match my original scope f
 
 M Chart Pro will be where I add those out of scope features as an addon to M Chart and since M Chart Pro will have a yearly subscription fee it will hopefully provide me with the financial stability to allow me to devote my time more fully to M Chart overall.
 
-**Note:** Starting with M Chart version 2.0 the plugin uses a new React based UI as well as updated data parsing class. This means any third party libraries will need to be refactored to support this. Version 1.3 of the [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) has the necssary changes implemented.
+**Note:** The [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) is deprecated and will not receive further updates. Chart.js now matches Highcharts feature-for-feature, supports additional chart types, works with M Chart Pro, is more performant, and isn't burdened by expensive commercial licensing requirements. If you have Highcharts charts, M Chart offers a one-click migration to Chart.js.
  
 **Accessibility:** M Chart targets WCAG 2.1 Level AA. Charts on the front end include a visually-hidden data table for screen-reader users, and a `Color Blind Safe` theme is bundled. Screen-reader users entering chart data should use the CSV Import feature — the spreadsheet widget has partial keyboard support but CSV import is fully accessible.
 
@@ -59,6 +59,21 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 
 ## Changelog ##
+
+### 2.3 ###
+
+* The M Chart Highcharts Library is now deprecated and M Chart offers one-click migration of Highcharts charts to Chart.js
+	* The M Chart implementation of Chart.js now matches Highcharts feature-for-feature, supports additional chart types, works with M Chart Pro, is more performant, and isn't burdened by expensive commercial licensing requirements
+	* Sites with Highcharts charts see a migration notice - dismissible while the Highcharts library plugin is active, persistent when it isn't (since those charts won't display)
+	* Chart data carries over as-is - only legacy Highcharts theme slugs are remapped (to the bundled Highcharts 4.x look) and chart images refresh the next time each chart is saved
+* Added support for [venn](https://docs.mch.art/guide/chart-types) and [euler](https://docs.mch.art/guide/chart-types) chart types
+	* Supports up to 5 sets
+	* Venn uses the classic fixed layout while euler sizes the circles proportionally to their totals
+* Treemap labels now wrap to fit their rectangle so long labels stay readable instead of shrinking to fit on a single line
+* Treemap group captions now wrap onto a second line when long group names need the room
+* Tweaked table rendering so that it always matches the format of the data in the spreadsheet
+* Fixed an issue where treemaps with 3 or more grouping levels could render gray instead of using the theme colors
+* Fixed an issue where saving a chart could cause a fatal error when the chart's library plugin wasn't active
 
 ### 2.2.2 ###
 

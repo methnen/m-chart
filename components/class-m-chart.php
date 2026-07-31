@@ -407,6 +407,14 @@ class M_Chart {
 			$this->version
 		);
 
+		// The venn UMD build reads the global Chart at load time so the chartjs dependency is required
+		wp_register_script(
+			'chartjs-venn',
+			$this->plugin_url . '/components/external/chartjs/chartjs-chart-venn.min.js',
+			[ 'chartjs' ],
+			$this->version
+		);
+
 		// Add endpoint needed for iframe embed support
 		add_rewrite_endpoint( 'embed', EP_PERMALINK );
 
@@ -1169,7 +1177,15 @@ class M_Chart {
 	 * @param array $parsed_meta the parsed chart meta passed by the action hook
 	 */
 	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
-		$this->library( $parsed_meta['library'] )->m_chart_update_post_meta( $post_id, $parsed_meta );
+		$library = $this->library( $parsed_meta['library'] );
+
+		// The chart's library plugin may be inactive (e.g. Highcharts charts after the
+		// extension was removed) in which case there's no library object to notify
+		if ( ! is_object( $library ) || ! method_exists( $library, 'm_chart_update_post_meta' ) ) {
+			return;
+		}
+
+		$library->m_chart_update_post_meta( $post_id, $parsed_meta );
 	}
 
 	/**

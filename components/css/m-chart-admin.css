@@ -126,6 +126,14 @@
   background-image: url("../images/types/violin.svg");
   background-size: contain;
 }
+.column-m-chart-type span.type.venn::after {
+  background-image: url("../images/types/venn.svg");
+  background-size: contain;
+}
+.column-m-chart-type span.type.euler::after {
+  background-image: url("../images/types/euler.svg");
+  background-size: contain;
+}
 
 .column-m-chart-library span.library {
   background-position: left center;

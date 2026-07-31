@@ -31,6 +31,8 @@ class M_Chart_Chartjs {
 		'treemap',
 		'boxplot',
 		'violin',
+		'venn',
+		'euler',
 	];
 	public $type_option_names = [];
 	public $theme_directories;
@@ -61,6 +63,8 @@ class M_Chart_Chartjs {
 		'treemap'        => 'treemap',
 		'boxplot'        => 'boxplot',
 		'violin'         => 'violin',
+		'venn'           => 'venn',
+		'euler'          => 'euler',
 	];
 	public $helpers_loaded = false;
 
@@ -98,6 +102,8 @@ class M_Chart_Chartjs {
 			'treemap'        => esc_html__( 'Treemap', 'm-chart' ),
 			'boxplot'        => esc_html__( 'Boxplot', 'm-chart' ),
 			'violin'         => esc_html__( 'Violin', 'm-chart' ),
+			'venn'           => esc_html__( 'Venn', 'm-chart' ),
+			'euler'          => esc_html__( 'Euler', 'm-chart' ),
 		];
 	}
 
@@ -247,6 +253,21 @@ class M_Chart_Chartjs {
 	}
 
 	/**
+	 * Canonical chartjs-chart-venn dataset defaults (style-only).
+	 *
+	 * Returns the static border values core writes onto every venn/euler dataset
+	 * Extensions read this to get the same literals m-chart will apply at render time
+	 *
+	 * @return array
+	 */
+	public static function get_venn_dataset_defaults() {
+		return [
+			'borderColor' => '#ffffff',
+			'borderWidth' => 2,
+		];
+	}
+
+	/**
 	 * Get the necessary chart data for a given chart and assign it the right class vars
 	 *
 	 * @param int $post_id the WP ID for the chart post
@@ -300,6 +321,10 @@ class M_Chart_Chartjs {
 
 		if ( 'boxplot' === $type || 'violin' === $type ) {
 			wp_enqueue_script( 'chartjs-boxplot' );
+		}
+
+		if ( 'venn' === $type || 'euler' === $type ) {
+			wp_enqueue_script( 'chartjs-venn' );
 		}
 	}
 
@@ -386,6 +411,8 @@ class M_Chart_Chartjs {
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 			&& 'treemap' != $chart_args['type']
+			&& 'venn' != $chart_args['type']
+			&& 'euler' != $chart_args['type']
 		) {
 			$chart_args['options']['scales']['x']['grid']['borderWidth'] = 0;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
@@ -396,8 +423,12 @@ class M_Chart_Chartjs {
 			$chart_args['options']['interaction']['mode']        = 'index';
 		}
 
-		// Treemap has no meaningful series legend; force it off regardless of stored meta
-		if ( 'treemap' === $chart_args['type'] ) {
+		// Treemap and venn/euler have no meaningful series legend; force it off regardless of stored meta
+		if (
+			   'treemap' === $chart_args['type']
+			|| 'venn' === $chart_args['type']
+			|| 'euler' === $chart_args['type']
+		) {
 			$chart_args['options']['plugins']['legend']['display'] = false;
 		}
 
@@ -457,6 +488,8 @@ class M_Chart_Chartjs {
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 			&& 'treemap' != $chart_args['type']
+			&& 'venn' != $chart_args['type']
+			&& 'euler' != $chart_args['type']
 		) {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
@@ -474,6 +507,8 @@ class M_Chart_Chartjs {
 			&& 'radar' != $chart_args['type']
 			&& 'polarArea' != $chart_args['type']
 			&& 'treemap' != $chart_args['type']
+			&& 'venn' != $chart_args['type']
+			&& 'euler' != $chart_args['type']
 		) {
 			$chart_args['options']['scales']['x']['grid']['display'] = false;
 		}
@@ -579,6 +614,24 @@ class M_Chart_Chartjs {
 			}
 
 			unset( $ds );
+		} elseif (
+			   ( 'venn' === $chart_args['type'] || 'euler' === $chart_args['type'] )
+			&& isset( $chart_args['data']['datasets'][0]['mChartVennSets'] )
+		) {
+			// One palette color per set — the JS helper derives each region's color from these
+			// (single-set regions get the set color, intersections blend their member sets)
+			$set_colors = [];
+			$set_rgb    = [];
+
+			foreach ( $chart_args['data']['datasets'][0]['mChartVennSets'] as $i => $set_name ) {
+				$hex = $this->colors[ $i % $color_count ];
+
+				$set_colors[ $set_name ] = $hex;
+				$set_rgb[ $set_name ]    = $this->hex_to_rgb( $hex );
+			}
+
+			$chart_args['data']['datasets'][0]['mChartVennSetColors'] = $set_colors;
+			$chart_args['data']['datasets'][0]['mChartVennSetRgb']    = $set_rgb;
 		} elseif (
 			   isset( $chart_args['data']['datasets'] )
 			&& ( 'boxplot' === $chart_args['type'] || 'violin' === $chart_args['type'] )
@@ -760,6 +813,8 @@ class M_Chart_Chartjs {
 			&& 'treemap' !== $chart_args['type']
 			&& 'boxplot' !== $chart_args['type']
 			&& 'violin' !== $chart_args['type']
+			&& 'venn' !== $chart_args['type']
+			&& 'euler' !== $chart_args['type']
 		) {
 			$chart_args['options']['plugins']['datalabels'] = array_merge(
 				$defaults['plugins']['datalabels'],
@@ -1090,6 +1145,54 @@ class M_Chart_Chartjs {
 			return $chart_args;
 		}
 
+		if ( 'venn' === $this->post_meta['type'] || 'euler' === $this->post_meta['type'] ) {
+			$raw_sheet = isset( $this->post_meta['data']['sets'][0] ) ? $this->post_meta['data']['sets'][0] : [];
+			$venn      = $this->build_venn_regions( $raw_sheet, $this->post_meta['parse_in'], 'euler' === $this->post_meta['type'] );
+
+			$dataset_defaults = apply_filters(
+				'm_chart_venn_dataset_defaults',
+				self::get_venn_dataset_defaults(),
+				$this->post,
+				$this->args
+			);
+
+			// The venn library reads set-name labels from scales.y.ticks and in-region value labels from scales.x.ticks
+			// These ticks keys are the ONLY scale config safe to set — the controller owns the actual (hidden) scales
+			// and any axis/min/max config here would corrupt its layout math
+			$chart_args['options']['scales'] = [
+				'x' => [
+					'ticks' => [
+						'display' => (bool) $this->post_meta['labels'],
+						'color'   => '#222222',
+					],
+				],
+				'y' => [
+					'ticks' => [
+						'display' => true,
+						'color'   => '#222222',
+						'font'    => [ 'weight' => 'bold' ],
+					],
+				],
+			];
+
+			$chart_args['data']['labels']   = $venn ? $venn['labels'] : [];
+			$chart_args['data']['datasets'] = [
+				array_merge(
+					$dataset_defaults,
+					[
+						'data'                => $venn ? $venn['regions'] : [],
+						'mChartIsVenn'        => true,
+						'mChartVennSets'      => $venn ? $venn['sets'] : [],
+						'mChartVennMeta'      => $venn ? $venn['meta'] : [],
+						'mChartDatasetPrefix' => $venn ? $venn['dataset_prefix'] : '',
+						'mChartDatasetSuffix' => $venn ? $venn['dataset_suffix'] : '',
+					]
+				),
+			];
+
+			return $chart_args;
+		}
+
 		if (
 			   'pie' == $this->post_meta['type']
 			|| 'doughnut' == $chart_args['type']
@@ -1288,6 +1391,10 @@ class M_Chart_Chartjs {
 
 		if ( 'boxplot' === $type || 'violin' === $type ) {
 			$scripts[] = 'chartjs-boxplot';
+		}
+
+		if ( 'venn' === $type || 'euler' === $type ) {
+			$scripts[] = 'chartjs-venn';
 		}
 
 		// Return the scripts
@@ -1496,8 +1603,286 @@ class M_Chart_Chartjs {
 	}
 
 	/**
+	 * Build the venn/euler region data from the raw spreadsheet sheet
+	 *
+	 * Two shapes are supported and detected from the data:
+	 * - Region rows: two columns of [set combo, value] where the combo cell joins set names with &
+	 *   e.g. ['Soccer', 12], ['Tennis', 8], ['Soccer & Tennis', 3]
+	 *   Values are the exclusive counts for each region exactly as they should display
+	 * - Membership lists: one row per set with the set name in the first cell and its member
+	 *   names in the cells after it (the same row-per-entity shape boxplot uses)
+	 *   Exclusive region counts are computed from the shared member names
+	 *
+	 * The output honors the chartjs-chart-venn layout contract:
+	 * - All 2^n - 1 regions are present, zero-filled when absent from the data
+	 *   The library derives the set count as log2(length + 1) so a partial list is a hard error
+	 * - Regions are ordered degree-ascending then lexicographic by set index
+	 *   The library maps region i to layout slot i and ignores the sets arrays for positioning
+	 * - labels leads with the n set names in set order followed by the ' ∩ ' joined region names
+	 *   The library reads set-name labels from labels[0..n-1]
+	 *
+	 * @param array  $sheet     raw spreadsheet data (rows of cells)
+	 * @param string $parse_in  rows or columns
+	 * @param bool   $for_euler when true sets with a zero total are dropped since they would
+	 *                          produce degenerate radius-0 circles in the euler layout
+	 *
+	 * @return array|null sets/labels/regions/meta/dataset affixes, or null when the sheet is unusable
+	 */
+	public function build_venn_regions( $sheet, $parse_in, $for_euler = false ) {
+		if ( ! is_array( $sheet ) || ! count( $sheet ) ) {
+			return null;
+		}
+
+		$rows = ( 'columns' === $parse_in ) ? $this->transpose_sheet( $sheet ) : $sheet;
+		$rows = $this->strip_empty_rows( $rows );
+
+		if ( ! count( $rows ) ) {
+			return null;
+		}
+
+		// Effective column count: the rightmost column with any non-empty cell across all rows
+		// Jspreadsheet pads sheets out to a minimum width so a raw width reading would include padding
+		$col_count = 0;
+
+		foreach ( $rows as $row ) {
+			for ( $i = count( $row ) - 1; $i >= 0; $i-- ) {
+				if ( '' !== trim( (string) $row[ $i ] ) ) {
+					if ( $i + 1 > $col_count ) {
+						$col_count = $i + 1;
+					}
+
+					break;
+				}
+			}
+		}
+
+		if ( $col_count < 1 ) {
+			return null;
+		}
+
+		// Region-rows detection: exactly two effective columns and every second cell contains a number
+		$is_region_rows = 2 === $col_count;
+
+		if ( $is_region_rows ) {
+			foreach ( $rows as $row ) {
+				$point = m_chart()->parse()->parse_data_point( isset( $row[1] ) ? $row[1] : '' );
+
+				if ( ! $point->is_numeric() ) {
+					$is_region_rows = false;
+					break;
+				}
+			}
+		}
+
+		$set_names      = [];
+		$region_values  = [];
+		$region_members = [];
+		$dataset_prefix = '';
+		$dataset_suffix = '';
+		$affixes_set    = false;
+
+		if ( $is_region_rows ) {
+			foreach ( $rows as $row ) {
+				$combo = array_values( array_filter( array_map( 'trim', explode( '&', (string) $row[0] ) ), 'strlen' ) );
+
+				if ( ! count( $combo ) ) {
+					continue;
+				}
+
+				// The library supports at most five sets so the first five distinct names win
+				// Rows referencing a dropped set are skipped entirely
+				$skip = false;
+
+				foreach ( $combo as $name ) {
+					if ( isset( $set_names[ $name ] ) ) {
+						continue;
+					}
+
+					if ( count( $set_names ) >= 5 ) {
+						$skip = true;
+						break;
+					}
+
+					$set_names[ $name ] = true;
+				}
+
+				if ( $skip ) {
+					continue;
+				}
+
+				$point = m_chart()->parse()->parse_data_point( $row[1] );
+				$key   = $this->venn_region_key( $combo );
+
+				$region_values[ $key ] = ( isset( $region_values[ $key ] ) ? $region_values[ $key ] : 0 ) + (float) $point->value;
+
+				if ( ! $affixes_set && ( '' !== $point->prefix || '' !== $point->suffix ) ) {
+					$dataset_prefix = $point->prefix;
+					$dataset_suffix = $point->suffix;
+					$affixes_set    = true;
+				}
+			}
+		} else {
+			// Membership lists: each row is one set — name in the first cell, member names after it
+			// Same row-per-entity orientation as boxplot; transpose_sheet above already
+			// normalized parse_in='columns' (sets down columns, names in row 0) into this shape
+
+			// Element name → the exact combination of sets it belongs to
+			$element_sets = [];
+
+			foreach ( $rows as $row ) {
+				$name = trim( (string) $row[0] );
+
+				if ( '' === $name ) {
+					continue;
+				}
+
+				// The library supports at most five sets so the first five distinct names win
+				if ( ! isset( $set_names[ $name ] ) ) {
+					if ( count( $set_names ) >= 5 ) {
+						continue;
+					}
+
+					$set_names[ $name ] = true;
+				}
+
+				foreach ( array_slice( $row, 1 ) as $cell ) {
+					$element = trim( (string) $cell );
+
+					if ( '' === $element ) {
+						continue;
+					}
+
+					$element_sets[ $element ][ $name ] = true;
+				}
+			}
+
+			if ( ! count( $set_names ) || ! count( $element_sets ) ) {
+				return null;
+			}
+
+			// Exclusive region counts from each element's exact membership combination
+			foreach ( $element_sets as $element => $memberships ) {
+				$key = $this->venn_region_key( array_keys( $memberships ) );
+
+				$region_values[ $key ]    = ( isset( $region_values[ $key ] ) ? $region_values[ $key ] : 0 ) + 1;
+				$region_members[ $key ][] = (string) $element;
+			}
+		}
+
+		$ordered_sets = array_keys( $set_names );
+
+		// Euler sizes circles by their totals so a zero-total set would collapse to a radius-0 circle
+		if ( $for_euler ) {
+			$totals = array_fill_keys( $ordered_sets, 0 );
+
+			foreach ( $region_values as $key => $value ) {
+				foreach ( explode( "\0", $key ) as $name ) {
+					if ( isset( $totals[ $name ] ) ) {
+						$totals[ $name ] += $value;
+					}
+				}
+			}
+
+			$ordered_sets = array_values( array_filter( $ordered_sets, function( $name ) use ( $totals ) {
+				return $totals[ $name ] > 0;
+			} ) );
+		}
+
+		$set_count = count( $ordered_sets );
+
+		if ( ! $set_count ) {
+			return null;
+		}
+
+		// Assemble every region in the library's required order (see the docblock)
+		$labels  = $ordered_sets;
+		$regions = [];
+		$meta    = [];
+
+		for ( $degree = 1; $degree <= $set_count; $degree++ ) {
+			foreach ( $this->venn_index_combinations( $set_count, $degree ) as $combo ) {
+				$names = array_map( function( $i ) use ( $ordered_sets ) {
+					return $ordered_sets[ $i ];
+				}, $combo );
+
+				$key = $this->venn_region_key( $names );
+
+				$regions[] = [
+					'sets'  => $names,
+					'value' => isset( $region_values[ $key ] ) ? $region_values[ $key ] : 0,
+				];
+
+				$meta[] = [
+					'members' => isset( $region_members[ $key ] ) ? $region_members[ $key ] : null,
+				];
+
+				if ( $degree > 1 ) {
+					$labels[] = implode( ' ∩ ', $names );
+				}
+			}
+		}
+
+		return [
+			'sets'           => $ordered_sets,
+			'labels'         => $labels,
+			'regions'        => $regions,
+			'meta'           => $meta,
+			'dataset_prefix' => $dataset_prefix,
+			'dataset_suffix' => $dataset_suffix,
+		];
+	}
+
+	/**
+	 * Canonical lookup key for a combination of set names
+	 * Sorted so the key is order-independent, joined on a null byte which can't appear in cell text
+	 *
+	 * @param array $names set names
+	 *
+	 * @return string the canonical key
+	 */
+	private function venn_region_key( $names ) {
+		$names = array_values( array_unique( $names ) );
+		sort( $names, SORT_STRING );
+
+		return implode( "\0", $names );
+	}
+
+	/**
+	 * All size-$degree combinations of the indices 0..$count-1 in lexicographic order
+	 *
+	 * Combined with the degree-ascending loop in build_venn_regions this produces the fixed
+	 * region order chartjs-chart-venn's layouts expect, e.g. for three sets:
+	 * [0], [1], [2], [0,1], [0,2], [1,2], [0,1,2]
+	 *
+	 * @param int $count  number of sets
+	 * @param int $degree combination size
+	 * @param int $start  first index to consider (used by the recursion)
+	 *
+	 * @return array array of index arrays
+	 */
+	private function venn_index_combinations( $count, $degree, $start = 0 ) {
+		$out = [];
+
+		if ( 1 === $degree ) {
+			for ( $i = $start; $i < $count; $i++ ) {
+				$out[] = [ $i ];
+			}
+
+			return $out;
+		}
+
+		for ( $i = $start; $i <= $count - $degree; $i++ ) {
+			foreach ( $this->venn_index_combinations( $count, $degree - 1, $i + 1 ) as $rest ) {
+				$out[] = array_merge( [ $i ], $rest );
+			}
+		}
+
+		return $out;
+	}
+
+	/**
 	 * Transpose a 2D sheet so columns become rows
-	 * Normalizes parse_in='columns' to a row-oriented shape for hierarchical treemap construction
+	 * Normalizes parse_in='columns' to a row-oriented shape for treemap and venn/euler construction
 	 *
 	 * @param array $sheet array of rows
 	 *
