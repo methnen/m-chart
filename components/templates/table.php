@@ -1,5 +1,5 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
-<table class="<?php echo esc_attr( $classes ); ?>">
+<table class="<?php echo esc_attr( $classes ); ?> table">
 	<?php
 	$set_name = '';
 
