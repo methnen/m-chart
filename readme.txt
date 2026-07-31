@@ -3,7 +3,7 @@ Contributors: methnen
 Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
 Tested up to: 7.0
-Stable tag: 2.2.2
+Stable tag: 2.3
 License: MIT
 
 Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
