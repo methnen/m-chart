@@ -759,8 +759,14 @@ function paintTreemapCaptions( chart ) {
 		// Any line can still overflow (a single word wider than the group) — ellipsize it
 		lines = lines.map( ( line ) => ellipsize( ctx, line, maxWidth ) );
 
-		const textX = 'right' === align ? x + width - padding : ( 'center' === align ? x + width / 2 : x + padding );
-		let   textY = y + padding + spacing + baseLineHeight / 2;
+		let textX = x + padding;
+		let textY = y + padding + spacing + baseLineHeight / 2;
+
+		if ( 'right' === align ) {
+			textX = x + width - padding;
+		} else if ( 'center' === align ) {
+			textX = x + width / 2;
+		}
 
 		ctx.save();
 		ctx.beginPath();
