@@ -20,7 +20,7 @@
     "concurrently": "^9.0.0",
     "jest-axe": "^10.0.0",
     "jest-junit": "^17.0.0",
-    "msw": "^2.6.0",
+    "msw": "^2.15.0",
     "uglify-js": "^3.19.3",
     "wp-readme-to-markdown": "^1.0.0"
   },
