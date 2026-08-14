@@ -20,13 +20,13 @@ class M_Chart_Block {
 	 * Register block type
 	 */
 	public function register_m_chart_block_support() {
-		$asset_file = require_once __DIR__ . '/block/index.asset.php';
+		$asset_file = require __DIR__ . '/block/index.asset.php';
 
 		// Register editor script.
 		wp_register_script(
 			'm-chart-editor',
 			m_chart()->plugin_url . '/components/block/index.js',
-			[ 'wp-i18n' ],
+			$asset_file['dependencies'],
 			$this->version_str(),
 			true
 		);
