@@ -900,13 +900,16 @@ class M_Chart_Admin {
 		$excerpt = $wp_meta_boxes[ m_chart()->slug ][ 'normal' ][ 'core' ][ 'postexcerpt' ];
 		unset( $wp_meta_boxes[ m_chart()->slug ][ 'normal' ][ 'core' ][ 'postexcerpt' ] );
 
+		// The chart editing interface is built for the classic edit screen only
+		// Flag these metaboxes accordingly in case the m-chart post type ever gains block editor support
 		add_meta_box(
 			m_chart()->slug . '-spreadsheet',
 			esc_html__( 'Data', 'm-chart' ),
 			[ $this, 'spreadsheet_meta_box' ],
 			m_chart()->slug,
 			'normal',
-			'high'
+			'high',
+			[ '__block_editor_compatible_meta_box' => false ]
 		);
 
 		add_meta_box(
@@ -915,7 +918,8 @@ class M_Chart_Admin {
 			[ $this, 'chart_meta_box' ],
 			m_chart()->slug,
 			'normal',
-			'high'
+			'high',
+			[ '__block_editor_compatible_meta_box' => false ]
 		);
 
 		$wp_meta_boxes[ m_chart()->slug ][ 'normal' ][ 'high' ][ 'postexcerpt' ] = $excerpt;

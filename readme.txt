@@ -2,8 +2,9 @@
 Contributors: methnen
 Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
-Tested up to: 7.0
-Stable tag: 2.3
+Requires at least: 6.6
+Tested up to: 7.1
+Stable tag: 2.3.1
 License: MIT
 
 Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
@@ -53,6 +54,10 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 3. M Chart Block UI
 
 == Changelog ==
+
+= 2.3.1 =
+
+* Minor changes to support Wordpress 7.1
 
 = 2.3 =
 
