@@ -15,7 +15,7 @@
     "@wordpress/hooks": "^4.45.0",
     "@wordpress/i18n": "^6.19.0",
     "@wordpress/jest-preset-default": "^12.5.0",
-    "@wordpress/scripts": "^32.5.1",
+    "@wordpress/scripts": "^34.1.0",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.0.0",
     "jest-axe": "^10.0.0",
