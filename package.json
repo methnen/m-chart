@@ -25,7 +25,7 @@
     "wp-readme-to-markdown": "^1.0.0"
   },
   "dependencies": {
-    "@wordpress/icons": "15.0.0",
+    "@wordpress/icons": "15.4.0",
     "lodash": "^4.17.21"
   },
   "scripts": {
