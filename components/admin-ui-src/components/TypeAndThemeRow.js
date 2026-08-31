@@ -25,9 +25,10 @@ const TYPES_REQUIRING_SIMPLE_2D = new Set( [
 ] );
 
 /**
- * Returns the index past the last non-empty cell in a row.
- * Empty = "" or null or undefined. 0 is non-empty (valid numeric value).
- * Used so trailing Jspreadsheet padding cells don't inflate the column count.
+ * Returns the index past the last non-empty cell in a row
+ * Empty = "" or null or undefined
+ * 0 is non-empty (valid numeric value)
+ * Used so trailing Jspreadsheet padding cells don't inflate the column count
  *
  * @param {Array} row One row from a 2D data array
  * @return {number} Effective length (rightmost non-empty index + 1, or 0)

@@ -22,13 +22,6 @@ class M_Chart_Parse {
 	private ?NumberFormatter $formatter = null;
 
 	/**
-	 * Initializes the parse class
-	 */
-	public function __construct() {
-
-	}
-
-	/**
 	 * Parses a chart's data array for labels, data sets, and raw values
 	 *
 	 * @param array  $data     the raw two-dimensional data array from the chart post
@@ -105,7 +98,7 @@ class M_Chart_Parse {
 		}
 
 		// Structural pre-check
-		// The simple single-series shape from creating-a-chart.md is unambiguous 2 effective columns (rows mode) or 2 effective rows (columns mode)
+		// A sheet with 2 effective columns (rows mode) or 2 effective rows (columns mode) is the simple single-series shape and is unambiguous
 		// Works regardless of whether the labels look numeric (years, ordinals, etc)
 		if ( self::PARSE_ROWS === $this->parse_in && 2 === $this->effective_max_columns() ) {
 			return self::LABELS_FIRST_COLUMN;
@@ -282,6 +275,10 @@ class M_Chart_Parse {
 		$raw_data_array = [];
 
 		foreach ( $this->data as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+
 			foreach ( $row as $key => $column ) {
 				if ( '' == $column || 0 == $key ) {
 					continue;
@@ -308,6 +305,10 @@ class M_Chart_Parse {
 		$this_raw       = [];
 
 		for ( $i = 1; $i < $limit; $i++ ) {
+			if ( ! is_array( $this->data[ $i ] ) ) {
+				continue;
+			}
+
 			foreach ( $this->data[ $i ] as $c_key => $column ) {
 				if ( 0 != $c_key ) {
 					$data_point = $this->clean_data_point( $column );
@@ -350,6 +351,10 @@ class M_Chart_Parse {
 		$this_raw       = [];
 
 		for ( $i = 1; $i < $limit; $i++ ) {
+			if ( ! is_array( $this->data[ $i ] ) ) {
+				continue;
+			}
+
 			foreach ( $this->data[ $i ] as $key => $column ) {
 				if ( 0 == $key ) {
 					continue;
@@ -395,6 +400,10 @@ class M_Chart_Parse {
 		}
 
 		foreach ( $this->data as $key => $columns ) {
+			if ( ! is_array( $columns ) ) {
+				continue;
+			}
+
 			foreach ( $columns as $column ) {
 				if ( '' == $column || 0 == $key ) {
 					continue;
@@ -445,7 +454,8 @@ class M_Chart_Parse {
 
 	/**
 	 * Formats an M_Chart_Parsed_Data_Point for table display
-	 * Numeric cells are formatted with the locale-aware NumberFormatter non-numeric cells are returned as plain text
+	 * Numeric cells are formatted with the locale-aware NumberFormatter
+	 * Non-numeric cells are returned as plain text
 	 *
 	 * @param ?M_Chart_Parsed_Data_Point $raw the parsed data point to format, or null for an empty cell
 	 *

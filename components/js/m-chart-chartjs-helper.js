@@ -950,7 +950,7 @@ function wireTreemap( chart ) {
 		return;
 	}
 
-	// Flat treemap (Phase 1 path)
+	// Flat treemap (single-level data, no group columns)
 	if ( ds && Array.isArray( ds.mChartColors ) ) {
 		const colors = ds.mChartColors;
 
@@ -1405,21 +1405,16 @@ const MChartHelper = {
 		ctx.font         = `${ style } ${ weight } ${ size }px ${ family }`;
 		ctx.fillStyle    = color;
 		ctx.textAlign    = 'left';
-		// textBaseline:'top' so drawY is the top edge of the text block — simpler
-		// position math (matches m-chart-pro's text-element paintText). Defaults
-		// below still place the text 12px from the canvas's bottom-left corner,
-		// so the visible position is identical to the pre-override behavior.
+		// textBaseline:'top' so drawY is the top edge of the text block — simpler position math (matches m-chart-pro's text-element paintText)
+		// Defaults below still place the text 12px from the canvas's bottom-left corner, so the visible position is identical to the pre-override behavior
 		ctx.textBaseline = 'top';
 
 		const metrics = ctx.measureText( text );
 		const blockW  = metrics.width;
 		const blockH  = size;
 
-		// Position math mirrors m-chart-pro's resolvePosition() in
-		// m-chart-pro-theme-helper.js — keep the two in sync so extensions
-		// and core stay visually consistent. Per-axis xOffsetUnits /
-		// yOffsetUnits (PositionGrid canonical shape) take precedence;
-		// fall back to the legacy single `units` field for older configs.
+		// Position math mirrors m-chart-pro's resolvePosition() in m-chart-pro-theme-helper.js — keep the two in sync so extensions and core stay visually consistent
+		// Per-axis xOffsetUnits / yOffsetUnits (PositionGrid canonical shape) take precedence; fall back to the legacy single `units` field for older configs
 		const xKey    = position.x     || 'left';
 		const yKey    = position.y     || 'bottom';
 		const xUnits  = position.xOffsetUnits || position.units || 'pixels';
@@ -1453,7 +1448,7 @@ const MChartHelper = {
 
 		ctx.fillText( text, drawX, drawY );
 
-		// Pad the click target slightly on each side so the hover/click affordance is comfortable.
+		// Pad the click target slightly on each side so the hover/click affordance is comfortable
 		chart.$mchartSourceBounds = {
 			left:   drawX - 2,
 			right:  drawX + blockW + 2,

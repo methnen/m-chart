@@ -143,7 +143,7 @@ $this->iframe_csp_nonce = $nonce;
 		}
 		?>
 		<style>
-			/* This prevents the screenreader stuff from being visible just like it behaves in it's regular context in the site  */
+			/* Mirror WP's .screen-reader-text rule since theme styles don't load inside the iframe */
 			.screen-reader-text {
 				border: 0;
 				clip-path: inset(50%);

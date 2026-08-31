@@ -2,7 +2,8 @@ import { useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartDispatch } from '../context/ChartAdminContext';
 
-// Jspreadsheet CE has a bunch of default menu items this is the list of the ones we actually want
+// Jspreadsheet CE ships many default context menu items
+// This is the allowlist of the ones we keep
 const CONTEXT_MENU_ITEMS = [
 	'Insert a new row before',
 	'Insert a new row after',
@@ -115,12 +116,12 @@ export default function JspreadsheetWrapper( {
 					CONTEXT_MENU_ITEMS.includes( item.title )
 				);
 			},
-			// Run spreadsheetAutoWidth on the intiial load
+			// Run spreadsheetAutoWidth on the initial load
 			onload( spreadsheet ) {
 				const ws = spreadsheet.worksheets[ spreadsheet.getWorksheetActive() ];
 				spreadsheetAutoWidth( ws );
 			},
-			// Run spreadsheetAutoWidth on changed recrds and also push any changes to the chart
+			// Run spreadsheetAutoWidth on changed records and also push any changes to the chart
 			// Skipped entirely in read-only mode since the data cannot change
 			...( ! readOnly ? {
 				onafterchanges( worksheet, records ) {

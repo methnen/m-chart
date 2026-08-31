@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
- * Reach controlled subtitle input
+ * React-controlled subtitle input
  *
  * Renders with the m-chart[subtitle] name attribute so the value is submitted with the native WordPress post form and the existing PHP save logic still works
  */

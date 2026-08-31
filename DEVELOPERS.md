@@ -10,7 +10,7 @@ Full user and developer documentation is available at **https://docs.mch.art/**.
 npm install
 ```
 
-> **Note:** `package.json` includes a `postinstall` script that runs `npm run build` automatically after `npm install` completes. This means a full build will fire on first install — this is expected.
+> **Note:** `package.json` includes a `postinstall` script that runs `npm run build` automatically, so a full build on first install is expected.
 
 ## Build Commands ##
 
@@ -67,235 +67,6 @@ Individual watch targets are also available:
 | `npm run watch:css` | SCSS → CSS |
 | `npm run watch:js` | `m-chart-chartjs-helper.js` |
 | `npm run watch:readme` | `readme.txt` → `README.md` |
-
-## Translations (i18n) ##
-
-To create a new .pot file with any new string run:
-
-```
-wp i18n make-pot . components/languages/m-chart.pot --exclude=components/admin-ui,components/block
-```
-
-The `--exclude` skips the compiled bundle directories. Their `index.js` files still contain the same translatable strings as the `-src` sources, so without the exclude `make-pot` would also reference `components/admin-ui/index.js` and `components/block/index.js`. `wp i18n make-json` then emits a stray hash-named JSON for each of those bundle paths that the `build:i18n` merge step does not clean up (it only consumes `-src` sourced files), leaving leftover `m-chart-{locale}-{md5}.json` files behind.
-
-PHP translations use `.po` / `.mo` files managed in Poedit. JavaScript translations require additional steps because `wp-scripts` bundles multiple source files into a single compiled file, and WordPress needs handle-named JSON files to load them.
-
-All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
-
-### Workflow
-
-1. Open the `.po` file for the locale you are updating (e.g. `components/languages/m-chart-zh_CN.po`) in Poedit.
-2. Go to Translation -> Update from POT file...
-  - Do not choose Update from Source Code it will fail to retrieve everything and your tanslation will be missing necessary items
-3. Translate any new or updated strings.
-4. Save in Poedit (this generates the `.mo` and `.l10n.php` files automatically).
-5. Generate per-source-file JSON translation files:
-
-```
-wp i18n make-json components/languages/m-chart-zh_CN.po --no-purge
-wp i18n make-json components/languages/m-chart-nl_NL.po --no-purge
-wp i18n make-json components/languages/m-chart-ja_JP.po --no-purge
-```
-
-6. Merge the hash-based JSON files into handle-named files that WordPress can find:
-
-```
-npm run build:i18n
-```
-
-Repeat steps 1–6 for each locale.
-
-### Why the merge step is needed
-
-`wp i18n make-json` generates one JSON file per source file, named with the md5 hash of the source path (e.g. `components/admin-ui-src/components/AxisRows.js`). However, WordPress looks up translations using the md5 hash of the *compiled* file path (e.g. `components/admin-ui/index.js`). Since these hashes don't match, WordPress falls back to looking for `{domain}-{locale}-{handle}.json`. The `build:i18n` script merges the per-source-file JSONs into these handle-named files:
-
-- `m-chart-{locale}-m-chart-admin-ui.json` — admin UI translations
-- `m-chart-{locale}-m-chart-editor.json` — block editor translations
-
-### Poedit configuration
-
-Each `.po` file includes Poedit search path headers so that source scanning works correctly. These should exclude:
-
-- `*.min.js` — minified files (duplicates of source)
-- `node_modules` — third-party dependencies
-- `components/external` — vendored libraries
-
-If creating a new locale, copy these headers from an existing `.po` file (e.g. `m-chart-en_US.po`).
-
-## Running Tests ##
-
-This plugin has automated tests across four layers — PHP unit, PHP integration, JS unit, and Playwright E2E. All test materials live under `/tests/` at the repo root.
-
-### One-time setup
-
-```bash
-composer install        # PHP dev dependencies (PHPUnit, Brain Monkey, etc.)
-npm ci                  # JS dev dependencies (Jest, Playwright, wp-env)
-npx playwright install  # Playwright browser binaries (only needed once per machine)
-```
-
-Integration and E2E tests run WordPress in Docker via wp-env, so Docker must be running first (`colima start` or Docker Desktop). The `test:e2e` / `test:a11y` scripts run a preflight check and fail with a friendly message if it isn't.
-
-`wp-env start` handles plugin activation and pretty permalinks automatically via the `lifecycleScripts.afterStart` entry in `.wp-env.json` — the same setup runs locally and in CI.
-
-### PHP unit tests (Brain Monkey, no WP)
-
-Fast, no Docker, runs against the source directly:
-
-```bash
-composer test:unit
-```
-
-Covers `M_Chart_Parse`, `M_Chart_Parsed_Data_Point`, `clean_labels()` (Wordfence M-Chart-194 CVE regression), and `neutralize_csv_cell()`.
-
-### PHP integration tests (full WP via wp-env)
-
-Requires Docker. Spins up a real WP install with the plugin active and runs against a real MariaDB:
-
-```bash
-npx wp-env start
-npx wp-env run tests-cli --env-cwd=wp-content/plugins/m-chart \
-    vendor/bin/phpunit --testsuite integration
-```
-
-Covers the save_post pipeline, CSV import/export AJAX, the REST API permission callbacks, and a Contributor-role end-to-end XSS regression test.
-
-### JS unit tests (Jest)
-
-```bash
-npm run test:js              # one-shot
-npm run test:js:watch        # interactive
-npm run test:js:coverage     # with coverage report
-```
-
-Covers the `ChartAdminContext` reducer (every action type) and `useChartRefresh` race-condition guards.
-
-### E2E tests (Playwright)
-
-```bash
-npm run test:e2e             # all chromium specs (fast loop — reuses a running wp-env, starts one if needed)
-npm run test:e2e:ui          # interactive Playwright UI
-npm run test:a11y            # axe-core accessibility suite only (tests/e2e/a11y)
-npm run test:e2e:full        # one-shot: build assets + start wp-env + run everything
-```
-
-`test:e2e` does NOT rebuild assets — after changing plugin source, run `npm run build` first (or use `test:e2e:full`). wp-env is left running between test runs so iteration stays fast; stop it with `npm run wp-env stop` when you're done.
-
-### Accessibility tests (axe-core)
-
-`tests/e2e/a11y/` scans the plugin's own markup against the WCAG 2.1 A/AA axe rule set:
-
-- `frontend.spec.js` — the rendered chart region (canvas ARIA wiring, screen-reader summary/table/source link) and the `show="table"` output
-- `editor.spec.js` — the chart edit screen's React mounts (the Jspreadsheet grid internals are excluded; the CSV Import flow is the accessible data-entry path)
-
-These run as part of the regular chromium E2E pass in CI. Tag: `@a11y`.
-
-### CVE regression suite
-
-The Wordfence M-Chart-194 stored-XSS CVE has dedicated regression tests at three layers:
-- `tests/php/unit/CleanLabelsTest.php` — pure-function payload neutralization
-- `tests/php/integration/XssRegressionTest.php` — Contributor-role end-to-end render
-- `tests/e2e/security-regression-xss.spec.js` — real browser execution check
-
-If `M_Chart_Parse::clean_labels()` ever regresses to a state that lets `<script>` tags through, all three fail loudly. Tag: `@security`.
-
-### Linting
-
-The project uses `@wordpress/scripts` ESLint config with Prettier formatting rules disabled (`.eslintrc.json`). Lint scope is restricted to source directories — `components/admin-ui-src/`, `components/block-src/`, `components/js/m-chart-chartjs-helper.js`, `tests/js/`, `tests/e2e/` — to avoid choking on vendored libraries in `components/external/` and compiled webpack output in `components/admin-ui/` / `components/block/`.
-
-```sh
-npm run lint:js              # one-shot lint
-npm run lint:js:fix          # auto-fix what's safe to auto-fix
-npm run lint:js:watch        # re-lint on file save
-```
-
-### CI
-
-Four GitHub Actions workflows under `.github/workflows/`:
-- `test-php.yml` — PHP unit matrix (PHP 8.1–8.4) + integration matrix (PHP 8.2–8.4 × WP 6.8/7.0, plus WP trunk); the PHP 8.3 × WP 7.0 cell collects clover coverage inside the wp-env container and uploads it to Codecov
-- `test-js.yml` — Jest + ESLint
-- `test-e2e.yml` — Playwright including the a11y suite (chromium on push/PR, full firefox/webkit nightly)
-- `deploy.yml` — manual WordPress.org deploy, gated on a fast PHP-unit + Jest job
-
-Test workflows trigger on pushes to `main`, `wordpress-7`, and `pro-support`, and on all PRs.
-
----
-
-## Styling overrides ##
-
-m-chart exposes its color palette as CSS custom properties on `:root`, so themes and library plugins can re-skin the admin UI without recompiling SASS. The full token list lives at the top of `components/sass/_global-mixins-and-variables.scss`. Override any of them at any matching selector:
-
-```css
-/* Example: change the accent color and the destructive-action red */
-.m-chart-container {
-    --m-chart-accent:      #ff6b35;
-    --m-chart-alert-error: #b00020;
-}
-```
-
-The accent token chains through to WordPress's `--wp-admin-theme-color`, so the chart-edit screen's accent (sheet-tab underline, focus rings, hover states) automatically follows the user's Admin Color Scheme (Users → Profile). Other tokens hold direct hex defaults because WP's component library does not reliably emit gray/foreground/notice colors as runtime custom properties — when it does in a future version, those tokens will be migrated to chain through with one-line changes.
-
-Available tokens:
-`--m-chart-accent`, `--m-chart-accent-bg-hover`, `--m-chart-text`, `--m-chart-text-muted`, `--m-chart-text-inactive`, `--m-chart-border`, `--m-chart-border-strong`, `--m-chart-bg-sectioned`, `--m-chart-icon`, `--m-chart-icon-inactive`, `--m-chart-disabled`, `--m-chart-alert-error`, `--m-chart-alert-success`, `--m-chart-alert-warning`.
-
----
-
-## Example charts ##
-
-The repo ships a library of 19 pickle-themed example charts (one per chart type) — useful for documentation, screenshots, and as data fixtures.
-
-- **Canonical data:** [`tests/fixtures/charts/pickle-*.json`](tests/fixtures/charts/) — one JSON file per chart type with the full meta + `data.sets` payload
-- **Human-readable doc:** [`docs/example-charts.md`](docs/example-charts.md) — concept blurb, data table, and source citations per chart
-- **WP-importable file:** [`example-charts/pickle-charts.wxr.xml`](example-charts/) — WordPress eXtended RSS (WXR) export creating all 19 posts as drafts
-
-Each example exercises a different real-world dataset (FAOSTAT cucumber production, KITA kimchi exports, USDA FoodData Central sodium figures, Chinese pao cai / zha cai industry data, Korean kimchi fermentation studies, Google Trends, etc.) and includes a `subtitle` field that surfaces any data caveats (rounding, interpolation, normalization) directly on the rendered chart.
-
-### Regenerating the WXR
-
-The JSON fixtures are the source of truth. After editing a fixture, regenerate the WXR with:
-
-```sh
-npm run build:example-charts
-```
-
-Implementation lives at [`scripts/generate-example-charts-wxr.js`](scripts/generate-example-charts-wxr.js) — a hand-rolled Node script that PHP-serializes each fixture's contents and wraps them in a valid WXR 1.2 envelope. No dependencies beyond Node's stdlib.
-
-### Importing into WordPress
-
-```sh
-npx wp-env run cli wp import example-charts/pickle-charts.wxr.xml --authors=skip
-```
-
-…or through the WP admin: **Tools → Import → WordPress** (install the WP Importer plugin if prompted), then upload `example-charts/pickle-charts.wxr.xml`. The 19 example charts will appear as drafts under **M Chart → All Chart Posts**.
-
-### Adding a new example chart
-
-1. Create a new fixture under `tests/fixtures/charts/pickle-<slug>.json` matching the existing shape (every fixture has `library`, `type`, `parse_in`, `set_names`, `subtitle`, `source`, `source_url`, and `data`).
-2. Add a `<slug> =>` entry to the `TITLES` map at the top of `scripts/generate-example-charts-wxr.js`.
-3. Add a section to `docs/example-charts.md`.
-4. Run `npm run build:example-charts` and commit the regenerated WXR.
-
-### WXR contents notes
-
-- Each chart imports with `wp:status = draft` — review before publishing.
-- The PHP-serialized blob in `<wp:meta_value>` is what WP's importer unpacks via `maybe_unserialize()` and then re-serializes via `update_post_meta()`. The end result in `wp_postmeta` is identical to what the m-chart admin UI would produce when saving the same chart manually.
-- Post IDs in the WXR start at 1000 to avoid collisions with low-numbered posts on the destination site. The importer will reassign IDs if they conflict.
-
----
-
-## Deployment ##
-
-Deploy to WordPress.org via GitHub Actions:
-
-Actions tab → "Deploy to WordPress.org" → "Run workflow"
-
-Before triggering the workflow:
-- Bump the version number in `m-chart.php`, `class-m-chart.php`, and `readme.txt`
-- Run `npm run build` and commit all compiled assets
-- Run `npm run build:readme` and commit the updated `README.md`
-- Target the `main` branch when running the workflow
-
----
 
 ## Admin UI Architecture ##
 
@@ -401,3 +172,230 @@ The React admin UI sits inside meta-box `<h2>` elements provided by WordPress co
 ### Status announcements
 
 The admin UI uses `wp.a11y.speak()` from `@wordpress/a11y` for transient status announcements (chart refreshed, sheet renamed, CSV imported, shortcode copied, etc.). Library plugin authors hooking into the React data-flow should consider doing the same.
+
+## Translations (i18n) ##
+
+To regenerate the .pot file with any new strings, run:
+
+```
+wp i18n make-pot . components/languages/m-chart.pot --exclude=components/admin-ui,components/block
+```
+
+The `--exclude` skips the compiled bundle directories. Without it, `make-pot` would also reference the compiled `components/admin-ui/index.js` and `components/block/index.js` (which contain the same strings as their `-src` sources). `wp i18n make-json` would then emit a stray hash-named JSON file for each of those bundle paths, and because the `build:i18n` merge step only consumes `-src`-sourced files, those `m-chart-{locale}-{md5}.json` strays would never get cleaned up.
+
+PHP translations use `.po` / `.mo` files managed in Poedit. JavaScript translations require additional steps because `wp-scripts` bundles multiple source files into a single compiled file, and WordPress needs handle-named JSON files to load them.
+
+All locale files (`.po`, `.mo`, `.l10n.php`) live in `components/languages/`.
+
+### Workflow
+
+1. Open the `.po` file for the locale you are updating (e.g. `components/languages/m-chart-zh_CN.po`) in Poedit.
+2. Go to Translation -> Update from POT file...
+  - Do not choose "Update from Source Code"; it fails to retrieve everything and your translation will be missing strings.
+3. Translate any new or updated strings.
+4. Save in Poedit (this generates the `.mo` and `.l10n.php` files automatically).
+5. Generate per-source-file JSON translation files:
+
+```
+wp i18n make-json components/languages/m-chart-zh_CN.po --no-purge
+wp i18n make-json components/languages/m-chart-nl_NL.po --no-purge
+wp i18n make-json components/languages/m-chart-ja_JP.po --no-purge
+```
+
+6. Merge the hash-based JSON files into handle-named files that WordPress can find:
+
+```
+npm run build:i18n
+```
+
+Repeat steps 1–6 for each locale.
+
+### Why the merge step is needed
+
+`wp i18n make-json` generates one JSON file per source file, named with the md5 hash of the source path (e.g. `components/admin-ui-src/components/AxisRows.js`). However, WordPress looks up translations using the md5 hash of the *compiled* file path (e.g. `components/admin-ui/index.js`). Since these hashes don't match, WordPress falls back to looking for `{domain}-{locale}-{handle}.json`. The `build:i18n` script merges the per-source-file JSONs into these handle-named files:
+
+- `m-chart-{locale}-m-chart-admin-ui.json` — admin UI translations
+- `m-chart-{locale}-m-chart-editor.json` — block editor translations
+
+### Poedit configuration
+
+Each `.po` file includes Poedit search path headers so that source scanning works correctly. These should exclude:
+
+- `*.min.js` — minified files (duplicates of source)
+- `node_modules` — third-party dependencies
+- `components/external` — vendored libraries
+
+If creating a new locale, copy these headers from an existing `.po` file (e.g. `m-chart-en_US.po`).
+
+## Running Tests ##
+
+This plugin has automated tests at four layers: PHP unit, PHP integration, JS unit, and Playwright E2E. All test materials live under `/tests/` at the repo root.
+
+### One-time setup
+
+```bash
+composer install        # PHP dev dependencies (PHPUnit, Brain Monkey, etc.)
+npm ci                  # JS dev dependencies (Jest, Playwright, wp-env)
+npx playwright install  # Playwright browser binaries (only needed once per machine)
+```
+
+Integration and E2E tests run WordPress in Docker via wp-env, so Docker must be running first (`colima start` or Docker Desktop). The `test:e2e` / `test:a11y` scripts run a preflight check and fail with a friendly message if it isn't.
+
+`wp-env start` handles plugin activation and pretty permalinks automatically via the `lifecycleScripts.afterStart` entry in `.wp-env.json` — the same setup runs locally and in CI.
+
+### PHP unit tests (Brain Monkey, no WP)
+
+Fast, no Docker, runs against the source directly:
+
+```bash
+composer test:unit
+```
+
+Covers `M_Chart_Parse`, `M_Chart_Parsed_Data_Point`, `clean_labels()` (Wordfence M-Chart-194 CVE regression), and `neutralize_csv_cell()`.
+
+### PHP integration tests (full WP via wp-env)
+
+Requires Docker. Spins up a real WP install with the plugin active and runs against a real MariaDB:
+
+```bash
+npx wp-env start
+npx wp-env run tests-cli --env-cwd=wp-content/plugins/m-chart \
+    vendor/bin/phpunit --testsuite integration
+```
+
+Covers the save_post pipeline, CSV import/export AJAX, the REST API permission callbacks, and a Contributor-role end-to-end XSS regression test.
+
+### JS unit tests (Jest)
+
+```bash
+npm run test:js              # one-shot
+npm run test:js:watch        # interactive
+npm run test:js:coverage     # with coverage report
+```
+
+Covers the `ChartAdminContext` reducer (every action type) and `useChartRefresh` race-condition guards.
+
+### E2E tests (Playwright)
+
+```bash
+npm run test:e2e             # all chromium specs (fast loop — reuses a running wp-env, starts one if needed)
+npm run test:e2e:ui          # interactive Playwright UI
+npm run test:a11y            # axe-core accessibility suite only (tests/e2e/a11y)
+npm run test:e2e:full        # one-shot: build assets + start wp-env + run everything
+```
+
+`test:e2e` does NOT rebuild assets. After changing plugin source, run `npm run build` first, or use `test:e2e:full`. wp-env is left running between test runs so iteration stays fast; stop it with `npm run wp-env stop` when you're done.
+
+### Accessibility tests (axe-core)
+
+`tests/e2e/a11y/` scans the plugin's own markup against the WCAG 2.1 A/AA axe rule set:
+
+- `frontend.spec.js` — the rendered chart region (canvas ARIA wiring, screen-reader summary/table/source link) and the `show="table"` output
+- `editor.spec.js` — the chart edit screen's React mounts (the Jspreadsheet grid internals are excluded; the CSV Import flow is the accessible data-entry path)
+
+These run as part of the regular chromium E2E pass in CI. Tag: `@a11y`.
+
+### CVE regression suite
+
+The Wordfence M-Chart-194 stored-XSS CVE has dedicated regression tests at three layers:
+- `tests/php/unit/CleanLabelsTest.php` — pure-function payload neutralization
+- `tests/php/integration/XssRegressionTest.php` — Contributor-role end-to-end render
+- `tests/e2e/security-regression-xss.spec.js` — real browser execution check
+
+If `M_Chart_Parse::clean_labels()` ever regresses to a state that lets `<script>` tags through, all three fail loudly. Tag: `@security`.
+
+### Linting
+
+The project uses `@wordpress/scripts` ESLint config with Prettier formatting rules disabled (`.eslintrc.json`). Lint scope is restricted to source directories — `components/admin-ui-src/`, `components/block-src/`, `components/js/m-chart-chartjs-helper.js`, `tests/js/`, `tests/e2e/` — to avoid choking on vendored libraries in `components/external/` and compiled webpack output in `components/admin-ui/` / `components/block/`.
+
+```sh
+npm run lint:js              # one-shot lint
+npm run lint:js:fix          # auto-fix what's safe to auto-fix
+npm run lint:js:watch        # re-lint on file save
+```
+
+### CI
+
+Four GitHub Actions workflows under `.github/workflows/`:
+- `test-php.yml` — PHP unit matrix (PHP 8.1–8.4) + integration matrix (PHP 8.2–8.4 × WP 6.8/7.0, plus WP trunk); the PHP 8.3 × WP 7.0 cell collects clover coverage inside the wp-env container and uploads it to Codecov
+- `test-js.yml` — Jest + ESLint
+- `test-e2e.yml` — Playwright including the a11y suite (chromium on push/PR, full firefox/webkit nightly)
+- `deploy.yml` — manual WordPress.org deploy, gated on a fast PHP-unit + Jest job
+
+Test workflows trigger on pushes to `main`, `wordpress-7`, and `pro-support`, and on all PRs.
+
+---
+
+## Styling overrides ##
+
+m-chart exposes its color palette as CSS custom properties on `:root`, so themes and library plugins can re-skin the admin UI without recompiling SASS. The full token list lives at the top of `components/sass/_global-mixins-and-variables.scss`. Override any of them at any matching selector:
+
+```css
+/* Example: change the accent color and the destructive-action red */
+.m-chart-container {
+    --m-chart-accent:      #ff6b35;
+    --m-chart-alert-error: #b00020;
+}
+```
+
+The accent token chains through to WordPress's `--wp-admin-theme-color`, so the chart-edit screen's accent (sheet-tab underline, focus rings, hover states) automatically follows the user's Admin Color Scheme (Users → Profile). Other tokens hold direct hex defaults because WP's component library does not reliably emit gray/foreground/notice colors as runtime custom properties. If a future version does, those tokens can be migrated to chain through with one-line changes.
+
+Available tokens:
+`--m-chart-accent`, `--m-chart-accent-bg-hover`, `--m-chart-text`, `--m-chart-text-muted`, `--m-chart-text-inactive`, `--m-chart-border`, `--m-chart-border-strong`, `--m-chart-bg-sectioned`, `--m-chart-icon`, `--m-chart-icon-inactive`, `--m-chart-disabled`, `--m-chart-alert-error`, `--m-chart-alert-success`, `--m-chart-alert-warning`.
+
+---
+
+## Example charts ##
+
+The repo ships 19 pickle-themed example charts (one per chart type), useful for documentation, screenshots, and test data fixtures.
+
+- **Canonical data:** [`tests/fixtures/charts/pickle-*.json`](tests/fixtures/charts/) — one JSON file per chart type with the full meta + `data.sets` payload
+- **Human-readable doc:** [`docs/example-charts.md`](docs/example-charts.md) — concept blurb, data table, and source citations per chart
+- **WP-importable file:** [`example-charts/pickle-charts.wxr.xml`](example-charts/) — WordPress eXtended RSS (WXR) export creating all 19 posts as drafts
+
+Each example exercises a different real-world dataset (FAOSTAT cucumber production, KITA kimchi exports, USDA FoodData Central sodium figures, Chinese pao cai / zha cai industry data, Korean kimchi fermentation studies, Google Trends, etc.) and includes a `subtitle` field that surfaces any data caveats (rounding, interpolation, normalization) directly on the rendered chart.
+
+### Regenerating the WXR
+
+The JSON fixtures are the source of truth. After editing a fixture, regenerate the WXR with:
+
+```sh
+npm run build:example-charts
+```
+
+Implementation lives at [`scripts/generate-example-charts-wxr.js`](scripts/generate-example-charts-wxr.js) — a hand-rolled Node script that PHP-serializes each fixture's contents and wraps them in a valid WXR 1.2 envelope. No dependencies beyond Node's stdlib.
+
+### Importing into WordPress
+
+```sh
+npx wp-env run cli wp import example-charts/pickle-charts.wxr.xml --authors=skip
+```
+
+…or through the WP admin: **Tools → Import → WordPress** (install the WP Importer plugin if prompted), then upload `example-charts/pickle-charts.wxr.xml`. The 19 example charts will appear as drafts under **M Chart → All Chart Posts**.
+
+### Adding a new example chart
+
+1. Create a new fixture under `tests/fixtures/charts/pickle-<slug>.json` matching the existing shape (every fixture has `library`, `type`, `parse_in`, `set_names`, `subtitle`, `source`, `source_url`, and `data`).
+2. Add a `<slug> =>` entry to the `TITLES` map at the top of `scripts/generate-example-charts-wxr.js`.
+3. Add a section to `docs/example-charts.md`.
+4. Run `npm run build:example-charts` and commit the regenerated WXR.
+
+### WXR contents notes
+
+- Each chart imports with `wp:status = draft` — review before publishing.
+- The PHP-serialized blob in `<wp:meta_value>` is what WP's importer unpacks via `maybe_unserialize()` and then re-serializes via `update_post_meta()`. The end result in `wp_postmeta` is identical to what the m-chart admin UI would produce when saving the same chart manually.
+- Post IDs in the WXR start at 1000 to avoid collisions with low-numbered posts on the destination site. The importer will reassign IDs if they conflict.
+
+---
+
+## Deployment ##
+
+Deploy to WordPress.org via GitHub Actions:
+
+Actions tab → "Deploy to WordPress.org" → "Run workflow"
+
+Before triggering the workflow:
+- Bump the version number in `m-chart.php`, `class-m-chart.php`, and `readme.txt`
+- Run `npm run build` and commit all compiled assets
+- Run `npm run build:readme` and commit the updated `README.md`
+- Target the `main` branch when running the workflow

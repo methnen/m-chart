@@ -22,7 +22,6 @@ class M_Chart_Block {
 	public function register_m_chart_block_support() {
 		$asset_file = require __DIR__ . '/block/index.asset.php';
 
-		// Register editor script.
 		wp_register_script(
 			'm-chart-editor',
 			m_chart()->plugin_url . '/components/block/index.js',
@@ -31,14 +30,12 @@ class M_Chart_Block {
 			true
 		);
 		
-		// Set editor script translation.
 		wp_set_script_translations(
 			'm-chart-editor',
 			'm-chart',
 			plugin_dir_path( __DIR__ ) . 'components/languages/'
 		);
 
-		// Register block styles.
 		wp_register_style(
 			'm-chart-style',
 			m_chart()->plugin_url . '/components/block/index.css',
@@ -46,7 +43,6 @@ class M_Chart_Block {
 			$this->version_str()
 		);
 
-		// Register editor styles.
 		wp_register_style(
 			'm-chart-editor-style',
 			m_chart()->plugin_url . '/components/block/index.css',
@@ -58,7 +54,8 @@ class M_Chart_Block {
 	}
 
 	/**
-	 * Create a version string to add to the loaded script & style files, but refresh if in develop mode
+	 * Version string for registered scripts/styles
+	 * When WP_DEBUG is on a per-request hash is appended so rebuilt assets always bust the cache
 	 */
 	public function version_str() {
 		static $cached = null;
@@ -79,7 +76,7 @@ class M_Chart_Block {
 	}
 
 	/**
-	 * Register api route to fetch all kind of information needed on the available graphs & settings of the plugin
+	 * Register the REST route the block uses for site options (site URL, image support, whether any charts exist)
 	 */
 	public function register_fetch_m_chart_options() {
 		register_rest_route(
@@ -96,13 +93,12 @@ class M_Chart_Block {
 	}
 
 	/**
-	 * Retrieve from the saved options the siteurl & whether to show preview images,  default show
+	 * Return the site URL, whether chart images are generated, and whether any published charts exist
 	 */
 	public function fetch_options() {
-		// Check the performance setting
 		$performance = m_chart()->get_settings( 'performance' );
-		
-		// Check if there's any posts available
+
+		// posts_per_page 1 since only existence matters
 		$args = [ 
 			'post_type' => 'm-chart', 
 			'post_status' => 'publish', 
@@ -112,14 +108,14 @@ class M_Chart_Block {
 		$posts = new WP_Query( $args );
 
 		return [
-			'siteurl'        => get_option( 'siteurl' ),
-			'image_support'  => 'default' === $performance ? true : false,
-			'posts_avilable' => $posts->have_posts() ? true : false,
+			'siteurl'         => get_option( 'siteurl' ),
+			'image_support'   => 'default' === $performance ? true : false,
+			'posts_available' => $posts->have_posts() ? true : false,
 		];
 	}
 
 	/**
-	 * Register api route to search graphs by title using a search string
+	 * Register the REST route to search charts by title
 	 */
 	public function register_get_charts() {
 		register_rest_route(
@@ -204,7 +200,7 @@ class M_Chart_Block {
 	 * Fetch charts with an optional search term
 	 * 
 	 * @param WP_REST_Request $request The REST request object
-	 * @return array|WP_Error Chart data array or WP_Error if not found
+	 * @return array found_posts count plus an array of chart summaries
 	 */
 	public function get_charts( $request ) {
 		$args = [
@@ -221,10 +217,9 @@ class M_Chart_Block {
 			$args['s'] = $search_string;
 		}
 
-		// Get the charts
 		$posts = new WP_Query( $args );
 
-		// Buid a results array to return to the block
+		// Build a results array to return to the block
 		$results = [];
 		
 		if ( $posts->have_posts() ) {
