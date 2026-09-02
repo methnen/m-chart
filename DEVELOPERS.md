@@ -388,6 +388,24 @@ npx wp-env run cli wp import example-charts/pickle-charts.wxr.xml --authors=skip
 
 ---
 
+## Vendored libraries ##
+
+Everything in `components/external/` is manually copied from upstream dist builds — nothing there is managed by npm or composer, and no build step touches it. When updating one, copy the new dist build over the existing file(s) and make sure a version banner survives at the top of each JS file (some upstream builds strip theirs; add a one-line `/*! name vX.Y.Z */` comment if needed so the vendored version stays identifiable).
+
+| Library | Version | Upstream |
+|---|---|---|
+| Chart.js | 4.5.1 | [chart.js on npm](https://www.npmjs.com/package/chart.js) (`dist/chart.umd.js`) |
+| chartjs-plugin-datalabels | 2.2.0 | [npm](https://www.npmjs.com/package/chartjs-plugin-datalabels) |
+| chartjs-chart-treemap | 4.2.0 | [npm](https://www.npmjs.com/package/chartjs-chart-treemap) (`dist/chartjs-chart-treemap.min.js`) |
+| chartjs-chart-boxplot | 4.4.5 | [@sgratzl/chartjs-chart-boxplot on npm](https://www.npmjs.com/package/@sgratzl/chartjs-chart-boxplot) (`build/index.umd.min.js`) |
+| chartjs-chart-venn | 4.3.7 | [npm](https://www.npmjs.com/package/chartjs-chart-venn) (`build/index.umd.min.js`) |
+| Jspreadsheet CE | 5.0.4 | [jspreadsheet-ce on npm](https://www.npmjs.com/package/jspreadsheet-ce) — pairs with jsuites 5.x (`^5.12.0`) |
+| jsuites | 5.13.5 | [npm](https://www.npmjs.com/package/jsuites) — do not move to 6.x while Jspreadsheet CE 5 is bundled |
+| Freemius SDK | 2.13.4 | [GitHub releases](https://github.com/Freemius/wordpress-sdk/releases) — replace the directory wholesale but preserve `assets/img/m-chart.png` (our plugin icon, not part of the SDK) |
+| parseCSV | ~1.3 | [GitHub](https://github.com/parsecsv/parsecsv-for-php) — upstream dormant since 2021 |
+
+---
+
 ## Deployment ##
 
 Deploy to WordPress.org via GitHub Actions:
