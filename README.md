@@ -4,7 +4,7 @@
 **Requires PHP:** 8.1  
 **Requires at least:** 6.6  
 **Tested up to:** 7.1  
-**Stable tag:** 2.3.2-rc.1  
+**Stable tag:** 2.3.2  
 **License:** MIT  
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -64,6 +64,7 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 ### 2.3.2 ###
 
 * Fixed an issue where very old data could get parsed incorrectly
+* Fixed an issue where WordPress could fail to detect M Chart Pro updates
 * Updated the bundled Freemius SDK (2.13.4) and treemap chart plugin (4.2.0) to their latest versions
 
 ### 2.3.1 ###

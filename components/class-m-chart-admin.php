@@ -57,11 +57,45 @@ class M_Chart_Admin {
 	 */
 	public function admin_init() {
 		$this->save_settings();
+		$this->repair_freemius_plugin_path();
 
 		add_action( 'admin_notices', [ $this, 'library_warning' ] );
 		add_action( 'admin_notices', [ $this, 'migration_success_notice' ] );
 		add_action( 'admin_post_m_chart_migrate_highcharts', [ $this, 'admin_post_migrate_highcharts' ] );
 		add_action( 'admin_post_m_chart_dismiss_migration_notice', [ $this, 'admin_post_dismiss_migration_notice' ] );
+	}
+
+	/**
+	 * Repair the Freemius cached plugin path when it has drifted to the free plugin
+	 *
+	 * Freemius caches its plugin file path in fs_accounts; with the shared free/premium
+	 * setup, activation order can leave it pointing at the free plugin. Freemius then
+	 * compares against the core version and premium updates never appear
+	 *
+	 * Lives in core as well as in M Chart Pro because affected sites can't see Pro
+	 * updates at all — this fix reaches them through core's own updates
+	 */
+	private function repair_freemius_plugin_path() {
+		$premium_basename = 'm-chart-pro/m-chart-pro.php';
+
+		if (
+			! function_exists( 'm_chart_fs' )
+			|| ! class_exists( 'FS_Option_Manager' )
+			|| ! function_exists( 'is_plugin_active' )
+			|| ! is_plugin_active( $premium_basename )
+		) {
+			return;
+		}
+
+		$accounts = FS_Option_Manager::get_manager( WP_FS__ACCOUNTS_OPTION_NAME, true );
+		$map      = $accounts->get_option( 'id_slug_type_path_map', [] );
+		$id       = m_chart_fs()->get_id();
+
+		if ( isset( $map[ $id ]['path'] ) && $premium_basename !== $map[ $id ]['path'] ) {
+			$map[ $id ]['path'] = $premium_basename;
+			$accounts->set_option( 'id_slug_type_path_map', $map, true );
+			delete_site_transient( 'update_plugins' );
+		}
 	}
 
 	/**
