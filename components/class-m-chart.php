@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class M_Chart {
-	public $version           = '2.3.1';
+	public $version           = '2.3.2';
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
@@ -92,11 +92,11 @@ class M_Chart {
 		add_action( 'init', [ $this, 'init' ] );
 		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 		add_action( 'save_post', [ $this, 'save_post' ] );
-		// Doing this early as possible because it sets is_iframe which we might need to use for other things
+		// Priority 0 so is_iframe is set before anything else reads it
 		add_action( 'template_redirect', [ $this, 'template_redirect' ], 0 );
 		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], 10, 2 );
 
-		// Doing this before the default so it's already done before anything else
+		// Priority 9 so this runs before any default-priority filters other plugins add
 		add_filter( 'm_chart_get_chart_image_tag', [ $this, 'm_chart_get_chart_image_tag' ], 9, 3 );
 		add_filter( 'the_content', [ $this, 'the_content' ] );
 		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
@@ -438,10 +438,12 @@ class M_Chart {
 	}
 
 	/**
-	 * WP VIP's CDN was breaking the chart library's ability to handle embedded SVGs so this should circumvent that
-	 * If you wanted to say, watermark your charts, SVGs suddenly become very important
+	 * Return the plugin URL built from the home/admin URL rather than plugins_url() alone
 	 *
-	 * @param string $path option additional path to be used (e.g. components)
+	 * Exists because WP VIP's CDN rewrote plugin URLs in a way that broke embedded SVG handling (e.g. watermarks)
+	 * Building the URL from the current host circumvents that
+	 *
+	 * @param string $path optional additional path to append (e.g. components)
 	 *
 	 * @return string URL to the plugin directory with path if parameter was passed
 	 */
@@ -454,7 +456,7 @@ class M_Chart {
 
 		$url_path = parse_url( plugins_url( $path, __DIR__ ) );
 
-		// Check for a port value if one exists we make sure it's honored
+		// Honor a non-standard port if the base URL has one
 		$port = '';
 
 		if ( isset( $url_base['port'] ) && 80 != $url_base['port'] ) {
@@ -473,9 +475,9 @@ class M_Chart {
 	 * Get chart post meta
 	 *
 	 * @param int $post_id WP post ID of the post you want post meta from
-	 * @param string $field optional field to be returend instead of all post meta
+	 * @param string $field optional field to be returned instead of all post meta
 	 *
-	 * @return array $post_meta the meta for a give post ID
+	 * @return array $post_meta the meta for a given post ID
 	 */
 	public function get_post_meta( $post_id, $field = false ) {
 		$raw_post_meta = get_post_meta( $post_id, $this->slug, true );
@@ -492,7 +494,7 @@ class M_Chart {
 				? get_current_screen()
 				: null;
 
-			// If we're we're adding a new chart and a library is specified in the get vars we use it
+			// When adding a new chart with a library specified in the query string, use that library
 			if (
 				   is_admin()
 				&& null != $current_screen
@@ -534,6 +536,16 @@ class M_Chart {
 			$data                        = $post_meta['data'];
 			$post_meta['data']           = [];
 			$post_meta['data']['sets'][] = $data;
+		}
+
+		// Some very old charts stored a single sheet's rows directly in the sets value
+		// A valid sets value is an array of sheets where each sheet is an array of row arrays
+		if ( isset( $post_meta['data']['sets'] ) && is_array( $post_meta['data']['sets'] ) ) {
+			$first_sheet = reset( $post_meta['data']['sets'] );
+
+			if ( is_array( $first_sheet ) && [] !== $first_sheet && ! is_array( reset( $first_sheet ) ) ) {
+				$post_meta['data'] = [ 'sets' => [ array_values( $post_meta['data']['sets'] ) ] ];
+			}
 		}
 
 		// If there's no set_names value set we'll set it to an empty array
@@ -636,12 +648,12 @@ class M_Chart {
 			}
 		}
 
-		// The theme meta it isn't included in the chart_meta_fields class var so we handle it here
+		// Theme isn't included in chart_meta_fields so it's validated here
 		if ( isset( $meta['theme'] ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
-		// If the data value is not an array we asume it is JSON encoded (i.e. from Jspreadsheet CE)
+		// If the data value is not an array we assume it is JSON encoded (i.e. from Jspreadsheet CE)
 		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
 			$decoded = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
 			$chart_meta['data']['sets'] = is_array( $decoded ) ? $decoded : [];
@@ -689,7 +701,7 @@ class M_Chart {
 	 * @param int $post_id WP post ID of the post
 	 */
 	public function save_post( $post_id ) {
-		// We do this in the main class because otherwise it won't get hooked soon enough
+		// save_post is hooked here because the admin class is lazy-loaded and wouldn't be instantiated in time to hook it itself
 		$this->admin()->save_post( $post_id );
 	}
 
@@ -723,7 +735,7 @@ class M_Chart {
 			return;
 		}
 
-		// Make sure we isntantiate the library so any library specific filters/setup get run
+		// Make sure we instantiate the library so any library specific filters/setup get run
 		$this->library( $library );
 
 		// If they want the table of data we'll return that
@@ -880,7 +892,7 @@ class M_Chart {
 	}
 
 	/**
-	 * Filter the m_chart_get_chart_image_tag hook and return a plaecholder if appropriate
+	 * Filter the m_chart_get_chart_image_tag hook and return a placeholder if appropriate
 	 *
 	 * @param array|bool an array of image values or false if no image could be found
 	 * @param int $post_id WP post ID of the chart you want an image for
@@ -913,11 +925,9 @@ class M_Chart {
 	public function the_content( $content ) {
 		// Make sure we're dealing with a chart
 		if ( get_post_type() != $this->slug ) {
-			// We aren't dealing with a chart so we'll just stop here
 			return $content;
 		}
 
-		// Call the get_chart method and let it do it's thing
 		return $this->get_chart();
 	}
 
@@ -962,7 +972,7 @@ class M_Chart {
 	 * @return class the library class for this library
 	 */
 	public function m_chart_library_class( $library_class, $library ) {
-		// If Chart.js wasn't requested we'll stop here ()
+		// If Chart.js wasn't requested we'll stop here
 		if ( $library != $this->chart_meta_fields['library'] ) {
 			return $library_class;
 		}
@@ -1043,11 +1053,12 @@ class M_Chart {
 
 	/**
 	 * Helper function that prevents issues with stripslashes and unicode characters
-	 * stripslashes will strip off the slash before unicode characters which is sucky, this prevents that
+	 * stripslashes() strips the backslash before \uXXXX sequences
+	 * This re-escapes those sequences first so unicode survives the strip
 	 *
-	 * @param string $string a string that may have unicode characters as well as unecessary escaping
+	 * @param string $string a string that may have unicode characters as well as unnecessary escaping
 	 *
-	 * @return string a string with any unecessary escaping removed
+	 * @return string a string with any unnecessary escaping removed
 	 */
 	public function unicode_aware_stripslashes( $string ) {
 		return stripslashes( preg_replace( '#\\\u[a-fA-F0-9]{4}#', '\\\\$0', $string ) );
@@ -1267,7 +1278,7 @@ class M_Chart {
 	/**
 	 * Return an array of available charting libraries
 	 *
-	 * @return array current settings
+	 * @return array available chart libraries keyed by slug
 	 */
 	public function get_libraries() {
 		return apply_filters( 'm_chart_get_libraries', $this->libraries );

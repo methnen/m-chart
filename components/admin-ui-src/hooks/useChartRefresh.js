@@ -34,7 +34,7 @@ export function useChartRefresh( title ) {
 
 	useEffect( () => {
 		// On first run we want to skip rendering since the chart will already be rendered
-		// But only if it's not a brand new chart (chartArgs being null indcates chart is new)
+		// But only if it's not a brand new chart (chartArgs being null indicates chart is new)
 		if ( isFirstRun.current && null !== chartArgs ) {
 			isFirstRun.current = false;
 
@@ -69,7 +69,6 @@ export function useChartRefresh( title ) {
 			}
 
 			try {
-				// Start buidling the values we'll send to the m_chart_get_chart_args endpoint
 				const body = new URLSearchParams();
 				body.append( 'post_id', postId );
 				body.append( 'nonce', nonce );
@@ -118,7 +117,7 @@ export function useChartRefresh( title ) {
 					return;
 				}
 
-				// If the request succeeded we dispatch the returned data nd then trigger the m_chart.chart_args_success hook and pass it the new data and postId
+				// On success, store the new args and notify extensions via m_chart.chart_args_success
 				if ( json.success ) {
 					dispatch( { type: 'SET_CHART_ARGS', payload: json.data } );
 					speak( __( 'Chart refreshed', 'm-chart' ) );

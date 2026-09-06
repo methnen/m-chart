@@ -31,7 +31,7 @@ export default function Edit( { attributes, setAttributes } ) {
     // Blockprops
     const blockProps = useBlockProps( { className: 'm-chart-block-chart-selector' } );
 
-    // Set a cache URL parameter based on the current moment in time to prevent cached images from messing up the UI
+    // Cache-busting query param so regenerated chart images aren't served stale
     const cacheBuster = `?cache=${performance.now()}`;
 
     // Get option settings
@@ -39,7 +39,7 @@ export default function Edit( { attributes, setAttributes } ) {
         apiFetch( { path: optionsUrl } ).then( result => {
             setImageSupport( result.image_support );
             setSiteUrl( result.siteurl );
-            setPostsAvailable( result.posts_avilable );
+            setPostsAvailable( result.posts_available );
         } );
     };
 
@@ -80,7 +80,6 @@ export default function Edit( { attributes, setAttributes } ) {
 
         const query = params.toString();
 
-        // Run the query and grab the results
         apiFetch( { path: `/m-chart/v1/charts${ query ? '?' + query : '' }` } )
             .then(
                 result => {
@@ -116,7 +115,7 @@ export default function Edit( { attributes, setAttributes } ) {
                 } );
     }, [] );
 
-    // Actually actually carry out the debounced search
+    // Debounced search
     const doSearch = useMemo(
         () => debounce( ( value ) => {
             setSearch( value );
@@ -126,7 +125,7 @@ export default function Edit( { attributes, setAttributes } ) {
         [ getCharts ]
     );
 
-    // On load we fetch some option settings and run getCharts so we have some intiial reasults loaded into the UI
+    // Mount-only fetch of options and the first page of charts
     useEffect( () => {
         fetchOptions();
         getCharts( search );
@@ -202,7 +201,7 @@ export default function Edit( { attributes, setAttributes } ) {
         );
     } );
 
-    // Handle clicks to a chart in the results list
+    // Handle clicks on a chart in the results list
     const handleClick = ( id ) => {
         setAttributes( { chartId: id } );
         setSelectedChart( null );

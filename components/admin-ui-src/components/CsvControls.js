@@ -77,7 +77,7 @@ export default function CsvControls( { getActiveWorksheet } ) {
 			return;
 		}
 
-		// Save the file value so we can reset the iput
+		// Save the file value so we can reset the input
 		const file = selectedFile;
 
 		// Set the UI to show we're importing the file
@@ -99,7 +99,6 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		formData.append( 'csv_delimiter',   csvDelimiter );
 		formData.append( 'nonce',           nonce );
 
-		// Try submitting the data to the endpoint
 		try {
 			const response = await fetch( `${ ajaxUrl }?action=m_chart_import_csv`, {
 				method: 'POST',
@@ -115,11 +114,9 @@ export default function CsvControls( { getActiveWorksheet } ) {
 				return;
 			}
 
-			// Get the active worksheet
 			const worksheet = getActiveWorksheet();
 
 			if ( worksheet ) {
-				// Set the active worksheet to the new data
 				worksheet.setData( json.data );
 
 				// setData() does not trigger onafterchanges so we need to run spreadsheetAutoWidth ourselves
@@ -146,7 +143,6 @@ export default function CsvControls( { getActiveWorksheet } ) {
 	function handleExport( e ) {
 		e.preventDefault();
 
-		// Get the active worksheet
 		const worksheet = getActiveWorksheet();
 
 		if ( ! worksheet ) {
@@ -173,7 +169,6 @@ export default function CsvControls( { getActiveWorksheet } ) {
 		form.method   = 'post';
 		form.style.display = 'none';
 
-		// Loop through the formData and append it to the temporary form
 		for ( const [ name, value ] of formData.entries() ) {
 			const input   = document.createElement( 'input' );
 			input.type    = 'hidden';
@@ -182,7 +177,6 @@ export default function CsvControls( { getActiveWorksheet } ) {
 			form.appendChild( input );
 		}
 
-		// Do the thing
 		document.body.appendChild( form );
 		form.submit();
 		document.body.removeChild( form );

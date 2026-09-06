@@ -110,7 +110,7 @@ class M_Chart_Chartjs {
 	/**
 	 * Canonical Chart.js options scaffold that get_chart_args() builds on top of.
 	 *
-	 * Pure static defaults with no post-meta dependencie
+	 * Pure static defaults with no post-meta dependencies
 	 * Extensions read this to get the same literals m-chart will apply at render time
 	 *
 	 * @return array
@@ -224,7 +224,7 @@ class M_Chart_Chartjs {
 	 * Returns the static color/font/spacing values core writes onto every treemap dataset
 	 * Per-instance flags (`captions.display`, `labels.display`) are intentionally omitted
 	 *
-	  * Extensions read this to get the same literals m-chart will apply at render time
+	 * Extensions read this to get the same literals m-chart will apply at render time
 	 *
 	 * @return array
 	 */
@@ -329,14 +329,14 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Returns an arary of all settings and data needed to build a chart
+	 * Returns an array of all settings and data needed to build a chart
 	 *
 	 * @param int $post_id WP post ID of the post you want chart args for
 	 * @param array $args any args we want to override the defaults for
 	 * @param bool $force optional param to force a rebuild of the data even if a cache was found
 	 * @param bool $cache optional param to override the default behavior to cache the results
 	 *
-	 * @return string URL to the plugin directory with path if parameter was passed
+	 * @return array complete chart args ready to hand to Chart.js
 	 */
 	public function get_chart_args( $post_id, $args, $force = false, $cache = true ) {
 		// There's a ton of work that goes into generating the chart args so we cache them
@@ -364,7 +364,6 @@ class M_Chart_Chartjs {
 			'type'    => $this->chart_types[ $this->post_meta['type'] ],
 			'options' => [
 				'plugins' => [
-					// @TODO Figure out how to support subtitles in Chart.js
 					'title' => array_merge(
 						$defaults['plugins']['title'],
 						[
@@ -432,7 +431,8 @@ class M_Chart_Chartjs {
 			$chart_args['options']['plugins']['legend']['display'] = false;
 		}
 
-		// Forcing a minimum value prevents the built in fudging which sometimes looks weird
+		// Chart.js auto-picks a y-axis minimum with headroom which can look odd
+		// Forcing the stored minimum overrides that
 		if (
 			$this->post_meta['y_min']
 			&& (
@@ -559,7 +559,8 @@ class M_Chart_Chartjs {
 
 		$use_per_point_colors = ! empty( $this->post_meta['data_point_colors'] );
 
-		// Apply colors and point styles, yes this kind of sucks, but so does the Chart.js system for handling this stuff
+		// Apply colors and point styles
+		// The per-type branching mirrors how unevenly Chart.js spreads color config across chart types
 		if ( 'treemap' === $chart_args['type'] && isset( $chart_args['data']['datasets'][0]['tree'] ) ) {
 			$ds = &$chart_args['data']['datasets'][0];
 
@@ -893,9 +894,8 @@ class M_Chart_Chartjs {
 	/**
 	 * Returns the value labels array
 	 *
-	 * @return array an array of the value labels need for the active chart
+	 * @return array an array of the value labels needed for the active chart
 	 */
-
 	public function get_value_labels_array() {
 		$value_labels = m_chart()->parse()->value_labels;
 
@@ -926,7 +926,6 @@ class M_Chart_Chartjs {
 		$chart_args['options']['scales']['x']['ticks']['color'] = '#222222';
 		$chart_args['options']['scales']['y']['ticks']['color'] = '#222222';
 
-		// Note the additional layer in the array: [0] its needed for Chart.js to see the label settings
 		$chart_args['options']['scales']['x']['title'] = [
 			'color'   => '#222222',
 			'display' => '' == $this->post_meta['x_title'] ? false : true,
@@ -1118,7 +1117,7 @@ class M_Chart_Chartjs {
 
 			$treemap_defaults = self::get_treemap_dataset_defaults();
 			// Flat (single-level) data — captions don't render, so reset
-			// the array to just the off flag and let the styling drop.
+			// the array to just the off flag and let the styling drop
 			$treemap_defaults['captions']           = [ 'display' => false ];
 			$treemap_defaults['labels']['display']  = (bool) $this->post_meta['labels'];
 
@@ -1397,14 +1396,13 @@ class M_Chart_Chartjs {
 			$scripts[] = 'chartjs-venn';
 		}
 
-		// Return the scripts
 		return $scripts;
 	}
 
 	/**
 	 * Helper function escapes and modifies text/title values
 	 *
-	 * @param string an string you want to use in Chart.js
+	 * @param string a string you want to use in Chart.js
 	 *
 	 * @return string an escaped and modified string
 	 */
@@ -1918,7 +1916,8 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Ensure no two field names collide and that none collide with the value field Appends _2, _3, etc. as needed to disambiguate
+	 * Ensure no two field names collide and that none collide with the value field
+	 * Appends _2, _3, etc as needed to disambiguate
 	 *
 	 * @param array  $group_fields array of group field names
 	 * @param string $value_field  the value field name
@@ -1978,7 +1977,7 @@ class M_Chart_Chartjs {
 	 *
 	 * @param string a hex color value
 	 *
-	 * @return array the color as seperate RGB values
+	 * @return array the color as separate RGB values
 	 */
 	public function hex_to_rgb( $hex ) {
 		// Make sure the hex string is a proper hex string
@@ -1987,7 +1986,7 @@ class M_Chart_Chartjs {
 
 		switch ( strlen( $hex ) ) {
 			case 6:
-				// If a proper hex code, convert using bitwise operation, no overhead... faster
+				// Full 6-digit hex converts with bitwise ops
 				$color_value = hexdec( $hex );
 
 				$rgb['red']   = 0xFF & ( $color_value >> 0x10 );
@@ -2038,7 +2037,7 @@ class M_Chart_Chartjs {
 	 *
 	 * @param string a theme slug
 	 *
-	 * @return string/boolean requested theme options or false if they could not be found
+	 * @return array|false the theme's options array or false when not found
 	 */
 	private function get_theme( $slug ) {
 		foreach ( $this->theme_directories as $directory ) {

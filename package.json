@@ -3,7 +3,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.48.0",
-    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.0",
     "@wordpress/a11y": "^4.49.0",
@@ -14,18 +14,18 @@
     "@wordpress/env": "^11.6.0",
     "@wordpress/hooks": "^4.45.0",
     "@wordpress/i18n": "^6.19.0",
-    "@wordpress/jest-preset-default": "^12.5.0",
-    "@wordpress/scripts": "^32.5.1",
+    "@wordpress/jest-preset-default": "^14.1.0",
+    "@wordpress/scripts": "^34.2.0",
     "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.0.0",
-    "jest-axe": "^10.0.0",
+    "concurrently": "^10.0.5",
+    "jest-axe": "^11.0.0",
     "jest-junit": "^17.0.0",
     "msw": "^2.6.0",
     "uglify-js": "^3.19.3",
     "wp-readme-to-markdown": "^1.0.0"
   },
   "dependencies": {
-    "@wordpress/icons": "15.0.0",
+    "@wordpress/icons": "^15.5.0",
     "lodash": "^4.17.21"
   },
   "scripts": {

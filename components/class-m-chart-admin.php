@@ -57,11 +57,45 @@ class M_Chart_Admin {
 	 */
 	public function admin_init() {
 		$this->save_settings();
+		$this->repair_freemius_plugin_path();
 
 		add_action( 'admin_notices', [ $this, 'library_warning' ] );
 		add_action( 'admin_notices', [ $this, 'migration_success_notice' ] );
 		add_action( 'admin_post_m_chart_migrate_highcharts', [ $this, 'admin_post_migrate_highcharts' ] );
 		add_action( 'admin_post_m_chart_dismiss_migration_notice', [ $this, 'admin_post_dismiss_migration_notice' ] );
+	}
+
+	/**
+	 * Repair the Freemius cached plugin path when it has drifted to the free plugin
+	 *
+	 * Freemius caches its plugin file path in fs_accounts; with the shared free/premium
+	 * setup, activation order can leave it pointing at the free plugin. Freemius then
+	 * compares against the core version and premium updates never appear
+	 *
+	 * Lives in core as well as in M Chart Pro because affected sites can't see Pro
+	 * updates at all — this fix reaches them through core's own updates
+	 */
+	private function repair_freemius_plugin_path() {
+		$premium_basename = 'm-chart-pro/m-chart-pro.php';
+
+		if (
+			! function_exists( 'm_chart_fs' )
+			|| ! class_exists( 'FS_Option_Manager' )
+			|| ! function_exists( 'is_plugin_active' )
+			|| ! is_plugin_active( $premium_basename )
+		) {
+			return;
+		}
+
+		$accounts = FS_Option_Manager::get_manager( WP_FS__ACCOUNTS_OPTION_NAME, true );
+		$map      = $accounts->get_option( 'id_slug_type_path_map', [] );
+		$id       = m_chart_fs()->get_id();
+
+		if ( isset( $map[ $id ]['path'] ) && $premium_basename !== $map[ $id ]['path'] ) {
+			$map[ $id ]['path'] = $premium_basename;
+			$accounts->set_option( 'id_slug_type_path_map', $map, true );
+			delete_site_transient( 'update_plugins' );
+		}
 	}
 
 	/**
@@ -175,7 +209,7 @@ class M_Chart_Admin {
 		];
 
 		// If multiple libraries are active we'll give you the option of using each one
-		// @TODO As written this will break if there's ever more than 10 active libraries... so yeah
+		// @TODO the hardcoded positions 10+ collide with the Docs/Account/Upgrade slots if there are ever more than ~10 active libraries
 		$libraries = m_chart()->get_libraries();
 
 		if ( 1 < count( $libraries ) ) {
@@ -212,7 +246,7 @@ class M_Chart_Admin {
 			}
 		}
 
-		// Gotta sort them so they're in the right order
+		// ksort so the numeric positions assigned above actually take effect
 		if ( ! empty( $submenu[ $menu_slug ] ) ) {
 			ksort( $submenu[ $menu_slug ] );
 		}
@@ -421,7 +455,7 @@ class M_Chart_Admin {
 				}
 			} else {
 				// Make sure the value is a string and matches the safe pattern before saving it
-				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back o the default
+				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back to the default
 				// Plugins that need to persist complex shapes should hook 'm_chart_validated_settings' below to inject their own validated value
 				$value = $submitted_settings[ $setting ];
 
@@ -759,7 +793,7 @@ class M_Chart_Admin {
 				plugin_dir_path( __DIR__ ) . 'components/languages/'
 			);
 
-			// We need the library and post ID for a bunch of stuff below
+			// Library and post ID feed the localized config and script choices below
 			$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : '';
 			$library = m_chart()->get_library();
 
@@ -956,7 +990,7 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Insert CSV Import and Export forms into the footer when editing charts
+	 * Print the m_chart_admin_footer_javascript action's output in a script tag on chart edit screens
 	 */
 	public function admin_footer() {
 		$screen = get_current_screen();
@@ -1124,8 +1158,7 @@ class M_Chart_Admin {
 	/**
 	 * Attach a given image to a chart post
 	 *
-	 * @param int the WP post ID of the post being saved
-	 * @param string a base64 encoded string of the image we want to attach
+	 * Reads the post ID and base64 image from $_POST
 	 */
 	public function attach_image() {
 		$settings = m_chart()->get_settings();
@@ -1191,7 +1224,7 @@ class M_Chart_Admin {
 		// Upload image to WP
 		$file = wp_upload_bits( sanitize_title( $post->post_title . '-' . $post->ID ) . '.png', null, $decoded_img );
 
-		// START acting like media_sideload_image
+		// Mirror media_sideload_image()'s file-array handling since it only accepts URLs, not an already-uploaded local file
 		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file['file'], $matches );
 
 		$file_array['name']     = basename( $matches[0] );
@@ -1208,7 +1241,7 @@ class M_Chart_Admin {
 			@unlink( $file_array['tmp_name'] );
 			return $img_id;
 		}
-		// STOP acting like media_sideload_image
+		// End of the media_sideload_image mirror
 
 		// Set some meta on the attachment so we know it came from m-chart
 		add_post_meta( $img_id, m_chart()->slug . '-image', $post->ID );
@@ -1286,7 +1319,7 @@ class M_Chart_Admin {
 		}
 
 		// Get parseCSV library so we can use it to convert the CSV to a nice array
-		// Yes, PHP does this natively now but I've run into trouble with malformed CSV that parsCSV handles fine
+		// Yes, PHP does this natively now but I've run into trouble with malformed CSV that parseCSV handles fine
 		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
 
 		$parse_csv = new parseCSV();
@@ -1449,12 +1482,6 @@ class M_Chart_Admin {
 			wp_send_json_error( esc_html__( 'Invalid library', 'm-chart' ) );
 		}
 
-		// This does get potentially overwritten later on
-		// However, it's necessary for initial load on a new chart
-		if ( 'highcharts' === $library_slug ) {
-			$library = m_chart()->library( $library_slug );
-		}
-
 		$library = apply_filters( 'm_chart_library_class', m_chart()->library_class, $library_slug );
 
 		// Make sure a third-party filter didn't replace the library with something unusable
@@ -1477,8 +1504,9 @@ class M_Chart_Admin {
 	 * Return a name spaced field name
 	 *
 	 * @param string the field name we want to name space
+	 * @param string optional parent field name to nest the field name under
 	 *
-	 * @param string a name spaced field name
+	 * @return string a name spaced field name
 	 */
 	public function get_field_name( $field_name, $parent_field_name = '' ) {
 		if ( '' !== $parent_field_name ) {
@@ -1493,7 +1521,7 @@ class M_Chart_Admin {
 	 *
 	 * @param string the field id we want to name space
 	 *
-	 * @param string a name spaced field id
+	 * @return string a name spaced field id
 	 */
 	public function get_field_id( $field_name ) {
 		return m_chart()->slug . '-' . $field_name;

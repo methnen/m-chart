@@ -4,48 +4,48 @@ Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
 Requires at least: 6.6
 Tested up to: 7.1
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: MIT
 
-Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
+Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
 
 == Description ==
 
-Manage your data via a spreadsheet interface or an accessible CSV import, display it as any of 19 chart types using the bundled Chart.js library, and embed it anywhere via a shortcode, or the block editor.
+Manage your data in a spreadsheet or with an accessible CSV import, display it as any of 19 chart types using the bundled Chart.js library, and embed it anywhere with a shortcode or the block editor.
 
 **Features:**
 
 * **19 chart types** — line, spline, area, column, stacked column, bar, stacked bar, pie, doughnut, scatter, bubble, radar, radar area, polar, treemap, boxplot, violin, venn, and euler
-* **Two ways to enter data** — a spreadsheet UI (Jspreadsheet CE) with multi-sheet support, or a fully keyboard-accessible CSV import with configurable delimiters
+* **Two ways to enter data** — a spreadsheet with multi-sheet support, or a fully keyboard-accessible CSV import with configurable delimiters
 * **Live preview** — the chart redraws instantly as you edit your data and settings, so you can see exactly what you'll get before publishing
 * **Multiple output formats** — render as a live interactive chart, a static image, or a plain HTML data table, all from the same chart
-* **Automatic image generation** — every chart is captured to a real PNG image automatically (no headless browser or external service required)
+* **Automatic image generation** — every chart is automatically saved as a PNG image (no extra software or external service required)
 	* Images have a configurable width and 1x–4x quality multiplier
 	* Perfect for RSS feeds, emails, AMP pages, and anywhere JavaScript doesn't work
-* **Flexible embedding** — shortcode, native block editor block, or iframe for remote/cross-site embedding
-* **Accessibility (WCAG 2.1 AA)** — every front-end chart includes a visually-hidden data table for screen readers, and a Color Blind Safe theme is bundled
+* **Flexible embedding** — shortcode, block editor block, or iframe for embedding on other sites
+* **Accessibility (WCAG 2.1 AA)** — every front-end chart includes a hidden data table for screen readers
 * **Themes** — bundled Chart.js themes, switchable per install, including a Color Blind Safe palette
 * **Responsive and fast** — charts size to their container, defer rendering until scrolled into view, and lazy-load in the block editor
 * **Localization** — locale-aware number formatting, plus full translation support
 * **Per-chart customization** — title/subtitle, axis titles and units, forced axis minimum, legend and shared-tooltip toggles, data-point labels, source attribution, and "color per data point"
 
-**Note:** Version 2.2 adds support for [M Chart Pro](https://mch.art/) which adds some additional premium features. 
+**Note:** [M Chart Pro](https://mch.art/) is a premium add-on that adds some additional features. Support for it was added in version 2.2.
 
-For a detailed explanation of why M Chart Pro exists and what my plans are going forwards read [Why M Chart Pro](https://mch.art/why-m-chart-pro/). 
+For a detailed explanation of why M Chart Pro exists and my plans going forward, read [Why M Chart Pro](https://mch.art/why-m-chart-pro/).
 
-The short version is that M Chart will continue to be supported and developed, I've been working on this plugin and providing it for free over 10 years now and that will continue to be the case.
+The short version: M Chart will continue to be supported and developed. I've been working on this plugin and providing it for free for over 10 years now, and that won't change.
 
-However, that support and development will continue to match my original scope for the plugin which was to provide an efficent and easy to use UI for managing datasets and displaying them as charts and nothing more. Because of my limited ability to devote time to development of M Chart I've had to intentionally not add some features that have been requested throughout the years. Not because those features were bad ideas, but because I couldn't devote the kind of time necessary to do those features justice.
+That support and development will continue to match my original scope for the plugin: an efficient, easy-to-use UI for managing datasets and displaying them as charts, and nothing more. Because my time for M Chart is limited, I've intentionally not added some features that have been requested over the years. Not because they were bad ideas, but because I couldn't give them the time they deserve.
 
-M Chart Pro will be where I add those out of scope features as an addon to M Chart and since M Chart Pro will have a yearly subscription fee it will hopefully provide me with the financial stability to allow me to devote my time more fully to M Chart overall.
+M Chart Pro is where I add those out-of-scope features. Its yearly subscription fee will hopefully give me the financial stability to devote my time more fully to M Chart overall.
 
-**Note:** The [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) is deprecated and will not receive further updates. Chart.js now matches Highcharts feature-for-feature, supports additional chart types, works with M Chart Pro, is more performant, and isn't burdened by expensive commercial licensing requirements. If you have Highcharts charts, M Chart offers a one-click migration to Chart.js.
- 
-**Accessibility:** M Chart targets WCAG 2.1 Level AA. Charts on the front end include a visually-hidden data table for screen-reader users, and a `Color Blind Safe` theme is bundled. Screen-reader users entering chart data should use the CSV Import feature — the spreadsheet widget has partial keyboard support but CSV import is fully accessible.
+**Note:** The [M Chart Highcharts Library](https://github.com/methnen/m-chart-highcharts-library/) is deprecated and will not receive further updates. Chart.js now matches Highcharts feature-for-feature, supports additional chart types, works with M Chart Pro, is faster, and doesn't require an expensive commercial license. If you have Highcharts charts, M Chart offers a one-click migration to Chart.js.
 
-For full documentation please see the [Documentation](https://docs.mch.art/).
+**Accessibility:** M Chart targets WCAG 2.1 Level AA. Charts on the front end include a hidden data table for screen-reader users, and a Color Blind Safe theme is bundled. Screen-reader users entering chart data should use the CSV Import feature: the spreadsheet has partial keyboard support, but CSV import is fully accessible.
 
-To contribute, report issues, or make feature requests use [Github](https://github.com/methnen/m-chart).
+For full documentation, see the [Documentation](https://docs.mch.art/).
+
+To contribute, report issues, or make feature requests, use [GitHub](https://github.com/methnen/m-chart).
 
 == Screenshots ==
 
@@ -55,9 +55,15 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 == Changelog ==
 
+= 2.3.2 =
+
+* Fixed an issue where very old data could get parsed incorrectly
+* Fixed an issue where WordPress could fail to detect M Chart Pro updates
+* Updated the bundled Freemius SDK (2.13.4) and treemap chart plugin (4.2.0) to their latest versions
+
 = 2.3.1 =
 
-* Minor changes to support Wordpress 7.1
+* Minor changes to support WordPress 7.1
 
 = 2.3 =
 
@@ -168,7 +174,7 @@ To contribute, report issues, or make feature requests use [Github](https://gith
 
 * Added alt text to the image version of a chart in the Block editor for better accessibility support
 * Added chart title to the image version of a chart in the Block editor
-* Added `arial-label` and `role` attributes to the Chart.js canvas object for better accessibility support
+* Added `aria-label` and `role` attributes to the Chart.js canvas object for better accessibility support
 * Fixed an issue with translation text not making it into the Block interface
 * Fixed an issue where Chart.js tooltips were sometimes missing a label
 * Updated Chart.js to the latest stable version (4.4.3)
