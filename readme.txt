@@ -3,8 +3,8 @@ Contributors: methnen
 Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
 Requires at least: 6.6
-Tested up to: 7.1
-Stable tag: 2.3.2
+Tested up to: 7.1.3
+Stable tag: 2.3.3
 License: MIT
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -54,6 +54,10 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 3. M Chart Block UI
 
 == Changelog ==
+
+= 2.3.3 =
+
+* Updated the bundled Freemius SDK to the latest version (2.13.5)
 
 = 2.3.2 =
 
