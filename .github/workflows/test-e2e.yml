@@ -39,11 +39,16 @@ jobs:
 
       - run: npm ci
 
+      # The key includes the runner image (ImageOS reads e.g. ubuntu24 or
+      # ubuntu26) because WebKit is a per-Ubuntu-release build linked against
+      # that release's ICU and libxml2
+      # A cache restored across an image change leaves the old binary in place,
+      # playwright install then skips the download, and every launch fails
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ matrix.browser }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ matrix.browser }}-${{ runner.os }}-${{ env.ImageOS }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps ${{ matrix.browser }}
