@@ -17,14 +17,34 @@ import SpreadsheetMetaBox from '../../../components/admin-ui-src/components/Spre
 import { ChartAdminProvider, useChartAdmin } from '../../../components/admin-ui-src/context/ChartAdminContext';
 
 // Mock the heavy child components — they require Jspreadsheet and are not under
-// test here. handleMounted will never fire, so worksheetInstances stays empty
-// and writeDataToForm writes the fallback [["",""]]. That's fine — we're
-// testing the coordination logic, not the data round-trip
-jest.mock( '../../../components/admin-ui-src/components/JspreadsheetWrapper', () => ( {
-	__esModule: true,
-	default:    () => null,
-	spreadsheetAutoWidth: () => {},
-} ) );
+// test here. The wrapper mock reports a fake worksheet through onMounted when
+// mockMount.enabled is set, otherwise it never mounts so writeDataToForm has to
+// fall back to the data held in state
+const mockMount = { enabled: false, worksheet: { getData: () => [ [ 'from', 'worksheet' ] ] } };
+
+jest.mock( '../../../components/admin-ui-src/components/JspreadsheetWrapper', () => {
+	const { useEffect } = require( '@wordpress/element' );
+
+	function MockJspreadsheetWrapper( { sheetId, onMounted, onUnmounted } ) {
+		useEffect( () => {
+			if ( ! mockMount.enabled ) {
+				return undefined;
+			}
+
+			onMounted( sheetId, mockMount.worksheet );
+
+			return () => onUnmounted( sheetId );
+		}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+		return null;
+	}
+
+	return {
+		__esModule: true,
+		default: MockJspreadsheetWrapper,
+		spreadsheetAutoWidth: () => {},
+	};
+} );
 jest.mock( '../../../components/admin-ui-src/components/SheetTabs', () => ( {
 	__esModule: true,
 	default:    () => null,
@@ -72,6 +92,7 @@ describe( 'SpreadsheetMetaBox submit gate', () => {
 	beforeEach( () => {
 		form = setupDom();
 		capturedDispatch = null;
+		mockMount.enabled = false;
 	} );
 
 	afterEach( () => {
@@ -162,5 +183,63 @@ describe( 'SpreadsheetMetaBox submit gate', () => {
 		// when formEnabled is false — blocking the submit
 		expect( submitEvent.defaultPrevented ).toBe( true );
 		expect( form.submit ).not.toHaveBeenCalled();
+	} );
+
+	test( 'writeDataToForm falls back to the data in state when a worksheet is not mounted', () => {
+		renderUnderTest();
+
+		act( () => {
+			document.getElementById( 'publish' ).dispatchEvent( new MouseEvent( 'click', { bubbles: true, cancelable: true } ) );
+		} );
+
+		const textarea = form.querySelector( 'textarea[name="m-chart[data]"]' );
+
+		// setup.js seeds spreadsheet_data as [ [ [ '' ] ] ]
+		expect( JSON.parse( textarea.value ) ).toEqual( [ [ [ '' ] ] ] );
+	} );
+
+	test( 'writeDataToForm reads mounted worksheets and fires m_chart.before_submit', () => {
+		mockMount.enabled = true;
+
+		const beforeSubmit = jest.fn();
+		window.wp.hooks.addAction( 'm_chart.before_submit', 'test/before', beforeSubmit );
+
+		renderUnderTest();
+
+		act( () => {
+			document.getElementById( 'publish' ).dispatchEvent( new MouseEvent( 'click', { bubbles: true, cancelable: true } ) );
+		} );
+
+		const textarea = form.querySelector( 'textarea[name="m-chart[data]"]' );
+
+		expect( JSON.parse( textarea.value ) ).toEqual( [ [ [ 'from', 'worksheet' ] ] ] );
+		expect( beforeSubmit ).toHaveBeenCalledWith( 0, form );
+	} );
+
+	test( 'm_chart.spreadsheet_mounted / unmounted fire with the sheet index', () => {
+		mockMount.enabled = true;
+
+		const mounted   = jest.fn();
+		const unmounted = jest.fn();
+		window.wp.hooks.addAction( 'm_chart.spreadsheet_mounted',   'test/mounted',   mounted );
+		window.wp.hooks.addAction( 'm_chart.spreadsheet_unmounted', 'test/unmounted', unmounted );
+
+		renderUnderTest();
+
+		expect( mounted ).toHaveBeenCalledTimes( 1 );
+		expect( mounted ).toHaveBeenCalledWith( 0, 0, mockMount.worksheet );
+
+		// Replacing the sheets gives every worksheet a fresh id, so each remounts exactly once
+		act( () => {
+			capturedDispatch( {
+				type: 'REPLACE_SHEETS',
+				payload: { sets: [ [ [ 'a' ] ], [ [ 'b' ] ] ], setNames: [ 'A', 'B' ] },
+			} );
+		} );
+
+		expect( unmounted ).toHaveBeenCalledTimes( 1 );
+		expect( mounted ).toHaveBeenCalledTimes( 3 );
+		expect( mounted.mock.calls[ 1 ][ 1 ] ).toBe( 0 );
+		expect( mounted.mock.calls[ 2 ][ 1 ] ).toBe( 1 );
 	} );
 } );

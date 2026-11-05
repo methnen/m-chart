@@ -167,6 +167,28 @@ export function reducer( state, action ) {
 		case 'CLEAR_NEW_SHEET_ID':
 			return { ...state, newSheetId: null };
 
+		// Swap every sheet in one step, e.g. when an external data source delivers a fresh set of tables
+		// Fresh sheet ids make every Jspreadsheet remount exactly once, no rename mode is entered
+		case 'REPLACE_SHEETS': {
+			const sets      = Array.isArray( action.payload?.sets ) && action.payload.sets.length ? action.payload.sets : [ [ [ '' ] ] ];
+			const names     = Array.isArray( action.payload?.setNames ) ? action.payload.setNames : [];
+			const setNames  = sets.map( ( _, i ) => names[ i ] ?? '' );
+			const sheetIds  = sets.map( ( _, i ) => state.nextSheetId + i );
+			const requested = Number.isInteger( action.payload?.activeSheet ) ? action.payload.activeSheet : 0;
+
+			return {
+				...state,
+				spreadsheetData: sets,
+				setNames,
+				sheetIds,
+				nextSheetId: state.nextSheetId + sets.length,
+				activeSheet: Math.min( Math.max( requested, 0 ), sets.length - 1 ),
+				newSheetId:  null,
+				// New data means a refresh is coming, gate submission until it lands
+				formEnabled: false,
+			};
+		}
+
 		case 'DELETE_SHEET': {
 			if ( state.spreadsheetData.length <= 1 ) {
 				return state;

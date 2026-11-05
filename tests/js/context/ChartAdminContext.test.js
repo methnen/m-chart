@@ -302,3 +302,44 @@ describe( 'm_chart.chart_args filter', () => {
 		expect( latest.baseChartArgs ).toEqual( { type: 'line' } );
 	} );
 } );
+
+describe( 'REPLACE_SHEETS', () => {
+	const twoSheets = {
+		...baseState,
+		spreadsheetData: [ [ [ 'a' ] ], [ [ 'b' ] ] ],
+		setNames: [ 'One', 'Two' ],
+		sheetIds: [ 0, 1 ],
+		nextSheetId: 2,
+		activeSheet: 1,
+		newSheetId: 1,
+		formEnabled: true,
+	};
+
+	test( 'replaces data and names, regenerates ids, clamps the active sheet and leaves rename mode', () => {
+		const next = reducer( twoSheets, {
+			type: 'REPLACE_SHEETS',
+			payload: {
+				sets:        [ [ [ 'x', 1 ] ], [ [ 'y', 2 ] ], [ [ 'z', 3 ] ] ],
+				setNames:    [ 'X', 'Y' ],
+				activeSheet: 9,
+			},
+		} );
+
+		expect( next.spreadsheetData ).toEqual( [ [ [ 'x', 1 ] ], [ [ 'y', 2 ] ], [ [ 'z', 3 ] ] ] );
+		expect( next.setNames ).toEqual( [ 'X', 'Y', '' ] );
+		expect( next.sheetIds ).toEqual( [ 2, 3, 4 ] );
+		expect( next.nextSheetId ).toBe( 5 );
+		expect( next.activeSheet ).toBe( 2 );
+		expect( next.newSheetId ).toBeNull();
+		expect( next.formEnabled ).toBe( false );
+	} );
+
+	test( 'defaults the active sheet to 0 and tolerates an empty payload', () => {
+		const next = reducer( twoSheets, { type: 'REPLACE_SHEETS', payload: {} } );
+
+		expect( next.spreadsheetData ).toEqual( [ [ [ '' ] ] ] );
+		expect( next.setNames ).toEqual( [ '' ] );
+		expect( next.sheetIds ).toEqual( [ 2 ] );
+		expect( next.activeSheet ).toBe( 0 );
+	} );
+} );
