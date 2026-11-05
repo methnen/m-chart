@@ -37,4 +37,5 @@ global.m_chart_admin = {
 	unit_terms:          [],
 	image_url:           '',
 	multi_sheet_types:   [ 'scatter', 'bubble', 'radar', 'radar-area', 'boxplot', 'violin' ],
+	chartjs_plugin_globals: [ 'MChartHelper', 'ChartDataLabels' ],
 };

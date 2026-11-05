@@ -72,9 +72,7 @@ class M_Chart_Chartjs {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
-		add_filter( 'm_chart_iframe_scripts', [ $this, 'm_chart_iframe_scripts' ], 10, 2 );
-		add_action( 'm_chart_get_chart_begin', [ $this, 'm_chart_get_chart_begin' ], 10, 2 );
+		$this->register_hooks();
 
 		$this->points = self::get_points_defaults();
 
@@ -177,6 +175,17 @@ class M_Chart_Chartjs {
 	 *
 	 * @return array
 	 */
+	/**
+	 * Attach this library's hooks
+	 *
+	 * Called from the constructor, and callable again by code that has replaced the global hook table (the WordPress test suite does this between tests)
+	 */
+	public function register_hooks() {
+		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
+		add_filter( 'm_chart_iframe_scripts', [ $this, 'm_chart_iframe_scripts' ], 10, 2 );
+		add_action( 'm_chart_get_chart_begin', [ $this, 'm_chart_get_chart_begin' ], 10, 3 );
+	}
+
 	/**
 	 * Chart types that read the raw sheet grid themselves instead of (or before) going through M_Chart_Parse
 	 *
@@ -326,38 +335,68 @@ class M_Chart_Chartjs {
 	 * @param int   $post_id The chart post ID
 	 * @param array $args    The chart shortcode args
 	 */
-	public function m_chart_get_chart_begin( $post_id, $args ) {
-		// Bail if this chart isn't using the Chart.js library
-		$library = m_chart()->get_post_meta( $post_id, 'library' );
+	public function m_chart_get_chart_begin( $post_id, $args, $uses_chartjs = true ) {
+		// Bail if this chart isn't using the Chart.js library, or a plugin is rendering it without Chart.js
+		$post_meta = m_chart()->get_post_meta( $post_id );
 
-		if ( $library !== $this->library ) {
+		if ( ! $uses_chartjs || $post_meta['library'] !== $this->library ) {
 			return;
 		}
 
-		// Ensure post_meta is populated so enqueue_chartjs_plugins() can read 'type' for the treemap/boxplot/violin branches
-		$this->post_meta = m_chart()->get_post_meta( $post_id );
-		$this->enqueue_chartjs_plugins();
+		$this->enqueue_chartjs_plugins( $post_meta, $post_id, 'inline' );
+	}
+
+	/**
+	 * The Chart.js plugin scripts a chart needs, keyed by script handle
+	 *
+	 * The value is the window global the template passes to Chart.register(), or null for a build that registers itself on load
+	 * (the bundled treemap, boxplot and venn controllers do). The same list feeds the inline page, the embed iframe and the admin editor,
+	 * so a plugin that adds a Chart.js plugin through the m_chart_chartjs_plugins filter gets it loaded on all three
+	 *
+	 * @param int    $post_id   WP post ID of the chart
+	 * @param array  $post_meta the chart's post meta
+	 * @param string $context   'inline', 'iframe' or 'admin' (the admin loads every type's plugin since the type can change)
+	 *
+	 * @return array [ 'script-handle' => 'WindowGlobal' | null ]
+	 */
+	public function get_chartjs_plugins( $post_id, $post_meta, $context = 'inline' ) {
+		$type = isset( $post_meta['type'] ) ? $post_meta['type'] : '';
+		$all  = 'admin' === $context;
+
+		$plugins = [
+			'chartjs-helper'     => 'MChartHelper',
+			'chartjs-datalabels' => 'ChartDataLabels',
+		];
+
+		if ( $all || 'treemap' === $type ) {
+			$plugins['chartjs-treemap'] = null;
+		}
+
+		if ( $all || 'boxplot' === $type || 'violin' === $type ) {
+			$plugins['chartjs-boxplot'] = null;
+		}
+
+		if ( $all || 'venn' === $type || 'euler' === $type ) {
+			$plugins['chartjs-venn'] = null;
+		}
+
+		return apply_filters( 'm_chart_chartjs_plugins', $plugins, $post_id, $post_meta, $context );
 	}
 
 	/**
 	 * Enqueue any Chart.js plugins that we'll need
+	 *
+	 * @param array|null $post_meta the chart's post meta, falls back to the instance post meta
+	 * @param int        $post_id   WP post ID of the chart
+	 * @param string     $context   see get_chartjs_plugins()
 	 */
-	public function enqueue_chartjs_plugins() {
-		wp_enqueue_script( 'chartjs-helper' );
-		wp_enqueue_script( 'chartjs-datalabels' );
-
-		$type = isset( $this->post_meta['type'] ) ? $this->post_meta['type'] : '';
-
-		if ( 'treemap' === $type ) {
-			wp_enqueue_script( 'chartjs-treemap' );
+	public function enqueue_chartjs_plugins( $post_meta = null, $post_id = 0, $context = 'inline' ) {
+		if ( null === $post_meta ) {
+			$post_meta = is_array( $this->post_meta ) ? $this->post_meta : [];
 		}
 
-		if ( 'boxplot' === $type || 'violin' === $type ) {
-			wp_enqueue_script( 'chartjs-boxplot' );
-		}
-
-		if ( 'venn' === $type || 'euler' === $type ) {
-			wp_enqueue_script( 'chartjs-venn' );
+		foreach ( array_keys( $this->get_chartjs_plugins( $post_id, $post_meta, $context ) ) as $handle ) {
+			wp_enqueue_script( $handle );
 		}
 	}
 
@@ -1407,31 +1446,14 @@ class M_Chart_Chartjs {
 	 * @return array $scripts an array of scripts needed for the iframe to render the chart
 	 */
 	public function m_chart_iframe_scripts( $scripts, $post_id ) {
-		$library = m_chart()->get_post_meta( $post_id, 'library' );
+		$post_meta = m_chart()->get_post_meta( $post_id );
 
-		// If Chart.js isn't the library type we'll stop here
-		if ( $library != $this->library ) {
+		// If Chart.js isn't the library type, or a plugin renders this chart without Chart.js, we'll stop here
+		if ( $post_meta['library'] != $this->library || ! m_chart()->render_uses_chartjs( $post_id, $post_meta ) ) {
 			return $scripts;
 		}
 
-		$type = m_chart()->get_post_meta( $post_id, 'type' );
-
-		$scripts[] = 'chartjs-helper';
-		$scripts[] = 'chartjs-datalabels';
-
-		if ( 'treemap' === $type ) {
-			$scripts[] = 'chartjs-treemap';
-		}
-
-		if ( 'boxplot' === $type || 'violin' === $type ) {
-			$scripts[] = 'chartjs-boxplot';
-		}
-
-		if ( 'venn' === $type || 'euler' === $type ) {
-			$scripts[] = 'chartjs-venn';
-		}
-
-		return $scripts;
+		return array_merge( $scripts, array_keys( $this->get_chartjs_plugins( $post_id, $post_meta, 'iframe' ) ) );
 	}
 
 	/**

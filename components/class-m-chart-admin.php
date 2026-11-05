@@ -806,18 +806,24 @@ class M_Chart_Admin {
 				$library = $_GET['library'];
 			}
 
+			$post_meta = m_chart()->get_post_meta( $post_id );
+
+			// Window globals the React app hands to Chart.register(), in load order
+			$chartjs_plugin_globals = [];
+
 			if ( 'chartjs' === $library ) {
-				// Chart.js libs — enqueued explicitly so the React preview has window.Chart and window
-				// MChartHelper available before m-chart-admin-ui runs its plugin registration
-				// We load every plugin regardless of immediate need when in the edit view since the user can switch chart types from the picker
-				wp_enqueue_script( 'chartjs-helper' );
-				wp_enqueue_script( 'chartjs-datalabels' );
-				wp_enqueue_script( 'chartjs-treemap' );
-				wp_enqueue_script( 'chartjs-boxplot' );
-				wp_enqueue_script( 'chartjs-venn' );
+				// Chart.js libs are enqueued explicitly so the React preview has window.Chart and the plugin globals
+				// before m-chart-admin-ui runs its plugin registration
+				// The 'admin' context loads every type's plugin since the user can switch chart types from the picker
+				$chartjs_plugins = m_chart()->library( 'chartjs' )->get_chartjs_plugins( $post_id, $post_meta, 'admin' );
+
+				foreach ( array_keys( $chartjs_plugins ) as $handle ) {
+					wp_enqueue_script( $handle );
+				}
+
+				$chartjs_plugin_globals = array_values( array_filter( $chartjs_plugins ) );
 			}
 
-			$post_meta        = m_chart()->get_post_meta( $post_id );
 			$spreadsheet_data = empty( $post_meta['data'] ) ? [ [ '' ] ] : $post_meta['data']['sets'];
 			unset( $post_meta['data'] ); // passed separately as spreadsheet_data
 
@@ -904,6 +910,7 @@ class M_Chart_Admin {
 				'csv_delimiters'          => $csv_delimiters,
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
 				'multi_sheet_types'       => m_chart()->get_multi_sheet_types(),
+				'chartjs_plugin_globals'  => $chartjs_plugin_globals,
 			];
 
 			wp_localize_script( 'm-chart-admin-ui', 'm_chart_admin', $localize_data );

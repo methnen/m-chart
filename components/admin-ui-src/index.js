@@ -30,12 +30,15 @@ window.m_chart = {
  */
 
 // Register Chart.js plugins before any chart instances are created
-if ( window.Chart && window.ChartDataLabels ) {
-	window.Chart.register( window.ChartDataLabels );
-}
+// PHP lists the window globals (core's plus anything added through m_chart_chartjs_plugins), the names are a fallback for an old localize payload
+if ( window.Chart ) {
+	const pluginGlobals = window.m_chart_admin?.chartjs_plugin_globals || [ 'MChartHelper', 'ChartDataLabels' ];
 
-if ( window.Chart && window.MChartHelper ) {
-	window.Chart.register( window.MChartHelper );
+	pluginGlobals.forEach( ( name ) => {
+		if ( window[ name ] ) {
+			window.Chart.register( window[ name ] );
+		}
+	} );
 }
 
 const subtitleRoot    = document.getElementById( 'm-chart-subtitle-root' );

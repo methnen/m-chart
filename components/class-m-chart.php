@@ -833,10 +833,15 @@ class M_Chart {
 			return $this->get_chart_iframe( $post_id, $args );
 		}
 
+		// A plugin can take over the rendering of a Chart.js chart entirely (e.g. show the data as a table)
+		// in which case the library, its plugins and the inline script are all left out
+		$post_meta    = $this->get_post_meta( $post_id );
+		$uses_chartjs = $this->render_uses_chartjs( $post_id, $post_meta );
+
 		// If we haven't enqueued the right library yet lets do it
-		if ( ! wp_script_is( $library, 'enqueued' ) ) {
+		// Chart.js' helper and plugins are enqueued by the library class on m_chart_get_chart_begin
+		if ( ( 'chartjs' !== $library || $uses_chartjs ) && ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
-			wp_enqueue_script( 'chartjs-helper' );
 		}
 
 		// Ship the visually hidden rule the screen reader data table relies on
@@ -845,8 +850,12 @@ class M_Chart {
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
+		// Locals for the template, the $this-> equivalents keep working for templates written against older versions
+		$instance  = $this->instance;
+		$is_iframe = $this->is_iframe;
+
 		ob_start();
-		do_action( 'm_chart_get_chart_begin', $post_id, $args );
+		do_action( 'm_chart_get_chart_begin', $post_id, $args, $uses_chartjs );
 		require apply_filters( 'm_chart_chart_template', $template, $library, $post_id );
 		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
@@ -1011,7 +1020,7 @@ class M_Chart {
 
 		ob_start();
 		?>
-<iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
+<iframe id="<?php echo esc_attr( $this->get_container_id( $post_id ) ); ?>"
 	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
 	title="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 	src="<?php echo esc_url( $src_url ); ?>"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
@@ -1174,10 +1183,13 @@ class M_Chart {
 
 		$this->is_iframe = true;
 
-		$scripts = [
-			'jquery',
-			$this->get_post_meta( $post->ID, 'library' ),
-		];
+		$library = $this->get_post_meta( $post->ID, 'library' );
+		$scripts = [ 'jquery' ];
+
+		// A chart a plugin renders without Chart.js doesn't need the library in the iframe either
+		if ( 'chartjs' !== $library || $this->render_uses_chartjs( $post->ID ) ) {
+			$scripts[] = $library;
+		}
 
 		unset( $_GET['action'], $_GET['share'] );
 
@@ -1188,6 +1200,69 @@ class M_Chart {
 
 		require __DIR__ . '/templates/iframe.php';
 		exit;
+	}
+
+	/**
+	 * Whether a Chart.js chart is drawn by Chart.js on this render
+	 *
+	 * Plugins that replace the rendering of a chart (M Chart Pro's Display as Table) return false from
+	 * m_chart_render_uses_chartjs so the library, its plugins and the inline script are left out
+	 * Charts using another library always return false
+	 *
+	 * @param int        $post_id   WP post ID of the chart
+	 * @param array|null $post_meta the chart's post meta, fetched when not given
+	 *
+	 * @return bool
+	 */
+	public function render_uses_chartjs( $post_id, $post_meta = null ) {
+		if ( null === $post_meta ) {
+			$post_meta = $this->get_post_meta( $post_id );
+		}
+
+		$default = isset( $post_meta['library'] ) && 'chartjs' === $post_meta['library'];
+
+		return (bool) apply_filters( 'm_chart_render_uses_chartjs', $default, $post_id, $post_meta );
+	}
+
+	/**
+	 * The id of the element that wraps one rendered chart
+	 *
+	 * @param int      $post_id  WP post ID of the chart
+	 * @param int|null $instance which render of this chart on the page, defaults to the current instance counter
+	 *
+	 * @return string
+	 */
+	public function get_container_id( $post_id, $instance = null ) {
+		if ( null === $instance ) {
+			$instance = $this->instance;
+		}
+
+		return 'm-chart-container-' . absint( $post_id ) . '-' . absint( $instance );
+	}
+
+	/**
+	 * The screen reader source attribution paragraph a chart template prints
+	 *
+	 * The visual source attribution is painted on the canvas by the helper plugin, which makes it invisible to AT and mouse only
+	 * This is the operable version for keyboard and screen reader users and un-hides while the link has focus
+	 *
+	 * @param array $post_meta the chart's post meta
+	 *
+	 * @return string the markup, or an empty string when the chart doesn't show its source
+	 */
+	public function render_source_html( $post_meta ) {
+		$source_name = trim( (string) ( $post_meta['source'] ?? '' ) );
+		$source_url  = trim( (string) ( $post_meta['source_url'] ?? '' ) );
+
+		if ( empty( $post_meta['include_source'] ) || '' === $source_name ) {
+			return '';
+		}
+
+		$source = '' !== $source_url
+			? '<a href="' . esc_url( $source_url ) . '">' . esc_html( $source_name ) . '</a>'
+			: ' ' . esc_html( $source_name );
+
+		return '<p class="m-chart-source screen-reader-text">' . esc_html__( 'Source:', 'm-chart' ) . ' ' . $source . '</p>';
 	}
 
 	/**
