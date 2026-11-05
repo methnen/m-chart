@@ -18,6 +18,8 @@ class M_Chart_Parse {
 	public array $set_data               = [];
 	public array $raw_data               = [];
 	public string $parse_in              = '';
+	// Original series indexes the last parse_data() call dropped because every value was non numeric
+	public array $dropped_sets           = [];
 
 	private ?NumberFormatter $formatter = null;
 
@@ -32,6 +34,7 @@ class M_Chart_Parse {
 	public function parse_data( array $data, string $parse_in ): static {
 		$this->data                  = $data;
 		$this->parse_in              = $parse_in;
+		$this->dropped_sets          = [];
 		$this->value_labels_position = $this->get_value_labels_position();
 		$this->parse_value_labels();
 		$this->parse_set_data();
@@ -89,31 +92,46 @@ class M_Chart_Parse {
 	 * @return string the position of the labels in the given data set
 	 */
 	private function get_value_labels_position(): string {
-		if ( ! isset( $this->data[0][0] ) && ! isset( $this->data[1][0] ) ) {
+		return self::detect_labels_position( $this->data, $this->parse_in );
+	}
+
+	/**
+	 * Work out where the value labels sit in a sheet without touching the shared parser state
+	 *
+	 * Pure function of the sheet and the parse direction, so plugins can ask the same question core asks
+	 * Note the corner cell test is a loose '' == comparison, null counts as empty but a lone space does not
+	 *
+	 * @param array  $data     the raw two-dimensional data array
+	 * @param string $parse_in PARSE_ROWS or PARSE_COLUMNS
+	 *
+	 * @return string one of the LABELS_* constants
+	 */
+	public static function detect_labels_position( array $data, string $parse_in ): string {
+		if ( ! isset( $data[0][0] ) && ! isset( $data[1][0] ) ) {
 			return self::LABELS_NONE;
 		}
 
-		if ( '' == $this->data[0][0] ) {
+		if ( '' == ( $data[0][0] ?? '' ) ) {
 			return self::LABELS_BOTH;
 		}
 
 		// Structural pre-check
 		// A sheet with 2 effective columns (rows mode) or 2 effective rows (columns mode) is the simple single-series shape and is unambiguous
 		// Works regardless of whether the labels look numeric (years, ordinals, etc)
-		if ( self::PARSE_ROWS === $this->parse_in && 2 === $this->effective_max_columns() ) {
+		if ( self::PARSE_ROWS === $parse_in && 2 === self::effective_max_columns( $data ) ) {
 			return self::LABELS_FIRST_COLUMN;
 		}
 
-		if ( self::PARSE_COLUMNS === $this->parse_in && 2 === $this->effective_row_count() ) {
+		if ( self::PARSE_COLUMNS === $parse_in && 2 === self::effective_row_count( $data ) ) {
 			return self::LABELS_FIRST_ROW;
 		}
 
 		// Existing content-based heuristic for 3+ effective columns/rows
-		if ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
+		if ( ! is_numeric( trim( (string) $data[0][0] ) ) ) {
 			// If the first row has multiple non-numeric headers and the data rows start with numeric values the entire first row is column labels (e.g. scatter format)
 			if (
-				   isset( $this->data[0][1] ) && ! is_numeric( trim( (string) $this->data[0][1] ) )
-				&& isset( $this->data[1][0] ) &&   is_numeric( trim( (string) $this->data[1][0] ) )
+				   isset( $data[0][1] ) && ! is_numeric( trim( (string) $data[0][1] ) )
+				&& isset( $data[1][0] ) &&   is_numeric( trim( (string) $data[1][0] ) )
 			) {
 				return self::LABELS_FIRST_ROW;
 			}
@@ -125,20 +143,30 @@ class M_Chart_Parse {
 	}
 
 	/**
+	 * Original indexes of the series the last parse_data() call dropped
+	 *
+	 * In the LABELS_BOTH shapes a series whose every cell is non numeric is left out of set_data and raw_data
+	 * The keys that remain are the original ones, this lists the gaps
+	 *
+	 * @return int[]
+	 */
+	public function get_dropped_sets(): array {
+		return $this->dropped_sets;
+	}
+
+	/**
 	 * Max effective column count across rows
 	 * Rightmost non-empty cell index + 1, taken as a max over all rows
 	 * Trailing empty cells (typical of Jspreadsheet's minDimensions padding) don't count
 	 *
+	 * @param array $data the raw two-dimensional data array
+	 *
 	 * @return int
 	 */
-	private function effective_max_columns(): int {
-		if ( ! is_array( $this->data ) ) {
-			return 0;
-		}
-
+	private static function effective_max_columns( array $data ): int {
 		$max = 0;
 
-		foreach ( $this->data as $row ) {
+		foreach ( $data as $row ) {
 			if ( ! is_array( $row ) ) {
 				continue;
 			}
@@ -161,16 +189,14 @@ class M_Chart_Parse {
 	 * Count of rows that contain at least one non-empty cell
 	 * Trailing empty rows (typical of Jspreadsheet's minDimensions padding) don't count
 	 *
+	 * @param array $data the raw two-dimensional data array
+	 *
 	 * @return int
 	 */
-	private function effective_row_count(): int {
-		if ( ! is_array( $this->data ) ) {
-			return 0;
-		}
-
+	private static function effective_row_count( array $data ): int {
 		$last = -1;
 
-		foreach ( $this->data as $i => $row ) {
+		foreach ( $data as $i => $row ) {
 			if ( ! is_array( $row ) ) {
 				continue;
 			}
@@ -332,6 +358,8 @@ class M_Chart_Parse {
 			if ( false == $set['is_null'] ) {
 				$set_data_array[ $key ] = $set['data'];
 				$raw_data_array[ $key ] = $this_raw[ $key ];
+			} else {
+				$this->dropped_sets[] = $key;
 			}
 		}
 
@@ -380,6 +408,8 @@ class M_Chart_Parse {
 			if ( false == $set['is_null'] ) {
 				$set_data_array[ $key ] = $set['data'];
 				$raw_data_array[ $key ] = $this_raw[ $key ];
+			} else {
+				$this->dropped_sets[] = $key;
 			}
 		}
 

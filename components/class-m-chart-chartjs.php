@@ -177,6 +177,39 @@ class M_Chart_Chartjs {
 	 *
 	 * @return array
 	 */
+	/**
+	 * Chart types that read the raw sheet grid themselves instead of (or before) going through M_Chart_Parse
+	 *
+	 * boxplot and violin treat each row as a category with its observations, treemap tries build_treemap_hierarchy()
+	 * first and only falls back to the parsed path when it returns null, venn and euler read membership lists or region rows
+	 *
+	 * @return string[]
+	 */
+	public static function get_raw_grid_types() {
+		return apply_filters( 'm_chart_raw_grid_types', [ 'boxplot', 'violin', 'treemap', 'venn', 'euler' ] );
+	}
+
+	/**
+	 * How many consecutive values from the parsed data stream make up one point for a chart type
+	 *
+	 * scatter consumes x,y pairs and bubble consumes x,y,r triples, every other type uses one value per point
+	 *
+	 * @param string $type the m-chart chart type
+	 *
+	 * @return int
+	 */
+	public static function get_data_lines_per_series( $type ) {
+		$lines = 1;
+
+		if ( 'scatter' === $type ) {
+			$lines = 2;
+		} elseif ( 'bubble' === $type ) {
+			$lines = 3;
+		}
+
+		return max( 1, (int) apply_filters( 'm_chart_data_lines_per_series', $lines, $type ) );
+	}
+
 	public static function get_points_defaults() {
 		return [
 			[
@@ -1256,8 +1289,10 @@ class M_Chart_Chartjs {
 						}
 					}
 				} else {
+					$lines = self::get_data_lines_per_series( 'scatter' );
+
 					foreach ( $data_array as $data_key => $data ) {
-						if ( $data_key % 2 ) {
+						if ( $data_key % $lines ) {
 							continue;
 						}
 
@@ -1311,8 +1346,10 @@ class M_Chart_Chartjs {
 						}
 					}
 				} else {
+					$lines = self::get_data_lines_per_series( 'bubble' );
+
 					foreach ( $data_array as $data_key => $data ) {
-						if ( $data_key % 3 ) {
+						if ( $data_key % $lines ) {
 							continue;
 						}
 
