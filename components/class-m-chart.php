@@ -4,6 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Loaded up front so the static helpers on these classes (M_Chart_Parse::detect_labels_position(), M_Chart_Chartjs::get_type_traits(), ...)
+// can be called from any hook without something having touched the parser or the library instance first
+// The files only declare classes, nothing runs until m_chart()->parse() or m_chart()->library() instantiates them
+require_once __DIR__ . '/class-m-chart-parsed-data-point.php';
+require_once __DIR__ . '/class-m-chart-parse.php';
+require_once __DIR__ . '/class-m-chart-chartjs.php';
+
 class M_Chart {
 	// Chart height range in pixels, shared by the per chart height field, the default height setting and the admin UI
 	const HEIGHT_MIN = 300;
