@@ -6,7 +6,7 @@
  * for this file in jest.config.js.
  */
 import { render, act } from '@testing-library/react';
-import { reducer, ChartAdminProvider, useChartAdmin, setFormEnabled } from '../../../components/admin-ui-src/context/ChartAdminContext';
+import { reducer, ChartAdminProvider, useChartAdmin, setFormEnabled, initChartAdminState } from '../../../components/admin-ui-src/context/ChartAdminContext';
 
 const baseState = {
 	postMeta: { type: 'line', height: 400 },
@@ -207,5 +207,98 @@ describe( 'ChartAdminProvider form actions', () => {
 
 		// Safe to call with nothing mounted
 		expect( () => setFormEnabled( false ) ).not.toThrow();
+	} );
+} );
+
+describe( 'm_chart.chart_args filter', () => {
+	const stateWithArgs = { ...baseState, postId: 7, baseChartArgs: null };
+
+	test( 'SET_CHART_ARGS stores the raw args and the filtered args separately', () => {
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args, context ) => ( {
+			...args,
+			annotations: [ 'a' ],
+			seen: context,
+		} ) );
+
+		const raw  = { type: 'line' };
+		const next = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: raw } );
+
+		expect( next.baseChartArgs ).toBe( raw );
+		expect( next.chartArgs.annotations ).toEqual( [ 'a' ] );
+		expect( next.chartArgs.seen ).toEqual( { postId: 7, postMeta: baseState.postMeta, source: 'refresh' } );
+	} );
+
+	test( 'SET_CHART_ARGS passes an explicit source through', () => {
+		const sources = [];
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args, { source } ) => {
+			sources.push( source );
+			return args;
+		} );
+
+		reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: { type: 'bar' }, source: 'initial' } );
+
+		expect( sources ).toEqual( [ 'initial' ] );
+	} );
+
+	test( 'REAPPLY_CHART_ARGS re-runs the filter on the stored base', () => {
+		let extra = 1;
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args ) => ( { ...args, extra } ) );
+
+		const first = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: { type: 'line' } } );
+		expect( first.chartArgs.extra ).toBe( 1 );
+
+		extra = 2;
+		const second = reducer( first, { type: 'REAPPLY_CHART_ARGS' } );
+
+		expect( second.chartArgs.extra ).toBe( 2 );
+		expect( second.baseChartArgs ).toBe( first.baseChartArgs );
+		expect( second.chartArgs ).not.toBe( first.chartArgs );
+	} );
+
+	test( 'REAPPLY_CHART_ARGS returns the same state when nothing changes the args', () => {
+		const first  = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: { type: 'line' } } );
+		const second = reducer( first, { type: 'REAPPLY_CHART_ARGS' } );
+
+		expect( second ).toBe( first );
+	} );
+
+	test( 'without a filter the rendered args are the raw args', () => {
+		const raw  = { type: 'pie' };
+		const next = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: raw } );
+
+		expect( next.chartArgs ).toBe( raw );
+	} );
+
+	test( 'the lazy initialiser filters the PHP seeded args at mount time', () => {
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args, { source } ) => ( { ...args, source } ) );
+
+		const seed = { ...stateWithArgs, chartArgs: { type: 'line' } };
+		const init = initChartAdminState( seed );
+
+		expect( init.baseChartArgs ).toBe( seed.chartArgs );
+		expect( init.chartArgs.source ).toBe( 'initial' );
+	} );
+
+	test( 'a filter registered after mount can ask for a reapply through the provider', () => {
+		let dispatchRef;
+		let latest;
+
+		function Capture() {
+			const { state, dispatch } = useChartAdmin();
+			dispatchRef = dispatch;
+			latest      = state;
+			return null;
+		}
+
+		render( <ChartAdminProvider><Capture /></ChartAdminProvider> );
+
+		act( () => dispatchRef( { type: 'SET_CHART_ARGS', payload: { type: 'line' } } ) );
+		expect( latest.chartArgs ).toEqual( { type: 'line' } );
+
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/late', ( args ) => ( { ...args, late: true } ) );
+		act( () => dispatchRef( { type: 'REAPPLY_CHART_ARGS' } ) );
+
+		expect( latest.chartArgs ).toEqual( { type: 'line', late: true } );
+		expect( latest.baseChartArgs ).toEqual( { type: 'line' } );
 	} );
 } );

@@ -21,6 +21,48 @@ export function setFormEnabled( enabled ) {
 }
 
 /**
+ * Run the raw chart args through the m_chart.chart_args filter
+ *
+ * Library plugins use the filter to layer their own options onto every preview render (annotations, themes, ...)
+ * Core keeps the unfiltered args in baseChartArgs so the filter can be re-run with REAPPLY_CHART_ARGS when a plugin's own state changes
+ *
+ * @param {Object|null} base   Unfiltered chart args
+ * @param {Object}      state  Current context state, for postId and postMeta
+ * @param {string}      source 'initial' (PHP seed), 'refresh' (AJAX result) or 'reapply'
+ * @return {Object|null} Filtered args, or the base when there is nothing to filter
+ */
+function filterChartArgs( base, state, source ) {
+	if ( ! base || ! window.wp?.hooks ) {
+		return base;
+	}
+
+	return window.wp.hooks.applyFilters( 'm_chart.chart_args', base, {
+		postId:   state.postId,
+		postMeta: state.postMeta,
+		source,
+	} );
+}
+
+// Handler count for m_chart.chart_args, so the mount-time reapply only runs when a filter arrived after the lazy init
+function chartArgsFilterCount() {
+	return window.wp?.hooks ? Number( window.wp.hooks.hasFilter( 'm_chart.chart_args' ) ) || 0 : 0;
+}
+
+/**
+ * Lazy useReducer initialiser, runs at mount rather than module load so filters registered by scripts that ran in between apply to the PHP seed
+ *
+ * @param {Object} seed initialState
+ * @return {Object} The seed with baseChartArgs set and chartArgs filtered
+ */
+export function initChartAdminState( seed ) {
+	return {
+		...seed,
+		baseChartArgs: seed.chartArgs,
+		chartArgs:     filterChartArgs( seed.chartArgs, seed, 'initial' ),
+	};
+}
+
+/**
  * Initial state populated from the PHP-localised window.m_chart_admin object
  *
  * post_meta contains all chart meta fields except 'data' (spreadsheetData holds that)
@@ -65,8 +107,11 @@ const initialState = {
 	// Index of the currently active sheet tab
 	activeSheet: 0,
 
-	// Chart.js args object — seeded from PHP on load, updated by useChartRefresh
+	// Chart.js args object as rendered — seeded from PHP on load, updated by useChartRefresh, filtered through m_chart.chart_args
 	chartArgs: m_chart_admin.chart_args || null,
+
+	// The same args before the m_chart.chart_args filter, kept so REAPPLY_CHART_ARGS can re-run it
+	baseChartArgs: m_chart_admin.chart_args || null,
 
 	// True while waiting for ajax_get_chart_args to respond
 	isRefreshing: false,
@@ -143,8 +188,23 @@ export function reducer( state, action ) {
 		case 'SET_ACTIVE_SHEET':
 			return { ...state, activeSheet: action.payload };
 
-		case 'SET_CHART_ARGS':
-			return { ...state, chartArgs: action.payload };
+		case 'SET_CHART_ARGS': {
+			const baseChartArgs = action.payload;
+			const chartArgs     = filterChartArgs( baseChartArgs, state, action.source || 'refresh' );
+
+			return { ...state, baseChartArgs, chartArgs };
+		}
+
+		case 'REAPPLY_CHART_ARGS': {
+			const chartArgs = filterChartArgs( state.baseChartArgs, state, action.source || 'reapply' );
+
+			// Nothing changed the args, so don't hand the preview a new object to re-render
+			if ( chartArgs === state.chartArgs ) {
+				return state;
+			}
+
+			return { ...state, chartArgs };
+		}
 
 		case 'SET_REFRESHING':
 			return { ...state, isRefreshing: action.payload };
@@ -170,12 +230,21 @@ export function reducer( state, action ) {
 }
 
 export function ChartAdminProvider( { children } ) {
-	const [ state, dispatch ] = useReducer( reducer, initialState );
+	const [ state, dispatch ] = useReducer( reducer, initialState, initChartAdminState );
 
 	dispatchHandle = dispatch;
 
-	useEffect( () => () => {
-		dispatchHandle = null;
+	// Filters registered between the lazy init and this effect still get a go at the PHP seeded args
+	const filtersAtInit = useRef( chartArgsFilterCount() );
+
+	useEffect( () => {
+		if ( chartArgsFilterCount() !== filtersAtInit.current ) {
+			dispatch( { type: 'REAPPLY_CHART_ARGS', source: 'initial' } );
+		}
+
+		return () => {
+			dispatchHandle = null;
+		};
 	}, [] );
 
 	// m_chart.form_enabled / m_chart.form_disabled fire once per change of formEnabled, wherever the dispatch came from
