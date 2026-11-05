@@ -29,9 +29,10 @@ foreach ( $style_urls as $style_url ) {
 }
 
 // Auto-extract hosts from m_chart_iframe_fonts font sources too
+// Only the sources render_font_face() will actually print are allowlisted
 foreach ( $font_descriptors as $font ) {
-	foreach ( (array) ( $font['src'] ?? [] ) as $src ) {
-		$host = wp_parse_url( $src['url'] ?? '', PHP_URL_HOST );
+	foreach ( M_Chart::font_face_sources( (array) $font ) as $src ) {
+		$host = wp_parse_url( $src['url'], PHP_URL_HOST );
 
 		if ( $host ) {
 			$font_hosts[] = $host;
@@ -101,45 +102,9 @@ $this->iframe_csp_nonce = $nonce;
 			printf( "<style>%s</style>\n", $css );
 		}
 
-		// Structured @font-face injection — render each descriptor through a known-safe template
-		// Every slot is allowlisted: family is char-class-stripped, weight/style/display are enum-validated
-		// Src URLs are esc_url'd with HTTPS-only scheme constraint, format is alnum-stripped
+		// Structured @font-face injection, each descriptor goes through M_Chart::render_font_face() which allowlists every slot
 		foreach ( $font_descriptors as $font ) {
-			$family = preg_replace( '/[^A-Za-z0-9 _-]/', '', (string) ( $font['family'] ?? '' ) );
-
-			if ( '' === $family ) {
-				continue;
-			}
-
-			$weight  = preg_match( '/^[1-9]00$|^(normal|bold)$/', (string) ( $font['weight'] ?? '400' ) ) ? $font['weight'] : '400';
-			$style   = in_array( $font['style']   ?? 'normal', [ 'normal', 'italic', 'oblique' ],                    true ) ? $font['style']   : 'normal';
-			$display = in_array( $font['display'] ?? 'swap',   [ 'auto', 'block', 'swap', 'fallback', 'optional' ], true ) ? $font['display'] : 'swap';
-
-			$srcs = [];
-
-			foreach ( (array) ( $font['src'] ?? [] ) as $src ) {
-				$url = esc_url( $src['url'] ?? '', [ 'https' ] );
-
-				if ( '' === $url ) {
-					continue;
-				}
-
-				$format = preg_replace( '/[^a-z0-9-]/', '', strtolower( (string) ( $src['format'] ?? '' ) ) );
-				$srcs[] = sprintf( "url('%s')%s", $url, $format ? " format('{$format}')" : '' );
-			}
-
-			if ( empty( $srcs ) ) {
-				continue;
-			}
-
-			printf(
-				"<style>@font-face { font-family: '%s'; src: %s; font-weight: %s; font-style: %s; font-display: %s; }</style>\n",
-				esc_html( $family ),
-				implode( ', ', $srcs ),
-				esc_html( $weight ),
-				esc_html( $style ),
-				esc_html( $display )
-			);
+			echo M_Chart::render_font_face( (array) $font );
 		}
 		?>
 		<style>

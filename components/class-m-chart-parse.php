@@ -12,6 +12,9 @@ class M_Chart_Parse {
 	const PARSE_ROWS          = 'rows';
 	const PARSE_COLUMNS       = 'columns';
 
+	// The CSV delimiters the importer and the settings page accept
+	const CSV_DELIMITERS = [ ',', "\t", ' ', ';' ];
+
 	public array $data                   = [];
 	public array $value_labels           = [];
 	public string $value_labels_position = '';
@@ -477,6 +480,108 @@ class M_Chart_Parse {
 					}
 				}
 			}
+		}
+
+		return $data_array;
+	}
+
+	/**
+	 * The decimal and thousands separators for a locale
+	 *
+	 * Front end code formatting numbers outside Chart.js (a data table, for instance) can match what the charts show
+	 *
+	 * @param string|null $locale a BCP 47 locale, defaults to the plugin's locale setting
+	 *
+	 * @return array [ 'decimal' => string, 'thousands' => string ]
+	 */
+	public function get_number_symbols( ?string $locale = null ): array {
+		$symbols = [ 'decimal' => '.', 'thousands' => ',' ];
+
+		if ( ! class_exists( 'NumberFormatter' ) ) {
+			return $symbols;
+		}
+
+		$formatter = null === $locale ? $this->get_formatter() : new NumberFormatter( $locale, NumberFormatter::DECIMAL );
+
+		if ( ! $formatter ) {
+			return $symbols;
+		}
+
+		$decimal   = $formatter->getSymbol( NumberFormatter::DECIMAL_SEPARATOR_SYMBOL );
+		$thousands = $formatter->getSymbol( NumberFormatter::GROUPING_SEPARATOR_SYMBOL );
+
+		return [
+			'decimal'   => false === $decimal || '' === $decimal ? '.' : $decimal,
+			'thousands' => false === $thousands ? ',' : $thousands,
+		];
+	}
+
+	/**
+	 * Load the bundled parseCSV library
+	 *
+	 * parsecsv.lib.php declares the global parseCSV class without a class_exists guard, so every caller has to go through here
+	 */
+	public static function load_parsecsv(): void {
+		if ( ! class_exists( 'parseCSV' ) ) {
+			require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
+		}
+	}
+
+	/**
+	 * Parse CSV text into the row arrays the spreadsheet expects
+	 *
+	 * Mirrors what the CSV import does: the text is wrapped in newlines so parseCSV treats the first line as data rather than
+	 * headings, the delimiter has to be one of CSV_DELIMITERS or the csv_delimiter setting is used, and short rows are padded
+	 *
+	 * @param string      $csv       the CSV text
+	 * @param string|null $delimiter one of CSV_DELIMITERS, anything else falls back to the setting
+	 *
+	 * @return array rows of cells
+	 */
+	public static function parse_csv_string( string $csv, ?string $delimiter = null ): array {
+		self::load_parsecsv();
+
+		$parse_csv = new parseCSV();
+
+		// The "\n" before and after is to deal with CSV files that don't have line breaks above and below the data
+		// Which then seems to confuse parseCSV occasionally
+		$csv = "\n" . trim( $csv ) . "\n";
+
+		$parse_csv->delimiter = in_array( $delimiter, self::CSV_DELIMITERS, true ) ? $delimiter : m_chart()->get_settings( 'csv_delimiter' );
+		$parse_csv->parse( $csv );
+
+		return self::fix_csv_data( is_array( $parse_csv->data ) ? $parse_csv->data : [] );
+	}
+
+	/**
+	 * Pad every row to the longest row's length
+	 *
+	 * Deals with CSV exports (Google Docs among them) that leave off trailing empty cells
+	 *
+	 * @param array $data_array rows of cells
+	 *
+	 * @return array rows of cells, all the same length
+	 */
+	public static function fix_csv_data( array $data_array ): array {
+		$count = 0;
+
+		// Get largest row count
+		foreach ( $data_array as $data ) {
+			$temp_count = is_array( $data ) ? count( $data ) : 0;
+
+			$count = ( $temp_count > $count ) ? $temp_count : $count;
+		}
+
+		// Fix arrays so value counts match
+		foreach ( $data_array as $key => $data ) {
+			$data       = is_array( $data ) ? $data : [];
+			$temp_count = count( $data );
+
+			if ( $temp_count < $count ) {
+				$data = array_pad( $data, $count, '' );
+			}
+
+			$data_array[ $key ] = $data;
 		}
 
 		return $data_array;

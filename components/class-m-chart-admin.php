@@ -26,6 +26,9 @@ class M_Chart_Admin {
 	];
 	private $plugin_url;
 
+	// The hook suffix WordPress assigned to the settings page, for load-{suffix} / admin_print_scripts-{suffix} hooks
+	public $settings_hook_suffix = '';
+
 	/**
 	 * Constructor
 	 */
@@ -75,7 +78,7 @@ class M_Chart_Admin {
 	 * updates at all — this fix reaches them through core's own updates
 	 */
 	private function repair_freemius_plugin_path() {
-		$premium_basename = 'm-chart-pro/m-chart-pro.php';
+		$premium_basename = m_chart()->get_freemius_config()['parallel_activation']['premium_version_basename'];
 
 		if (
 			! function_exists( 'm_chart_fs' )
@@ -101,7 +104,7 @@ class M_Chart_Admin {
 	 * Add settings admin page
 	 */
 	public function admin_menu() {
-		add_submenu_page(
+		$this->settings_hook_suffix = add_submenu_page(
 			'edit.php?post_type=' . m_chart()->slug,
 			esc_html__( 'M Chart Settings', 'm-chart' ),
 			esc_html__( 'Settings', 'm-chart' ),
@@ -434,55 +437,42 @@ class M_Chart_Admin {
 				continue;
 			}
 
-			// Default chart height is numeric so clamp it to the same range as the per-chart height field
-			// Non-scalar submissions fall back to the default rather than tripping absint's array warning
-			if ( 'default_height' === $setting ) {
-				$validated_settings[ $setting ] = is_scalar( $submitted_settings[ $setting ] )
-					? M_Chart::clamp_height( $submitted_settings[ $setting ] )
-					: $default;
-				continue;
-			}
-
-			if ( isset( $this->safe_settings[ $setting ] ) ) {
-				// If we've got an array of valid values lets check against that
-				$safe_setting = $this->safe_settings[ $setting ];
-
-				if ( in_array( $submitted_settings[ $setting ], $safe_setting, true ) ) {
-					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
-				} else {
-					$validated_settings[ $setting ] = $default;
-				}
-			} else {
-				// Make sure the value is a string and matches the safe pattern before saving it
-				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back to the default
-				// Plugins that need to persist complex shapes should hook 'm_chart_validated_settings' below to inject their own validated value
-				$value = $submitted_settings[ $setting ];
-
-				if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $value ) ) {
-					$validated_settings[ $setting ] = $value;
-				} else {
-					$validated_settings[ $setting ] = $default;
-				}
-			}
+			$validated_settings[ $setting ] = $this->validate_setting( $setting, $submitted_settings[ $setting ], $default );
 		}
 
-		// Allow third party libraries to further validate the settings
-		$validated_settings = apply_filters( 'm_chart_validated_settings', $validated_settings, $submitted_settings );
-
-		update_option( m_chart()->slug, $validated_settings );
-
-		// Drop the memoized settings so anything later in this request sees the new values
-		m_chart()->reset_settings();
-
-		// Only flush rewrite rules when the embed endpoint is actually being toggled
-		$previous_embeds = $previous_settings['embeds'] ?? '';
-		$current_embeds  = $validated_settings['embeds'] ?? '';
-
-		if ( $previous_embeds !== $current_embeds ) {
-			flush_rewrite_rules();
-		}
+		m_chart()->store_settings( $validated_settings, $submitted_settings, $previous_settings );
 
 		add_action( 'admin_notices', [ $this, 'save_success' ] );
+	}
+
+	/**
+	 * Validate one submitted setting value
+	 *
+	 * Values with a fixed list of options are checked against it, default_height is clamped, anything else has to be a
+	 * plain string of letters, digits, dots, dashes and underscores. Non scalar submissions fall back to the default
+	 * Plugins that need to persist complex shapes should hook 'm_chart_validated_settings' to inject their own validated value
+	 *
+	 * @param string $setting the setting key
+	 * @param mixed  $value   the submitted value
+	 * @param mixed  $default the setting's default, returned when the value isn't acceptable
+	 *
+	 * @return mixed the validated value
+	 */
+	public function validate_setting( $setting, $value, $default ) {
+		// Default chart height is numeric so clamp it to the same range as the per-chart height field
+		if ( 'default_height' === $setting ) {
+			return is_scalar( $value ) ? M_Chart::clamp_height( $value ) : $default;
+		}
+
+		if ( isset( $this->safe_settings[ $setting ] ) ) {
+			return in_array( $value, $this->safe_settings[ $setting ], true ) ? $value : $default;
+		}
+
+		if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9._-]+$#', $value ) ) {
+			return $value;
+		}
+
+		return $default;
 	}
 
 	/**
@@ -1057,8 +1047,11 @@ class M_Chart_Admin {
 		}
 
 		if ( m_chart()->slug . '-type' === $column ) {
-			$type      = m_chart()->get_post_meta( $post_id, 'type' );
-			$type_name = $library_instance->type_option_names[ $type ];
+			$type = m_chart()->get_post_meta( $post_id, 'type' );
+
+			// A type whose plugin is inactive has no name, show its slug rather than warn
+			// Plugins can relabel a type here (e.g. a chart published as a table)
+			$type_name = apply_filters( 'm_chart_admin_type_column_label', $library_instance->type_option_names[ $type ] ?? $type, $type, $post_id );
 			?>
 <span class="type <?php echo esc_attr( $type ); ?>" title="<?php echo esc_attr( $type_name ); ?>">
 			<?php echo esc_html( $type_name ); ?>
@@ -1098,10 +1091,10 @@ class M_Chart_Admin {
 			$new_columns[ $column ] = $name;
 
 			if ( 'author' === $column || 'coauthors' === $column ) {
-				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
+				$new_columns[ m_chart()->slug . '-type' ] = esc_html__( 'Type', 'm-chart' );
 
 				if ( 'yes' === m_chart()->get_settings( 'show_library' ) ) {
-					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
+					$new_columns[ m_chart()->slug . '-library' ] = esc_html__( 'Library', 'm-chart' );
 				}
 			}
 		}
@@ -1336,24 +1329,13 @@ class M_Chart_Admin {
 
 		// Get parseCSV library so we can use it to convert the CSV to a nice array
 		// Yes, PHP does this natively now but I've run into trouble with malformed CSV that parseCSV handles fine
-		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
+		// Make sure the parser class is loaded, then let it do what the importer always did
+		// An unsafe delimiter falls back to the csv_delimiter setting inside parse_csv_string()
+		m_chart()->parse();
 
-		$parse_csv = new parseCSV();
+		$delimiter = isset( $_POST['csv_delimiter'] ) && is_string( $_POST['csv_delimiter'] ) ? $_POST['csv_delimiter'] : null;
 
-		// The "\n" before and after is to deal with CSV files that don't have line breaks above and below the data
-		// Which then seems to confuse parseCSV occasionally
-		$csv_data = "\n" . trim( $csv_data ) . "\n";
-
-		// Set delimiter but check to make sure it's safe first
-		$parse_csv->delimiter = isset( $_POST['csv_delimiter'] ) && in_array( $_POST['csv_delimiter'], $this->safe_settings[ 'csv_delimiter' ] ) ? $_POST['csv_delimiter'] : m_chart()->get_settings( 'csv_delimiter' );
-
-		// Parse the CSV
-		$parse_csv->parse( $csv_data );
-
-		// This deals with Google Doc's crappy CSV exports which don't include columns at the end of a row if they are empty
-		$data_array = $this->fix_csv_data( $parse_csv->data );
-
-		wp_send_json_success( $data_array );
+		wp_send_json_success( M_Chart_Parse::parse_csv_string( $csv_data, $delimiter ) );
 	}
 
 	/**
@@ -1365,29 +1347,11 @@ class M_Chart_Admin {
 	 * @return array the array of data with matching array value counts
 	 */
 	public function fix_csv_data( $data_array ) {
-		$count = 0;
+		_deprecated_function( __METHOD__, '2.4', 'M_Chart_Parse::fix_csv_data()' );
 
-		// Get largest row count
-		foreach ( $data_array as $data ) {
-			$temp_count = count( $data );
+		m_chart()->parse();
 
-			$count = ( $temp_count > $count ) ? $temp_count : $count;
-		}
-
-		// Fix arrays so value counts match
-		foreach ( $data_array as $key => $data ) {
-			$temp_count = count( $data );
-
-			if ( $temp_count < $count ) {
-				$difference = $count - $temp_count;
-
-				for ( $i = 0; $i < $difference; $i++ ) {
-					$data_array[ $key ][] = '';
-				}
-			}
-		}
-
-		return $data_array;
+		return M_Chart_Parse::fix_csv_data( (array) $data_array );
 	}
 
 	/**
@@ -1427,7 +1391,8 @@ class M_Chart_Admin {
 			$cell = $this->neutralize_csv_cell( $cell );
 		} );
 
-		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
+		m_chart()->parse();
+		M_Chart_Parse::load_parsecsv();
 		$parse_csv = new parseCSV();
 
 		// Set delimiter

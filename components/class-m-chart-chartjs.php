@@ -631,12 +631,14 @@ class M_Chart_Chartjs {
 			$chart_args['options']['plugins']['mchart']['source']         = $this->post_meta['source'];
 			$chart_args['options']['plugins']['mchart']['source_url']     = $this->post_meta['source_url'];
 			$chart_args['options']['plugins']['mchart']['include_source'] = true;
+			// How much extra bottom padding the source line is given, so plugins positioning their own content can allow for it
+			$chart_args['options']['plugins']['mchart']['sourceReserve']  = 20;
 
 			// Push the bottom of the plot area up so the source line has room to render
 			$chart_args['options']['layout']['padding'] = [
 				'top'    => 16,
 				'right'  => 16,
-				'bottom' => 36,
+				'bottom' => 16 + $chart_args['options']['plugins']['mchart']['sourceReserve'],
 				'left'   => 16,
 			];
 		}
@@ -927,9 +929,13 @@ class M_Chart_Chartjs {
 				) {
 					$rgb = $this->hex_to_rgb( $color );
 
-					$chart_args['data']['datasets'][ $key ]['backgroundColor']                      = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
-					$chart_args['data']['datasets'][ $key ]['elements']['point']['backgroundColor'] = $color;
-					$chart_args['data']['datasets'][ $key ]['fill']                                 = true;
+					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
+					$chart_args['data']['datasets'][ $key ]['fill']            = true;
+
+					// Bubbles are the points, an opaque point colour would hide the translucent fill
+					if ( 'bubble' !== $this->post_meta['type'] ) {
+						$chart_args['data']['datasets'][ $key ]['elements']['point']['backgroundColor'] = $color;
+					}
 				} else {
 					$chart_args['data']['datasets'][ $key ]['fill'] = false;
 				}

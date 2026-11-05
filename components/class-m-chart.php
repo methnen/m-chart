@@ -137,7 +137,24 @@ class M_Chart {
 
 		require_once __DIR__ . '/external/freemius/start.php';
 
-		$this->fs = fs_dynamic_init( [
+		$this->fs = fs_dynamic_init( $this->get_freemius_config() );
+
+		$this->freemius_filters();
+
+		do_action( 'm_chart_fs_loaded' );
+
+		return $this->fs;
+	}
+
+	/**
+	 * The Freemius SDK configuration for the free plugin
+	 *
+	 * The premium plugin shares the product id, keys and menu anchor, so it reads them from here rather than keeping a copy
+	 *
+	 * @return array arguments for fs_dynamic_init()
+	 */
+	public function get_freemius_config() {
+		return [
 			'id'                  => '30258',
 			'slug'                => 'm-chart',
 			'premium_slug'        => 'm-chart-pro',
@@ -161,13 +178,7 @@ class M_Chart {
 				'contact' => false,
 				'support' => false,
 			],
-		] );
-
-		$this->freemius_filters();
-
-		do_action( 'm_chart_fs_loaded' );
-
-		return $this->fs;
+		];
 	}
 
 	/**
@@ -540,22 +551,7 @@ class M_Chart {
 			$post_meta['y_min_value'] = 0;
 		}
 
-		// If the data has the old legacy format we need to update it
-		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
-			$data                        = $post_meta['data'];
-			$post_meta['data']           = [];
-			$post_meta['data']['sets'][] = $data;
-		}
-
-		// Some very old charts stored a single sheet's rows directly in the sets value
-		// A valid sets value is an array of sheets where each sheet is an array of row arrays
-		if ( isset( $post_meta['data']['sets'] ) && is_array( $post_meta['data']['sets'] ) ) {
-			$first_sheet = reset( $post_meta['data']['sets'] );
-
-			if ( is_array( $first_sheet ) && [] !== $first_sheet && ! is_array( reset( $first_sheet ) ) ) {
-				$post_meta['data'] = [ 'sets' => [ array_values( $post_meta['data']['sets'] ) ] ];
-			}
-		}
+		$post_meta = $this->normalize_legacy_data( $post_meta );
 
 		// If there's no set_names value set we'll set it to an empty array
 		if ( ! isset( $post_meta['set_names'] ) ) {
@@ -1212,6 +1208,194 @@ class M_Chart {
 	 */
 	public static function clamp_height( $height ) {
 		return min( self::HEIGHT_MAX, max( self::HEIGHT_MIN, absint( is_scalar( $height ) ? $height : 0 ) ) );
+	}
+
+	/**
+	 * Change one setting the same way the settings page does
+	 *
+	 * The value is validated, the full settings array runs through m_chart_validated_settings, the option is written,
+	 * the memoised settings are reset, rewrite rules are flushed if embeds toggled and m_chart_settings_saved fires
+	 *
+	 * @param string $key   the setting key, must exist in the (filtered) default settings
+	 * @param mixed  $value the new value
+	 *
+	 * @return bool false when the key is unknown
+	 */
+	public function update_setting( $key, $value ) {
+		$default_settings = apply_filters( 'm_chart_default_settings', $this->settings );
+
+		if ( ! array_key_exists( $key, $default_settings ) ) {
+			return false;
+		}
+
+		$previous  = $this->get_settings();
+		$submitted = $previous;
+
+		$submitted[ $key ] = $value;
+
+		$validated         = $previous;
+		$validated[ $key ] = $this->admin()->validate_setting( $key, $value, $default_settings[ $key ] );
+
+		$this->store_settings( $validated, $submitted, $previous );
+
+		return true;
+	}
+
+	/**
+	 * Persist a validated settings array
+	 *
+	 * Shared by the settings page and update_setting()
+	 *
+	 * @param array $validated the validated settings
+	 * @param array $submitted the settings as submitted, handed to the m_chart_validated_settings filter
+	 * @param array $previous  the settings before this save
+	 */
+	public function store_settings( array $validated, array $submitted, array $previous ) {
+		// Allow third party libraries to further validate the settings
+		$validated = apply_filters( 'm_chart_validated_settings', $validated, $submitted );
+
+		update_option( $this->slug, $validated );
+
+		// Drop the memoized settings so anything later in this request sees the new values
+		$this->reset_settings();
+
+		// Only flush rewrite rules when the embed endpoint is actually being toggled
+		if ( ( $previous['embeds'] ?? '' ) !== ( $validated['embeds'] ?? '' ) ) {
+			flush_rewrite_rules();
+		}
+
+		do_action( 'm_chart_settings_saved', $this->get_settings(), $previous );
+	}
+
+	/**
+	 * The usable sources of an @font-face descriptor passed through m_chart_iframe_fonts
+	 *
+	 * Only https URLs survive, formats are reduced to [a-z0-9-]
+	 * iframe.php uses this both to build the font-src CSP allowlist and to render the rule, so the two can't disagree
+	 *
+	 * @param array $font a font descriptor with a src list of [ 'url' => ..., 'format' => ... ]
+	 *
+	 * @return array validated [ 'url' => ..., 'format' => ... ] entries
+	 */
+	public static function font_face_sources( array $font ) {
+		$sources = [];
+
+		foreach ( (array) ( $font['src'] ?? [] ) as $src ) {
+			$url = esc_url( is_array( $src ) ? ( $src['url'] ?? '' ) : '', [ 'https' ] );
+
+			if ( '' === $url ) {
+				continue;
+			}
+
+			$sources[] = [
+				'url'    => $url,
+				'format' => preg_replace( '/[^a-z0-9-]/', '', strtolower( (string) ( $src['format'] ?? '' ) ) ),
+			];
+		}
+
+		return $sources;
+	}
+
+	/**
+	 * Render one @font-face rule from a descriptor, every slot allowlisted
+	 *
+	 * Descriptor keys: family (required), src (required, see font_face_sources()), weight, style, display, unicode_range
+	 *
+	 * @param array $font the font descriptor
+	 *
+	 * @return string a <style> element, or an empty string when the descriptor can't be used
+	 */
+	public static function render_font_face( array $font ) {
+		$family = preg_replace( '/[^A-Za-z0-9 _-]/', '', (string) ( $font['family'] ?? '' ) );
+
+		if ( '' === $family ) {
+			return '';
+		}
+
+		$weight  = (string) ( $font['weight'] ?? '400' );
+		$style   = (string) ( $font['style'] ?? 'normal' );
+		$display = (string) ( $font['display'] ?? 'swap' );
+
+		$weight  = preg_match( '/^[1-9]00$|^(normal|bold)$/', $weight ) ? $weight : '400';
+		$style   = in_array( $style,   [ 'normal', 'italic', 'oblique' ],                    true ) ? $style   : 'normal';
+		$display = in_array( $display, [ 'auto', 'block', 'swap', 'fallback', 'optional' ], true ) ? $display : 'swap';
+
+		$srcs = [];
+
+		foreach ( self::font_face_sources( $font ) as $src ) {
+			$srcs[] = sprintf( "url('%s')%s", $src['url'], $src['format'] ? " format('{$src['format']}')" : '' );
+		}
+
+		if ( empty( $srcs ) ) {
+			return '';
+		}
+
+		$unicode_range = '';
+
+		if ( isset( $font['unicode_range'] ) && preg_match( '/^[U+0-9A-Fa-f?,\s-]+$/', (string) $font['unicode_range'] ) ) {
+			$unicode_range = ' unicode-range: ' . trim( (string) $font['unicode_range'] ) . ';';
+		}
+
+		return sprintf(
+			"<style>@font-face { font-family: '%s'; src: %s; font-weight: %s; font-style: %s; font-display: %s;%s }</style>\n",
+			esc_html( $family ),
+			implode( ', ', $srcs ),
+			esc_html( $weight ),
+			esc_html( $style ),
+			esc_html( $display ),
+			$unicode_range
+		);
+	}
+
+	/**
+	 * Bring the data value of older charts up to the current shape
+	 *
+	 * Current charts store data => [ 'sets' => [ sheet, sheet, ... ] ] where each sheet is an array of row arrays
+	 * Charts from before multi sheet support stored the rows directly in data, and some very old ones stored
+	 * a single sheet's rows directly in sets
+	 *
+	 * @param array $post_meta chart post meta as stored
+	 *
+	 * @return array the same meta with data in the current shape
+	 */
+	public function normalize_legacy_data( array $post_meta ) {
+		// If the data has the old legacy format we need to update it
+		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
+			$data                        = $post_meta['data'];
+			$post_meta['data']           = [];
+			$post_meta['data']['sets'][] = $data;
+		}
+
+		// Some very old charts stored a single sheet's rows directly in the sets value
+		if ( isset( $post_meta['data']['sets'] ) && is_array( $post_meta['data']['sets'] ) ) {
+			$first_sheet = reset( $post_meta['data']['sets'] );
+
+			if ( is_array( $first_sheet ) && [] !== $first_sheet && ! is_array( reset( $first_sheet ) ) ) {
+				$post_meta['data'] = [ 'sets' => [ array_values( $post_meta['data']['sets'] ) ] ];
+			}
+		}
+
+		return $post_meta;
+	}
+
+	/**
+	 * The chart meta exactly as stored, with only the legacy data shape fixes applied
+	 *
+	 * Unlike get_post_meta() this fills in no defaults and runs no m_chart_get_post_meta filters, so plugins that
+	 * mask or rewrite meta through that filter can still read the underlying row
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 *
+	 * @return array|false the stored meta, or false when the post has none
+	 */
+	public function get_raw_post_meta( $post_id ) {
+		$raw = get_post_meta( $post_id, $this->slug, true );
+
+		if ( ! is_array( $raw ) ) {
+			return false;
+		}
+
+		return $this->normalize_legacy_data( $raw );
 	}
 
 	/**
