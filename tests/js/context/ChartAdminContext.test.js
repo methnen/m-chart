@@ -253,6 +253,19 @@ describe( 'm_chart.chart_args filter', () => {
 		expect( second.chartArgs.extra ).toBe( 2 );
 		expect( second.baseChartArgs ).toBe( first.baseChartArgs );
 		expect( second.chartArgs ).not.toBe( first.chartArgs );
+		expect( second.formEnabled ).toBe( false );
+	} );
+
+	test( 'REAPPLY_CHART_ARGS gates the form only when the args actually changed', () => {
+		const enabled = { ...stateWithArgs, formEnabled: true };
+		const first   = { ...reducer( enabled, { type: 'SET_CHART_ARGS', payload: { type: 'line' } } ), formEnabled: true };
+
+		// No filter, same args: nothing to render, Save stays available
+		expect( reducer( first, { type: 'REAPPLY_CHART_ARGS' } ).formEnabled ).toBe( true );
+
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args ) => ( { ...args, changed: true } ) );
+
+		expect( reducer( first, { type: 'REAPPLY_CHART_ARGS' } ).formEnabled ).toBe( false );
 	} );
 
 	test( 'REAPPLY_CHART_ARGS returns the same state when nothing changes the args', () => {

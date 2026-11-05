@@ -232,7 +232,8 @@ export function reducer( state, action ) {
 				return state;
 			}
 
-			return { ...state, chartArgs };
+			// New args mean a render and an image capture are coming, gate Save until they land (same as SET_SHEET_DATA)
+			return { ...state, chartArgs, formEnabled: false };
 		}
 
 		case 'SET_REFRESHING':
