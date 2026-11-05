@@ -36,14 +36,7 @@ class M_Chart_Chartjs {
 	];
 	public $type_option_names = [];
 	public $theme_directories;
-	public $colors         = [
-		'#ed6d85', // Pink
-		'#f7d06b', // Yellow
-		'#f2a354', // Orange
-		'#56a0e5', // Blue
-		'#6cbebf', // Turquoise
-		'#47494b', // Gray
-	];
+	public $colors;
 	public $points;
 	public $chart_types    = [
 		'column'         => 'bar',
@@ -74,6 +67,7 @@ class M_Chart_Chartjs {
 	public function __construct() {
 		$this->register_hooks();
 
+		$this->colors = self::get_colors_defaults();
 		$this->points = self::get_points_defaults();
 
 		$this->theme_directories = [
@@ -217,6 +211,22 @@ class M_Chart_Chartjs {
 		}
 
 		return max( 1, (int) apply_filters( 'm_chart_data_lines_per_series', $lines, $type ) );
+	}
+
+	/**
+	 * The palette used when a theme doesn't define its own colors
+	 *
+	 * @return string[] hex colors
+	 */
+	public static function get_colors_defaults() {
+		return [
+			'#ed6d85', // Pink
+			'#f7d06b', // Yellow
+			'#f2a354', // Orange
+			'#56a0e5', // Blue
+			'#6cbebf', // Turquoise
+			'#47494b', // Gray
+		];
 	}
 
 	public static function get_points_defaults() {
@@ -924,11 +934,48 @@ class M_Chart_Chartjs {
 		}
 
 		// Clear out all of the class vars so the next chart instance starts fresh
+		// The palette and point styles go back to the defaults so a theme without its own doesn't inherit the previous chart's
 		$this->args      = null;
 		$this->post      = null;
 		$this->post_meta = null;
+		$this->colors    = self::get_colors_defaults();
+		$this->points    = self::get_points_defaults();
 
 		return $chart_args;
+	}
+
+	/**
+	 * Build chart args for a chart from post meta you supply, without touching the cache or the instance state
+	 *
+	 * The admin preview uses this with unsaved meta, plugins use it to see what a chart would look like with masked or modified meta
+	 * The shared M_Chart_Parse instance is still driven, as with every render
+	 *
+	 * @param WP_Post|int $post      the chart post or its ID (a stub WP_Post with ID 0 is fine for an unsaved chart)
+	 * @param array       $post_meta validated chart post meta to build from
+	 * @param array       $args      optional chart args to override the defaults
+	 *
+	 * @return array complete chart args, or an empty array when the post can't be resolved
+	 */
+	public function get_chart_args_for_meta( $post, array $post_meta, array $args = [] ) {
+		if ( ! $post instanceof WP_Post ) {
+			$post = absint( $post ) ? get_post( absint( $post ) ) : null;
+		}
+
+		if ( ! $post instanceof WP_Post ) {
+			return [];
+		}
+
+		$saved = [ $this->args, $this->post, $this->post_meta, $this->colors, $this->points ];
+
+		$this->args      = wp_parse_args( $args, m_chart()->get_chart_default_args );
+		$this->post      = $post;
+		$this->post_meta = $post_meta;
+
+		try {
+			return $this->get_chart_args( $post->ID, $this->args, true, false );
+		} finally {
+			[ $this->args, $this->post, $this->post_meta, $this->colors, $this->points ] = $saved;
+		}
 	}
 
 	/**

@@ -176,6 +176,30 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 		$this->assertFalse( wp_cache_get( $key, $group ) );
 	}
 
+	public function test_validate_post_meta_passes_a_context_to_its_filter(): void {
+		$seen = [];
+		add_filter( 'm_chart_validate_post_meta', function ( $chart_meta, $meta, $context ) use ( &$seen ) {
+			$seen[] = $context;
+
+			return $chart_meta;
+		}, 10, 3 );
+
+		$meta = [
+			'library'   => 'chartjs',
+			'type'      => 'line',
+			'parse_in'  => 'rows',
+			'data'      => [ 'sets' => [ [ [ '', 'A' ], [ 1, 2 ] ] ] ],
+			'set_names' => [ 'Sheet 1' ],
+			'height'    => 400,
+		];
+
+		m_chart()->validate_post_meta( $meta );
+		m_chart()->validate_post_meta( $meta, 'preview' );
+
+		$this->assertSame( [ 'save', 'preview' ], $seen );
+		$this->assertFalse( m_chart()->is_preview_request(), 'nothing in this request flagged a preview' );
+	}
+
 	public function test_save_rejects_invalid_library(): void {
 		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
 		wp_set_current_user( $editor_id );

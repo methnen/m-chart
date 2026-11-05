@@ -867,12 +867,16 @@ class M_Chart_Admin {
 			$initial_chart_args = null;
 
 			if ( $post_id && m_chart()->library( $library ) ) {
-				$initial_chart_args = m_chart()->library( $library )->get_chart_args(
-					$post_id,
-					m_chart()->get_chart_default_args,
-					true,  // force recompute
-					false  // don't store in cache
-				);
+				$library_instance = m_chart()->library( $library );
+
+				$initial_chart_args = method_exists( $library_instance, 'get_chart_args_for_meta' )
+					? $library_instance->get_chart_args_for_meta( $post_id, m_chart()->get_post_meta( $post_id ) )
+					: $library_instance->get_chart_args(
+						$post_id,
+						m_chart()->get_chart_default_args,
+						true,  // force recompute
+						false  // don't store in cache
+					);
 			}
 
 			// Allow extensions to modify or replace the chart args used for the editor's initial preview render
@@ -1493,15 +1497,24 @@ class M_Chart_Admin {
 			wp_send_json_error( esc_html__( 'Invalid library', 'm-chart' ) );
 		}
 
-		// Set these values so that get_chart_args has them already available before we call it
-		$library->args             = m_chart()->get_chart_default_args;
-		$library->post             = $post;
-		$library->post->post_title = sanitize_text_field( $_POST['title'] ?? '' );
+		// Plugins hooking the validation or the chart args can tell this apart from a real save
+		m_chart()->set_preview_request( true );
+
+		$post->post_title = sanitize_text_field( $_POST['title'] ?? '' );
 
 		// validate_post_meta returns only valid post meta values and does data validation on each item
-		$library->post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] ?? [] );
+		$post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] ?? [], 'preview' );
 
-		wp_send_json_success( $library->get_chart_args( $library->post->ID, $library->args, true, false ) );
+		// Libraries written against older versions set the instance state by hand
+		if ( ! method_exists( $library, 'get_chart_args_for_meta' ) ) {
+			$library->args      = m_chart()->get_chart_default_args;
+			$library->post      = $post;
+			$library->post_meta = $post_meta;
+
+			wp_send_json_success( $library->get_chart_args( $post->ID, $library->args, true, false ) );
+		}
+
+		wp_send_json_success( $library->get_chart_args_for_meta( $post, $post_meta ) );
 	}
 
 	/**

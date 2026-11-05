@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class M_Chart {
 	public $version           = '2.3.4';
+	private $is_preview_request = false;
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
@@ -602,11 +603,12 @@ class M_Chart {
 	/**
 	 * Parses a $meta array and returns a cleaned and validated array
 	 *
-	 * @param array $meta an array of the post meta you want to attach to the post
+	 * @param array  $meta    an array of the post meta you want to attach to the post
+	 * @param string $context 'save' when the result is about to be stored, 'preview' when it only feeds the admin preview
 	 *
 	 * @return array of cleaned/validated post meta
 	 */
-	public function validate_post_meta( $meta ) {
+	public function validate_post_meta( $meta, $context = 'save' ) {
 		// Need to set checkboxes before checking or they can't be deselected
 		$chart_meta['labels']             = false;
 		$chart_meta['y_min']              = false;
@@ -677,7 +679,8 @@ class M_Chart {
 		}
 
 		// Allow plugins to validate their own custom meta
-		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta );
+		// $context tells them whether this is a real save or the admin preview
+		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta, $context );
 
 		return $chart_meta;
 	}
@@ -1200,6 +1203,26 @@ class M_Chart {
 
 		require __DIR__ . '/templates/iframe.php';
 		exit;
+	}
+
+	/**
+	 * Whether the current request is the admin preview building chart args from unsaved meta
+	 *
+	 * Set by the m_chart_get_chart_args AJAX handler, so plugins don't have to sniff $_REQUEST themselves
+	 *
+	 * @return bool
+	 */
+	public function is_preview_request() {
+		return $this->is_preview_request;
+	}
+
+	/**
+	 * Flag the current request as an admin preview
+	 *
+	 * @param bool $is_preview
+	 */
+	public function set_preview_request( $is_preview ) {
+		$this->is_preview_request = (bool) $is_preview;
 	}
 
 	/**
