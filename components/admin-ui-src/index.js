@@ -8,8 +8,10 @@ import ParseAndFlagsRow     from './components/ParseAndFlagsRow';
 import AxisRows             from './components/AxisRows';
 import SourceRow            from './components/SourceRow';
 import ShortcodeAndImageRow from './components/ShortcodeAndImageRow';
+import { defaultChartjsRender } from './components/ChartPreview';
 
 // Expose shared context hook and settings row components for library plugins that implement the m_chart.settings_component filter without a build step
+// defaultChartjsRender lets a plugin render Chart.js itself, e.g. when its m_chart.render_chart filter wants to own the instance
 window.m_chart = {
 	useChartAdmin,
 	TypeAndThemeRow,
@@ -17,6 +19,7 @@ window.m_chart = {
 	AxisRows,
 	SourceRow,
 	ShortcodeAndImageRow,
+	defaultChartjsRender,
 };
 
 /**

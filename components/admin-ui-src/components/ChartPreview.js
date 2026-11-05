@@ -38,15 +38,16 @@ function prepareArgs( args ) {
  *
  * Applies chartjs-specific arg preparation before rendering
  * Returned instance is stored in chartRef by the caller
+ * Also exposed as window.m_chart.defaultChartjsRender so library plugins can render Chart.js themselves
  *
  * @param {HTMLCanvasElement} canvas           Target canvas element
  * @param {Object}            args             Raw chart args from state
  * @param {Function}          onComplete       Callback to fire after render completes
- * @param {Object|null}       existingInstance Existing Chart.js instance, or null on first render
+ * @param {Object|null}       existingInstance Existing Chart.js instance, or null to create a new one
  *
  * @return {Object}             The Chart.js instance
  */
-function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
+export function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
 	const prepared = prepareArgs( args );
 
 	// Guard against null/undefined datasets or labels (Chart.js requires arrays)
@@ -89,6 +90,8 @@ function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
  * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so library plugins can replace the default Chart.js renderer
  * The filter receives ( canvas, args, onComplete, existingInstance ) as extra arguments
  * If no filter handles rendering (i.e. returns false), Chart.js is used
+ * When a filter handled the previous render but returns false now, the instance it gave us is destroyed first
+ * so the Chart.js renderer never calls update() on something it didn't create
  *
  * The onComplete callback must be called by the renderer once the chart has finished which will fire 'm_chart.render_done' to trigger image generation and/or re-enable the form
  */
@@ -98,6 +101,8 @@ export default function ChartPreview() {
 
 	const canvasRef      = useRef( null );
 	const chartRef       = useRef( null );
+	// True when chartRef holds an instance created by defaultChartjsRender rather than by a filter
+	const ownsChartRef   = useRef( false );
 	const renderFlagRef  = useRef( false );
 	const isFirstRender  = useRef( true );
 
@@ -173,9 +178,25 @@ export default function ChartPreview() {
 			);
 		}
 
-		chartRef.current = ( false !== instance )
-			? instance
-			: defaultChartjsRender( canvasRef.current, chartArgs, onComplete, chartRef.current );
+		if ( false !== instance ) {
+			chartRef.current     = instance;
+			ownsChartRef.current = false;
+
+			return;
+		}
+
+		// A filter owned the previous instance and has handed rendering back to us
+		// Destroy it so the canvas is free and the Chart.js renderer starts fresh
+		if ( chartRef.current && ! ownsChartRef.current ) {
+			if ( 'function' === typeof chartRef.current.destroy ) {
+				chartRef.current.destroy();
+			}
+
+			chartRef.current = null;
+		}
+
+		chartRef.current     = defaultChartjsRender( canvasRef.current, chartArgs, onComplete, chartRef.current );
+		ownsChartRef.current = true;
 
 	}, [ chartArgs ] ); // eslint-disable-line react-hooks/exhaustive-deps
 

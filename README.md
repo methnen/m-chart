@@ -3,8 +3,8 @@
 **Tags:** chartjs, graphs, charts, tables, data  
 **Requires PHP:** 8.1  
 **Requires at least:** 6.6  
-**Tested up to:** 7.1.3  
-**Stable tag:** 2.3.3  
+**Tested up to:** 7.1.4  
+**Stable tag:** 2.3.4  
 **License:** MIT  
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -60,6 +60,12 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 
 ## Changelog ##
+
+### 2.3.4 ###
+
+* The admin preview now destroys a chart instance supplied by a library plugin before falling back to Chart.js, so plugins no longer need to recreate the Chart.js instance themselves
+* Added `defaultChartjsRender` to `window.m_chart` so library plugins can reuse the built-in Chart.js renderer
+* Minor changes to support WordPress 7.1.4
 
 ### 2.3.3 ###
 
