@@ -124,6 +124,30 @@ describe( 'ChartPreview renderer hand-off', () => {
 		expect( seen[ 2 ] ).toBe( instances[ 0 ] );
 	} );
 
+	test( 'the render filter receives the image settings and post meta as a fifth argument', () => {
+		let context;
+
+		window.wp.hooks.addFilter(
+			'm_chart.render_chart',
+			'test/render',
+			( handled, canvas, args, onComplete, existingInstance, extra ) => {
+				context = extra;
+				return false;
+			}
+		);
+
+		renderPreview();
+		setChartArgs( ARGS_A );
+
+		expect( context ).toEqual( {
+			imageWidth:      640,
+			imageMultiplier: '2',
+			performance:     'default',
+			imageSupport:    'yes',
+			postMeta:        {},
+		} );
+	} );
+
 	test( 'a filter instance without a destroy method is dropped without throwing', () => {
 		let handleRender = true;
 

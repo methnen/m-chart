@@ -89,7 +89,8 @@ export function defaultChartjsRender( canvas, args, onComplete, existingInstance
  * The chart instance is managed imperatively via refs and is never recreated on re-render — only updated when chartArgs changes
  *
  * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so library plugins can replace the default Chart.js renderer
- * The filter receives ( canvas, args, onComplete, existingInstance ) as extra arguments
+ * The filter receives ( canvas, args, onComplete, existingInstance, context ) as extra arguments, context carrying the image settings and post meta
+ * An instance the filter returns may implement captureImage( { width, multiplier } ) to supply the chart image itself (see useImageGeneration)
  * If no filter handles rendering (i.e. returns false), Chart.js is used
  * When a filter handled the previous render but returns false now, the instance it gave us is destroyed first
  * so the Chart.js renderer never calls update() on something it didn't create
@@ -98,7 +99,7 @@ export function defaultChartjsRender( canvas, args, onComplete, existingInstance
  */
 export default function ChartPreview() {
 	const { state, dispatch } = useChartAdmin();
-	const { postId, chartArgs, performance, imageSupport, postMeta } = state;
+	const { postId, chartArgs, performance, imageSupport, imageWidth, imageMultiplier, postMeta } = state;
 
 	const canvasRef      = useRef( null );
 	const chartRef       = useRef( null );
@@ -161,14 +162,16 @@ export default function ChartPreview() {
 		let instance = false;
 
 		if ( window.wp?.hooks ) {
-			// See defaultChartjsRender for the filter arguments
+			// See defaultChartjsRender for the first four filter arguments
+			// The fifth hands renderers the settings they'd otherwise have to localise themselves
 			instance = window.wp.hooks.applyFilters(
 				'm_chart.render_chart',
 				false,
 				canvasRef.current,
 				chartArgs,
 				onComplete,
-				chartRef.current
+				chartRef.current,
+				{ imageWidth, imageMultiplier, performance, imageSupport, postMeta }
 			);
 		}
 
