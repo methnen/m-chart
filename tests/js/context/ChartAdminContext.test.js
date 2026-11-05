@@ -5,7 +5,8 @@
  * goes through it. Coverage threshold is configured to ≥95% lines/functions
  * for this file in jest.config.js.
  */
-import { reducer } from '../../../components/admin-ui-src/context/ChartAdminContext';
+import { render, act } from '@testing-library/react';
+import { reducer, ChartAdminProvider, useChartAdmin, setFormEnabled } from '../../../components/admin-ui-src/context/ChartAdminContext';
 
 const baseState = {
 	postMeta: { type: 'line', height: 400 },
@@ -157,5 +158,54 @@ describe( 'ChartAdminContext reducer', () => {
 		expect( next.postMeta.subtitle ).toBe( 'New Subtitle' );
 		expect( next.postMeta.type ).toBe( 'line' );
 		expect( next.postMeta.height ).toBe( 400 );
+	} );
+} );
+
+describe( 'ChartAdminProvider form actions', () => {
+	let dispatchRef;
+
+	function Capture() {
+		dispatchRef = useChartAdmin().dispatch;
+		return null;
+	}
+
+	test( 'fires m_chart.form_enabled / form_disabled once per change, not on mount', () => {
+		const enabled  = jest.fn();
+		const disabled = jest.fn();
+
+		window.wp.hooks.addAction( 'm_chart.form_enabled',  'test/enabled',  enabled );
+		window.wp.hooks.addAction( 'm_chart.form_disabled', 'test/disabled', disabled );
+
+		render( <ChartAdminProvider><Capture /></ChartAdminProvider> );
+
+		expect( enabled ).not.toHaveBeenCalled();
+		expect( disabled ).not.toHaveBeenCalled();
+
+		act( () => dispatchRef( { type: 'SET_FORM_ENABLED', payload: true } ) );
+		expect( enabled ).toHaveBeenCalledTimes( 1 );
+		expect( enabled ).toHaveBeenCalledWith( 0 );
+
+		// Same value again is not a change
+		act( () => dispatchRef( { type: 'SET_FORM_ENABLED', payload: true } ) );
+		expect( enabled ).toHaveBeenCalledTimes( 1 );
+
+		act( () => dispatchRef( { type: 'SET_FORM_ENABLED', payload: false } ) );
+		expect( disabled ).toHaveBeenCalledTimes( 1 );
+	} );
+
+	test( 'window-level setFormEnabled dispatches through the mounted provider', () => {
+		const enabled = jest.fn();
+
+		window.wp.hooks.addAction( 'm_chart.form_enabled', 'test/enabled', enabled );
+
+		const { unmount } = render( <ChartAdminProvider><Capture /></ChartAdminProvider> );
+
+		act( () => setFormEnabled( true ) );
+		expect( enabled ).toHaveBeenCalledTimes( 1 );
+
+		unmount();
+
+		// Safe to call with nothing mounted
+		expect( () => setFormEnabled( false ) ).not.toThrow();
 	} );
 } );

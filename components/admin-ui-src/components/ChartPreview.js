@@ -105,7 +105,6 @@ export default function ChartPreview() {
 	// True when chartRef holds an instance created by defaultChartjsRender rather than by a filter
 	const ownsChartRef   = useRef( false );
 	const renderFlagRef  = useRef( false );
-	const isFirstRender  = useRef( true );
 
 	// Keep a ref so onComplete closures always see the latest values
 	const needsImagesRef = useRef( false );
@@ -151,12 +150,6 @@ export default function ChartPreview() {
 				// No image generation — enable form submission immediately
 				// This also covers the initial page load where useChartRefresh skips its first run
 				dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-				if ( window.wp?.hooks ) {
-					window.wp.hooks.doAction( 'm_chart.form_enabled', postId );
-				}
-
-				isFirstRender.current = false;
 			}
 		}
 

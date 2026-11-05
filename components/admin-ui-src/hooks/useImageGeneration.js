@@ -26,10 +26,6 @@ export function useImageGeneration( chartRef ) {
 		if ( ! chart.canvas ) {
 			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 
-			if ( window.wp?.hooks ) {
-				window.wp.hooks.doAction( 'm_chart.form_enabled', stateRef.current.postId );
-			}
-
 			return;
 		}
 
@@ -72,12 +68,8 @@ export function useImageGeneration( chartRef ) {
 			window.wp.hooks.doAction( 'm_chart.image_capture_done', stateRef.current.postId, chart, img );
 		}
 
-		// Re-enable form submission
+		// Re-enable form submission, the provider fires m_chart.form_enabled
 		dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-		if ( window.wp?.hooks ) {
-			window.wp.hooks.doAction( 'm_chart.form_enabled', stateRef.current.postId );
-		}
 
 		speak( __( 'Chart image generated', 'm-chart' ) );
 	}, [ chartRef, dispatch ] );

@@ -1,9 +1,24 @@
-import { createContext, useContext, useReducer } from '@wordpress/element';
+import { createContext, useContext, useEffect, useReducer, useRef } from '@wordpress/element';
 
 const ChartAdminStateContext    = createContext( null );
 const ChartAdminDispatchContext = createContext( null );
 
 const { m_chart_admin } = window;
+
+// Set by the provider so code outside the React tree (window.m_chart.setFormEnabled) can dispatch
+let dispatchHandle = null;
+
+/**
+ * Enable or disable the WordPress Save/Publish buttons from outside the React tree
+ * Library plugins that gate submission on their own async work can use this instead of dispatching through a component
+ *
+ * @param {boolean} enabled
+ */
+export function setFormEnabled( enabled ) {
+	if ( dispatchHandle ) {
+		dispatchHandle( { type: 'SET_FORM_ENABLED', payload: !! enabled } );
+	}
+}
 
 /**
  * Initial state populated from the PHP-localised window.m_chart_admin object
@@ -156,6 +171,29 @@ export function reducer( state, action ) {
 
 export function ChartAdminProvider( { children } ) {
 	const [ state, dispatch ] = useReducer( reducer, initialState );
+
+	dispatchHandle = dispatch;
+
+	useEffect( () => () => {
+		dispatchHandle = null;
+	}, [] );
+
+	// m_chart.form_enabled / m_chart.form_disabled fire once per change of formEnabled, wherever the dispatch came from
+	// Skipped on mount so the initial disabled state doesn't announce itself
+	const { formEnabled, postId } = state;
+	const isFirstFormEffect       = useRef( true );
+
+	useEffect( () => {
+		if ( isFirstFormEffect.current ) {
+			isFirstFormEffect.current = false;
+
+			return;
+		}
+
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( formEnabled ? 'm_chart.form_enabled' : 'm_chart.form_disabled', postId );
+		}
+	}, [ formEnabled, postId ] );
 
 	return (
 		<ChartAdminDispatchContext.Provider value={ dispatch }>

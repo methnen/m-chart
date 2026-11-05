@@ -1,5 +1,5 @@
 import { createRoot, createPortal } from '@wordpress/element';
-import { ChartAdminProvider, useChartAdmin } from './context/ChartAdminContext';
+import { ChartAdminProvider, useChartAdmin, setFormEnabled } from './context/ChartAdminContext';
 import ChartMetaBox         from './components/ChartMetaBox';
 import SpreadsheetMetaBox   from './components/SpreadsheetMetaBox';
 import SubtitleField        from './components/SubtitleField';
@@ -20,6 +20,7 @@ window.m_chart = {
 	SourceRow,
 	ShortcodeAndImageRow,
 	defaultChartjsRender,
+	setFormEnabled,
 };
 
 /**

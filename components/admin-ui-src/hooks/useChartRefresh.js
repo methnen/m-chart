@@ -73,11 +73,8 @@ export function useChartRefresh( title ) {
 			}
 
 			dispatch( { type: 'SET_REFRESHING', payload: true } );
+			// The provider fires m_chart.form_disabled when this lands
 			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
-
-			if ( window.wp?.hooks ) {
-				window.wp.hooks.doAction( 'm_chart.form_disabled', postId );
-			}
 
 			try {
 				const body = new URLSearchParams();
@@ -141,10 +138,6 @@ export function useChartRefresh( title ) {
 					// Otherwise ChartPreview's animation.onComplete enables it after capture
 					if ( 'default' !== performance || 'yes' !== imageSupport ) {
 						dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-						if ( window.wp?.hooks ) {
-							window.wp.hooks.doAction( 'm_chart.form_enabled', postId );
-						}
 					}
 				} else {
 					// The server rejected the request, there's no new render coming so unblock Save ourselves
