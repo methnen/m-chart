@@ -9,7 +9,7 @@ class M_Chart {
 	const HEIGHT_MIN = 300;
 	const HEIGHT_MAX = 1500;
 
-	public $version           = '2.3.4';
+	public $version           = '2.4';
 	private $is_preview_request = false;
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
@@ -1586,7 +1586,7 @@ class M_Chart {
 			$settings = (array) get_option( $this->slug, $default_settings );
 			$settings = wp_parse_args( $settings, $default_settings );
 
-			// The No Instant Preview performance option was folded into No Images in 2.3.4
+			// The No Instant Preview performance option was folded into No Images in 2.4
 			if ( 'no-preview' === $settings['performance'] ) {
 				$settings['performance'] = 'no-images';
 			}

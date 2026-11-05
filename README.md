@@ -4,7 +4,7 @@
 **Requires PHP:** 8.1  
 **Requires at least:** 6.6  
 **Tested up to:** 7.1.4  
-**Stable tag:** 2.3.4  
+**Stable tag:** 2.4  
 **License:** MIT  
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -61,12 +61,28 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 ## Changelog ##
 
-### 2.3.4 ###
+### 2.4 ###
 
-* Library plugins that take over the admin preview via `m_chart.render_chart` can now hand it back to Chart.js without recreating the chart themselves
-* Added `defaultChartjsRender` to `window.m_chart` for library plugins that want to use the built-in Chart.js renderer
+* Fixed sheet data being stored without sanitisation and with stray keys beside the sets, text such as "A & B" or "<5" now survives a save unchanged
+* Fixed stale charts on sites with a persistent object cache, the chart args cache is now flushed after every save and whenever the chart meta row changes
+* Fixed a failed chart refresh leaving the Save button disabled
+* Fixed the front end `m_chart.render_done` event firing on every chart on the page instead of only the chart that rendered
+* Fixed bubble charts hiding their translucent fill behind an opaque point colour
+* Library plugins that take over the admin preview via `m_chart.render_chart` can now hand it back to Chart.js without recreating the chart themselves, and can supply the chart image through a `captureImage()` method
+* Added `m_chart_chartjs_plugins`, one place to add a Chart.js plugin to the page, the embed iframe and the admin editor
+* Added `m_chart_render_uses_chartjs`, `get_container_id()` and `render_source_html()` for plugins that present a chart's data some other way
+* Added `m_chart_type_options` and `m_chart_type_traits`, which now drive core's rendering and the admin settings rows alike
+* Added `M_Chart_Parse::detect_labels_position()`, `get_dropped_sets()`, `parse_csv_string()`, `fix_csv_data()` and `get_number_symbols()`
+* Added `get_chart_args_for_meta()`, `is_preview_request()` and a `$context` argument on `m_chart_validate_post_meta` to tell a preview from a save
+* Added `flush_chart_args_cache()`, `get_raw_post_meta()`, `update_setting()` with the `m_chart_settings_saved` action, `render_font_face()`, `clamp_height()` with `HEIGHT_MIN` / `HEIGHT_MAX`, and `get_freemius_config()`
+* Added the `m_chart.chart_args` filter and the `REAPPLY_CHART_ARGS` and `REPLACE_SHEETS` actions to the admin UI, plus the `m_chart.spreadsheet_mounted`, `m_chart.before_submit` and `m_chart.chart_args_error` actions
+* Added `defaultChartjsRender`, `setFormEnabled`, `useChartDispatch`, `isSimple2DSeries`, `spreadsheetAutoWidth`, `measureTextWidth` and `hasTrait` to `window.m_chart`
+* Added `MChartHelper.formatValue()` and `MChartHelper.dispatchRenderDone()` for front end code
+* `m_chart.form_enabled` and `m_chart.form_disabled` now fire once per change, and `m_chart.render_done` carries the instance in a fourth argument
+* The chart list's Type column is translatable, filterable with `m_chart_admin_type_column_label`, and shows the slug of a type whose plugin is inactive
 * Removed the No Instant Preview performance option, it did the same thing as No Images and sites using it are now treated as No Images
 * Removed the unused `m_chart_instant_preview_support` filter and `instant_preview_support` admin value
+* Deprecated `M_Chart_Admin::fix_csv_data()` in favour of `M_Chart_Parse::fix_csv_data()`, and `chartjs-helper` no longer loads for charts drawn by another library
 * Minor changes to support WordPress 7.1.4
 
 ### 2.3.3 ###
