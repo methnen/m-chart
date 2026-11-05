@@ -64,10 +64,14 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 		wp_register_script( 'fake-plugin', 'https://example.com/fake-plugin.js', [ 'chartjs' ], '1.0' );
 
 		add_filter( 'm_chart_chartjs_plugins', function ( $plugins ) {
-			$plugins['fake-plugin'] = 'FakePlugin';
+			$plugins['fake-plugin']  = 'FakePlugin';
+			// Third party UMD builds often publish hyphenated globals, which only bracket access can reach
+			$plugins['fake-hyphen'] = 'chartjs-plugin-fake';
 
 			return $plugins;
 		} );
+
+		wp_register_script( 'fake-hyphen', 'https://example.com/fake-hyphen.js', [ 'chartjs' ], '1.0' );
 
 		// Start from an empty queue so handles another test enqueued don't leak into the assertions
 		wp_scripts()->queue = [];
@@ -75,8 +79,10 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 		$output = m_chart()->get_chart( $post_id );
 
 		$this->assertContains( 'fake-plugin', wp_scripts()->queue, 'the filtered handle is enqueued on the inline path' );
-		$this->assertStringContainsString( 'Chart.register( window.FakePlugin )', $output );
-		$this->assertStringContainsString( 'Chart.register( window.MChartHelper )', $output );
+		$this->assertStringContainsString( 'Chart.register( window[ "FakePlugin" ] )', $output );
+		$this->assertStringContainsString( 'Chart.register( window[ "MChartHelper" ] )', $output );
+		$this->assertStringContainsString( 'Chart.register( window[ "chartjs-plugin-fake" ] )', $output );
+		$this->assertStringNotContainsString( 'window.chartjs-plugin-fake', $output );
 		$this->assertStringContainsString( 'id="' . m_chart()->get_container_id( $post_id, 1 ) . '"', $output );
 		$this->assertStringContainsString( 'class="m-chart-source screen-reader-text"', $output );
 		$this->assertStringContainsString( '<a href="https://example.com/data">ACME Data</a>', $output );

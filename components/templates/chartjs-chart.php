@@ -182,9 +182,13 @@ $plugin_globals = array_filter( $this->library( 'chartjs' )->get_chartjs_plugins
 
 		document.addEventListener( 'DOMContentLoaded', () => {
 			// Register the Chart.js plugins once per chart script rather than on every render
-			<?php foreach ( $plugin_globals as $global ) { ?>
-			if ( window.<?php echo esc_js( $global ); ?> ) {
-				Chart.register( window.<?php echo esc_js( $global ); ?> );
+			<?php
+			// Bracket access so hyphenated UMD names like "chartjs-plugin-annotation" work
+			foreach ( $plugin_globals as $global ) {
+				$global_js = wp_json_encode( (string) $global );
+				?>
+			if ( window[ <?php echo $global_js; ?> ] ) {
+				Chart.register( window[ <?php echo $global_js; ?> ] );
 			}
 			<?php } ?>
 			<?php do_action( 'm_chart_after_chartjs_plugins', $post_id, $args, $instance ); ?>
