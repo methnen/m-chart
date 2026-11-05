@@ -57,11 +57,6 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 = 2.4 =
 
-* Fixed an issue with sheet data being stored unsanitised and with stray keys beside the sets
-* Fixed an issue with stale charts on sites with a persistent object cache
-* Fixed an issue with a failed chart refresh leaving the Save button disabled
-* Fixed an issue with the front end `m_chart.render_done` event firing on every chart on the page
-* Fixed an issue with bubble charts hiding their translucent fill
 * Added a Chart.js plugin registry via the `m_chart_chartjs_plugins` filter
 * Added the `m_chart_render_uses_chartjs` filter for plugins that render a chart's data another way
 * Added chart type traits via the `m_chart_type_options` and `m_chart_type_traits` filters
@@ -72,8 +67,13 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * The Type column in the chart list is now translatable and filterable
 * Removed the No Instant Preview performance option, sites using it are now treated as No Images
 * Removed the unused `m_chart_instant_preview_support` filter
-* Deprecated `M_Chart_Admin::fix_csv_data()` in favour of `M_Chart_Parse::fix_csv_data()`
 * Minor changes to support WordPress 7.1.4
+* Deprecated `M_Chart_Admin::fix_csv_data()` in favour of `M_Chart_Parse::fix_csv_data()`
+* Fixed an issue with sheet data being stored unsanitised and with stray keys beside the sets
+* Fixed an issue with stale charts on sites with a persistent object cache
+* Fixed an issue with a failed chart refresh leaving the Save button disabled
+* Fixed an issue with the front end `m_chart.render_done` event firing on every chart on the page
+* Fixed an issue with bubble charts hiding their translucent fill
 
 = 2.3.3 =
 
