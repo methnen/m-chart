@@ -24,7 +24,6 @@ const initialState = {
 	library:          m_chart_admin.library,
 	performance:      m_chart_admin.performance,
 	imageSupport:     m_chart_admin.image_support,
-	instantPreview:   m_chart_admin.instant_preview_support,
 	imageMultiplier:  m_chart_admin.image_multiplier,
 	imageWidth:       m_chart_admin.image_width,
 	csvDelimiters:    m_chart_admin.csv_delimiters || { ',': 'Comma' },

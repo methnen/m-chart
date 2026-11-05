@@ -12,7 +12,6 @@ class M_Chart_Admin {
 		'performance' => [
 			'default',
 			'no-images',
-			'no-preview',
 		],
 		'csv_delimiter' => [
 			',',
@@ -888,7 +887,6 @@ class M_Chart_Admin {
 				'request'                 => false,
 				'performance'             => m_chart()->get_settings( 'performance' ),
 				'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
-				'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
 				'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
 				'image_width'             => m_chart()->get_settings( 'image_width' ),
 				'library'                 => $library,

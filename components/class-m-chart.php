@@ -100,7 +100,6 @@ class M_Chart {
 		add_filter( 'm_chart_get_chart_image_tag', [ $this, 'm_chart_get_chart_image_tag' ], 9, 3 );
 		add_filter( 'the_content', [ $this, 'the_content' ] );
 		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
-		add_filter( 'm_chart_instant_preview_support', [ $this, 'm_chart_instant_preview_support' ], 10, 2 );
 		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
 		add_shortcode( 'm-chart', [ $this, 'chart_shortcode' ] );
@@ -948,22 +947,6 @@ class M_Chart {
 	}
 
 	/**
-	 * Hook to the m_chart_instant_preview_support filter and indicate that Chart.js supports instant previews
-	 *
-	 * @param string $supports_images yes/no whether the library supports instant previews
-	 * @param string $library the library in question
-	 *
-	 * @return string yes/no whether the library supports instant previews
-	 */
-	public function m_chart_instant_preview_support( $supports_instant_preview, $library ) {
-		if ( $library != $this->chart_meta_fields['library'] ) {
-			return $supports_instant_preview;
-		}
-
-		return 'yes';
-	}
-
-	/**
 	 * Hook to the m_chart_library_class filter and return the library class if appropriate
 	 *
 	 * @param string $library_class the library class
@@ -1246,6 +1229,11 @@ class M_Chart {
 
 			$settings = (array) get_option( $this->slug, $default_settings );
 			$settings = wp_parse_args( $settings, $default_settings );
+
+			// The No Instant Preview performance option was folded into No Images in 2.3.4
+			if ( 'no-preview' === $settings['performance'] ) {
+				$settings['performance'] = 'no-images';
+			}
 
 			// Make sure the set library is still valid
 			if ( ! $this->is_valid_library( $settings['library'] ) ) {

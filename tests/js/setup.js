@@ -23,7 +23,6 @@ global.m_chart_admin = {
 	library:             'chartjs',
 	performance:         'default',
 	image_support:       'yes',
-	instant_preview_support: 'yes',
 	image_multiplier:    '2',
 	image_width:         640,
 	csv_delimiters:      { ',': 'Comma' },

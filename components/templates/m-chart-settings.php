@@ -56,11 +56,6 @@
 								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'performance' ) ); ?>" value="no-images"<?php checked( $settings['performance'], 'no-images' ); ?> />
 								<span><?php esc_html_e( 'No Images', 'm-chart' ); ?></span><br />
 								<span class="description"><?php esc_html_e( 'No generation of chart images', 'm-chart' ); ?></span>
-							</label><br />
-							<label>
-								<input type="radio" name="<?php echo esc_attr( $this->get_field_name( 'performance' ) ); ?>" value="no-preview"<?php checked( $settings['performance'], 'no-preview' ); ?> />
-								<span><?php esc_html_e( 'No Instant Preview', 'm-chart' ); ?></span><br />
-								<span class="description"><?php esc_html_e( 'No instant preview and no generation of chart images', 'm-chart' ); ?></span>
 							</label>
 						</fieldset>
 					</td>
