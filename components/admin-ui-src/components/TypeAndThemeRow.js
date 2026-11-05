@@ -3,26 +3,7 @@ import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { measureTextWidth } from '../utils/measureTextWidth';
-
-// Chart types that support cycling palette colors per data point
-const DATA_POINT_COLOR_TYPES = new Set( [
-	'column',
-	'bar',
-	'treemap',
-	'boxplot',
-	'violin',
-] );
-
-// Chart types where the per-point color toggle requires single-series (simple 2D) data
-// Treemap is in this set because hierarchical (3+ column) data uses parent-group coloring rather than per-leaf cycling, so the toggle wouldn't apply
-// Boxplot/Violin are in this set because per-box cycling only makes sense with one dataset
-const TYPES_REQUIRING_SIMPLE_2D = new Set( [
-	'column',
-	'bar',
-	'treemap',
-	'boxplot',
-	'violin',
-] );
+import { hasTrait } from '../utils/typeTraits';
 
 /**
  * Returns the index past the last non-empty cell in a row
@@ -84,7 +65,7 @@ export function isSimple2DSeries( sheet, parseIn ) {
 
 export default function TypeAndThemeRow() {
 	const { state, dispatch } = useChartAdmin();
-	const { postMeta, typeOptions, typeOptionNames, themes, spreadsheetData } = state;
+	const { postMeta, typeOptions, typeOptionNames, themes, spreadsheetData, typeTraits, heightRange } = state;
 
 	const [ heightEl, setHeightEl ] = useState( null );
 	const heightRef                 = useCallback( node => setHeightEl( node ), [] );
@@ -93,17 +74,16 @@ export default function TypeAndThemeRow() {
 		? ( measureTextWidth( heightValue, heightEl ) + 20 ) + 'px'
 		: '73px';
 
-	let showDataPointColors = DATA_POINT_COLOR_TYPES.has( postMeta.type );
+	// Per point colours only make sense for a single series
+	// Types that treat each sheet as a dataset (boxplot, violin) need exactly one sheet, the others need simple 2D data
+	// Treemap is simple-2D-required because hierarchical (3+ column) data colours by parent group rather than per leaf
+	let showDataPointColors = hasTrait( typeTraits, postMeta.type, 'data_point_colors' );
 
-	if ( showDataPointColors && TYPES_REQUIRING_SIMPLE_2D.has( postMeta.type ) ) {
-		// Boxplot/violin treat each sheet as a separate dataset, so "single-dataset" means
-		// exactly one sheet (the per-box-color toggle is meaningful only there)
-		if ( 'boxplot' === postMeta.type || 'violin' === postMeta.type ) {
-			showDataPointColors = Array.isArray( spreadsheetData ) && 1 === spreadsheetData.length;
-		} else {
-			const activeSheet = Array.isArray( spreadsheetData ) ? spreadsheetData[0] : null;
-			showDataPointColors = isSimple2DSeries( activeSheet, postMeta.parse_in );
-		}
+	if ( showDataPointColors && hasTrait( typeTraits, postMeta.type, 'single_sheet_required' ) ) {
+		showDataPointColors = Array.isArray( spreadsheetData ) && 1 === spreadsheetData.length;
+	} else if ( showDataPointColors && hasTrait( typeTraits, postMeta.type, 'simple_2d_required' ) ) {
+		const activeSheet = Array.isArray( spreadsheetData ) ? spreadsheetData[0] : null;
+		showDataPointColors = isSimple2DSeries( activeSheet, postMeta.parse_in );
 	}
 
 	function handleChange( field, value ) {
@@ -171,8 +151,8 @@ export default function TypeAndThemeRow() {
 						name="m-chart[height]"
 						ref={ heightRef }
 						value={ postMeta.height }
-						min="300"
-						max="1500"
+						min={ heightRange.min }
+						max={ heightRange.max }
 						onChange={ ( value ) => handleChange( 'height', value ) }
 						style={ { width: heightWidth, minWidth: 0 } }
 					/>

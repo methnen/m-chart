@@ -181,6 +181,93 @@ class M_Chart_Chartjs {
 	}
 
 	/**
+	 * The chart type slugs this library offers, in menu order
+	 *
+	 * @return string[]
+	 */
+	public function get_type_options() {
+		return apply_filters( 'm_chart_type_options', $this->type_options );
+	}
+
+	/**
+	 * The Chart.js controller type an m-chart type renders with (column → bar, polar → polarArea, ...)
+	 *
+	 * An unknown type is returned unchanged so a type whose plugin is inactive doesn't silently draw as something else
+	 *
+	 * @param string $type the m-chart chart type
+	 *
+	 * @return string
+	 */
+	public function get_native_type( $type ) {
+		return isset( $this->chart_types[ $type ] ) ? $this->chart_types[ $type ] : (string) $type;
+	}
+
+	/**
+	 * What each chart type can do, keyed by type
+	 *
+	 * Core's own rendering and the React settings rows read these, so a plugin adding a type can describe it once through
+	 * the m_chart_type_traits filter instead of patching every list. Keys:
+	 * native, data_lines, raw_grid, multi_sheet, axes (has x/y scales and shows the axis fields), points (gets point styles),
+	 * shared_tooltip, legend, labels, data_point_colors, simple_2d_required, single_sheet_required, boxplot_points, y_min, constrain_y
+	 *
+	 * @return array [ type => [ trait => value ] ]
+	 */
+	public function get_type_traits() {
+		$traits = [];
+
+		foreach ( $this->get_type_options() as $type ) {
+			$traits[ $type ] = $this->type_trait_defaults( $type );
+		}
+
+		return apply_filters( 'm_chart_type_traits', $traits );
+	}
+
+	/**
+	 * Look up one trait for a type, falling back to the built in defaults for a type the traits list doesn't know
+	 *
+	 * @param string $type  the m-chart chart type
+	 * @param string $trait the trait key
+	 *
+	 * @return mixed
+	 */
+	public function type_has_trait( $type, $trait ) {
+		$traits = $this->get_type_traits();
+		$row    = isset( $traits[ $type ] ) ? $traits[ $type ] : $this->type_trait_defaults( $type );
+
+		return isset( $row[ $trait ] ) ? $row[ $trait ] : false;
+	}
+
+	/**
+	 * Core's traits for a type before the m_chart_type_traits filter
+	 *
+	 * @param string $type the m-chart chart type
+	 *
+	 * @return array
+	 */
+	private function type_trait_defaults( $type ) {
+		$native = $this->get_native_type( $type );
+
+		return [
+			'native'                => $native,
+			'data_lines'            => self::get_data_lines_per_series( $type ),
+			'raw_grid'              => in_array( $type, self::get_raw_grid_types(), true ),
+			'multi_sheet'           => in_array( $type, m_chart()->get_multi_sheet_types(), true ),
+			// Keyed by the native type so a plugin type rendering as pie or radar is treated the way those are
+			'axes'                  => ! in_array( $native, [ 'pie', 'doughnut', 'radar', 'polarArea', 'treemap', 'venn', 'euler' ], true ),
+			'points'                => in_array( $type, [ 'line', 'spline', 'area', 'radar', 'radar-area', 'scatter' ], true ),
+			'shared_tooltip'        => in_array( $type, [ 'line', 'spline', 'area', 'radar', 'radar-area' ], true ),
+			'legend'                => ! in_array( $type, [ 'treemap', 'venn', 'euler' ], true ),
+			'labels'                => ! in_array( $type, [ 'boxplot', 'violin' ], true ),
+			'data_point_colors'     => in_array( $type, [ 'column', 'bar', 'treemap', 'boxplot', 'violin' ], true ),
+			'simple_2d_required'    => in_array( $type, [ 'column', 'bar', 'treemap' ], true ),
+			'single_sheet_required' => in_array( $type, [ 'boxplot', 'violin' ], true ),
+			'boxplot_points'        => in_array( $type, [ 'boxplot', 'violin' ], true ),
+			'y_min'                 => in_array( $type, [ 'line', 'spline', 'area' ], true ),
+			'constrain_y'           => in_array( $type, [ 'boxplot', 'violin' ], true ),
+		];
+	}
+
+	/**
 	 * Chart types that read the raw sheet grid themselves instead of (or before) going through M_Chart_Parse
 	 *
 	 * boxplot and violin treat each row as a category with its observations, treemap tries build_treemap_hierarchy()
@@ -443,7 +530,7 @@ class M_Chart_Chartjs {
 		$defaults = self::get_chart_options_defaults();
 
 		$chart_args = [
-			'type'    => $this->chart_types[ $this->post_meta['type'] ],
+			'type'    => $this->get_native_type( $this->post_meta['type'] ),
 			'options' => [
 				'plugins' => [
 					'title' => array_merge(
@@ -486,15 +573,7 @@ class M_Chart_Chartjs {
 			$chart_args['options']['devicePixelRatio'] = m_chart()->get_settings( 'image_multiplier' );
 		}
 
-		if (
-			   'pie' != $chart_args['type']
-			&& 'doughnut' != $chart_args['type']
-			&& 'radar' != $chart_args['type']
-			&& 'polarArea' != $chart_args['type']
-			&& 'treemap' != $chart_args['type']
-			&& 'venn' != $chart_args['type']
-			&& 'euler' != $chart_args['type']
-		) {
+		if ( $this->type_has_trait( $this->post_meta['type'], 'axes' ) ) {
 			$chart_args['options']['scales']['x']['grid']['borderWidth'] = 0;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
 		}
@@ -564,15 +643,7 @@ class M_Chart_Chartjs {
 
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
 
-		if (
-			   'pie' != $chart_args['type']
-			&& 'doughnut' != $chart_args['type']
-			&& 'radar' != $chart_args['type']
-			&& 'polarArea' != $chart_args['type']
-			&& 'treemap' != $chart_args['type']
-			&& 'venn' != $chart_args['type']
-			&& 'euler' != $chart_args['type']
-		) {
+		if ( $this->type_has_trait( $this->post_meta['type'], 'axes' ) ) {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
 
@@ -583,15 +654,7 @@ class M_Chart_Chartjs {
 			$chart_args['options']['indexAxis']                          = 'y';
 			$chart_args['options']['scales']['y']['grid']['display']     = false;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
-		} elseif (
-			   'pie' != $chart_args['type']
-			&& 'doughnut' != $chart_args['type']
-			&& 'radar' != $chart_args['type']
-			&& 'polarArea' != $chart_args['type']
-			&& 'treemap' != $chart_args['type']
-			&& 'venn' != $chart_args['type']
-			&& 'euler' != $chart_args['type']
-		) {
+		} elseif ( $this->type_has_trait( $this->post_meta['type'], 'axes' ) ) {
 			$chart_args['options']['scales']['x']['grid']['display'] = false;
 		}
 
@@ -853,14 +916,7 @@ class M_Chart_Chartjs {
 					$chart_args['data']['datasets'][ $key ]['tension'] = 0;
 				}
 
-				if (
-					   'line' == $this->post_meta['type']
-					|| 'spline' == $this->post_meta['type']
-					|| 'area' == $this->post_meta['type']
-					|| 'radar' == $this->post_meta['type']
-					|| 'radar-area' == $this->post_meta['type']
-					|| 'scatter' == $this->post_meta['type']
-				) {
+				if ( $this->type_has_trait( $this->post_meta['type'], 'points' ) ) {
 					$chart_args['data']['datasets'][ $key ]['elements'] = $this->points[ $key % $point_count ];
 				}
 

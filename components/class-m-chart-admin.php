@@ -438,7 +438,7 @@ class M_Chart_Admin {
 			// Non-scalar submissions fall back to the default rather than tripping absint's array warning
 			if ( 'default_height' === $setting ) {
 				$validated_settings[ $setting ] = is_scalar( $submitted_settings[ $setting ] )
-					? min( 1500, max( 300, absint( $submitted_settings[ $setting ] ) ) )
+					? M_Chart::clamp_height( $submitted_settings[ $setting ] )
 					: $default;
 				continue;
 			}
@@ -828,14 +828,19 @@ class M_Chart_Admin {
 			unset( $post_meta['data'] ); // passed separately as spreadsheet_data
 
 			// Collect library-specific config for the React admin app
+			// The type map and traits are Chart.js specific, other libraries may not provide them
 			$type_options      = [];
 			$type_option_names = [];
+			$chart_types       = [];
+			$type_traits       = [];
 			$themes            = [];
 
 			if ( m_chart()->library( $library ) ) {
 				$library_class     = m_chart()->library( $library );
-				$type_options      = $library_class->type_options;
+				$type_options      = method_exists( $library_class, 'get_type_options' ) ? $library_class->get_type_options() : $library_class->type_options;
 				$type_option_names = $library_class->type_option_names;
+				$chart_types       = isset( $library_class->chart_types ) && is_array( $library_class->chart_types ) ? $library_class->chart_types : [];
+				$type_traits       = method_exists( $library_class, 'get_type_traits' ) ? $library_class->get_type_traits() : [];
 
 				foreach ( $library_class->get_themes() as $theme ) {
 					$themes[] = [
@@ -915,6 +920,9 @@ class M_Chart_Admin {
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
 				'multi_sheet_types'       => m_chart()->get_multi_sheet_types(),
 				'chartjs_plugin_globals'  => $chartjs_plugin_globals,
+				'chart_types'             => $chart_types,
+				'type_traits'             => $type_traits,
+				'height_range'            => [ 'min' => M_Chart::HEIGHT_MIN, 'max' => M_Chart::HEIGHT_MAX ],
 			];
 
 			wp_localize_script( 'm-chart-admin-ui', 'm_chart_admin', $localize_data );

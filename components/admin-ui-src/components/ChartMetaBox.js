@@ -40,11 +40,13 @@ export default function ChartMetaBox() {
 
 	// Allow external plugins to inject content above the chart preview
 	// Same pattern as m_chart.spreadsheet_metabox_extension in SpreadsheetMetaBox.js
-	const chartMetaboxExtension = wp.hooks.applyFilters(
-		'm_chart.chart_metabox_extension',
-		null,
-		{ state, dispatch }
-	);
+	const chartMetaboxExtension = window.wp?.hooks
+		? window.wp.hooks.applyFilters(
+			'm_chart.chart_metabox_extension',
+			null,
+			{ state, dispatch }
+		)
+		: null;
 
 	return (
 		<>

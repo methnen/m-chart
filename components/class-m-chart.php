@@ -5,6 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class M_Chart {
+	// Chart height range in pixels, shared by the per chart height field, the default height setting and the admin UI
+	const HEIGHT_MIN = 300;
+	const HEIGHT_MAX = 1500;
+
 	public $version           = '2.3.4';
 	private $is_preview_request = false;
 	public $slug              = 'm-chart';
@@ -639,13 +643,7 @@ class M_Chart {
 				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
-					$chart_meta[ $field ] = absint( $meta[ $field ] );
-
-					if ( $chart_meta[ $field ] > 1500 ) {
-						$chart_meta[ $field ] = 1500;
-					} elseif ( $chart_meta[ $field ] < 300 ) {
-						$chart_meta[ $field ] = 300;
-					}
+					$chart_meta[ $field ] = self::clamp_height( $meta[ $field ] );
 				} elseif ( 'y_min_value' == $field ) {
 					$chart_meta[ $field ] = floatval( $meta[ $field ] );
 				} else {
@@ -1203,6 +1201,17 @@ class M_Chart {
 
 		require __DIR__ . '/templates/iframe.php';
 		exit;
+	}
+
+	/**
+	 * Clamp a chart height to the supported range
+	 *
+	 * @param mixed $height a height in pixels, anything absint() can read
+	 *
+	 * @return int
+	 */
+	public static function clamp_height( $height ) {
+		return min( self::HEIGHT_MAX, max( self::HEIGHT_MIN, absint( is_scalar( $height ) ? $height : 0 ) ) );
 	}
 
 	/**

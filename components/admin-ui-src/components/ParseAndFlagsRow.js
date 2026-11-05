@@ -1,49 +1,23 @@
 import { CheckboxControl, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
+import { hasTrait } from '../utils/typeTraits';
 
 const PARSE_OPTION_NAMES = {
 	columns: __( 'Columns', 'm-chart' ),
 	rows:    __( 'Rows', 'm-chart' ),
 };
 
-// Chart types that support the shared tooltip option
-const SHARED_TYPES = new Set( [
-	'line',
-	'spline',
-	'area',
-	'radar',
-	'radar-area'
-] );
-
-// Chart types where the legend toggle has no meaningful effect
-const NO_LEGEND_TYPES = new Set( [
-	'treemap',
-	'venn',
-	'euler',
-] );
-
-// Chart types where the data labels toggle has no meaningful effect
-// Treemap and venn/euler are intentionally NOT here - they use the same checkbox to control their native labels
-const NO_LABELS_TYPES = new Set( [
-	'boxplot',
-	'violin',
-] );
-
-// Chart types that get the mean / point distribution toggles
-const BOXPLOT_POINT_TYPES = new Set( [
-	'boxplot',
-	'violin',
-] );
-
 export default function ParseAndFlagsRow() {
 	const { state, dispatch } = useChartAdmin();
-	const { postMeta } = state;
+	const { postMeta, typeTraits } = state;
 
-	const showShared        = SHARED_TYPES.has( postMeta.type );
-	const showLegend        = ! NO_LEGEND_TYPES.has( postMeta.type );
-	const showLabels        = ! NO_LABELS_TYPES.has( postMeta.type );
-	const showBoxplotPoints = BOXPLOT_POINT_TYPES.has( postMeta.type );
+	// Which toggles make sense for the current type comes from the PHP type traits (see M_Chart_Chartjs::get_type_traits())
+	// Treemap and venn/euler keep the labels toggle, it controls their native labels
+	const showShared        = hasTrait( typeTraits, postMeta.type, 'shared_tooltip' );
+	const showLegend        = hasTrait( typeTraits, postMeta.type, 'legend' );
+	const showLabels        = hasTrait( typeTraits, postMeta.type, 'labels' );
+	const showBoxplotPoints = hasTrait( typeTraits, postMeta.type, 'boxplot_points' );
 
 	function handleChange( field, value ) {
 		dispatch( { type: 'SET_POST_META', payload: { [ field ]: value } } );

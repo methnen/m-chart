@@ -132,6 +132,13 @@ const initialState = {
 	themes:          m_chart_admin.themes             || [],
 	unitTerms:       m_chart_admin.unit_terms         || [],
 	imageUrl:        m_chart_admin.image_url          || '',
+
+	// Per type capabilities (see M_Chart_Chartjs::get_type_traits()), the native Chart.js type map,
+	// the types that show the sheet tab bar, and the chart height range
+	typeTraits:      m_chart_admin.type_traits        || {},
+	chartTypes:      m_chart_admin.chart_types        || {},
+	multiSheetTypes: m_chart_admin.multi_sheet_types  || [],
+	heightRange:     m_chart_admin.height_range       || { min: 300, max: 1500 },
 };
 
 export function reducer( state, action ) {
