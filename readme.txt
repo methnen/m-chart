@@ -57,10 +57,10 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 = 2.3.4 =
 
-* The admin preview now destroys a chart instance supplied by a library plugin before falling back to Chart.js, so plugins no longer need to recreate the Chart.js instance themselves
-* Added `defaultChartjsRender` to `window.m_chart` so library plugins can reuse the built-in Chart.js renderer
-* Removed the No Instant Preview performance option, which had behaved the same as No Images since 2.0; sites using it are treated as No Images
-* Removed the unused `m_chart_instant_preview_support` filter and the `instant_preview_support` key from `window.m_chart_admin`
+* Library plugins that take over the admin preview via `m_chart.render_chart` can now hand it back to Chart.js without recreating the chart themselves
+* Added `defaultChartjsRender` to `window.m_chart` for library plugins that want to use the built-in Chart.js renderer
+* Removed the No Instant Preview performance option, it did the same thing as No Images and sites using it are now treated as No Images
+* Removed the unused `m_chart_instant_preview_support` filter and `instant_preview_support` admin value
 * Minor changes to support WordPress 7.1.4
 
 = 2.3.3 =
