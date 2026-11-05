@@ -93,6 +93,89 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 		$this->assertTrue( $fired, 'm_chart_update_post_meta action did not fire' );
 	}
 
+	public function test_sheet_cells_are_sanitised_in_place_without_stray_keys(): void {
+		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
+		wp_set_current_user( $editor_id );
+
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_author' => $editor_id,
+		] );
+
+		m_chart()->update_post_meta( $post_id, [
+			'library'   => 'chartjs',
+			'type'      => 'line',
+			'parse_in'  => 'rows',
+			'theme'     => '_default',
+			// JSON string, which is the shape the real save path receives from the spreadsheet textarea
+			'data'      => json_encode( [ [
+				[ '', 'Series' ],
+				[ '<script>alert(1)</script>Label', 1 ],
+				[ 'A & B', 2 ],
+				[ '<5', 3 ],
+			] ] ),
+			'set_names' => [ 'Sheet 1' ],
+			'height'    => 400,
+		] );
+
+		// Read the raw row so get_post_meta()'s normalisation can't hide what was stored
+		$raw = get_post_meta( $post_id, m_chart()->slug, true );
+
+		$this->assertSame( [ 'sets' ], array_keys( $raw['data'] ), 'validated sheets must be written under data.sets only' );
+		$this->assertSame( 'alert(1)Label', $raw['data']['sets'][0][1][0], 'tags are stripped from cells' );
+		$this->assertSame( 'A & B',         $raw['data']['sets'][0][2][0], 'ampersands survive as text' );
+		$this->assertSame( '<5',            $raw['data']['sets'][0][3][0], 'a lone less-than survives as text' );
+	}
+
+	public function test_chart_args_cache_is_flushed_on_save(): void {
+		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
+		wp_set_current_user( $editor_id );
+
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_author' => $editor_id,
+		] );
+
+		$meta = [
+			'library'   => 'chartjs',
+			'type'      => 'line',
+			'parse_in'  => 'rows',
+			'theme'     => '_default',
+			'data'      => [ 'sets' => [ [ [ '', 'A' ], [ 1, 2 ] ] ] ],
+			'set_names' => [ 'Sheet 1' ],
+			'height'    => 400,
+		];
+
+		$key   = m_chart()->chart_args_cache_key( $post_id );
+		$group = m_chart()->slug;
+
+		// A saver on the action that re-primes the cache must still end up flushed because core flushes last
+		$reprimed = false;
+		add_action( 'm_chart_update_post_meta', function ( $saved_post_id ) use ( &$reprimed ) {
+			m_chart()->library( 'chartjs' )->get_chart_args( $saved_post_id, [], true, true );
+			$reprimed = true;
+		}, 50 );
+
+		wp_cache_set( $key, [ 'sentinel' => true ], $group );
+		m_chart()->update_post_meta( $post_id, $meta );
+
+		$this->assertTrue( $reprimed, 'the priority 50 saver should have run' );
+		$this->assertFalse( wp_cache_get( $key, $group ), 'update_post_meta() must leave no cached chart args behind' );
+
+		// Writing the meta row directly, as REST or a sync job would, flushes too
+		wp_cache_set( $key, [ 'sentinel' => true ], $group );
+		$meta['height'] = 500;
+		update_post_meta( $post_id, m_chart()->slug, m_chart()->validate_post_meta( $meta ) );
+
+		$this->assertFalse( wp_cache_get( $key, $group ), 'a direct update_post_meta() must flush the cached chart args' );
+
+		// And the public helper does the same on demand
+		wp_cache_set( $key, [ 'sentinel' => true ], $group );
+		m_chart()->flush_chart_args_cache( $post_id );
+
+		$this->assertFalse( wp_cache_get( $key, $group ) );
+	}
+
 	public function test_save_rejects_invalid_library(): void {
 		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
 		wp_set_current_user( $editor_id );

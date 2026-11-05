@@ -340,7 +340,7 @@ class M_Chart_Chartjs {
 	 */
 	public function get_chart_args( $post_id, $args, $force = false, $cache = true ) {
 		// There's a ton of work that goes into generating the chart args so we cache them
-		$cache_key = $post_id . '-chart-args';
+		$cache_key = m_chart()->chart_args_cache_key( $post_id );
 
 		if ( ! $force && $chart_args = wp_cache_get( $cache_key, m_chart()->slug ) ) {
 			// The width can be set via the args so we'll override whatever the cache has with the arg value
@@ -860,19 +860,17 @@ class M_Chart_Chartjs {
 	}
 
 	/**
-	 * Hook to the m_chart_update_post_meta action and refresh the chart args cache
+	 * Hook to the m_chart_update_post_meta action and drop the chart args cache
+	 *
+	 * The cache used to be rebuilt here from the raw parsed meta, which ran before other plugins had saved
+	 * their related meta and skipped the m_chart_get_post_meta filters
+	 * Flushing instead lets the next front end request rebuild through the full get_post_meta() path
 	 *
 	 * @param int $post_id WP post ID of the post you want chart args for
 	 * @param array $parsed_meta the parsed chart meta passed by the action hook
 	 */
 	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
-		// Refresh arg cache
-		$this->args = m_chart()->get_chart_default_args;
-		$this->post = get_post( $post_id );
-
-		$this->post_meta = $parsed_meta;
-
-		$this->get_chart_args( $post_id, [], true );
+		m_chart()->flush_chart_args_cache( $post_id );
 	}
 
 	/**

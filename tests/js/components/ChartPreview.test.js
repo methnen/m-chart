@@ -179,6 +179,18 @@ describe( 'defaultChartjsRender', () => {
 		expect( instance.options.animation.onComplete ).toBe( onComplete );
 	} );
 
+	test( 'accepts null or empty args for a brand new chart', () => {
+		const canvas = document.createElement( 'canvas' );
+
+		expect( () => defaultChartjsRender( canvas, null, () => {}, null ) ).not.toThrow();
+		expect( () => defaultChartjsRender( canvas, {}, () => {}, null ) ).not.toThrow();
+
+		const instance = defaultChartjsRender( canvas, null, () => {}, null );
+
+		expect( instance.data.datasets ).toEqual( [] );
+		expect( instance.data.labels ).toBeUndefined();
+	} );
+
 	test( 'updates the passed instance in place instead of creating another', () => {
 		const canvas   = document.createElement( 'canvas' );
 		const first    = defaultChartjsRender( canvas, ARGS_A, () => {}, null );

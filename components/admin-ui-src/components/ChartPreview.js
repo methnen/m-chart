@@ -48,7 +48,8 @@ function prepareArgs( args ) {
  * @return {Object}             The Chart.js instance
  */
 export function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
-	const prepared = prepareArgs( args );
+	// A brand new chart can hand us null args, Chart.js still needs a config
+	const prepared = prepareArgs( args || {} );
 
 	// Guard against null/undefined datasets or labels (Chart.js requires arrays)
 	if ( ! prepared.data?.datasets ) {

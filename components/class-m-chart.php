@@ -94,7 +94,12 @@ class M_Chart {
 		add_action( 'save_post', [ $this, 'save_post' ] );
 		// Priority 0 so is_iframe is set before anything else reads it
 		add_action( 'template_redirect', [ $this, 'template_redirect' ], 0 );
-		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], 10, 2 );
+		// Runs last so the chart args cache is flushed after every other plugin has saved its related meta
+		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], PHP_INT_MAX, 2 );
+		// Anything that writes the chart meta row directly (REST, Pro's external data sync) also invalidates the cache
+		add_action( 'added_post_meta', [ $this, 'flush_chart_args_cache_on_meta_change' ], 10, 4 );
+		add_action( 'updated_post_meta', [ $this, 'flush_chart_args_cache_on_meta_change' ], 10, 4 );
+		add_action( 'deleted_post_meta', [ $this, 'flush_chart_args_cache_on_meta_change' ], 10, 4 );
 
 		// Priority 9 so this runs before any default-priority filters other plugins add
 		add_filter( 'm_chart_get_chart_image_tag', [ $this, 'm_chart_get_chart_image_tag' ], 9, 3 );
@@ -618,7 +623,15 @@ class M_Chart {
 				if ( 'source_url' == $field && '' != $meta[ $field ] ) {
 					$chart_meta[ $field ] = esc_url_raw( $meta[ $field ] );
 				} elseif ( 'data' == $field ) {
-					$chart_meta[ $field ]['sets'] = $meta[ $field ];
+					$data = $meta[ $field ];
+
+					// Accept the stored shape (data => [ 'sets' => [...] ]) as well as a plain list of sheets
+					// or the JSON string the spreadsheet textarea submits
+					if ( is_array( $data ) && array_key_exists( 'sets', $data ) ) {
+						$data = $data['sets'];
+					}
+
+					$chart_meta[ $field ]['sets'] = $data;
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
 				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
@@ -660,7 +673,7 @@ class M_Chart {
 
 		// Validate the data array
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
-			$chart_meta['data'][ $key ] = $this->validate_data( $data );
+			$chart_meta['data']['sets'][ $key ] = $this->validate_data( $data );
 		}
 
 		// Allow plugins to validate their own custom meta
@@ -672,25 +685,38 @@ class M_Chart {
 	/**
 	 * Runs all of the raw data array values through wp_filter_nohtml_kses
 	 *
+	 * Cells are text, not HTML, so entities kses normalises on the way through are decoded again
+	 * Otherwise a cell like "A & B" would come back as "A &amp; B" in the spreadsheet and on the canvas
+	 *
 	 * @param array $data an array of data as passed by the user
 	 *
 	 * @return array of validated data
 	 */
 	function validate_data( $data ) {
 		if ( ! is_array( $data ) ) {
-			return wp_filter_nohtml_kses( $data );
+			return $this->validate_data_cell( $data );
 		}
 
 		foreach ( $data as $key => $value ) {
 			if ( is_array( $value ) ) {
 				$data[ $key ] = $this->validate_data( $value );
 			} else {
-				$value        = $value ?? '';
-				$data[ $key ] = wp_filter_nohtml_kses( $value );
+				$data[ $key ] = $this->validate_data_cell( $value ?? '' );
 			}
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Strip tags from a single spreadsheet cell while leaving its text intact
+	 *
+	 * @param mixed $value a single cell value
+	 *
+	 * @return string the cleaned cell
+	 */
+	private function validate_data_cell( $value ) {
+		return html_entity_decode( wp_filter_nohtml_kses( (string) $value ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 
 
@@ -1175,11 +1201,50 @@ class M_Chart {
 
 		// The chart's library plugin may be inactive (e.g. Highcharts charts after the
 		// extension was removed) in which case there's no library object to notify
-		if ( ! is_object( $library ) || ! method_exists( $library, 'm_chart_update_post_meta' ) ) {
+		if ( is_object( $library ) && method_exists( $library, 'm_chart_update_post_meta' ) ) {
+			$library->m_chart_update_post_meta( $post_id, $parsed_meta );
+		}
+
+		// Flush after the library has had its turn so a library that still rebuilds the cache from the raw meta can't leave stale args behind
+		$this->flush_chart_args_cache( $post_id );
+	}
+
+	/**
+	 * The object cache key the chart args for a given chart live under
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 *
+	 * @return string the cache key (use with the m-chart cache group)
+	 */
+	public function chart_args_cache_key( $post_id ) {
+		return absint( $post_id ) . '-chart-args';
+	}
+
+	/**
+	 * Drop the cached chart args for a chart so the next render rebuilds them
+	 *
+	 * Call this after changing anything that feeds into the chart args outside of a normal chart save
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 */
+	public function flush_chart_args_cache( $post_id ) {
+		wp_cache_delete( $this->chart_args_cache_key( $post_id ), $this->slug );
+	}
+
+	/**
+	 * Hook to added/updated/deleted_post_meta and flush the chart args cache when the chart meta row changes
+	 *
+	 * @param int|array $meta_id the meta ID(s) that changed
+	 * @param int $object_id the post the meta belongs to
+	 * @param string $meta_key the meta key that changed
+	 * @param mixed $meta_value the new meta value
+	 */
+	public function flush_chart_args_cache_on_meta_change( $meta_id, $object_id, $meta_key, $meta_value ) {
+		if ( $this->slug !== $meta_key ) {
 			return;
 		}
 
-		$library->m_chart_update_post_meta( $post_id, $parsed_meta );
+		$this->flush_chart_args_cache( $object_id );
 	}
 
 	/**

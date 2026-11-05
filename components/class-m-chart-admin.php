@@ -648,9 +648,8 @@ class M_Chart_Admin {
 		// Core's update_post_meta validates the meta and replaces the m-chart-library taxonomy term
 		m_chart()->update_post_meta( $post_id, $post_meta );
 
-		// Core only ever overwrites this cache key, never deletes it
-		// Clear it so persistent object caches don't serve Highcharts args to the Chart.js renderer
-		wp_cache_delete( $post_id . '-chart-args', m_chart()->slug );
+		// Clear the cached args so persistent object caches don't serve Highcharts args to the Chart.js renderer
+		m_chart()->flush_chart_args_cache( $post_id );
 
 		return true;
 	}
