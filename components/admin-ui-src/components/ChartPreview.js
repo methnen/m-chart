@@ -138,7 +138,9 @@ export default function ChartPreview() {
 			renderFlagRef.current = false;
 
 			if ( window.wp?.hooks ) {
-				window.wp.hooks.doAction( 'm_chart.render_done', postId, 1, chartRef.current );
+				// The literal 1 is the instance counter slot from the pre-React events and is always 1 here
+				// New listeners can read the fourth argument instead, the positional arguments stay until v3
+				window.wp.hooks.doAction( 'm_chart.render_done', postId, 1, chartRef.current, { postId, instance: chartRef.current } );
 			}
 
 			if ( needsImagesRef.current ) {

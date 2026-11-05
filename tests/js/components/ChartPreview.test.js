@@ -124,6 +124,25 @@ describe( 'ChartPreview renderer hand-off', () => {
 		expect( seen[ 2 ] ).toBe( instances[ 0 ] );
 	} );
 
+	test( 'm_chart.render_done carries the instance in a fourth object argument', () => {
+		const done = jest.fn();
+		window.wp.hooks.addAction( 'm_chart.render_done', 'test/done', done );
+
+		renderPreview();
+		setChartArgs( ARGS_A );
+
+		// The mock constructor never animates, so complete the render by hand
+		// Dropping the canvas keeps the image capture (jsdom has no 2d context) out of this test
+		delete instances[ 0 ].canvas;
+		act( () => instances[ 0 ].options.animation.onComplete() );
+
+		expect( done ).toHaveBeenCalledTimes( 1 );
+		expect( done.mock.calls[ 0 ][ 0 ] ).toBe( 0 );
+		expect( done.mock.calls[ 0 ][ 1 ] ).toBe( 1 );
+		expect( done.mock.calls[ 0 ][ 2 ] ).toBe( instances[ 0 ] );
+		expect( done.mock.calls[ 0 ][ 3 ] ).toEqual( { postId: 0, instance: instances[ 0 ] } );
+	} );
+
 	test( 'the render filter receives the image settings and post meta as a fifth argument', () => {
 		let context;
 

@@ -160,23 +160,9 @@ $plugin_globals = array_filter( $this->library( 'chartjs' )->get_chartjs_plugins
 
 			rendered = true;
 
-			document.querySelectorAll( '.m-chart' ).forEach( el => {
-				// Build detail once so both dispatches carry identical data
-				const detail = { post_id: postId, instance };
-
-				// Canonical event name — matches the wp.hooks `m_chart.render_done` action on the admin side
-				// The chart instance type (Chart.js vs Highcharts) is identified by consumer context, not the event name
-				el.dispatchEvent( new CustomEvent( 'm_chart.render_done', {
-					bubbles: true,
-					detail,
-				} ) );
-
-				// Legacy name — deprecated, kept for one major version (planned removal in v3)
-				el.dispatchEvent( new CustomEvent( 'render_done', {
-					bubbles: true,
-					detail,
-				} ) );
-			} );
+			// Fires on this chart's own canvas only (older versions fired on every chart on the page)
+			// Canonical event name m_chart.render_done matches the wp.hooks action on the admin side, the legacy render_done rides along
+			MChartHelper.dispatchRenderDone( canvas.canvas, { post_id: postId, instance } );
 		};
 
 		const reducedMotion = window.matchMedia
