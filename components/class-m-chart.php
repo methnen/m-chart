@@ -4,8 +4,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Loaded up front so the static helpers on these classes (M_Chart_Parse::detect_labels_position(), M_Chart_Chartjs::get_type_traits(), ...)
+// can be called from any hook without something having touched the parser or the library instance first
+// The files only declare classes, nothing runs until m_chart()->parse() or m_chart()->library() instantiates them
+require_once __DIR__ . '/class-m-chart-parsed-data-point.php';
+require_once __DIR__ . '/class-m-chart-parse.php';
+require_once __DIR__ . '/class-m-chart-chartjs.php';
+
 class M_Chart {
-	public $version           = '2.3.3';
+	// Chart height range in pixels, shared by the per chart height field, the default height setting and the admin UI
+	const HEIGHT_MIN = 300;
+	const HEIGHT_MAX = 1500;
+
+	public $version           = '2.4';
+	private $is_preview_request = false;
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
 	public $chart_meta_fields = [
@@ -94,13 +106,17 @@ class M_Chart {
 		add_action( 'save_post', [ $this, 'save_post' ] );
 		// Priority 0 so is_iframe is set before anything else reads it
 		add_action( 'template_redirect', [ $this, 'template_redirect' ], 0 );
-		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], 10, 2 );
+		// Runs last so the chart args cache is flushed after every other plugin has saved its related meta
+		add_action( 'm_chart_update_post_meta', [ $this, 'm_chart_update_post_meta' ], PHP_INT_MAX, 2 );
+		// Anything that writes the chart meta row directly (REST, Pro's external data sync) also invalidates the cache
+		add_action( 'added_post_meta', [ $this, 'flush_chart_args_cache_on_meta_change' ], 10, 4 );
+		add_action( 'updated_post_meta', [ $this, 'flush_chart_args_cache_on_meta_change' ], 10, 4 );
+		add_action( 'deleted_post_meta', [ $this, 'flush_chart_args_cache_on_meta_change' ], 10, 4 );
 
 		// Priority 9 so this runs before any default-priority filters other plugins add
 		add_filter( 'm_chart_get_chart_image_tag', [ $this, 'm_chart_get_chart_image_tag' ], 9, 3 );
 		add_filter( 'the_content', [ $this, 'the_content' ] );
 		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
-		add_filter( 'm_chart_instant_preview_support', [ $this, 'm_chart_instant_preview_support' ], 10, 2 );
 		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
 
 		add_shortcode( 'm-chart', [ $this, 'chart_shortcode' ] );
@@ -128,7 +144,24 @@ class M_Chart {
 
 		require_once __DIR__ . '/external/freemius/start.php';
 
-		$this->fs = fs_dynamic_init( [
+		$this->fs = fs_dynamic_init( $this->get_freemius_config() );
+
+		$this->freemius_filters();
+
+		do_action( 'm_chart_fs_loaded' );
+
+		return $this->fs;
+	}
+
+	/**
+	 * The Freemius SDK configuration for the free plugin
+	 *
+	 * The premium plugin shares the product id, keys and menu anchor, so it reads them from here rather than keeping a copy
+	 *
+	 * @return array arguments for fs_dynamic_init()
+	 */
+	public function get_freemius_config() {
+		return [
 			'id'                  => '30258',
 			'slug'                => 'm-chart',
 			'premium_slug'        => 'm-chart-pro',
@@ -152,13 +185,7 @@ class M_Chart {
 				'contact' => false,
 				'support' => false,
 			],
-		] );
-
-		$this->freemius_filters();
-
-		do_action( 'm_chart_fs_loaded' );
-
-		return $this->fs;
+		];
 	}
 
 	/**
@@ -280,46 +307,7 @@ class M_Chart {
 	 * Do init stuff
 	 */
 	public function init() {
-		// Register the units taxonomy
-		register_taxonomy(
-			$this->slug . '-units',
-			[ $this->slug ],
-			[
-				'hierarchical' => true,
-				'labels'       => [
-					'name'              => esc_html__( 'Chart Units', 'm-chart' ),
-					'singular_name'     => esc_html__( 'Chart Unit', 'm-chart' ),
-					'search_items'      => esc_html__( 'Search Chart Units', 'm-chart' ),
-					'all_items'         => esc_html__( 'All Chart Units', 'm-chart' ),
-					'parent_item'       => esc_html__( 'Parent Chart Unit', 'm-chart' ),
-					'parent_item_colon' => esc_html__( 'Parent Chart Unit:', 'm-chart' ),
-					'edit_item'         => esc_html__( 'Edit Chart Unit', 'm-chart' ),
-					'update_item'       => esc_html__( 'Update Chart Unit', 'm-chart' ),
-					'add_new_item'      => esc_html__( 'Add New Chart Unit', 'm-chart' ),
-					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
-					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
-				],
-				'show_ui'   => true,
-				'query_var' => true,
-				'rewrite'   => [
-					'slug' => $this->slug . '-units',
-				],
-			]
-		);
-
-		// Register the library taxonomy
-		register_taxonomy(
-			$this->slug . '-library',
-			[ $this->slug ],
-			[
-				'hierarchical' => false,
-				'show_ui'      => false,
-				'query_var'    => true,
-				'rewrite'      => [
-					'slug' => $this->slug . '-library',
-				],
-			]
-		);
+		$this->register_taxonomies();
 
 		// Register the charts custom post type
 		register_post_type(
@@ -431,6 +419,62 @@ class M_Chart {
 	}
 
 	/**
+	 * Runs on plugin activation
+	 * Seeds the default chart units so they exist before any charts are imported or edited
+	 */
+	public function activate() {
+		// The activation request loads the plugin after init has fired so the taxonomies aren't registered yet
+		$this->register_taxonomies();
+		$this->generate_unit_terms();
+	}
+
+	/**
+	 * Registers the units and library taxonomies
+	 */
+	public function register_taxonomies() {
+		// Register the units taxonomy
+		register_taxonomy(
+			$this->slug . '-units',
+			[ $this->slug ],
+			[
+				'hierarchical' => true,
+				'labels'       => [
+					'name'              => esc_html__( 'Chart Units', 'm-chart' ),
+					'singular_name'     => esc_html__( 'Chart Unit', 'm-chart' ),
+					'search_items'      => esc_html__( 'Search Chart Units', 'm-chart' ),
+					'all_items'         => esc_html__( 'All Chart Units', 'm-chart' ),
+					'parent_item'       => esc_html__( 'Parent Chart Unit', 'm-chart' ),
+					'parent_item_colon' => esc_html__( 'Parent Chart Unit:', 'm-chart' ),
+					'edit_item'         => esc_html__( 'Edit Chart Unit', 'm-chart' ),
+					'update_item'       => esc_html__( 'Update Chart Unit', 'm-chart' ),
+					'add_new_item'      => esc_html__( 'Add New Chart Unit', 'm-chart' ),
+					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
+					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
+				],
+				'show_ui'   => true,
+				'query_var' => true,
+				'rewrite'   => [
+					'slug' => $this->slug . '-units',
+				],
+			]
+		);
+
+		// Register the library taxonomy
+		register_taxonomy(
+			$this->slug . '-library',
+			[ $this->slug ],
+			[
+				'hierarchical' => false,
+				'show_ui'      => false,
+				'query_var'    => true,
+				'rewrite'      => [
+					'slug' => $this->slug . '-library',
+				],
+			]
+		);
+	}
+
+	/**
 	 * Do plugins loaded stuff
 	 */
 	public function plugins_loaded() {
@@ -531,22 +575,7 @@ class M_Chart {
 			$post_meta['y_min_value'] = 0;
 		}
 
-		// If the data has the old legacy format we need to update it
-		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
-			$data                        = $post_meta['data'];
-			$post_meta['data']           = [];
-			$post_meta['data']['sets'][] = $data;
-		}
-
-		// Some very old charts stored a single sheet's rows directly in the sets value
-		// A valid sets value is an array of sheets where each sheet is an array of row arrays
-		if ( isset( $post_meta['data']['sets'] ) && is_array( $post_meta['data']['sets'] ) ) {
-			$first_sheet = reset( $post_meta['data']['sets'] );
-
-			if ( is_array( $first_sheet ) && [] !== $first_sheet && ! is_array( reset( $first_sheet ) ) ) {
-				$post_meta['data'] = [ 'sets' => [ array_values( $post_meta['data']['sets'] ) ] ];
-			}
-		}
+		$post_meta = $this->normalize_legacy_data( $post_meta );
 
 		// If there's no set_names value set we'll set it to an empty array
 		if ( ! isset( $post_meta['set_names'] ) ) {
@@ -598,11 +627,12 @@ class M_Chart {
 	/**
 	 * Parses a $meta array and returns a cleaned and validated array
 	 *
-	 * @param array $meta an array of the post meta you want to attach to the post
+	 * @param array  $meta    an array of the post meta you want to attach to the post
+	 * @param string $context 'save' when the result is about to be stored, 'preview' when it only feeds the admin preview
 	 *
 	 * @return array of cleaned/validated post meta
 	 */
-	public function validate_post_meta( $meta ) {
+	public function validate_post_meta( $meta, $context = 'save' ) {
 		// Need to set checkboxes before checking or they can't be deselected
 		$chart_meta['labels']             = false;
 		$chart_meta['y_min']              = false;
@@ -619,19 +649,21 @@ class M_Chart {
 				if ( 'source_url' == $field && '' != $meta[ $field ] ) {
 					$chart_meta[ $field ] = esc_url_raw( $meta[ $field ] );
 				} elseif ( 'data' == $field ) {
-					$chart_meta[ $field ]['sets'] = $meta[ $field ];
+					$data = $meta[ $field ];
+
+					// Accept the stored shape (data => [ 'sets' => [...] ]) as well as a plain list of sheets
+					// or the JSON string the spreadsheet textarea submits
+					if ( is_array( $data ) && array_key_exists( 'sets', $data ) ) {
+						$data = $data['sets'];
+					}
+
+					$chart_meta[ $field ]['sets'] = $data;
 				} elseif ( 'set_names' == $field ) {
 					$chart_meta[ $field ] = array_values( $meta[ $field ] );
 				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
 				} elseif ( 'height' == $field ) {
-					$chart_meta[ $field ] = absint( $meta[ $field ] );
-
-					if ( $chart_meta[ $field ] > 1500 ) {
-						$chart_meta[ $field ] = 1500;
-					} elseif ( $chart_meta[ $field ] < 300 ) {
-						$chart_meta[ $field ] = 300;
-					}
+					$chart_meta[ $field ] = self::clamp_height( $meta[ $field ] );
 				} elseif ( 'y_min_value' == $field ) {
 					$chart_meta[ $field ] = floatval( $meta[ $field ] );
 				} else {
@@ -660,18 +692,24 @@ class M_Chart {
 		}
 
 		// Validate the data array
+		// validate_data() returns plain text, the rest of this array is slashed for update_post_meta() so match it
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
-			$chart_meta['data'][ $key ] = $this->validate_data( $data );
+			$chart_meta['data']['sets'][ $key ] = wp_slash( $this->validate_data( $data ) );
 		}
 
 		// Allow plugins to validate their own custom meta
-		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta );
+		// $context tells them whether this is a real save or the admin preview
+		$chart_meta = apply_filters( 'm_chart_validate_post_meta', $chart_meta, $meta, $context );
 
 		return $chart_meta;
 	}
 
 	/**
-	 * Runs all of the raw data array values through wp_filter_nohtml_kses
+	 * Strips tags from every cell of a raw (unslashed) data array
+	 *
+	 * Cells are text, not HTML, so entities kses normalises on the way through are decoded again
+	 * Otherwise a cell like "A & B" would come back as "A &amp; B" in the spreadsheet and on the canvas
+	 * The result is plain text too, callers that store it are responsible for slashing it (see validate_post_meta())
 	 *
 	 * @param array $data an array of data as passed by the user
 	 *
@@ -679,19 +717,32 @@ class M_Chart {
 	 */
 	function validate_data( $data ) {
 		if ( ! is_array( $data ) ) {
-			return wp_filter_nohtml_kses( $data );
+			return $this->validate_data_cell( $data );
 		}
 
 		foreach ( $data as $key => $value ) {
 			if ( is_array( $value ) ) {
 				$data[ $key ] = $this->validate_data( $value );
 			} else {
-				$value        = $value ?? '';
-				$data[ $key ] = wp_filter_nohtml_kses( $value );
+				$data[ $key ] = $this->validate_data_cell( $value ?? '' );
 			}
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Strip tags from a single spreadsheet cell while leaving its text intact
+	 *
+	 * wp_kses() is used directly rather than wp_filter_nohtml_kses(), which expects slashed input
+	 * and would eat a backslash the user typed ("C:\temp") and hand back quotes with backslashes in front
+	 *
+	 * @param mixed $value a single cell value
+	 *
+	 * @return string the cleaned cell
+	 */
+	private function validate_data_cell( $value ) {
+		return html_entity_decode( wp_kses( (string) $value, 'strip' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 
 
@@ -808,10 +859,15 @@ class M_Chart {
 			return $this->get_chart_iframe( $post_id, $args );
 		}
 
+		// A plugin can take over the rendering of a Chart.js chart entirely (e.g. show the data as a table)
+		// in which case the library, its plugins and the inline script are all left out
+		$post_meta    = $this->get_post_meta( $post_id );
+		$uses_chartjs = $this->render_uses_chartjs( $post_id, $post_meta );
+
 		// If we haven't enqueued the right library yet lets do it
-		if ( ! wp_script_is( $library, 'enqueued' ) ) {
+		// Chart.js' helper and plugins are enqueued by the library class on m_chart_get_chart_begin
+		if ( ( 'chartjs' !== $library || $uses_chartjs ) && ! wp_script_is( $library, 'enqueued' ) ) {
 			wp_enqueue_script( $library );
-			wp_enqueue_script( 'chartjs-helper' );
 		}
 
 		// Ship the visually hidden rule the screen reader data table relies on
@@ -820,8 +876,12 @@ class M_Chart {
 
 		$template = __DIR__ . '/templates/' . $library . '-chart.php';
 
+		// Locals for the template, the $this-> equivalents keep working for templates written against older versions
+		$instance  = $this->instance;
+		$is_iframe = $this->is_iframe;
+
 		ob_start();
-		do_action( 'm_chart_get_chart_begin', $post_id, $args );
+		do_action( 'm_chart_get_chart_begin', $post_id, $args, $uses_chartjs );
 		require apply_filters( 'm_chart_chart_template', $template, $library, $post_id );
 		do_action( 'm_chart_get_chart_end', $post_id, $args );
 		$this->instance++;
@@ -948,22 +1008,6 @@ class M_Chart {
 	}
 
 	/**
-	 * Hook to the m_chart_instant_preview_support filter and indicate that Chart.js supports instant previews
-	 *
-	 * @param string $supports_images yes/no whether the library supports instant previews
-	 * @param string $library the library in question
-	 *
-	 * @return string yes/no whether the library supports instant previews
-	 */
-	public function m_chart_instant_preview_support( $supports_instant_preview, $library ) {
-		if ( $library != $this->chart_meta_fields['library'] ) {
-			return $supports_instant_preview;
-		}
-
-		return 'yes';
-	}
-
-	/**
 	 * Hook to the m_chart_library_class filter and return the library class if appropriate
 	 *
 	 * @param string $library_class the library class
@@ -1002,7 +1046,7 @@ class M_Chart {
 
 		ob_start();
 		?>
-<iframe id="m-chart-container-<?php echo absint( $post_id ); ?>-<?php echo absint( $this->instance ); ?>"
+<iframe id="<?php echo esc_attr( $this->get_container_id( $post_id ) ); ?>"
 	class="m-chart-iframe" width="100%" height="<?php echo absint( $post_meta['height'] + 1 ); ?>"
 	title="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 	src="<?php echo esc_url( $src_url ); ?>"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
@@ -1072,7 +1116,15 @@ class M_Chart {
 	public function get_unit_terms() {
 		$terms = get_terms( $this->slug . '-units', [ 'hide_empty' => false ] );
 
-		if ( empty( $terms ) ) {
+		if ( ! is_array( $terms ) ) {
+			$terms = [];
+		}
+
+		// Seed the defaults when no unit sits under a group yet
+		// An import or a direct save can create flat unit terms before this ever runs so an empty check isn't enough
+		$grouped = array_filter( $terms, fn( $term ) => 0 != $term->parent );
+
+		if ( empty( $grouped ) ) {
 			$terms = $this->generate_unit_terms();
 		}
 
@@ -1088,19 +1140,36 @@ class M_Chart {
 	 */
 	public function compile_unit_terms( $terms ) {
 		$compiled_terms = [];
-		$parents        = [];
+		$groups         = [];
+		$used_groups    = [];
+		$other          = esc_html__( 'Other', 'm-chart' );
 
 		foreach ( $terms as $unit ) {
 			if ( 0 == $unit->parent ) {
-				$parents[ $unit->term_id ] = $unit->name;
+				$groups[ $unit->term_id ] = $unit;
 			}
 		}
 
 		foreach ( $terms as $unit ) {
-			if ( 0 != $unit->parent && isset( $parents[ $unit->parent ] ) ) {
-				$compiled_terms[ $parents[ $unit->parent ] ][] = $unit;
+			if ( 0 != $unit->parent && isset( $groups[ $unit->parent ] ) ) {
+				$compiled_terms[ $groups[ $unit->parent ]->name ][] = $unit;
+				$used_groups[ $unit->parent ]                        = true;
 			}
 		}
+
+		// A top level term with nothing under it was created flat by an import or typed straight into a chart
+		// List it under Other so it can still be picked
+		foreach ( $groups as $term_id => $group ) {
+			if ( ! isset( $used_groups[ $term_id ] ) && $group->name !== $other ) {
+				$compiled_terms[ $other ][] = $group;
+			}
+		}
+
+		foreach ( $compiled_terms as &$units ) {
+			usort( $units, fn( $a, $b ) => strcasecmp( $a->name, $b->name ) );
+		}
+
+		unset( $units );
 
 		ksort( $compiled_terms );
 
@@ -1109,26 +1178,70 @@ class M_Chart {
 
 	/**
 	 * Helper function that populates the unit terms taxonomy with a default set of terms
+	 * Safe to run more than once, existing terms are kept and a default unit that exists as a flat term is moved into its group
 	 *
-	 * @return array an array of the newly generated unit terms
+	 * @return array an array of every unit term after the defaults were added
 	 */
 	public function generate_unit_terms() {
+		$taxonomy = $this->slug . '-units';
+
 		// Load the default terms array
 		$default_terms = require __DIR__ . '/array-default-unit-terms.php';
 
-		$terms = [];
+		foreach ( $default_terms as $group_name => $unit_names ) {
+			$group = $this->get_unit_term_by_name( $group_name );
 
-		foreach ( $default_terms as $parent_term => $child_terms ) {
-			$parent  = (object) wp_insert_term( $parent_term, $this->slug . '-units' );
-			$terms[] = get_term( $parent->term_id, $this->slug . '-units' );
+			if ( $group && 0 != $group->parent ) {
+				// Someone made a unit out of this name so the group is created as a sibling, WordPress suffixes its slug
+				$group = null;
+			}
 
-			foreach ( $child_terms as $child_term ) {
-				$term    = (object) wp_insert_term( $child_term, $this->slug . '-units', [ 'parent' => $parent->term_id ] );
-				$terms[] = get_term( $term->term_id, $this->slug . '-units' );
+			$group_id = $group ? (int) $group->term_id : 0;
+
+			if ( ! $group_id ) {
+				$inserted = wp_insert_term( $group_name, $taxonomy );
+
+				if ( is_wp_error( $inserted ) ) {
+					continue;
+				}
+
+				$group_id = (int) $inserted['term_id'];
+			}
+
+			foreach ( $unit_names as $unit_name ) {
+				$unit = $this->get_unit_term_by_name( $unit_name );
+
+				if ( ! $unit ) {
+					wp_insert_term( $unit_name, $taxonomy, [ 'parent' => $group_id ] );
+				} elseif ( 0 == $unit->parent ) {
+					// An import or a direct save created this unit without a group so move it into ours
+					wp_update_term( $unit->term_id, $taxonomy, [ 'parent' => $group_id ] );
+				}
 			}
 		}
 
-		return $terms;
+		$terms = get_terms( $taxonomy, [ 'hide_empty' => false ] );
+
+		return is_array( $terms ) ? $terms : [];
+	}
+
+	/**
+	 * Finds a unit term by its name
+	 *
+	 * @param string $name the term name to look for
+	 *
+	 * @return WP_Term|null the term or null when there isn't one
+	 */
+	private function get_unit_term_by_name( $name ) {
+		$exists = term_exists( $name, $this->slug . '-units' );
+
+		if ( ! is_array( $exists ) ) {
+			return null;
+		}
+
+		$term = get_term( (int) $exists['term_id'], $this->slug . '-units' );
+
+		return $term instanceof WP_Term ? $term : null;
 	}
 
 	/**
@@ -1165,10 +1278,13 @@ class M_Chart {
 
 		$this->is_iframe = true;
 
-		$scripts = [
-			'jquery',
-			$this->get_post_meta( $post->ID, 'library' ),
-		];
+		$library = $this->get_post_meta( $post->ID, 'library' );
+		$scripts = [ 'jquery' ];
+
+		// A chart a plugin renders without Chart.js doesn't need the library in the iframe either
+		if ( 'chartjs' !== $library || $this->render_uses_chartjs( $post->ID ) ) {
+			$scripts[] = $library;
+		}
 
 		unset( $_GET['action'], $_GET['share'] );
 
@@ -1182,6 +1298,288 @@ class M_Chart {
 	}
 
 	/**
+	 * Clamp a chart height to the supported range
+	 *
+	 * @param mixed $height a height in pixels, anything absint() can read
+	 *
+	 * @return int
+	 */
+	public static function clamp_height( $height ) {
+		return min( self::HEIGHT_MAX, max( self::HEIGHT_MIN, absint( is_scalar( $height ) ? $height : 0 ) ) );
+	}
+
+	/**
+	 * Change one setting the same way the settings page does
+	 *
+	 * The value is validated, the full settings array runs through m_chart_validated_settings, the option is written,
+	 * the memoised settings are reset, rewrite rules are flushed if embeds toggled and m_chart_settings_saved fires
+	 *
+	 * @param string $key   the setting key, must exist in the (filtered) default settings
+	 * @param mixed  $value the new value
+	 *
+	 * @return bool false when the key is unknown
+	 */
+	public function update_setting( $key, $value ) {
+		$default_settings = apply_filters( 'm_chart_default_settings', $this->settings );
+
+		if ( ! array_key_exists( $key, $default_settings ) ) {
+			return false;
+		}
+
+		$previous  = $this->get_settings();
+		$submitted = $previous;
+
+		$submitted[ $key ] = $value;
+
+		$validated         = $previous;
+		$validated[ $key ] = $this->admin()->validate_setting( $key, $value, $default_settings[ $key ] );
+
+		$this->store_settings( $validated, $submitted, $previous );
+
+		return true;
+	}
+
+	/**
+	 * Persist a validated settings array
+	 *
+	 * Shared by the settings page and update_setting()
+	 *
+	 * @param array $validated the validated settings
+	 * @param array $submitted the settings as submitted, handed to the m_chart_validated_settings filter
+	 * @param array $previous  the settings before this save
+	 */
+	public function store_settings( array $validated, array $submitted, array $previous ) {
+		// Allow third party libraries to further validate the settings
+		$validated = apply_filters( 'm_chart_validated_settings', $validated, $submitted );
+
+		update_option( $this->slug, $validated );
+
+		// Drop the memoized settings so anything later in this request sees the new values
+		$this->reset_settings();
+
+		// Only flush rewrite rules when the embed endpoint is actually being toggled
+		if ( ( $previous['embeds'] ?? '' ) !== ( $validated['embeds'] ?? '' ) ) {
+			flush_rewrite_rules();
+		}
+
+		do_action( 'm_chart_settings_saved', $this->get_settings(), $previous );
+	}
+
+	/**
+	 * The usable sources of an @font-face descriptor passed through m_chart_iframe_fonts
+	 *
+	 * Only https URLs survive, formats are reduced to [a-z0-9-]
+	 * iframe.php uses this both to build the font-src CSP allowlist and to render the rule, so the two can't disagree
+	 *
+	 * @param array $font a font descriptor with a src list of [ 'url' => ..., 'format' => ... ]
+	 *
+	 * @return array validated [ 'url' => ..., 'format' => ... ] entries
+	 */
+	public static function font_face_sources( array $font ) {
+		$sources = [];
+
+		foreach ( (array) ( $font['src'] ?? [] ) as $src ) {
+			$url = esc_url( is_array( $src ) ? ( $src['url'] ?? '' ) : '', [ 'https' ] );
+
+			if ( '' === $url ) {
+				continue;
+			}
+
+			$sources[] = [
+				'url'    => $url,
+				'format' => preg_replace( '/[^a-z0-9-]/', '', strtolower( (string) ( $src['format'] ?? '' ) ) ),
+			];
+		}
+
+		return $sources;
+	}
+
+	/**
+	 * Render one @font-face rule from a descriptor, every slot allowlisted
+	 *
+	 * Descriptor keys: family (required), src (required, see font_face_sources()), weight, style, display, unicode_range
+	 *
+	 * @param array $font the font descriptor
+	 *
+	 * @return string a <style> element, or an empty string when the descriptor can't be used
+	 */
+	public static function render_font_face( array $font ) {
+		$family = preg_replace( '/[^A-Za-z0-9 _-]/', '', (string) ( $font['family'] ?? '' ) );
+
+		if ( '' === $family ) {
+			return '';
+		}
+
+		$weight  = (string) ( $font['weight'] ?? '400' );
+		$style   = (string) ( $font['style'] ?? 'normal' );
+		$display = (string) ( $font['display'] ?? 'swap' );
+
+		$weight  = preg_match( '/^[1-9]00$|^(normal|bold)$/', $weight ) ? $weight : '400';
+		$style   = in_array( $style,   [ 'normal', 'italic', 'oblique' ],                    true ) ? $style   : 'normal';
+		$display = in_array( $display, [ 'auto', 'block', 'swap', 'fallback', 'optional' ], true ) ? $display : 'swap';
+
+		$srcs = [];
+
+		foreach ( self::font_face_sources( $font ) as $src ) {
+			$srcs[] = sprintf( "url('%s')%s", $src['url'], $src['format'] ? " format('{$src['format']}')" : '' );
+		}
+
+		if ( empty( $srcs ) ) {
+			return '';
+		}
+
+		$unicode_range = '';
+
+		if ( isset( $font['unicode_range'] ) && preg_match( '/^[U+0-9A-Fa-f?,\s-]+$/', (string) $font['unicode_range'] ) ) {
+			$unicode_range = ' unicode-range: ' . trim( (string) $font['unicode_range'] ) . ';';
+		}
+
+		return sprintf(
+			"<style>@font-face { font-family: '%s'; src: %s; font-weight: %s; font-style: %s; font-display: %s;%s }</style>\n",
+			esc_html( $family ),
+			implode( ', ', $srcs ),
+			esc_html( $weight ),
+			esc_html( $style ),
+			esc_html( $display ),
+			$unicode_range
+		);
+	}
+
+	/**
+	 * Bring the data value of older charts up to the current shape
+	 *
+	 * Current charts store data => [ 'sets' => [ sheet, sheet, ... ] ] where each sheet is an array of row arrays
+	 * Charts from before multi sheet support stored the rows directly in data, and some very old ones stored
+	 * a single sheet's rows directly in sets
+	 *
+	 * @param array $post_meta chart post meta as stored
+	 *
+	 * @return array the same meta with data in the current shape
+	 */
+	public function normalize_legacy_data( array $post_meta ) {
+		// If the data has the old legacy format we need to update it
+		if ( isset( $post_meta['data'] ) && ! isset( $post_meta['data']['sets'] ) ) {
+			$data                        = $post_meta['data'];
+			$post_meta['data']           = [];
+			$post_meta['data']['sets'][] = $data;
+		}
+
+		// Some very old charts stored a single sheet's rows directly in the sets value
+		if ( isset( $post_meta['data']['sets'] ) && is_array( $post_meta['data']['sets'] ) ) {
+			$first_sheet = reset( $post_meta['data']['sets'] );
+
+			if ( is_array( $first_sheet ) && [] !== $first_sheet && ! is_array( reset( $first_sheet ) ) ) {
+				$post_meta['data'] = [ 'sets' => [ array_values( $post_meta['data']['sets'] ) ] ];
+			}
+		}
+
+		return $post_meta;
+	}
+
+	/**
+	 * The chart meta exactly as stored, with only the legacy data shape fixes applied
+	 *
+	 * Unlike get_post_meta() this fills in no defaults and runs no m_chart_get_post_meta filters, so plugins that
+	 * mask or rewrite meta through that filter can still read the underlying row
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 *
+	 * @return array|false the stored meta, or false when the post has none
+	 */
+	public function get_raw_post_meta( $post_id ) {
+		$raw = get_post_meta( $post_id, $this->slug, true );
+
+		if ( ! is_array( $raw ) ) {
+			return false;
+		}
+
+		return $this->normalize_legacy_data( $raw );
+	}
+
+	/**
+	 * Whether the current request is the admin preview building chart args from unsaved meta
+	 *
+	 * Set by the m_chart_get_chart_args AJAX handler, so plugins don't have to sniff $_REQUEST themselves
+	 *
+	 * @return bool
+	 */
+	public function is_preview_request() {
+		return $this->is_preview_request;
+	}
+
+	/**
+	 * Flag the current request as an admin preview
+	 *
+	 * @param bool $is_preview
+	 */
+	public function set_preview_request( $is_preview ) {
+		$this->is_preview_request = (bool) $is_preview;
+	}
+
+	/**
+	 * Whether a Chart.js chart is drawn by Chart.js on this render
+	 *
+	 * Plugins that replace the rendering of a chart (M Chart Pro's Display as Table) return false from
+	 * m_chart_render_uses_chartjs so the library, its plugins and the inline script are left out
+	 * Charts using another library always return false
+	 *
+	 * @param int        $post_id   WP post ID of the chart
+	 * @param array|null $post_meta the chart's post meta, fetched when not given
+	 *
+	 * @return bool
+	 */
+	public function render_uses_chartjs( $post_id, $post_meta = null ) {
+		if ( null === $post_meta ) {
+			$post_meta = $this->get_post_meta( $post_id );
+		}
+
+		$default = isset( $post_meta['library'] ) && 'chartjs' === $post_meta['library'];
+
+		return (bool) apply_filters( 'm_chart_render_uses_chartjs', $default, $post_id, $post_meta );
+	}
+
+	/**
+	 * The id of the element that wraps one rendered chart
+	 *
+	 * @param int      $post_id  WP post ID of the chart
+	 * @param int|null $instance which render of this chart on the page, defaults to the current instance counter
+	 *
+	 * @return string
+	 */
+	public function get_container_id( $post_id, $instance = null ) {
+		if ( null === $instance ) {
+			$instance = $this->instance;
+		}
+
+		return 'm-chart-container-' . absint( $post_id ) . '-' . absint( $instance );
+	}
+
+	/**
+	 * The screen reader source attribution paragraph a chart template prints
+	 *
+	 * The visual source attribution is painted on the canvas by the helper plugin, which makes it invisible to AT and mouse only
+	 * This is the operable version for keyboard and screen reader users and un-hides while the link has focus
+	 *
+	 * @param array $post_meta the chart's post meta
+	 *
+	 * @return string the markup, or an empty string when the chart doesn't show its source
+	 */
+	public function render_source_html( $post_meta ) {
+		$source_name = trim( (string) ( $post_meta['source'] ?? '' ) );
+		$source_url  = trim( (string) ( $post_meta['source_url'] ?? '' ) );
+
+		if ( empty( $post_meta['include_source'] ) || '' === $source_name ) {
+			return '';
+		}
+
+		$source = '' !== $source_url
+			? '<a href="' . esc_url( $source_url ) . '">' . esc_html( $source_name ) . '</a>'
+			: ' ' . esc_html( $source_name );
+
+		return '<p class="m-chart-source screen-reader-text">' . esc_html__( 'Source:', 'm-chart' ) . ' ' . $source . '</p>';
+	}
+
+	/**
 	 * Hook to the m_chart_update_post_meta action and call the required library specific function
 	 *
 	 * @param int $post_id WP post ID of the post you want chart args for
@@ -1192,11 +1590,50 @@ class M_Chart {
 
 		// The chart's library plugin may be inactive (e.g. Highcharts charts after the
 		// extension was removed) in which case there's no library object to notify
-		if ( ! is_object( $library ) || ! method_exists( $library, 'm_chart_update_post_meta' ) ) {
+		if ( is_object( $library ) && method_exists( $library, 'm_chart_update_post_meta' ) ) {
+			$library->m_chart_update_post_meta( $post_id, $parsed_meta );
+		}
+
+		// Flush after the library has had its turn so a library that still rebuilds the cache from the raw meta can't leave stale args behind
+		$this->flush_chart_args_cache( $post_id );
+	}
+
+	/**
+	 * The object cache key the chart args for a given chart live under
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 *
+	 * @return string the cache key (use with the m-chart cache group)
+	 */
+	public function chart_args_cache_key( $post_id ) {
+		return absint( $post_id ) . '-chart-args';
+	}
+
+	/**
+	 * Drop the cached chart args for a chart so the next render rebuilds them
+	 *
+	 * Call this after changing anything that feeds into the chart args outside of a normal chart save
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 */
+	public function flush_chart_args_cache( $post_id ) {
+		wp_cache_delete( $this->chart_args_cache_key( $post_id ), $this->slug );
+	}
+
+	/**
+	 * Hook to added/updated/deleted_post_meta and flush the chart args cache when the chart meta row changes
+	 *
+	 * @param int|array $meta_id the meta ID(s) that changed
+	 * @param int $object_id the post the meta belongs to
+	 * @param string $meta_key the meta key that changed
+	 * @param mixed $meta_value the new meta value
+	 */
+	public function flush_chart_args_cache_on_meta_change( $meta_id, $object_id, $meta_key, $meta_value ) {
+		if ( $this->slug !== $meta_key ) {
 			return;
 		}
 
-		$library->m_chart_update_post_meta( $post_id, $parsed_meta );
+		$this->flush_chart_args_cache( $object_id );
 	}
 
 	/**
@@ -1246,6 +1683,11 @@ class M_Chart {
 
 			$settings = (array) get_option( $this->slug, $default_settings );
 			$settings = wp_parse_args( $settings, $default_settings );
+
+			// The No Instant Preview performance option was folded into No Images in 2.4
+			if ( 'no-preview' === $settings['performance'] ) {
+				$settings['performance'] = 'no-images';
+			}
 
 			// Make sure the set library is still valid
 			if ( ! $this->is_valid_library( $settings['library'] ) ) {

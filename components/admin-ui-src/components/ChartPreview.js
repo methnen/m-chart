@@ -38,16 +38,18 @@ function prepareArgs( args ) {
  *
  * Applies chartjs-specific arg preparation before rendering
  * Returned instance is stored in chartRef by the caller
+ * Also exposed as window.m_chart.defaultChartjsRender so library plugins can render Chart.js themselves
  *
  * @param {HTMLCanvasElement} canvas           Target canvas element
  * @param {Object}            args             Raw chart args from state
  * @param {Function}          onComplete       Callback to fire after render completes
- * @param {Object|null}       existingInstance Existing Chart.js instance, or null on first render
+ * @param {Object|null}       existingInstance Existing Chart.js instance, or null to create a new one
  *
  * @return {Object}             The Chart.js instance
  */
-function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
-	const prepared = prepareArgs( args );
+export function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
+	// A brand new chart can hand us null args, Chart.js still needs a config
+	const prepared = prepareArgs( args || {} );
 
 	// Guard against null/undefined datasets or labels (Chart.js requires arrays)
 	if ( ! prepared.data?.datasets ) {
@@ -87,19 +89,23 @@ function defaultChartjsRender( canvas, args, onComplete, existingInstance ) {
  * The chart instance is managed imperatively via refs and is never recreated on re-render — only updated when chartArgs changes
  *
  * Rendering is delegated via the 'm_chart.render_chart' wp.hooks filter so library plugins can replace the default Chart.js renderer
- * The filter receives ( canvas, args, onComplete, existingInstance ) as extra arguments
+ * The filter receives ( canvas, args, onComplete, existingInstance, context ) as extra arguments, context carrying the image settings and post meta
+ * An instance the filter returns may implement captureImage( { width, multiplier } ) to supply the chart image itself (see useImageGeneration)
  * If no filter handles rendering (i.e. returns false), Chart.js is used
+ * When a filter handled the previous render but returns false now, the instance it gave us is destroyed first
+ * so the Chart.js renderer never calls update() on something it didn't create
  *
  * The onComplete callback must be called by the renderer once the chart has finished which will fire 'm_chart.render_done' to trigger image generation and/or re-enable the form
  */
 export default function ChartPreview() {
 	const { state, dispatch } = useChartAdmin();
-	const { postId, chartArgs, performance, imageSupport, postMeta } = state;
+	const { postId, chartArgs, performance, imageSupport, imageWidth, imageMultiplier, postMeta } = state;
 
 	const canvasRef      = useRef( null );
 	const chartRef       = useRef( null );
+	// True when chartRef holds an instance created by defaultChartjsRender rather than by a filter
+	const ownsChartRef   = useRef( false );
 	const renderFlagRef  = useRef( false );
-	const isFirstRender  = useRef( true );
 
 	// Keep a ref so onComplete closures always see the latest values
 	const needsImagesRef = useRef( false );
@@ -132,7 +138,9 @@ export default function ChartPreview() {
 			renderFlagRef.current = false;
 
 			if ( window.wp?.hooks ) {
-				window.wp.hooks.doAction( 'm_chart.render_done', postId, 1, chartRef.current );
+				// The literal 1 is the instance counter slot from the pre-React events and is always 1 here
+				// New listeners can read the fourth argument instead, the positional arguments stay until v3
+				window.wp.hooks.doAction( 'm_chart.render_done', postId, 1, chartRef.current, { postId, instance: chartRef.current } );
 			}
 
 			if ( needsImagesRef.current ) {
@@ -145,12 +153,6 @@ export default function ChartPreview() {
 				// No image generation — enable form submission immediately
 				// This also covers the initial page load where useChartRefresh skips its first run
 				dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-				if ( window.wp?.hooks ) {
-					window.wp.hooks.doAction( 'm_chart.form_enabled', postId );
-				}
-
-				isFirstRender.current = false;
 			}
 		}
 
@@ -162,20 +164,38 @@ export default function ChartPreview() {
 		let instance = false;
 
 		if ( window.wp?.hooks ) {
-			// See defaultChartjsRender for the filter arguments
+			// See defaultChartjsRender for the first four filter arguments
+			// The fifth hands renderers the settings they'd otherwise have to localise themselves
 			instance = window.wp.hooks.applyFilters(
 				'm_chart.render_chart',
 				false,
 				canvasRef.current,
 				chartArgs,
 				onComplete,
-				chartRef.current
+				chartRef.current,
+				{ imageWidth, imageMultiplier, performance, imageSupport, postMeta }
 			);
 		}
 
-		chartRef.current = ( false !== instance )
-			? instance
-			: defaultChartjsRender( canvasRef.current, chartArgs, onComplete, chartRef.current );
+		if ( false !== instance ) {
+			chartRef.current     = instance;
+			ownsChartRef.current = false;
+
+			return;
+		}
+
+		// A filter owned the previous instance and has handed rendering back to us
+		// Destroy it so the canvas is free and the Chart.js renderer starts fresh
+		if ( chartRef.current && ! ownsChartRef.current ) {
+			if ( 'function' === typeof chartRef.current.destroy ) {
+				chartRef.current.destroy();
+			}
+
+			chartRef.current = null;
+		}
+
+		chartRef.current     = defaultChartjsRender( canvasRef.current, chartArgs, onComplete, chartRef.current );
+		ownsChartRef.current = true;
 
 	}, [ chartArgs ] ); // eslint-disable-line react-hooks/exhaustive-deps
 

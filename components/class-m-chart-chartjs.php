@@ -36,14 +36,7 @@ class M_Chart_Chartjs {
 	];
 	public $type_option_names = [];
 	public $theme_directories;
-	public $colors         = [
-		'#ed6d85', // Pink
-		'#f7d06b', // Yellow
-		'#f2a354', // Orange
-		'#56a0e5', // Blue
-		'#6cbebf', // Turquoise
-		'#47494b', // Gray
-	];
+	public $colors;
 	public $points;
 	public $chart_types    = [
 		'column'         => 'bar',
@@ -72,10 +65,9 @@ class M_Chart_Chartjs {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
-		add_filter( 'm_chart_iframe_scripts', [ $this, 'm_chart_iframe_scripts' ], 10, 2 );
-		add_action( 'm_chart_get_chart_begin', [ $this, 'm_chart_get_chart_begin' ], 10, 2 );
+		$this->register_hooks();
 
+		$this->colors = self::get_colors_defaults();
 		$this->points = self::get_points_defaults();
 
 		$this->theme_directories = [
@@ -177,6 +169,153 @@ class M_Chart_Chartjs {
 	 *
 	 * @return array
 	 */
+	/**
+	 * Attach this library's hooks
+	 *
+	 * Called from the constructor, and callable again by code that has replaced the global hook table (the WordPress test suite does this between tests)
+	 */
+	public function register_hooks() {
+		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
+		add_filter( 'm_chart_iframe_scripts', [ $this, 'm_chart_iframe_scripts' ], 10, 2 );
+		add_action( 'm_chart_get_chart_begin', [ $this, 'm_chart_get_chart_begin' ], 10, 3 );
+	}
+
+	/**
+	 * The chart type slugs this library offers, in menu order
+	 *
+	 * @return string[]
+	 */
+	public function get_type_options() {
+		return apply_filters( 'm_chart_type_options', $this->type_options );
+	}
+
+	/**
+	 * The Chart.js controller type an m-chart type renders with (column → bar, polar → polarArea, ...)
+	 *
+	 * An unknown type is returned unchanged so a type whose plugin is inactive doesn't silently draw as something else
+	 *
+	 * @param string $type the m-chart chart type
+	 *
+	 * @return string
+	 */
+	public function get_native_type( $type ) {
+		return isset( $this->chart_types[ $type ] ) ? $this->chart_types[ $type ] : (string) $type;
+	}
+
+	/**
+	 * What each chart type can do, keyed by type
+	 *
+	 * Core's own rendering and the React settings rows read these, so a plugin adding a type can describe it once through
+	 * the m_chart_type_traits filter instead of patching every list. Keys:
+	 * native, data_lines, raw_grid, multi_sheet, axes (has x/y scales and shows the axis fields), points (gets point styles),
+	 * shared_tooltip, legend, labels, data_point_colors, simple_2d_required, single_sheet_required, boxplot_points, y_min, constrain_y
+	 *
+	 * @return array [ type => [ trait => value ] ]
+	 */
+	public function get_type_traits() {
+		$traits = [];
+
+		foreach ( $this->get_type_options() as $type ) {
+			$traits[ $type ] = $this->type_trait_defaults( $type );
+		}
+
+		return apply_filters( 'm_chart_type_traits', $traits );
+	}
+
+	/**
+	 * Look up one trait for a type, falling back to the built in defaults for a type the traits list doesn't know
+	 *
+	 * @param string $type  the m-chart chart type
+	 * @param string $trait the trait key
+	 *
+	 * @return mixed
+	 */
+	public function type_has_trait( $type, $trait ) {
+		$traits = $this->get_type_traits();
+		$row    = isset( $traits[ $type ] ) ? $traits[ $type ] : $this->type_trait_defaults( $type );
+
+		return isset( $row[ $trait ] ) ? $row[ $trait ] : false;
+	}
+
+	/**
+	 * Core's traits for a type before the m_chart_type_traits filter
+	 *
+	 * @param string $type the m-chart chart type
+	 *
+	 * @return array
+	 */
+	private function type_trait_defaults( $type ) {
+		$native = $this->get_native_type( $type );
+
+		return [
+			'native'                => $native,
+			'data_lines'            => self::get_data_lines_per_series( $type ),
+			'raw_grid'              => in_array( $type, self::get_raw_grid_types(), true ),
+			'multi_sheet'           => in_array( $type, m_chart()->get_multi_sheet_types(), true ),
+			// Keyed by the native type so a plugin type rendering as pie or radar is treated the way those are
+			'axes'                  => ! in_array( $native, [ 'pie', 'doughnut', 'radar', 'polarArea', 'treemap', 'venn', 'euler' ], true ),
+			'points'                => in_array( $type, [ 'line', 'spline', 'area', 'radar', 'radar-area', 'scatter' ], true ),
+			'shared_tooltip'        => in_array( $type, [ 'line', 'spline', 'area', 'radar', 'radar-area' ], true ),
+			'legend'                => ! in_array( $type, [ 'treemap', 'venn', 'euler' ], true ),
+			'labels'                => ! in_array( $type, [ 'boxplot', 'violin' ], true ),
+			'data_point_colors'     => in_array( $type, [ 'column', 'bar', 'treemap', 'boxplot', 'violin' ], true ),
+			'simple_2d_required'    => in_array( $type, [ 'column', 'bar', 'treemap' ], true ),
+			'single_sheet_required' => in_array( $type, [ 'boxplot', 'violin' ], true ),
+			'boxplot_points'        => in_array( $type, [ 'boxplot', 'violin' ], true ),
+			'y_min'                 => in_array( $type, [ 'line', 'spline', 'area' ], true ),
+			'constrain_y'           => in_array( $type, [ 'boxplot', 'violin' ], true ),
+		];
+	}
+
+	/**
+	 * Chart types that read the raw sheet grid themselves instead of (or before) going through M_Chart_Parse
+	 *
+	 * boxplot and violin treat each row as a category with its observations, treemap tries build_treemap_hierarchy()
+	 * first and only falls back to the parsed path when it returns null, venn and euler read membership lists or region rows
+	 *
+	 * @return string[]
+	 */
+	public static function get_raw_grid_types() {
+		return apply_filters( 'm_chart_raw_grid_types', [ 'boxplot', 'violin', 'treemap', 'venn', 'euler' ] );
+	}
+
+	/**
+	 * How many consecutive values from the parsed data stream make up one point for a chart type
+	 *
+	 * scatter consumes x,y pairs and bubble consumes x,y,r triples, every other type uses one value per point
+	 *
+	 * @param string $type the m-chart chart type
+	 *
+	 * @return int
+	 */
+	public static function get_data_lines_per_series( $type ) {
+		$lines = 1;
+
+		if ( 'scatter' === $type ) {
+			$lines = 2;
+		} elseif ( 'bubble' === $type ) {
+			$lines = 3;
+		}
+
+		return max( 1, (int) apply_filters( 'm_chart_data_lines_per_series', $lines, $type ) );
+	}
+
+	/**
+	 * The palette used when a theme doesn't define its own colors
+	 *
+	 * @return string[] hex colors
+	 */
+	public static function get_colors_defaults() {
+		return [
+			'#ed6d85', // Pink
+			'#f7d06b', // Yellow
+			'#f2a354', // Orange
+			'#56a0e5', // Blue
+			'#6cbebf', // Turquoise
+			'#47494b', // Gray
+		];
+	}
+
 	public static function get_points_defaults() {
 		return [
 			[
@@ -293,38 +432,69 @@ class M_Chart_Chartjs {
 	 * @param int   $post_id The chart post ID
 	 * @param array $args    The chart shortcode args
 	 */
-	public function m_chart_get_chart_begin( $post_id, $args ) {
-		// Bail if this chart isn't using the Chart.js library
-		$library = m_chart()->get_post_meta( $post_id, 'library' );
+	public function m_chart_get_chart_begin( $post_id, $args, $uses_chartjs = true ) {
+		// Bail if this chart isn't using the Chart.js library, or a plugin is rendering it without Chart.js
+		$post_meta = m_chart()->get_post_meta( $post_id );
 
-		if ( $library !== $this->library ) {
+		if ( ! $uses_chartjs || $post_meta['library'] !== $this->library ) {
 			return;
 		}
 
-		// Ensure post_meta is populated so enqueue_chartjs_plugins() can read 'type' for the treemap/boxplot/violin branches
-		$this->post_meta = m_chart()->get_post_meta( $post_id );
-		$this->enqueue_chartjs_plugins();
+		// Inside the embed iframe ask with the same context the iframe's script list and the template use
+		$this->enqueue_chartjs_plugins( $post_meta, $post_id, m_chart()->is_iframe ? 'iframe' : 'inline' );
+	}
+
+	/**
+	 * The Chart.js plugin scripts a chart needs, keyed by script handle
+	 *
+	 * The value is the window global the template passes to Chart.register(), or null for a build that registers itself on load
+	 * (the bundled treemap, boxplot and venn controllers do). The same list feeds the inline page, the embed iframe and the admin editor,
+	 * so a plugin that adds a Chart.js plugin through the m_chart_chartjs_plugins filter gets it loaded on all three
+	 *
+	 * @param int    $post_id   WP post ID of the chart
+	 * @param array  $post_meta the chart's post meta
+	 * @param string $context   'inline', 'iframe' or 'admin' (the admin loads every type's plugin since the type can change)
+	 *
+	 * @return array [ 'script-handle' => 'WindowGlobal' | null ]
+	 */
+	public function get_chartjs_plugins( $post_id, $post_meta, $context = 'inline' ) {
+		$type = isset( $post_meta['type'] ) ? $post_meta['type'] : '';
+		$all  = 'admin' === $context;
+
+		$plugins = [
+			'chartjs-helper'     => 'MChartHelper',
+			'chartjs-datalabels' => 'ChartDataLabels',
+		];
+
+		if ( $all || 'treemap' === $type ) {
+			$plugins['chartjs-treemap'] = null;
+		}
+
+		if ( $all || 'boxplot' === $type || 'violin' === $type ) {
+			$plugins['chartjs-boxplot'] = null;
+		}
+
+		if ( $all || 'venn' === $type || 'euler' === $type ) {
+			$plugins['chartjs-venn'] = null;
+		}
+
+		return apply_filters( 'm_chart_chartjs_plugins', $plugins, $post_id, $post_meta, $context );
 	}
 
 	/**
 	 * Enqueue any Chart.js plugins that we'll need
+	 *
+	 * @param array|null $post_meta the chart's post meta, falls back to the instance post meta
+	 * @param int        $post_id   WP post ID of the chart
+	 * @param string     $context   see get_chartjs_plugins()
 	 */
-	public function enqueue_chartjs_plugins() {
-		wp_enqueue_script( 'chartjs-helper' );
-		wp_enqueue_script( 'chartjs-datalabels' );
-
-		$type = isset( $this->post_meta['type'] ) ? $this->post_meta['type'] : '';
-
-		if ( 'treemap' === $type ) {
-			wp_enqueue_script( 'chartjs-treemap' );
+	public function enqueue_chartjs_plugins( $post_meta = null, $post_id = 0, $context = 'inline' ) {
+		if ( null === $post_meta ) {
+			$post_meta = is_array( $this->post_meta ) ? $this->post_meta : [];
 		}
 
-		if ( 'boxplot' === $type || 'violin' === $type ) {
-			wp_enqueue_script( 'chartjs-boxplot' );
-		}
-
-		if ( 'venn' === $type || 'euler' === $type ) {
-			wp_enqueue_script( 'chartjs-venn' );
+		foreach ( array_keys( $this->get_chartjs_plugins( $post_id, $post_meta, $context ) ) as $handle ) {
+			wp_enqueue_script( $handle );
 		}
 	}
 
@@ -340,7 +510,7 @@ class M_Chart_Chartjs {
 	 */
 	public function get_chart_args( $post_id, $args, $force = false, $cache = true ) {
 		// There's a ton of work that goes into generating the chart args so we cache them
-		$cache_key = $post_id . '-chart-args';
+		$cache_key = m_chart()->chart_args_cache_key( $post_id );
 
 		if ( ! $force && $chart_args = wp_cache_get( $cache_key, m_chart()->slug ) ) {
 			// The width can be set via the args so we'll override whatever the cache has with the arg value
@@ -361,7 +531,7 @@ class M_Chart_Chartjs {
 		$defaults = self::get_chart_options_defaults();
 
 		$chart_args = [
-			'type'    => $this->chart_types[ $this->post_meta['type'] ],
+			'type'    => $this->get_native_type( $this->post_meta['type'] ),
 			'options' => [
 				'plugins' => [
 					'title' => array_merge(
@@ -404,15 +574,7 @@ class M_Chart_Chartjs {
 			$chart_args['options']['devicePixelRatio'] = m_chart()->get_settings( 'image_multiplier' );
 		}
 
-		if (
-			   'pie' != $chart_args['type']
-			&& 'doughnut' != $chart_args['type']
-			&& 'radar' != $chart_args['type']
-			&& 'polarArea' != $chart_args['type']
-			&& 'treemap' != $chart_args['type']
-			&& 'venn' != $chart_args['type']
-			&& 'euler' != $chart_args['type']
-		) {
+		if ( $this->type_has_trait( $this->post_meta['type'], 'axes' ) ) {
 			$chart_args['options']['scales']['x']['grid']['borderWidth'] = 0;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
 		}
@@ -470,27 +632,21 @@ class M_Chart_Chartjs {
 			$chart_args['options']['plugins']['mchart']['source']         = $this->post_meta['source'];
 			$chart_args['options']['plugins']['mchart']['source_url']     = $this->post_meta['source_url'];
 			$chart_args['options']['plugins']['mchart']['include_source'] = true;
+			// How much extra bottom padding the source line is given, so plugins positioning their own content can allow for it
+			$chart_args['options']['plugins']['mchart']['sourceReserve']  = 20;
 
 			// Push the bottom of the plot area up so the source line has room to render
 			$chart_args['options']['layout']['padding'] = [
 				'top'    => 16,
 				'right'  => 16,
-				'bottom' => 36,
+				'bottom' => 16 + $chart_args['options']['plugins']['mchart']['sourceReserve'],
 				'left'   => 16,
 			];
 		}
 
 		$chart_args['data']['labels'] = $this->get_value_labels_array();
 
-		if (
-			   'pie' != $chart_args['type']
-			&& 'doughnut' != $chart_args['type']
-			&& 'radar' != $chart_args['type']
-			&& 'polarArea' != $chart_args['type']
-			&& 'treemap' != $chart_args['type']
-			&& 'venn' != $chart_args['type']
-			&& 'euler' != $chart_args['type']
-		) {
+		if ( $this->type_has_trait( $this->post_meta['type'], 'axes' ) ) {
 			$chart_args = $this->add_axis_labels( $chart_args );
 		}
 
@@ -501,15 +657,7 @@ class M_Chart_Chartjs {
 			$chart_args['options']['indexAxis']                          = 'y';
 			$chart_args['options']['scales']['y']['grid']['display']     = false;
 			$chart_args['options']['scales']['y']['grid']['borderWidth'] = 0;
-		} elseif (
-			   'pie' != $chart_args['type']
-			&& 'doughnut' != $chart_args['type']
-			&& 'radar' != $chart_args['type']
-			&& 'polarArea' != $chart_args['type']
-			&& 'treemap' != $chart_args['type']
-			&& 'venn' != $chart_args['type']
-			&& 'euler' != $chart_args['type']
-		) {
+		} elseif ( $this->type_has_trait( $this->post_meta['type'], 'axes' ) ) {
 			$chart_args['options']['scales']['x']['grid']['display'] = false;
 		}
 
@@ -771,14 +919,7 @@ class M_Chart_Chartjs {
 					$chart_args['data']['datasets'][ $key ]['tension'] = 0;
 				}
 
-				if (
-					   'line' == $this->post_meta['type']
-					|| 'spline' == $this->post_meta['type']
-					|| 'area' == $this->post_meta['type']
-					|| 'radar' == $this->post_meta['type']
-					|| 'radar-area' == $this->post_meta['type']
-					|| 'scatter' == $this->post_meta['type']
-				) {
+				if ( $this->type_has_trait( $this->post_meta['type'], 'points' ) ) {
 					$chart_args['data']['datasets'][ $key ]['elements'] = $this->points[ $key % $point_count ];
 				}
 
@@ -789,9 +930,13 @@ class M_Chart_Chartjs {
 				) {
 					$rgb = $this->hex_to_rgb( $color );
 
-					$chart_args['data']['datasets'][ $key ]['backgroundColor']                      = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
-					$chart_args['data']['datasets'][ $key ]['elements']['point']['backgroundColor'] = $color;
-					$chart_args['data']['datasets'][ $key ]['fill']                                 = true;
+					$chart_args['data']['datasets'][ $key ]['backgroundColor'] = 'rgba( ' . implode( ', ', $rgb ) . ', .5 )';
+					$chart_args['data']['datasets'][ $key ]['fill']            = true;
+
+					// Bubbles are the points, an opaque point colour would hide the translucent fill
+					if ( 'bubble' !== $this->post_meta['type'] ) {
+						$chart_args['data']['datasets'][ $key ]['elements']['point']['backgroundColor'] = $color;
+					}
 				} else {
 					$chart_args['data']['datasets'][ $key ]['fill'] = false;
 				}
@@ -852,27 +997,62 @@ class M_Chart_Chartjs {
 		}
 
 		// Clear out all of the class vars so the next chart instance starts fresh
+		// The palette and point styles go back to the defaults so a theme without its own doesn't inherit the previous chart's
 		$this->args      = null;
 		$this->post      = null;
 		$this->post_meta = null;
+		$this->colors    = self::get_colors_defaults();
+		$this->points    = self::get_points_defaults();
 
 		return $chart_args;
 	}
 
 	/**
-	 * Hook to the m_chart_update_post_meta action and refresh the chart args cache
+	 * Build chart args for a chart from post meta you supply, without touching the cache or the instance state
+	 *
+	 * The admin preview uses this with unsaved meta, plugins use it to see what a chart would look like with masked or modified meta
+	 * The shared M_Chart_Parse instance is still driven, as with every render
+	 *
+	 * @param WP_Post|int $post      the chart post or its ID (a stub WP_Post with ID 0 is fine for an unsaved chart)
+	 * @param array       $post_meta validated chart post meta to build from
+	 * @param array       $args      optional chart args to override the defaults
+	 *
+	 * @return array complete chart args, or an empty array when the post can't be resolved
+	 */
+	public function get_chart_args_for_meta( $post, array $post_meta, array $args = [] ) {
+		if ( ! $post instanceof WP_Post ) {
+			$post = absint( $post ) ? get_post( absint( $post ) ) : null;
+		}
+
+		if ( ! $post instanceof WP_Post ) {
+			return [];
+		}
+
+		$saved = [ $this->args, $this->post, $this->post_meta, $this->colors, $this->points ];
+
+		$this->args      = wp_parse_args( $args, m_chart()->get_chart_default_args );
+		$this->post      = $post;
+		$this->post_meta = $post_meta;
+
+		try {
+			return $this->get_chart_args( $post->ID, $this->args, true, false );
+		} finally {
+			[ $this->args, $this->post, $this->post_meta, $this->colors, $this->points ] = $saved;
+		}
+	}
+
+	/**
+	 * Hook to the m_chart_update_post_meta action and drop the chart args cache
+	 *
+	 * The cache used to be rebuilt here from the raw parsed meta, which ran before other plugins had saved
+	 * their related meta and skipped the m_chart_get_post_meta filters
+	 * Flushing instead lets the next front end request rebuild through the full get_post_meta() path
 	 *
 	 * @param int $post_id WP post ID of the post you want chart args for
 	 * @param array $parsed_meta the parsed chart meta passed by the action hook
 	 */
 	public function m_chart_update_post_meta( $post_id, $parsed_meta ) {
-		// Refresh arg cache
-		$this->args = m_chart()->get_chart_default_args;
-		$this->post = get_post( $post_id );
-
-		$this->post_meta = $parsed_meta;
-
-		$this->get_chart_args( $post_id, [], true );
+		m_chart()->flush_chart_args_cache( $post_id );
 	}
 
 	/**
@@ -1258,8 +1438,10 @@ class M_Chart_Chartjs {
 						}
 					}
 				} else {
+					$lines = self::get_data_lines_per_series( 'scatter' );
+
 					foreach ( $data_array as $data_key => $data ) {
-						if ( $data_key % 2 ) {
+						if ( $data_key % $lines ) {
 							continue;
 						}
 
@@ -1313,8 +1495,10 @@ class M_Chart_Chartjs {
 						}
 					}
 				} else {
+					$lines = self::get_data_lines_per_series( 'bubble' );
+
 					foreach ( $data_array as $data_key => $data ) {
-						if ( $data_key % 3 ) {
+						if ( $data_key % $lines ) {
 							continue;
 						}
 
@@ -1372,31 +1556,14 @@ class M_Chart_Chartjs {
 	 * @return array $scripts an array of scripts needed for the iframe to render the chart
 	 */
 	public function m_chart_iframe_scripts( $scripts, $post_id ) {
-		$library = m_chart()->get_post_meta( $post_id, 'library' );
+		$post_meta = m_chart()->get_post_meta( $post_id );
 
-		// If Chart.js isn't the library type we'll stop here
-		if ( $library != $this->library ) {
+		// If Chart.js isn't the library type, or a plugin renders this chart without Chart.js, we'll stop here
+		if ( $post_meta['library'] != $this->library || ! m_chart()->render_uses_chartjs( $post_id, $post_meta ) ) {
 			return $scripts;
 		}
 
-		$type = m_chart()->get_post_meta( $post_id, 'type' );
-
-		$scripts[] = 'chartjs-helper';
-		$scripts[] = 'chartjs-datalabels';
-
-		if ( 'treemap' === $type ) {
-			$scripts[] = 'chartjs-treemap';
-		}
-
-		if ( 'boxplot' === $type || 'violin' === $type ) {
-			$scripts[] = 'chartjs-boxplot';
-		}
-
-		if ( 'venn' === $type || 'euler' === $type ) {
-			$scripts[] = 'chartjs-venn';
-		}
-
-		return $scripts;
+		return array_merge( $scripts, array_keys( $this->get_chartjs_plugins( $post_id, $post_meta, 'iframe' ) ) );
 	}
 
 	/**

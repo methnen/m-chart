@@ -1,22 +1,37 @@
 import { createRoot, createPortal } from '@wordpress/element';
-import { ChartAdminProvider, useChartAdmin } from './context/ChartAdminContext';
+import { ChartAdminProvider, useChartAdmin, useChartDispatch, setFormEnabled } from './context/ChartAdminContext';
 import ChartMetaBox         from './components/ChartMetaBox';
 import SpreadsheetMetaBox   from './components/SpreadsheetMetaBox';
 import SubtitleField        from './components/SubtitleField';
-import TypeAndThemeRow      from './components/TypeAndThemeRow';
+import TypeAndThemeRow, { isSimple2DSeries } from './components/TypeAndThemeRow';
+import { spreadsheetAutoWidth } from './components/JspreadsheetWrapper';
+import { measureTextWidth } from './utils/measureTextWidth';
+import { hasTrait } from './utils/typeTraits';
+import { deepClone } from './utils/deepClone';
 import ParseAndFlagsRow     from './components/ParseAndFlagsRow';
 import AxisRows             from './components/AxisRows';
 import SourceRow            from './components/SourceRow';
 import ShortcodeAndImageRow from './components/ShortcodeAndImageRow';
+import { defaultChartjsRender } from './components/ChartPreview';
 
-// Expose shared context hook and settings row components for library plugins that implement the m_chart.settings_component filter without a build step
+// Expose shared context hooks, settings row components and the small utilities the rows are built from, for library plugins
+// that implement the m_chart.settings_component filter without a build step
+// defaultChartjsRender lets a plugin render Chart.js itself, e.g. when its m_chart.render_chart filter wants to own the instance
 window.m_chart = {
 	useChartAdmin,
+	useChartDispatch,
 	TypeAndThemeRow,
 	ParseAndFlagsRow,
 	AxisRows,
 	SourceRow,
 	ShortcodeAndImageRow,
+	defaultChartjsRender,
+	setFormEnabled,
+	isSimple2DSeries,
+	spreadsheetAutoWidth,
+	measureTextWidth,
+	hasTrait,
+	deepClone,
 };
 
 /**
@@ -26,12 +41,15 @@ window.m_chart = {
  */
 
 // Register Chart.js plugins before any chart instances are created
-if ( window.Chart && window.ChartDataLabels ) {
-	window.Chart.register( window.ChartDataLabels );
-}
+// PHP lists the window globals (core's plus anything added through m_chart_chartjs_plugins), the names are a fallback for an old localize payload
+if ( window.Chart ) {
+	const pluginGlobals = window.m_chart_admin?.chartjs_plugin_globals || [ 'MChartHelper', 'ChartDataLabels' ];
 
-if ( window.Chart && window.MChartHelper ) {
-	window.Chart.register( window.MChartHelper );
+	pluginGlobals.forEach( ( name ) => {
+		if ( window[ name ] ) {
+			window.Chart.register( window[ name ] );
+		}
+	} );
 }
 
 const subtitleRoot    = document.getElementById( 'm-chart-subtitle-root' );

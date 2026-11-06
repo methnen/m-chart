@@ -26,29 +26,43 @@ if ( ! fs.existsSync( OUTPUT_DIR ) ) {
 	fs.mkdirSync( OUTPUT_DIR, { recursive: true } );
 }
 
-// Display-name lookup for unit-term slugs. m-chart stores the slug in
+// Group and display-name lookup for unit-term slugs. m-chart stores the slug in
 // the y_units / x_units fields and resolves the display name at render
 // time via get_term_by( 'slug', ..., 'm-chart-units' ). The WXR must
 // include a <category> entry per unit so the post→term association is
 // created on import — without it, the chart renders but the unit isn't
 // formally attached to the post (orphan term lookup still works, but
 // the post's term list is empty in the admin).
-const UNIT_NAMES = {
-	tonnes:     'Tonnes',
-	tons:       'Tons',
-	kilograms:  'Kilograms',
-	grams:      'Grams',
-	milligrams: 'Milligrams',
-	pounds:     'Pounds',
-	ounces:     'Ounces',
-	usd:        'USD',
-	eur:        'EUR',
-	gbp:        'GBP',
-	jpy:        'JPY',
-	cny:        'CNY',
-	days:       'Days',
-	years:      'Years',
-	percent:    'Percent',
+//
+// The WXR also declares each unit and its group as a <wp:term> so the
+// importer creates them with the right hierarchy. Without that the
+// importer creates every unit as a flat top-level term, and the units
+// dropdown treats top-level terms as groups. Names and groups match
+// components/array-default-unit-terms.php
+const UNIT_GROUPS = {
+	time:   'Time',
+	money:  'Money',
+	length: 'Length',
+	weight: 'Weight',
+	other:  'Other',
+};
+
+const UNITS = {
+	tonnes:     { name: 'Tonnes',     group: 'weight' },
+	tons:       { name: 'Tons',       group: 'weight' },
+	kilograms:  { name: 'Kilograms',  group: 'weight' },
+	grams:      { name: 'Grams',      group: 'weight' },
+	milligrams: { name: 'Milligrams', group: 'weight' },
+	pounds:     { name: 'Pounds',     group: 'weight' },
+	ounces:     { name: 'Ounces',     group: 'weight' },
+	usd:        { name: 'USD',        group: 'money' },
+	eur:        { name: 'EUR',        group: 'money' },
+	gbp:        { name: 'GBP',        group: 'money' },
+	jpy:        { name: 'JPY',        group: 'money' },
+	cny:        { name: 'CNY',        group: 'money' },
+	days:       { name: 'Days',       group: 'time' },
+	years:      { name: 'Years',      group: 'time' },
+	percent:    { name: 'Percent',    group: 'other' },
 };
 
 // Human-readable post titles per chart type. The fixture file's slug
@@ -132,6 +146,9 @@ const fixtures = fs.readdirSync( FIXTURES_DIR )
 	.filter( ( f ) => f.startsWith( 'pickle-' ) && f.endsWith( '.json' ) )
 	.sort();
 
+// Unit slugs referenced by any fixture, declared as <wp:term> entries before the posts
+const usedUnits = new Set();
+
 const items = fixtures.map( ( filename, index ) => {
 	const slug    = filename.replace( /^pickle-/, '' ).replace( /\.json$/, '' );
 	const title   = TITLES[ slug ] || `M Chart example — ${ slug }`;
@@ -159,7 +176,8 @@ const items = fixtures.map( ( filename, index ) => {
 		if ( ! slug ) {
 			continue;
 		}
-		const name = UNIT_NAMES[ slug ] || slug;
+		const name = UNITS[ slug ] ? UNITS[ slug ].name : slug;
+		usedUnits.add( slug );
 		categories.push(
 			`		<category domain="m-chart-units" nicename="${ slug }">${ cdata( name ) }</category>`
 		);
@@ -193,6 +211,43 @@ const items = fixtures.map( ( filename, index ) => {
 	</item>`;
 } ).join( '\n' );
 
+/**
+ * Builds one <wp:term> entry. Parents must be declared before their
+ * children, the importer looks the parent up by slug as it goes
+ *
+ * @param {number} id         Term ID within the export, only has to be unique
+ * @param {string} slug       Term slug
+ * @param {string} name       Term display name
+ * @param {string} parentSlug Parent term slug, empty for a group
+ * @return {string} The XML for the term
+ */
+function termEntry( id, slug, name, parentSlug ) {
+	return `	<wp:term>
+		<wp:term_id>${ id }</wp:term_id>
+		<wp:term_taxonomy>${ cdata( 'm-chart-units' ) }</wp:term_taxonomy>
+		<wp:term_slug>${ cdata( slug ) }</wp:term_slug>
+		<wp:term_parent>${ cdata( parentSlug ) }</wp:term_parent>
+		<wp:term_name>${ cdata( name ) }</wp:term_name>
+	</wp:term>`;
+}
+
+const termEntries = [];
+let termId        = 1;
+
+const usedGroups = [ ...usedUnits ]
+	.map( ( slug ) => UNITS[ slug ] && UNITS[ slug ].group )
+	.filter( ( group, i, all ) => group && all.indexOf( group ) === i )
+	.sort();
+
+for ( const group of usedGroups ) {
+	termEntries.push( termEntry( termId++, group, UNIT_GROUPS[ group ], '' ) );
+}
+
+for ( const slug of [ ...usedUnits ].sort() ) {
+	const unit = UNITS[ slug ];
+	termEntries.push( termEntry( termId++, slug, unit ? unit.name : slug, unit ? unit.group : '' ) );
+}
+
 const xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0"
 	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
@@ -204,12 +259,14 @@ const xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <channel>
 	<title>M Chart — Pickle example charts</title>
 	<link>https://example.com/</link>
-	<description>17 example m-chart posts (one per chart type) using real pickle-themed data</description>
+	<description>${ fixtures.length } example m-chart posts (one per chart type) using real pickle-themed data</description>
 	<pubDate>${ pubDate }</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
 	<wp:base_site_url>https://example.com/</wp:base_site_url>
 	<wp:base_blog_url>https://example.com/</wp:base_blog_url>
+
+${ termEntries.join( '\n' ) }
 
 ${ items }
 

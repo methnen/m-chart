@@ -61,12 +61,20 @@ export function useChartRefresh( title ) {
 			// eslint-disable-next-line no-shadow -- intentional: same names, fresh-via-ref values
 			const { postId, nonce, ajaxUrl, library, performance, imageSupport } = latestRef.current;
 
-			dispatch( { type: 'SET_REFRESHING', payload: true } );
-			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
+			// A failed refresh leaves the previous preview in place, so Save has to be unblocked here
+			// Otherwise the form stays disabled until the next successful refresh
+			function onRefreshFailed( error ) {
+				dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+				speak( __( 'Chart refresh failed', 'm-chart' ) );
 
-			if ( window.wp?.hooks ) {
-				window.wp.hooks.doAction( 'm_chart.form_disabled', postId );
+				if ( window.wp?.hooks ) {
+					window.wp.hooks.doAction( 'm_chart.chart_args_error', postId, error );
+				}
 			}
+
+			dispatch( { type: 'SET_REFRESHING', payload: true } );
+			// The provider fires m_chart.form_disabled when this lands
+			dispatch( { type: 'SET_FORM_ENABLED', payload: false } );
 
 			try {
 				const body = new URLSearchParams();
@@ -130,16 +138,20 @@ export function useChartRefresh( title ) {
 					// Otherwise ChartPreview's animation.onComplete enables it after capture
 					if ( 'default' !== performance || 'yes' !== imageSupport ) {
 						dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-						if ( window.wp?.hooks ) {
-							window.wp.hooks.doAction( 'm_chart.form_enabled', postId );
-						}
 					}
+				} else {
+					// The server rejected the request, there's no new render coming so unblock Save ourselves
+					onRefreshFailed( json.data );
 				}
 			} catch ( err ) {
 				if ( err.name !== 'AbortError' ) {
 					// eslint-disable-next-line no-console
 					console.error( 'm-chart: chart refresh failed', err );
+
+					// Only the newest request may re-enable the form, a stale failure must not unblock Save mid-refresh
+					if ( isMountedRef.current && myToken === requestTokenRef.current ) {
+						onRefreshFailed( err );
+					}
 				}
 			} finally {
 				if ( isMountedRef.current && myToken === requestTokenRef.current ) {

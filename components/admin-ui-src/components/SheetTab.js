@@ -130,9 +130,8 @@ export default function SheetTab( {
 		}
 	}
 
-	const inputWidth = inputRef.current
-		? measureTextWidth( inputValue, inputRef.current ) + 'px'
-		: Math.max( 40, inputValue.length * 8 + 16 ) + 'px';
+	// measureTextWidth has its own estimate for when the input hasn't mounted yet
+	const inputWidth = measureTextWidth( inputValue, inputRef.current ) + 'px';
 
 	const className = [
 		'components-tab-panel__tabs-item',

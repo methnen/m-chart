@@ -12,12 +12,17 @@ class M_Chart_Parse {
 	const PARSE_ROWS          = 'rows';
 	const PARSE_COLUMNS       = 'columns';
 
+	// The CSV delimiters the importer and the settings page accept
+	const CSV_DELIMITERS = [ ',', "\t", ' ', ';' ];
+
 	public array $data                   = [];
 	public array $value_labels           = [];
 	public string $value_labels_position = '';
 	public array $set_data               = [];
 	public array $raw_data               = [];
 	public string $parse_in              = '';
+	// Original series indexes the last parse_data() call dropped because every value was non numeric
+	public array $dropped_sets           = [];
 
 	private ?NumberFormatter $formatter = null;
 
@@ -32,6 +37,7 @@ class M_Chart_Parse {
 	public function parse_data( array $data, string $parse_in ): static {
 		$this->data                  = $data;
 		$this->parse_in              = $parse_in;
+		$this->dropped_sets          = [];
 		$this->value_labels_position = $this->get_value_labels_position();
 		$this->parse_value_labels();
 		$this->parse_set_data();
@@ -89,31 +95,46 @@ class M_Chart_Parse {
 	 * @return string the position of the labels in the given data set
 	 */
 	private function get_value_labels_position(): string {
-		if ( ! isset( $this->data[0][0] ) && ! isset( $this->data[1][0] ) ) {
+		return self::detect_labels_position( $this->data, $this->parse_in );
+	}
+
+	/**
+	 * Work out where the value labels sit in a sheet without touching the shared parser state
+	 *
+	 * Pure function of the sheet and the parse direction, so plugins can ask the same question core asks
+	 * Note the corner cell test is a loose '' == comparison, null counts as empty but a lone space does not
+	 *
+	 * @param array  $data     the raw two-dimensional data array
+	 * @param string $parse_in PARSE_ROWS or PARSE_COLUMNS
+	 *
+	 * @return string one of the LABELS_* constants
+	 */
+	public static function detect_labels_position( array $data, string $parse_in ): string {
+		if ( ! isset( $data[0][0] ) && ! isset( $data[1][0] ) ) {
 			return self::LABELS_NONE;
 		}
 
-		if ( '' == $this->data[0][0] ) {
+		if ( '' == ( $data[0][0] ?? '' ) ) {
 			return self::LABELS_BOTH;
 		}
 
 		// Structural pre-check
 		// A sheet with 2 effective columns (rows mode) or 2 effective rows (columns mode) is the simple single-series shape and is unambiguous
 		// Works regardless of whether the labels look numeric (years, ordinals, etc)
-		if ( self::PARSE_ROWS === $this->parse_in && 2 === $this->effective_max_columns() ) {
+		if ( self::PARSE_ROWS === $parse_in && 2 === self::effective_max_columns( $data ) ) {
 			return self::LABELS_FIRST_COLUMN;
 		}
 
-		if ( self::PARSE_COLUMNS === $this->parse_in && 2 === $this->effective_row_count() ) {
+		if ( self::PARSE_COLUMNS === $parse_in && 2 === self::effective_row_count( $data ) ) {
 			return self::LABELS_FIRST_ROW;
 		}
 
 		// Existing content-based heuristic for 3+ effective columns/rows
-		if ( ! is_numeric( trim( (string) $this->data[0][0] ) ) ) {
+		if ( ! is_numeric( trim( (string) $data[0][0] ) ) ) {
 			// If the first row has multiple non-numeric headers and the data rows start with numeric values the entire first row is column labels (e.g. scatter format)
 			if (
-				   isset( $this->data[0][1] ) && ! is_numeric( trim( (string) $this->data[0][1] ) )
-				&& isset( $this->data[1][0] ) &&   is_numeric( trim( (string) $this->data[1][0] ) )
+				   isset( $data[0][1] ) && ! is_numeric( trim( (string) $data[0][1] ) )
+				&& isset( $data[1][0] ) &&   is_numeric( trim( (string) $data[1][0] ) )
 			) {
 				return self::LABELS_FIRST_ROW;
 			}
@@ -125,20 +146,30 @@ class M_Chart_Parse {
 	}
 
 	/**
+	 * Original indexes of the series the last parse_data() call dropped
+	 *
+	 * In the LABELS_BOTH shapes a series whose every cell is non numeric is left out of set_data and raw_data
+	 * The keys that remain are the original ones, this lists the gaps
+	 *
+	 * @return int[]
+	 */
+	public function get_dropped_sets(): array {
+		return $this->dropped_sets;
+	}
+
+	/**
 	 * Max effective column count across rows
 	 * Rightmost non-empty cell index + 1, taken as a max over all rows
 	 * Trailing empty cells (typical of Jspreadsheet's minDimensions padding) don't count
 	 *
+	 * @param array $data the raw two-dimensional data array
+	 *
 	 * @return int
 	 */
-	private function effective_max_columns(): int {
-		if ( ! is_array( $this->data ) ) {
-			return 0;
-		}
-
+	private static function effective_max_columns( array $data ): int {
 		$max = 0;
 
-		foreach ( $this->data as $row ) {
+		foreach ( $data as $row ) {
 			if ( ! is_array( $row ) ) {
 				continue;
 			}
@@ -161,16 +192,14 @@ class M_Chart_Parse {
 	 * Count of rows that contain at least one non-empty cell
 	 * Trailing empty rows (typical of Jspreadsheet's minDimensions padding) don't count
 	 *
+	 * @param array $data the raw two-dimensional data array
+	 *
 	 * @return int
 	 */
-	private function effective_row_count(): int {
-		if ( ! is_array( $this->data ) ) {
-			return 0;
-		}
-
+	private static function effective_row_count( array $data ): int {
 		$last = -1;
 
-		foreach ( $this->data as $i => $row ) {
+		foreach ( $data as $i => $row ) {
 			if ( ! is_array( $row ) ) {
 				continue;
 			}
@@ -332,6 +361,8 @@ class M_Chart_Parse {
 			if ( false == $set['is_null'] ) {
 				$set_data_array[ $key ] = $set['data'];
 				$raw_data_array[ $key ] = $this_raw[ $key ];
+			} else {
+				$this->dropped_sets[] = $key;
 			}
 		}
 
@@ -380,6 +411,8 @@ class M_Chart_Parse {
 			if ( false == $set['is_null'] ) {
 				$set_data_array[ $key ] = $set['data'];
 				$raw_data_array[ $key ] = $this_raw[ $key ];
+			} else {
+				$this->dropped_sets[] = $key;
 			}
 		}
 
@@ -447,6 +480,108 @@ class M_Chart_Parse {
 					}
 				}
 			}
+		}
+
+		return $data_array;
+	}
+
+	/**
+	 * The decimal and thousands separators for a locale
+	 *
+	 * Front end code formatting numbers outside Chart.js (a data table, for instance) can match what the charts show
+	 *
+	 * @param string|null $locale a BCP 47 locale, defaults to the plugin's locale setting
+	 *
+	 * @return array [ 'decimal' => string, 'thousands' => string ]
+	 */
+	public function get_number_symbols( ?string $locale = null ): array {
+		$symbols = [ 'decimal' => '.', 'thousands' => ',' ];
+
+		if ( ! class_exists( 'NumberFormatter' ) ) {
+			return $symbols;
+		}
+
+		$formatter = null === $locale ? $this->get_formatter() : new NumberFormatter( $locale, NumberFormatter::DECIMAL );
+
+		if ( ! $formatter ) {
+			return $symbols;
+		}
+
+		$decimal   = $formatter->getSymbol( NumberFormatter::DECIMAL_SEPARATOR_SYMBOL );
+		$thousands = $formatter->getSymbol( NumberFormatter::GROUPING_SEPARATOR_SYMBOL );
+
+		return [
+			'decimal'   => false === $decimal || '' === $decimal ? '.' : $decimal,
+			'thousands' => false === $thousands ? ',' : $thousands,
+		];
+	}
+
+	/**
+	 * Load the bundled parseCSV library
+	 *
+	 * parsecsv.lib.php declares the global parseCSV class without a class_exists guard, so every caller has to go through here
+	 */
+	public static function load_parsecsv(): void {
+		if ( ! class_exists( 'parseCSV' ) ) {
+			require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
+		}
+	}
+
+	/**
+	 * Parse CSV text into the row arrays the spreadsheet expects
+	 *
+	 * Mirrors what the CSV import does: the text is wrapped in newlines so parseCSV treats the first line as data rather than
+	 * headings, the delimiter has to be one of CSV_DELIMITERS or the csv_delimiter setting is used, and short rows are padded
+	 *
+	 * @param string      $csv       the CSV text
+	 * @param string|null $delimiter one of CSV_DELIMITERS, anything else falls back to the setting
+	 *
+	 * @return array rows of cells
+	 */
+	public static function parse_csv_string( string $csv, ?string $delimiter = null ): array {
+		self::load_parsecsv();
+
+		$parse_csv = new parseCSV();
+
+		// The "\n" before and after is to deal with CSV files that don't have line breaks above and below the data
+		// Which then seems to confuse parseCSV occasionally
+		$csv = "\n" . trim( $csv ) . "\n";
+
+		$parse_csv->delimiter = in_array( $delimiter, self::CSV_DELIMITERS, true ) ? $delimiter : m_chart()->get_settings( 'csv_delimiter' );
+		$parse_csv->parse( $csv );
+
+		return self::fix_csv_data( is_array( $parse_csv->data ) ? $parse_csv->data : [] );
+	}
+
+	/**
+	 * Pad every row to the longest row's length
+	 *
+	 * Deals with CSV exports (Google Docs among them) that leave off trailing empty cells
+	 *
+	 * @param array $data_array rows of cells
+	 *
+	 * @return array rows of cells, all the same length
+	 */
+	public static function fix_csv_data( array $data_array ): array {
+		$count = 0;
+
+		// Get largest row count
+		foreach ( $data_array as $data ) {
+			$temp_count = is_array( $data ) ? count( $data ) : 0;
+
+			$count = ( $temp_count > $count ) ? $temp_count : $count;
+		}
+
+		// Fix arrays so value counts match
+		foreach ( $data_array as $key => $data ) {
+			$data       = is_array( $data ) ? $data : [];
+			$temp_count = count( $data );
+
+			if ( $temp_count < $count ) {
+				$data = array_pad( $data, $count, '' );
+			}
+
+			$data_array[ $key ] = $data;
 		}
 
 		return $data_array;

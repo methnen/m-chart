@@ -15,26 +15,39 @@ const SUBMIT_BUTTON_IDS = [ 'publish', 'save-post' ];
  */
 export default function SpreadsheetMetaBox() {
 	const { state, dispatch } = useChartAdmin();
-	const { sheetIds, spreadsheetData, activeSheet, formEnabled, pendingSubmit, sheetEditingDisabled } = state;
+	const { postId, sheetIds, spreadsheetData, activeSheet, formEnabled, pendingSubmit, sheetEditingDisabled } = state;
 
 	// Map of stable sheetId → worksheet instance (Jspreadsheet worksheet object)
 	const worksheetInstances = useRef( {} );
 
 	// Refs so event handlers always see the latest values without needing to be recreated
-	const formEnabledRef = useRef( formEnabled );
-	const sheetIdsRef    = useRef( sheetIds );
+	const formEnabledRef     = useRef( formEnabled );
+	const sheetIdsRef        = useRef( sheetIds );
+	const spreadsheetDataRef = useRef( spreadsheetData );
+	const postIdRef          = useRef( postId );
 
-	formEnabledRef.current = formEnabled;
-	sheetIdsRef.current    = sheetIds;
+	formEnabledRef.current     = formEnabled;
+	sheetIdsRef.current        = sheetIds;
+	spreadsheetDataRef.current = spreadsheetData;
+	postIdRef.current          = postId;
 
 	// Called by JspreadsheetWrapper after it initialises its jspreadsheet instance
+	// Fires m_chart.spreadsheet_mounted so extensions can decorate the grid, also on the initial mount and on every remount
 	const handleMounted = useCallback( ( sheetId, worksheet ) => {
 		worksheetInstances.current[ sheetId ] = worksheet;
+
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( 'm_chart.spreadsheet_mounted', postIdRef.current, sheetIdsRef.current.indexOf( sheetId ), worksheet );
+		}
 	}, [] );
 
 	// Called by JspreadsheetWrapper just before it unmounts
 	const handleUnmounted = useCallback( ( sheetId ) => {
 		delete worksheetInstances.current[ sheetId ];
+
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( 'm_chart.spreadsheet_unmounted', postIdRef.current, sheetIdsRef.current.indexOf( sheetId ) );
+		}
 	}, [] );
 
 	// Called by extensions (e.g. Google Sheets) to update a sheet's data imperatively
@@ -56,6 +69,8 @@ export default function SpreadsheetMetaBox() {
 	}, [ state.activeSheet ] );
 
 	// Writes all sheet data to the hidden textarea so the form POST includes it
+	// Runs on every submit path, so m_chart.before_submit is the one place extensions can write their own hidden inputs
+	// It can fire more than once per submission (click, then the submit event) so listeners must be idempotent
 	const writeDataToForm = useCallback( () => {
 		const form = document.getElementById( 'post' );
 
@@ -63,14 +78,19 @@ export default function SpreadsheetMetaBox() {
 			return;
 		}
 
+		// A worksheet that hasn't mounted yet (e.g. right after REPLACE_SHEETS) still has its data in state
 		const allData = sheetIdsRef.current.map(
-			( id ) => worksheetInstances.current[ id ]?.getData() ?? [ [ '' ] ]
+			( id, index ) => worksheetInstances.current[ id ]?.getData() ?? spreadsheetDataRef.current[ index ] ?? [ [ '' ] ]
 		);
 
 		const dataTextarea = form.querySelector( 'textarea[name="m-chart[data]"]' );
 
 		if ( dataTextarea ) {
 			dataTextarea.value = JSON.stringify( allData );
+		}
+
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( 'm_chart.before_submit', postIdRef.current, form );
 		}
 	}, [] );
 
@@ -151,11 +171,13 @@ export default function SpreadsheetMetaBox() {
 
 	// Allow external plugins to inject content above the sheet tabs and spreadsheet
 	// The filter receives null as the default and the current { state, dispatch } as context
-	const metaboxExtension = wp.hooks.applyFilters(
-		'm_chart.spreadsheet_metabox_extension',
-		null,
-		{ state, dispatch, getActiveWorksheet, setSheetDataOnWorksheet }
-	);
+	const metaboxExtension = window.wp?.hooks
+		? window.wp.hooks.applyFilters(
+			'm_chart.spreadsheet_metabox_extension',
+			null,
+			{ state, dispatch, getActiveWorksheet, setSheetDataOnWorksheet }
+		)
+		: null;
 
 	// Deterministic signal for E2E tests
 	// pending: the submit gate engaged and form.submit() is deferred until chart refresh + image capture complete

@@ -1,9 +1,68 @@
-import { createContext, useContext, useReducer } from '@wordpress/element';
+import { createContext, useContext, useEffect, useReducer, useRef } from '@wordpress/element';
+import { deepClone } from '../utils/deepClone';
 
 const ChartAdminStateContext    = createContext( null );
 const ChartAdminDispatchContext = createContext( null );
 
 const { m_chart_admin } = window;
+
+// Set by the provider so code outside the React tree (window.m_chart.setFormEnabled) can dispatch
+let dispatchHandle = null;
+
+/**
+ * Enable or disable the WordPress Save/Publish buttons from outside the React tree
+ * Library plugins that gate submission on their own async work can use this instead of dispatching through a component
+ *
+ * @param {boolean} enabled
+ */
+export function setFormEnabled( enabled ) {
+	if ( dispatchHandle ) {
+		dispatchHandle( { type: 'SET_FORM_ENABLED', payload: !! enabled } );
+	}
+}
+
+/**
+ * Run the raw chart args through the m_chart.chart_args filter
+ *
+ * Library plugins use the filter to layer their own options onto every preview render (annotations, themes, ...)
+ * Core keeps the unfiltered args in baseChartArgs so the filter can be re-run with REAPPLY_CHART_ARGS when a plugin's own state changes
+ *
+ * @param {Object|null} base   Unfiltered chart args
+ * @param {Object}      state  Current context state, for postId and postMeta
+ * @param {string}      source 'initial' (PHP seed), 'refresh' (AJAX result) or 'reapply'
+ * @return {Object|null} Filtered args, or the base itself when there is no filter to run
+ */
+function filterChartArgs( base, state, source ) {
+	if ( ! base || ! window.wp?.hooks || ! window.wp.hooks.hasFilter( 'm_chart.chart_args' ) ) {
+		return base;
+	}
+
+	// Filters get a copy, so one that edits the args in place and returns them can't change the stored base
+	return window.wp.hooks.applyFilters( 'm_chart.chart_args', deepClone( base ), {
+		postId:   state.postId,
+		postMeta: state.postMeta,
+		source,
+	} );
+}
+
+// Handler count for m_chart.chart_args, so the mount-time reapply only runs when a filter arrived after the lazy init
+function chartArgsFilterCount() {
+	return window.wp?.hooks ? Number( window.wp.hooks.hasFilter( 'm_chart.chart_args' ) ) || 0 : 0;
+}
+
+/**
+ * Lazy useReducer initialiser, runs at mount rather than module load so filters registered by scripts that ran in between apply to the PHP seed
+ *
+ * @param {Object} seed initialState
+ * @return {Object} The seed with baseChartArgs set and chartArgs filtered
+ */
+export function initChartAdminState( seed ) {
+	return {
+		...seed,
+		baseChartArgs: seed.chartArgs,
+		chartArgs:     filterChartArgs( seed.chartArgs, seed, 'initial' ),
+	};
+}
 
 /**
  * Initial state populated from the PHP-localised window.m_chart_admin object
@@ -24,7 +83,6 @@ const initialState = {
 	library:          m_chart_admin.library,
 	performance:      m_chart_admin.performance,
 	imageSupport:     m_chart_admin.image_support,
-	instantPreview:   m_chart_admin.instant_preview_support,
 	imageMultiplier:  m_chart_admin.image_multiplier,
 	imageWidth:       m_chart_admin.image_width,
 	csvDelimiters:    m_chart_admin.csv_delimiters || { ',': 'Comma' },
@@ -51,8 +109,11 @@ const initialState = {
 	// Index of the currently active sheet tab
 	activeSheet: 0,
 
-	// Chart.js args object — seeded from PHP on load, updated by useChartRefresh
+	// Chart.js args object as rendered — seeded from PHP on load, updated by useChartRefresh, filtered through m_chart.chart_args
 	chartArgs: m_chart_admin.chart_args || null,
+
+	// The same args before the m_chart.chart_args filter, kept so REAPPLY_CHART_ARGS can re-run it
+	baseChartArgs: m_chart_admin.chart_args || null,
 
 	// True while waiting for ajax_get_chart_args to respond
 	isRefreshing: false,
@@ -73,6 +134,13 @@ const initialState = {
 	themes:          m_chart_admin.themes             || [],
 	unitTerms:       m_chart_admin.unit_terms         || [],
 	imageUrl:        m_chart_admin.image_url          || '',
+
+	// Per type capabilities (see M_Chart_Chartjs::get_type_traits()), the native Chart.js type map,
+	// the types that show the sheet tab bar, and the chart height range
+	typeTraits:      m_chart_admin.type_traits        || {},
+	chartTypes:      m_chart_admin.chart_types        || {},
+	multiSheetTypes: m_chart_admin.multi_sheet_types  || [],
+	heightRange:     m_chart_admin.height_range       || { min: 300, max: 1500 },
 };
 
 export function reducer( state, action ) {
@@ -108,6 +176,28 @@ export function reducer( state, action ) {
 		case 'CLEAR_NEW_SHEET_ID':
 			return { ...state, newSheetId: null };
 
+		// Swap every sheet in one step, e.g. when an external data source delivers a fresh set of tables
+		// Fresh sheet ids make every Jspreadsheet remount exactly once, no rename mode is entered
+		case 'REPLACE_SHEETS': {
+			const sets      = Array.isArray( action.payload?.sets ) && action.payload.sets.length ? action.payload.sets : [ [ [ '' ] ] ];
+			const names     = Array.isArray( action.payload?.setNames ) ? action.payload.setNames : [];
+			const setNames  = sets.map( ( _, i ) => names[ i ] ?? '' );
+			const sheetIds  = sets.map( ( _, i ) => state.nextSheetId + i );
+			const requested = Number.isInteger( action.payload?.activeSheet ) ? action.payload.activeSheet : 0;
+
+			return {
+				...state,
+				spreadsheetData: sets,
+				setNames,
+				sheetIds,
+				nextSheetId: state.nextSheetId + sets.length,
+				activeSheet: Math.min( Math.max( requested, 0 ), sets.length - 1 ),
+				newSheetId:  null,
+				// New data means a refresh is coming, gate submission until it lands
+				formEnabled: false,
+			};
+		}
+
 		case 'DELETE_SHEET': {
 			if ( state.spreadsheetData.length <= 1 ) {
 				return state;
@@ -129,8 +219,24 @@ export function reducer( state, action ) {
 		case 'SET_ACTIVE_SHEET':
 			return { ...state, activeSheet: action.payload };
 
-		case 'SET_CHART_ARGS':
-			return { ...state, chartArgs: action.payload };
+		case 'SET_CHART_ARGS': {
+			const baseChartArgs = action.payload;
+			const chartArgs     = filterChartArgs( baseChartArgs, state, action.source || 'refresh' );
+
+			return { ...state, baseChartArgs, chartArgs };
+		}
+
+		case 'REAPPLY_CHART_ARGS': {
+			const chartArgs = filterChartArgs( state.baseChartArgs, state, action.source || 'reapply' );
+
+			// Nothing changed the args, so don't hand the preview a new object to re-render
+			if ( chartArgs === state.chartArgs ) {
+				return state;
+			}
+
+			// New args mean a render and an image capture are coming, gate Save until they land (same as SET_SHEET_DATA)
+			return { ...state, chartArgs, formEnabled: false };
+		}
 
 		case 'SET_REFRESHING':
 			return { ...state, isRefreshing: action.payload };
@@ -156,7 +262,39 @@ export function reducer( state, action ) {
 }
 
 export function ChartAdminProvider( { children } ) {
-	const [ state, dispatch ] = useReducer( reducer, initialState );
+	const [ state, dispatch ] = useReducer( reducer, initialState, initChartAdminState );
+
+	dispatchHandle = dispatch;
+
+	// Filters registered between the lazy init and this effect still get a go at the PHP seeded args
+	const filtersAtInit = useRef( chartArgsFilterCount() );
+
+	useEffect( () => {
+		if ( chartArgsFilterCount() !== filtersAtInit.current ) {
+			dispatch( { type: 'REAPPLY_CHART_ARGS', source: 'initial' } );
+		}
+
+		return () => {
+			dispatchHandle = null;
+		};
+	}, [] );
+
+	// m_chart.form_enabled / m_chart.form_disabled fire once per change of formEnabled, wherever the dispatch came from
+	// Skipped on mount so the initial disabled state doesn't announce itself
+	const { formEnabled, postId } = state;
+	const isFirstFormEffect       = useRef( true );
+
+	useEffect( () => {
+		if ( isFirstFormEffect.current ) {
+			isFirstFormEffect.current = false;
+
+			return;
+		}
+
+		if ( window.wp?.hooks ) {
+			window.wp.hooks.doAction( formEnabled ? 'm_chart.form_enabled' : 'm_chart.form_disabled', postId );
+		}
+	}, [ formEnabled, postId ] );
 
 	return (
 		<ChartAdminDispatchContext.Provider value={ dispatch }>

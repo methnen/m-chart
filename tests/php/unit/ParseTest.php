@@ -22,7 +22,7 @@ final class ParseTest extends TestCase {
 		parent::setUp();
 		Monkey\setUp();
 
-		// parse_data() routes through apply_filters( 'm_chart_value_labels_position', ... )
+		// parse_data() routes its labels and data through apply_filters( 'm_chart_value_labels' / 'm_chart_set_data' / 'm_chart_raw_data' )
 		// Stub it as a passthrough so we test the parser, not the filter chain
 		Functions\stubs( [
 			'apply_filters' => static function ( $hook, $value ) {
@@ -249,5 +249,72 @@ final class ParseTest extends TestCase {
 			[ '2014', '2015', '2016', '2017' ],
 			$this->parser->value_labels
 		);
+	}
+
+	public function test_detect_labels_position_is_a_pure_static_mirror_of_parse_data(): void {
+		$cases = [
+			[ [ [ '2014', 73000000 ], [ '2015', 75000000 ] ], M_Chart_Parse::PARSE_ROWS, M_Chart_Parse::LABELS_FIRST_COLUMN ],
+			[ [ [ 'Apr', 10 ], [ 'May', 20 ] ], M_Chart_Parse::PARSE_ROWS, M_Chart_Parse::LABELS_FIRST_COLUMN ],
+			[ array_map( static fn( $row ) => array_pad( $row, 37, '' ), [ [ '2014', 1 ], [ '2015', 2 ] ] ), M_Chart_Parse::PARSE_ROWS, M_Chart_Parse::LABELS_FIRST_COLUMN ],
+			[ [ [ '', 'Series A', 'Series B' ], [ 'Q1', 10, 15 ] ], M_Chart_Parse::PARSE_ROWS, M_Chart_Parse::LABELS_BOTH ],
+			[ [ [ '2014', '2015', '2016' ], [ 100, 110, 120 ] ], M_Chart_Parse::PARSE_COLUMNS, M_Chart_Parse::LABELS_FIRST_ROW ],
+			[ [ [ 'X', 'Y' ], [ 1, 2 ], [ 3, 4 ] ], M_Chart_Parse::PARSE_COLUMNS, M_Chart_Parse::LABELS_FIRST_ROW ],
+			[ [ [ '' ], [ '' ] ], M_Chart_Parse::PARSE_ROWS, M_Chart_Parse::LABELS_BOTH ],
+			[ [], M_Chart_Parse::PARSE_ROWS, M_Chart_Parse::LABELS_NONE ],
+		];
+
+		foreach ( $cases as [ $data, $parse_in, $expected ] ) {
+			$this->assertSame( $expected, M_Chart_Parse::detect_labels_position( $data, $parse_in ) );
+
+			if ( [] === $data ) {
+				continue;
+			}
+
+			$this->parser->parse_data( $data, $parse_in );
+			$this->assertSame( $expected, $this->parser->value_labels_position, 'static and instance detection must agree' );
+		}
+	}
+
+	public function test_detect_labels_position_does_not_touch_parser_state(): void {
+		$this->parser->parse_data( [ [ 'Apr', 10 ], [ 'May', 20 ] ], M_Chart_Parse::PARSE_ROWS );
+
+		M_Chart_Parse::detect_labels_position( [ [ '', 'A' ], [ 'Q1', 1 ] ], M_Chart_Parse::PARSE_ROWS );
+
+		$this->assertSame( M_Chart_Parse::LABELS_FIRST_COLUMN, $this->parser->value_labels_position );
+		$this->assertSame( [ 'Apr', 'May' ], $this->parser->value_labels );
+	}
+
+	public function test_dropped_sets_lists_all_null_series_in_rows_mode(): void {
+		$data = [
+			[ '',   'Jan', 'Feb' ],
+			[ 'A',  1,     2 ],
+			[ 'B',  'n/a', '-' ],
+			[ 'C',  3,     4 ],
+		];
+
+		$this->parser->parse_data( $data, M_Chart_Parse::PARSE_ROWS );
+
+		$this->assertSame( [ 1 ], $this->parser->get_dropped_sets() );
+		$this->assertSame( [ 0, 2 ], array_keys( $this->parser->set_data ) );
+	}
+
+	public function test_dropped_sets_lists_all_null_series_in_columns_mode(): void {
+		$data = [
+			[ '',    'A', 'B',   'C' ],
+			[ 'Jan', 1,   'n/a', 3 ],
+			[ 'Feb', 2,   '-',   4 ],
+		];
+
+		$this->parser->parse_data( $data, M_Chart_Parse::PARSE_COLUMNS );
+
+		$this->assertSame( [ 1 ], $this->parser->get_dropped_sets() );
+	}
+
+	public function test_dropped_sets_resets_between_parses(): void {
+		$this->parser->parse_data( [ [ '', 'Jan' ], [ 'A', 'n/a' ], [ 'B', 1 ] ], M_Chart_Parse::PARSE_ROWS );
+		$this->assertSame( [ 0 ], $this->parser->get_dropped_sets() );
+
+		$this->parser->parse_data( [ [ 'Apr', 10 ], [ 'May', 20 ] ], M_Chart_Parse::PARSE_ROWS );
+		$this->assertSame( [], $this->parser->get_dropped_sets() );
 	}
 }

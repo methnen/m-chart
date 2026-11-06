@@ -1,12 +1,17 @@
-import { useCallback, useRef } from '@wordpress/element';
+import { useCallback, useEffect, useRef } from '@wordpress/element';
 import { speak } from '@wordpress/a11y';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 /**
- * Returns a stable `generateImage` callback that captures the current Chart.js instance as a PNG, writes it to the hidden img textarea, then re-enables the form
+ * Returns a stable `generateImage` callback that captures the current chart instance as a PNG, writes it to the hidden img textarea, then re-enables the form
  *
- * @param {Object} chartRef React ref (`useRef`) holding the Chart.js instance
+ * Three kinds of instance are handled, in this order:
+ * - one with a captureImage( { width, multiplier } ) method, which resolves to a PNG data URL (or null to skip the image) and is awaited
+ * - a Chart.js instance, captured from its canvas
+ * - anything else (e.g. Highcharts), which handles image generation through the m_chart.render_done action instead
+ *
+ * @param {Object} chartRef React ref (`useRef`) holding the chart instance
  */
 export function useImageGeneration( chartRef ) {
 	const { state, dispatch } = useChartAdmin();
@@ -15,20 +20,74 @@ export function useImageGeneration( chartRef ) {
 	const stateRef = useRef( state );
 	stateRef.current = state;
 
-	const generateImage = useCallback( () => {
-		const chart = chartRef.current;
+	// Generation counter for the asynchronous captureImage() path
+	// Bumped on every capture start and every change of the chart args, so a capture that resolves after either is discarded
+	// Otherwise an old capture could overwrite a newer image or release Save while the newer render is still capturing
+	const captureTokenRef = useRef( 0 );
 
+	useEffect( () => {
+		captureTokenRef.current++;
+	}, [ state.chartArgs ] );
+
+	const generateImage = useCallback( () => {
+		const chart   = chartRef.current;
+		const myToken = ++captureTokenRef.current;
+
+		// Writes the image (when there is one), announces it and re-enables the form
+		function finishCapture( img ) {
+			if ( 'string' === typeof img && img ) {
+				const imgEl = document.getElementById( 'm-chart-img' );
+
+				if ( imgEl ) {
+					imgEl.value = img;
+				}
+
+				if ( window.wp?.hooks ) {
+					window.wp.hooks.doAction( 'm_chart.image_capture_done', stateRef.current.postId, chart, img );
+				}
+
+				speak( __( 'Chart image generated', 'm-chart' ) );
+			}
+
+			// Re-enable form submission, the provider fires m_chart.form_enabled
+			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+		}
+
+		// Nothing rendered yet, there's no capture coming so don't leave Save blocked
 		if ( ! chart ) {
+			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+
+			return;
+		}
+
+		if ( 'function' === typeof chart.captureImage ) {
+			const { imageWidth, imageMultiplier } = stateRef.current;
+			const isCurrent = () => myToken === captureTokenRef.current;
+
+			Promise.resolve( chart.captureImage( {
+				width:      parseInt( imageWidth, 10 ),
+				multiplier: parseFloat( imageMultiplier ) || 1,
+			} ) ).then( ( img ) => {
+				// A newer render or capture owns the image and the form now
+				if ( isCurrent() ) {
+					finishCapture( img );
+				}
+			}, ( err ) => {
+				if ( ! isCurrent() ) {
+					return;
+				}
+
+				// eslint-disable-next-line no-console
+				console.error( 'm-chart: image capture failed', err );
+				finishCapture( null );
+			} );
+
 			return;
 		}
 
 		// Non-canvas libraries (e.g. Highcharts) handle image generation via the m_chart.render_done action hook instead
 		if ( ! chart.canvas ) {
 			dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-			if ( window.wp?.hooks ) {
-				window.wp.hooks.doAction( 'm_chart.form_enabled', stateRef.current.postId );
-			}
 
 			return;
 		}
@@ -61,25 +120,7 @@ export function useImageGeneration( chartRef ) {
 		container.style.height = '';
 		chart.resize();
 
-		// Write base64 string to the hidden textarea for form POST
-		const imgEl = document.getElementById( 'm-chart-img' );
-
-		if ( imgEl ) {
-			imgEl.value = img;
-		}
-
-		if ( window.wp?.hooks ) {
-			window.wp.hooks.doAction( 'm_chart.image_capture_done', stateRef.current.postId, chart, img );
-		}
-
-		// Re-enable form submission
-		dispatch( { type: 'SET_FORM_ENABLED', payload: true } );
-
-		if ( window.wp?.hooks ) {
-			window.wp.hooks.doAction( 'm_chart.form_enabled', stateRef.current.postId );
-		}
-
-		speak( __( 'Chart image generated', 'm-chart' ) );
+		finishCapture( img );
 	}, [ chartRef, dispatch ] );
 
 	return generateImage;

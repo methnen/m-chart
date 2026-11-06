@@ -1,44 +1,18 @@
 import { CheckboxControl, SelectControl, TextControl } from '@wordpress/components';
-import { Fragment, useState, useCallback } from '@wordpress/element';
+import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { measureTextWidth } from '../utils/measureTextWidth';
-
-// Chart types that show y-min controls (line, spline, area only)
-const YMIN_TYPES = new Set( [
-	'line',
-	'spline',
-	'area',
-] );
-
-// Chart types that show the constrain-y-axis checkbox in the same slot as y-min
-const CONSTRAIN_Y_TYPES = new Set( [
-	'boxplot',
-	'violin',
-] );
-
-// Chart types that show axis title/unit rows
-const AXIS_TYPES = new Set( [
-	'line',
-	'spline',
-	'area',
-	'column',
-	'stacked-column',
-	'bar',
-	'stacked-bar',
-	'scatter',
-	'bubble',
-	'boxplot',
-	'violin',
-] );
+import { hasTrait } from '../utils/typeTraits';
 
 export default function AxisRows() {
 	const { state, dispatch } = useChartAdmin();
-	const { postMeta, unitTerms } = state;
+	const { postMeta, unitTerms, typeTraits } = state;
 
-	const showAxis        = AXIS_TYPES.has( postMeta.type );
-	const showYMin        = YMIN_TYPES.has( postMeta.type );
-	const showConstrainY  = CONSTRAIN_Y_TYPES.has( postMeta.type );
+	// axes: the type has x/y scales so the title/unit rows apply, y_min and constrain_y share one slot
+	const showAxis        = hasTrait( typeTraits, postMeta.type, 'axes' );
+	const showYMin        = hasTrait( typeTraits, postMeta.type, 'y_min' );
+	const showConstrainY  = hasTrait( typeTraits, postMeta.type, 'constrain_y' );
 
 	// Callback ref triggers a re-render when the input mounts, so the canvas measurement runs with the real element instead of the fallback
 	const [ yMinEl, setYMinEl ] = useState( null );
@@ -68,12 +42,11 @@ export default function AxisRows() {
 		<>
 			<option value="">{ __( 'N/A', 'm-chart' ) }</option>
 			{ unitTerms.map( ( { group, units } ) => (
-				<Fragment key={ group }>
-					<option value="" disabled>{ group }</option>
+				<optgroup key={ group } label={ group }>
 					{ units.map( ( unit ) => (
 						<option key={ unit.slug } value={ unit.slug }>{ unit.name }</option>
 					) ) }
-				</Fragment>
+				</optgroup>
 			) ) }
 		</>
 	);

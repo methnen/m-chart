@@ -12,7 +12,6 @@ class M_Chart_Admin {
 		'performance' => [
 			'default',
 			'no-images',
-			'no-preview',
 		],
 		'csv_delimiter' => [
 			',',
@@ -26,6 +25,9 @@ class M_Chart_Admin {
 		],
 	];
 	private $plugin_url;
+
+	// The hook suffix WordPress assigned to the settings page, for load-{suffix} / admin_print_scripts-{suffix} hooks
+	public $settings_hook_suffix = '';
 
 	/**
 	 * Constructor
@@ -76,7 +78,7 @@ class M_Chart_Admin {
 	 * updates at all — this fix reaches them through core's own updates
 	 */
 	private function repair_freemius_plugin_path() {
-		$premium_basename = 'm-chart-pro/m-chart-pro.php';
+		$premium_basename = m_chart()->get_freemius_config()['parallel_activation']['premium_version_basename'];
 
 		if (
 			! function_exists( 'm_chart_fs' )
@@ -102,7 +104,7 @@ class M_Chart_Admin {
 	 * Add settings admin page
 	 */
 	public function admin_menu() {
-		add_submenu_page(
+		$this->settings_hook_suffix = add_submenu_page(
 			'edit.php?post_type=' . m_chart()->slug,
 			esc_html__( 'M Chart Settings', 'm-chart' ),
 			esc_html__( 'Settings', 'm-chart' ),
@@ -435,55 +437,42 @@ class M_Chart_Admin {
 				continue;
 			}
 
-			// Default chart height is numeric so clamp it to the same range as the per-chart height field
-			// Non-scalar submissions fall back to the default rather than tripping absint's array warning
-			if ( 'default_height' === $setting ) {
-				$validated_settings[ $setting ] = is_scalar( $submitted_settings[ $setting ] )
-					? min( 1500, max( 300, absint( $submitted_settings[ $setting ] ) ) )
-					: $default;
-				continue;
-			}
-
-			if ( isset( $this->safe_settings[ $setting ] ) ) {
-				// If we've got an array of valid values lets check against that
-				$safe_setting = $this->safe_settings[ $setting ];
-
-				if ( in_array( $submitted_settings[ $setting ], $safe_setting, true ) ) {
-					$validated_settings[ $setting ] = $submitted_settings[ $setting ];
-				} else {
-					$validated_settings[ $setting ] = $default;
-				}
-			} else {
-				// Make sure the value is a string and matches the safe pattern before saving it
-				// Non-scalar submissions (e.g. an array from a library-plugin-added setting) fall back to the default
-				// Plugins that need to persist complex shapes should hook 'm_chart_validated_settings' below to inject their own validated value
-				$value = $submitted_settings[ $setting ];
-
-				if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $value ) ) {
-					$validated_settings[ $setting ] = $value;
-				} else {
-					$validated_settings[ $setting ] = $default;
-				}
-			}
+			$validated_settings[ $setting ] = $this->validate_setting( $setting, $submitted_settings[ $setting ], $default );
 		}
 
-		// Allow third party libraries to further validate the settings
-		$validated_settings = apply_filters( 'm_chart_validated_settings', $validated_settings, $submitted_settings );
-
-		update_option( m_chart()->slug, $validated_settings );
-
-		// Drop the memoized settings so anything later in this request sees the new values
-		m_chart()->reset_settings();
-
-		// Only flush rewrite rules when the embed endpoint is actually being toggled
-		$previous_embeds = $previous_settings['embeds'] ?? '';
-		$current_embeds  = $validated_settings['embeds'] ?? '';
-
-		if ( $previous_embeds !== $current_embeds ) {
-			flush_rewrite_rules();
-		}
+		m_chart()->store_settings( $validated_settings, $submitted_settings, $previous_settings );
 
 		add_action( 'admin_notices', [ $this, 'save_success' ] );
+	}
+
+	/**
+	 * Validate one submitted setting value
+	 *
+	 * Values with a fixed list of options are checked against it, default_height is clamped, anything else has to be a
+	 * plain string of letters, digits, dots, dashes and underscores. Non scalar submissions fall back to the default
+	 * Plugins that need to persist complex shapes should hook 'm_chart_validated_settings' to inject their own validated value
+	 *
+	 * @param string $setting the setting key
+	 * @param mixed  $value   the submitted value
+	 * @param mixed  $default the setting's default, returned when the value isn't acceptable
+	 *
+	 * @return mixed the validated value
+	 */
+	public function validate_setting( $setting, $value, $default ) {
+		// Default chart height is numeric so clamp it to the same range as the per-chart height field
+		if ( 'default_height' === $setting ) {
+			return is_scalar( $value ) ? M_Chart::clamp_height( $value ) : $default;
+		}
+
+		if ( isset( $this->safe_settings[ $setting ] ) ) {
+			return in_array( $value, $this->safe_settings[ $setting ], true ) ? $value : $default;
+		}
+
+		if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9._-]+$#', $value ) ) {
+			return $value;
+		}
+
+		return $default;
 	}
 
 	/**
@@ -649,9 +638,8 @@ class M_Chart_Admin {
 		// Core's update_post_meta validates the meta and replaces the m-chart-library taxonomy term
 		m_chart()->update_post_meta( $post_id, $post_meta );
 
-		// Core only ever overwrites this cache key, never deletes it
-		// Clear it so persistent object caches don't serve Highcharts args to the Chart.js renderer
-		wp_cache_delete( $post_id . '-chart-args', m_chart()->slug );
+		// Clear the cached args so persistent object caches don't serve Highcharts args to the Chart.js renderer
+		m_chart()->flush_chart_args_cache( $post_id );
 
 		return true;
 	}
@@ -808,30 +796,41 @@ class M_Chart_Admin {
 				$library = $_GET['library'];
 			}
 
+			$post_meta = m_chart()->get_post_meta( $post_id );
+
+			// Window globals the React app hands to Chart.register(), in load order
+			$chartjs_plugin_globals = [];
+
 			if ( 'chartjs' === $library ) {
-				// Chart.js libs — enqueued explicitly so the React preview has window.Chart and window
-				// MChartHelper available before m-chart-admin-ui runs its plugin registration
-				// We load every plugin regardless of immediate need when in the edit view since the user can switch chart types from the picker
-				wp_enqueue_script( 'chartjs-helper' );
-				wp_enqueue_script( 'chartjs-datalabels' );
-				wp_enqueue_script( 'chartjs-treemap' );
-				wp_enqueue_script( 'chartjs-boxplot' );
-				wp_enqueue_script( 'chartjs-venn' );
+				// Chart.js libs are enqueued explicitly so the React preview has window.Chart and the plugin globals
+				// before m-chart-admin-ui runs its plugin registration
+				// The 'admin' context loads every type's plugin since the user can switch chart types from the picker
+				$chartjs_plugins = m_chart()->library( 'chartjs' )->get_chartjs_plugins( $post_id, $post_meta, 'admin' );
+
+				foreach ( array_keys( $chartjs_plugins ) as $handle ) {
+					wp_enqueue_script( $handle );
+				}
+
+				$chartjs_plugin_globals = array_values( array_filter( $chartjs_plugins ) );
 			}
 
-			$post_meta        = m_chart()->get_post_meta( $post_id );
 			$spreadsheet_data = empty( $post_meta['data'] ) ? [ [ '' ] ] : $post_meta['data']['sets'];
 			unset( $post_meta['data'] ); // passed separately as spreadsheet_data
 
 			// Collect library-specific config for the React admin app
+			// The type map and traits are Chart.js specific, other libraries may not provide them
 			$type_options      = [];
 			$type_option_names = [];
+			$chart_types       = [];
+			$type_traits       = [];
 			$themes            = [];
 
 			if ( m_chart()->library( $library ) ) {
 				$library_class     = m_chart()->library( $library );
-				$type_options      = $library_class->type_options;
+				$type_options      = method_exists( $library_class, 'get_type_options' ) ? $library_class->get_type_options() : $library_class->type_options;
 				$type_option_names = $library_class->type_option_names;
+				$chart_types       = isset( $library_class->chart_types ) && is_array( $library_class->chart_types ) ? $library_class->chart_types : [];
+				$type_traits       = method_exists( $library_class, 'get_type_traits' ) ? $library_class->get_type_traits() : [];
 
 				foreach ( $library_class->get_themes() as $theme ) {
 					$themes[] = [
@@ -863,12 +862,16 @@ class M_Chart_Admin {
 			$initial_chart_args = null;
 
 			if ( $post_id && m_chart()->library( $library ) ) {
-				$initial_chart_args = m_chart()->library( $library )->get_chart_args(
-					$post_id,
-					m_chart()->get_chart_default_args,
-					true,  // force recompute
-					false  // don't store in cache
-				);
+				$library_instance = m_chart()->library( $library );
+
+				$initial_chart_args = method_exists( $library_instance, 'get_chart_args_for_meta' )
+					? $library_instance->get_chart_args_for_meta( $post_id, m_chart()->get_post_meta( $post_id ) )
+					: $library_instance->get_chart_args(
+						$post_id,
+						m_chart()->get_chart_default_args,
+						true,  // force recompute
+						false  // don't store in cache
+					);
 			}
 
 			// Allow extensions to modify or replace the chart args used for the editor's initial preview render
@@ -888,7 +891,6 @@ class M_Chart_Admin {
 				'request'                 => false,
 				'performance'             => m_chart()->get_settings( 'performance' ),
 				'image_support'           => apply_filters( 'm_chart_image_support', 'no', $library ),
-				'instant_preview_support' => apply_filters( 'm_chart_instant_preview_support', 'no', $library ),
 				'image_multiplier'        => m_chart()->get_settings( 'image_multiplier' ),
 				'image_width'             => m_chart()->get_settings( 'image_width' ),
 				'library'                 => $library,
@@ -907,6 +909,10 @@ class M_Chart_Admin {
 				'csv_delimiters'          => $csv_delimiters,
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
 				'multi_sheet_types'       => m_chart()->get_multi_sheet_types(),
+				'chartjs_plugin_globals'  => $chartjs_plugin_globals,
+				'chart_types'             => $chart_types,
+				'type_traits'             => $type_traits,
+				'height_range'            => [ 'min' => M_Chart::HEIGHT_MIN, 'max' => M_Chart::HEIGHT_MAX ],
 			];
 
 			wp_localize_script( 'm-chart-admin-ui', 'm_chart_admin', $localize_data );
@@ -1041,8 +1047,11 @@ class M_Chart_Admin {
 		}
 
 		if ( m_chart()->slug . '-type' === $column ) {
-			$type      = m_chart()->get_post_meta( $post_id, 'type' );
-			$type_name = $library_instance->type_option_names[ $type ];
+			$type = m_chart()->get_post_meta( $post_id, 'type' );
+
+			// A type whose plugin is inactive has no name, show its slug rather than warn
+			// Plugins can relabel a type here (e.g. a chart published as a table)
+			$type_name = apply_filters( 'm_chart_admin_type_column_label', $library_instance->type_option_names[ $type ] ?? $type, $type, $post_id );
 			?>
 <span class="type <?php echo esc_attr( $type ); ?>" title="<?php echo esc_attr( $type_name ); ?>">
 			<?php echo esc_html( $type_name ); ?>
@@ -1082,10 +1091,10 @@ class M_Chart_Admin {
 			$new_columns[ $column ] = $name;
 
 			if ( 'author' === $column || 'coauthors' === $column ) {
-				$new_columns[ m_chart()->slug . '-type' ] = 'Type';
+				$new_columns[ m_chart()->slug . '-type' ] = esc_html__( 'Type', 'm-chart' );
 
 				if ( 'yes' === m_chart()->get_settings( 'show_library' ) ) {
-					$new_columns[ m_chart()->slug . '-library' ] = 'Library';
+					$new_columns[ m_chart()->slug . '-library' ] = esc_html__( 'Library', 'm-chart' );
 				}
 			}
 		}
@@ -1320,24 +1329,13 @@ class M_Chart_Admin {
 
 		// Get parseCSV library so we can use it to convert the CSV to a nice array
 		// Yes, PHP does this natively now but I've run into trouble with malformed CSV that parseCSV handles fine
-		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
+		// Make sure the parser class is loaded, then let it do what the importer always did
+		// An unsafe delimiter falls back to the csv_delimiter setting inside parse_csv_string()
+		m_chart()->parse();
 
-		$parse_csv = new parseCSV();
+		$delimiter = isset( $_POST['csv_delimiter'] ) && is_string( $_POST['csv_delimiter'] ) ? $_POST['csv_delimiter'] : null;
 
-		// The "\n" before and after is to deal with CSV files that don't have line breaks above and below the data
-		// Which then seems to confuse parseCSV occasionally
-		$csv_data = "\n" . trim( $csv_data ) . "\n";
-
-		// Set delimiter but check to make sure it's safe first
-		$parse_csv->delimiter = isset( $_POST['csv_delimiter'] ) && in_array( $_POST['csv_delimiter'], $this->safe_settings[ 'csv_delimiter' ] ) ? $_POST['csv_delimiter'] : m_chart()->get_settings( 'csv_delimiter' );
-
-		// Parse the CSV
-		$parse_csv->parse( $csv_data );
-
-		// This deals with Google Doc's crappy CSV exports which don't include columns at the end of a row if they are empty
-		$data_array = $this->fix_csv_data( $parse_csv->data );
-
-		wp_send_json_success( $data_array );
+		wp_send_json_success( M_Chart_Parse::parse_csv_string( $csv_data, $delimiter ) );
 	}
 
 	/**
@@ -1349,29 +1347,11 @@ class M_Chart_Admin {
 	 * @return array the array of data with matching array value counts
 	 */
 	public function fix_csv_data( $data_array ) {
-		$count = 0;
+		_deprecated_function( __METHOD__, '2.4', 'M_Chart_Parse::fix_csv_data()' );
 
-		// Get largest row count
-		foreach ( $data_array as $data ) {
-			$temp_count = count( $data );
+		m_chart()->parse();
 
-			$count = ( $temp_count > $count ) ? $temp_count : $count;
-		}
-
-		// Fix arrays so value counts match
-		foreach ( $data_array as $key => $data ) {
-			$temp_count = count( $data );
-
-			if ( $temp_count < $count ) {
-				$difference = $count - $temp_count;
-
-				for ( $i = 0; $i < $difference; $i++ ) {
-					$data_array[ $key ][] = '';
-				}
-			}
-		}
-
-		return $data_array;
+		return M_Chart_Parse::fix_csv_data( (array) $data_array );
 	}
 
 	/**
@@ -1411,7 +1391,8 @@ class M_Chart_Admin {
 			$cell = $this->neutralize_csv_cell( $cell );
 		} );
 
-		require_once __DIR__ . '/external/parsecsv/parsecsv.lib.php';
+		m_chart()->parse();
+		M_Chart_Parse::load_parsecsv();
 		$parse_csv = new parseCSV();
 
 		// Set delimiter
@@ -1489,15 +1470,26 @@ class M_Chart_Admin {
 			wp_send_json_error( esc_html__( 'Invalid library', 'm-chart' ) );
 		}
 
-		// Set these values so that get_chart_args has them already available before we call it
-		$library->args             = m_chart()->get_chart_default_args;
-		$library->post             = $post;
-		$library->post->post_title = sanitize_text_field( $_POST['title'] ?? '' );
+		// Plugins hooking the validation or the chart args can tell this apart from a real save
+		m_chart()->set_preview_request( true );
+
+		$post->post_title = sanitize_text_field( wp_unslash( $_POST['title'] ?? '' ) );
 
 		// validate_post_meta returns only valid post meta values and does data validation on each item
-		$library->post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] ?? [] );
+		// Its result is slashed, ready for update_post_meta() which unslashes on save
+		// Nothing is saved here so unslash it ourselves or quotes render with backslashes in the preview
+		$post_meta = wp_unslash( m_chart()->validate_post_meta( $_POST['post_meta'] ?? [], 'preview' ) );
 
-		wp_send_json_success( $library->get_chart_args( $library->post->ID, $library->args, true, false ) );
+		// Libraries written against older versions set the instance state by hand
+		if ( ! method_exists( $library, 'get_chart_args_for_meta' ) ) {
+			$library->args      = m_chart()->get_chart_default_args;
+			$library->post      = $post;
+			$library->post_meta = $post_meta;
+
+			wp_send_json_success( $library->get_chart_args( $post->ID, $library->args, true, false ) );
+		}
+
+		wp_send_json_success( $library->get_chart_args_for_meta( $post, $post_meta ) );
 	}
 
 	/**

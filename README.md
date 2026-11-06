@@ -3,8 +3,8 @@
 **Tags:** chartjs, graphs, charts, tables, data  
 **Requires PHP:** 8.1  
 **Requires at least:** 6.6  
-**Tested up to:** 7.1.3  
-**Stable tag:** 2.3.3  
+**Tested up to:** 7.1.4  
+**Stable tag:** 2.4  
 **License:** MIT  
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -60,6 +60,31 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 
 ## Changelog ##
+
+### 2.4 ###
+
+* Added a Chart.js plugin registry via the `m_chart_chartjs_plugins` filter
+* Added the `m_chart_render_uses_chartjs` filter for plugins that render a chart's data another way
+* Added chart type traits via the `m_chart_type_options` and `m_chart_type_traits` filters
+* Added a number of public PHP methods for library plugins, see the developer docs
+* Added the `m_chart.chart_args` filter and several new actions to the admin UI
+* Added new helpers to `window.m_chart` and `window.MChartHelper`
+* Added a fourth argument to `m_chart.render_done` and a `captureImage()` option for `m_chart.render_chart` renderers
+* The Type column in the chart list is now translatable and filterable
+* Removed the No Instant Preview performance option, sites using it are now treated as No Images
+* Removed the unused `m_chart_instant_preview_support` filter
+* Chart units without a group now show under Other in the Units dropdown
+* The default chart units are now created on activation
+* Minor changes to support WordPress 7.1.4
+* Deprecated `M_Chart_Admin::fix_csv_data()` in favour of `M_Chart_Parse::fix_csv_data()`
+* Fixed an issue with sheet data being stored unsanitised and with stray keys beside the sets
+* Fixed an issue with stale charts on sites with a persistent object cache
+* Fixed an issue with a failed chart refresh leaving the Save button disabled
+* Fixed an issue with the front end `m_chart.render_done` event firing on every chart on the page
+* Fixed an issue with bubble charts hiding their translucent fill
+* Fixed an issue with quotes picking up backslashes in the chart preview and the CSV export
+* Fixed an issue with backslashes in sheet cells being lost on save
+* Fixed an issue with the default chart units never being created on sites that imported charts first
 
 ### 2.3.3 ###
 

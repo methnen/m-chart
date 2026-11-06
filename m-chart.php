@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: M Chart
-Version: 2.3.3
+Version: 2.4
 Plugin URI: https://github.com/methnen/m-chart
 Description: Manage data sets via a spreadsheet interface, display them as charts via the Chart.js chart library, and embed them via a shortcode or block.
 Author: Jamie Poitra
@@ -19,3 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/components/class-m-chart.php';
 m_chart();
+
+// Seed the default chart units before any charts are imported or edited
+register_activation_hook( __FILE__, [ m_chart(), 'activate' ] );

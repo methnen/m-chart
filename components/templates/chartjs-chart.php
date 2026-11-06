@@ -26,8 +26,13 @@ $observer_options = apply_filters(
 	$args
 );
 
-$container_id = 'm-chart-container-' . absint( $post_id ) . '-' . absint( $this->instance );
-$canvas_id    = 'm-chart-' . absint( $post_id ) . '-' . absint( $this->instance );
+// get_chart() hands these in as locals, older code paths only set the instance properties
+$instance     = $instance ?? $this->instance;
+$uses_chartjs = $uses_chartjs ?? true;
+$is_iframe    = $is_iframe ?? $this->is_iframe;
+
+$container_id = m_chart()->get_container_id( $post_id, $instance );
+$canvas_id    = 'm-chart-' . absint( $post_id ) . '-' . absint( $instance );
 $caption_id   = $canvas_id . '-caption';
 $summary_id   = $canvas_id . '-summary';
 $desc_id      = $canvas_id . '-desc';
@@ -123,38 +128,29 @@ if ( '' === $summary ) {
 		do_action( 'm_chart_screen_reader_text', $post_id, $args );
 		?>
 	</div>
-	<?php if ( $show_source ) { ?>
-	<p class="m-chart-source screen-reader-text">
-		<?php
-		// The visual source attribution is painted on the canvas by the helper plugin 
-		// This makes it invisible to AT and its click target is mouse-only
-		// So this is the operable version for keyboard and screen-reader users
-		// The paragraph un-hides while the link has focus so sighted keyboard users can see it
-		esc_html_e( 'Source:', 'm-chart' );
-
-		if ( '' !== $source_url ) {
-			?>
-			<a href="<?php echo esc_url( $source_url ); ?>"><?php echo esc_html( $source_name ); ?></a>
-			<?php
-		} else {
-			echo ' ' . esc_html( $source_name );
-		}
-		?>
-	</p>
-	<?php } ?>
+	<?php echo m_chart()->render_source_html( $post_meta ); ?>
 </figure>
 <?php
+// A plugin that answered false to m_chart_render_uses_chartjs draws this chart itself, so there's no Chart.js to drive
+if ( ! $uses_chartjs ) {
+	return;
+}
+
 // Inside iframe.php the M_Chart instance has a CSP nonce set; outside (front-end / admin preview) it's empty
 // The inline <script> needs a matching nonce ONLY when rendered inside the CSP-protected iframe
 $iframe_nonce = m_chart()->iframe_csp_nonce ?? '';
+
+// Plugins that register themselves on load are listed with a null global and only need enqueuing
+// The embed iframe loads its scripts from the 'iframe' list (see M_Chart_Chartjs::m_chart_iframe_scripts()) so register from the same one
+$plugin_globals = array_filter( $this->library( 'chartjs' )->get_chartjs_plugins( $post_id, $post_meta, $is_iframe ? 'iframe' : 'inline' ) );
 ?>
 <script<?php echo $iframe_nonce ? ' nonce="' . esc_attr( $iframe_nonce ) . '"' : ''; ?>>
 	( () => {
 		const postId    = <?php echo absint( $post_id ); ?>;
-		const instance  = <?php echo absint( $this->instance ); ?>;
+		const instance  = <?php echo absint( $instance ); ?>;
 		const chartArgs = <?php echo json_encode( $this->library( 'chartjs' )->get_chart_args( $post_id, $args ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT ); ?>;
 		const canvas    = document.getElementById( 'm-chart-' + postId + '-' + instance ).getContext( '2d' );
-		<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $this->instance ); ?>
+		<?php do_action( 'm_chart_after_chart_args', $post_id, $args, $instance ); ?>
 
 		let rendered = false;
 
@@ -166,23 +162,9 @@ $iframe_nonce = m_chart()->iframe_csp_nonce ?? '';
 
 			rendered = true;
 
-			document.querySelectorAll( '.m-chart' ).forEach( el => {
-				// Build detail once so both dispatches carry identical data
-				const detail = { post_id: postId, instance };
-
-				// Canonical event name — matches the wp.hooks `m_chart.render_done` action on the admin side
-				// The chart instance type (Chart.js vs Highcharts) is identified by consumer context, not the event name
-				el.dispatchEvent( new CustomEvent( 'm_chart.render_done', {
-					bubbles: true,
-					detail,
-				} ) );
-
-				// Legacy name — deprecated, kept for one major version (planned removal in v3)
-				el.dispatchEvent( new CustomEvent( 'render_done', {
-					bubbles: true,
-					detail,
-				} ) );
-			} );
+			// Fires on this chart's own canvas only (older versions fired on every chart on the page)
+			// Canonical event name m_chart.render_done matches the wp.hooks action on the admin side, the legacy render_done rides along
+			MChartHelper.dispatchRenderDone( canvas.canvas, { post_id: postId, instance } );
 		};
 
 		const reducedMotion = window.matchMedia
@@ -202,9 +184,16 @@ $iframe_nonce = m_chart()->iframe_csp_nonce ?? '';
 
 		document.addEventListener( 'DOMContentLoaded', () => {
 			// Register the Chart.js plugins once per chart script rather than on every render
-			Chart.register( ChartDataLabels );
-			Chart.register( MChartHelper );
-			<?php do_action( 'm_chart_after_chartjs_plugins', $post_id, $args, $this->instance ); ?>
+			<?php
+			// Bracket access so hyphenated UMD names like "chartjs-plugin-annotation" work
+			foreach ( $plugin_globals as $global ) {
+				$global_js = wp_json_encode( (string) $global );
+				?>
+			if ( window[ <?php echo $global_js; ?> ] ) {
+				Chart.register( window[ <?php echo $global_js; ?> ] );
+			}
+			<?php } ?>
+			<?php do_action( 'm_chart_after_chartjs_plugins', $post_id, $args, $instance ); ?>
 
 			const defer = <?php echo $defer_rendering ? 'true' : 'false'; ?>;
 

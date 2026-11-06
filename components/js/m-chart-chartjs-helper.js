@@ -33,6 +33,46 @@ function safeNumberFormat( value, locale ) {
 }
 
 /**
+ * Format a number with the chart locale and wrap it in a dataset's prefix and suffix
+ *
+ * @param {number} num    The number to format
+ * @param {string} locale BCP 47 locale string
+ * @param {string} prefix Text before the number, e.g. a currency symbol
+ * @param {string} suffix Text after the number, e.g. a unit
+ * @return {string} The affixed, locale-formatted number, or '' when num is not finite
+ */
+function formatAffixed( num, locale, prefix = '', suffix = '' ) {
+	const value = Number( num );
+
+	if ( null == num || '' === num || ! Number.isFinite( value ) ) {
+		return '';
+	}
+
+	return ( prefix || '' ) + numberFormat( value, locale ) + ( suffix || '' );
+}
+
+/**
+ * Format a parsed data point as PHP hands it over in rawData ({ value, prefix, suffix, text })
+ *
+ * Numeric points are formatted with their own affixes, text points are returned as they are
+ *
+ * @param {Object} raw    A parsed data point
+ * @param {string} locale BCP 47 locale string
+ * @return {string} The display text, or '' when there is nothing to show
+ */
+function formatParsed( raw, locale ) {
+	if ( ! raw || 'object' !== typeof raw ) {
+		return '';
+	}
+
+	if ( null != raw.value && '' !== raw.value && Number.isFinite( Number( raw.value ) ) ) {
+		return formatAffixed( raw.value, locale, raw.prefix, raw.suffix );
+	}
+
+	return null != raw.text ? String( raw.text ) : '';
+}
+
+/**
  * Returns true for charts produced by M Chart
  *
  * M Chart always writes a `labels_pos` into the `m-chart-helper` plugin options block (see class-m-chart-chartjs.php)
@@ -251,17 +291,12 @@ function treemapFormatValue( entry, locale ) {
 		return '';
 	}
 
+	// A text cell is shown as typed even when it also carries a number
 	if ( null != entry.text && '' !== entry.text ) {
 		return entry.text;
 	}
 
-	const value = Number.isFinite( entry.value ) ? entry.value : Number( entry.value );
-
-	if ( ! Number.isFinite( value ) ) {
-		return '';
-	}
-
-	return ( entry.prefix || '' ) + numberFormat( value, locale ) + ( entry.suffix || '' );
+	return formatParsed( entry, locale );
 }
 
 /**
@@ -347,16 +382,8 @@ function chartTooltipLabel( item ) {
 
 	// Format the value using the raw data struct (prefix + localized number + suffix)
 	// Fall back to a plain formatted number if rawData is not available
-	const raw = item.dataset.rawData && item.dataset.rawData[ item.dataIndex ];
-	let rawValue;
-
-	if ( raw && null !== raw.value ) {
-		rawValue = ( raw.prefix || '' ) + numberFormat( raw.value, locale ) + ( raw.suffix || '' );
-	} else if ( raw && raw.text ) {
-		rawValue = raw.text;
-	} else {
-		rawValue = numberFormat( item.raw, locale );
-	}
+	const raw      = item.dataset.rawData && item.dataset.rawData[ item.dataIndex ];
+	const rawValue = formatParsed( raw, locale ) || numberFormat( item.raw, locale );
 
 	return prefix + rawValue;
 }
@@ -1065,7 +1092,7 @@ function wireVenn( chart ) {
 			return '';
 		}
 
-		return prefix + numberFormat( num, locale ) + suffix;
+		return formatAffixed( num, locale, prefix, suffix );
 	};
 
 	const meta = Array.isArray( ds.mChartVennMeta ) ? ds.mChartVennMeta : [];
@@ -1085,7 +1112,7 @@ function wireVenn( chart ) {
 			const raw   = item.raw || {};
 			const sets  = raw.sets || [];
 			const name  = sets.join( ' ∩ ' );
-			const value = prefix + numberFormat( Number( raw.value ) || 0, locale ) + suffix;
+			const value = formatAffixed( Number( raw.value ) || 0, locale, prefix, suffix );
 			const lines = [ name ? name + ': ' + value : value ];
 
 			// Membership-format charts know which elements are in each region — show a few
@@ -1119,15 +1146,9 @@ function wireBoxplotViolin( chart ) {
 
 	// Format a single number with the dataset's prefix/suffix and locale formatting
 	const fmtForItem = ( item, value ) => {
-		if ( value === null || value === undefined || ! Number.isFinite( value ) ) {
-			return '';
-		}
-
 		const itemDs = item && item.dataset ? item.dataset : {};
-		const prefix = itemDs.mChartDatasetPrefix || '';
-		const suffix = itemDs.mChartDatasetSuffix || '';
 
-		return prefix + numberFormat( value, locale ) + suffix;
+		return formatAffixed( value, locale, itemDs.mChartDatasetPrefix, itemDs.mChartDatasetSuffix );
 	};
 
 	chart.options.plugins.tooltip.callbacks = {
@@ -1288,14 +1309,11 @@ const MChartHelper = {
 			}
 
 			// Standard charts: use the raw data struct (prefix + localized number + suffix)
-			const raw = rawData && rawData[ dataIndex ];
+			const raw       = rawData && rawData[ dataIndex ];
+			const formatted = formatParsed( raw, locale );
 
-			if ( raw && null !== raw.value ) {
-				return ( raw.prefix || '' ) + numberFormat( raw.value, locale ) + ( raw.suffix || '' );
-			}
-
-			if ( raw && raw.text ) {
-				return raw.text;
+			if ( '' !== formatted ) {
+				return formatted;
 			}
 
 			// Fallback: format the scalar as a number if possible
@@ -1520,6 +1538,44 @@ const MChartHelper = {
 			}
 		}
 	},
+};
+
+/**
+ * Format a value the way M Chart's tooltips and labels do
+ *
+ * Pass a parsed data point ({ value, prefix, suffix, text }) from a dataset's rawData, or a plain number with optional affixes
+ *
+ * @param {Object}        chart   The Chart.js instance, for its locale
+ * @param {Object|number} value   A parsed data point or a number
+ * @param {Object}        affixes Optional { prefix, suffix } for a plain number
+ * @return {string} The display text
+ */
+MChartHelper.formatValue = function ( chart, value, affixes = {} ) {
+	const locale = chart && chart.options ? chart.options.locale : undefined;
+
+	if ( value && 'object' === typeof value ) {
+		return formatParsed( value, locale );
+	}
+
+	return formatAffixed( value, locale, affixes.prefix, affixes.suffix );
+};
+
+/**
+ * Fire the render done events on a rendered chart element
+ *
+ * Dispatches m_chart.render_done and, for one more major version, the deprecated render_done, both bubbling
+ *
+ * @param {Element} el     The chart's canvas (or the element a plugin rendered into)
+ * @param {Object}  detail Event detail, { post_id, instance } for core's own charts
+ */
+MChartHelper.dispatchRenderDone = function ( el, detail ) {
+	if ( ! el || 'function' !== typeof el.dispatchEvent ) {
+		return;
+	}
+
+	el.dispatchEvent( new CustomEvent( 'm_chart.render_done', { bubbles: true, detail } ) );
+	// Legacy name — deprecated, kept for one major version (planned removal in v3)
+	el.dispatchEvent( new CustomEvent( 'render_done', { bubbles: true, detail } ) );
 };
 
 window.MChartHelper = MChartHelper;

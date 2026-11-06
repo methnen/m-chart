@@ -127,7 +127,7 @@ All three share a single `ChartAdminProvider` rendered into a hidden container a
 Library plugins (e.g. M Chart Highcharts Library) integrate with the React admin UI via the `wp.hooks` API:
 
 - **`m_chart_admin_scripts` action** — enqueue library-specific scripts after M Chart's scripts are loaded
-- **`m_chart.render_chart` filter** — handle chart rendering in the admin preview, returning `true` to prevent the default Chart.js renderer from running
+- **`m_chart.render_chart` filter** — handle chart rendering in the admin preview, returning your chart instance (anything other than `false`) to prevent the default Chart.js renderer from running; returning `false` on a later render hands the canvas back to Chart.js, and M Chart destroys your instance first
 - **`m_chart.settings_component` filter** — replace the default Chart.js settings UI with a library-specific React component
 
 See the [Admin UI Hooks reference](https://docs.mch.art/developer/admin-ui-hooks.html) for the full list of available hooks.
