@@ -9,27 +9,105 @@
 <channel>
 	<title>M Chart — Pickle example charts</title>
 	<link>https://example.com/</link>
-	<description>17 example m-chart posts (one per chart type) using real pickle-themed data</description>
-	<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+	<description>19 example m-chart posts (one per chart type) using real pickle-themed data</description>
+	<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
 	<wp:base_site_url>https://example.com/</wp:base_site_url>
 	<wp:base_blog_url>https://example.com/</wp:base_blog_url>
+
+	<wp:term>
+		<wp:term_id>1</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[money]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Money]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>2</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[other]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Other]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>3</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[time]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Time]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>4</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[weight]]></wp:term_slug>
+		<wp:term_parent><![CDATA[]]></wp:term_parent>
+		<wp:term_name><![CDATA[Weight]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>5</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[days]]></wp:term_slug>
+		<wp:term_parent><![CDATA[time]]></wp:term_parent>
+		<wp:term_name><![CDATA[Days]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>6</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[grams]]></wp:term_slug>
+		<wp:term_parent><![CDATA[weight]]></wp:term_parent>
+		<wp:term_name><![CDATA[Grams]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>7</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[kilograms]]></wp:term_slug>
+		<wp:term_parent><![CDATA[weight]]></wp:term_parent>
+		<wp:term_name><![CDATA[Kilograms]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>8</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[milligrams]]></wp:term_slug>
+		<wp:term_parent><![CDATA[weight]]></wp:term_parent>
+		<wp:term_name><![CDATA[Milligrams]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>9</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[percent]]></wp:term_slug>
+		<wp:term_parent><![CDATA[other]]></wp:term_parent>
+		<wp:term_name><![CDATA[Percent]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>10</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[tonnes]]></wp:term_slug>
+		<wp:term_parent><![CDATA[weight]]></wp:term_parent>
+		<wp:term_name><![CDATA[Tonnes]]></wp:term_name>
+	</wp:term>
+	<wp:term>
+		<wp:term_id>11</wp:term_id>
+		<wp:term_taxonomy><![CDATA[m-chart-units]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[usd]]></wp:term_slug>
+		<wp:term_parent><![CDATA[money]]></wp:term_parent>
+		<wp:term_name><![CDATA[USD]]></wp:term_name>
+	</wp:term>
 
 	<item>
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<category domain="m-chart-units" nicename="usd"><![CDATA[USD]]></category>
 		<title><![CDATA[South Korean kimchi exports]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1000</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1000</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1000</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-area]]></wp:post_name>
@@ -49,15 +127,15 @@
 		<category domain="m-chart-units" nicename="milligrams"><![CDATA[Milligrams]]></category>
 		<title><![CDATA[Sodium content of signature pickles]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1001</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1001</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1001</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-bar]]></wp:post_name>
@@ -76,15 +154,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Finished pH across 5 commercial pickle types]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1002</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1002</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1002</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-boxplot]]></wp:post_name>
@@ -105,15 +183,15 @@
 		<category domain="m-chart-units" nicename="kilograms"><![CDATA[Kilograms]]></category>
 		<title><![CDATA[Cucumber consumption × production × exports]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1003</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1003</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1003</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-bubble]]></wp:post_name>
@@ -133,15 +211,15 @@
 		<category domain="m-chart-units" nicename="tonnes"><![CDATA[Tonnes]]></category>
 		<title><![CDATA[Top cucumber-producing countries (2022)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1004</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1004</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1004</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-column]]></wp:post_name>
@@ -160,15 +238,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Kimchi varieties by share of consumption]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1005</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1005</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1005</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-doughnut]]></wp:post_name>
@@ -187,15 +265,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Shared ingredients: kimchi, dill pickles, sauerkraut]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1006</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1006</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1006</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-euler]]></wp:post_name>
@@ -214,15 +292,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Cucumber yield by top producer country, 2014-2023]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1007</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1007</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1007</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-line]]></wp:post_name>
@@ -241,15 +319,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Chinese preserved-vegetable industry by category]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1008</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1008</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1008</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-pie]]></wp:post_name>
@@ -268,15 +346,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Google Trends interest in "pickling" (US)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1009</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1009</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1009</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-polar]]></wp:post_name>
@@ -295,15 +373,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Nutritional profile (4 pickle types)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1010</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1010</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1010</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-radar-area]]></wp:post_name>
@@ -322,15 +400,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Flavor profile of 5 globally distinct pickles]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1011</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1011</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1011</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-radar]]></wp:post_name>
@@ -350,15 +428,15 @@
 		<category domain="m-chart-units" nicename="days"><![CDATA[Days]]></category>
 		<title><![CDATA[Fermentation time vs final pH (4 pickle types)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1012</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1012</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1012</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-scatter]]></wp:post_name>
@@ -378,15 +456,15 @@
 		<category domain="m-chart-units" nicename="grams"><![CDATA[Grams]]></category>
 		<title><![CDATA[Per-capita kimchi consumption in Korea]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1013</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1013</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1013</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-spline]]></wp:post_name>
@@ -406,15 +484,15 @@
 		<category domain="m-chart-units" nicename="percent"><![CDATA[Percent]]></category>
 		<title><![CDATA[US pickle product mix by retail brand]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1014</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1014</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1014</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-stacked-bar]]></wp:post_name>
@@ -434,15 +512,15 @@
 		<category domain="m-chart-units" nicename="usd"><![CDATA[USD]]></category>
 		<title><![CDATA[Korean kimchi exports by destination]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1015</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1015</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1015</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-stacked-column]]></wp:post_name>
@@ -461,15 +539,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Top table olive producers by region (2022/23)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1016</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1016</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1016</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-treemap]]></wp:post_name>
@@ -488,15 +566,15 @@
 		<category domain="m-chart-library" nicename="chartjs"><![CDATA[chartjs]]></category>
 		<title><![CDATA[Pickling-crop production overlap (FAOSTAT top 8)]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1017</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1017</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1017</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-venn]]></wp:post_name>
@@ -516,15 +594,15 @@
 		<category domain="m-chart-units" nicename="milligrams"><![CDATA[Milligrams]]></category>
 		<title><![CDATA[Sodium content across commercial pickle brands]]></title>
 		<link>https://example.com/?post_type=m-chart&amp;p=1018</link>
-		<pubDate>Fri, 10 Jul 2026 22:59:49 GMT</pubDate>
+		<pubDate>Fri, 06 Nov 2026 04:33:42 GMT</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://example.com/?post_type=m-chart&amp;p=1018</guid>
 		<description></description>
 		<content:encoded><![CDATA[]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>1018</wp:post_id>
-		<wp:post_date><![CDATA[2026-07-10 00:00:00]]></wp:post_date>
-		<wp:post_date_gmt><![CDATA[2026-07-10 00:00:00]]></wp:post_date_gmt>
+		<wp:post_date><![CDATA[2026-11-06 00:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2026-11-06 00:00:00]]></wp:post_date_gmt>
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[pickle-violin]]></wp:post_name>

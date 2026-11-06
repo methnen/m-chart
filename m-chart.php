@@ -19,3 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/components/class-m-chart.php';
 m_chart();
+
+// Seed the default chart units before any charts are imported or edited
+register_activation_hook( __FILE__, [ m_chart(), 'activate' ] );

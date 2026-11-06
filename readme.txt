@@ -67,6 +67,8 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * The Type column in the chart list is now translatable and filterable
 * Removed the No Instant Preview performance option, sites using it are now treated as No Images
 * Removed the unused `m_chart_instant_preview_support` filter
+* Chart units without a group now show under Other in the Units dropdown
+* The default chart units are now created on activation
 * Minor changes to support WordPress 7.1.4
 * Deprecated `M_Chart_Admin::fix_csv_data()` in favour of `M_Chart_Parse::fix_csv_data()`
 * Fixed an issue with sheet data being stored unsanitised and with stray keys beside the sets
@@ -76,6 +78,7 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * Fixed an issue with bubble charts hiding their translucent fill
 * Fixed an issue with quotes picking up backslashes in the chart preview and the CSV export
 * Fixed an issue with backslashes in sheet cells being lost on save
+* Fixed an issue with the default chart units never being created on sites that imported charts first
 
 = 2.3.3 =
 

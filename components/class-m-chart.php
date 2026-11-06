@@ -307,46 +307,7 @@ class M_Chart {
 	 * Do init stuff
 	 */
 	public function init() {
-		// Register the units taxonomy
-		register_taxonomy(
-			$this->slug . '-units',
-			[ $this->slug ],
-			[
-				'hierarchical' => true,
-				'labels'       => [
-					'name'              => esc_html__( 'Chart Units', 'm-chart' ),
-					'singular_name'     => esc_html__( 'Chart Unit', 'm-chart' ),
-					'search_items'      => esc_html__( 'Search Chart Units', 'm-chart' ),
-					'all_items'         => esc_html__( 'All Chart Units', 'm-chart' ),
-					'parent_item'       => esc_html__( 'Parent Chart Unit', 'm-chart' ),
-					'parent_item_colon' => esc_html__( 'Parent Chart Unit:', 'm-chart' ),
-					'edit_item'         => esc_html__( 'Edit Chart Unit', 'm-chart' ),
-					'update_item'       => esc_html__( 'Update Chart Unit', 'm-chart' ),
-					'add_new_item'      => esc_html__( 'Add New Chart Unit', 'm-chart' ),
-					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
-					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
-				],
-				'show_ui'   => true,
-				'query_var' => true,
-				'rewrite'   => [
-					'slug' => $this->slug . '-units',
-				],
-			]
-		);
-
-		// Register the library taxonomy
-		register_taxonomy(
-			$this->slug . '-library',
-			[ $this->slug ],
-			[
-				'hierarchical' => false,
-				'show_ui'      => false,
-				'query_var'    => true,
-				'rewrite'      => [
-					'slug' => $this->slug . '-library',
-				],
-			]
-		);
+		$this->register_taxonomies();
 
 		// Register the charts custom post type
 		register_post_type(
@@ -455,6 +416,62 @@ class M_Chart {
 		if ( version_compare( $current_version, '1.7.4', 'lt' ) ) {
 			$this->upgrade_to_1_7_4();
 		}
+	}
+
+	/**
+	 * Runs on plugin activation
+	 * Seeds the default chart units so they exist before any charts are imported or edited
+	 */
+	public function activate() {
+		// The activation request loads the plugin after init has fired so the taxonomies aren't registered yet
+		$this->register_taxonomies();
+		$this->generate_unit_terms();
+	}
+
+	/**
+	 * Registers the units and library taxonomies
+	 */
+	public function register_taxonomies() {
+		// Register the units taxonomy
+		register_taxonomy(
+			$this->slug . '-units',
+			[ $this->slug ],
+			[
+				'hierarchical' => true,
+				'labels'       => [
+					'name'              => esc_html__( 'Chart Units', 'm-chart' ),
+					'singular_name'     => esc_html__( 'Chart Unit', 'm-chart' ),
+					'search_items'      => esc_html__( 'Search Chart Units', 'm-chart' ),
+					'all_items'         => esc_html__( 'All Chart Units', 'm-chart' ),
+					'parent_item'       => esc_html__( 'Parent Chart Unit', 'm-chart' ),
+					'parent_item_colon' => esc_html__( 'Parent Chart Unit:', 'm-chart' ),
+					'edit_item'         => esc_html__( 'Edit Chart Unit', 'm-chart' ),
+					'update_item'       => esc_html__( 'Update Chart Unit', 'm-chart' ),
+					'add_new_item'      => esc_html__( 'Add New Chart Unit', 'm-chart' ),
+					'new_item_name'     => esc_html__( 'Chart Unit Name', 'm-chart' ),
+					'menu_name'         => esc_html__( 'Chart Units', 'm-chart' ),
+				],
+				'show_ui'   => true,
+				'query_var' => true,
+				'rewrite'   => [
+					'slug' => $this->slug . '-units',
+				],
+			]
+		);
+
+		// Register the library taxonomy
+		register_taxonomy(
+			$this->slug . '-library',
+			[ $this->slug ],
+			[
+				'hierarchical' => false,
+				'show_ui'      => false,
+				'query_var'    => true,
+				'rewrite'      => [
+					'slug' => $this->slug . '-library',
+				],
+			]
+		);
 	}
 
 	/**
@@ -1099,7 +1116,15 @@ class M_Chart {
 	public function get_unit_terms() {
 		$terms = get_terms( $this->slug . '-units', [ 'hide_empty' => false ] );
 
-		if ( empty( $terms ) ) {
+		if ( ! is_array( $terms ) ) {
+			$terms = [];
+		}
+
+		// Seed the defaults when no unit sits under a group yet
+		// An import or a direct save can create flat unit terms before this ever runs so an empty check isn't enough
+		$grouped = array_filter( $terms, fn( $term ) => 0 != $term->parent );
+
+		if ( empty( $grouped ) ) {
 			$terms = $this->generate_unit_terms();
 		}
 
@@ -1115,19 +1140,36 @@ class M_Chart {
 	 */
 	public function compile_unit_terms( $terms ) {
 		$compiled_terms = [];
-		$parents        = [];
+		$groups         = [];
+		$used_groups    = [];
+		$other          = esc_html__( 'Other', 'm-chart' );
 
 		foreach ( $terms as $unit ) {
 			if ( 0 == $unit->parent ) {
-				$parents[ $unit->term_id ] = $unit->name;
+				$groups[ $unit->term_id ] = $unit;
 			}
 		}
 
 		foreach ( $terms as $unit ) {
-			if ( 0 != $unit->parent && isset( $parents[ $unit->parent ] ) ) {
-				$compiled_terms[ $parents[ $unit->parent ] ][] = $unit;
+			if ( 0 != $unit->parent && isset( $groups[ $unit->parent ] ) ) {
+				$compiled_terms[ $groups[ $unit->parent ]->name ][] = $unit;
+				$used_groups[ $unit->parent ]                        = true;
 			}
 		}
+
+		// A top level term with nothing under it was created flat by an import or typed straight into a chart
+		// List it under Other so it can still be picked
+		foreach ( $groups as $term_id => $group ) {
+			if ( ! isset( $used_groups[ $term_id ] ) && $group->name !== $other ) {
+				$compiled_terms[ $other ][] = $group;
+			}
+		}
+
+		foreach ( $compiled_terms as &$units ) {
+			usort( $units, fn( $a, $b ) => strcasecmp( $a->name, $b->name ) );
+		}
+
+		unset( $units );
 
 		ksort( $compiled_terms );
 
@@ -1136,26 +1178,70 @@ class M_Chart {
 
 	/**
 	 * Helper function that populates the unit terms taxonomy with a default set of terms
+	 * Safe to run more than once, existing terms are kept and a default unit that exists as a flat term is moved into its group
 	 *
-	 * @return array an array of the newly generated unit terms
+	 * @return array an array of every unit term after the defaults were added
 	 */
 	public function generate_unit_terms() {
+		$taxonomy = $this->slug . '-units';
+
 		// Load the default terms array
 		$default_terms = require __DIR__ . '/array-default-unit-terms.php';
 
-		$terms = [];
+		foreach ( $default_terms as $group_name => $unit_names ) {
+			$group = $this->get_unit_term_by_name( $group_name );
 
-		foreach ( $default_terms as $parent_term => $child_terms ) {
-			$parent  = (object) wp_insert_term( $parent_term, $this->slug . '-units' );
-			$terms[] = get_term( $parent->term_id, $this->slug . '-units' );
+			if ( $group && 0 != $group->parent ) {
+				// Someone made a unit out of this name so the group is created as a sibling, WordPress suffixes its slug
+				$group = null;
+			}
 
-			foreach ( $child_terms as $child_term ) {
-				$term    = (object) wp_insert_term( $child_term, $this->slug . '-units', [ 'parent' => $parent->term_id ] );
-				$terms[] = get_term( $term->term_id, $this->slug . '-units' );
+			$group_id = $group ? (int) $group->term_id : 0;
+
+			if ( ! $group_id ) {
+				$inserted = wp_insert_term( $group_name, $taxonomy );
+
+				if ( is_wp_error( $inserted ) ) {
+					continue;
+				}
+
+				$group_id = (int) $inserted['term_id'];
+			}
+
+			foreach ( $unit_names as $unit_name ) {
+				$unit = $this->get_unit_term_by_name( $unit_name );
+
+				if ( ! $unit ) {
+					wp_insert_term( $unit_name, $taxonomy, [ 'parent' => $group_id ] );
+				} elseif ( 0 == $unit->parent ) {
+					// An import or a direct save created this unit without a group so move it into ours
+					wp_update_term( $unit->term_id, $taxonomy, [ 'parent' => $group_id ] );
+				}
 			}
 		}
 
-		return $terms;
+		$terms = get_terms( $taxonomy, [ 'hide_empty' => false ] );
+
+		return is_array( $terms ) ? $terms : [];
+	}
+
+	/**
+	 * Finds a unit term by its name
+	 *
+	 * @param string $name the term name to look for
+	 *
+	 * @return WP_Term|null the term or null when there isn't one
+	 */
+	private function get_unit_term_by_name( $name ) {
+		$exists = term_exists( $name, $this->slug . '-units' );
+
+		if ( ! is_array( $exists ) ) {
+			return null;
+		}
+
+		$term = get_term( (int) $exists['term_id'], $this->slug . '-units' );
+
+		return $term instanceof WP_Term ? $term : null;
 	}
 
 	/**
