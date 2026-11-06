@@ -275,6 +275,45 @@ describe( 'm_chart.chart_args filter', () => {
 		expect( second ).toBe( first );
 	} );
 
+	test( 'a filter that edits the args in place leaves the base untouched', () => {
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args ) => {
+			args.options.mutated = true;
+			return args;
+		} );
+
+		const raw  = { type: 'line', options: { plugins: {} } };
+		const next = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: raw } );
+
+		expect( next.chartArgs.options.mutated ).toBe( true );
+		expect( next.baseChartArgs ).toBe( raw );
+		expect( raw.options.mutated ).toBeUndefined();
+
+		// A reapply runs the filter on a fresh copy and still hands the preview new args
+		const again = reducer( { ...next, formEnabled: true }, { type: 'REAPPLY_CHART_ARGS' } );
+
+		expect( again.chartArgs ).not.toBe( next.chartArgs );
+		expect( again.chartArgs.options.mutated ).toBe( true );
+		expect( again.formEnabled ).toBe( false );
+
+		// Removing the filter and reapplying gets the unfiltered args back
+		// As a copy, wp.hooks keeps the hook entry once a filter was registered so hasFilter() stays true
+		window.wp.hooks.removeFilter( 'm_chart.chart_args', 'test/args' );
+		const restored = reducer( again, { type: 'REAPPLY_CHART_ARGS' } );
+
+		expect( restored.chartArgs ).toEqual( raw );
+		expect( restored.chartArgs.options.mutated ).toBeUndefined();
+	} );
+
+	test( 'callbacks inside the args survive the copy handed to filters', () => {
+		const onClick = () => {};
+		window.wp.hooks.addFilter( 'm_chart.chart_args', 'test/args', ( args ) => args );
+
+		const next = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: { type: 'line', options: { onClick } } } );
+
+		expect( next.chartArgs ).not.toBe( next.baseChartArgs );
+		expect( next.chartArgs.options.onClick ).toBe( onClick );
+	} );
+
 	test( 'without a filter the rendered args are the raw args', () => {
 		const raw  = { type: 'pie' };
 		const next = reducer( stateWithArgs, { type: 'SET_CHART_ARGS', payload: raw } );

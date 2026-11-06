@@ -7,6 +7,7 @@ import TypeAndThemeRow, { isSimple2DSeries } from './components/TypeAndThemeRow'
 import { spreadsheetAutoWidth } from './components/JspreadsheetWrapper';
 import { measureTextWidth } from './utils/measureTextWidth';
 import { hasTrait } from './utils/typeTraits';
+import { deepClone } from './utils/deepClone';
 import ParseAndFlagsRow     from './components/ParseAndFlagsRow';
 import AxisRows             from './components/AxisRows';
 import SourceRow            from './components/SourceRow';
@@ -30,6 +31,7 @@ window.m_chart = {
 	spreadsheetAutoWidth,
 	measureTextWidth,
 	hasTrait,
+	deepClone,
 };
 
 /**

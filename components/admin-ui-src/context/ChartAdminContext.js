@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from '@wordpress/element';
+import { deepClone } from '../utils/deepClone';
 
 const ChartAdminStateContext    = createContext( null );
 const ChartAdminDispatchContext = createContext( null );
@@ -29,14 +30,15 @@ export function setFormEnabled( enabled ) {
  * @param {Object|null} base   Unfiltered chart args
  * @param {Object}      state  Current context state, for postId and postMeta
  * @param {string}      source 'initial' (PHP seed), 'refresh' (AJAX result) or 'reapply'
- * @return {Object|null} Filtered args, or the base when there is nothing to filter
+ * @return {Object|null} Filtered args, or the base itself when there is no filter to run
  */
 function filterChartArgs( base, state, source ) {
-	if ( ! base || ! window.wp?.hooks ) {
+	if ( ! base || ! window.wp?.hooks || ! window.wp.hooks.hasFilter( 'm_chart.chart_args' ) ) {
 		return base;
 	}
 
-	return window.wp.hooks.applyFilters( 'm_chart.chart_args', base, {
+	// Filters get a copy, so one that edits the args in place and returns them can't change the stored base
+	return window.wp.hooks.applyFilters( 'm_chart.chart_args', deepClone( base ), {
 		postId:   state.postId,
 		postMeta: state.postMeta,
 		source,
