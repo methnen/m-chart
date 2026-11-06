@@ -440,7 +440,8 @@ class M_Chart_Chartjs {
 			return;
 		}
 
-		$this->enqueue_chartjs_plugins( $post_meta, $post_id, 'inline' );
+		// Inside the embed iframe ask with the same context the iframe's script list and the template use
+		$this->enqueue_chartjs_plugins( $post_meta, $post_id, m_chart()->is_iframe ? 'iframe' : 'inline' );
 	}
 
 	/**

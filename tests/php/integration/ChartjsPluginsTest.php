@@ -93,6 +93,40 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 		$this->assertContains( 'chartjs-helper', $iframe_scripts );
 	}
 
+	public function test_iframe_render_registers_the_iframe_plugin_list(): void {
+		$post_id = $this->create_chart();
+
+		wp_register_script( 'iframe-only', 'https://example.com/iframe-only.js', [ 'chartjs' ], '1.0' );
+
+		// A plugin that only wants to be present inside the embed iframe
+		add_filter( 'm_chart_chartjs_plugins', function ( $plugins, $chart_id, $post_meta, $context ) {
+			if ( 'iframe' === $context ) {
+				$plugins['iframe-only'] = 'IframeOnly';
+			}
+
+			return $plugins;
+		}, 10, 4 );
+
+		$inline = m_chart()->get_chart( $post_id );
+
+		$this->assertStringNotContainsString( 'IframeOnly', $inline, 'the inline page registers the inline list' );
+
+		// template_redirect() sets this before the iframe template renders the chart
+		m_chart()->is_iframe = true;
+
+		try {
+			wp_scripts()->queue = [];
+
+			$iframe = m_chart()->get_chart( $post_id );
+		} finally {
+			m_chart()->is_iframe = false;
+		}
+
+		$this->assertStringContainsString( 'Chart.register( window[ "IframeOnly" ] )', $iframe, 'the iframe registers what its script list loads' );
+		$this->assertContains( 'iframe-only', wp_scripts()->queue, 'the begin hook enqueues from the iframe list too' );
+		$this->assertContains( 'iframe-only', apply_filters( 'm_chart_iframe_scripts', [ 'jquery', 'chartjs' ], $post_id ) );
+	}
+
 	public function test_render_without_chartjs_skips_the_library_and_inline_script(): void {
 		$post_id = $this->create_chart();
 

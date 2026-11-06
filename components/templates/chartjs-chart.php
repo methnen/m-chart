@@ -29,6 +29,7 @@ $observer_options = apply_filters(
 // get_chart() hands these in as locals, older code paths only set the instance properties
 $instance     = $instance ?? $this->instance;
 $uses_chartjs = $uses_chartjs ?? true;
+$is_iframe    = $is_iframe ?? $this->is_iframe;
 
 $container_id = m_chart()->get_container_id( $post_id, $instance );
 $canvas_id    = 'm-chart-' . absint( $post_id ) . '-' . absint( $instance );
@@ -140,7 +141,8 @@ if ( ! $uses_chartjs ) {
 $iframe_nonce = m_chart()->iframe_csp_nonce ?? '';
 
 // Plugins that register themselves on load are listed with a null global and only need enqueuing
-$plugin_globals = array_filter( $this->library( 'chartjs' )->get_chartjs_plugins( $post_id, $post_meta, 'inline' ) );
+// The embed iframe loads its scripts from the 'iframe' list (see M_Chart_Chartjs::m_chart_iframe_scripts()) so register from the same one
+$plugin_globals = array_filter( $this->library( 'chartjs' )->get_chartjs_plugins( $post_id, $post_meta, $is_iframe ? 'iframe' : 'inline' ) );
 ?>
 <script<?php echo $iframe_nonce ? ' nonce="' . esc_attr( $iframe_nonce ) . '"' : ''; ?>>
 	( () => {
