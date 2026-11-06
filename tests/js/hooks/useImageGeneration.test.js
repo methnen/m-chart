@@ -9,9 +9,12 @@ import { useImageGeneration } from '../../../components/admin-ui-src/hooks/useIm
 import { ChartAdminProvider, useChartAdmin } from '../../../components/admin-ui-src/context/ChartAdminContext';
 
 let latestFormEnabled = null;
+let capturedDispatch  = null;
 
 function Probe() {
-	latestFormEnabled = useChartAdmin().state.formEnabled;
+	const { state, dispatch } = useChartAdmin();
+	latestFormEnabled = state.formEnabled;
+	capturedDispatch  = dispatch;
 	return null;
 }
 
@@ -88,6 +91,59 @@ describe( 'useImageGeneration', () => {
 		expect( textarea.value ).toBe( '' );
 		expect( latestFormEnabled ).toBe( true );
 		expect( console ).toHaveErrored();
+	} );
+
+	test( 'a capture that resolves after a newer one started is discarded', async () => {
+		const done = jest.fn();
+		window.wp.hooks.addAction( 'm_chart.image_capture_done', 'test/done', done );
+
+		const resolvers = [];
+		const instance  = { captureImage: jest.fn( () => new Promise( ( resolve ) => resolvers.push( resolve ) ) ) };
+		const { generateImage, textarea } = setup( instance );
+
+		act( () => generateImage() );
+		act( () => generateImage() );
+
+		// The older capture lands first and must change nothing
+		resolvers[ 0 ]( 'data:old' );
+		await flush();
+
+		expect( textarea.value ).toBe( '' );
+		expect( done ).not.toHaveBeenCalled();
+		expect( latestFormEnabled ).toBe( false );
+
+		resolvers[ 1 ]( 'data:new' );
+		await flush();
+
+		expect( textarea.value ).toBe( 'data:new' );
+		expect( done ).toHaveBeenCalledTimes( 1 );
+		expect( done ).toHaveBeenCalledWith( 0, instance, 'data:new' );
+		expect( latestFormEnabled ).toBe( true );
+	} );
+
+	test( 'a capture invalidated by new chart args is discarded, even when it fails', async () => {
+		let settle;
+		const instance = { captureImage: () => new Promise( ( resolve, reject ) => { settle = { resolve, reject }; } ) };
+		const { generateImage, textarea } = setup( instance );
+
+		act( () => generateImage() );
+		// New args mean a new render whose own onComplete will capture, this capture is for the old chart
+		act( () => capturedDispatch( { type: 'SET_CHART_ARGS', payload: { type: 'bar' } } ) );
+
+		settle.resolve( 'data:stale' );
+		await flush();
+
+		expect( textarea.value ).toBe( '' );
+		expect( latestFormEnabled ).toBe( false );
+
+		// A stale rejection stays quiet too, nothing is logged and the form is left to the newer render
+		act( () => generateImage() );
+		act( () => capturedDispatch( { type: 'SET_CHART_ARGS', payload: { type: 'pie' } } ) );
+
+		settle.reject( new Error( 'late' ) );
+		await flush();
+
+		expect( latestFormEnabled ).toBe( false );
 	} );
 
 	test( 'a Chart.js instance is captured from its canvas', () => {

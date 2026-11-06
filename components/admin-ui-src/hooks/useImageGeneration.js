@@ -1,4 +1,4 @@
-import { useCallback, useRef } from '@wordpress/element';
+import { useCallback, useEffect, useRef } from '@wordpress/element';
 import { speak } from '@wordpress/a11y';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
@@ -20,8 +20,18 @@ export function useImageGeneration( chartRef ) {
 	const stateRef = useRef( state );
 	stateRef.current = state;
 
+	// Generation counter for the asynchronous captureImage() path
+	// Bumped on every capture start and every change of the chart args, so a capture that resolves after either is discarded
+	// Otherwise an old capture could overwrite a newer image or release Save while the newer render is still capturing
+	const captureTokenRef = useRef( 0 );
+
+	useEffect( () => {
+		captureTokenRef.current++;
+	}, [ state.chartArgs ] );
+
 	const generateImage = useCallback( () => {
-		const chart = chartRef.current;
+		const chart   = chartRef.current;
+		const myToken = ++captureTokenRef.current;
 
 		// Writes the image (when there is one), announces it and re-enables the form
 		function finishCapture( img ) {
@@ -52,11 +62,21 @@ export function useImageGeneration( chartRef ) {
 
 		if ( 'function' === typeof chart.captureImage ) {
 			const { imageWidth, imageMultiplier } = stateRef.current;
+			const isCurrent = () => myToken === captureTokenRef.current;
 
 			Promise.resolve( chart.captureImage( {
 				width:      parseInt( imageWidth, 10 ),
 				multiplier: parseFloat( imageMultiplier ) || 1,
-			} ) ).then( finishCapture, ( err ) => {
+			} ) ).then( ( img ) => {
+				// A newer render or capture owns the image and the form now
+				if ( isCurrent() ) {
+					finishCapture( img );
+				}
+			}, ( err ) => {
+				if ( ! isCurrent() ) {
+					return;
+				}
+
 				// eslint-disable-next-line no-console
 				console.error( 'm-chart: image capture failed', err );
 				finishCapture( null );
