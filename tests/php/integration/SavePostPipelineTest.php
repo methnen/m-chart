@@ -122,7 +122,9 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 		$raw = get_post_meta( $post_id, m_chart()->slug, true );
 
 		$this->assertSame( [ 'sets' ], array_keys( $raw['data'] ), 'validated sheets must be written under data.sets only' );
-		$this->assertSame( 'alert(1)Label', $raw['data']['sets'][0][1][0], 'tags are stripped from cells' );
+		// Older kses leaves the script text ("alert(1)Label"), newer kses drops the element's contents too ("Label"), both are fine
+		$this->assertStringNotContainsString( '<', $raw['data']['sets'][0][1][0], 'tags are stripped from cells' );
+		$this->assertStringEndsWith( 'Label', $raw['data']['sets'][0][1][0], 'the text outside the tag survives' );
 		$this->assertSame( 'A & B',         $raw['data']['sets'][0][2][0], 'ampersands survive as text' );
 		$this->assertSame( '<5',            $raw['data']['sets'][0][3][0], 'a lone less-than survives as text' );
 	}
