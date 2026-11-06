@@ -107,13 +107,15 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 			'type'      => 'line',
 			'parse_in'  => 'rows',
 			'theme'     => '_default',
-			// JSON string, which is the shape the real save path receives from the spreadsheet textarea
-			'data'      => json_encode( [ [
+			// Slashed JSON string, which is the shape the real save path receives from the spreadsheet textarea via $_POST
+			'data'      => wp_slash( json_encode( [ [
 				[ '', 'Series' ],
 				[ '<script>alert(1)</script>Label', 1 ],
 				[ 'A & B', 2 ],
 				[ '<5', 3 ],
-			] ] ),
+				[ "O'Reilly", 4 ],
+				[ 'C:\\temp', 5 ],
+			] ] ) ),
 			'set_names' => [ 'Sheet 1' ],
 			'height'    => 400,
 		] );
@@ -127,6 +129,16 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 		$this->assertStringEndsWith( 'Label', $raw['data']['sets'][0][1][0], 'the text outside the tag survives' );
 		$this->assertSame( 'A & B',         $raw['data']['sets'][0][2][0], 'ampersands survive as text' );
 		$this->assertSame( '<5',            $raw['data']['sets'][0][3][0], 'a lone less-than survives as text' );
+		$this->assertSame( "O'Reilly",      $raw['data']['sets'][0][4][0], 'quotes are stored without backslashes' );
+		$this->assertSame( 'C:\\temp',      $raw['data']['sets'][0][5][0], 'a backslash the user typed is kept' );
+	}
+
+	public function test_validate_data_returns_plain_text(): void {
+		// The CSV export hands this straight to the file, so it must not come back slashed or with backslashes eaten
+		$this->assertSame(
+			[ [ "O'Reilly", 'C:\\temp', 'bold', 'A & B' ] ],
+			m_chart()->validate_data( [ [ "O'Reilly", 'C:\\temp', '<b>bold</b>', 'A &amp; B' ] ] )
+		);
 	}
 
 	public function test_chart_args_cache_is_flushed_on_save(): void {

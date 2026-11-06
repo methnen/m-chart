@@ -80,6 +80,8 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * Fixed an issue with a failed chart refresh leaving the Save button disabled
 * Fixed an issue with the front end `m_chart.render_done` event firing on every chart on the page
 * Fixed an issue with bubble charts hiding their translucent fill
+* Fixed an issue with quotes picking up backslashes in the chart preview and the CSV export
+* Fixed an issue with backslashes in sheet cells being lost on save
 
 ### 2.3.3 ###
 

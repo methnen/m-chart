@@ -675,8 +675,9 @@ class M_Chart {
 		}
 
 		// Validate the data array
+		// validate_data() returns plain text, the rest of this array is slashed for update_post_meta() so match it
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
-			$chart_meta['data']['sets'][ $key ] = $this->validate_data( $data );
+			$chart_meta['data']['sets'][ $key ] = wp_slash( $this->validate_data( $data ) );
 		}
 
 		// Allow plugins to validate their own custom meta
@@ -687,10 +688,11 @@ class M_Chart {
 	}
 
 	/**
-	 * Runs all of the raw data array values through wp_filter_nohtml_kses
+	 * Strips tags from every cell of a raw (unslashed) data array
 	 *
 	 * Cells are text, not HTML, so entities kses normalises on the way through are decoded again
 	 * Otherwise a cell like "A & B" would come back as "A &amp; B" in the spreadsheet and on the canvas
+	 * The result is plain text too, callers that store it are responsible for slashing it (see validate_post_meta())
 	 *
 	 * @param array $data an array of data as passed by the user
 	 *
@@ -715,12 +717,15 @@ class M_Chart {
 	/**
 	 * Strip tags from a single spreadsheet cell while leaving its text intact
 	 *
+	 * wp_kses() is used directly rather than wp_filter_nohtml_kses(), which expects slashed input
+	 * and would eat a backslash the user typed ("C:\temp") and hand back quotes with backslashes in front
+	 *
 	 * @param mixed $value a single cell value
 	 *
 	 * @return string the cleaned cell
 	 */
 	private function validate_data_cell( $value ) {
-		return html_entity_decode( wp_filter_nohtml_kses( (string) $value ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		return html_entity_decode( wp_kses( (string) $value, 'strip' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 
 

@@ -1473,10 +1473,12 @@ class M_Chart_Admin {
 		// Plugins hooking the validation or the chart args can tell this apart from a real save
 		m_chart()->set_preview_request( true );
 
-		$post->post_title = sanitize_text_field( $_POST['title'] ?? '' );
+		$post->post_title = sanitize_text_field( wp_unslash( $_POST['title'] ?? '' ) );
 
 		// validate_post_meta returns only valid post meta values and does data validation on each item
-		$post_meta = m_chart()->validate_post_meta( $_POST['post_meta'] ?? [], 'preview' );
+		// Its result is slashed, ready for update_post_meta() which unslashes on save
+		// Nothing is saved here so unslash it ourselves or quotes render with backslashes in the preview
+		$post_meta = wp_unslash( m_chart()->validate_post_meta( $_POST['post_meta'] ?? [], 'preview' ) );
 
 		// Libraries written against older versions set the instance state by hand
 		if ( ! method_exists( $library, 'get_chart_args_for_meta' ) ) {
