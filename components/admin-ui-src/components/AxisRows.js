@@ -1,5 +1,5 @@
 import { CheckboxControl, SelectControl, TextControl } from '@wordpress/components';
-import { Fragment, useState, useCallback } from '@wordpress/element';
+import { useState, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useChartAdmin } from '../context/ChartAdminContext';
 import { measureTextWidth } from '../utils/measureTextWidth';
@@ -42,12 +42,11 @@ export default function AxisRows() {
 		<>
 			<option value="">{ __( 'N/A', 'm-chart' ) }</option>
 			{ unitTerms.map( ( { group, units } ) => (
-				<Fragment key={ group }>
-					<option value="" disabled>{ group }</option>
+				<optgroup key={ group } label={ group }>
 					{ units.map( ( unit ) => (
 						<option key={ unit.slug } value={ unit.slug }>{ unit.name }</option>
 					) ) }
-				</Fragment>
+				</optgroup>
 			) ) }
 		</>
 	);
