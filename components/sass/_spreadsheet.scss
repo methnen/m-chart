@@ -42,6 +42,16 @@
 		overflow-y: hidden;
 		white-space: nowrap;
 
+		// The line under the tabs is drawn by the bar itself, over the grid's own top border and in its colour
+		// At any browser zoom other than 100% the bar and the grid's header are rounded to the screen's pixels separately
+		// and can land a pixel apart, which showed as a white hairline between the active tab's indicator and the grid
+		// A line that belongs to the bar can't come away from the bar
+		// The z-index only has to clear the grid's sticky header cells, which sit at 2
+		// Checked in Safari, where the hairline was reported, the emulated zoom of a test browser doesn't reproduce it
+		box-shadow: 0 1px 0 #ccc;
+		position: relative;
+		z-index: 3;
+
 		&.m-chart-hide {
 			display: none;
 		}

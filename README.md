@@ -77,6 +77,7 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * Fixed an issue with the Delete Sheet dialog not answering to the keyboard
 * Fixed an issue with the wrong sheet being shown after a sheet was deleted
 * Fixed an issue with the sheet tabs being described incorrectly to screen readers
+* Fixed an issue with a hairline gap under the active sheet tab at some browser zoom levels
 * Fixed an issue with the chart block loading forever when the chart list could not be fetched
 * Fixed an issue with the chart block skipping charts after a failed Load more
 * Fixed an issue with the chart block showing the results of an earlier search
