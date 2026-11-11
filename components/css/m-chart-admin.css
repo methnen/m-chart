@@ -261,9 +261,9 @@
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab::after {
   background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-  bottom: 0;
+  bottom: -1px;
   content: "";
-  height: 0;
+  height: 1px;
   left: 0;
   pointer-events: none;
   position: absolute;
@@ -271,7 +271,7 @@
   transition: height 0.1s linear;
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab.is-active::after {
-  height: var(--wp-admin-border-width-focus, 2px);
+  height: calc(var(--wp-admin-border-width-focus, 2px) + 1px);
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab.is-active .m-chart-sheet-tab-delete {
   color: var(--m-chart-text);

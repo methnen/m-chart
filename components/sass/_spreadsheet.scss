@@ -158,11 +158,16 @@
 				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 			}
 
+			// The active tab's indicator
+			// It hangs one pixel below the tab, where the bar clips it off, so it always ends exactly on the bar's bottom edge
+			// A line this thin that ends on an edge by itself gets rounded short of it when the page is scaled
+			// (browser zoom, or a browser's mobile preview), which leaves it looking thinner than it is
+			// The hidden pixel is there on every tab so the indicator still grows from nothing when a tab becomes active
 			&::after {
 				background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-				bottom: 0;
+				bottom: -1px;
 				content: '';
-				height: 0;
+				height: 1px;
 				left: 0;
 				pointer-events: none;
 				position: absolute;
@@ -172,7 +177,7 @@
 
 			&.is-active {
 				&::after {
-					height: var(--wp-admin-border-width-focus, 2px);
+					height: calc( var(--wp-admin-border-width-focus, 2px) + 1px );
 				}
 
 				.m-chart-sheet-tab-delete {
