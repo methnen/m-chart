@@ -55,6 +55,34 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 == Changelog ==
 
+= 2.4.1 =
+
+* Chart and table text now shows exactly as typed, including `<`, `>` and `&`
+* CSV exports now open in Excel with special characters intact
+* Fixed an issue with cells starting with `=` showing as an error in the spreadsheet
+* Fixed an issue with exporting a CSV of a chart's saved data
+* Fixed an issue with negative numbers getting an apostrophe in CSV exports
+* Fixed an issue with very large CSV files running out of memory on import
+* Fixed an issue with backslashes being lost when migrating Highcharts charts
+* Fixed an issue with chart images being left behind when a chart is deleted
+* Fixed an issue with theme files not loading when their file name was unusual
+* Fixed an issue with Publish saving a draft when clicked while the chart preview was still updating
+* Fixed an issue with spaces and arrow keys not working while renaming a sheet
+* Fixed an issue with the Delete Sheet dialog not answering to the keyboard
+* Fixed an issue with the wrong sheet being shown after a sheet was deleted
+* Fixed an issue with the sheet tabs being described incorrectly to screen readers
+* Fixed an issue with the chart block loading forever when the chart list could not be fetched
+* Fixed an issue with the chart block skipping charts after a failed Load more
+* Fixed an issue with the chart block showing the results of an earlier search
+* Fixed an issue with embeds on sites whose permalinks do not end in a slash
+* Fixed an issue with `show="image"` on a chart that has no image yet
+* Fixed a security issue with password protected charts being shown without the password
+* Fixed a security issue with chart data being visible to users who could not edit the chart
+* Fixed a security issue with chart settings being editable as a custom field
+* Fixed a security issue with chart images not being checked before they were stored
+* Fixed a security issue with formulas in CSV exports
+* Fixed a cross-site scripting issue on sites still using the M Chart Highcharts Library
+
 = 2.4 =
 
 * Added a Chart.js plugin registry via the `m_chart_chartjs_plugins` filter
@@ -70,9 +98,6 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * Chart units without a group now show under Other in the Units dropdown
 * The default chart units are now created on activation
 * Minor changes to support WordPress 7.1.4
-* Chart and table text now shows exactly as typed, including `<`, `>` and `&`
-* CSV exports now open in Excel with special characters intact
-* The M Chart Highcharts Library is no longer supported, please migrate any remaining Highcharts charts to Chart.js
 * Deprecated `M_Chart_Admin::fix_csv_data()` in favour of `M_Chart_Parse::fix_csv_data()`
 * Fixed an issue with sheet data being stored unsanitised and with stray keys beside the sets
 * Fixed an issue with stale charts on sites with a persistent object cache
@@ -82,19 +107,6 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 * Fixed an issue with quotes picking up backslashes in the chart preview and the CSV export
 * Fixed an issue with backslashes in sheet cells being lost on save
 * Fixed an issue with the default chart units never being created on sites that imported charts first
-* Fixed an issue with cells starting with `=` showing as an error in the spreadsheet
-* Fixed an issue with exporting a CSV of a chart's saved data
-* Fixed an issue with negative numbers getting an apostrophe in CSV exports
-* Fixed an issue with very large CSV files running out of memory on import
-* Fixed an issue with backslashes being lost when migrating Highcharts charts
-* Fixed an issue with chart images being left behind when a chart is deleted
-* Fixed an issue with theme files not loading when their file name was unusual
-* Fixed a security issue with password protected charts being shown without the password
-* Fixed a security issue with chart data being visible to users who could not edit the chart
-* Fixed a security issue with chart settings being editable as a custom field
-* Fixed a security issue with chart images not being checked before they were stored
-* Fixed a security issue with formulas in CSV exports
-* Fixed a cross-site scripting issue on sites still using the M Chart Highcharts Library
 
 = 2.3.3 =
 

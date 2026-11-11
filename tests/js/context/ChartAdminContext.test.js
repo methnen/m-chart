@@ -105,6 +105,47 @@ describe( 'ChartAdminContext reducer', () => {
 		expect( next.activeSheet ).toBe( 1 );
 	} );
 
+	// Sheet ids never change, so the id under the active index says which sheet is active after the delete
+	test.each( [
+		// description, active index, deleted index, id of the sheet expected to be active
+		[ 'a sheet after the active one keeps the active sheet', 1, 3, 11 ],
+		[ 'a sheet before the active one keeps the active sheet', 2, 0, 12 ],
+		[ 'the sheet right before the active one keeps the active sheet', 2, 1, 12 ],
+		[ 'the last sheet keeps an active first sheet', 0, 3, 10 ],
+		[ 'the first sheet keeps an active last sheet', 3, 0, 13 ],
+		[ 'the active first sheet moves to the sheet that was next to it', 0, 0, 11 ],
+		[ 'the active middle sheet moves to the sheet before it', 2, 2, 11 ],
+		[ 'the active last sheet moves to the sheet before it', 3, 3, 12 ],
+	] )( 'DELETE_SHEET of %s', ( description, activeSheet, index, expectedId ) => {
+		const multi = {
+			...baseState,
+			spreadsheetData: [ [], [], [], [] ],
+			setNames: [ 'A', 'B', 'C', 'D' ],
+			sheetIds: [ 10, 11, 12, 13 ],
+			activeSheet,
+		};
+
+		const next = reducer( multi, { type: 'DELETE_SHEET', payload: { index } } );
+
+		expect( next.sheetIds ).toHaveLength( 3 );
+		expect( next.sheetIds[ next.activeSheet ] ).toBe( expectedId );
+	} );
+
+	test.each( [ 0, 1, 2 ] )( 'DELETE_SHEET of sheet %d leaves a valid active index when the old one was out of range', ( index ) => {
+		const multi = {
+			...baseState,
+			spreadsheetData: [ [], [], [] ],
+			setNames: [ 'A', 'B', 'C' ],
+			sheetIds: [ 0, 1, 2 ],
+			activeSheet: 7,
+		};
+
+		const next = reducer( multi, { type: 'DELETE_SHEET', payload: { index } } );
+
+		expect( next.activeSheet ).toBeGreaterThanOrEqual( 0 );
+		expect( next.activeSheet ).toBeLessThan( next.sheetIds.length );
+	} );
+
 	test( 'RENAME_SHEET updates a single set name by index', () => {
 		const next = reducer( baseState, {
 			type: 'RENAME_SHEET',

@@ -99,11 +99,16 @@ class M_Chart_Block {
 		$performance = m_chart()->get_settings( 'performance' );
 
 		// posts_per_page 1 since only existence matters
-		$args = [ 
-			'post_type' => 'm-chart', 
-			'post_status' => 'publish', 
-			'posts_per_page' => 1 
+		$args = [
+			'post_type'      => 'm-chart',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
 		];
+
+		// The same rule the chart list uses, so the block isn't told there is a chart to pick and then shown none
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			$args['has_password'] = false;
+		}
 
 		$posts = new WP_Query( $args );
 
@@ -208,11 +213,15 @@ class M_Chart_Block {
 	 * @return array found_posts count plus an array of chart summaries
 	 */
 	public function get_charts( $request ) {
+		$per_page = 9;
+
 		$args = [
 			'post_type'      => 'm-chart',
 			'post_status'    => 'publish',
-			'posts_per_page' => 9,
-			'paged'          => intval( $request->get_param( 'page' ) ) ?: 1,
+			'posts_per_page' => $per_page,
+			// Capped so the offset WP_Query works out (page × charts per page) is still an integer
+			// A page number beyond that made it a float, which is a fatal error in WP_Query rather than an empty page
+			'paged'          => min( intval( $request->get_param( 'page' ) ) ?: 1, intdiv( PHP_INT_MAX, $per_page ) ),
 		];
 
 		// Password protected charts are only listed for people who can edit every chart

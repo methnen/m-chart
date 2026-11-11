@@ -14,11 +14,14 @@ m-chart-*.zip
 .phpunit.cache/
 .phpunit.result.cache
 .playwright-auth-state.json
+.playwright-auth-state-*.json
 .wp-screenshots.json
 artifacts/
 coverage/
 playwright-report/
+playwright-report-*/
 test-results/
+test-results-*/
 tests/junit/
 vendor/
 .screenshots/

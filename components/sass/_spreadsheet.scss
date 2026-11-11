@@ -59,17 +59,40 @@
 			}
 		}
 
+		// The tab list assistive technology is given, it claims the tabs with aria-owns and holds nothing itself
+		.m-chart-sheet-tablist {
+			height: 0;
+			position: absolute;
+			width: 0;
+		}
+
+		// The box that looks like a tab
+		// The tab itself is the title inside it, with the delete button and the rename field as its siblings,
+		// because a tab may not contain other controls
 		.m-chart-sheet-tab {
 			display: flex;
 			align-items: center;
 
-			&:focus-visible {
+			// Focus is on the title, the rings are drawn round the whole box as they were when the box was the tab
+			// The second is the ring WordPress gives a focused tab item
+			&:has( > .m-chart-sheet-tab-title:focus-visible ) {
 				outline: 2px solid var(--wp-admin-theme-color, #3858e9);
 				outline-offset: -2px;
+
+				&::before {
+					box-shadow: 0 0 0 var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) var(--wpds-color-stroke-focus, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)));
+					opacity: 1;
+					outline: 2px solid transparent;
+				}
 			}
 
 			.m-chart-sheet-tab-delete {
 				color: $wp-admin-black;
+				// Shown before the title, which comes first in the markup so the Tab key reaches the tab first
+				order: -1;
+				// Above the title's stretched hit area
+				position: relative;
+				z-index: 1;
 
 				&:hover {
 					color: $wp-admin-alert-red;
@@ -93,6 +116,27 @@
 				padding: rem-calc( 0 13 0 12 );
 				border: 1px solid transparent;
 				display: inline-block;
+
+				// Stretched over the whole box, so a click, double click or long press anywhere on it still lands on the tab
+				&::before {
+					content: '';
+					inset: 0;
+					position: absolute;
+				}
+
+				// The rings are drawn on the box, see above
+				&:focus {
+					outline: none;
+				}
+			}
+
+			.m-chart-sheet-tab-rename {
+				position: relative;
+				z-index: 1;
+
+				&.is-idle {
+					display: none;
+				}
 			}
 
 			input {

@@ -9,17 +9,9 @@
 
 declare( strict_types=1 );
 
-final class ChartjsPluginsTest extends WP_UnitTestCase {
+final class ChartjsPluginsTest extends M_Chart_Integration_Test_Case {
 
-	public function set_up(): void {
-		parent::set_up();
-
-		// WP_UnitTestCase restores the hook table after every test, which drops the hooks the lazily created
-		// Chart.js library class added during whichever earlier test first touched it
-		m_chart()->library( 'chartjs' )->register_hooks();
-	}
-
-	private function create_chart( array $overrides = [] ): int {
+	private function create_plugins_chart( array $overrides = [] ): int {
 		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
 		wp_set_current_user( $editor_id );
 
@@ -59,7 +51,7 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 	}
 
 	public function test_filtered_plugin_is_enqueued_registered_and_listed_for_the_iframe(): void {
-		$post_id = $this->create_chart( [ 'source' => 'ACME Data', 'source_url' => 'https://example.com/data', 'include_source' => true ] );
+		$post_id = $this->create_plugins_chart( [ 'source' => 'ACME Data', 'source_url' => 'https://example.com/data', 'include_source' => true ] );
 
 		wp_register_script( 'fake-plugin', 'https://example.com/fake-plugin.js', [ 'chartjs' ], '1.0' );
 
@@ -94,7 +86,7 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 	}
 
 	public function test_iframe_render_registers_the_iframe_plugin_list(): void {
-		$post_id = $this->create_chart();
+		$post_id = $this->create_plugins_chart();
 
 		wp_register_script( 'iframe-only', 'https://example.com/iframe-only.js', [ 'chartjs' ], '1.0' );
 
@@ -114,13 +106,9 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 		// template_redirect() sets this before the iframe template renders the chart
 		m_chart()->is_iframe = true;
 
-		try {
-			wp_scripts()->queue = [];
+		wp_scripts()->queue = [];
 
-			$iframe = m_chart()->get_chart( $post_id );
-		} finally {
-			m_chart()->is_iframe = false;
-		}
+		$iframe = m_chart()->get_chart( $post_id );
 
 		$this->assertStringContainsString( 'Chart.register( window[ "IframeOnly" ] )', $iframe, 'the iframe registers what its script list loads' );
 		$this->assertContains( 'iframe-only', wp_scripts()->queue, 'the begin hook enqueues from the iframe list too' );
@@ -128,7 +116,7 @@ final class ChartjsPluginsTest extends WP_UnitTestCase {
 	}
 
 	public function test_render_without_chartjs_skips_the_library_and_inline_script(): void {
-		$post_id = $this->create_chart();
+		$post_id = $this->create_plugins_chart();
 
 		// The queue is checked directly because wp_script_is() also reports handles pulled in as dependencies of whatever another test enqueued
 		wp_scripts()->queue = [];

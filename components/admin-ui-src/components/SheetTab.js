@@ -14,7 +14,12 @@ import { measureTextWidth } from '../utils/measureTextWidth';
  *   - Click to activate
  *   - Double-click or long-press (500ms) to enter rename mode
  *   - Enter / blur to commit rename
- *   - Dismiss icon to delete (guarded by window.confirm)
+ *   - Dismiss icon to delete (after a confirmation dialog)
+ *
+ * What looks like one tab is three siblings in a box: the tab itself (the sheet's name), its delete button and the rename field
+ * A tab may not contain other controls, so the button and the field can't be inside it,
+ * and the tab list may only contain tabs, so SheetTabs claims each tab with aria-owns instead of wrapping these boxes
+ * The stylesheet stretches the tab over the whole box, which keeps the box clickable everywhere as it always was
  */
 export default function SheetTab( {
 	sheetId,
@@ -95,13 +100,7 @@ export default function SheetTab( {
 	}
 
 	function confirmDelete() {
-		// Activate a neighbouring sheet before deleting so the active index stays valid
-		if ( isActive ) {
-			const newActive = sheetIndex > 0 ? sheetIndex - 1 : 1;
-
-			dispatch( { type: 'SET_ACTIVE_SHEET', payload: newActive } );
-		}
-
+		// The reducer works out which sheet is active afterwards
 		dispatch( { type: 'DELETE_SHEET', payload: { index: sheetIndex } } );
 		setShowDeleteModal( false );
 		speak( __( 'Sheet deleted', 'm-chart' ) );
@@ -140,6 +139,11 @@ export default function SheetTab( {
 	].filter( Boolean ).join( ' ' );
 
 	function handleKeyActivate( e ) {
+		// The shortcuts belong to the tab itself, nothing that bubbles up from inside it
+		if ( e.target !== e.currentTarget ) {
+			return;
+		}
+
 		if ( 'Enter' === e.key || ' ' === e.key ) {
 			e.preventDefault();
 			handleClick( e );
@@ -168,50 +172,63 @@ export default function SheetTab( {
 		}
 	}
 
+	const tabId    = `spreadsheet-tab-${ sheetId }`;
+	const deleteId = `spreadsheet-tab-delete-${ sheetId }`;
+
 	return (
-		<div
-			role="tab"
-			tabIndex={ isActive ? 0 : -1 }
-			aria-selected={ isActive }
-			aria-controls={ `spreadsheet-panel-${ sheetId }` }
-			className={ className }
-			id={ `spreadsheet-tab-${ sheetId }` }
-			onClick={ handleClick }
-			onDoubleClick={ handleDoubleClick }
-			onKeyDown={ handleKeyActivate }
-			{ ...longPress }
-		>
-			{ ! isSingle && ! sheetEditingDisabled && (
-				<Button
-					className="m-chart-sheet-tab-delete"
-					icon={ circleX }
-					size="small"
-					label="Delete"
-					onClick={ handleDelete }
+		<>
+			<div className={ className }>
+				{ /* First in the markup so the Tab key reaches the tab before its delete button, the stylesheet shows the button first */ }
+				<span
+					role="tab"
+					tabIndex={ isActive ? 0 : -1 }
+					aria-selected={ isActive }
+					aria-controls={ `spreadsheet-panel-${ sheetId }` }
+					className="m-chart-sheet-tab-title"
+					id={ tabId }
+					style={ { display: isRenaming ? 'none' : '' } }
+					onClick={ handleClick }
+					onDoubleClick={ handleDoubleClick }
+					onKeyDown={ handleKeyActivate }
+					{ ...longPress }
+				>
+					{ name }
+				</span>
+				{ ! isSingle && ! sheetEditingDisabled && (
+					<Button
+						className="m-chart-sheet-tab-delete"
+						icon={ circleX }
+						size="small"
+						id={ deleteId }
+						label={ __( 'Delete', 'm-chart' ) }
+						// Named "Delete" plus the sheet's name, every sheet has one of these
+						aria-labelledby={ `${ deleteId } ${ tabId }` }
+						onClick={ handleDelete }
+					/>
+				) }
+				<TextControl
+					__next40pxDefaultSize
+					// The whole control is hidden while idle, not only its field: the label would otherwise be read out on every tab
+					// It stays in the page either way, its value is the sheet's name in the form
+					className={ `m-chart-sheet-tab-rename${ isRenaming ? '' : ' is-idle' }` }
+					label={ __( 'Rename sheet', 'm-chart' ) }
+					hideLabelFromVision
+					ref={ inputRef }
+					name={ `m-chart[set_names][${ sheetIndex }]` }
+					value={ inputValue }
+					style={ {
+						display: isRenaming ? '' : 'none',
+						width:   inputWidth,
+					} }
+					onChange={ ( value ) => setInputValue( value ) }
+					onBlur={ commitRename }
+					onKeyDown={ handleKeyDown }
 				/>
-			) }
-			<span
-				className="m-chart-sheet-tab-title"
-				style={ { display: isRenaming ? 'none' : '' } }
-			>
-				{ name }
-			</span>
-			<TextControl
-				__next40pxDefaultSize
-				label={ __( 'Rename sheet', 'm-chart' ) }
-				hideLabelFromVision
-				ref={ inputRef }
-				name={ `m-chart[set_names][${ sheetIndex }]` }
-				value={ inputValue }
-				style={ {
-					display: isRenaming ? '' : 'none',
-					width:   inputWidth,
-				} }
-				onChange={ ( value ) => setInputValue( value ) }
-				onClick={ ( e ) => e.stopPropagation() }
-				onBlur={ commitRename }
-				onKeyDown={ handleKeyDown }
-			/>
+			</div>
+			{ /*
+				Rendered outside the tab's box
+				React bubbles events through portals, so inside the tab the modal's clicks and keys would reach the tab's own handlers
+			*/ }
 			{ showDeleteModal && (
 				<Modal
 					className="m-chart-modal"
@@ -237,6 +254,6 @@ export default function SheetTab( {
 					</div>
 				</Modal>
 			) }
-		</div>
+		</>
 	);
 }

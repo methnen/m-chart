@@ -1,21 +1,82 @@
+# What Dependabot watches, and how loudly
+#
+# Almost everything in package.json only builds or tests the plugin, none of it reaches a site
+# The code that does ship is the handful of libraries copied into components/external,
+# and tests/external-libraries lists those at their vendored versions so they can be watched too
+#
+# So: build tools arrive as one batch a month, what ships is checked every week
+# See "Dependencies and Dependabot" in DEVELOPERS.md
+
 version: 2
+
 updates:
+  # Build and test tooling, plus anything bundled into the compiled JavaScript ("dependencies" in package.json)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    # Wait a week before proposing a new release, a compromised release is usually pulled within days
+    # Security updates are not delayed by this
+    cooldown:
+      default-days: 7
+    # Major versions of build tools are a deliberate job, not a monthly one
     ignore:
-      # All three of the entries below are devDependency transitives — they only run during local dev / CI builds and never ship in the deployed plugin
-      # Each one's earliest non-vulnerable version is out-of-reach because of how @wordpress/scripts pins it transitively
-      # Re-evaluate each entry when @wordpress/scripts is next bumped to a version that ships newer transitive constraints
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
+    groups:
+      # One pull request a month for every build and test tool
+      build-tools:
+        dependency-type: "development"
+      # Their security fixes as a single rolling pull request instead of one each
+      # None of this code ships, so it can be merged when convenient
+      build-tools-security:
+        applies-to: security-updates
+        dependency-type: "development"
+    # Anything in "dependencies" is left out of the groups on purpose: it ships, so it gets its own pull request
 
-      # webpack-dev-server — runs only via `npm run watch` / `npm start` for local dev
-      - dependency-name: "webpack-dev-server"
+  # The JavaScript libraries vendored into components/external
+  # A pull request here is a reminder to copy the new files in, VendoredLibrariesTest fails until they are
+  - package-ecosystem: "npm"
+    directory: "/tests/external-libraries"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    ignore:
+      # Jspreadsheet CE 5 needs jsuites 5, see the vendored libraries table in DEVELOPERS.md
+      - dependency-name: "jsuites"
+        update-types: [ "version-update:semver-major" ]
+    commit-message:
+      prefix: "Vendored library"
 
-      # serialize-javascript — pulled in via copy-webpack-plugin (WP scripts transitive)
-      # CVE flags < 7.0.5; copy-webpack-plugin pins ^6.0.0 so we're capped at 6.0.2
-      - dependency-name: "serialize-javascript"
+  # The PHP libraries vendored into components/external (Freemius SDK, parseCSV)
+  - package-ecosystem: "composer"
+    directory: "/tests/external-libraries"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "Vendored library"
 
-      # minimatch — deep transitive in the webpack/jest dep tree
-      # CVE flags < 3.1.4; some intermediate dep pins ~3.0.x so we're capped at 3.0.8
-      - dependency-name: "minimatch"
+  # PHPUnit and the other test-only PHP packages
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    groups:
+      php-test-tools:
+        patterns: [ "*" ]
+
+  # The actions the workflows run, third-party ones are pinned to a commit and updated here
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: [ "*" ]

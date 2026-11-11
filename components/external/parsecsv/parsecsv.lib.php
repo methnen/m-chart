@@ -3,6 +3,9 @@
 // Added by M Chart: this file does nothing useful when requested directly, and its fatal error would show the server path
 defined( 'ABSPATH' ) || exit;
 
+// Added by M Chart: the vendored version, parsecsv/php-parsecsv 1.3.2
+// tests/external-libraries/composer.json has to say the same, a test compares them
+
 // This file should not be used at all! Instead, please use Composer's autoload.
 // It purely exists to reduce the maintenance burden for existing code using
 // this repository.

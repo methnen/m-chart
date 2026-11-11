@@ -26,6 +26,9 @@ export default function SpreadsheetMetaBox() {
 	const spreadsheetDataRef = useRef( spreadsheetData );
 	const postIdRef          = useRef( postId );
 
+	// The submit button whose click was held back while the chart was refreshing
+	const heldButtonRef = useRef( null );
+
 	formEnabledRef.current     = formEnabled;
 	sheetIdsRef.current        = sheetIds;
 	spreadsheetDataRef.current = spreadsheetData;
@@ -94,13 +97,31 @@ export default function SpreadsheetMetaBox() {
 		}
 	}, [] );
 
-	// When formEnabled becomes true while a submit is pending, submit the form
-	// Uses form.submit() to bypass event handlers since the data textarea is already written
+	// When formEnabled becomes true while a submit is pending, finish what the user asked for
+	// That means clicking the button they clicked again, not calling form.submit()
+	// form.submit() sends the form without any button, so WordPress never hears "publish" and saves a draft,
+	// and it skips the submit event, which is where WordPress stands down its "Leave site?" warning
 	useEffect( () => {
-		if ( formEnabled && pendingSubmit ) {
-			dispatch( { type: 'SET_PENDING_SUBMIT', payload: false } );
+		if ( ! formEnabled || ! pendingSubmit ) {
+			return;
+		}
 
-			// Write latest data right before submitting
+		dispatch( { type: 'SET_PENDING_SUBMIT', payload: false } );
+
+		const button = heldButtonRef.current;
+
+		heldButtonRef.current = null;
+
+		// After this round of effects, so the buttons have had their disabled class taken off first
+		// WordPress ignores a click on a submit button that still has it
+		queueMicrotask( () => {
+			if ( button && button.isConnected ) {
+				// The click handler below writes the data and lets this one through
+				button.click();
+				return;
+			}
+
+			// The button is gone, sending the form as it stands is the best that can be done
 			writeDataToForm();
 
 			const form = document.getElementById( 'post' );
@@ -108,7 +129,7 @@ export default function SpreadsheetMetaBox() {
 			if ( form ) {
 				form.submit();
 			}
-		}
+		} );
 	}, [ formEnabled, pendingSubmit, dispatch, writeDataToForm ] );
 
 	// Detect submit intent at the click event on WP submit buttons
@@ -121,6 +142,10 @@ export default function SpreadsheetMetaBox() {
 			if ( ! formEnabledRef.current ) {
 				e.preventDefault();
 				writeDataToForm();
+
+				// Remembered so the same button can be clicked for them once the chart is ready
+				heldButtonRef.current = e.currentTarget;
+
 				dispatch( { type: 'SET_PENDING_SUBMIT', payload: true } );
 				return;
 			}

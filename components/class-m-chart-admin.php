@@ -468,7 +468,8 @@ class M_Chart_Admin {
 			return in_array( $value, $this->safe_settings[ $setting ], true ) ? $value : $default;
 		}
 
-		if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9._-]+$#', $value ) ) {
+		// D so that $ only matches at the very end, without it a value with a line break after it would pass
+		if ( is_string( $value ) && preg_match( '#^[a-zA-Z0-9._-]+$#D', $value ) ) {
 			return $value;
 		}
 

@@ -1,0 +1,9 @@
+{
+    "name": "methnen/m-chart-external-libraries",
+    "description": "The PHP libraries copied into components/external, at the versions that are there. Nothing is installed from this file: it exists so GitHub can see what the plugin ships. See DEVELOPERS.md.",
+    "license": "MIT",
+    "require": {
+        "freemius/wordpress-sdk": "2.13.5",
+        "parsecsv/php-parsecsv": "1.3.2"
+    }
+}

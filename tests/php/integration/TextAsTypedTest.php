@@ -13,7 +13,7 @@
 
 declare( strict_types=1 );
 
-final class TextAsTypedTest extends WP_UnitTestCase {
+final class TextAsTypedTest extends M_Chart_Integration_Test_Case {
 
 	protected $backupGlobals                  = false;
 	protected $beStrictAboutOutputDuringTests = false;
@@ -21,18 +21,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 
-		m_chart()->library( 'chartjs' )->register_hooks();
-		m_chart()->reset_settings();
-
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'editor' ] ) );
-	}
-
-	public function tear_down(): void {
-		remove_all_filters( 'm_chart_get_libraries' );
-		remove_all_filters( 'm_chart_library_paints_plain_text' );
-		unset( $_GET['post'] );
-		set_current_screen( 'front' );
-		parent::tear_down();
 	}
 
 	public static function typed_strings(): array {
@@ -70,7 +59,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 		m_chart()->update_post_meta( $post_id, $meta );
 	}
 
-	private function create_chart( string $text, string $library = 'chartjs' ): int {
+	private function create_typed_chart( string $text, string $library = 'chartjs' ): int {
 		$post_id = self::factory()->post->create( [
 			'post_type'   => m_chart()->slug,
 			'post_status' => 'publish',
@@ -134,7 +123,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	 * @dataProvider typed_strings
 	 */
 	public function test_stored_meta_gives_back_exactly_what_was_typed( string $text ): void {
-		$meta = m_chart()->get_post_meta( $this->create_chart( $text ) );
+		$meta = m_chart()->get_post_meta( $this->create_typed_chart( $text ) );
 
 		$this->assertSame( 'Label ' . $text, $meta['data']['sets'][0][0][1], 'label cell' );
 		$this->assertSame( 'Row ' . $text, $meta['data']['sets'][0][1][0], 'row label cell' );
@@ -150,7 +139,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	 * @dataProvider typed_strings
 	 */
 	public function test_the_canvas_is_given_exactly_what_was_typed( string $text ): void {
-		$args = $this->chart_args( $this->create_chart( $text ) );
+		$args = $this->chart_args( $this->create_typed_chart( $text ) );
 
 		$this->assertSame( $text, $args['options']['plugins']['subtitle']['text'], 'subtitle' );
 		$this->assertSame( $text, $args['options']['scales']['x']['title']['text'], 'x axis title' );
@@ -168,7 +157,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	 * @dataProvider typed_strings
 	 */
 	public function test_the_html_table_shows_exactly_what_was_typed( string $text ): void {
-		$html = m_chart()->build_table( $this->create_chart( $text ) );
+		$html = m_chart()->build_table( $this->create_typed_chart( $text ) );
 
 		$this->assertContains( 'Label ' . $text, $this->shown_text( $html, '//table[1]//thead//th' ), 'column header' );
 		$this->assertContains( 'Row ' . $text, $this->shown_text( $html, '//table[1]//tbody//th' ), 'row header' );
@@ -183,7 +172,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	 * @dataProvider typed_strings
 	 */
 	public function test_the_editor_is_given_exactly_what_was_typed( string $text ): void {
-		$post_id = $this->create_chart( $text );
+		$post_id = $this->create_typed_chart( $text );
 
 		$screen         = WP_Screen::get( m_chart()->slug );
 		$screen->base   = 'post';
@@ -191,8 +180,6 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 
 		$GLOBALS['current_screen'] = $screen;
 		$_GET['post']              = (string) $post_id;
-
-		wp_scripts()->remove( 'm-chart-admin-ui' );
 
 		m_chart()->admin()->current_screen( $screen );
 
@@ -217,7 +204,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 		// Everything in the row that holds text
 		$text_keys = array_flip( array_merge( M_Chart::TEXT_FIELDS, [ 'data', 'set_names', 'text_format' ] ) );
 
-		$post_id = $this->create_chart( $text );
+		$post_id = $this->create_typed_chart( $text );
 		$first   = array_intersect_key( get_post_meta( $post_id, m_chart()->slug, true ), $text_keys );
 
 		for ( $save = 0; $save < 10; $save++ ) {
@@ -240,7 +227,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	 * @dataProvider typed_strings
 	 */
 	public function test_the_preview_matches_the_saved_chart( string $text ): void {
-		$post_id = $this->create_chart( $text );
+		$post_id = $this->create_typed_chart( $text );
 		$saved   = m_chart()->library( 'chartjs' )->get_chart_args_for_meta( $post_id, m_chart()->get_post_meta( $post_id ) );
 
 		// The preview validates the posted, unsaved meta and builds the args from the result
@@ -293,7 +280,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_stamped_chart_is_not_decoded_again(): void {
-		$meta = m_chart()->get_post_meta( $this->create_chart( '&amp;lt;' ) );
+		$meta = m_chart()->get_post_meta( $this->create_typed_chart( '&amp;lt;' ) );
 
 		// A cell someone really typed as an entity stays that entity
 		$this->assertSame( 'Cell &amp;lt;', $meta['data']['sets'][0][1][2] );
@@ -303,7 +290,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 		// Any library but Chart.js is assumed to render strings as HTML, the way Highcharts does
 		add_filter( 'm_chart_get_libraries', static fn( $libraries ) => $libraries + [ 'otherlib' => 'Other Library' ] );
 
-		$meta = m_chart()->get_post_meta( $this->create_chart( '<img src=x onerror=alert(1)> kept', 'otherlib' ) );
+		$meta = m_chart()->get_post_meta( $this->create_typed_chart( '<img src=x onerror=alert(1)> kept', 'otherlib' ) );
 
 		$this->assertSame( 'otherlib', $meta['library'] );
 		$this->assertSame( 'Cell  kept', $meta['data']['sets'][0][1][2], 'cells are tag stripped' );
@@ -318,7 +305,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	public function test_the_filter_brings_the_tag_stripping_back_for_chartjs(): void {
 		add_filter( 'm_chart_library_paints_plain_text', '__return_false' );
 
-		$post_id = $this->create_chart( 'x < y > z <b>bold</b>' );
+		$post_id = $this->create_typed_chart( 'x < y > z <b>bold</b>' );
 		$meta    = m_chart()->get_post_meta( $post_id );
 
 		$this->assertSame( 'Cell x  z bold', $meta['data']['sets'][0][1][2] );
@@ -333,7 +320,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_source_and_a_unit_with_an_ampersand_are_painted_without_the_entity(): void {
-		$post_id = $this->create_chart( 'R&D' );
+		$post_id = $this->create_typed_chart( 'R&D' );
 
 		// WordPress stores the term name as "R&amp;D kg"
 		$term = wp_insert_term( 'R&D kg', m_chart()->slug . '-units' );
@@ -356,7 +343,7 @@ final class TextAsTypedTest extends WP_UnitTestCase {
 	}
 
 	public function test_the_post_title_loses_real_tags_and_keeps_typed_text(): void {
-		$post_id = $this->create_chart( 'x' );
+		$post_id = $this->create_typed_chart( 'x' );
 
 		// An administrator's title is stored unfiltered
 		wp_update_post( [ 'ID' => $post_id, 'post_title' => 'Sales <em>2026</em> R&amp;D &lt;draft&gt;' ] );

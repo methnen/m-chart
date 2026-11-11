@@ -35,11 +35,11 @@ const CHART_META = {
 test.describe( '@a11y frontend chart output', () => {
 	test( 'rendered chart region has no WCAG 2.1 A/AA violations', async ( {
 		page,
-		requestUtils,
+		postFactory,
 		chartFactory,
 	} ) => {
 		const chart = await chartFactory( { title: 'A11y chart', meta: CHART_META } );
-		const post  = await requestUtils.createPost( {
+		const post  = await postFactory( {
 			content: `[m-chart id="${ chart.id }"]`,
 			status:  'publish',
 			title:   'A11y chart embed',
@@ -75,11 +75,11 @@ test.describe( '@a11y frontend chart output', () => {
 
 	test( 'show="table" output has no WCAG 2.1 A/AA violations', async ( {
 		page,
-		requestUtils,
+		postFactory,
 		chartFactory,
 	} ) => {
 		const chart = await chartFactory( { title: 'A11y table chart', meta: CHART_META } );
-		const post  = await requestUtils.createPost( {
+		const post  = await postFactory( {
 			content: `[m-chart id="${ chart.id }" show="table"]`,
 			status:  'publish',
 			title:   'A11y table embed',

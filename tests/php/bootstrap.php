@@ -27,6 +27,9 @@ if ( $tests_dir && file_exists( $tests_dir . '/includes/functions.php' ) ) {
 	} );
 
 	require $tests_dir . '/includes/bootstrap.php';
+
+	// The shared base class extends WP_UnitTestCase, which only exists once the line above has run
+	require_once __DIR__ . '/integration/class-m-chart-integration-test-case.php';
 } else {
 	// Tier A — Brain Monkey for pure-function unit tests
 	if ( ! defined( 'ABSPATH' ) ) {

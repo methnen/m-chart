@@ -2,8 +2,18 @@ name: JS Tests
 
 on:
   push:
-    branches: [ main, wordpress-7, pro-support ]
+    branches: [ main ]
   pull_request:
+  # Run by hand against any branch from the Actions tab
+  workflow_dispatch:
+  # Run by the deploy workflow as its gate
+  workflow_call:
+
+# A new push to a pull request replaces the run before it, nothing else is ever cancelled
+# The name is spelled out because github.workflow is the caller's name when the deploy workflow runs this
+concurrency:
+  group: js-tests-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Required for the test reporter to post check results, PR comments, and source-line annotations
 permissions:
@@ -16,21 +26,22 @@ jobs:
     name: "Jest"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
 
-      - run: npm ci
+      # Jest runs the source, so skip the asset build that postinstall would run
+      - run: npm ci --ignore-scripts
 
       - name: Run Jest with coverage
         run: npm run test:js:coverage -- --ci
 
       - name: Upload Jest JUnit XML
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jest-junit
           path: tests/junit/jest.xml
@@ -38,7 +49,7 @@ jobs:
 
       - name: Upload Jest coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jest-coverage
           path: coverage/
@@ -46,7 +57,7 @@ jobs:
 
       - name: Publish Jest test results
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@a16be3a69023e9bd7e748ede768b3282ea7b30ce # v6.7.1
         with:
           report_paths: tests/junit/jest.xml
           check_name: Jest
@@ -56,24 +67,25 @@ jobs:
 
       - name: Upload Jest coverage to Codecov
         if: always()
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: coverage/lcov.info
           flags: js
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
 
   lint:
     name: "ESLint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
 
       # Scope lint to source directories only — `components/` also contains
       # compiled webpack output (admin-ui/, block/) and vendored libraries

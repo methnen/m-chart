@@ -206,7 +206,12 @@ export function reducer( state, action ) {
 			const spreadsheetData = state.spreadsheetData.filter( ( _, i ) => i !== idx );
 			const setNames        = state.setNames.filter( ( _, i ) => i !== idx );
 			const sheetIds        = state.sheetIds.filter( ( _, i ) => i !== idx );
-			const activeSheet     = Math.min( state.activeSheet, spreadsheetData.length - 1 );
+
+			// The active sheet stays the same sheet, so its index moves down when a sheet before it is deleted
+			// When the active sheet itself is deleted the one before it takes over, or the next one if it was the first
+			const shifted     = idx <= state.activeSheet ? state.activeSheet - 1 : state.activeSheet;
+			const activeSheet = Math.min( Math.max( shifted, 0 ), spreadsheetData.length - 1 );
+
 			return { ...state, spreadsheetData, setNames, sheetIds, activeSheet };
 		}
 

@@ -57,9 +57,12 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:full": "node tests/bin/docker-preflight.js && npm run build && npm run wp-env start && playwright test",
+    "test:e2e:site-settings": "playwright test --project=site-settings --no-deps",
     "test:a11y": "playwright test tests/e2e/a11y",
+    "test:package": "npm run build:zip && node tests/bin/check-package.js",
     "pretest:e2e": "node tests/bin/docker-preflight.js",
     "pretest:a11y": "node tests/bin/docker-preflight.js",
+    "pretest:e2e:site-settings": "node tests/bin/docker-preflight.js",
     "postinstall": "npm run build"
   },
   "repository": {

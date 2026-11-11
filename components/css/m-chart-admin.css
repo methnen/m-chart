@@ -193,16 +193,29 @@
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-add-sheet:disabled {
   color: var(--m-chart-disabled);
 }
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tablist {
+  height: 0;
+  position: absolute;
+  width: 0;
+}
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab {
   display: flex;
   align-items: center;
 }
-#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab:focus-visible {
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab:has(> .m-chart-sheet-tab-title:focus-visible) {
   outline: 2px solid var(--wp-admin-theme-color, #3858e9);
   outline-offset: -2px;
 }
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab:has(> .m-chart-sheet-tab-title:focus-visible)::before {
+  box-shadow: 0 0 0 var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) var(--wpds-color-stroke-focus, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)));
+  opacity: 1;
+  outline: 2px solid transparent;
+}
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete {
   color: var(--m-chart-text);
+  order: -1;
+  position: relative;
+  z-index: 1;
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-delete:hover {
   color: var(--m-chart-alert-error);
@@ -220,6 +233,21 @@
   padding: 0 0.8125rem 0 0.75rem;
   border: 1px solid transparent;
   display: inline-block;
+}
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-title::before {
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-title:focus {
+  outline: none;
+}
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-rename {
+  position: relative;
+  z-index: 1;
+}
+#m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab .m-chart-sheet-tab-rename.is-idle {
+  display: none;
 }
 #m-chart-spreadsheet .m-chart-sheet-tabs .m-chart-sheet-tab input {
   min-width: 1.875rem;

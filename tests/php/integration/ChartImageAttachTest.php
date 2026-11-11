@@ -9,14 +9,12 @@
 
 declare( strict_types=1 );
 
-final class ChartImageAttachTest extends WP_UnitTestCase {
+final class ChartImageAttachTest extends M_Chart_Integration_Test_Case {
 
 	private int $author;
 
 	public function set_up(): void {
 		parent::set_up();
-
-		m_chart()->library( 'chartjs' )->register_hooks();
 
 		// The before_delete_post hook is registered in the constructor and restored between tests like any other
 		if ( ! has_action( 'before_delete_post', [ m_chart(), 'before_delete_post' ] ) ) {
@@ -29,22 +27,16 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function tear_down(): void {
-		unset( $_POST['m-chart'], $_POST['post_ID'] );
 		$this->remove_added_uploads();
 		parent::tear_down();
 	}
 
-	private function create_chart( array $args = [] ): WP_Post {
-		$post_id = self::factory()->post->create( array_merge( [
-			'post_type'   => m_chart()->slug,
+	private function create_image_chart( array $args = [] ): WP_Post {
+		return get_post( $this->create_chart( array_merge( [
 			'post_status' => 'draft',
 			'post_author' => $this->author,
 			'post_title'  => 'Image chart',
-		], $args ) );
-
-		update_post_meta( $post_id, m_chart()->slug, m_chart()->validate_post_meta( [ 'library' => 'chartjs' ] ) );
-
-		return get_post( $post_id );
+		], $args ) ) );
 	}
 
 	/**
@@ -64,7 +56,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_real_png_is_attached_to_the_chart(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 
 		$this->post_image( $this->png() );
 
@@ -78,7 +70,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_data_that_only_starts_like_a_png_is_not_stored(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 
 		$this->post_image( "\x89PNG\r\n\x1a\n" . str_repeat( 'JUNK-NOT-A-PNG ', 2000 ) );
 
@@ -87,7 +79,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_the_image_goes_on_the_chart_being_saved_not_the_post_the_request_names(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 		$other = self::factory()->post->create( [ 'post_author' => $this->author ] );
 
 		$this->post_image( $this->png() );
@@ -110,7 +102,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_chart_the_user_cannot_edit_gets_no_image(): void {
-		$chart = $this->create_chart( [ 'post_author' => self::factory()->user->create( [ 'role' => 'editor' ] ) ] );
+		$chart = $this->create_image_chart( [ 'post_author' => self::factory()->user->create( [ 'role' => 'editor' ] ) ] );
 
 		$this->post_image( $this->png() );
 
@@ -119,7 +111,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_saving_again_replaces_the_image_rather_than_adding_one(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 
 		$this->post_image( $this->png() );
 
@@ -132,7 +124,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_failed_upload_keeps_the_image_the_chart_already_had(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 
 		$this->post_image( $this->png() );
 
@@ -152,7 +144,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_password_protected_chart_gets_no_image_and_loses_the_one_it_had(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 
 		$this->post_image( $this->png() );
 
@@ -168,7 +160,7 @@ final class ChartImageAttachTest extends WP_UnitTestCase {
 	}
 
 	public function test_deleting_a_chart_deletes_its_image(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_image_chart();
 
 		$this->post_image( $this->png() );
 

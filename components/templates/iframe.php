@@ -7,68 +7,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 $library = $this->get_post_meta( $post->ID, 'library' );
 $this->library( $library );
 
-// Resolve all CSP allowlists and font descriptors upfront so we can emit one header before any output begins
+// Resolve the stylesheets, inline styles and font descriptors upfront so we can emit one header before any output begins
 $style_urls       = apply_filters( 'm_chart_iframe_styles',        [], $post->ID );
 $inline_styles    = apply_filters( 'm_chart_iframe_inline_styles', [], $post->ID );
 $font_descriptors = apply_filters( 'm_chart_iframe_fonts',         [], $post->ID );
 
-// Default allowed style-src hosts cover the well-known font-service stylesheet origins
-// Site owners using Fontspring, FontAwesome CDN, an internal CDN, etc. can extend via the filter
-$style_hosts = apply_filters( 'm_chart_iframe_csp_style_src', [ 'fonts.googleapis.com', 'use.typekit.net' ], $post->ID );
-// Default allowed font-src hosts cover where Google Fonts + Adobe Typekit actually load their .woff2 files from
-$font_hosts = apply_filters( 'm_chart_iframe_csp_font_src', [ 'fonts.gstatic.com', 'use.typekit.net', 'p.typekit.net' ], $post->ID );
-
-// Auto-extract hosts from anything passed through m_chart_iframe_styles
-// Site owners can add a stylesheet URL without also having to register its host in the CSP filter
-foreach ( $style_urls as $style_url ) {
-	$host = wp_parse_url( $style_url, PHP_URL_HOST );
-
-	if ( $host ) {
-		$style_hosts[] = $host;
-	}
-}
-
-// Auto-extract hosts from m_chart_iframe_fonts font sources too
-// Only the sources render_font_face() will actually print are allowlisted
-foreach ( $font_descriptors as $font ) {
-	foreach ( M_Chart::font_face_sources( (array) $font ) as $src ) {
-		$host = wp_parse_url( $src['url'], PHP_URL_HOST );
-
-		if ( $host ) {
-			$font_hosts[] = $host;
-		}
-	}
-}
-
-$style_hosts = array_unique( array_filter( $style_hosts ) );
-$font_hosts  = array_unique( array_filter( $font_hosts ) );
-
-// frame-ancestors controls who's allowed to embed this iframe page
-// Default 'self' permits same-origin embedding; site owners syndicating charts to third-party sites can add origins here
-$frame_ancestors = apply_filters( 'm_chart_iframe_frame_ancestors', [ "'self'" ], $post->ID );
-
 // Generate per-response CSP nonce — cryptographically random, NOT a CSRF nonce (wp_create_nonce is the wrong tool here)
 $nonce = bin2hex( random_bytes( 16 ) );
 
-// Whitelist the characters that can appear in a valid CSP source expression
-// esc_attr() is for HTML attributes — it would encode 'self' as &#039;self&#039; here and break the directive
-// Stripping anything outside this character class prevents header injection (CRLF, semicolons) while preserving keywords/hosts/schemes
-$sanitize_csp_source = static function ( $value ) {
-	return preg_replace( '/[^A-Za-z0-9.\-_:\/*\'+=@]/', '', (string) $value );
-};
-
-// style-src uses 'unsafe-inline' (not a nonce) because inline style="..." attributes can't carry a nonce
-// CSS-driven exfiltration vectors (url(), @font-face src, @import) are still blocked by font-src / img-src / connect-src
-// script-src keeps a nonce since the chart template emits a dynamic inline <script> we want strictly gated
-$csp = sprintf(
-	"default-src 'none'; style-src 'self' 'unsafe-inline' %s; script-src 'self' 'nonce-%s'; font-src 'self' data: %s; img-src 'self' data:; connect-src 'self'; frame-ancestors %s;",
-	implode( ' ', array_map( $sanitize_csp_source, $style_hosts ) ),
-	$nonce,
-	implode( ' ', array_map( $sanitize_csp_source, $font_hosts  ) ),
-	implode( ' ', array_map( $sanitize_csp_source, $frame_ancestors ) )
-);
-
-header( 'Content-Security-Policy: ' . $csp );
+// The allowlists, their filters and the sanitising of every source live in M_Chart::iframe_csp()
+header( 'Content-Security-Policy: ' . $this->iframe_csp( $nonce, $post->ID, $style_urls, $font_descriptors ) );
 
 // Expose the nonce to chartjs-chart.php so its inline <script> can carry a matching nonce attribute
 $this->iframe_csp_nonce = $nonce;

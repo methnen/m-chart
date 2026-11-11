@@ -10,7 +10,7 @@
 
 declare( strict_types=1 );
 
-final class EditorScreenPostIdTest extends WP_UnitTestCase {
+final class EditorScreenPostIdTest extends M_Chart_Integration_Test_Case {
 
 	private const MARKER = 'SECRETCELL';
 
@@ -19,35 +19,20 @@ final class EditorScreenPostIdTest extends WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 
-		m_chart()->library( 'chartjs' )->register_hooks();
-
-		$this->victim_chart = $this->create_chart( self::factory()->user->create( [ 'role' => 'administrator' ] ), 'draft' );
-
-		wp_scripts()->remove( 'm-chart-admin-ui' );
+		$this->victim_chart = $this->create_secret_chart( self::factory()->user->create( [ 'role' => 'administrator' ] ), 'draft' );
 	}
 
-	public function tear_down(): void {
-		unset( $_GET['post'], $_GET['post_type'] );
-		wp_scripts()->remove( 'm-chart-admin-ui' );
-		set_current_screen( 'front' );
-		parent::tear_down();
-	}
-
-	private function create_chart( int $author_id, string $status ): int {
-		$post_id = self::factory()->post->create( [
-			'post_type'   => m_chart()->slug,
-			'post_status' => $status,
-			'post_author' => $author_id,
-		] );
-
-		update_post_meta( $post_id, m_chart()->slug, m_chart()->validate_post_meta( [
-			'library'  => 'chartjs',
-			'type'     => 'column',
-			'subtitle' => 'sub ' . self::MARKER,
-			'data'     => [ 'sets' => [ [ [ '', 'A' ], [ self::MARKER, 1 ] ] ] ],
-		] ) );
-
-		return $post_id;
+	private function create_secret_chart( int $author_id, string $status ): int {
+		return $this->create_chart(
+			[
+				'post_status' => $status,
+				'post_author' => $author_id,
+			],
+			[
+				'subtitle' => 'sub ' . self::MARKER,
+				'data'     => [ 'sets' => [ [ [ '', 'A' ], [ self::MARKER, 1 ] ] ] ],
+			]
+		);
 	}
 
 	/**
@@ -99,7 +84,7 @@ final class EditorScreenPostIdTest extends WP_UnitTestCase {
 
 	public function test_edit_screen_loads_the_users_own_chart(): void {
 		$contributor = self::factory()->user->create( [ 'role' => 'contributor' ] );
-		$own_chart   = $this->create_chart( $contributor, 'draft' );
+		$own_chart   = $this->create_secret_chart( $contributor, 'draft' );
 
 		wp_set_current_user( $contributor );
 

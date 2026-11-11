@@ -11,7 +11,7 @@
 
 declare( strict_types=1 );
 
-final class MetaHardeningTest extends WP_UnitTestCase {
+final class MetaHardeningTest extends M_Chart_Integration_Test_Case {
 
 	protected $backupGlobals                  = false;
 	protected $beStrictAboutOutputDuringTests = false;
@@ -23,19 +23,12 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 
-		m_chart()->library( 'chartjs' )->register_hooks();
-
 		$this->contributor = self::factory()->user->create( [ 'role' => 'contributor' ] );
 
 		wp_set_current_user( $this->contributor );
 	}
 
-	public function tear_down(): void {
-		unset( $_POST['metakeyinput'], $_POST['metakeyselect'], $_POST['metavalue'] );
-		parent::tear_down();
-	}
-
-	private function create_chart( string $status = 'draft' ): int {
+	private function create_bare_chart( string $status = 'draft' ): int {
 		return self::factory()->post->create( [
 			'post_type'   => m_chart()->slug,
 			'post_status' => $status,
@@ -78,7 +71,7 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_chart_editor_cannot_write_the_row_through_meta_capabilities(): void {
-		$chart = $this->create_chart();
+		$chart = $this->create_bare_chart();
 
 		// What XML-RPC and the add-meta AJAX action ask before they write a custom field
 		$this->assertTrue( current_user_can( 'edit_post', $chart ) );
@@ -90,7 +83,7 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	public function test_the_custom_field_form_handler_refuses_the_row(): void {
 		require_once ABSPATH . 'wp-admin/includes/post.php';
 
-		$chart = $this->create_chart();
+		$chart = $this->create_bare_chart();
 
 		// What post.php passes on when a save carries a new custom field
 		$_POST['metakeyinput'] = 'm-chart';
@@ -101,7 +94,7 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_hostile_row_is_given_safe_types_on_read(): void {
-		$chart = $this->create_chart( 'publish' );
+		$chart = $this->create_bare_chart( 'publish' );
 
 		// Straight into the database, the way an import would
 		update_post_meta( $chart, 'm-chart', wp_slash( $this->hostile_row() ) );
@@ -117,7 +110,7 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	}
 
 	public function test_an_ordinary_source_url_is_left_exactly_as_stored(): void {
-		$chart = $this->create_chart( 'publish' );
+		$chart = $this->create_bare_chart( 'publish' );
 
 		foreach ( [ 'https://example.com/path?a=1&b=2#frag', 'http://example.com/', 'mailto:someone@example.com', '/relative/path' ] as $url ) {
 			update_post_meta( $chart, 'm-chart', [ 'library' => 'chartjs', 'source_url' => $url ] );
@@ -127,7 +120,7 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_row_that_is_not_an_array_is_treated_as_no_meta(): void {
-		$chart = $this->create_chart( 'publish' );
+		$chart = $this->create_bare_chart( 'publish' );
 
 		// wp_parse_args() used to read this as a query string and fill the fields from it
 		update_post_meta( $chart, 'm-chart', 'type=pie&subtitle=injected&height=99999' );
@@ -140,7 +133,7 @@ final class MetaHardeningTest extends WP_UnitTestCase {
 	}
 
 	public function test_a_hostile_row_renders_without_markup_or_errors(): void {
-		$chart = $this->create_chart( 'publish' );
+		$chart = $this->create_bare_chart( 'publish' );
 
 		update_post_meta( $chart, 'm-chart', wp_slash( $this->hostile_row() ) );
 

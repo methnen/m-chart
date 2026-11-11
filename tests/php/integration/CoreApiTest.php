@@ -8,7 +8,7 @@
 
 declare( strict_types=1 );
 
-final class CoreApiTest extends WP_UnitTestCase {
+final class CoreApiTest extends M_Chart_Integration_Test_Case {
 
 	public function set_up(): void {
 		parent::set_up();

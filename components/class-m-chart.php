@@ -827,7 +827,7 @@ class M_Chart {
 		}
 
 		// Theme isn't included in chart_meta_fields so it's validated here
-		if ( isset( $meta['theme'] ) && is_string( $meta['theme'] ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
+		if ( isset( $meta['theme'] ) && is_string( $meta['theme'] ) && preg_match( '#^[a-zA-Z0-9-_]+$#D', $meta['theme'] ) ) {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
@@ -1084,8 +1084,11 @@ class M_Chart {
 
 			// Default behavior is to return the full size image but with the width/height values halved
 			// This should result in an image that looks nice on retina or better screens
-			$image['width']  = $image['width'] / 2;
-			$image['height'] = $image['height'] / 2;
+			// A chart without an image stays false here so the filter below can stand the placeholder in for it
+			if ( $image ) {
+				$image['width']  = $image['width'] / 2;
+				$image['height'] = $image['height'] / 2;
+			}
 
 			$image = apply_filters( 'm_chart_get_chart_image_tag', $image, $post_id, $args );
 
@@ -1346,7 +1349,15 @@ class M_Chart {
 	public function get_chart_iframe( $post_id, $args = [] ) {
 		$post_meta = $this->get_post_meta( $post_id );
 
-		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
+		$permalink = get_permalink( $post_id );
+
+		// The embed endpoint is a path on the end of a pretty permalink
+		// A permalink with a query string (plain permalinks: ?m-chart=slug) has no path to add it to, the endpoint's query var asks for the same thing
+		$embed_url = false === strpos( (string) $permalink, '?' )
+			? trailingslashit( $permalink ) . 'embed/'
+			: add_query_arg( 'embed', '1', $permalink );
+
+		$src_url = add_query_arg( $args, $embed_url );
 
 		$defer_lazy = 'enabled' === $this->get_settings( 'defer_rendering' );
 
@@ -1357,7 +1368,8 @@ class M_Chart {
 	title="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 	src="<?php echo esc_url( $src_url ); ?>"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
 		<?php
-		if ( 'show' == $args['share'] ) {
+		// The share template asks for this iframe again without the share argument, and a caller may leave it out altogether
+		if ( 'show' == ( $args['share'] ?? '' ) ) {
 			unset( $args['share'] );
 			require apply_filters( 'm_chart_share_template', __DIR__ . '/templates/share.php' );
 		}
@@ -1661,6 +1673,74 @@ class M_Chart {
 
 		require __DIR__ . '/templates/iframe.php';
 		exit;
+	}
+
+	/**
+	 * Build the Content-Security-Policy the embed document is sent with
+	 *
+	 * The embed template has already resolved the stylesheets and fonts it is about to print and hands them in,
+	 * so their hosts are allowlisted here without running those filters a second time
+	 *
+	 * @param string $nonce            the per-response nonce the chart's inline script carries
+	 * @param int    $post_id          WP post ID of the chart being embedded
+	 * @param array  $style_urls       the stylesheet URLs returned by the m_chart_iframe_styles filter
+	 * @param array  $font_descriptors the font descriptors returned by the m_chart_iframe_fonts filter
+	 *
+	 * @return string the policy, without the header name
+	 */
+	public function iframe_csp( $nonce, $post_id, $style_urls = [], $font_descriptors = [] ) {
+		// Default allowed style-src hosts cover the well-known font-service stylesheet origins
+		// Site owners using Fontspring, FontAwesome CDN, an internal CDN, etc. can extend via the filter
+		$style_hosts = apply_filters( 'm_chart_iframe_csp_style_src', [ 'fonts.googleapis.com', 'use.typekit.net' ], $post_id );
+		// Default allowed font-src hosts cover where Google Fonts + Adobe Typekit actually load their .woff2 files from
+		$font_hosts = apply_filters( 'm_chart_iframe_csp_font_src', [ 'fonts.gstatic.com', 'use.typekit.net', 'p.typekit.net' ], $post_id );
+
+		// Auto-extract hosts from anything passed through m_chart_iframe_styles
+		// Site owners can add a stylesheet URL without also having to register its host in the CSP filter
+		foreach ( $style_urls as $style_url ) {
+			$host = wp_parse_url( $style_url, PHP_URL_HOST );
+
+			if ( $host ) {
+				$style_hosts[] = $host;
+			}
+		}
+
+		// Auto-extract hosts from m_chart_iframe_fonts font sources too
+		// Only the sources render_font_face() will actually print are allowlisted
+		foreach ( $font_descriptors as $font ) {
+			foreach ( self::font_face_sources( (array) $font ) as $src ) {
+				$host = wp_parse_url( $src['url'], PHP_URL_HOST );
+
+				if ( $host ) {
+					$font_hosts[] = $host;
+				}
+			}
+		}
+
+		$style_hosts = array_unique( array_filter( $style_hosts ) );
+		$font_hosts  = array_unique( array_filter( $font_hosts ) );
+
+		// frame-ancestors controls who's allowed to embed this iframe page
+		// Default 'self' permits same-origin embedding; site owners syndicating charts to third-party sites can add origins here
+		$frame_ancestors = apply_filters( 'm_chart_iframe_frame_ancestors', [ "'self'" ], $post_id );
+
+		// Whitelist the characters that can appear in a valid CSP source expression
+		// esc_attr() is for HTML attributes — it would encode 'self' as &#039;self&#039; here and break the directive
+		// Stripping anything outside this character class prevents header injection (CRLF, semicolons) while preserving keywords/hosts/schemes
+		$sanitize_csp_source = static function ( $value ) {
+			return preg_replace( '/[^A-Za-z0-9.\-_:\/*\'+=@]/', '', (string) $value );
+		};
+
+		// style-src uses 'unsafe-inline' (not a nonce) because inline style="..." attributes can't carry a nonce
+		// CSS-driven exfiltration vectors (url(), @font-face src, @import) are still blocked by font-src / img-src / connect-src
+		// script-src keeps a nonce since the chart template emits a dynamic inline <script> we want strictly gated
+		return sprintf(
+			"default-src 'none'; style-src 'self' 'unsafe-inline' %s; script-src 'self' 'nonce-%s'; font-src 'self' data: %s; img-src 'self' data:; connect-src 'self'; frame-ancestors %s;",
+			implode( ' ', array_map( $sanitize_csp_source, $style_hosts ) ),
+			$nonce,
+			implode( ' ', array_map( $sanitize_csp_source, $font_hosts  ) ),
+			implode( ' ', array_map( $sanitize_csp_source, $frame_ancestors ) )
+		);
 	}
 
 	/**

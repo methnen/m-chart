@@ -38,10 +38,13 @@
 /jest.config.js
 /playwright.config.js
 /playwright-report
+/playwright-report-*
 /test-results
+/test-results-*
 /vendor
 /artifacts
 /.screenshots
 /.wp-screenshots.json
 /m-chart-*.zip
 *.map
+/.playwright-auth-state.json

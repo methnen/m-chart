@@ -108,7 +108,7 @@ function isSafeSourceUrl( url ) {
 	try {
 		// Relative links resolve against the page, the same way the browser would follow them
 		return SOURCE_URL_PROTOCOLS.includes( new URL( url, window.location.href ).protocol );
-	} catch ( err ) {
+	} catch {
 		return false;
 	}
 }

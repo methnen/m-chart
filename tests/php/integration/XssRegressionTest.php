@@ -19,7 +19,7 @@
 
 declare( strict_types=1 );
 
-final class XssRegressionTest extends WP_UnitTestCase {
+final class XssRegressionTest extends M_Chart_Integration_Test_Case {
 
 	/**
 	 * The render code uses ob_start() internally and doesn't always close cleanly
@@ -41,27 +41,11 @@ final class XssRegressionTest extends WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 
-		// The Chart.js instance is created lazily and its hooks don't survive WP_UnitTestCase's hook restore
-		m_chart()->library( 'chartjs' )->register_hooks();
-
-		// Settings are memoised on the plugin object, a test that ran earlier may have left embeds switched on
-		m_chart()->reset_settings();
-
 		$this->contributor_id = self::factory()->user->create( [
 			'role' => 'contributor',
 		] );
 
 		wp_set_current_user( $this->contributor_id );
-	}
-
-	public function tear_down(): void {
-		m_chart()->is_iframe        = false;
-		m_chart()->iframe_csp_nonce = '';
-
-		unset( $_GET['post'] );
-		set_current_screen( 'front' );
-
-		parent::tear_down();
 	}
 
 	public static function xss_payloads(): array {
@@ -90,7 +74,7 @@ final class XssRegressionTest extends WP_UnitTestCase {
 	public function test_contributor_xss_does_not_execute_in_chart_render( string $payload ): void {
 		$post_id = $this->create_chart_with_payload( $payload );
 
-		$output = $this->safe_render( fn () => m_chart()->get_chart( $post_id ) );
+		$output = $this->render( fn () => m_chart()->get_chart( $post_id ) );
 
 		$this->assertNotSame( '', $output, 'The chart rendered' );
 		$this->assert_only_template_markup( $output, 1, $payload );
@@ -107,7 +91,7 @@ final class XssRegressionTest extends WP_UnitTestCase {
 		m_chart()->is_iframe        = true;
 		m_chart()->iframe_csp_nonce = 'testnonce';
 
-		$output = $this->safe_render( fn () => m_chart()->get_chart( $post_id ) );
+		$output = $this->render( fn () => m_chart()->get_chart( $post_id ) );
 
 		$this->assertNotSame( '', $output, 'The chart rendered' );
 		$this->assert_only_template_markup( $output, 1, $payload );
@@ -120,7 +104,7 @@ final class XssRegressionTest extends WP_UnitTestCase {
 	public function test_contributor_xss_does_not_execute_in_table_render( string $payload ): void {
 		$post_id = $this->create_chart_with_payload( $payload );
 
-		$output = $this->safe_render( fn () => m_chart()->build_table( $post_id ) );
+		$output = $this->render( fn () => m_chart()->build_table( $post_id ) );
 
 		$this->assertStringContainsString( '<table', $output, 'The table rendered' );
 		$this->assert_only_template_markup( $output, 0, $payload );
@@ -141,8 +125,6 @@ final class XssRegressionTest extends WP_UnitTestCase {
 
 		$GLOBALS['current_screen'] = $screen;
 		$_GET['post']              = (string) $post_id;
-
-		wp_scripts()->remove( 'm-chart-admin-ui' );
 
 		m_chart()->admin()->current_screen( $screen );
 
@@ -168,79 +150,45 @@ final class XssRegressionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Capture render output. If the render throws (e.g. a render-time bug
-	 * triggered by the unusual payload data), the exception itself is the
-	 * "no XSS reached output" condition since the user gets a fatal-error
-	 * page rather than executable script content.
-	 */
-	private function safe_render( callable $render ): string {
-		$ob_level_before = ob_get_level();
-
-		try {
-			$result = $render();
-			return is_string( $result ) ? $result : '';
-		} catch ( \Throwable $e ) {
-			// Clean up any ob_start() buffers the render opened but didn't close
-			while ( ob_get_level() > $ob_level_before ) {
-				ob_end_clean();
-			}
-
-			$this->fail( 'The render threw: ' . $e->getMessage() );
-		}
-	}
-
-	/**
 	 * Helper: create a chart post owned by the contributor with the XSS payload
 	 * sprayed across every label-bearing field
 	 */
 	private function create_chart_with_payload( string $payload ): int {
-		$post_id = self::factory()->post->create( [
-			'post_type'   => m_chart()->slug,
-			'post_status' => 'publish',
-			'post_author' => $this->contributor_id,
-			'post_title'  => 'Test chart ' . wp_generate_password( 8, false ),
-		] );
-
-		// Build a minimal valid chart with the payload in every label field
-		// Slashed the way a form post arrives, which is what validate_post_meta() expects
-		$meta = wp_slash( [
-			'library'        => 'chartjs',
-			'type'           => 'line',
-			'parse_in'       => 'rows',
-			'theme'          => '_default',
-			'labels'         => 1,
-			'legend'         => 1,
-			'include_source' => 1,
-			'subtitle'       => $payload,
-			'x_title'        => $payload,
-			'y_title'        => $payload,
-			'source'         => $payload,
-			'source_url'     => 'https://example.com/?q=' . rawurlencode( $payload ),
-			'set_names'      => [ $payload, $payload ],
-			'height'         => 400,
-		] );
-
-		// Two sheets so the table caption carries the set name, cells both as labels and as values
-		$meta['data'] = [
-			'sets' => [
-				[
-					[ '',       $payload, 'Plain' ],
-					[ $payload, 1,        $payload ],
-					[ 'Plain',  2,        '5 ' . $payload ],
-				],
-				[
-					[ '',       'B' ],
-					[ $payload, 3 ],
-				],
+		// A minimal valid chart with the payload in every label field
+		// create_chart() runs it through the plugin's own validation so the test reflects the real save path
+		return $this->create_chart(
+			[
+				'post_author' => $this->contributor_id,
+				'post_title'  => 'Test chart ' . wp_generate_password( 8, false ),
 			],
-		];
-
-		// Run through the plugin's own validation pipeline so the test
-		// reflects the real save path
-		$validated = m_chart()->validate_post_meta( $meta );
-		update_post_meta( $post_id, m_chart()->slug, $validated );
-
-		return $post_id;
+			[
+				'type'           => 'line',
+				'theme'          => '_default',
+				'labels'         => 1,
+				'legend'         => 1,
+				'include_source' => 1,
+				'subtitle'       => $payload,
+				'x_title'        => $payload,
+				'y_title'        => $payload,
+				'source'         => $payload,
+				'source_url'     => 'https://example.com/?q=' . rawurlencode( $payload ),
+				'set_names'      => [ $payload, $payload ],
+				// Two sheets so the table caption carries the set name, cells both as labels and as values
+				'data'           => [
+					'sets' => [
+						[
+							[ '',       $payload, 'Plain' ],
+							[ $payload, 1,        $payload ],
+							[ 'Plain',  2,        '5 ' . $payload ],
+						],
+						[
+							[ '',       'B' ],
+							[ $payload, 3 ],
+						],
+					],
+				],
+			]
+		);
 	}
 
 	/**

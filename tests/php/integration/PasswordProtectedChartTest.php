@@ -11,7 +11,7 @@
 
 declare( strict_types=1 );
 
-final class PasswordProtectedChartTest extends WP_UnitTestCase {
+final class PasswordProtectedChartTest extends M_Chart_Integration_Test_Case {
 
 	private const PASSWORD = 'hunter2';
 	private const MARKER   = 'SECRETROW';
@@ -22,44 +22,18 @@ final class PasswordProtectedChartTest extends WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 
-		// The Chart.js instance is created lazily and its hooks don't survive WP_UnitTestCase's hook restore
-		m_chart()->library( 'chartjs' )->register_hooks();
-
-		$this->protected_id = $this->create_chart( [ 'post_password' => self::PASSWORD, 'post_title' => 'Protected chart' ] );
-		$this->open_id      = $this->create_chart( [ 'post_title' => 'Open chart' ] );
+		$this->protected_id = $this->create_marked_chart( [ 'post_password' => self::PASSWORD, 'post_title' => 'Protected chart' ] );
+		$this->open_id      = $this->create_marked_chart( [ 'post_title' => 'Open chart' ] );
 
 		wp_set_current_user( 0 );
 		unset( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] );
 	}
 
-	public function tear_down(): void {
-		unset( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] );
-		wp_reset_postdata();
-
-		// The option is rolled back with the test's transaction, the settings m_chart() has memoised are not
-		m_chart()->reset_settings();
-
-		parent::tear_down();
-	}
-
-	private function create_chart( array $post_args ): int {
-		$post_id = self::factory()->post->create( array_merge( [
-			'post_type'   => m_chart()->slug,
-			'post_status' => 'publish',
-		], $post_args ) );
-
-		$meta = m_chart()->validate_post_meta( [
-			'library'  => 'chartjs',
-			'type'     => 'column',
-			'parse_in' => 'rows',
+	private function create_marked_chart( array $post_args ): int {
+		return $this->create_chart( $post_args, [
 			'subtitle' => 'sub ' . self::MARKER,
-			'height'   => 400,
 			'data'     => [ 'sets' => [ [ [ '', 'A', 'B' ], [ self::MARKER, 1, 2 ] ] ] ],
 		] );
-
-		update_post_meta( $post_id, m_chart()->slug, $meta );
-
-		return $post_id;
 	}
 
 	/**
@@ -144,16 +118,10 @@ final class PasswordProtectedChartTest extends WP_UnitTestCase {
 		$this->assertTrue( is_admin() );
 		$this->assertTrue( m_chart()->is_password_locked( $this->protected_id ) );
 		$this->assertFalse( m_chart()->is_password_locked( $this->open_id ) );
-
-		remove_filter( 'wp_doing_ajax', '__return_true' );
-		set_current_screen( 'front' );
 	}
 
 	public function test_rest_chart_route_hides_a_protected_chart_from_a_subscriber(): void {
-		global $wp_rest_server;
-
-		$wp_rest_server = new WP_REST_Server();
-		do_action( 'rest_api_init' );
+		$this->start_rest_server();
 
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'subscriber' ] ) );
 
@@ -168,15 +136,10 @@ final class PasswordProtectedChartTest extends WP_UnitTestCase {
 
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertSame( $this->protected_id, $response->get_data()['id'] );
-
-		$wp_rest_server = null;
 	}
 
 	public function test_rest_charts_list_leaves_protected_charts_out_for_a_contributor(): void {
-		global $wp_rest_server;
-
-		$wp_rest_server = new WP_REST_Server();
-		do_action( 'rest_api_init' );
+		$this->start_rest_server();
 
 		wp_set_current_user( self::factory()->user->create( [ 'role' => 'contributor' ] ) );
 
@@ -190,7 +153,5 @@ final class PasswordProtectedChartTest extends WP_UnitTestCase {
 		$ids = wp_list_pluck( rest_do_request( new WP_REST_Request( 'GET', '/m-chart/v1/charts' ) )->get_data()['posts'], 'id' );
 
 		$this->assertContains( $this->protected_id, $ids );
-
-		$wp_rest_server = null;
 	}
 }
