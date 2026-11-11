@@ -2,6 +2,9 @@
 
 namespace ParseCsv\enums;
 
+// Added by M Chart: this file does nothing useful when requested directly, and its fatal error would show the server path
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Class DatatypeEnum
  *

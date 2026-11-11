@@ -15,6 +15,10 @@
  * broken embed would mean the payload never reaches the page and the __pwned
  * check would pass vacuously.
  *
+ * Since 2.4 chart text is stored exactly as typed and escaped where it is printed, so the later tests here
+ * check the sinks themselves: that the payload is on the page as text, in the chart as a label, and that
+ * nothing it contains became an element.
+ *
  * Tagged @security so this runs on every CI push, not just nightly.
  */
 
@@ -145,5 +149,129 @@ test.describe( '@security XSS regression — Wordfence M-Chart-194', () => {
 
 		const pwned = await page.evaluate( () => window.__pwned );
 		expect( pwned ).toBeUndefined();
+	} );
+
+	// Three ways of writing the same attack: as markup, as a script element breakout, and typed as entities
+	const PAYLOADS = [
+		'<img src=x onerror="window.__pwned=true">',
+		'</script><script>window.__pwned=true</script>',
+		'&lt;img src=x onerror=window.__pwned=true&gt;',
+	];
+
+	const TYPED = PAYLOADS.join( ' ' );
+
+	// The fixture writes the meta row directly, so the text fields go in the way a save stores them: HTML-encoded
+	// Cells and set names are stored exactly as typed
+	const stored = ( text ) => text
+		.replace( /&/g, '&amp;' )
+		.replace( /</g, '&lt;' )
+		.replace( />/g, '&gt;' )
+		.replace( /"/g, '&quot;' )
+		.replace( /'/g, '&#039;' );
+
+	// A chart with the payloads in every place that holds text, stamped the way a 2.4 save stamps it
+	const payloadMeta = () => ( {
+		text_format:    2,
+		include_source: true,
+		subtitle:       stored( TYPED ),
+		x_title:        stored( TYPED ),
+		y_title:        stored( TYPED ),
+		source:         stored( TYPED ),
+		source_url:     'javascript:window.__pwned=true',
+		set_names:      [ TYPED ],
+		data: {
+			sets: [ [
+				[ '', ...PAYLOADS ],
+				[ PAYLOADS[ 0 ], 1, 2, 3 ],
+				[ PAYLOADS[ 1 ], 4, 5, 6 ],
+				[ PAYLOADS[ 2 ], 7, 8, 9 ],
+			] ],
+		},
+	} );
+
+	test( 'Payloads in every field are text on the chart page and nothing else', async ( {
+		page,
+		requestUtils,
+		chartFactory,
+	} ) => {
+		const dialogs = [];
+
+		page.on( 'dialog', ( dialog ) => {
+			dialogs.push( dialog.message() );
+			dialog.dismiss();
+		} );
+
+		const chart = await chartFactory( { meta: payloadMeta() } );
+		const post  = await requestUtils.createPost( {
+			content: `[chart id="${ chart.id }"]`,
+			status:  'publish',
+			title:   'XSS every field test',
+		} );
+
+		await trackChartRender( page );
+		await page.goto( `/?p=${ post.id }` );
+		await expectChartRendered( page );
+
+		expect( await page.evaluate( () => window.__pwned ) ).toBeUndefined();
+		expect( dialogs ).toEqual( [] );
+
+		// Nothing in the chart text became an element
+		await expect( page.locator( '.m-chart-container img, .m-chart-container svg, .m-chart-container iframe, .m-chart-container script' ) ).toHaveCount( 0 );
+		await expect( page.locator( '.m-chart-container [onerror], .m-chart-container [onload]' ) ).toHaveCount( 0 );
+
+		// The chart was given the text exactly as it is stored
+		const chartText = await page.evaluate( () => {
+			const instance = window.Chart.getChart( document.querySelector( 'canvas.m-chart' ) );
+
+			return {
+				labels:    instance.data.labels,
+				series:    instance.data.datasets.map( ( dataset ) => dataset.label ),
+				// Long text is handed to Chart.js as an array of lines
+				subtitle:  [].concat( instance.options.plugins.subtitle.text ).join( ' ' ),
+				sourceUrl: instance.options.plugins.mchart.source_url,
+			};
+		} );
+
+		expect( chartText.labels ).toEqual( PAYLOADS );
+		expect( chartText.series ).toEqual( PAYLOADS );
+		expect( chartText.subtitle ).toBe( TYPED );
+
+		// A javascript: source link never reaches the page
+		expect( chartText.sourceUrl ).toBe( '' );
+
+		// And the data table shows the same text
+		const headers = await page.locator( 'table.m-chart-table thead th' ).allTextContents();
+
+		expect( headers.map( ( header ) => header.trim() ) ).toEqual( PAYLOADS );
+	} );
+
+	test( 'Payloads in every field are text in the chart editor', async ( { page, chartEditPage } ) => {
+		const dialogs = [];
+
+		page.on( 'dialog', ( dialog ) => {
+			dialogs.push( dialog.message() );
+			dialog.dismiss();
+		} );
+
+		await chartEditPage.open( { meta: payloadMeta() } );
+
+		expect( await page.evaluate( () => window.__pwned ) ).toBeUndefined();
+		expect( dialogs ).toEqual( [] );
+
+		// The spreadsheet shows each cell as the text it holds
+		const firstColumn = await page.evaluate( () =>
+			Array.from( document.querySelectorAll( '#m-chart-spreadsheet-root .jss_worksheet tbody tr' ) )
+				.slice( 1, 4 )
+				.map( ( row ) => row.querySelectorAll( 'td' )[ 1 ].textContent )
+		);
+
+		expect( firstColumn ).toEqual( PAYLOADS );
+
+		// Nothing in a cell or a field became an element
+		await expect( page.locator( '#m-chart-spreadsheet-root img, #m-chart-spreadsheet-root svg[onload], #m-chart-spreadsheet-root script' ) ).toHaveCount( 0 );
+		await expect( page.locator( '#m-chart-subtitle-root img, #m-chart-subtitle-root script, #m-chart-chart-root script' ) ).toHaveCount( 0 );
+
+		// And the subtitle field holds the text for editing
+		await expect( page.locator( '#m-chart-subtitle-root input' ).first() ).toHaveValue( TYPED );
 	} );
 } );

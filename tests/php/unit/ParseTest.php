@@ -317,4 +317,24 @@ final class ParseTest extends TestCase {
 		$this->parser->parse_data( [ [ 'Apr', 10 ], [ 'May', 20 ] ], M_Chart_Parse::PARSE_ROWS );
 		$this->assertSame( [], $this->parser->get_dropped_sets() );
 	}
+
+	public function test_a_number_too_large_to_be_a_float_stays_text(): void {
+		// 320 nines overflow floatval() to INF, which json_encode() refuses and so took the whole chart and its editor down
+		$huge = str_repeat( '9', 320 );
+
+		$this->assertSame( $huge, $this->parser->clean_data_point( $huge ) );
+
+		$point = $this->parser->parse_data_point( $huge );
+
+		$this->assertNull( $point->value );
+		$this->assertSame( $huge, $point->text );
+		$this->assertNotFalse( json_encode( $point ) );
+	}
+
+	public function test_a_large_but_finite_number_is_still_a_number(): void {
+		$big = '1' . str_repeat( '0', 300 );
+
+		$this->assertSame( 1e300, $this->parser->clean_data_point( $big ) );
+		$this->assertSame( 1e300, $this->parser->parse_data_point( $big )->value );
+	}
 }

@@ -524,7 +524,7 @@ class M_Chart_Chartjs {
 
 		// Run the parse class on the data
 		$data = isset( $this->post_meta['data']['sets'][0] ) ? $this->post_meta['data']['sets'][0] : [];
-		m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+		m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'], m_chart()->parse_text_mode( 'chartjs' ) );
 
 		$type = $this->post_meta['type'];
 
@@ -538,7 +538,7 @@ class M_Chart_Chartjs {
 						$defaults['plugins']['title'],
 						[
 							'display' => true,
-							'text'    => $this->esc_title( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
+							'text'    => $this->title_text( apply_filters( 'the_title', $this->post->post_title, $this->post->ID ) ),
 						]
 					),
 					'legend' => array_merge(
@@ -564,7 +564,7 @@ class M_Chart_Chartjs {
 				$defaults['plugins']['subtitle'],
 				[
 					'display' => true,
-					'text'    => $this->esc_title( $this->post_meta['subtitle'] ),
+					'text'    => $this->canvas_text( $this->post_meta['subtitle'] ),
 				]
 			);
 		}
@@ -629,7 +629,7 @@ class M_Chart_Chartjs {
 				$chart_args['options']['plugins']['mchart'] = [];
 			}
 
-			$chart_args['options']['plugins']['mchart']['source']         = $this->post_meta['source'];
+			$chart_args['options']['plugins']['mchart']['source']         = $this->source_text( $this->post_meta['source'] );
 			$chart_args['options']['plugins']['mchart']['source_url']     = $this->post_meta['source_url'];
 			$chart_args['options']['plugins']['mchart']['include_source'] = true;
 			// How much extra bottom padding the source line is given, so plugins positioning their own content can allow for it
@@ -1109,33 +1109,43 @@ class M_Chart_Chartjs {
 		$chart_args['options']['scales']['x']['title'] = [
 			'color'   => '#222222',
 			'display' => '' == $this->post_meta['x_title'] ? false : true,
-			'text'    => $this->esc_title( $this->post_meta['x_title'] ),
+			'text'    => $this->canvas_text( $this->post_meta['x_title'] ),
 		];
 
 		// We've got x axis units so we'll add them to the axis label
 		if ( '' != $this->post_meta['x_units'] ) {
-			$chart_args['options']['scales']['x']['title']['display'] = true;
+			$units = get_term_by( 'slug', $this->post_meta['x_units'], m_chart()->slug . '-units' );
 
-			$units   = get_term_by( 'slug', $this->post_meta['x_units'], m_chart()->slug . '-units' );
-			$x_units = '' != $this->post_meta['x_title'] ? ' (' . $units->name . ')' : $units->name;
+			// The unit can be missing if its term was deleted or the meta didn't come through the editor
+			if ( $units instanceof WP_Term ) {
+				$chart_args['options']['scales']['x']['title']['display'] = true;
 
-			$chart_args['options']['scales']['x']['title']['text'] .= $x_units;
+				$unit_name = $this->unit_text( $units->name );
+				$x_units   = '' != $this->post_meta['x_title'] ? ' (' . $unit_name . ')' : $unit_name;
+
+				$chart_args['options']['scales']['x']['title']['text'] .= $x_units;
+			}
 		}
 
 		$chart_args['options']['scales']['y']['title'] = [
 			'color'   => '#222222',
 			'display' => '' == $this->post_meta['y_title'] ? false : true,
-			'text'    => $this->esc_title( $this->post_meta['y_title'] ),
+			'text'    => $this->canvas_text( $this->post_meta['y_title'] ),
 		];
 
 		// We've got y axis units so we'll add them to the axis label
 		if ( '' != $this->post_meta['y_units'] ) {
-			$chart_args['options']['scales']['y']['title']['display'] = true;
+			$units = get_term_by( 'slug', $this->post_meta['y_units'], m_chart()->slug . '-units' );
 
-			$units   = get_term_by( 'slug', $this->post_meta['y_units'], m_chart()->slug . '-units' );
-			$y_units = '' != $this->post_meta['y_title'] ? ' (' . $units->name . ')' : $units->name;
+			// The unit can be missing if its term was deleted or the meta didn't come through the editor
+			if ( $units instanceof WP_Term ) {
+				$chart_args['options']['scales']['y']['title']['display'] = true;
 
-			$chart_args['options']['scales']['y']['title']['text'] .= $y_units;
+				$unit_name = $this->unit_text( $units->name );
+				$y_units   = '' != $this->post_meta['y_title'] ? ' (' . $unit_name . ')' : $unit_name;
+
+				$chart_args['options']['scales']['y']['title']['text'] .= $y_units;
+			}
 		}
 
 		return $chart_args;
@@ -1397,7 +1407,7 @@ class M_Chart_Chartjs {
 			$set_names = $this->post_meta['set_names'];
 
 			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
-				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'], m_chart()->parse_text_mode( 'chartjs' ) );
 
 				$data_array = array_map( [ $this, 'fix_null_values' ], $parse->set_data );
 
@@ -1411,7 +1421,7 @@ class M_Chart_Chartjs {
 			$set_names = $this->post_meta['set_names'];
 
 			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
-				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'], m_chart()->parse_text_mode( 'chartjs' ) );
 
 				$data_array = array_map( [ $this, 'fix_null_values' ], $parse->set_data );
 
@@ -1466,7 +1476,7 @@ class M_Chart_Chartjs {
 			$set_names = $this->post_meta['set_names'];
 
 			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
-				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'] );
+				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'], m_chart()->parse_text_mode( 'chartjs' ) );
 
 				$data_array = array_map( [ $this, 'fix_null_values' ], $parse->set_data );
 
@@ -1567,7 +1577,80 @@ class M_Chart_Chartjs {
 	}
 
 	/**
+	 * Whether this library's charts keep text exactly as typed (see M_Chart::library_paints_plain_text())
+	 *
+	 * @return bool
+	 */
+	private function paints_plain_text() {
+		return m_chart()->library_paints_plain_text( 'chartjs' );
+	}
+
+	/**
+	 * A stored subtitle or axis title as the text to paint on the canvas
+	 *
+	 * These are stored HTML encoded and the canvas paints characters, not HTML, so they are decoded and nothing else
+	 *
+	 * @param string $string a stored text field
+	 *
+	 * @return string
+	 */
+	private function canvas_text( $string ) {
+		return $this->paints_plain_text() ? M_Chart::decode_text( $string ) : $this->esc_title( $string );
+	}
+
+	/**
+	 * The stored source name as the text to paint on the canvas
+	 *
+	 * It was passed on still HTML encoded before 2.4, which painted "R&D" as "R&amp;D"
+	 *
+	 * @param string $string the stored source name
+	 *
+	 * @return string
+	 */
+	private function source_text( $string ) {
+		return $this->paints_plain_text() ? M_Chart::decode_text( $string ) : $string;
+	}
+
+	/**
+	 * A unit term's name as the text to paint on the canvas
+	 *
+	 * WordPress stores term names HTML encoded
+	 *
+	 * @param string $string the term name
+	 *
+	 * @return string
+	 */
+	private function unit_text( $string ) {
+		return $this->paints_plain_text() ? M_Chart::decode_text( $string ) : $string;
+	}
+
+	/**
+	 * The chart's title as the text to paint on the canvas
+	 *
+	 * WordPress treats a post title as HTML, so real tags are dropped first and what is left is decoded
+	 * esc_title() decodes first, which turns a title typed as "&lt;b&gt;" into a tag and then deletes it
+	 *
+	 * @param string $title the post title after the_title filters
+	 *
+	 * @return string
+	 */
+	private function title_text( $title ) {
+		if ( ! $this->paints_plain_text() ) {
+			return $this->esc_title( $title );
+		}
+
+		$title = M_Chart::decode_text( wp_strip_all_tags( (string) $title ) );
+
+		// the_title has been through wptexturize(), which turns " - " and "--" into dashes
+		// Putting the hyphen back shows what was typed, and keeps existing titles looking the way they always have
+		return str_replace( [ '—', '–' ], '-', $title );
+	}
+
+	/**
 	 * Helper function escapes and modifies text/title values
+	 *
+	 * Only used when chart text is not kept as typed (the m_chart_library_paints_plain_text filter returns false)
+	 * It was written for Highcharts: the <br /> markers are Highcharts line breaks, which Chart.js paints literally
 	 *
 	 * @param string a string you want to use in Chart.js
 	 *
@@ -2245,17 +2328,21 @@ class M_Chart_Chartjs {
 		$themes    = [];
 
 		foreach ( $theme_dir as $file ) {
-			if ( ! $file->isFile() || ! preg_match( '#.php$#i', $file->getFilename() ) ) {
+			if ( ! $file->isFile() || ! preg_match( '#\.php$#i', $file->getFilename() ) ) {
 				continue;
 			}
 
 			$theme_data = implode( '', file( $theme_base . $file ) );
 
-			if ( preg_match( '|Theme Name:(.*)$|mi', $theme_data, $name ) ) {
-				$name = trim( _cleanup_header_comment( $name[1] ) );
+			// Only a file that says it is a theme gets loaded
+			// $name starts empty for every file, otherwise one real theme would vouch for every PHP file after it
+			$name = '';
+
+			if ( preg_match( '|Theme Name:(.*)$|mi', $theme_data, $header ) ) {
+				$name = trim( _cleanup_header_comment( $header[1] ) );
 			}
 
-			if ( isset( $name ) && '' != $name ) {
+			if ( '' !== $name ) {
 				$file    = basename( $file );
 				$options = require $theme_base . $file;
 

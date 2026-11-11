@@ -1,13 +1,18 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <table class="<?php echo esc_attr( $classes ); ?> table">
 	<?php
+	// Cells, labels and set names of a Chart.js chart are stored exactly as typed, so every character is escaped
+	// esc_html() leaves "&amp;" and "&lt;" alone, which would show a cell typed that way as "&" or "<"
+	// Other libraries' data can still hold entities from the tag stripping, those keep esc_html()
+	$m_chart_esc = m_chart()->library_paints_plain_text( $library ) ? [ 'M_Chart', 'esc_text' ] : 'esc_html';
+
 	$set_name = '';
 
 	if ( $multiple ) {
-		$set_name = ': ' . $post_meta['set_names'][ $set ];
+		$set_name = ': ' . ( $post_meta['set_names'][ $set ] ?? '' );
 	}
 	?>
-	<caption><?php echo esc_html( get_the_title( $post_id ) . $set_name ); ?></caption>
+	<caption><?php echo esc_html( get_the_title( $post_id ) ) . call_user_func( $m_chart_esc, $set_name ); // The title is HTML, the set name is text ?></caption>
 	<?php
 	if ( isset( m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_ROW ] ) ) {
 		$first_row = m_chart()->parse()->value_labels[ M_Chart_Parse::LABELS_FIRST_ROW ];
@@ -22,7 +27,7 @@
 				<?php
 				foreach ( $first_row as $label ) {
 					?>
-					<th scope="col"><?php echo esc_html( $label ); ?></th>
+					<th scope="col"><?php echo call_user_func( $m_chart_esc, $label ); ?></th>
 					<?php
 				}
 				?>
@@ -33,7 +38,7 @@
 			foreach ( $labels as $row => $label ) {
 				?>
 				<tr>
-					<th scope="row"><?php echo esc_html( $label ); ?></th>
+					<th scope="row"><?php echo call_user_func( $m_chart_esc, $label ); ?></th>
 					<?php
 					foreach ( $first_row as $column => $label ) {
 						if ( $row_column ) {
@@ -42,7 +47,7 @@
 							$raw = m_chart()->parse()->raw_data[ $column ][ $row ] ?? null;
 						}
 						?>
-						<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
+						<td><?php echo call_user_func( $m_chart_esc, m_chart()->parse()->format_raw( $raw ) ); ?></td>
 						<?php
 					}
 					?>
@@ -69,11 +74,11 @@
 			foreach ( $labels as $row => $label ) {
 				?>
 				<tr>
-					<th scope="row"><?php echo esc_html( $label ); ?></th>
+					<th scope="row"><?php echo call_user_func( $m_chart_esc, $label ); ?></th>
 					<?php
 					foreach ( $chunks[ $row ] ?? [] as $raw ) {
 						?>
-						<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
+						<td><?php echo call_user_func( $m_chart_esc, m_chart()->parse()->format_raw( $raw ) ); ?></td>
 						<?php
 					}
 					?>
@@ -103,7 +108,7 @@
 
 				foreach ( $first_row as $label ) {
 					?>
-					<th scope="col"><?php echo esc_html( $label ); ?></th>
+					<th scope="col"><?php echo call_user_func( $m_chart_esc, $label ); ?></th>
 					<?php
 				}
 				?>
@@ -128,7 +133,7 @@
 
 					foreach ( $cells as $raw ) {
 						?>
-						<td><?php echo esc_html( m_chart()->parse()->format_raw( $raw ) ); ?></td>
+						<td><?php echo call_user_func( $m_chart_esc, m_chart()->parse()->format_raw( $raw ) ); ?></td>
 						<?php
 					}
 					?>

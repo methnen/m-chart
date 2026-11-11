@@ -636,7 +636,15 @@ class M_Chart_Admin {
 		}
 
 		// Core's update_post_meta validates the meta and replaces the m-chart-library taxonomy term
-		m_chart()->update_post_meta( $post_id, $post_meta );
+		// It expects what a form post would give it: text slashed, the sheets not
+		// Without the slashes a backslash in a subtitle or a set name ("C:\temp") is lost on the way through
+		$slashed = wp_slash( $post_meta );
+
+		if ( isset( $post_meta['data'] ) ) {
+			$slashed['data'] = $post_meta['data'];
+		}
+
+		m_chart()->update_post_meta( $post_id, $slashed );
 
 		// Clear the cached args so persistent object caches don't serve Highcharts args to the Chart.js renderer
 		m_chart()->flush_chart_args_cache( $post_id );
@@ -723,6 +731,35 @@ class M_Chart_Admin {
 	}
 
 	/**
+	 * The ID of the chart being edited on a post screen, or '' when there isn't one
+	 *
+	 * The ID comes from the query string, which post.php checks before it shows anything but post-new.php ignores
+	 * So it only counts on an edit screen, for a chart, that the current user can edit
+	 * Otherwise any user who can add a chart could load someone else's chart data into the Add Chart screen
+	 *
+	 * @param object $screen the current screen object
+	 *
+	 * @return int|string the chart's post ID, or '' for a new chart
+	 */
+	private function get_editor_post_id( $screen ) {
+		if ( 'add' === $screen->action || ! isset( $_GET['post'] ) || ! is_scalar( $_GET['post'] ) ) {
+			return '';
+		}
+
+		$post_id = absint( $_GET['post'] );
+
+		if (
+			   ! $post_id
+			|| m_chart()->slug !== get_post_type( $post_id )
+			|| ! current_user_can( 'edit_post', $post_id )
+		) {
+			return '';
+		}
+
+		return $post_id;
+	}
+
+	/**
 	 * Load CSS/Javascript necessary for the interface
 	 *
 	 * @param object the current screen object as passed by the current_screen action hook
@@ -782,7 +819,7 @@ class M_Chart_Admin {
 			);
 
 			// Library and post ID feed the localized config and script choices below
-			$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : '';
+			$post_id = $this->get_editor_post_id( $screen );
 			$library = m_chart()->get_library();
 
 			if ( ! empty( $post_id ) ) {
@@ -817,6 +854,17 @@ class M_Chart_Admin {
 			$spreadsheet_data = empty( $post_meta['data'] ) ? [ [ '' ] ] : $post_meta['data']['sets'];
 			unset( $post_meta['data'] ); // passed separately as spreadsheet_data
 
+			// The app's inputs hold text, and these fields are stored HTML encoded ("R&D" as "R&amp;D")
+			// Decoded here they show what was typed, and a save encodes them back to the same stored value
+			// Left alone for a library whose text is tag stripped on save: decoding there would turn typed entities into tags the next save removes
+			if ( m_chart()->library_paints_plain_text( $library ) ) {
+				foreach ( M_Chart::TEXT_FIELDS as $text_field ) {
+					if ( isset( $post_meta[ $text_field ] ) ) {
+						$post_meta[ $text_field ] = M_Chart::decode_text( $post_meta[ $text_field ] );
+					}
+				}
+			}
+
 			// Collect library-specific config for the React admin app
 			// The type map and traits are Chart.js specific, other libraries may not provide them
 			$type_options      = [];
@@ -846,12 +894,13 @@ class M_Chart_Admin {
 			foreach ( m_chart()->get_unit_terms() as $group => $units ) {
 				$group_units = [];
 
+				// Term names are stored HTML encoded and the app shows them as text
 				foreach ( $units as $unit ) {
-					$group_units[] = [ 'name' => $unit->name, 'slug' => $unit->slug ];
+					$group_units[] = [ 'name' => M_Chart::decode_text( $unit->name ), 'slug' => $unit->slug ];
 				}
 
 				$unit_terms[] = [
-					'group' => $group,
+					'group' => M_Chart::decode_text( $group ),
 					'units' => $group_units,
 				];
 			}
@@ -904,7 +953,8 @@ class M_Chart_Admin {
 				'type_option_names'       => $type_option_names,
 				'themes'                  => $themes,
 				'unit_terms'              => $unit_terms,
-				'image_url'               => $chart_image ? esc_url( $chart_image['url'] ) : '',
+				// A URL for JavaScript, not for HTML: esc_url() would write "&#038;" into it
+				'image_url'               => $chart_image ? esc_url_raw( $chart_image['url'] ) : '',
 				'chart_args'              => $initial_chart_args,
 				'csv_delimiters'          => $csv_delimiters,
 				'default_delimiter'       => m_chart()->get_settings( 'csv_delimiter' ),
@@ -915,7 +965,14 @@ class M_Chart_Admin {
 				'height_range'            => [ 'min' => M_Chart::HEIGHT_MIN, 'max' => M_Chart::HEIGHT_MAX ],
 			];
 
-			wp_localize_script( 'm-chart-admin-ui', 'm_chart_admin', $localize_data );
+			// Printed as an inline script of our own rather than through wp_localize_script(), which only started
+			// hex-escaping "<" in a recent WordPress: a cell holding "<!--<script>" must not be able to swallow the
+			// rest of the page on the oldest WordPress this plugin supports
+			wp_add_inline_script(
+				'm-chart-admin-ui',
+				'var m_chart_admin = ' . wp_json_encode( $localize_data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';',
+				'before'
+			);
 
 			do_action( 'm_chart_admin_scripts', $library, $post_id );
 		}
@@ -1145,7 +1202,7 @@ class M_Chart_Admin {
 		}
 
 		// If there's an image being passed attach it to the chart post
-		$this->attach_image();
+		$this->attach_image( $post );
 
 		// Make sure we don't overwrite existing settings in the case someone hits update too quickly
 		if (
@@ -1165,11 +1222,15 @@ class M_Chart_Admin {
 	}
 
 	/**
-	 * Attach a given image to a chart post
+	 * Attach the chart image the admin app captured to a chart post
 	 *
-	 * Reads the post ID and base64 image from $_POST
+	 * Reads the base64 image from $_POST
+	 *
+	 * @param WP_Post|int|null $post the chart being saved
+	 *
+	 * @return int|false|WP_Error the attachment ID, false when no image was stored
 	 */
-	public function attach_image() {
+	public function attach_image( $post = null ) {
 		$settings = m_chart()->get_settings();
 
 		// If the performance setting isn't turned to default we don't do this
@@ -1177,86 +1238,121 @@ class M_Chart_Admin {
 			return false;
 		}
 
-		if ( ! is_numeric( $_POST['post_ID'] ?? '' ) ) {
+		// The image belongs to the chart being saved, never to whatever post ID the request names
+		$post = get_post( $post );
+
+		if ( ! $post || m_chart()->slug !== $post->post_type ) {
 			return false;
 		}
-
-		$post_id = absint( $_POST['post_ID'] );
 
 		// Make sure the library used on this post supports images
-		if ( 'no' === apply_filters( 'm_chart_image_support', 'no', m_chart()->get_post_meta( $post_id, 'library' ) ) ) {
+		if ( 'no' === apply_filters( 'm_chart_image_support', 'no', m_chart()->get_post_meta( $post->ID, 'library' ) ) ) {
 			return false;
 		}
 
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
 			return false;
 		}
 
-		if ( ! $post = get_post( $post_id ) ) {
+		// Anything in the uploads folder is public, so a password protected chart gets no image
+		// and loses one made before the password was set
+		if ( '' !== $post->post_password ) {
+			foreach ( m_chart()->get_chart_image_attachments( $post->ID ) as $attachment_id ) {
+				wp_delete_attachment( $attachment_id, true );
+			}
+
+			delete_post_meta( $post->ID, '_thumbnail_id' );
+
 			return false;
 		}
 
 		$img_data = $_POST[ m_chart()->slug ]['img'] ?? '';
 
-		if ( '' === $img_data ) {
+		if ( ! is_string( $img_data ) || '' === $img_data ) {
 			return false;
 		}
 
 		// Decode the image so we can save it
 		$decoded_img = base64_decode( str_replace( 'data:image/png;base64,', '', $img_data ) );
 
-		// Reject anything that isn't a real PNG before writing it to disk
-		if ( false === $decoded_img || '' === $decoded_img || "\x89PNG\r\n\x1a\n" !== substr( $decoded_img, 0, 8 ) ) {
+		if ( ! self::is_chart_image( $decoded_img ) ) {
 			return false;
 		}
 
-		// Cap the image size at 5MB to keep a runaway client from filling disk
-		if ( strlen( $decoded_img ) > 5 * 1024 * 1024 ) {
-			return false;
-		}
+		$existing = m_chart()->get_chart_image_attachments( $post->ID );
 
-		// Check for an existing attached image
-		$attachments = get_posts(
-			[
-				'post_type'      => 'attachment',
-				'posts_per_page' => 1,
-				'post_parent'    => $post->ID,
-				'meta_key'       => m_chart()->slug . '-image',
-			]
-		);
-
-		// If an existing image was found delete it
-		foreach ( $attachments as $attachment ) {
-			wp_delete_attachment( $attachment->ID, true );
-		}
-
-		// Upload image to WP
+		// Write the new file before touching the old one, so a failed upload leaves the chart with the image it had
 		$file = wp_upload_bits( sanitize_title( $post->post_title . '-' . $post->ID ) . '.png', null, $decoded_img );
 
-		// Mirror media_sideload_image()'s file-array handling since it only accepts URLs, not an already-uploaded local file
-		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file['file'], $matches );
-
-		$file_array['name']     = basename( $matches[0] );
-		$file_array['tmp_name'] = $file['file'];
-
-		if ( is_wp_error( $file ) ) {
-			@unlink( $file_array['tmp_name'] );
-			$file_array['tmp_name'] = '';
+		// wp_upload_bits() reports a failure in the array it returns
+		if ( ! empty( $file['error'] ) || empty( $file['file'] ) ) {
+			return false;
 		}
+
+		foreach ( $existing as $attachment_id ) {
+			wp_delete_attachment( $attachment_id, true );
+		}
+
+		// These are only loaded on wp-admin screens, a save can also arrive over REST
+		if ( ! function_exists( 'media_handle_sideload' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+		}
+
+		// media_sideload_image() only accepts URLs, so hand the already uploaded file to the step it would run next
+		$file_array = [
+			'name'     => basename( $file['file'] ),
+			'tmp_name' => $file['file'],
+		];
 
 		$img_id = media_handle_sideload( $file_array, $post->ID, $post->post_title );
 
 		if ( is_wp_error( $img_id ) ) {
-			@unlink( $file_array['tmp_name'] );
+			@unlink( $file['file'] );
 			return $img_id;
 		}
-		// End of the media_sideload_image mirror
 
 		// Set some meta on the attachment so we know it came from m-chart
 		add_post_meta( $img_id, m_chart()->slug . '-image', $post->ID );
 
 		// Set the attachment as the chart's thumbnail
 		update_post_meta( $post->ID, '_thumbnail_id', $img_id );
+
+		return $img_id;
+	}
+
+	/**
+	 * Whether decoded image data is a PNG this plugin will store as a chart image
+	 *
+	 * The data comes from the browser, so the PNG signature alone proves nothing: the file has to parse as an image
+	 * A Contributor can save a chart but can't upload media, this is what keeps the image field from being a way round that
+	 *
+	 * @param mixed $data the decoded image bytes
+	 *
+	 * @return bool
+	 */
+	public static function is_chart_image( $data ) {
+		if ( ! is_string( $data ) || "\x89PNG\r\n\x1a\n" !== substr( $data, 0, 8 ) ) {
+			return false;
+		}
+
+		// Cap the image size at 5MB to keep a runaway client from filling disk
+		if ( strlen( $data ) > 5 * 1024 * 1024 ) {
+			return false;
+		}
+
+		$size = @getimagesizefromstring( $data );
+
+		if ( ! is_array( $size ) || IMAGETYPE_PNG !== $size[2] ) {
+			return false;
+		}
+
+		// A table rendered as an image can be far taller than a chart, so the limit is generous
+		// It only has to stop dimensions the media library would choke on when it makes thumbnails
+		$max = (int) apply_filters( 'm_chart_image_max_dimension', 12000 );
+
+		return $size[0] >= 1 && $size[1] >= 1 && $size[0] <= $max && $size[1] <= $max;
 	}
 
 	/**
@@ -1335,7 +1431,13 @@ class M_Chart_Admin {
 
 		$delimiter = isset( $_POST['csv_delimiter'] ) && is_string( $_POST['csv_delimiter'] ) ? $_POST['csv_delimiter'] : null;
 
-		wp_send_json_success( M_Chart_Parse::parse_csv_string( $csv_data, $delimiter ) );
+		$rows = M_Chart_Parse::parse_csv( $csv_data, $delimiter );
+
+		if ( is_wp_error( $rows ) ) {
+			wp_send_json_error( esc_html( $rows->get_error_message() ) );
+		}
+
+		wp_send_json_success( $rows );
 	}
 
 	/**
@@ -1369,20 +1471,27 @@ class M_Chart_Admin {
 			wp_die( esc_html__( 'Unauthorized access', 'm-chart' ), esc_html__( 'You do not have permission to do that', 'm-chart' ), [ 'response' => 401 ] );
 		}
 
-		$post = get_post( absint( $post_id ) );
+		$post     = get_post( absint( $post_id ) );
+		$set_name = is_string( $_REQUEST['set_name'] ?? null ) ? wp_unslash( $_REQUEST['set_name'] ) : '';
 
 		// If the user passed a data value in their request we'll use it after validation
-		if ( isset( $_POST['data'] ) && isset( $_POST['title'] ) ) {
-			$data      = m_chart()->validate_data( json_decode( stripslashes( $_POST['data'] ) ) );
-			$file_name = sanitize_title( $_POST['title'] );
+		if ( is_string( $_POST['data'] ?? null ) && is_string( $_POST['title'] ?? null ) ) {
+			// Cleaned the way a save of this chart would clean it, so the file holds what the chart holds
+			$data  = m_chart()->validate_data( json_decode( stripslashes( $_POST['data'] ) ), m_chart()->get_post_meta( $post->ID, 'library' ) );
+			$title = wp_unslash( $_POST['title'] );
 		} else {
-			$data      = m_chart()->get_post_meta( $post->ID, 'data' );
-			$file_name = sanitize_title( get_the_title( $post->ID ) );
+			// The saved sheets, the request can say which one it wants
+			$sets  = m_chart()->get_post_meta( $post->ID, 'data' )['sets'] ?? [];
+			$set   = absint( $_REQUEST['set'] ?? 0 );
+			$data  = $sets[ $set ] ?? [];
+			$title = get_the_title( $post->ID );
+
+			if ( '' === $set_name ) {
+				$set_name = (string) ( m_chart()->get_post_meta( $post->ID, 'set_names' )[ $set ] ?? '' );
+			}
 		}
 
-		$set_name = sanitize_title( $_REQUEST['set_name'] ?? '' );
-
-		if ( empty( $data ) ) {
+		if ( empty( $data ) || ! is_array( $data ) ) {
 			return;
 		}
 
@@ -1392,30 +1501,90 @@ class M_Chart_Admin {
 		} );
 
 		m_chart()->parse();
-		M_Chart_Parse::load_parsecsv();
-		$parse_csv = new parseCSV();
 
-		// Set delimiter
-		$parse_csv->output_delimiter = m_chart()->get_settings( 'csv_delimiter' );
+		$csv   = M_Chart_Parse::build_csv( $data, (string) m_chart()->get_settings( 'csv_delimiter' ) );
+		$names = $this->csv_export_filenames( $title, $set_name );
 
-		$parse_csv->output( $file_name . '-' . $set_name . '.csv', $data );
-		die;
+		// The byte order mark is what tells Excel the file is UTF-8, without it accents and non-Latin text open as gibberish
+		if ( apply_filters( 'm_chart_csv_export_bom', true, $post->ID ) ) {
+			$csv = "\xEF\xBB\xBF" . $csv;
+		}
+
+		if ( ! headers_sent() ) {
+			nocache_headers();
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'X-Content-Type-Options: nosniff' );
+			header( 'Content-Length: ' . strlen( $csv ) );
+			// The plain name is for old browsers, filename* carries the real one
+			header( 'Content-Disposition: attachment; filename="' . $names['ascii'] . '"; filename*=UTF-8\'\'' . rawurlencode( $names['utf8'] ) );
+		}
+
+		echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a CSV download, not HTML
+
+		// Ends the request without adding anything to the file
+		wp_die( '', '', [ 'response' => null ] );
 	}
 
 	/**
-	 * Prefix a cell value with a single quote when it starts with a character that Excel/Sheets/Numbers interpret as a formula trigger
+	 * The file names a CSV export is offered under
+	 *
+	 * sanitize_title() percent-encodes anything outside ASCII, which is no use as a file name
+	 * The ASCII name drops those characters, the UTF-8 name puts them back
+	 *
+	 * @param string $title    the chart title
+	 * @param string $set_name the sheet name, may be empty
+	 *
+	 * @return array [ 'ascii' => string, 'utf8' => string ], neither can hold a quote, a slash or a line break
+	 */
+	public function csv_export_filenames( $title, $set_name ) {
+		$slug = implode( '-', array_filter( [ sanitize_title( (string) $title ), sanitize_title( (string) $set_name ) ], 'strlen' ) );
+
+		$ascii = trim( preg_replace( '/-{2,}/', '-', preg_replace( '/%[0-9a-f]{2}/i', '', $slug ) ), '-' );
+		$utf8  = wp_check_invalid_utf8( rawurldecode( $slug ) );
+
+		$ascii = '' !== $ascii ? $ascii : 'chart';
+		$utf8  = '' !== $utf8 ? $utf8 : $ascii;
+
+		return [
+			'ascii' => $ascii . '.csv',
+			'utf8'  => $utf8 . '.csv',
+		];
+	}
+
+	/**
+	 * Prefix a cell value with a single quote when a spreadsheet application would run it as a formula
+	 *
+	 * A cell that starts with = + - or @ is evaluated by Excel, Sheets and Numbers
+	 * A signed number (-5, +1.5, -$5, -5%) starts the same way but is only ever read as the number it is, so it is left alone
 	 *
 	 * @param mixed $cell The raw cell value
 	 * @return string The cell value, prefixed with ' if it would otherwise execute
 	 */
 	public function neutralize_csv_cell( $cell ) {
-		$cell = (string) $cell;
+		$cell = is_scalar( $cell ) ? (string) $cell : '';
 
-		if ( '' !== $cell && in_array( $cell[0], [ '=', '+', '-', '@', "\t", "\r" ], true ) ) {
-			return "'" . $cell;
+		if ( '' === $cell ) {
+			return $cell;
 		}
 
-		return $cell;
+		// The parser class holds the formula rules the import shares, load it without going through m_chart()
+		if ( ! class_exists( 'M_Chart_Parse' ) ) {
+			require_once __DIR__ . '/class-m-chart-parsed-data-point.php';
+			require_once __DIR__ . '/class-m-chart-parse.php';
+		}
+
+		$triggered = preg_match( '/^(?:' . M_Chart_Parse::CSV_FORMULA_TRIGGERS . ')/u', $cell );
+
+		// preg_match() gives false for text that isn't valid UTF-8, fall back to looking at the first byte
+		if ( false === $triggered ) {
+			$triggered = in_array( $cell[0], [ '=', '+', '-', '@', "\t", "\r" ], true );
+		}
+
+		if ( ! $triggered || M_Chart_Parse::is_signed_number( $cell ) ) {
+			return $cell;
+		}
+
+		return "'" . $cell;
 	}
 
 	/**
@@ -1478,7 +1647,12 @@ class M_Chart_Admin {
 		// validate_post_meta returns only valid post meta values and does data validation on each item
 		// Its result is slashed, ready for update_post_meta() which unslashes on save
 		// Nothing is saved here so unslash it ourselves or quotes render with backslashes in the preview
-		$post_meta = wp_unslash( m_chart()->validate_post_meta( $_POST['post_meta'] ?? [], 'preview' ) );
+		$submitted_meta = is_array( $_POST['post_meta'] ?? null ) ? $_POST['post_meta'] : [];
+
+		// The library checked above decides how text is treated, the same as on a real save
+		$submitted_meta['library'] = $library_slug;
+
+		$post_meta = wp_unslash( m_chart()->validate_post_meta( $submitted_meta, 'preview' ) );
 
 		// Libraries written against older versions set the instance state by hand
 		if ( ! method_exists( $library, 'get_chart_args_for_meta' ) ) {

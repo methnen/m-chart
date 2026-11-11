@@ -181,6 +181,11 @@ class M_Chart_Block {
 			return new WP_Error( 'not_found', __( 'Chart not found', 'm-chart' ), [ 'status' => 404 ] );
 		}
 
+		// read_post ignores a post password, so a protected chart is only returned to someone who could edit it anyway
+		if ( '' !== $post->post_password && ! current_user_can( 'edit_post', $post->ID ) ) {
+			return new WP_Error( 'not_found', __( 'Chart not found', 'm-chart' ), [ 'status' => 404 ] );
+		}
+
 		$post_meta   = get_post_meta( $post->ID, 'm-chart', true );
 		// get_chart_image() returns false when image generation is off OR the chart has no captured PNG yet — coerce so ['key'] ?? default works
 		$chart_image = m_chart()->get_chart_image( $post->ID ) ?: [];
@@ -209,6 +214,12 @@ class M_Chart_Block {
 			'posts_per_page' => 9,
 			'paged'          => intval( $request->get_param( 'page' ) ) ?: 1,
 		];
+
+		// Password protected charts are only listed for people who can edit every chart
+		// Filtering them per chart after the query would leave the paging counts wrong
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			$args['has_password'] = false;
+		}
 
 		// If there's a search string add it to our args
 		$search_string = $request->get_param( 's' );

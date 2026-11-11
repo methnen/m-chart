@@ -69,3 +69,117 @@ describe( 'MChartHelper.dispatchRenderDone', () => {
 		expect( () => window.MChartHelper.dispatchRenderDone( null, {} ) ).not.toThrow();
 	} );
 } );
+
+describe( 'MChartHelper.isSafeSourceUrl', () => {
+	test.each( [
+		'https://example.com/report?a=1&b=2#top',
+		'http://example.com/',
+		'mailto:someone@example.com',
+		'/reports/2026/',
+		'reports/2026.html',
+	] )( 'allows %s', ( url ) => {
+		expect( window.MChartHelper.isSafeSourceUrl( url ) ).toBe( true );
+	} );
+
+	test.each( [
+		'javascript:alert(document.domain)',
+		' javascript:alert(1)',
+		'JaVaScRiPt:alert(1)',
+		'java\tscript:alert(1)',
+		'data:text/html,<script>alert(1)</script>',
+		'vbscript:msgbox(1)',
+		'blob:https://example.com/1234',
+		'',
+		'   ',
+		null,
+		undefined,
+		[ 'https://example.com' ],
+	] )( 'refuses %p', ( url ) => {
+		expect( window.MChartHelper.isSafeSourceUrl( url ) ).toBe( false );
+	} );
+} );
+
+describe( 'MChartHelper.afterEvent source link', () => {
+	const bounds = { left: 10, right: 110, top: 380, bottom: 396 };
+
+	function chartWith( sourceUrl ) {
+		return {
+			canvas:              { style: { cursor: '' } },
+			$mchartSourceBounds: bounds,
+			options:             { plugins: {
+				'm-chart-helper': { labels_pos: 'first_column' },
+				mchart:           { include_source: true, source: 'Source name', source_url: sourceUrl },
+			} },
+		};
+	}
+
+	let open;
+
+	beforeEach( () => {
+		open = jest.spyOn( window, 'open' ).mockReturnValue( { opener: {} } );
+	} );
+
+	afterEach( () => {
+		open.mockRestore();
+	} );
+
+	test( 'opens an ordinary link in a new tab with no opener', () => {
+		window.MChartHelper.afterEvent( chartWith( 'https://example.com/report' ), { event: { type: 'click', x: 50, y: 388 } } );
+
+		expect( open ).toHaveBeenCalledWith( 'https://example.com/report', '_blank', 'noopener,noreferrer' );
+	} );
+
+	test( 'does not hand a javascript: link to the browser', () => {
+		window.MChartHelper.afterEvent( chartWith( 'javascript:alert(document.domain)' ), { event: { type: 'click', x: 50, y: 388 } } );
+
+		expect( open ).not.toHaveBeenCalled();
+	} );
+
+	test( 'only shows the pointer for a link that will open', () => {
+		const safe   = chartWith( 'https://example.com/report' );
+		const unsafe = chartWith( 'javascript:alert(1)' );
+
+		window.MChartHelper.afterEvent( safe, { event: { type: 'mousemove', x: 50, y: 388 } } );
+		window.MChartHelper.afterEvent( unsafe, { event: { type: 'mousemove', x: 50, y: 388 } } );
+
+		expect( safe.canvas.style.cursor ).toBe( 'pointer' );
+		expect( unsafe.canvas.style.cursor ).toBe( '' );
+	} );
+} );
+
+describe( 'MChartHelper.afterDraw source line', () => {
+	// Chart text is painted onto the canvas character for character, so what PHP sends is what has to arrive at fillText
+	test.each( [
+		'R&D',
+		'x < y > z',
+		'"quoted" \'single\'',
+		'&amp;',
+		'<b>bold</b>',
+		'café €5 ±2°',
+		'日本語',
+		'C:\\temp',
+		'<script>alert(1)</script>',
+	] )( 'paints %s exactly as given', ( source ) => {
+		const ctx = {
+			save:        jest.fn(),
+			restore:     jest.fn(),
+			fillText:    jest.fn(),
+			measureText: () => ( { width: 100 } ),
+		};
+
+		const chart = {
+			ctx,
+			width:   600,
+			height:  400,
+			options: { plugins: {
+				'm-chart-helper': { labels_pos: 'first_column' },
+				mchart:           { include_source: true, source },
+			} },
+		};
+
+		window.MChartHelper.afterDraw( chart );
+
+		expect( ctx.fillText ).toHaveBeenCalledTimes( 1 );
+		expect( ctx.fillText.mock.calls[ 0 ][ 0 ] ).toBe( source );
+	} );
+} );

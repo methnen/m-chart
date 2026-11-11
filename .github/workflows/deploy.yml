@@ -62,7 +62,8 @@ jobs:
         run: npm ci
 
       - name: Deploy to WordPress.org
-        uses: 10up/action-wordpress-plugin-deploy@stable
+        # Pinned to a commit (2.3.0) because this step is handed the WordPress.org SVN credentials
+        uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2
         env:
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}

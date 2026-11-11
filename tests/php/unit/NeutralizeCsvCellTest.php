@@ -7,6 +7,10 @@
  * return must be prefixed with a single quote so spreadsheet apps treat it
  * as a literal string instead of executing it.
  *
+ * The one exception is a signed number (-5, +1.5, -$5, -5%), which a
+ * spreadsheet only ever reads as that number. Prefixing those turned every
+ * negative value in an exported chart into text.
+ *
  * References: OWASP CSV Injection (CWE-1236).
  *
  * The method has no instance-state dependency so we use ReflectionClass
@@ -50,6 +54,17 @@ final class NeutralizeCsvCellTest extends TestCase {
 			'tab character'      => [ "\tinjection",  "'\tinjection" ],
 			'carriage return'    => [ "\rinjection",  "'\rinjection" ],
 			'hyperlink formula'  => [ '=HYPERLINK("https://evil","Click")', "'=HYPERLINK(\"https://evil\",\"Click\")" ],
+			'number then operator' => [ '-5+A1',      "'-5+A1" ],
+			'number then reference' => [ '-5A1',      "'-5A1" ],
+			'signed reference'   => [ '-A1',          "'-A1" ],
+			'absolute reference' => [ '-$A$1',        "'-\$A\$1" ],
+			'dde payload'        => [ "-2+3+cmd|' /C calc'!A0", "'-2+3+cmd|' /C calc'!A0" ],
+			'phone number'       => [ '+1 555 123',   "'+1 555 123" ],
+			'signed call'        => [ '-SUM(1,2)',    "'-SUM(1,2)" ],
+			'full-width equals'  => [ '＝1+1',         "'＝1+1" ],
+			'byte order mark'    => [ "\u{FEFF}=1+1",   "'\u{FEFF}=1+1" ],
+			'zero-width space'   => [ "\u{200B}@SUM(1)", "'\u{200B}@SUM(1)" ],
+			'full-width at'      => [ '＠SUM(1)',      "'＠SUM(1)" ],
 		];
 	}
 
@@ -71,6 +86,19 @@ final class NeutralizeCsvCellTest extends TestCase {
 			'currency value'     => [ '$1,234.56',    '$1,234.56' ],
 			'unicode text'       => [ '売上',          '売上' ],
 			'newline content'    => [ "line\nbreak",  "line\nbreak" ],
+			// A signed number is data: a chart with negative values has to survive an export
+			'negative integer'   => [ '-5',           '-5' ],
+			'negative decimal'   => [ '-5.25',        '-5.25' ],
+			'explicit positive'  => [ '+1.5',         '+1.5' ],
+			'negative thousands' => [ '-1,234.56',    '-1,234.56' ],
+			'negative currency'  => [ '-$5.00',       '-$5.00' ],
+			'negative euro'      => [ '-€5',          '-€5' ],
+			'negative percent'   => [ '-5%',          '-5%' ],
+			'negative degrees'   => [ '-5°C',         '-5°C' ],
+			'negative with unit' => [ '-5 kg',        '-5 kg' ],
+			'negative exponent'  => [ '-1.5e3',       '-1.5e3' ],
+			'negative float'     => [ -3.5,           '-3.5' ],
+			'array is not a cell' => [ [ 'x' ],       '' ],
 		];
 	}
 }

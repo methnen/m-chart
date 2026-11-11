@@ -93,7 +93,7 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 		$this->assertTrue( $fired, 'm_chart_update_post_meta action did not fire' );
 	}
 
-	public function test_sheet_cells_are_sanitised_in_place_without_stray_keys(): void {
+	public function test_sheet_cells_are_stored_as_typed_in_place_without_stray_keys(): void {
 		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
 		wp_set_current_user( $editor_id );
 
@@ -124,9 +124,9 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 		$raw = get_post_meta( $post_id, m_chart()->slug, true );
 
 		$this->assertSame( [ 'sets' ], array_keys( $raw['data'] ), 'validated sheets must be written under data.sets only' );
-		// Older kses leaves the script text ("alert(1)Label"), newer kses drops the element's contents too ("Label"), both are fine
-		$this->assertStringNotContainsString( '<', $raw['data']['sets'][0][1][0], 'tags are stripped from cells' );
-		$this->assertStringEndsWith( 'Label', $raw['data']['sets'][0][1][0], 'the text outside the tag survives' );
+		// A Chart.js chart keeps every cell exactly as typed, the escaping happens where a cell is printed (see XssRegressionTest)
+		$this->assertSame( '<script>alert(1)</script>Label', $raw['data']['sets'][0][1][0], 'a cell is data, whatever it looks like' );
+		$this->assertSame( M_Chart::TEXT_FORMAT, $raw['text_format'], 'the row is stamped as holding cells as typed' );
 		$this->assertSame( 'A & B',         $raw['data']['sets'][0][2][0], 'ampersands survive as text' );
 		$this->assertSame( '<5',            $raw['data']['sets'][0][3][0], 'a lone less-than survives as text' );
 		$this->assertSame( "O'Reilly",      $raw['data']['sets'][0][4][0], 'quotes are stored without backslashes' );
@@ -135,9 +135,23 @@ final class SavePostPipelineTest extends WP_UnitTestCase {
 
 	public function test_validate_data_returns_plain_text(): void {
 		// The CSV export hands this straight to the file, so it must not come back slashed or with backslashes eaten
+		// With no library named the conservative cleaning applies: tags stripped, entities decoded
 		$this->assertSame(
 			[ [ "O'Reilly", 'C:\\temp', 'bold', 'A & B' ] ],
 			m_chart()->validate_data( [ [ "O'Reilly", 'C:\\temp', '<b>bold</b>', 'A &amp; B' ] ] )
+		);
+	}
+
+	public function test_validate_data_keeps_chartjs_cells_as_typed(): void {
+		$cells = [ [ "O'Reilly", 'C:\\temp', '<b>bold</b>', 'A &amp; B', 'x < y > z', '<5%', '日本語' ] ];
+
+		$this->assertSame( $cells, m_chart()->validate_data( $cells, 'chartjs' ) );
+	}
+
+	public function test_validate_data_drops_only_what_cannot_be_text(): void {
+		$this->assertSame(
+			[ [ 'ab', "tab\there", "two\nlines", '' ] ],
+			m_chart()->validate_data( [ [ "a\x00\x07b", "tab\there", "two\nlines", null ] ], 'chartjs' )
 		);
 	}
 

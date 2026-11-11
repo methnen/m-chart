@@ -14,7 +14,7 @@
 /build
 /components/admin-ui-src
 /components/block-src
-/components/js/m-chart-chartjs-helpers.js
+/components/js/m-chart-chartjs-helper.js
 /components/sass
 /config.rb
 /deploy
@@ -40,3 +40,8 @@
 /playwright-report
 /test-results
 /vendor
+/artifacts
+/.screenshots
+/.wp-screenshots.json
+/m-chart-*.zip
+*.map

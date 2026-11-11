@@ -186,4 +186,41 @@ final class HighchartsMigrationTest extends WP_UnitTestCase {
 		// A chart that was never highcharts keeps its meta untouched, theme included
 		$this->assertSame( 'legacy-v2', m_chart()->get_post_meta( $post_id, 'theme' ) );
 	}
+
+	public function test_migration_keeps_backslashes_in_text_and_cells(): void {
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_status' => 'publish',
+		] );
+
+		// update_post_meta() unslashes, so the fixture is slashed to store exactly this
+		update_post_meta( $post_id, m_chart()->slug, wp_slash( [
+			'library'   => 'highcharts',
+			'type'      => 'line',
+			'subtitle'  => 'Files in C:\\temp',
+			'y_title'   => 'A \\ B',
+			'source'    => 'Share \\\\server\\docs',
+			'data'      => [
+				'sets' => [ [ [ '', 'C:\\data' ], [ 'path\\to', '1' ] ] ],
+			],
+			'set_names' => [ 'Sheet \\ one' ],
+			'height'    => 400,
+		] ) );
+
+		$before = get_post_meta( $post_id, m_chart()->slug, true );
+
+		$this->assertSame( 'Files in C:\\temp', $before['subtitle'], 'The fixture holds single backslashes' );
+
+		$this->assertTrue( m_chart()->admin()->migrate_highcharts_chart( $post_id ) );
+
+		$after = get_post_meta( $post_id, m_chart()->slug, true );
+
+		$this->assertSame( 'chartjs', $after['library'] );
+
+		foreach ( [ 'subtitle', 'y_title', 'source', 'set_names' ] as $field ) {
+			$this->assertSame( $before[ $field ], $after[ $field ], $field . ' kept its backslashes' );
+		}
+
+		$this->assertSame( $before['data']['sets'], $after['data']['sets'] );
+	}
 }

@@ -401,8 +401,8 @@ Everything in `components/external/` is manually copied from upstream dist build
 | chartjs-chart-venn | 4.3.7 | [npm](https://www.npmjs.com/package/chartjs-chart-venn) (`build/index.umd.min.js`) |
 | Jspreadsheet CE | 5.0.4 | [jspreadsheet-ce on npm](https://www.npmjs.com/package/jspreadsheet-ce) — pairs with jsuites 5.x (`^5.12.0`) |
 | jsuites | 5.13.5 | [npm](https://www.npmjs.com/package/jsuites) — do not move to 6.x while Jspreadsheet CE 5 is bundled |
-| Freemius SDK | 2.13.4 | [GitHub releases](https://github.com/Freemius/wordpress-sdk/releases) — replace the directory wholesale but preserve `assets/img/m-chart.png` (our plugin icon, not part of the SDK) |
-| parseCSV | ~1.3 | [GitHub](https://github.com/parsecsv/parsecsv-for-php) — upstream dormant since 2021 |
+| Freemius SDK | 2.13.5 | [GitHub releases](https://github.com/Freemius/wordpress-sdk/releases) — replace the directory wholesale but preserve `assets/img/m-chart.png` (our plugin icon, not part of the SDK) |
+| parseCSV | 1.3.2 | [GitHub](https://github.com/parsecsv/parsecsv-for-php) — upstream dormant since 2021. Carries one local change: every PHP file has a `defined( 'ABSPATH' ) || exit;` guard after its namespace line, re-add it if the library is ever replaced |
 
 ---
 
