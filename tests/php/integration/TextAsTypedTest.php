@@ -305,10 +305,11 @@ final class TextAsTypedTest extends M_Chart_Integration_Test_Case {
 	public function test_the_filter_brings_the_tag_stripping_back_for_chartjs(): void {
 		add_filter( 'm_chart_library_paints_plain_text', '__return_false' );
 
-		$post_id = $this->create_typed_chart( 'x < y > z <b>bold</b>' );
+		// Real tags only: whether "x < y > z" counts as one is WordPress's decision and has changed between versions
+		$post_id = $this->create_typed_chart( 'plain <b>bold</b> <img src=x onerror=alert(1)>text' );
 		$meta    = m_chart()->get_post_meta( $post_id );
 
-		$this->assertSame( 'Cell x  z bold', $meta['data']['sets'][0][1][2] );
+		$this->assertSame( 'Cell plain bold text', $meta['data']['sets'][0][1][2] );
 		$this->assertStringNotContainsString( '<', $this->chart_args( $post_id )['options']['plugins']['subtitle']['text'] );
 	}
 

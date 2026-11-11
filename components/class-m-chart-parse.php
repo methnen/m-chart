@@ -679,6 +679,8 @@ class M_Chart_Parse {
 	 * Undo the apostrophe the CSV export puts in front of a cell that starts like a formula
 	 *
 	 * So a chart exported and imported again comes back with the cells it had
+	 * The export adds one apostrophe to a cell that already starts with some ('=1+1 goes out as ''=1+1),
+	 * so taking exactly one off here gives back what was there, apostrophes someone typed included
 	 *
 	 * @param mixed $cell a cell as parsed from a CSV
 	 *
@@ -689,7 +691,7 @@ class M_Chart_Parse {
 			return $cell;
 		}
 
-		return 1 === preg_match( "/^'(?:" . self::CSV_FORMULA_TRIGGERS . ')/u', $cell ) ? substr( $cell, 1 ) : $cell;
+		return 1 === preg_match( "/^'+(?:" . self::CSV_FORMULA_TRIGGERS . ')/u', $cell ) ? substr( $cell, 1 ) : $cell;
 	}
 
 	/**

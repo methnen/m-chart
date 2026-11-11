@@ -1006,7 +1006,7 @@ class M_Chart {
 	 *
 	 * @return array
 	 */
-	private function decode_legacy_cells( array $post_meta ) {
+	public function decode_legacy_cells( array $post_meta ) {
 		if ( ! isset( $post_meta['data']['sets'] ) || ! is_array( $post_meta['data']['sets'] ) ) {
 			return $post_meta;
 		}

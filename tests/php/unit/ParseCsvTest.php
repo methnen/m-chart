@@ -195,6 +195,10 @@ final class ParseCsvTest extends TestCase {
 		$this->assertSame( '＝1+1', M_Chart_Parse::restore_csv_cell( "'＝1+1" ) );
 		$this->assertSame( "\u{FEFF}=1+1", M_Chart_Parse::restore_csv_cell( "'\u{FEFF}=1+1" ) );
 
+		// The export adds one to a cell that already had apostrophes, so exactly one comes off
+		$this->assertSame( "'=1+1", M_Chart_Parse::restore_csv_cell( "''=1+1" ) );
+		$this->assertSame( "''-5", M_Chart_Parse::restore_csv_cell( "'''-5" ) );
+
 		// An apostrophe in front of anything else was typed
 		$this->assertSame( "'tis", M_Chart_Parse::restore_csv_cell( "'tis" ) );
 		$this->assertSame( "'90s", M_Chart_Parse::restore_csv_cell( "'90s" ) );

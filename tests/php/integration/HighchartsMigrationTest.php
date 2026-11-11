@@ -223,4 +223,119 @@ final class HighchartsMigrationTest extends WP_UnitTestCase {
 
 		$this->assertSame( $before['data']['sets'], $after['data']['sets'] );
 	}
+
+	public function test_migration_does_not_encode_the_text_fields_a_second_time(): void {
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_status' => 'publish',
+		] );
+
+		// As a Highcharts chart stores them: HTML-encoded
+		update_post_meta( $post_id, m_chart()->slug, [
+			'library'   => 'highcharts',
+			'type'      => 'line',
+			'subtitle'  => 'R&amp;D spend',
+			'y_title'   => 'Profit &amp; loss',
+			'x_title'   => '&quot;Quoted&quot; years',
+			'source'    => 'Smith &amp; Sons',
+			'data'      => [
+				'sets' => [ [ [ '', 'A' ], [ 'row', '1' ] ] ],
+			],
+			'set_names' => [ 'Sheet 1' ],
+			'height'    => 400,
+		] );
+
+		$this->assertTrue( m_chart()->admin()->migrate_highcharts_chart( $post_id ) );
+
+		$meta = m_chart()->get_post_meta( $post_id );
+
+		// What a person reads, on the chart and in the editor
+		$this->assertSame( 'R&D spend', M_Chart::decode_text( $meta['subtitle'] ) );
+		$this->assertSame( 'Profit & loss', M_Chart::decode_text( $meta['y_title'] ) );
+		$this->assertSame( '"Quoted" years', M_Chart::decode_text( $meta['x_title'] ) );
+		$this->assertSame( 'Smith & Sons', M_Chart::decode_text( $meta['source'] ) );
+
+		// And nothing was encoded twice on the way into storage
+		foreach ( [ 'subtitle', 'y_title', 'x_title', 'source' ] as $field ) {
+			$this->assertStringNotContainsString( '&amp;amp;', $meta[ $field ], $field );
+			$this->assertStringNotContainsString( '&amp;quot;', $meta[ $field ], $field );
+		}
+	}
+
+	public function test_migrating_twice_over_changes_nothing_more(): void {
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_status' => 'publish',
+		] );
+
+		update_post_meta( $post_id, m_chart()->slug, [
+			'library'   => 'highcharts',
+			'type'      => 'line',
+			'subtitle'  => 'R&amp;D &lt;b&gt;',
+			'data'      => [
+				'sets' => [ [ [ '', 'A' ], [ 'row', '1' ] ] ],
+			],
+			'set_names' => [ 'Sheet 1' ],
+			'height'    => 400,
+		] );
+
+		m_chart()->admin()->migrate_highcharts_chart( $post_id );
+
+		$once = get_post_meta( $post_id, m_chart()->slug, true );
+
+		// Now a Chart.js chart, a second run has nothing to migrate and leaves it alone
+		$this->assertFalse( m_chart()->admin()->migrate_highcharts_chart( $post_id ) );
+		$this->assertSame( $once, get_post_meta( $post_id, m_chart()->slug, true ) );
+		$this->assertSame( 'R&D <b>', M_Chart::decode_text( $once['subtitle'] ) );
+	}
+
+	public function test_migration_decodes_cells_saved_before_cells_were_stored_as_typed(): void {
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_status' => 'publish',
+		] );
+
+		// An old chart: no text_format stamp, cells entity-encoded the way they were stored then
+		update_post_meta( $post_id, m_chart()->slug, [
+			'library'   => 'highcharts',
+			'type'      => 'column',
+			'parse_in'  => 'rows',
+			'data'      => [
+				'sets' => [ [ [ '', 'Bread &amp; Butter', 'Plain' ], [ 'Fish &amp; chips', '1', '2' ] ] ],
+			],
+			'set_names' => [ 'Sheet 1' ],
+			'height'    => 400,
+		] );
+
+		$this->assertTrue( m_chart()->admin()->migrate_highcharts_chart( $post_id ) );
+
+		$meta = m_chart()->get_post_meta( $post_id );
+
+		$this->assertSame( 'Bread & Butter', $meta['data']['sets'][0][0][1] );
+		$this->assertSame( 'Fish & chips', $meta['data']['sets'][0][1][0] );
+	}
+
+	public function test_migration_leaves_cells_alone_when_they_are_already_stored_as_typed(): void {
+		$post_id = self::factory()->post->create( [
+			'post_type'   => m_chart()->slug,
+			'post_status' => 'publish',
+		] );
+
+		// Stamped: the cell really is the six characters someone typed
+		update_post_meta( $post_id, m_chart()->slug, [
+			'library'     => 'highcharts',
+			'type'        => 'column',
+			'parse_in'    => 'rows',
+			'text_format' => M_Chart::TEXT_FORMAT,
+			'data'        => [
+				'sets' => [ [ [ '', 'typed &amp; kept' ], [ 'row', '1' ] ] ],
+			],
+			'set_names'   => [ 'Sheet 1' ],
+			'height'      => 400,
+		] );
+
+		$this->assertTrue( m_chart()->admin()->migrate_highcharts_chart( $post_id ) );
+
+		$this->assertSame( 'typed &amp; kept', m_chart()->get_post_meta( $post_id )['data']['sets'][0][0][1] );
+	}
 }

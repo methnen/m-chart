@@ -636,6 +636,22 @@ class M_Chart_Admin {
 			$post_meta['theme'] = $theme_map[ $post_meta['theme'] ];
 		}
 
+		// The save below treats what it is given as text someone has just typed and encodes it for storage
+		// The subtitle, axis titles and source are already stored encoded, so they go in decoded, the way the editor
+		// hands them to its form. Left as they are "R&amp;D" would be stored as "R&amp;amp;D" and shown as "R&amp;D"
+		foreach ( M_Chart::TEXT_FIELDS as $field ) {
+			if ( isset( $post_meta[ $field ] ) && is_string( $post_meta[ $field ] ) ) {
+				$post_meta[ $field ] = M_Chart::decode_text( $post_meta[ $field ] );
+			}
+		}
+
+		// A chart saved before cells were stored as typed can hold them entity-encoded ("A &amp; B")
+		// Left alone as a Chart.js chart it would have them decoded when it is read
+		// The save below marks it as stored as typed, which ends that, so they are decoded here once
+		if ( empty( $post_meta['text_format'] ) ) {
+			$post_meta = m_chart()->decode_legacy_cells( $post_meta );
+		}
+
 		// Core's update_post_meta validates the meta and replaces the m-chart-library taxonomy term
 		// It expects what a form post would give it: text slashed, the sheets not
 		// Without the slashes a backslash in a subtitle or a set name ("C:\temp") is lost on the way through
@@ -1574,14 +1590,22 @@ class M_Chart_Admin {
 			require_once __DIR__ . '/class-m-chart-parse.php';
 		}
 
-		$triggered = preg_match( '/^(?:' . M_Chart_Parse::CSV_FORMULA_TRIGGERS . ')/u', $cell );
+		// Apostrophes already in front of the trigger count too
+		// The import takes one apostrophe off anything that looks like this function's output,
+		// so a cell someone really typed as '=1+1 needs one added here to come back as it was
+		$triggered = preg_match( "/^'*(?:" . M_Chart_Parse::CSV_FORMULA_TRIGGERS . ')/u', $cell );
 
-		// preg_match() gives false for text that isn't valid UTF-8, fall back to looking at the first byte
+		// preg_match() gives false for text that isn't valid UTF-8, fall back to looking at the first byte after any apostrophes
 		if ( false === $triggered ) {
-			$triggered = in_array( $cell[0], [ '=', '+', '-', '@', "\t", "\r" ], true );
+			$triggered = in_array( ltrim( $cell, "'" )[0] ?? '', [ '=', '+', '-', '@', "\t", "\r" ], true );
 		}
 
-		if ( ! $triggered || M_Chart_Parse::is_signed_number( $cell ) ) {
+		if ( ! $triggered ) {
+			return $cell;
+		}
+
+		// A plain signed number is left as it is, the import leaves it alone as well
+		if ( "'" !== $cell[0] && M_Chart_Parse::is_signed_number( $cell ) ) {
 			return $cell;
 		}
 
