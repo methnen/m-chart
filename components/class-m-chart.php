@@ -24,7 +24,7 @@ class M_Chart {
 	// A row without it may hold HTML entities in its cells, which get_post_meta() decodes for Chart.js charts
 	const TEXT_FORMAT = 2;
 
-	public $version           = '2.4';
+	public $version           = '2.4.1';
 	private $is_preview_request = false;
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
