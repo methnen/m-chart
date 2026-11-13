@@ -2,8 +2,18 @@ name: PHP Tests
 
 on:
   push:
-    branches: [ main, wordpress-7, pro-support ]
+    branches: [ main ]
   pull_request:
+  # Run by hand against any branch from the Actions tab
+  workflow_dispatch:
+  # Run by the deploy workflow as its gate
+  workflow_call:
+
+# A new push to a pull request replaces the run before it, nothing else is ever cancelled
+# The name is spelled out because github.workflow is the caller's name when the deploy workflow runs this
+concurrency:
+  group: php-tests-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Required for the test reporter to post check results, PR comments, and source-line annotations
 permissions:
@@ -18,17 +28,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.1', '8.2', '8.3', '8.4' ]
+        php: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: ${{ matrix.php }}
           tools: composer
           coverage: none
 
-      - uses: ramsey/composer-install@v3
+      # The unit tests only load some of the plugin's files and the integration matrix doesn't cover every PHP version,
+      # so parse everything here: a syntax error on one version can't hide in a file no unit test loads
+      - name: Check every PHP file parses
+        run: |
+          status=0
+
+          while IFS= read -r -d '' file; do
+            output=$(php -l "$file" 2>&1) || { echo "$output"; status=1; }
+          done < <(find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0)
+
+          exit $status
+
+      - uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
 
       - name: Run PHP unit tests
         run: |
@@ -37,7 +59,7 @@ jobs:
 
       - name: Upload PHPUnit JUnit XML
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: phpunit-unit-junit-php${{ matrix.php }}
           path: tests/junit/phpunit-unit.xml
@@ -45,7 +67,7 @@ jobs:
 
       - name: Publish unit-test results
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@a16be3a69023e9bd7e748ede768b3282ea7b30ce # v6.7.1
         with:
           report_paths: tests/junit/phpunit-unit.xml
           check_name: PHP Unit (PHP ${{ matrix.php }})
@@ -56,17 +78,29 @@ jobs:
   php-integration:
     name: "Integration (PHP ${{ matrix.php }} × WP ${{ matrix.wp }})"
     runs-on: ubuntu-latest
+    # WordPress trunk can break for reasons that have nothing to do with a change here, so that cell reports without blocking
+    continue-on-error: ${{ matrix.experimental == true }}
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.2', '8.3', '8.4' ]
-        wp:  [ '6.8', '7.0' ]
+        # Each cell is there for a reason, this is not a full cross product
+        #   8.1 × 6.6     the oldest PHP and WordPress the readme says the plugin supports
+        #   8.2 × 6.8     two older pairings sites are still on
+        #   8.3 × 7.0
+        #   8.4 × latest  the current WordPress release, resolved at run time (see tests/bin/wp-core-ref.js), with coverage
+        #   8.5 × latest  the newest PHP
+        #   8.4 × trunk   an early warning of what the next WordPress release changes
         include:
-          - { php: '8.3', wp: 'trunk' }
+          - { php: '8.1', wp: '6.6' }
+          - { php: '8.2', wp: '6.8' }
+          - { php: '8.3', wp: '7.0' }
+          - { php: '8.4', wp: 'latest', coverage: true }
+          - { php: '8.5', wp: 'latest' }
+          - { php: '8.4', wp: 'trunk', experimental: true }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: ${{ matrix.php }}
           tools: composer
@@ -74,26 +108,28 @@ jobs:
           # needed — container coverage is enabled via --xdebug below
           coverage: none
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
 
-      - run: npm ci
+      # Only wp-env is needed here, so skip the asset build that postinstall would run
+      - run: npm ci --ignore-scripts
+
+      - name: Work out which WordPress to test against
+        id: wp
+        run: echo "core=$(node tests/bin/wp-core-ref.js '${{ matrix.wp }}')" >> "$GITHUB_OUTPUT"
 
       - name: Start wp-env
-        # Note: 'trunk' in the matrix maps to the WordPress/WordPress repo's
-        # `master` branch, which is the auto-synced mirror of SVN trunk. The
-        # GitHub mirror has no Git branch literally named `trunk`.
         # Plugin activation and pretty permalinks happen in the afterStart
         # lifecycle script in .wp-env.json so local runs and CI stay identical.
         # The coverage cell starts with xdebug in coverage mode inside the
         # container so phpunit can produce the clover report.
-        run: npx wp-env start ${{ matrix.php == '8.3' && matrix.wp == '7.0' && '--xdebug=coverage' || '' }}
+        run: npx wp-env start ${{ matrix.coverage && '--xdebug=coverage' || '' }}
         env:
-          WP_ENV_CORE: ${{ matrix.wp == 'trunk' && 'WordPress/WordPress#master' || format('WordPress/WordPress#{0}', matrix.wp) }}
+          WP_ENV_CORE: ${{ steps.wp.outputs.core }}
           WP_ENV_PHP_VERSION: ${{ matrix.php }}
 
       - name: Run integration tests
@@ -102,11 +138,11 @@ jobs:
           npx wp-env run tests-cli --env-cwd=wp-content/plugins/m-chart \
             vendor/bin/phpunit --testsuite integration \
             --log-junit tests/junit/phpunit-integration.xml \
-            ${{ matrix.php == '8.3' && matrix.wp == '7.0' && '--coverage-clover coverage.xml' || '' }}
+            ${{ matrix.coverage && '--coverage-clover coverage.xml' || '' }}
 
       - name: Upload PHPUnit JUnit XML
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: phpunit-integration-junit-php${{ matrix.php }}-wp${{ matrix.wp }}
           path: tests/junit/phpunit-integration.xml
@@ -114,7 +150,7 @@ jobs:
 
       - name: Publish integration-test results
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@a16be3a69023e9bd7e748ede768b3282ea7b30ce # v6.7.1
         with:
           report_paths: tests/junit/phpunit-integration.xml
           check_name: PHP Integration (PHP ${{ matrix.php }} × WP ${{ matrix.wp }})
@@ -123,9 +159,10 @@ jobs:
           detailed_summary: true
 
       - name: Upload coverage
-        if: matrix.php == '8.3' && matrix.wp == '7.0'
-        uses: codecov/codecov-action@v4
+        if: matrix.coverage
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: ./coverage.xml
           flags: php-integration
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false

@@ -6,6 +6,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class M_Chart_Parse {
 	const LABELS_NONE         = 'none';
+	// How label cells are read
+	// Legacy cleans them with clean_labels() (entities decoded, tags stripped), which is what a library that renders HTML needs
+	// Plain only trims them, for a library that paints text as text
+	const TEXT_LEGACY = 'legacy';
+	const TEXT_PLAIN  = 'plain';
+
 	const LABELS_FIRST_ROW    = 'first_row';
 	const LABELS_FIRST_COLUMN = 'first_column';
 	const LABELS_BOTH         = 'both';
@@ -15,12 +21,21 @@ class M_Chart_Parse {
 	// The CSV delimiters the importer and the settings page accept
 	const CSV_DELIMITERS = [ ',', "\t", ' ', ';' ];
 
+	// Most cells a CSV may hold once every row is padded to the widest, filterable through m_chart_csv_max_cells
+	// One very wide row followed by thousands of short ones is a few kilobytes of text and hundreds of megabytes padded
+	const CSV_MAX_CELLS = 500000;
+
+	// What a spreadsheet application treats as the start of a formula, the last four are the full-width forms
+	// A byte order mark or zero-width character in front doesn't change that, an application may drop it on the way in
+	const CSV_FORMULA_TRIGGERS = '[\x{FEFF}\x{200B}-\x{200D}\x{2060}]*(?:[=+\-@\t\r]|\x{FF1D}|\x{FF0B}|\x{FF0D}|\x{FF20})';
+
 	public array $data                   = [];
 	public array $value_labels           = [];
 	public string $value_labels_position = '';
 	public array $set_data               = [];
 	public array $raw_data               = [];
 	public string $parse_in              = '';
+	public string $text_mode             = self::TEXT_LEGACY;
 	// Original series indexes the last parse_data() call dropped because every value was non numeric
 	public array $dropped_sets           = [];
 
@@ -31,12 +46,14 @@ class M_Chart_Parse {
 	 *
 	 * @param array  $data     the raw two-dimensional data array from the chart post
 	 * @param string $parse_in whether to parse by rows or columns (PARSE_ROWS or PARSE_COLUMNS)
+	 * @param string $text_mode TEXT_PLAIN to keep label cells as typed, TEXT_LEGACY (the default) to clean them for a library that renders HTML
 	 *
 	 * @return static $this
 	 */
-	public function parse_data( array $data, string $parse_in ): static {
+	public function parse_data( array $data, string $parse_in, string $text_mode = self::TEXT_LEGACY ): static {
 		$this->data                  = $data;
 		$this->parse_in              = $parse_in;
+		$this->text_mode             = self::TEXT_PLAIN === $text_mode ? self::TEXT_PLAIN : self::TEXT_LEGACY;
 		$this->dropped_sets          = [];
 		$this->value_labels_position = $this->get_value_labels_position();
 		$this->parse_value_labels();
@@ -58,7 +75,7 @@ class M_Chart_Parse {
 			case self::LABELS_FIRST_COLUMN:
 				foreach ( (array) $this->data as $columns ) {
 					if ( '' != trim( (string) $columns[0] ) ) {
-						$this->value_labels[] = $this->clean_labels( $columns[0] );
+						$this->value_labels[] = $this->label( $columns[0] );
 					}
 				}
 				break;
@@ -66,21 +83,27 @@ class M_Chart_Parse {
 			case self::LABELS_FIRST_ROW:
 				foreach ( (array) $this->data[0] as $column ) {
 					if ( '' != trim( (string) $column ) ) {
-						$this->value_labels[] = $this->clean_labels( $column );
+						$this->value_labels[] = $this->label( $column );
 					}
 				}
 				break;
 
 			case self::LABELS_BOTH:
+				// Both lists always exist, a sheet whose first column (or first row) is entirely empty has no labels there
+				$this->value_labels = [
+					self::LABELS_FIRST_COLUMN => [],
+					self::LABELS_FIRST_ROW    => [],
+				];
+
 				foreach ( (array) $this->data as $columns ) {
 					if ( '' != trim( (string) $columns[0] ) ) {
-						$this->value_labels[ self::LABELS_FIRST_COLUMN ][] = $this->clean_labels( $columns[0] );
+						$this->value_labels[ self::LABELS_FIRST_COLUMN ][] = $this->label( $columns[0] );
 					}
 				}
 
 				foreach ( (array) $this->data[0] as $column ) {
 					if ( '' != trim( (string) $column ) ) {
-						$this->value_labels[ self::LABELS_FIRST_ROW ][] = $this->clean_labels( $column );
+						$this->value_labels[ self::LABELS_FIRST_ROW ][] = $this->label( $column );
 					}
 				}
 				break;
@@ -227,7 +250,13 @@ class M_Chart_Parse {
 		$data_point = trim( (string) $data_point );
 
 		if ( preg_match( '/-?\d[\d,]*(?:\.\d+)?/', $data_point, $matches ) ) {
-			return floatval( str_replace( ',', '', $matches[0] ) );
+			$number = floatval( str_replace( ',', '', $matches[0] ) );
+
+			// A run of several hundred digits overflows to INF, which can't be JSON encoded and takes the whole chart down
+			// It isn't a number anyone can plot, so it is left as the text it was typed as
+			if ( is_finite( $number ) ) {
+				return $number;
+			}
 		}
 
 		return $data_point;
@@ -248,19 +277,40 @@ class M_Chart_Parse {
 		if ( preg_match( '/(-?\d[\d,]*(?:\.\d+)?)/', $data_point, $matches, PREG_OFFSET_CAPTURE ) ) {
 			$number = $matches[1][0];
 			$offset = $matches[1][1];
+			$value  = floatval( str_replace( ',', '', $number ) );
 
-			return M_Chart_Parsed_Data_Point::numeric(
-				floatval( str_replace( ',', '', $number ) ),
-				substr( $data_point, 0, $offset ),
-				substr( $data_point, $offset + strlen( $number ) )
-			);
+			// See clean_data_point(), a number too large to be a float stays text
+			if ( is_finite( $value ) ) {
+				return M_Chart_Parsed_Data_Point::numeric(
+					$value,
+					substr( $data_point, 0, $offset ),
+					substr( $data_point, $offset + strlen( $number ) )
+				);
+			}
 		}
 
 		return M_Chart_Parsed_Data_Point::text( $data_point );
 	}
 
 	/**
+	 * A label cell, read the way the current text mode says
+	 *
+	 * @param mixed $cell a label cell
+	 *
+	 * @return string
+	 */
+	private function label( mixed $cell ): string {
+		if ( self::TEXT_PLAIN === $this->text_mode ) {
+			return trim( is_scalar( $cell ) ? (string) $cell : '' );
+		}
+
+		return $this->clean_labels( $cell );
+	}
+
+	/**
 	 * Helper function cleans out label values
+	 *
+	 * Used for libraries that render label text as HTML, see TEXT_LEGACY
 	 *
 	 * @param mixed $label a label string
 	 *
@@ -530,8 +580,71 @@ class M_Chart_Parse {
 	/**
 	 * Parse CSV text into the row arrays the spreadsheet expects
 	 *
-	 * Mirrors what the CSV import does: the text is wrapped in newlines so parseCSV treats the first line as data rather than
-	 * headings, the delimiter has to be one of CSV_DELIMITERS or the csv_delimiter setting is used, and short rows are padded
+	 * The delimiter has to be one of CSV_DELIMITERS or the csv_delimiter setting is used, short rows are padded,
+	 * and a CSV that would pad out past the cell limit is refused before any padding happens
+	 *
+	 * @param string      $csv       the CSV text
+	 * @param string|null $delimiter one of CSV_DELIMITERS, anything else falls back to the setting
+	 *
+	 * @return array|WP_Error rows of cells, or an error when the CSV is too large
+	 */
+	public static function parse_csv( string $csv, ?string $delimiter = null ) {
+		self::load_parsecsv();
+
+		// A byte order mark at the start of the file is not part of the first cell
+		if ( "\xEF\xBB\xBF" === substr( $csv, 0, 3 ) ) {
+			$csv = substr( $csv, 3 );
+		}
+
+		$csv = self::csv_to_utf8( $csv );
+
+		$parse_csv = new parseCSV();
+
+		// The "\n" before and after deals with CSV files that don't have line breaks above and below the data, which confuses parseCSV occasionally
+		// It is also what keeps this safe: parseCSV::parse() reads its argument as a file when it is the path of a readable file,
+		// and no path starts and ends with a line break. Never pass it the bare text
+		$csv = "\n" . trim( $csv ) . "\n";
+
+		$parse_csv->delimiter = in_array( $delimiter, self::CSV_DELIMITERS, true ) ? $delimiter : m_chart()->get_settings( 'csv_delimiter' );
+		$parse_csv->parse( $csv );
+
+		$rows   = is_array( $parse_csv->data ) ? $parse_csv->data : [];
+		$widest = 0;
+
+		foreach ( $rows as $row ) {
+			$widest = max( $widest, is_array( $row ) ? count( $row ) : 0 );
+		}
+
+		$cells = count( $rows ) * $widest;
+		$limit = (int) apply_filters( 'm_chart_csv_max_cells', self::CSV_MAX_CELLS );
+
+		if ( $cells > $limit ) {
+			return new WP_Error(
+				'm_chart_csv_too_large',
+				sprintf(
+					// translators: 1: the number of cells in the CSV, 2: the most cells allowed
+					__( 'The CSV is too large: %1$s cells, the limit is %2$s', 'm-chart' ),
+					number_format_i18n( $cells ),
+					number_format_i18n( $limit )
+				)
+			);
+		}
+
+		$rows = self::fix_csv_data( $rows );
+
+		foreach ( $rows as $row_key => $row ) {
+			foreach ( $row as $cell_key => $cell ) {
+				$rows[ $row_key ][ $cell_key ] = self::restore_csv_cell( $cell );
+			}
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Parse CSV text into the row arrays the spreadsheet expects
+	 *
+	 * The same as parse_csv() for callers that only want rows: a CSV that is too large comes back as no rows at all
 	 *
 	 * @param string      $csv       the CSV text
 	 * @param string|null $delimiter one of CSV_DELIMITERS, anything else falls back to the setting
@@ -539,18 +652,95 @@ class M_Chart_Parse {
 	 * @return array rows of cells
 	 */
 	public static function parse_csv_string( string $csv, ?string $delimiter = null ): array {
-		self::load_parsecsv();
+		$rows = self::parse_csv( $csv, $delimiter );
 
-		$parse_csv = new parseCSV();
+		return is_array( $rows ) ? $rows : [];
+	}
 
-		// The "\n" before and after is to deal with CSV files that don't have line breaks above and below the data
-		// Which then seems to confuse parseCSV occasionally
-		$csv = "\n" . trim( $csv ) . "\n";
+	/**
+	 * Turn CSV text saved in a Windows code page into UTF-8
+	 *
+	 * Spreadsheet applications on Windows still save plain "CSV" this way, and anything that isn't valid UTF-8
+	 * would otherwise come out as question marks once the cells are sent back as JSON
+	 *
+	 * @param string $csv the CSV text as uploaded
+	 *
+	 * @return string
+	 */
+	private static function csv_to_utf8( string $csv ): string {
+		if ( ! function_exists( 'mb_check_encoding' ) || mb_check_encoding( $csv, 'UTF-8' ) ) {
+			return $csv;
+		}
 
-		$parse_csv->delimiter = in_array( $delimiter, self::CSV_DELIMITERS, true ) ? $delimiter : m_chart()->get_settings( 'csv_delimiter' );
-		$parse_csv->parse( $csv );
+		return mb_convert_encoding( $csv, 'UTF-8', 'Windows-1252' );
+	}
 
-		return self::fix_csv_data( is_array( $parse_csv->data ) ? $parse_csv->data : [] );
+	/**
+	 * Undo the apostrophe the CSV export puts in front of a cell that starts like a formula
+	 *
+	 * So a chart exported and imported again comes back with the cells it had
+	 * The export adds one apostrophe to a cell that already starts with some ('=1+1 goes out as ''=1+1),
+	 * so taking exactly one off here gives back what was there, apostrophes someone typed included
+	 *
+	 * @param mixed $cell a cell as parsed from a CSV
+	 *
+	 * @return mixed
+	 */
+	public static function restore_csv_cell( mixed $cell ): mixed {
+		if ( ! is_string( $cell ) || '' === $cell || "'" !== $cell[0] ) {
+			return $cell;
+		}
+
+		return 1 === preg_match( "/^'+(?:" . self::CSV_FORMULA_TRIGGERS . ')/u', $cell ) ? substr( $cell, 1 ) : $cell;
+	}
+
+	/**
+	 * Whether a cell that starts with a sign is simply a number, such as -5, +1.5, -1,234.56, -$5, -5% or -5°C
+	 *
+	 * A spreadsheet reads these as the values they are, there is no operator or reference in them to evaluate
+	 *
+	 * @param string $cell a cell value
+	 *
+	 * @return bool
+	 */
+	public static function is_signed_number( string $cell ): bool {
+		return 1 === preg_match( '/^[+-](?:\p{Sc} ?)?\d[\d.,]*(?:[eE][+-]?\d+)?(?: ?[\p{L}\p{Sc}%°‰µ]{1,12})?$/u', $cell );
+	}
+
+	/**
+	 * Build CSV text from rows of cells
+	 *
+	 * A cell is quoted when it holds a quote, a line break, the delimiter or any character another application
+	 * might use as its delimiter, so the columns can't shift whichever separator the file is opened with
+	 *
+	 * @param array  $rows      rows of cells
+	 * @param string $delimiter the delimiter to write
+	 *
+	 * @return string
+	 */
+	public static function build_csv( array $rows, string $delimiter = ',' ): string {
+		$delimiter = in_array( $delimiter, self::CSV_DELIMITERS, true ) ? $delimiter : ',';
+		$lines     = [];
+
+		foreach ( $rows as $row ) {
+			$cells = [];
+
+			foreach ( is_array( $row ) ? $row : [] as $cell ) {
+				$cell = is_scalar( $cell ) ? (string) $cell : '';
+
+				$needs_quotes = '' !== $cell && (
+					   strpbrk( $cell, "\",;\t\r\n" . $delimiter ) !== false
+					|| ' ' === $cell[0]
+					|| ' ' === substr( $cell, -1 )
+				);
+
+				$cells[] = $needs_quotes ? '"' . str_replace( '"', '""', $cell ) . '"' : $cell;
+			}
+
+			$lines[] = implode( $delimiter, $cells );
+		}
+
+		return implode( "\r\n", $lines ) . ( $lines ? "\r\n" : '' );
 	}
 
 	/**

@@ -1,0 +1,37 @@
+{
+    "_comment": "The Special characters test chart: text as a person would type it, not as the plugin stores it. tests/bin/special-characters-chart.php saves it through the plugin's own save, so what ends up in the database is what the editor would have put there. See DEVELOPERS.md.",
+    "slug": "special-characters-test",
+    "title": "Special characters: R&D, \"quotes\", café €5 ±2°, 日本語, 5 < 10",
+    "page_slug": "special-characters-test-page",
+    "page_title": "Special characters test page",
+    "type": "column",
+    "height": 600,
+    "subtitle": "Subtitle: R&D, x < y > z, \"quoted\" 'single', &amp;, <b>bold</b>, café €5 ±2°, 日本語, C:\\temp",
+    "x_title": "X axis: a<b and c>d, <5%, A – B — C",
+    "y_title": "Y axis: 5<10 & \"units\" &lt;b&gt;",
+    "source": "Source: R&D <Labs> & \"Co\" – 日本語 C:\\temp",
+    "source_url": "https://example.com/?team=R%26D&page=1",
+    "set_name": "Sheet \"one\" & <two>",
+    "series": [
+        "Series \"A\" & <B>",
+        "Série C:\\temp – 日本語"
+    ],
+    "strings": [
+        "R&D",
+        "x < y > z",
+        "a<b and c>d",
+        "5<10",
+        "<5%",
+        "\"quoted\" 'single'",
+        "&amp;",
+        "&lt;b&gt;",
+        "<b>bold</b>",
+        "café €5 ±2°",
+        "日本語",
+        "C:\\temp",
+        "100%de",
+        "<script>alert(1)</script>",
+        "&lt;img src=x onerror=alert(1)&gt;",
+        "A – B — C"
+    ]
+}

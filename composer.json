@@ -12,7 +12,7 @@
         "brain/monkey": "^2.6"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": "vendor/bin/phpunit --testsuite unit",
         "test:unit": "vendor/bin/phpunit --testsuite unit",
         "test:integration": "vendor/bin/phpunit --testsuite integration"
     },

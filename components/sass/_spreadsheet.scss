@@ -42,6 +42,16 @@
 		overflow-y: hidden;
 		white-space: nowrap;
 
+		// The line under the tabs is drawn by the bar itself, over the grid's own top border and in its colour
+		// At any browser zoom other than 100% the bar and the grid's header are rounded to the screen's pixels separately
+		// and can land a pixel apart, which showed as a white hairline between the active tab's indicator and the grid
+		// A line that belongs to the bar can't come away from the bar
+		// The z-index only has to clear the grid's sticky header cells, which sit at 2
+		// Checked in Safari, where the hairline was reported, the emulated zoom of a test browser doesn't reproduce it
+		box-shadow: 0 1px 0 #ccc;
+		position: relative;
+		z-index: 3;
+
 		&.m-chart-hide {
 			display: none;
 		}
@@ -59,17 +69,40 @@
 			}
 		}
 
+		// The tab list assistive technology is given, it claims the tabs with aria-owns and holds nothing itself
+		.m-chart-sheet-tablist {
+			height: 0;
+			position: absolute;
+			width: 0;
+		}
+
+		// The box that looks like a tab
+		// The tab itself is the title inside it, with the delete button and the rename field as its siblings,
+		// because a tab may not contain other controls
 		.m-chart-sheet-tab {
 			display: flex;
 			align-items: center;
 
-			&:focus-visible {
+			// Focus is on the title, the rings are drawn round the whole box as they were when the box was the tab
+			// The second is the ring WordPress gives a focused tab item
+			&:has( > .m-chart-sheet-tab-title:focus-visible ) {
 				outline: 2px solid var(--wp-admin-theme-color, #3858e9);
 				outline-offset: -2px;
+
+				&::before {
+					box-shadow: 0 0 0 var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) var(--wpds-color-stroke-focus, var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)));
+					opacity: 1;
+					outline: 2px solid transparent;
+				}
 			}
 
 			.m-chart-sheet-tab-delete {
 				color: $wp-admin-black;
+				// Shown before the title, which comes first in the markup so the Tab key reaches the tab first
+				order: -1;
+				// Above the title's stretched hit area
+				position: relative;
+				z-index: 1;
 
 				&:hover {
 					color: $wp-admin-alert-red;
@@ -93,6 +126,27 @@
 				padding: rem-calc( 0 13 0 12 );
 				border: 1px solid transparent;
 				display: inline-block;
+
+				// Stretched over the whole box, so a click, double click or long press anywhere on it still lands on the tab
+				&::before {
+					content: '';
+					inset: 0;
+					position: absolute;
+				}
+
+				// The rings are drawn on the box, see above
+				&:focus {
+					outline: none;
+				}
+			}
+
+			.m-chart-sheet-tab-rename {
+				position: relative;
+				z-index: 1;
+
+				&.is-idle {
+					display: none;
+				}
 			}
 
 			input {
@@ -104,11 +158,16 @@
 				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 			}
 
+			// The active tab's indicator
+			// It hangs one pixel below the tab, where the bar clips it off, so it always ends exactly on the bar's bottom edge
+			// A line this thin that ends on an edge by itself gets rounded short of it when the page is scaled
+			// (browser zoom, or a browser's mobile preview), which leaves it looking thinner than it is
+			// The hidden pixel is there on every tab so the indicator still grows from nothing when a tab becomes active
 			&::after {
 				background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-				bottom: 0;
+				bottom: -1px;
 				content: '';
-				height: 0;
+				height: 1px;
 				left: 0;
 				pointer-events: none;
 				position: absolute;
@@ -118,7 +177,7 @@
 
 			&.is-active {
 				&::after {
-					height: var(--wp-admin-border-width-focus, 2px);
+					height: calc( var(--wp-admin-border-width-focus, 2px) + 1px );
 				}
 
 				.m-chart-sheet-tab-delete {

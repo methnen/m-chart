@@ -100,7 +100,7 @@ if ( '' === $summary ) {
 }
 ?>
 <figure id="<?php echo esc_attr( $container_id ); ?>" class="m-chart-container chartjs">
-	<canvas id="<?php echo esc_attr( $canvas_id ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width ? ' width="' . absint( $width ) . '"' : ''; ?> role="img" aria-labelledby="<?php echo esc_attr( $caption_id ); ?>" aria-describedby="<?php echo esc_attr( $summary_id ); ?>" aria-details="<?php echo esc_attr( $desc_id ); ?>" style="height: <?php echo esc_attr( $height ); ?>px; max-width: 100%;">
+	<canvas id="<?php echo esc_attr( $canvas_id ); ?>" class="m-chart" height="<?php echo absint( $height ); ?>"<?php echo $width ? ' width="' . absint( $width ) . '"' : ''; ?> role="img" aria-labelledby="<?php echo esc_attr( $caption_id ); ?>" aria-describedby="<?php echo esc_attr( $summary_id ); ?>" aria-details="<?php echo esc_attr( $desc_id ); ?>" style="height: <?php echo absint( $height ); ?>px; max-width: 100%;">
 		<p><?php echo esc_html( $title ); ?></p>
 	</canvas>
 	<figcaption id="<?php echo esc_attr( $caption_id ); ?>" class="screen-reader-text">

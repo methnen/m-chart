@@ -14,7 +14,7 @@
 /build
 /components/admin-ui-src
 /components/block-src
-/components/js/m-chart-chartjs-helpers.js
+/components/js/m-chart-chartjs-helper.js
 /components/sass
 /config.rb
 /deploy
@@ -38,5 +38,13 @@
 /jest.config.js
 /playwright.config.js
 /playwright-report
+/playwright-report-*
 /test-results
+/test-results-*
 /vendor
+/artifacts
+/.screenshots
+/.wp-screenshots.json
+/m-chart-*.zip
+*.map
+/.playwright-auth-state.json

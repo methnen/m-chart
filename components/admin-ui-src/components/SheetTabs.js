@@ -74,10 +74,19 @@ export default function SheetTabs() {
 		<div
 			id="spreadsheet-tabs"
 			className={ `components-tab-panel__tabs m-chart-sheet-tabs${ showTabs ? '' : ' m-chart-hide' }${ sheetEditingDisabled ? ' editing-disabled' : '' }` }
-			role="tablist"
-			aria-label={ __( 'Spreadsheet sheets', 'm-chart' ) }
-			aria-orientation="horizontal"
 		>
+			{ /*
+				The tab list, as assistive technology sees it
+				A tab list may hold nothing but tabs, and this bar also holds the Add Sheet button and each sheet's delete button
+				So the list is an empty element that claims the tabs by id, wherever they sit in the bar, and the buttons stay outside it
+			*/ }
+			<div
+				className="m-chart-sheet-tablist"
+				role="tablist"
+				aria-label={ __( 'Spreadsheet sheets', 'm-chart' ) }
+				aria-orientation="horizontal"
+				aria-owns={ sheetIds.map( ( id ) => `spreadsheet-tab-${ id }` ).join( ' ' ) }
+			/>
 			{ ! sheetEditingDisabled && (
 				<Button
 					className="m-chart-add-sheet"

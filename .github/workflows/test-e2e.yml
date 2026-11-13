@@ -2,11 +2,21 @@ name: E2E Tests
 
 on:
   push:
-    branches: [ main, wordpress-7, pro-support ]
+    branches: [ main ]
   pull_request:
   schedule:
     # Nightly run with the full browser matrix
     - cron: '0 6 * * *'
+  # Run by hand against any branch from the Actions tab
+  workflow_dispatch:
+  # Run by the deploy workflow as its gate
+  workflow_call:
+
+# A new push to a pull request replaces the run before it, nothing else is ever cancelled
+# The name is spelled out because github.workflow is the caller's name when the deploy workflow runs this
+concurrency:
+  group: e2e-tests-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Required for the test reporter to post check results, PR comments, and source-line annotations
 permissions:
@@ -16,28 +26,29 @@ permissions:
 
 jobs:
   playwright:
-    name: "Playwright (${{ matrix.browser }})"
+    name: "Playwright (${{ matrix.browser }} × WP ${{ matrix.wp }})"
     runs-on: ubuntu-latest
+    # WordPress trunk can break for reasons that have nothing to do with a change here, so that cell reports without blocking
+    continue-on-error: ${{ matrix.wp == 'trunk' }}
     strategy:
       fail-fast: false
-      matrix:
-        # Push and PR events run chromium only; the nightly schedule runs the
-        # full browser matrix. Jspreadsheet has historical browser quirks so
-        # cross-browser coverage stays in the rotation, just nightly. The
-        # matrix list itself is event-conditional via fromJSON — GitHub
-        # Actions doesn't reliably support `matrix.*` in job-level `if:`,
-        # so we shape the matrix at workflow-eval time instead.
-        browser: ${{ github.event_name == 'schedule' && fromJSON('["chromium","firefox","webkit"]') || fromJSON('["chromium"]') }}
+      # Pushes and pull requests run Chromium against the current WordPress release, the one sites actually run
+      # The nightly schedule adds Firefox and WebKit (Jspreadsheet has historical browser quirks)
+      # and one run against WordPress trunk as an early warning
+      # The whole matrix is shaped here with fromJSON because GitHub Actions
+      # doesn't reliably support `matrix.*` in a job-level `if:`
+      matrix: ${{ fromJSON( github.event_name == 'schedule' && '{"include":[{"browser":"chromium","wp":"latest"},{"browser":"firefox","wp":"latest"},{"browser":"webkit","wp":"latest"},{"browser":"chromium","wp":"trunk"}]}' || '{"include":[{"browser":"chromium","wp":"latest"}]}' ) }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
 
-      - run: npm ci
+      # The build is its own step below, so skip the one postinstall would run
+      - run: npm ci --ignore-scripts
 
       # The key includes the runner image (ImageOS reads e.g. ubuntu24 or
       # ubuntu26) because WebKit is a per-Ubuntu-release build linked against
@@ -45,7 +56,7 @@ jobs:
       # A cache restored across an image change leaves the old binary in place,
       # playwright install then skips the download, and every launch fails
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ matrix.browser }}-${{ runner.os }}-${{ env.ImageOS }}-${{ hashFiles('package-lock.json') }}
@@ -56,44 +67,62 @@ jobs:
       - name: Build assets
         run: npm run build
 
+      - name: Work out which WordPress to test against
+        id: wp
+        run: echo "core=$(node tests/bin/wp-core-ref.js '${{ matrix.wp }}')" >> "$GITHUB_OUTPUT"
+
       - name: Start wp-env
         # Plugin activation and pretty permalinks happen in the afterStart
         # lifecycle script in .wp-env.json so local runs and CI stay identical
+        # .wp-env.json itself points at WordPress trunk for local development, CI says which WordPress it wants
         run: npx wp-env start
+        env:
+          WP_ENV_CORE: ${{ steps.wp.outputs.core }}
 
       - name: Run E2E tests
-        run: npm run test:e2e -- --project=${{ matrix.browser }}
+        # Retries hide a test that only passes on its second try
+        # The nightly run fails on those so flakiness is seen, pushes and pull requests are not held up by it
+        run: npm run test:e2e -- --project=${{ matrix.browser }} ${{ github.event_name == 'schedule' && '--fail-on-flaky-tests' || '' }}
+
+      # The settings page and the iframe embed change settings for the whole site, so they run on their own
+      # once the parallel tests are done (see the site-settings project in playwright.config.js)
+      # One browser is enough for them
+      - name: Run the site settings tests
+        if: matrix.browser == 'chromium'
+        run: npx playwright test --project=site-settings --no-deps ${{ github.event_name == 'schedule' && '--fail-on-flaky-tests' || '' }}
+        env:
+          E2E_RUN_NAME: site-settings
 
       - name: Upload Playwright HTML report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-${{ matrix.browser }}
-          path: playwright-report/
+          name: playwright-report-${{ matrix.browser }}-wp-${{ matrix.wp }}
+          path: playwright-report*/
           retention-days: 7
 
       - name: Upload Playwright JUnit XML
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: playwright-junit-${{ matrix.browser }}
-          path: tests/junit/playwright.xml
+          name: playwright-junit-${{ matrix.browser }}-wp-${{ matrix.wp }}
+          path: tests/junit/playwright*.xml
           retention-days: 7
 
       - name: Upload Playwright test traces and screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: playwright-test-results-${{ matrix.browser }}
-          path: test-results/
+          name: playwright-test-results-${{ matrix.browser }}-wp-${{ matrix.wp }}
+          path: test-results*/
           retention-days: 7
 
       - name: Publish Playwright test results
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@a16be3a69023e9bd7e748ede768b3282ea7b30ce # v6.7.1
         with:
-          report_paths: tests/junit/playwright.xml
-          check_name: Playwright (${{ matrix.browser }})
+          report_paths: tests/junit/playwright*.xml
+          check_name: Playwright (${{ matrix.browser }} × WP ${{ matrix.wp }})
           require_tests: false
           fail_on_failure: true
           detailed_summary: true

@@ -169,6 +169,16 @@ add_action( 'm_chart_screen_reader_text', function ( $post_id, $args ) {
 
 The React admin UI sits inside meta-box `<h2>` elements provided by WordPress core. When inserting headings inside React components, level them appropriately (typically `<h3>` or `<h4>`) so the document outline stays sensible.
 
+### Sheet tabs
+
+The sheet tab bar looks like a row of tabs with a delete button inside each and an Add Sheet button at the start, and its markup is deliberately not that. A tab list may contain only tabs, and a tab may not contain another control, so:
+
+- The tab list is an empty element (`.m-chart-sheet-tablist`) that claims the tabs with `aria-owns`. It does not wrap them, which keeps the Add Sheet and delete buttons out of the list
+- What looks like a tab is a box (`.m-chart-sheet-tab`) holding three siblings: the tab itself (the sheet's name, `role="tab"`), that sheet's delete button, and the rename field
+- The stylesheet stretches the tab over the whole box so a click anywhere on it still lands on the tab, shows the delete button first although the tab comes first in the markup (so the Tab key reaches the tab first), and draws the focus rings on the box
+
+Don't "simplify" this back to buttons inside tabs inside a tab list. `tests/js/components/SheetTabs.test.js` and `tests/e2e/a11y/editor.spec.js` both run axe against the bar and will fail.
+
 ### Status announcements
 
 The admin UI uses `wp.a11y.speak()` from `@wordpress/a11y` for transient status announcements (chart refreshed, sheet renamed, CSV imported, shortcode copied, etc.). Library plugin authors hooking into the React data-flow should consider doing the same.
@@ -251,7 +261,7 @@ Fast, no Docker, runs against the source directly:
 composer test:unit
 ```
 
-Covers `M_Chart_Parse`, `M_Chart_Parsed_Data_Point`, `clean_labels()` (Wordfence M-Chart-194 CVE regression), and `neutralize_csv_cell()`.
+Covers `M_Chart_Parse`, `M_Chart_Parsed_Data_Point`, `clean_labels()` (Wordfence M-Chart-194 CVE regression), `neutralize_csv_cell()` and the chart image check. Two tests here guard the repository rather than the code: `VersionConsistencyTest` (the version is the same in every place it is written) and `VendoredLibrariesTest` (see [Vendored libraries](#vendored-libraries)).
 
 ### PHP integration tests (full WP via wp-env)
 
@@ -263,7 +273,9 @@ npx wp-env run tests-cli --env-cwd=wp-content/plugins/m-chart \
     vendor/bin/phpunit --testsuite integration
 ```
 
-Covers the save_post pipeline, CSV import/export AJAX, the REST API permission callbacks, and a Contributor-role end-to-end XSS regression test.
+Covers the save_post pipeline, CSV import/export AJAX, the block's REST routes, the settings save, shortcodes, the embed and its Content-Security-Policy, the Highcharts migration handlers, the upgrade routines, password protected charts, and a Contributor-role end-to-end XSS regression test.
+
+New integration tests should extend `M_Chart_Integration_Test_Case` (`tests/php/integration/class-m-chart-integration-test-case.php`, loaded by the bootstrap for this tier only) rather than `WP_UnitTestCase`. `WP_UnitTestCase` restores the hook table and rolls the database back after every test but the plugin object lives on, so the base class re-registers the lazily created Chart.js hooks and resets what the plugin memoises (settings, `is_iframe`, the CSP nonce, the instance counter, the request superglobals, the current screen). It also has the shared helpers: `create_chart()`, `validated_meta()`, `render()`, `add_admin_hook()`, `start_rest_server()` and `catch_redirect()` for handlers that end in `wp_safe_redirect(); exit;`. Tests that need `WP_Ajax_UnitTestCase` can't extend it and do their own resets.
 
 ### JS unit tests (Jest)
 
@@ -273,18 +285,44 @@ npm run test:js:watch        # interactive
 npm run test:js:coverage     # with coverage report
 ```
 
-Covers the `ChartAdminContext` reducer (every action type) and `useChartRefresh` race-condition guards.
+Covers the `ChartAdminContext` reducer (every action type), the hooks, the editor components (sheet tabs, CSV controls, type and theme, the submit gate), the block's edit component, and the front-end helper through the Chart.js plugin hooks it exposes. `jest.config.js` sets a coverage floor a few points under what the suite measures.
 
 ### E2E tests (Playwright)
 
 ```bash
-npm run test:e2e             # all chromium specs (fast loop — reuses a running wp-env, starts one if needed)
+npm run test:e2e             # every spec in every installed browser, then the site settings tests (reuses a running wp-env, starts one if needed)
+npm run test:e2e -- --project=chromium   # the fast loop: Chromium only, without the site settings tests
 npm run test:e2e:ui          # interactive Playwright UI
 npm run test:a11y            # axe-core accessibility suite only (tests/e2e/a11y)
 npm run test:e2e:full        # one-shot: build assets + start wp-env + run everything
+npm run test:e2e:site-settings  # only the settings page and embed tests, on their own
+npm run test:package         # build the release zip and check what is in it
 ```
 
 `test:e2e` does NOT rebuild assets. After changing plugin source, run `npm run build` first, or use `test:e2e:full`. wp-env is left running between test runs so iteration stays fast; stop it with `npm run wp-env stop` when you're done.
+
+What the specs in `tests/e2e/` cover:
+
+| Spec | Covers |
+|---|---|
+| `chart-create.spec.js` | A chart built from Charts → Add New: typing cells, changing type, publishing, reopening, the public page, and `show="image"` |
+| `chart-edit-flow.spec.js` | A seeded chart on the front end, `show="table"`, and the edit screen mounting |
+| `csv.spec.js` | Importing a file through the editor and the bytes the Export button downloads |
+| `sheets.spec.js` | Adding, renaming and deleting sheet tabs |
+| `block.spec.js` | The chart block: search, pick, the Show setting, publish |
+| `chart-types.spec.js` | Every chart type draws in a real browser, using the example charts in `tests/fixtures/charts/pickle-*.json` (it fails if a type is added without an example) |
+| `security-regression-xss.spec.js` | Stored payloads never execute, including a real Contributor typing them into the editor |
+| `submit-gate-regression.spec.js` | The save waits for an in-progress cell edit and a fresh chart image |
+| `site-settings.spec.js` | The settings page and the iframe embed, see below |
+| `a11y/` | axe-core scans, see below |
+
+Things worth knowing when writing one:
+
+- `tests/e2e/fixtures.js` has the helpers. `chartFactory` seeds a chart with one WP-CLI call and `postFactory` makes a post to carry a shortcode; both delete what they made. `chartFactory` writes the meta row directly, it does not go through the plugin's save, so give text fields (subtitle, axis titles, source) in their stored, HTML-encoded form. To exercise the save, build the chart through the editor with `awaitChartEditor()` and `typeIntoCell()` and register it with the `cleanup` fixture.
+- WP-CLI calls are the slow part and are queued across workers, so use `createCharts()` when a test needs many charts.
+- Tests start signed in as the admin. The `contributorPage` and `editorPage` fixtures give a page signed in as that role, in its own browser context. The users are made once in `tests/e2e/global-setup.js`.
+- `site-settings.spec.js` changes settings for the whole site (switching embeds on turns every chart on every page into an iframe), so it cannot run beside the other specs. It has its own Playwright project, `site-settings`, which depends on the others: a plain `npx playwright test` runs it last, `--project=chromium` leaves it out, and `npx playwright test --project=site-settings --no-deps` runs it alone. It puts the settings back when it finishes. Anything else that changes site-wide state belongs in that file.
+- Running the PHP integration suite resets the same tests database: the plugin and theme end up inactive and permalinks unset. Before the next E2E run, re-run the `tests-cli` commands from `lifecycleScripts.afterStart` in `.wp-env.json`, or `npx wp-env start` again.
 
 ### Accessibility tests (axe-core)
 
@@ -300,9 +338,27 @@ These run as part of the regular chromium E2E pass in CI. Tag: `@a11y`.
 The Wordfence M-Chart-194 stored-XSS CVE has dedicated regression tests at three layers:
 - `tests/php/unit/CleanLabelsTest.php` — pure-function payload neutralization
 - `tests/php/integration/XssRegressionTest.php` — Contributor-role end-to-end render
-- `tests/e2e/security-regression-xss.spec.js` — real browser execution check
+- `tests/e2e/security-regression-xss.spec.js` — real browser execution check, ending with a Contributor typing the payloads into the editor and an administrator opening the result
 
 If `M_Chart_Parse::clean_labels()` ever regresses to a state that lets `<script>` tags through, all three fail loudly. Tag: `@security`.
+
+### Special characters test chart
+
+For checking by eye how awkward text renders, there is a chart with every kind of it (ampersands, angle brackets, quotes, typed entities, typed tags, accents, non-Latin script, backslashes, dashes) in the title, subtitle, both axis titles, the source, the sheet name, the series names and the labels, and a page that shows the chart and its table together.
+
+```bash
+# A wp-env site ("cli" is the development site, "tests-cli" the tests site)
+npx wp-env run cli wp eval-file wp-content/plugins/m-chart/tests/bin/special-characters-chart.php
+
+# Any other local site, such as a MAMP one WP-CLI can't reach (use a PHP that can reach its database)
+php tests/bin/special-characters-chart.php /path/to/wordpress [host name]
+```
+
+It prints the chart's address, its edit screen and the page. Running it again refreshes the same chart and page, so use it after a database reset or after changing the text.
+
+The text lives in `tests/fixtures/charts/special-characters.json`, written as a person would type it, and the script saves it through the plugin's own save. The strings are the same set `TextAsTypedTest` runs through every field, and `SpecialCharactersFixtureTest` checks the chart built from the fixture shows each one exactly as typed.
+
+The chart's title shows curly quotes where straight ones were typed. That is WordPress's own typography for post titles, not the plugin.
 
 ### Linting
 
@@ -316,13 +372,33 @@ npm run lint:js:watch        # re-lint on file save
 
 ### CI
 
-Four GitHub Actions workflows under `.github/workflows/`:
-- `test-php.yml` — PHP unit matrix (PHP 8.1–8.4) + integration matrix (PHP 8.2–8.4 × WP 6.8/7.0, plus WP trunk); the PHP 8.3 × WP 7.0 cell collects clover coverage inside the wp-env container and uploads it to Codecov
+Five GitHub Actions workflows under `.github/workflows/`:
+- `test-php.yml` — PHP unit matrix (PHP 8.1–8.5, which also parses every PHP file on each version) + integration matrix
 - `test-js.yml` — Jest + ESLint
-- `test-e2e.yml` — Playwright including the a11y suite (chromium on push/PR, full firefox/webkit nightly)
-- `deploy.yml` — manual WordPress.org deploy, gated on a fast PHP-unit + Jest job
+- `test-e2e.yml` — Playwright including the a11y suite
+- `package.yml` — builds the release zip with `npm run build:zip`, checks its contents with `tests/bin/check-package.js`, keeps the zip as an artifact, and runs WordPress's Plugin Check on it (report only)
+- `deploy.yml` — manual WordPress.org deploy, gated on all four of the above
 
-Test workflows trigger on pushes to `main`, `wordpress-7`, and `pro-support`, and on all PRs.
+The test workflows run on pushes to `main`, on every pull request, by hand from the Actions tab (`workflow_dispatch`, against any branch), and when the deploy calls them. A new push to a pull request cancels the run before it.
+
+The integration matrix is a list of pairings chosen for a reason, not a full cross product:
+
+| PHP | WordPress | Why |
+|---|---|---|
+| 8.1 | 6.6 | The oldest of each that `readme.txt` says is supported, change both together |
+| 8.2 | 6.8 | Older pairings sites are still on |
+| 8.3 | 7.0 | |
+| 8.4 | latest release | Collects clover coverage inside the wp-env container and uploads it to Codecov |
+| 8.5 | latest release | The newest PHP |
+| 8.4 | trunk | Early warning. Reports without failing the run, a trunk break is rarely ours |
+
+"Latest release" is looked up from api.wordpress.org when the workflow runs (`tests/bin/wp-core-ref.js`), so nothing needs editing when WordPress ships a version.
+
+End-to-end tests run Chromium against the latest WordPress release on pushes and pull requests. The nightly run adds Firefox and WebKit, one Chromium run against trunk, and `--fail-on-flaky-tests`, so a test that only passes on a retry turns the nightly red instead of going unnoticed. `.wp-env.json` itself still points at trunk for local work; CI overrides it with `WP_ENV_CORE`.
+
+Every job installs with `npm ci --ignore-scripts`, which skips the `postinstall` build, and the jobs that need built assets run `npm run build` themselves. Third-party actions are pinned to a commit with the version in a comment; Dependabot updates them.
+
+Codecov uploads need a `CODECOV_TOKEN` repository secret.
 
 ---
 
@@ -388,9 +464,41 @@ npx wp-env run cli wp import example-charts/pickle-charts.wxr.xml --authors=skip
 
 ---
 
+## Dependencies and Dependabot ##
+
+Three kinds of dependency, treated differently because they carry different risk:
+
+| Kind | Where | Reaches a site? | Dependabot |
+|---|---|---|---|
+| Build and test tools | `devDependencies` in `package.json`, `require-dev` in `composer.json` | No | One grouped pull request a month, and one rolling grouped pull request for their security fixes |
+| Bundled packages | `dependencies` in `package.json` | Yes, compiled into `components/admin-ui/` and `components/block/` | Individual pull requests |
+| Vendored libraries | `components/external/`, listed in `tests/external-libraries/` | Yes | Checked weekly, individual pull requests titled "Vendored library" |
+
+Keep `dependencies` meaning exactly "ends up in shipped JavaScript". `@wordpress/*` packages are provided by WordPress at run time, not bundled, so they belong in `devDependencies`.
+
+A vulnerability in a build tool can't reach a visitor, which is why those alerts are batched and can wait. What a build tool can do is run during the deploy and alter what gets shipped, and a newer version doesn't protect against that, a known one does. So:
+
+- The deploy installs from `package-lock.json` with `npm ci --ignore-scripts`
+- Dependabot waits seven days before proposing any new release (`cooldown`), security fixes excepted
+- Major versions of build tools are never proposed, do those deliberately
+
+The configuration and the reasoning for each entry are in `.github/dependabot.yml`.
+
+---
+
 ## Vendored libraries ##
 
 Everything in `components/external/` is manually copied from upstream dist builds — nothing there is managed by npm or composer, and no build step touches it. When updating one, copy the new dist build over the existing file(s) and make sure a version banner survives at the top of each JS file (some upstream builds strip theirs; add a one-line `/*! name vX.Y.Z */` comment if needed so the vendored version stays identifiable).
+
+`tests/external-libraries/` lists every one of these at its vendored version (`package.json` and `composer.json`, each with a lockfile). Nothing is ever installed from it. It is there because GitHub can only watch dependencies it can see in a manifest, and these are the dependencies that actually ship. See [Dependencies and Dependabot](#dependencies-and-dependabot).
+
+`tests/php/unit/VendoredLibrariesTest.php` fails when that list and the files disagree, so updating a library is always the same three steps:
+
+1. Copy the new files in and check the version banner
+2. Change the version in `tests/external-libraries/package.json` (or `composer.json`) and refresh its lockfile: `npm install --package-lock-only --ignore-scripts`, or `composer update --no-install`, run in that folder
+3. Update the table below
+
+When Dependabot opens a "Vendored library" pull request it has done step 2 for you. The pull request stays red until step 1 is pushed to it.
 
 | Library | Version | Upstream |
 |---|---|---|
@@ -401,8 +509,8 @@ Everything in `components/external/` is manually copied from upstream dist build
 | chartjs-chart-venn | 4.3.7 | [npm](https://www.npmjs.com/package/chartjs-chart-venn) (`build/index.umd.min.js`) |
 | Jspreadsheet CE | 5.0.4 | [jspreadsheet-ce on npm](https://www.npmjs.com/package/jspreadsheet-ce) — pairs with jsuites 5.x (`^5.12.0`) |
 | jsuites | 5.13.5 | [npm](https://www.npmjs.com/package/jsuites) — do not move to 6.x while Jspreadsheet CE 5 is bundled |
-| Freemius SDK | 2.13.4 | [GitHub releases](https://github.com/Freemius/wordpress-sdk/releases) — replace the directory wholesale but preserve `assets/img/m-chart.png` (our plugin icon, not part of the SDK) |
-| parseCSV | ~1.3 | [GitHub](https://github.com/parsecsv/parsecsv-for-php) — upstream dormant since 2021 |
+| Freemius SDK | 2.13.5 | [GitHub releases](https://github.com/Freemius/wordpress-sdk/releases) — replace the directory wholesale but preserve `assets/img/m-chart.png` (our plugin icon, not part of the SDK) |
+| parseCSV | 1.3.2 | [GitHub](https://github.com/parsecsv/parsecsv-for-php) — upstream dormant since 2021. Carries one local change: every PHP file has a `defined( 'ABSPATH' ) || exit;` guard after its namespace line, re-add it if the library is ever replaced |
 
 ---
 
@@ -412,8 +520,10 @@ Deploy to WordPress.org via GitHub Actions:
 
 Actions tab → "Deploy to WordPress.org" → "Run workflow"
 
+The workflow first runs every test workflow and the package check against the branch being deployed, and only deploys if all of them pass. Tick "Dry run" to go through the whole thing, including preparing the WordPress.org commit, without committing anything.
+
 Before triggering the workflow:
-- Bump the version number in `m-chart.php`, `class-m-chart.php`, and `readme.txt`
+- Bump the version number in `m-chart.php`, `class-m-chart.php`, and `readme.txt` (`tests/php/unit/VersionConsistencyTest.php` fails if they differ, or if the changelog has no entry for the new version)
 - Run `npm run build` and commit all compiled assets
 - Run `npm run build:readme` and commit the updated `README.md`
 - Target the `main` branch when running the workflow

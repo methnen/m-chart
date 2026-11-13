@@ -23,6 +23,9 @@ export default function Edit( { attributes, setAttributes } ) {
     const [ loadingMore, setLoadingMore ] = useState( false );
     const resultsRef = useRef( null );
 
+    // Counts the first page requests, each of which starts a new list
+    const listRequest = useRef( 0 );
+
     // URLs
     const newUrl     = `${ siteUrl }/wp-admin/post-new.php?post_type=m-chart`;
     const editUrl    = `${ siteUrl }/wp-admin/post.php?post=${ attributes.chartId }&action=edit`;
@@ -32,7 +35,8 @@ export default function Edit( { attributes, setAttributes } ) {
     const blockProps = useBlockProps( { className: 'm-chart-block-chart-selector' } );
 
     // Cache-busting query param so regenerated chart images aren't served stale
-    const cacheBuster = `?cache=${performance.now()}`;
+    // Set once per block instance, a new value on every render would download every image again
+    const [ cacheBuster ] = useState( () => `?cache=${performance.now()}` );
 
     // Get option settings
     const fetchOptions = () => {
@@ -60,6 +64,14 @@ export default function Edit( { attributes, setAttributes } ) {
 
     // Stable across renders so the debounced search closure doesn't go stale
     const getCharts = useCallback( ( value, getPage = 1 ) => {
+        // A first page replaces the list, so it supersedes every request made before it
+        // A later page belongs to the list it was requested for
+        if ( getPage === 1 ) {
+            listRequest.current++;
+        }
+
+        const requestId = listRequest.current;
+
         setLoadProblem( false );
 
         // If we're getting a subsequent page we're adding to the existing results
@@ -83,6 +95,11 @@ export default function Edit( { attributes, setAttributes } ) {
         apiFetch( { path: `/m-chart/v1/charts${ query ? '?' + query : '' }` } )
             .then(
                 result => {
+                    // The list was replaced while this request was in flight
+                    if ( requestId !== listRequest.current ) {
+                        return;
+                    }
+
                     const newCharts = result.posts.map( x => ( {
                         id: x.id,
                         title: decodeEntities( x.title || '-' ),
@@ -103,11 +120,18 @@ export default function Edit( { attributes, setAttributes } ) {
                         setResults( prev => [ ...prev, ...newCharts ] );
                     }
 
+                    // The page only counts as loaded once it has arrived, so a failed one is asked for again
+                    setPage( getPage );
                     setLoaded( true );
                     setLoadingMore( false );
                 } ).catch( ( error ) => {
-                    // If there's an error we'll note it
-                    if ( error.code === 'rest_no_route' ) {
+                    if ( requestId !== listRequest.current ) {
+                        return;
+                    }
+
+                    // A first page that fails leaves no list for the current search
+                    // A later page that fails keeps the list and the Load more button so it can be tried again
+                    if ( getPage === 1 || error?.code === 'rest_no_route' ) {
                         setLoadProblem( true );
                     }
 
@@ -160,9 +184,7 @@ export default function Edit( { attributes, setAttributes } ) {
         
             // If we're close enough to the bottom of the list load the next page
             if ( el.scrollTop + el.clientHeight >= el.scrollHeight - 100 ) {
-                const nextPage = page + 1;
-                setPage( nextPage );
-                getCharts( search, nextPage );
+                getCharts( search, page + 1 );
             }
         };
 
@@ -269,16 +291,13 @@ export default function Edit( { attributes, setAttributes } ) {
                 <div className="wp-block m-chart-selector">
                     <Placeholder className="block-editor-m-chart-placeholder" icon={ getBlockType( 'm-chart/chart' ).icon.src } label={ __( 'M Chart', 'm-chart' ) }>
                         <div className="viewbox">
-                            { loadProblem ?
-                                <p>{ __( 'There was a problem loading charts', 'm-chart' ) }</p>
-                                :
                                 <>
-                                    { ! loaded && (
+                                    { ! loaded && ! loadProblem && (
                                         <p className="center">
                                             <Spinner />
                                         </p>
                                     ) }
-                                    { loaded && postsAvailable === false && (
+                                    { loaded && ! loadProblem && postsAvailable === false && (
                                         <div>
                                             <p>
                                                 { __( 'No charts found', 'm-chart' ) }<br />
@@ -288,7 +307,11 @@ export default function Edit( { attributes, setAttributes } ) {
                                             </p>
                                         </div>
                                     ) }
-                                    { loaded && postsAvailable !== false && (
+                                    { /*
+                                        The search box stays when a request fails, so searching again is the way to try again
+                                        Only the list gives way to the message, and that includes a first load that failed
+                                    */ }
+                                    { ( loadProblem || ( loaded && postsAvailable !== false ) ) && (
                                         <div className="no-chart-selected">
                                                 <div className="search-box">
                                                     <SearchControl
@@ -296,14 +319,19 @@ export default function Edit( { attributes, setAttributes } ) {
                                                         placeholder={ __( 'Search by title', 'm-chart' ) }
                                                         onChange={ ( value ) => handleSearch( value ) }
                                                     />
-                                                    <p className="count" role="status" aria-live="polite">
-                                                        {
-                                                            /* translators: %d: number of charts found */
-                                                            sprintf( _n( '%d chart found', '%d charts found', available, 'm-chart' ), available )
-                                                        }
-                                                    </p>
+                                                    { ! loadProblem && (
+                                                        <p className="count" role="status" aria-live="polite">
+                                                            {
+                                                                /* translators: %d: number of charts found */
+                                                                sprintf( _n( '%d chart found', '%d charts found', available, 'm-chart' ), available )
+                                                            }
+                                                        </p>
+                                                    ) }
                                                 </div>
-                                                { resultsList.length === 0 && search.length > 1 ?
+                                                { loadProblem && (
+                                                    <p role="alert">{ __( 'There was a problem loading charts', 'm-chart' ) }</p>
+                                                ) }
+                                                { ! loadProblem && ( resultsList.length === 0 && search.length > 1 ?
                                                     <p>{ __( 'No charts found', 'm-chart' ) }</p>
                                                     :
                                                     <ul ref={ resultsRef } className={ imageSupport ? 'results image-support' : 'results no-image-support' }>
@@ -316,22 +344,17 @@ export default function Edit( { attributes, setAttributes } ) {
                                                                 <Button
                                                                     variant="secondary"
                                                                     size="compact"
-                                                                    onClick={ () => {
-                                                                        const nextPage = page + 1;
-                                                                        setPage( nextPage );
-                                                                        getCharts( search, nextPage );
-                                                                    } }
+                                                                    onClick={ () => getCharts( search, page + 1 ) }
                                                                 >
                                                                     { __( 'Load more results', 'm-chart' ) }
                                                                 </Button>
                                                             </li>
                                                         ) }
                                                     </ul>
-                                                }
+                                                ) }
                                             </div>
                                     ) }
                                 </>
-                            }
                         </div>
                     </Placeholder>
                 </div>

@@ -88,6 +88,31 @@ function isMChartChart( chart ) {
 	return !! opts && undefined !== opts.labels_pos;
 }
 
+// Schemes a chart's source link may use, the ones WordPress' own URL check lets through for a link like this
+const SOURCE_URL_PROTOCOLS = [ 'http:', 'https:', 'mailto:', 'tel:', 'ftp:', 'ftps:' ];
+
+/**
+ * Whether a chart's source link is safe to open in a new tab
+ *
+ * PHP already cleans the URL when it builds the chart args, this is the last check before the browser acts on it
+ * A javascript: or data: URL handed to window.open() would otherwise run in a window this page opened
+ *
+ * @param {*} url The source_url from the chart options
+ * @return {boolean} Whether the link can be opened
+ */
+function isSafeSourceUrl( url ) {
+	if ( 'string' !== typeof url || '' === url.trim() ) {
+		return false;
+	}
+
+	try {
+		// Relative links resolve against the page, the same way the browser would follow them
+		return SOURCE_URL_PROTOCOLS.includes( new URL( url, window.location.href ).protocol );
+	} catch {
+		return false;
+	}
+}
+
 /**
  * Resolve the name to show for a bubble/scatter axis
  *
@@ -1528,8 +1553,8 @@ const MChartHelper = {
 			e.y <= bounds.bottom;
 
 		if ( 'mousemove' === e.type ) {
-			chart.canvas.style.cursor = inside ? 'pointer' : '';
-		} else if ( 'click' === e.type && inside ) {
+			chart.canvas.style.cursor = inside && isSafeSourceUrl( opts.source_url ) ? 'pointer' : '';
+		} else if ( 'click' === e.type && inside && isSafeSourceUrl( opts.source_url ) ) {
 			// Null the opener defensively even though noopener is requested in the features string
 			const opened = window.open( opts.source_url, '_blank', 'noopener,noreferrer' );
 
@@ -1577,5 +1602,7 @@ MChartHelper.dispatchRenderDone = function ( el, detail ) {
 	// Legacy name — deprecated, kept for one major version (planned removal in v3)
 	el.dispatchEvent( new CustomEvent( 'render_done', { bubbles: true, detail } ) );
 };
+
+MChartHelper.isSafeSourceUrl = isSafeSourceUrl;
 
 window.MChartHelper = MChartHelper;

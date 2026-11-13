@@ -100,6 +100,9 @@ export default function JspreadsheetWrapper( {
 
 		// Create the sheet instance
 		const instance = window.jspreadsheet( containerRef.current, {
+			// Cells are data, never formulas: a cell that starts with = shows as typed instead of #ERROR
+			// It also keeps one cell holding a huge range from freezing the editor for whoever opens the chart
+			parseFormulas: false,
 			worksheets: [ {
 				data:          initialData,
 				allowComments: false,

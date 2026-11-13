@@ -16,7 +16,15 @@ class M_Chart {
 	const HEIGHT_MIN = 300;
 	const HEIGHT_MAX = 1500;
 
-	public $version           = '2.4';
+	// The chart text fields that hold free text someone typed, stored HTML encoded (see encode_text())
+	// The other string fields (library, type, parse_in, units) are identifiers
+	const TEXT_FIELDS = [ 'subtitle', 'x_title', 'y_title', 'source' ];
+
+	// Stamped on a chart's meta when its sheet cells are stored exactly as typed (2.4 on)
+	// A row without it may hold HTML entities in its cells, which get_post_meta() decodes for Chart.js charts
+	const TEXT_FORMAT = 2;
+
+	public $version           = '2.4.1';
 	private $is_preview_request = false;
 	public $slug              = 'm-chart';
 	public $plugin_name       = 'Chart';
@@ -118,6 +126,10 @@ class M_Chart {
 		add_filter( 'the_content', [ $this, 'the_content' ] );
 		add_filter( 'm_chart_image_support', [ $this, 'm_chart_image_support' ], 10, 2 );
 		add_filter( 'm_chart_library_class', [ $this, 'm_chart_library_class' ], 10, 2 );
+		add_filter( 'is_protected_meta', [ $this, 'is_protected_meta' ], 10, 3 );
+
+		// Lives here rather than in the admin class, which isn't loaded when a chart is deleted over REST
+		add_action( 'before_delete_post', [ $this, 'before_delete_post' ] );
 
 		add_shortcode( 'm-chart', [ $this, 'chart_shortcode' ] );
 		// Backwards-compatible alias for content created before the rename
@@ -526,7 +538,8 @@ class M_Chart {
 	public function get_post_meta( $post_id, $field = false ) {
 		$raw_post_meta = get_post_meta( $post_id, $this->slug, true );
 
-		$post_meta = $raw_post_meta;
+		// Anything but an array isn't chart meta, wp_parse_args() would otherwise read a stored string as a query string
+		$post_meta = is_array( $raw_post_meta ) ? $raw_post_meta : [];
 
 		$defaults = $this->chart_meta_fields;
 
@@ -575,11 +588,12 @@ class M_Chart {
 			$post_meta['y_min_value'] = 0;
 		}
 
+		$post_meta = $this->harden_post_meta( $post_meta );
 		$post_meta = $this->normalize_legacy_data( $post_meta );
 
-		// If there's no set_names value set we'll set it to an empty array
-		if ( ! isset( $post_meta['set_names'] ) ) {
-			$post_meta['set_names'] = [];
+		// Cells saved before they were stored as typed can hold HTML entities
+		if ( empty( $post_meta['text_format'] ) && $this->library_paints_plain_text( $post_meta['library'] ) ) {
+			$post_meta = $this->decode_legacy_cells( $post_meta );
 		}
 
 		$post_meta = apply_filters( 'm_chart_get_post_meta', $post_meta, $raw_post_meta, $post_id );
@@ -591,6 +605,119 @@ class M_Chart {
 		}
 
 		return $post_meta;
+	}
+
+	/**
+	 * Make a stored meta row safe to use whatever wrote it
+	 *
+	 * validate_post_meta() only runs on this plugin's own save
+	 * An import, another plugin or a direct database write can leave any shape of value in the row,
+	 * so the types the rest of the plugin relies on are enforced again on the way out
+	 * Text is never altered here, only values of the wrong type are replaced
+	 *
+	 * @param array $post_meta the stored meta with defaults filled in
+	 *
+	 * @return array
+	 */
+	private function harden_post_meta( array $post_meta ) {
+		// These are used as strings everywhere
+		foreach ( [ 'library', 'type', 'parse_in', 'subtitle', 'y_title', 'y_units', 'x_title', 'x_units', 'source', 'source_url', 'theme' ] as $field ) {
+			if ( isset( $post_meta[ $field ] ) && ! is_scalar( $post_meta[ $field ] ) ) {
+				$post_meta[ $field ] = $this->chart_meta_fields[ $field ] ?? $this->get_settings( 'default_theme' );
+			}
+		}
+
+		// The source link is opened in the browser, so it gets the same check the save applies
+		// esc_url_raw() drops javascript: and the other schemes WordPress doesn't allow and leaves a normal address untouched
+		if ( '' !== (string) $post_meta['source_url'] ) {
+			$post_meta['source_url'] = esc_url_raw( (string) $post_meta['source_url'] );
+		}
+
+		// One name per sheet, each a string
+		if ( ! isset( $post_meta['set_names'] ) || ! is_array( $post_meta['set_names'] ) ) {
+			$post_meta['set_names'] = [];
+		}
+
+		foreach ( $post_meta['set_names'] as $key => $set_name ) {
+			$post_meta['set_names'][ $key ] = is_scalar( $set_name ) ? (string) $set_name : '';
+		}
+
+		// The sheets are a list of rows of cells
+		if ( ! is_array( $post_meta['data'] ?? null ) ) {
+			$post_meta['data'] = [];
+		}
+
+		if ( isset( $post_meta['data']['sets'] ) ) {
+			if ( ! is_array( $post_meta['data']['sets'] ) ) {
+				$post_meta['data']['sets'] = [];
+			}
+
+			foreach ( $post_meta['data']['sets'] as $key => $sheet ) {
+				if ( ! is_array( $sheet ) ) {
+					$post_meta['data']['sets'][ $key ] = [];
+				}
+			}
+		}
+
+		return $post_meta;
+	}
+
+	/**
+	 * Hook: is_protected_meta, keep the chart meta out of generic meta editors
+	 *
+	 * The key has no leading underscore, so without this anyone who can edit a chart could write the row through
+	 * WordPress' own custom field handling (post.php, the add-meta AJAX action, XML-RPC) and skip validate_post_meta()
+	 * This plugin's own update_post_meta() calls are unaffected
+	 *
+	 * @param bool   $protected whether the key is protected
+	 * @param string $meta_key  the meta key
+	 * @param string $meta_type the object type the meta belongs to
+	 *
+	 * @return bool
+	 */
+	public function is_protected_meta( $protected, $meta_key, $meta_type ) {
+		if ( 'post' !== $meta_type ) {
+			return $protected;
+		}
+
+		return in_array( $meta_key, [ $this->slug, $this->slug . '-image' ], true ) ? true : $protected;
+	}
+
+	/**
+	 * Hook: before_delete_post, remove the generated image of a chart that is being deleted
+	 *
+	 * WordPress only detaches attachments from a deleted post, so the image would stay in the media library for good
+	 *
+	 * @param int $post_id WP post ID of the post being deleted
+	 */
+	public function before_delete_post( $post_id ) {
+		if ( $this->slug !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		foreach ( $this->get_chart_image_attachments( $post_id ) as $attachment_id ) {
+			wp_delete_attachment( $attachment_id, true );
+		}
+	}
+
+	/**
+	 * IDs of the image attachments this plugin generated for a chart
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 *
+	 * @return int[]
+	 */
+	public function get_chart_image_attachments( $post_id ) {
+		return get_posts(
+			[
+				'post_type'      => 'attachment',
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'post_parent'    => $post_id,
+				'meta_key'       => $this->slug . '-image',
+			]
+		);
 	}
 
 	/**
@@ -643,10 +770,21 @@ class M_Chart {
 		$chart_meta['constrain_y_axis']   = false;
 		$chart_meta['include_source']     = false;
 
+		// Chart.js paints every string as plain text, so its charts keep text exactly as typed
+		// Any other library is assumed to treat strings as HTML and keeps the tag stripping
+		$library = is_array( $meta ) && is_string( $meta['library'] ?? null ) && $this->is_valid_library( $meta['library'] )
+			? $meta['library']
+			: $this->chart_meta_fields['library'];
+
+		$plain = $this->library_paints_plain_text( $library );
+
 		// Filter values so we know the data is clean
 		foreach ( $this->chart_meta_fields as $field => $default ) {
 			if ( isset( $meta[ $field ] ) ) {
-				if ( 'source_url' == $field && '' != $meta[ $field ] ) {
+				if ( in_array( $field, [ 'library', 'type', 'parse_in', 'subtitle', 'y_title', 'y_units', 'x_title', 'x_units', 'source', 'source_url' ], true ) && ! is_scalar( $meta[ $field ] ) ) {
+					// A text field sent as an array is not a value, the default stands in for it
+					$chart_meta[ $field ] = $default;
+				} elseif ( 'source_url' == $field && '' != $meta[ $field ] ) {
 					$chart_meta[ $field ] = esc_url_raw( $meta[ $field ] );
 				} elseif ( 'data' == $field ) {
 					$data = $meta[ $field ];
@@ -659,9 +797,17 @@ class M_Chart {
 
 					$chart_meta[ $field ]['sets'] = $data;
 				} elseif ( 'set_names' == $field ) {
-					$chart_meta[ $field ] = array_values( $meta[ $field ] );
-				} elseif ( in_array( $field, [ 'labels', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
+					// One name per sheet, anything that isn't a string becomes an empty name
+					$chart_meta[ $field ] = array_map(
+						static fn( $set_name ) => is_scalar( $set_name ) ? (string) $set_name : '',
+						is_array( $meta[ $field ] ) ? array_values( $meta[ $field ] ) : []
+					);
+				} elseif ( in_array( $field, [ 'labels', 'shared', 'y_min', 'legend', 'data_point_colors', 'mean_point', 'sample_points', 'constrain_y_axis', 'include_source' ] ) ) {
 					$chart_meta[ $field ] = (bool) $meta[ $field ];
+				} elseif ( $plain && in_array( $field, self::TEXT_FIELDS, true ) ) {
+					// Stored HTML encoded as it always has been, but nothing is stripped, so decode_text() gives back exactly what was typed
+					// Slashed in and slashed out like the other fields
+					$chart_meta[ $field ] = wp_slash( self::encode_text( self::plain_text( wp_unslash( (string) $meta[ $field ] ) ) ) );
 				} elseif ( 'height' == $field ) {
 					$chart_meta[ $field ] = self::clamp_height( $meta[ $field ] );
 				} elseif ( 'y_min_value' == $field ) {
@@ -681,21 +827,32 @@ class M_Chart {
 		}
 
 		// Theme isn't included in chart_meta_fields so it's validated here
-		if ( isset( $meta['theme'] ) && preg_match( '#^[a-zA-Z0-9-_]+$#', $meta['theme'] ) ) {
+		if ( isset( $meta['theme'] ) && is_string( $meta['theme'] ) && preg_match( '#^[a-zA-Z0-9-_]+$#D', $meta['theme'] ) ) {
 			$chart_meta['theme'] = $meta['theme'];
 		}
 
+		// A caller that passes no sheet data at all still gets the stored shape back
+		if ( ! is_array( $chart_meta['data'] ) || ! isset( $chart_meta['data']['sets'] ) ) {
+			$chart_meta['data'] = [ 'sets' => [] ];
+		}
+
 		// If the data value is not an array we assume it is JSON encoded (i.e. from Jspreadsheet CE)
-		if ( ! is_array( $chart_meta['data']['sets'] ) && '' != $chart_meta['data']['sets'] ) {
-			$decoded = json_decode( stripslashes( $chart_meta['data']['sets'] ) );
+		if ( ! is_array( $chart_meta['data']['sets'] ) ) {
+			$decoded = is_string( $chart_meta['data']['sets'] ) && '' !== $chart_meta['data']['sets']
+				? json_decode( stripslashes( $chart_meta['data']['sets'] ) )
+				: null;
+
 			$chart_meta['data']['sets'] = is_array( $decoded ) ? $decoded : [];
 		}
 
 		// Validate the data array
 		// validate_data() returns plain text, the rest of this array is slashed for update_post_meta() so match it
 		foreach ( $chart_meta['data']['sets'] as $key => $data ) {
-			$chart_meta['data']['sets'][ $key ] = wp_slash( $this->validate_data( $data ) );
+			$chart_meta['data']['sets'][ $key ] = wp_slash( $this->validate_data( $data, $library ) );
 		}
+
+		// Never taken from the request: this says how the cells above were just stored
+		$chart_meta['text_format'] = self::TEXT_FORMAT;
 
 		// Allow plugins to validate their own custom meta
 		// $context tells them whether this is a real save or the admin preview
@@ -705,26 +862,35 @@ class M_Chart {
 	}
 
 	/**
-	 * Strips tags from every cell of a raw (unslashed) data array
+	 * Cleans every cell of a raw (unslashed) data array
 	 *
+	 * For a library that paints plain text (Chart.js) a cell is kept exactly as typed
+	 * Every place a cell is printed escapes it for where it is going, so nothing typed can turn into markup,
+	 * and "x < y > z" or "<5%" is data like any other
+	 *
+	 * For any other library, and when no library is given, tags are stripped as they always were
 	 * Cells are text, not HTML, so entities kses normalises on the way through are decoded again
 	 * Otherwise a cell like "A & B" would come back as "A &amp; B" in the spreadsheet and on the canvas
-	 * The result is plain text too, callers that store it are responsible for slashing it (see validate_post_meta())
 	 *
-	 * @param array $data an array of data as passed by the user
+	 * The result is plain text either way, callers that store it are responsible for slashing it (see validate_post_meta())
+	 *
+	 * @param array       $data    an array of data as passed by the user
+	 * @param string|null $library the chart's library, null for the conservative behaviour
 	 *
 	 * @return array of validated data
 	 */
-	function validate_data( $data ) {
+	function validate_data( $data, $library = null ) {
+		$plain = null !== $library && $this->library_paints_plain_text( $library );
+
 		if ( ! is_array( $data ) ) {
-			return $this->validate_data_cell( $data );
+			return $this->validate_data_cell( $data, $plain );
 		}
 
 		foreach ( $data as $key => $value ) {
 			if ( is_array( $value ) ) {
-				$data[ $key ] = $this->validate_data( $value );
+				$data[ $key ] = $this->validate_data( $value, $library );
 			} else {
-				$data[ $key ] = $this->validate_data_cell( $value ?? '' );
+				$data[ $key ] = $this->validate_data_cell( $value ?? '', $plain );
 			}
 		}
 
@@ -732,19 +898,127 @@ class M_Chart {
 	}
 
 	/**
-	 * Strip tags from a single spreadsheet cell while leaving its text intact
+	 * Clean a single spreadsheet cell
 	 *
 	 * wp_kses() is used directly rather than wp_filter_nohtml_kses(), which expects slashed input
 	 * and would eat a backslash the user typed ("C:\temp") and hand back quotes with backslashes in front
 	 *
 	 * @param mixed $value a single cell value
+	 * @param bool  $plain whether the cell is kept as typed
 	 *
 	 * @return string the cleaned cell
 	 */
-	private function validate_data_cell( $value ) {
-		return html_entity_decode( wp_kses( (string) $value, 'strip' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+	private function validate_data_cell( $value, $plain = false ) {
+		$value = is_scalar( $value ) ? (string) $value : '';
+
+		if ( $plain ) {
+			return self::plain_text( $value );
+		}
+
+		return html_entity_decode( wp_kses( $value, 'strip' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	}
 
+	/**
+	 * Whether a library draws its strings as plain text, so chart text can be stored exactly as typed
+	 *
+	 * Chart.js draws every string onto the canvas with fillText, nothing typed can become markup there
+	 * Any other library is assumed to parse strings as HTML (Highcharts does) and keeps the tag stripping it has always had
+	 *
+	 * @param string $library a library slug
+	 *
+	 * @return bool
+	 */
+	public function library_paints_plain_text( $library ) {
+		$plain = 'chartjs' === $library;
+
+		/**
+		 * Filter whether a library paints chart text as plain text
+		 *
+		 * Returning false for chartjs brings back the tag stripping for every chart on the site
+		 *
+		 * @param bool   $plain   whether text is kept as typed for this library
+		 * @param string $library the library slug
+		 */
+		return (bool) apply_filters( 'm_chart_library_paints_plain_text', $plain, $library );
+	}
+
+	/**
+	 * Text someone typed, with only what can't be text removed: bytes that aren't valid UTF-8 and control characters
+	 *
+	 * Tabs and line breaks are kept
+	 *
+	 * @param string $text
+	 *
+	 * @return string
+	 */
+	public static function plain_text( $text ) {
+		$text = wp_check_invalid_utf8( (string) $text );
+
+		return (string) preg_replace( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $text );
+	}
+
+	/**
+	 * Encode typed text for storage in one of the TEXT_FIELDS
+	 *
+	 * These fields have always been stored HTML encoded ("R&D" as "R&amp;D") and everything that reads them expects that
+	 * Every ampersand is encoded, including one that already starts an entity, so decode_text() returns the exact input
+	 *
+	 * @param string $text
+	 *
+	 * @return string
+	 */
+	public static function encode_text( $text ) {
+		return htmlspecialchars( (string) $text, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8', true );
+	}
+
+	/**
+	 * Turn a stored TEXT_FIELDS value back into the text that was typed
+	 *
+	 * @param string $text
+	 *
+	 * @return string
+	 */
+	public static function decode_text( $text ) {
+		return html_entity_decode( (string) $text, ENT_QUOTES, 'UTF-8' );
+	}
+
+	/**
+	 * Escape plain text for HTML, for values that are stored exactly as typed (cells, labels, set names)
+	 *
+	 * Unlike esc_html() this encodes an ampersand that already starts an entity,
+	 * so a cell typed as "&amp;" or "&lt;b&gt;" shows as typed instead of as "&" or "<b>"
+	 *
+	 * @param string $text
+	 *
+	 * @return string
+	 */
+	public static function esc_text( $text ) {
+		return htmlspecialchars( (string) $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', true );
+	}
+
+	/**
+	 * Decode the HTML entities in the cells of a chart saved before cells were stored as typed
+	 *
+	 * Charts saved before December 2016 hold kses encoded cells ("A &amp; B") and the label cleaning used to decode
+	 * them on every render. Chart.js labels are no longer cleaned, so the decode happens here instead, once, on read
+	 *
+	 * @param array $post_meta chart meta without the text_format stamp
+	 *
+	 * @return array
+	 */
+	public function decode_legacy_cells( array $post_meta ) {
+		if ( ! isset( $post_meta['data']['sets'] ) || ! is_array( $post_meta['data']['sets'] ) ) {
+			return $post_meta;
+		}
+
+		array_walk_recursive( $post_meta['data']['sets'], static function ( &$cell ) {
+			if ( is_string( $cell ) && false !== strpos( $cell, '&' ) ) {
+				$cell = html_entity_decode( $cell, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			}
+		} );
+
+		return $post_meta;
+	}
 
 	/**
 	 * Hook to save_post action and save chart related post meta
@@ -767,6 +1041,11 @@ class M_Chart {
 	public function get_chart( $post_id = null, $args = [] ) {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
+		}
+
+		// A password protected chart stays hidden until the visitor has entered its password
+		if ( $this->is_password_locked( $post_id ) ) {
+			return '';
 		}
 
 		do_action( 'm_chart_get_chart_start', $post_id, $args );
@@ -805,8 +1084,11 @@ class M_Chart {
 
 			// Default behavior is to return the full size image but with the width/height values halved
 			// This should result in an image that looks nice on retina or better screens
-			$image['width']  = $image['width'] / 2;
-			$image['height'] = $image['height'] / 2;
+			// A chart without an image stays false here so the filter below can stand the placeholder in for it
+			if ( $image ) {
+				$image['width']  = $image['width'] / 2;
+				$image['height'] = $image['height'] / 2;
+			}
 
 			$image = apply_filters( 'm_chart_get_chart_image_tag', $image, $post_id, $args );
 
@@ -896,6 +1178,11 @@ class M_Chart {
 	 * @return string HTML table
 	 */
 	public function build_table( $post_id ) {
+		// The table holds the same data as the chart, so it is locked the same way
+		if ( $this->is_password_locked( $post_id ) ) {
+			return '';
+		}
+
 		$post      = get_post( $post_id );
 		$post_meta = $this->get_post_meta( $post_id );
 		$library   = m_chart()->get_post_meta( $post->ID, 'library' );
@@ -907,7 +1194,7 @@ class M_Chart {
 		foreach ( $post_meta['data']['sets'] as $set => $data ) {
 			$classes = $this->slug . '-table ' . $this->slug . '-table-' . $post_id . '-' . $set;
 
-			m_chart()->parse()->parse_data( $data, $post_meta['parse_in'] );
+			m_chart()->parse()->parse_data( $data, $post_meta['parse_in'], $this->parse_text_mode( $library ) );
 
 			$template = __DIR__ . '/templates/table.php';
 
@@ -988,7 +1275,29 @@ class M_Chart {
 			return $content;
 		}
 
+		// WordPress has already swapped the content for its password form, leave that in place
+		if ( $this->is_password_locked( get_the_ID() ) ) {
+			return $content;
+		}
+
 		return $this->get_chart();
+	}
+
+	/**
+	 * Whether a chart is password protected and the current visitor hasn't entered the password
+	 *
+	 * @param int $post_id WP post ID of the chart
+	 *
+	 * @return bool
+	 */
+	public function is_password_locked( $post_id ) {
+		// wp-admin screens are already limited to people who can edit the chart
+		// A visitor's admin-ajax.php request counts as is_admin() too though, so those are checked like the front end
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			return false;
+		}
+
+		return post_password_required( $post_id );
 	}
 
 	/**
@@ -1040,7 +1349,15 @@ class M_Chart {
 	public function get_chart_iframe( $post_id, $args = [] ) {
 		$post_meta = $this->get_post_meta( $post_id );
 
-		$src_url = add_query_arg( $args, get_permalink( $post_id ) . 'embed/' );
+		$permalink = get_permalink( $post_id );
+
+		// The embed endpoint is a path on the end of a pretty permalink
+		// A permalink with a query string (plain permalinks: ?m-chart=slug) has no path to add it to, the endpoint's query var asks for the same thing
+		$embed_url = false === strpos( (string) $permalink, '?' )
+			? trailingslashit( $permalink ) . 'embed/'
+			: add_query_arg( 'embed', '1', $permalink );
+
+		$src_url = add_query_arg( $args, $embed_url );
 
 		$defer_lazy = 'enabled' === $this->get_settings( 'defer_rendering' );
 
@@ -1051,7 +1368,8 @@ class M_Chart {
 	title="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"
 	src="<?php echo esc_url( $src_url ); ?>"<?php echo $defer_lazy ? ' loading="lazy"' : ''; ?>></iframe>
 		<?php
-		if ( 'show' == $args['share'] ) {
+		// The share template asks for this iframe again without the share argument, and a caller may leave it out altogether
+		if ( 'show' == ( $args['share'] ?? '' ) ) {
 			unset( $args['share'] );
 			require apply_filters( 'm_chart_share_template', __DIR__ . '/templates/share.php' );
 		}
@@ -1096,16 +1414,67 @@ class M_Chart {
 	}
 
 	/**
-	 * Helper function that prevents issues with stripslashes and unicode characters
-	 * stripslashes() strips the backslash before \uXXXX sequences
-	 * This re-escapes those sequences first so unicode survives the strip
+	 * Clean up JSON that is about to be printed inside a script element
 	 *
-	 * @param string $string a string that may have unicode characters as well as unnecessary escaping
+	 * Core no longer calls this, it is kept for library plugins: the M Chart Highcharts Library prints
+	 * json_encode()d chart args through it. It used to run stripslashes() over the JSON text to undo the
+	 * addslashes() that library applies to its titles, which also removed the backslash from "<\/script>"
+	 * and from a string ending in a backslash, so chart text could close the script element or the string it was in
 	 *
-	 * @return string a string with any unnecessary escaping removed
+	 * The JSON is now decoded, the slashes are taken off the string values themselves and the result is encoded
+	 * again with every character that means something to the HTML parser hex-escaped
+	 *
+	 * @param string $string JSON text (anything else gets the old behaviour, minus the ability to close a script element)
+	 *
+	 * @return string JSON that is safe inside a script element
 	 */
 	public function unicode_aware_stripslashes( $string ) {
-		return stripslashes( preg_replace( '#\\\u[a-fA-F0-9]{4}#', '\\\\$0', $string ) );
+		$string = (string) $string;
+		$data   = json_decode( $string );
+
+		// Not JSON, so there is nothing to rebuild
+		// Do what this always did, then make sure the result can't close a script element or open an HTML comment
+		if ( null === $data && JSON_ERROR_NONE !== json_last_error() ) {
+			$string = stripslashes( preg_replace( '#\\\\u[a-fA-F0-9]{4}#', '\\\\$0', $string ) );
+
+			return str_replace( [ '</', '<!--' ], [ '<\\/', '<\\!--' ], $string );
+		}
+
+		$json = wp_json_encode( $this->unslash_json_strings( $data ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
+
+		return false === $json ? 'null' : $json;
+	}
+
+	/**
+	 * Undo addslashes() on every string in decoded JSON, keys included
+	 *
+	 * Only a backslash in front of a quote or another backslash is removed, which is what addslashes() adds
+	 * A backslash anywhere else was typed and stays: "C:\temp" keeps its backslash
+	 *
+	 * @param mixed $value decoded JSON
+	 *
+	 * @return mixed
+	 */
+	private function unslash_json_strings( $value ) {
+		if ( is_string( $value ) ) {
+			return preg_replace( '/\\\\([\'"\\\\])/', '$1', $value );
+		}
+
+		if ( is_array( $value ) ) {
+			return array_map( [ $this, 'unslash_json_strings' ], $value );
+		}
+
+		if ( is_object( $value ) ) {
+			$clean = new stdClass();
+
+			foreach ( get_object_vars( $value ) as $key => $item ) {
+				$clean->{ $this->unslash_json_strings( (string) $key ) } = $this->unslash_json_strings( $item );
+			}
+
+			return $clean;
+		}
+
+		return $value;
 	}
 
 	/**
@@ -1276,6 +1645,15 @@ class M_Chart {
 			exit;
 		}
 
+		// The embed has no way to ask for a password, so a protected chart is refused until it has been entered on the chart's own page
+		if ( $this->is_password_locked( $post->ID ) ) {
+			wp_die(
+				esc_html__( 'This chart is password protected', 'm-chart' ),
+				esc_html__( 'Chart is password protected', 'm-chart' ),
+				[ 'response' => 403 ]
+			);
+		}
+
 		$this->is_iframe = true;
 
 		$library = $this->get_post_meta( $post->ID, 'library' );
@@ -1295,6 +1673,74 @@ class M_Chart {
 
 		require __DIR__ . '/templates/iframe.php';
 		exit;
+	}
+
+	/**
+	 * Build the Content-Security-Policy the embed document is sent with
+	 *
+	 * The embed template has already resolved the stylesheets and fonts it is about to print and hands them in,
+	 * so their hosts are allowlisted here without running those filters a second time
+	 *
+	 * @param string $nonce            the per-response nonce the chart's inline script carries
+	 * @param int    $post_id          WP post ID of the chart being embedded
+	 * @param array  $style_urls       the stylesheet URLs returned by the m_chart_iframe_styles filter
+	 * @param array  $font_descriptors the font descriptors returned by the m_chart_iframe_fonts filter
+	 *
+	 * @return string the policy, without the header name
+	 */
+	public function iframe_csp( $nonce, $post_id, $style_urls = [], $font_descriptors = [] ) {
+		// Default allowed style-src hosts cover the well-known font-service stylesheet origins
+		// Site owners using Fontspring, FontAwesome CDN, an internal CDN, etc. can extend via the filter
+		$style_hosts = apply_filters( 'm_chart_iframe_csp_style_src', [ 'fonts.googleapis.com', 'use.typekit.net' ], $post_id );
+		// Default allowed font-src hosts cover where Google Fonts + Adobe Typekit actually load their .woff2 files from
+		$font_hosts = apply_filters( 'm_chart_iframe_csp_font_src', [ 'fonts.gstatic.com', 'use.typekit.net', 'p.typekit.net' ], $post_id );
+
+		// Auto-extract hosts from anything passed through m_chart_iframe_styles
+		// Site owners can add a stylesheet URL without also having to register its host in the CSP filter
+		foreach ( $style_urls as $style_url ) {
+			$host = wp_parse_url( $style_url, PHP_URL_HOST );
+
+			if ( $host ) {
+				$style_hosts[] = $host;
+			}
+		}
+
+		// Auto-extract hosts from m_chart_iframe_fonts font sources too
+		// Only the sources render_font_face() will actually print are allowlisted
+		foreach ( $font_descriptors as $font ) {
+			foreach ( self::font_face_sources( (array) $font ) as $src ) {
+				$host = wp_parse_url( $src['url'], PHP_URL_HOST );
+
+				if ( $host ) {
+					$font_hosts[] = $host;
+				}
+			}
+		}
+
+		$style_hosts = array_unique( array_filter( $style_hosts ) );
+		$font_hosts  = array_unique( array_filter( $font_hosts ) );
+
+		// frame-ancestors controls who's allowed to embed this iframe page
+		// Default 'self' permits same-origin embedding; site owners syndicating charts to third-party sites can add origins here
+		$frame_ancestors = apply_filters( 'm_chart_iframe_frame_ancestors', [ "'self'" ], $post_id );
+
+		// Whitelist the characters that can appear in a valid CSP source expression
+		// esc_attr() is for HTML attributes — it would encode 'self' as &#039;self&#039; here and break the directive
+		// Stripping anything outside this character class prevents header injection (CRLF, semicolons) while preserving keywords/hosts/schemes
+		$sanitize_csp_source = static function ( $value ) {
+			return preg_replace( '/[^A-Za-z0-9.\-_:\/*\'+=@]/', '', (string) $value );
+		};
+
+		// style-src uses 'unsafe-inline' (not a nonce) because inline style="..." attributes can't carry a nonce
+		// CSS-driven exfiltration vectors (url(), @font-face src, @import) are still blocked by font-src / img-src / connect-src
+		// script-src keeps a nonce since the chart template emits a dynamic inline <script> we want strictly gated
+		return sprintf(
+			"default-src 'none'; style-src 'self' 'unsafe-inline' %s; script-src 'self' 'nonce-%s'; font-src 'self' data: %s; img-src 'self' data:; connect-src 'self'; frame-ancestors %s;",
+			implode( ' ', array_map( $sanitize_csp_source, $style_hosts ) ),
+			$nonce,
+			implode( ' ', array_map( $sanitize_csp_source, $font_hosts  ) ),
+			implode( ' ', array_map( $sanitize_csp_source, $frame_ancestors ) )
+		);
 	}
 
 	/**
@@ -1606,7 +2052,8 @@ class M_Chart {
 	 * @return string the cache key (use with the m-chart cache group)
 	 */
 	public function chart_args_cache_key( $post_id ) {
-		return absint( $post_id ) . '-chart-args';
+		// The suffix changes whenever what goes into the args changes, so a persistent object cache can't keep serving the old ones
+		return absint( $post_id ) . '-chart-args-v2';
 	}
 
 	/**
@@ -1618,6 +2065,22 @@ class M_Chart {
 	 */
 	public function flush_chart_args_cache( $post_id ) {
 		wp_cache_delete( $this->chart_args_cache_key( $post_id ), $this->slug );
+
+		// The key used before 2.4, which library plugins that keep their own cached args still write to
+		wp_cache_delete( absint( $post_id ) . '-chart-args', $this->slug );
+	}
+
+	/**
+	 * How M_Chart_Parse should treat label cells for a chart using the given library
+	 *
+	 * @param string $library a library slug
+	 *
+	 * @return string M_Chart_Parse::TEXT_PLAIN or M_Chart_Parse::TEXT_LEGACY
+	 */
+	public function parse_text_mode( $library ) {
+		$this->parse();
+
+		return $this->library_paints_plain_text( $library ) ? M_Chart_Parse::TEXT_PLAIN : M_Chart_Parse::TEXT_LEGACY;
 	}
 
 	/**
@@ -1646,7 +2109,8 @@ class M_Chart {
 	public function is_valid_library( $library ) {
 		$libraries = $this->get_libraries();
 
-		if ( ! isset( $libraries[ $library ] ) ) {
+		// A request can send an array here, which isset() would choke on
+		if ( ! is_string( $library ) || ! isset( $libraries[ $library ] ) ) {
 			return false;
 		}
 
@@ -1816,26 +2280,41 @@ class M_Chart {
 	 * Do things needed for version 1.7
 	 */
 	public function upgrade_to_1_7() {
-		// Get all charts
+		// Get the charts that predate library tracking: no highcharts tag yet and no library term either
+		// The version option can go missing on a site that is well past 1.7 (a move to multisite is one way),
+		// and without the second condition this would then mark every chart on it as a Highcharts chart
 		$charts = get_posts(
 			[
 				'post_type'      => m_chart()->slug,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
 				'tax_query'      => [
+					'relation' => 'AND',
 					[
 						'taxonomy' => 'post_tag',
 						'field'    => 'slug',
 						'terms'    => 'highcharts',
 						'operator' => 'NOT IN',
 					],
+					[
+						'taxonomy' => m_chart()->slug . '-library',
+						'operator' => 'NOT EXISTS',
+					],
 				],
 			]
 		);
 
-		// Add highcharts post_tag to all charts
+		// Add highcharts post_tag to those charts
 		foreach ( $charts as $chart ) {
-			wp_set_object_terms( $chart->ID, 'highcharts', 'post_tag' );
+			$library = get_post_meta( $chart->ID, m_chart()->slug, true )['library'] ?? 'highcharts';
+
+			// A chart whose own settings name another library was never a pre 1.7 chart
+			if ( 'highcharts' !== $library ) {
+				continue;
+			}
+
+			// Appended, so the tags the chart already has are kept
+			wp_set_object_terms( $chart->ID, 'highcharts', 'post_tag', true );
 		}
 
 		// Update version

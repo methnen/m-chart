@@ -7,8 +7,9 @@
  *
  *   1. Click #publish while formEnabled === false → form.submit NOT called;
  *      data textarea IS written; pendingSubmit → true
- *   2. SET_FORM_ENABLED:true after pendingSubmit → form.submit called once
- *   3. Rapid double-click during pending → still exactly one form.submit
+ *   2. SET_FORM_ENABLED:true after pendingSubmit → the held button is clicked again,
+ *      so the form is submitted once and by that button (Publish stays Publish)
+ *   3. Rapid double-click during pending → still exactly one submission
  *   4. Form-submit event fallback path (Cmd+S equivalent) — keyboard publish
  *      while formEnabled false is blocked at the submit event, no double-submit
  */
@@ -74,7 +75,25 @@ function setupDom() {
 	// Spy on form.submit (jsdom doesn't actually navigate; we just observe the call)
 	const form = document.getElementById( 'post' );
 	form.submit = jest.fn();
+
+	// Every real submission, with the button that made it
+	// Recorded on the document so the plugin's own listeners on the form have already had their say,
+	// and cancelled there because jsdom can't navigate
+	submissions = [];
+
+	document.addEventListener( 'submit', recordSubmission );
+
 	return form;
+}
+
+let submissions = [];
+
+function recordSubmission( event ) {
+	if ( ! event.defaultPrevented ) {
+		submissions.push( event.submitter ? event.submitter.id : null );
+	}
+
+	event.preventDefault();
 }
 
 function renderUnderTest() {
@@ -96,6 +115,7 @@ describe( 'SpreadsheetMetaBox submit gate', () => {
 	} );
 
 	afterEach( () => {
+		document.removeEventListener( 'submit', recordSubmission );
 		document.body.innerHTML = '';
 		jest.restoreAllMocks();
 	} );
@@ -126,7 +146,7 @@ describe( 'SpreadsheetMetaBox submit gate', () => {
 		expect( textarea.value ).not.toBe( '' );
 	} );
 
-	test( 'SET_FORM_ENABLED true after pending state triggers exactly one form.submit', () => {
+	test( 'once the chart is ready the held click is made again, so the form is submitted by that button', async () => {
 		renderUnderTest();
 
 		const publishBtn = document.getElementById( 'publish' );
@@ -136,18 +156,35 @@ describe( 'SpreadsheetMetaBox submit gate', () => {
 			publishBtn.dispatchEvent( new MouseEvent( 'click', { bubbles: true, cancelable: true } ) );
 		} );
 
-		expect( form.submit ).not.toHaveBeenCalled();
+		expect( submissions ).toEqual( [] );
 
-		// Flip formEnabled — the useEffect at SpreadsheetMetaBox.js:79-92 should
-		// observe both flags true and call form.submit exactly once
-		act( () => {
+		// Flip formEnabled, the gate lets go
+		await act( async () => {
 			capturedDispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 		} );
 
-		expect( form.submit ).toHaveBeenCalledTimes( 1 );
+		// Submitted once, by Publish: a form sent without its button is saved by WordPress as a draft
+		expect( submissions ).toEqual( [ 'publish' ] );
+
+		// And through the submit event, which is where WordPress stands down its "Leave site?" warning
+		expect( form.submit ).not.toHaveBeenCalled();
 	} );
 
-	test( 'rapid double-click while pending still yields exactly one form.submit', () => {
+	test( 'the button that was held is the one that submits', async () => {
+		renderUnderTest();
+
+		act( () => {
+			document.getElementById( 'save-post' ).dispatchEvent( new MouseEvent( 'click', { bubbles: true, cancelable: true } ) );
+		} );
+
+		await act( async () => {
+			capturedDispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+		} );
+
+		expect( submissions ).toEqual( [ 'save-post' ] );
+	} );
+
+	test( 'rapid double-click while pending still yields exactly one submission', async () => {
 		renderUnderTest();
 
 		const publishBtn = document.getElementById( 'publish' );
@@ -159,14 +196,33 @@ describe( 'SpreadsheetMetaBox submit gate', () => {
 			publishBtn.dispatchEvent( new MouseEvent( 'click', { bubbles: true, cancelable: true } ) );
 		} );
 
-		expect( form.submit ).not.toHaveBeenCalled();
+		expect( submissions ).toEqual( [] );
 
 		// One transition to enabled — one auto-submit
+		await act( async () => {
+			capturedDispatch( { type: 'SET_FORM_ENABLED', payload: true } );
+		} );
+
+		expect( submissions ).toEqual( [ 'publish' ] );
+	} );
+
+	test( 'a held button that has left the page falls back to sending the form as it stands', async () => {
+		renderUnderTest();
+
+		const publishBtn = document.getElementById( 'publish' );
+
 		act( () => {
+			publishBtn.dispatchEvent( new MouseEvent( 'click', { bubbles: true, cancelable: true } ) );
+		} );
+
+		publishBtn.remove();
+
+		await act( async () => {
 			capturedDispatch( { type: 'SET_FORM_ENABLED', payload: true } );
 		} );
 
 		expect( form.submit ).toHaveBeenCalledTimes( 1 );
+		expect( form.querySelector( 'textarea[name="m-chart[data]"]' ).value ).not.toBe( '' );
 	} );
 
 	test( 'form submit event while disabled is blocked (Cmd+S / keyboard publish path)', () => {

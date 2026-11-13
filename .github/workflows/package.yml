@@ -1,0 +1,67 @@
+name: Package
+
+# Builds the zip that would be published and checks what is in it
+# The zip is kept as an artifact, so the exact files a release would ship can be downloaded and tried
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  # Run by hand against any branch from the Actions tab
+  workflow_dispatch:
+  # Run by the deploy workflow as its gate
+  workflow_call:
+
+# A new push to a pull request replaces the run before it, nothing else is ever cancelled
+# The name is spelled out because github.workflow is the caller's name when the deploy workflow runs this
+concurrency:
+  group: package-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: "Release zip"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # The same two steps the deploy runs: dependencies without their install scripts, then the build
+      - run: npm ci --ignore-scripts
+
+      - name: Build assets
+        run: npm run build
+
+      # Uses .distignore, the same list the WordPress.org deploy uses
+      - name: Build the zip
+        run: npm run build:zip
+
+      - name: Check what is in the zip
+        run: node tests/bin/check-package.js
+
+      - name: Unpack the zip for Plugin Check
+        run: unzip -q m-chart-*.zip -d package
+
+      - name: Upload the zip
+        uses: actions/upload-artifact@v7
+        with:
+          name: m-chart-release-zip
+          path: m-chart-*.zip
+          retention-days: 14
+
+      # The checker WordPress.org runs on plugins, against the unpacked release
+      # Report only for now: it shows what it finds without failing the run
+      # Take continue-on-error off once its findings have been gone through
+      - name: Plugin Check
+        continue-on-error: true
+        uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
+        with:
+          build-dir: ./package/m-chart
+          slug: m-chart

@@ -30,6 +30,9 @@ function Capture() {
 // This runs at file level because the testing library registers its cleanup hook when it loads
 window.m_chart_admin.unit_terms = UNIT_TERMS;
 
+// A saved chart always has its title fields, empty or not, so the inputs are controlled from the first render
+window.m_chart_admin.post_meta = { ...window.m_chart_admin.post_meta, x_title: '', y_title: '' };
+
 jest.isolateModules( () => {
 	( { createElement } = require( '@wordpress/element' ) );
 	( { render, fireEvent, act } = require( '@testing-library/react' ) );
@@ -95,4 +98,28 @@ describe( 'AxisRows units dropdown', () => {
 		expect( latestState.postMeta.y_units ).toBe( 'usd' );
 		expect( select.value ).toBe( 'usd' );
 	} );
+} );
+
+describe( 'AxisRows text', () => {
+	// PHP hands the editor decoded text, the inputs have to show it and hand it back unchanged
+	test.each( [ 'R&D', 'x < y > z', '"quoted" \'single\'', '&amp;', '<b>bold</b>', 'café €5 ±2°', '日本語', 'C:\\temp' ] )(
+		'an axis title of %s is shown and kept as typed',
+		( text ) => {
+			const { container } = renderRows();
+
+			const inputs = Array.from( container.querySelectorAll( 'input[type="text"]' ) );
+
+			expect( inputs.length ).toBeGreaterThan( 0 );
+
+			act( () => {
+				fireEvent.change( inputs[ 0 ], { target: { value: text } } );
+			} );
+
+			expect( inputs[ 0 ].value ).toBe( text );
+			expect( Object.values( latestState.postMeta ) ).toContain( text );
+
+			// Nothing typed turned into an element
+			expect( container.querySelector( 'b, script' ) ).toBeNull();
+		}
+	);
 } );

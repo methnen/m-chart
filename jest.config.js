@@ -32,9 +32,16 @@ module.exports = {
 		'components/block-src/**/*.js',
 		'!**/index.js',
 	],
-	// Coverage thresholds intentionally not enforced yet — the suite covers
-	// only the highest-risk paths (reducer + useChartRefresh) so far, and a
-	// global threshold would fail loudly without informing maintenance choices.
-	// Coverage is still collected and uploaded as an artifact; reinstate
-	// thresholds once meaningful per-file coverage is in place.
+	// The helper script in components/js is not listed: its tests load it as a classic script, which Jest can't instrument
+	// A floor a few points under what the suite measured when it was set (86% statements, 79% branches, 77% functions),
+	// so coverage can't quietly fall away, without failing a change over a point or two
+	// Raise it when the measured numbers have moved up and stayed there
+	coverageThreshold: {
+		global: {
+			statements: 82,
+			branches:   75,
+			functions:  72,
+			lines:      82,
+		},
+	},
 };

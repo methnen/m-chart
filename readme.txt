@@ -4,7 +4,7 @@ Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
 Requires at least: 6.6
 Tested up to: 7.1.4
-Stable tag: 2.4
+Stable tag: 2.4.1
 License: MIT
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -55,6 +55,35 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 == Changelog ==
 
+= 2.4.1 =
+
+* Chart and table text now shows exactly as typed, including `<`, `>` and `&`
+* CSV exports now open in Excel with special characters intact
+* Fixed an issue with cells starting with `=` showing as an error in the spreadsheet
+* Fixed an issue with exporting a CSV of a chart's saved data
+* Fixed an issue with negative numbers getting an apostrophe in CSV exports
+* Fixed an issue with very large CSV files running out of memory on import
+* Fixed an issue with backslashes being lost when migrating Highcharts charts
+* Fixed an issue with chart images being left behind when a chart is deleted
+* Fixed an issue with theme files not loading when their file name was unusual
+* Fixed an issue with Publish saving a draft when clicked while the chart preview was still updating
+* Fixed an issue with spaces and arrow keys not working while renaming a sheet
+* Fixed an issue with the Delete Sheet dialog not answering to the keyboard
+* Fixed an issue with the wrong sheet being shown after a sheet was deleted
+* Fixed an issue with the sheet tabs being described incorrectly to screen readers
+* Fixed an issue with a hairline gap under the active sheet tab at some browser zoom levels
+* Fixed an issue with the chart block loading forever when the chart list could not be fetched
+* Fixed an issue with the chart block skipping charts after a failed Load more
+* Fixed an issue with the chart block showing the results of an earlier search
+* Fixed an issue with embeds on sites whose permalinks do not end in a slash
+* Fixed an issue with `show="image"` on a chart that has no image yet
+* Fixed a security issue with password protected charts being shown without the password
+* Fixed a security issue with chart data being visible to users who could not edit the chart
+* Fixed a security issue with chart settings being editable as a custom field
+* Fixed a security issue with chart images not being checked before they were stored
+* Fixed a security issue with formulas in CSV exports
+* Fixed a cross-site scripting issue on sites still using the M Chart Highcharts Library
+
 = 2.4 =
 
 * Added a Chart.js plugin registry via the `m_chart_chartjs_plugins` filter
@@ -82,7 +111,7 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 = 2.3.3 =
 
-* Updated the bundled Freemius SDK to the latest version (2.13.5)
+* Updated the bundled Freemius SDK to the latest version (2.13.5), which is a security release
 
 = 2.3.2 =
 
