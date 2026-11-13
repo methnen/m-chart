@@ -59,10 +59,10 @@ export default function SheetTabs() {
 
 			dispatch( { type: 'SET_ACTIVE_SHEET', payload: target } );
 
-			// Move focus to the new active tab after React commits
-			setTimeout( () => {
-				document.getElementById( `spreadsheet-tab-${ sheetIds[ target ] }` )?.focus();
-			}, 0 );
+			// Focus moves with the selection, in the same key press
+			// A tab can be focused from here whatever its tabindex, so there is no need to wait for React to commit
+			// Waiting left a moment where the next key press still landed on the old tab and moved from there
+			document.getElementById( `spreadsheet-tab-${ sheetIds[ target ] }` )?.focus();
 		}
 
 		el.addEventListener( 'm-chart-tab-nav', handler );
