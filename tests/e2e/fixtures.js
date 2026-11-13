@@ -160,6 +160,12 @@ async function expectChartRendered( page ) {
 	await page.waitForFunction( () => true === window.__mchartRenderDone );
 }
 
+// WebKit's console line for an XMLHttpRequest to admin-ajax.php that did not complete
+// Seen once in a while on the nightly run, never reproduced on demand
+// It is not counted because it cannot be the plugin's: the plugin only ever uses fetch, which WebKit reports
+// as "Fetch API cannot load", so this is one of WordPress's own (the heartbeat, an autosave)
+const CORE_REQUEST_CUT_SHORT = /^XMLHttpRequest cannot load .*\/wp-admin\/admin-ajax\.php due to access control checks\.$/;
+
 /**
  * Collects everything that would mean a script ran or broke on the page: dialogs, uncaught errors and console errors
  *
@@ -185,7 +191,7 @@ function watchPage( page ) {
 	page.on( 'pageerror', ( error ) => seen.errors.push( String( error ) ) );
 
 	page.on( 'console', ( message ) => {
-		if ( 'error' === message.type() ) {
+		if ( 'error' === message.type() && ! CORE_REQUEST_CUT_SHORT.test( message.text() ) ) {
 			seen.errors.push( message.text() );
 		}
 	} );

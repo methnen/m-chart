@@ -346,10 +346,20 @@ describe( 'SheetTabs switching sheets', () => {
 
 		expect( selectedTabName() ).toBe( to );
 
-		// Focus follows once React has committed the new selection
-		runPendingTimers();
-
+		// Focus has moved by the time the key press is done, the next key has to land on the new tab
 		expect( tab( to ) ).toHaveFocus();
+	} );
+
+	test( 'two keys in a row each move from the tab the one before it reached', () => {
+		renderTabs( { active: 2 } );
+
+		// Nothing in between the two, no timer is given the chance to run
+		// The second key goes to whatever has focus, the way a real key press does
+		fireEvent.keyDown( tab( 'Gamma' ), { key: 'ArrowRight' } );
+		fireEvent.keyDown( document.activeElement, { key: 'ArrowLeft' } );
+
+		expect( selectedTabName() ).toBe( 'Gamma' );
+		expect( tab( 'Gamma' ) ).toHaveFocus();
 	} );
 
 	test( 'the arrow keys do not scroll the page while they move between tabs', () => {

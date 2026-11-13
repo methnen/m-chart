@@ -20,7 +20,12 @@ test.describe( 'Chart types', () => {
 	test( 'there is an example for every type the plugin offers', async ( { page, admin } ) => {
 		await admin.visitAdminPage( 'post-new.php', 'post_type=m-chart' );
 
-		const offered = await page.locator( '[name="m-chart[type]"] option' ).evaluateAll( ( options ) => options.map( ( option ) => option.value ) );
+		const options = page.locator( '[name="m-chart[type]"] option' );
+
+		// The editor draws the list once it has mounted, reading it any sooner finds nothing
+		await expect( options.first() ).toBeAttached();
+
+		const offered = await options.evaluateAll( ( all ) => all.map( ( option ) => option.value ) );
 
 		// A type added to the plugin without an example would otherwise never be drawn by this spec
 		expect( EXAMPLES.map( ( example ) => example.type ).sort() ).toEqual( offered.sort() );

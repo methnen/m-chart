@@ -57,6 +57,26 @@ test.describe( '@a11y chart edit screen', () => {
 		await expect( page.locator( '#spreadsheet-tabs' ) ).toBeVisible();
 		expect( ( await scan() ).violations ).toEqual( [] );
 
+		// And again while a sheet's name is open for editing
+		await page.locator( '#spreadsheet-tabs [role="tab"]' ).nth( 1 ).dblclick();
+		await expect( page.locator( '#spreadsheet-tabs' ).getByRole( 'textbox', { name: 'Rename sheet' } ) ).toBeVisible();
+
+		expect( ( await scan() ).violations ).toEqual( [] );
+	} );
+
+	// A test of its own, on a page axe has not scanned
+	// Playwright 1.65's Firefox (159) crashes the page when a script on the page has read an element's
+	// ariaLabelledByElements and Playwright then reads it too: axe reads it, the snapshot below reads it,
+	// and every delete button has an aria-labelledby
+	// A page with one such button and nothing else does the same, it is not this markup
+	test( 'the sheet tab bar is a tab list of the sheets, with the buttons beside it', async ( { page, chartEditPage } ) => {
+		const sheet = ( label ) => [ [ '', 'X', 'Y' ], [ label, 1, 2 ], [ label + '2', 3, 4 ] ];
+
+		await chartEditPage.open( {
+			title: 'A11y tab list chart',
+			meta:  { type: 'scatter', data: { sets: [ sheet( 'a' ), sheet( 'b' ), sheet( 'c' ) ] }, set_names: [ 'Alpha', 'Beta', 'Gamma' ] },
+		} );
+
 		// What assistive technology is given: a tab list of the three sheets and nothing else,
 		// with the buttons beside it and each delete button naming its sheet
 		await expect( page.locator( '#spreadsheet-tabs' ) ).toMatchAriaSnapshot( `
@@ -69,11 +89,5 @@ test.describe( '@a11y chart edit screen', () => {
 			- button "Delete Beta"
 			- button "Delete Gamma"
 		`.replace( /\t/g, '  ' ) );
-
-		// And again while a sheet's name is open for editing
-		await page.locator( '#spreadsheet-tabs [role="tab"]' ).nth( 1 ).dblclick();
-		await expect( page.locator( '#spreadsheet-tabs' ).getByRole( 'textbox', { name: 'Rename sheet' } ) ).toBeVisible();
-
-		expect( ( await scan() ).violations ).toEqual( [] );
 	} );
 } );
