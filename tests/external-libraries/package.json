@@ -4,8 +4,8 @@
   "description": "The JavaScript libraries copied into components/external, at the versions that are there. Nothing is installed from this file: it exists so GitHub can see what the plugin ships. See DEVELOPERS.md.",
   "dependencies": {
     "@sgratzl/chartjs-chart-boxplot": "4.4.5",
-    "chart.js": "4.5.1",
-    "chartjs-chart-treemap": "4.2.0",
+    "chart.js": "4.6.1",
+    "chartjs-chart-treemap": "4.2.2",
     "chartjs-chart-venn": "4.3.7",
     "chartjs-plugin-datalabels": "2.2.0",
     "jspreadsheet-ce": "5.0.4",

@@ -502,9 +502,9 @@ When Dependabot opens a "Vendored library" pull request it has done step 2 for y
 
 | Library | Version | Upstream |
 |---|---|---|
-| Chart.js | 4.5.1 | [chart.js on npm](https://www.npmjs.com/package/chart.js) (`dist/chart.umd.js`) |
+| Chart.js | 4.6.1 | [chart.js on npm](https://www.npmjs.com/package/chart.js) (`dist/chart.umd.js`) |
 | chartjs-plugin-datalabels | 2.2.0 | [npm](https://www.npmjs.com/package/chartjs-plugin-datalabels) |
-| chartjs-chart-treemap | 4.2.0 | [npm](https://www.npmjs.com/package/chartjs-chart-treemap) (`dist/chartjs-chart-treemap.min.js`) |
+| chartjs-chart-treemap | 4.2.2 | [npm](https://www.npmjs.com/package/chartjs-chart-treemap) (`dist/chartjs-chart-treemap.min.js`) |
 | chartjs-chart-boxplot | 4.4.5 | [@sgratzl/chartjs-chart-boxplot on npm](https://www.npmjs.com/package/@sgratzl/chartjs-chart-boxplot) (`build/index.umd.min.js`) |
 | chartjs-chart-venn | 4.3.7 | [npm](https://www.npmjs.com/package/chartjs-chart-venn) (`build/index.umd.min.js`) |
 | Jspreadsheet CE | 5.0.4 | [jspreadsheet-ce on npm](https://www.npmjs.com/package/jspreadsheet-ce) — pairs with jsuites 5.x (`^5.12.0`) |
