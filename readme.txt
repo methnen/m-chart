@@ -59,6 +59,7 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 
 * Chart and table text now shows exactly as typed, including `<`, `>` and `&`
 * CSV exports now open in Excel with special characters intact
+* Updated Chart.js to the latest stable version (4.6.1)
 * Fixed an issue with cells starting with `=` showing as an error in the spreadsheet
 * Fixed an issue with exporting a CSV of a chart's saved data
 * Fixed an issue with negative numbers getting an apostrophe in CSV exports

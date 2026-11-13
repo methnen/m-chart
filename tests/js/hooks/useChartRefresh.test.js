@@ -46,9 +46,10 @@ describe( 'useChartRefresh', () => {
 		} );
 	} );
 
+	// No jest.restoreAllMocks() here, it would also take away the console spies
+	// @wordpress/jest-console uses to fail a test that logs an unexpected error
 	afterEach( () => {
 		jest.useRealTimers();
-		jest.restoreAllMocks();
 	} );
 
 	test( 'debounces rapid prop changes into a single fetch', async () => {
@@ -78,7 +79,6 @@ describe( 'useChartRefresh', () => {
 
 	test( 'a rejected fetch re-enables the form and fires m_chart.chart_args_error', async () => {
 		global.fetch = jest.fn().mockRejectedValue( new Error( 'network down' ) );
-		jest.spyOn( console, 'error' ).mockImplementation( () => {} );
 
 		const onError = jest.fn();
 		window.wp.hooks.addAction( 'm_chart.chart_args_error', 'test/error', onError );
@@ -96,6 +96,9 @@ describe( 'useChartRefresh', () => {
 		expect( latestFormEnabled ).toBe( true );
 		expect( onError ).toHaveBeenCalledTimes( 1 );
 		expect( onError.mock.calls[ 0 ][ 1 ] ).toBeInstanceOf( Error );
+
+		// The hook logs the failure, which has to be declared or jest-console fails the test
+		expect( console ).toHaveErrored();
 	} );
 
 	test( 'a { success: false } response re-enables the form', async () => {
@@ -136,7 +139,6 @@ describe( 'useChartRefresh', () => {
 			// Second request never settles during the test, so the form must stay disabled
 			return new Promise( () => {} );
 		} );
-		jest.spyOn( console, 'error' ).mockImplementation( () => {} );
 
 		const { rerender } = renderHook(
 			( { title } ) => useChartRefresh( title ),
@@ -164,6 +166,9 @@ describe( 'useChartRefresh', () => {
 		} );
 
 		expect( latestFormEnabled ).toBe( false );
+
+		// A stale failure is still logged, it just isn't acted on
+		expect( console ).toHaveErrored();
 	} );
 
 	test( 'does not dispatch after unmount', async () => {
