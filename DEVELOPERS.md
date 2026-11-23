@@ -323,6 +323,21 @@ Things worth knowing when writing one:
 - Tests start signed in as the admin. The `contributorPage` and `editorPage` fixtures give a page signed in as that role, in its own browser context. The users are made once in `tests/e2e/global-setup.js`.
 - `site-settings.spec.js` changes settings for the whole site (switching embeds on turns every chart on every page into an iframe), so it cannot run beside the other specs. It has its own Playwright project, `site-settings`, which depends on the others: a plain `npx playwright test` runs it last, `--project=chromium` leaves it out, and `npx playwright test --project=site-settings --no-deps` runs it alone. It puts the settings back when it finishes. Anything else that changes site-wide state belongs in that file.
 - Running the PHP integration suite resets the same tests database: the plugin and theme end up inactive and permalinks unset. Before the next E2E run, re-run the `tests-cli` commands from `lifecycleScripts.afterStart` in `.wp-env.json`, or `npx wp-env start` again.
+- Write a test so that its failure explains itself:
+  - Wrap each part of a longer test in `step( 'Publish the chart', async () => { … } )` from `fixtures.js`, named for what a person would be doing. The name is what a failure says the test was doing.
+  - Give an assertion a short message whenever its values alone would not say what was compared: `expect( meta.type, 'the saved chart type' ).toBe( 'column' )`. The message names the thing looked at, the report adds what was expected and what was found.
+  - To check a page ran no script it shouldn't have and threw no errors, use `watchPage( page )` at the start and `await expectNoPageErrors( seen )` / `await expectNoDialogs( seen )` at the end. They say which error, on which page and during which step, and keep a picture of the page at the moment of the first error.
+
+### Reading an E2E failure
+
+Every try of a test is recorded (trace and video) and the recordings of tries that failed are kept, so a test that failed once and passed on its retry still has the failed try to look at. When something fails, or passes only on a retry, `tests/e2e/reporters/failure-report.js` writes it up twice:
+
+1. **On the run's summary page in GitHub Actions**: which test, which try, the step it was in and why, in a line or two. It also says when a run is red only because a test needed a retry, which the nightly run counts as a failure and the test counts do not show.
+2. **In one HTML file**, `e2e-failures-<browser>-wp-<version>.html`: the same account with the screenshots and videos of the failed tries inside it. In CI it is an artifact of its own, uploaded as the file itself and linked from the summary under "See it". Locally it is written to the plugin folder and its path is printed at the end of the run.
+
+For more than that, the `playwright-report-*` artifact is Playwright's full report and `playwright-test-results-*` has the traces: unzip, then `npx playwright show-trace path/to/trace.zip` steps through the failed try action by action, with the page as it was at each one.
+
+Recording makes a full local run about a fifth longer. `tests/js/e2e/failure-report.test.js` feeds the reporter made-up results, so it cannot stop working unnoticed between real failures.
 
 ### Accessibility tests (axe-core)
 

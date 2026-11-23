@@ -160,20 +160,100 @@ async function expectChartRendered( page ) {
 	await page.waitForFunction( () => true === window.__mchartRenderDone );
 }
 
-// WebKit's console line for an XMLHttpRequest to admin-ajax.php that did not complete
-// Seen once in a while on the nightly run, never reproduced on demand
-// It is not counted because it cannot be the plugin's: the plugin only ever uses fetch, which WebKit reports
-// as "Fetch API cannot load", so this is one of WordPress's own (the heartbeat, an autosave)
-const CORE_REQUEST_CUT_SHORT = /^XMLHttpRequest cannot load .*\/wp-admin\/admin-ajax\.php due to access control checks\.$/;
+// The named steps the running test is inside, outermost first
+// A worker runs one test at a time, so one list for the file is enough
+const stepsRunning = [];
+
+/**
+ * A named part of a test
+ *
+ * The name is what a failure says the test was doing: it shows in Playwright's report and trace,
+ * in the failure report (tests/e2e/reporters/failure-report.js), and in what watchPage() records about an error
+ * Write it as what a person would be doing, "Publish the chart"
+ *
+ * @param {string}   title what this part of the test does
+ * @param {Function} body  the part itself
+ * @return {Promise} whatever the body returns
+ */
+function step( title, body ) {
+	return baseTest.step( title, async () => {
+		stepsRunning.push( title );
+
+		try {
+			return await body();
+		} finally {
+			stepsRunning.pop();
+		}
+	} );
+}
+
+// WebKit will not start a request for a page that is on its way out, and throws at whoever asked:
+// "XMLHttpRequest cannot load <url> due to access control checks.", or "Fetch API cannot load ..."
+// WordPress's own scripts ask now and then while a test is leaving an editor screen (the heartbeat's next beat,
+// the block editor's template lookup), nothing there catches it, and so it arrives as an uncaught error
+// Playwright splits the text at the first ": ", which is why the address reads "http: /localhost" by the time it is here
+const REFUSED_WHILE_LEAVING = /^(?:XMLHttpRequest|Fetch API) cannot load https?:\s?\/+([^/\s]+)\/\S* due to access control checks\.$/;
+
+/**
+ * Whether an uncaught error is WebKit turning away a request that WordPress itself made as the page was being left
+ *
+ * Only a request to the site can be that, the same words about another address are a real refusal
+ * And it stays an error when the plugin's own files are in the stack, a request of ours made that late is ours to fix
+ *
+ * @param {Error} error what Playwright's pageerror event handed over
+ * @return {boolean} true when it is not to be counted
+ */
+function isCoreRequestRefusedWhileLeaving( error ) {
+	const match = REFUSED_WHILE_LEAVING.exec( String( error ) );
+
+	return !! match
+		&& match[ 1 ] === new URL( BASE_URL ).host
+		&& ! /\/plugins\/m-chart[^/]*\//.test( error.stack || '' );
+}
+
+/**
+ * Takes a picture of the page and attaches it to the running test, for the first error a page reports
+ *
+ * The test's own screenshot is taken when the test ends, by which time it is usually on another page
+ * A page that is mid-navigation cannot be pictured, that is passed over quietly
+ *
+ * @param {Object} page Playwright page
+ * @return {Promise} settles when the picture is attached or has been given up on
+ */
+function pictureOf( page ) {
+	let info;
+
+	try {
+		info = baseTest.info();
+	} catch {
+		return Promise.resolve();
+	}
+
+	return page.screenshot( { timeout: 3000 } )
+		.then( ( body ) => info.attach( 'The page when it reported its first error', { body, contentType: 'image/png' } ) )
+		.catch( () => {} );
+}
 
 /**
  * Collects everything that would mean a script ran or broke on the page: dialogs, uncaught errors and console errors
+ *
+ * Check what it collected with expectNoPageErrors() and expectNoDialogs(), which say what happened in words
  *
  * @param {Object} page Playwright page
  * @return {{ dialogs: string[], errors: string[], leaveWarnings: number }} live values, read them after the page has done its work
  */
 function watchPage( page ) {
-	const seen = { dialogs: [], errors: [], leaveWarnings: 0 };
+	// records holds each error again with where and when it happened, pending the pictures still being taken
+	const seen = { dialogs: [], errors: [], leaveWarnings: 0, records: [], pending: [] };
+
+	const record = ( kind, text, detail ) => {
+		seen.errors.push( text );
+		seen.records.push( { kind, text, detail, address: page.url().replace( BASE_URL, '' ), during: stepsRunning.join( ' › ' ) } );
+
+		if ( 1 === seen.records.length ) {
+			seen.pending.push( pictureOf( page ) );
+		}
+	};
 
 	page.on( 'dialog', ( dialog ) => {
 		// The browser's "Leave site?" prompt is not a script running, but it is counted:
@@ -188,15 +268,71 @@ function watchPage( page ) {
 		dialog.dismiss();
 	} );
 
-	page.on( 'pageerror', ( error ) => seen.errors.push( String( error ) ) );
+	page.on( 'pageerror', ( error ) => {
+		if ( ! isCoreRequestRefusedWhileLeaving( error ) ) {
+			record( 'Uncaught error', String( error ), error.stack || '' );
+		}
+	} );
 
 	page.on( 'console', ( message ) => {
-		if ( 'error' === message.type() && ! CORE_REQUEST_CUT_SHORT.test( message.text() ) ) {
-			seen.errors.push( message.text() );
+		if ( 'error' === message.type() ) {
+			const { url, lineNumber } = message.location();
+
+			record( 'Console error', message.text(), url ? `logged from ${ url }:${ lineNumber }` : '' );
 		}
 	} );
 
 	return seen;
+}
+
+/**
+ * Fails the test when the page reported an error, and says which, on what page and during which step
+ *
+ * @param {Object}  seen            what watchPage() returned
+ * @param {Object}  options
+ * @param {boolean} options.soft    report it and let the test carry on, as expect.soft does
+ * @param {string}  options.subject what was being looked at, for a test that checks several things in turn
+ * @return {Promise} settles when the check is done, await it
+ */
+function expectNoPageErrors( seen, { soft = false, subject = '' } = {} ) {
+	// Boxed, so a failure points at the line of the test that asked and not at this file
+	return baseTest.step( 'Check the page reported no errors', async () => {
+		await Promise.all( seen.pending );
+
+		const lines = seen.records.map( ( { kind, text, address, during } ) =>
+			`${ kind } on ${ address || 'a page with no address yet' }${ during ? ` during "${ during }"` : '' }: ${ text }`
+		);
+
+		if ( lines.length && ! seen.attached ) {
+			seen.attached = true;
+
+			// The stacks are long, so they go beside the failure and not in it
+			await baseTest.info().attach( 'What the page reported', {
+				contentType: 'text/plain',
+				body:        seen.records.map( ( { detail }, index ) => [ lines[ index ], detail ].filter( Boolean ).join( '\n' ) ).join( '\n\n' ),
+			} );
+		}
+
+		const count   = 1 === lines.length ? '1 error' : `${ lines.length } errors`;
+		const message = `${ subject ? `${ subject }: ` : '' }the page reported ${ count } while the test ran (an uncaught JavaScript error, or something logged to the console as an error)`;
+
+		( soft ? expect.soft : expect )( lines, message ).toEqual( [] );
+	}, { box: true } );
+}
+
+/**
+ * Fails the test when the page opened an alert, confirm or prompt, which only a script can do
+ *
+ * @param {Object} seen    what watchPage() returned
+ * @param {string} meaning what a dialog here would mean, in a few words
+ * @return {Promise} settles when the check is done, await it
+ */
+function expectNoDialogs( seen, meaning = 'nothing in the test should open one' ) {
+	return baseTest.step( 'Check the page opened no dialogs', async () => {
+		const count = 1 === seen.dialogs.length ? 'a dialog' : `${ seen.dialogs.length } dialogs`;
+
+		expect( seen.dialogs, `the page opened ${ count } (${ meaning })` ).toEqual( [] );
+	}, { box: true } );
 }
 
 const test = baseTest.extend( {
@@ -580,4 +716,4 @@ async function getSavedPostMeta( postId ) {
 	}
 }
 
-module.exports = { test, expect, wpCli, createCharts, trackChartRender, expectChartRendered, watchPage, awaitChartEditor, typeIntoCell, readSheet, trimSheet, getChartImageTextarea, getSavedPostMeta };
+module.exports = { test, expect, step, wpCli, createCharts, trackChartRender, expectChartRendered, watchPage, expectNoPageErrors, expectNoDialogs, awaitChartEditor, typeIntoCell, readSheet, trimSheet, getChartImageTextarea, getSavedPostMeta };

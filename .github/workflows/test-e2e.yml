@@ -83,6 +83,9 @@ jobs:
         # Retries hide a test that only passes on its second try
         # The nightly run fails on those so flakiness is seen, pushes and pull requests are not held up by it
         run: npm run test:e2e -- --project=${{ matrix.browser }} ${{ github.event_name == 'schedule' && '--fail-on-flaky-tests' || '' }}
+        # Names the page tests/e2e/reporters/failure-report.js writes when something fails or needs a retry
+        env:
+          E2E_REPORT_NAME: ${{ matrix.browser }}-wp-${{ matrix.wp }}
 
       # The settings page and the iframe embed change settings for the whole site, so they run on their own
       # once the parallel tests are done (see the site-settings project in playwright.config.js)
@@ -92,6 +95,46 @@ jobs:
         run: npx playwright test --project=site-settings --no-deps ${{ github.event_name == 'schedule' && '--fail-on-flaky-tests' || '' }}
         env:
           E2E_RUN_NAME: site-settings
+          E2E_REPORT_NAME: site-settings-wp-${{ matrix.wp }}
+
+      # What failed, said plainly, with the screenshots and videos of the tries that failed inside one HTML file
+      # The file only exists when something failed or needed a retry
+      # archive: false uploads the file as it is and not in a zip, it takes one file and names the artifact after it
+      - name: Upload the failure report
+        id: failure-report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: e2e-failures-${{ matrix.browser }}-wp-${{ matrix.wp }}.html
+          archive: false
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload the site settings failure report
+        id: failure-report-site-settings
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: e2e-failures-site-settings-wp-${{ matrix.wp }}.html
+          archive: false
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # The reporter has already written what went wrong on the run's summary page, this adds where to see it
+      - name: Link the failure report from the run summary
+        if: always() && ( steps.failure-report.outputs.artifact-url || steps.failure-report-site-settings.outputs.artifact-url )
+        run: |
+          {
+            echo "### See it"
+            echo ""
+            [ -n "$REPORT" ] && echo "- [Screenshots and video of what failed (${{ matrix.browser }} × WP ${{ matrix.wp }})]($REPORT)"
+            [ -n "$SETTINGS_REPORT" ] && echo "- [Screenshots and video of what failed in the site settings tests]($SETTINGS_REPORT)"
+            echo ""
+            echo "The full Playwright report and the traces are in this run's artifacts."
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          REPORT: ${{ steps.failure-report.outputs.artifact-url }}
+          SETTINGS_REPORT: ${{ steps.failure-report-site-settings.outputs.artifact-url }}
 
       - name: Upload Playwright HTML report
         if: always()
@@ -126,3 +169,5 @@ jobs:
           require_tests: false
           fail_on_failure: true
           detailed_summary: true
+          # Lists the tests that passed only on a retry, which the counts alone report as plain passes
+          flaky_summary: true

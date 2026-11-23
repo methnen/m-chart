@@ -15,6 +15,20 @@ const { AxeBuilder } = require( '@axe-core/playwright' );
 
 const WCAG_TAGS = [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa' ];
 
+/**
+ * Turns axe's findings into lines a person can read
+ * A failure then names the rule, what it means and the element, where the raw objects run to hundreds of lines
+ *
+ * @param {Array} violations what axe reported
+ * @return {string[]} one line for each element that breaks a rule
+ */
+const readable = ( violations ) => violations.flatMap( ( violation ) => {
+	const rule = `${ violation.id } (${ violation.help })`;
+
+	// A finding with no element is still a finding
+	return violation.nodes.length ? violation.nodes.map( ( node ) => `${ rule } at ${ node.target.join( ' ' ) }` ) : [ rule ];
+} );
+
 // Chart meta that exercises the full accessibility surface: subtitle,
 // source attribution (rendered as the focusable source link), and a
 // multi-row data set so the description table has real structure
@@ -59,7 +73,7 @@ test.describe( '@a11y frontend chart output', () => {
 
 		// Positive assertion first so a missing chart can't produce a vacuous pass
 		const container = page.locator( '.m-chart-container' );
-		await expect( container ).toBeVisible();
+		await expect( container, 'the chart on the page' ).toBeVisible();
 
 		// Deferred rendering waits for the container to scroll into view
 		await container.scrollIntoViewIfNeeded();
@@ -70,7 +84,7 @@ test.describe( '@a11y frontend chart output', () => {
 			.include( '.m-chart-container' )
 			.analyze();
 
-		expect( results.violations ).toEqual( [] );
+		expect( readable( results.violations ), 'accessibility rules broken by the chart on a public page' ).toEqual( [] );
 	} );
 
 	test( 'show="table" output has no WCAG 2.1 A/AA violations', async ( {
@@ -88,13 +102,13 @@ test.describe( '@a11y frontend chart output', () => {
 		await page.goto( `/?p=${ post.id }` );
 
 		const table = page.locator( 'table.m-chart-table' );
-		await expect( table ).toBeVisible();
+		await expect( table, 'the chart as a table' ).toBeVisible();
 
 		const results = await new AxeBuilder( { page } )
 			.withTags( WCAG_TAGS )
 			.include( 'table.m-chart-table' )
 			.analyze();
 
-		expect( results.violations ).toEqual( [] );
+		expect( readable( results.violations ), 'accessibility rules broken by the chart shown as a table' ).toEqual( [] );
 	} );
 } );

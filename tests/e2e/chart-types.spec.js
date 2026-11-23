@@ -8,7 +8,7 @@
 
 const fs   = require( 'fs' );
 const path = require( 'path' );
-const { test, expect, createCharts, watchPage } = require( './fixtures' );
+const { test, expect, step, createCharts, watchPage, expectNoPageErrors } = require( './fixtures' );
 
 const FIXTURES = path.join( __dirname, '..', 'fixtures', 'charts' );
 
@@ -23,12 +23,12 @@ test.describe( 'Chart types', () => {
 		const options = page.locator( '[name="m-chart[type]"] option' );
 
 		// The editor draws the list once it has mounted, reading it any sooner finds nothing
-		await expect( options.first() ).toBeAttached();
+		await expect( options.first(), 'the first chart type in the editor\'s list' ).toBeAttached();
 
 		const offered = await options.evaluateAll( ( all ) => all.map( ( option ) => option.value ) );
 
 		// A type added to the plugin without an example would otherwise never be drawn by this spec
-		expect( EXAMPLES.map( ( example ) => example.type ).sort() ).toEqual( offered.sort() );
+		expect( EXAMPLES.map( ( example ) => example.type ).sort(), 'the types that have an example chart (first) against the types the editor offers (second)' ).toEqual( offered.sort() );
 	} );
 
 	test( 'every type draws without an error', async ( { page, requestUtils } ) => {
@@ -39,7 +39,7 @@ test.describe( 'Chart types', () => {
 
 		try {
 			for ( const [ index, example ] of EXAMPLES.entries() ) {
-				await test.step( example.type, async () => {
+				await step( `Draw the ${ example.type } example`, async () => {
 					const seen = watchPage( page );
 
 					await page.addInitScript( () => {
@@ -82,7 +82,7 @@ test.describe( 'Chart types', () => {
 					expect.soft( drawn?.done, `${ example.type }: finished rendering` ).toBe( true );
 					expect.soft( drawn?.datasets, `${ example.type }: datasets` ).toBeGreaterThan( 0 );
 					expect.soft( drawn?.painted, `${ example.type }: something painted` ).toBe( true );
-					expect.soft( seen.errors, `${ example.type }: page errors` ).toEqual( [] );
+					await expectNoPageErrors( seen, { soft: true, subject: example.type } );
 
 					page.removeAllListeners( 'dialog' );
 					page.removeAllListeners( 'pageerror' );

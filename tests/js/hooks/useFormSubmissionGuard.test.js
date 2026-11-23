@@ -5,6 +5,7 @@
  * and the post form refuses to submit, once it is true both are released
  */
 import { act, render } from '@testing-library/react';
+import { useLayoutEffect } from '@wordpress/element';
 import { useFormSubmissionGuard } from '../../../components/admin-ui-src/hooks/useFormSubmissionGuard';
 import { ChartAdminProvider, useChartAdmin } from '../../../components/admin-ui-src/context/ChartAdminContext';
 
@@ -89,6 +90,45 @@ describe( 'useFormSubmissionGuard', () => {
 		setFormEnabled( true );
 
 		expect( disabledButtons() ).toEqual( [] );
+	} );
+
+	test( 'the buttons and the form are released in the same commit that made the form ready, not some time after it', () => {
+		const seenDuringCommit = [];
+
+		// A layout effect runs inside the commit, after the hook's own when the hook is called first
+		// Anything the hook left for later (a plain effect) has not happened yet when this looks
+		function GuardThenLook() {
+			const { state, dispatch } = useChartAdmin();
+
+			dispatchRef = dispatch;
+
+			useFormSubmissionGuard();
+
+			useLayoutEffect( () => {
+				seenDuringCommit.push( {
+					formEnabled:   state.formEnabled,
+					disabled:      disabledButtons(),
+					submitRefused: submitForm( form ).defaultPrevented,
+				} );
+			}, [ state.formEnabled ] );
+
+			return null;
+		}
+
+		render(
+			<ChartAdminProvider>
+				<GuardThenLook />
+			</ChartAdminProvider>
+		);
+
+		setFormEnabled( true );
+
+		// A click handled right after this commit is let through by the editor,
+		// so WordPress has to let it through as well and the form has to accept the submit that follows
+		expect( seenDuringCommit ).toEqual( [
+			{ formEnabled: false, disabled: GUARDED_BUTTONS, submitRefused: true },
+			{ formEnabled: true, disabled: [], submitRefused: false },
+		] );
 	} );
 
 	test( 'the form submits normally once it is ready', () => {

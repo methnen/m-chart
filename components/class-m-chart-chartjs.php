@@ -1394,6 +1394,16 @@ class M_Chart_Chartjs {
 				&& 'radar-area' != $this->post_meta['type']
 			)
 		) {
+			// Only pie, doughnut and polar get here with names along both edges of the sheet, the layout of a line or column chart
+			// The parser then hands back a list of values per series and these types draw one series, so the first one kept is drawn
+			// A list of values where Chart.js expects a value is a blank pie and an error in a polar chart
+			if ( M_Chart_Parse::LABELS_BOTH == m_chart()->parse()->value_labels_position ) {
+				$first_series = array_key_first( $data_array );
+
+				$raw_data   = null !== $first_series && isset( $raw_data[ $first_series ] ) ? array_values( (array) $raw_data[ $first_series ] ) : [];
+				$data_array = null !== $first_series ? array_values( (array) $data_array[ $first_series ] ) : [];
+			}
+
 			foreach ( $chart_args['data']['labels'] as $key => $label ) {
 				if ( isset( $data_array[ $key ] ) ) {
 					$chart_args['data']['datasets'][0]['data'][]    = $data_array[ $key ];
@@ -1404,18 +1414,51 @@ class M_Chart_Chartjs {
 			   'radar' == $this->post_meta['type']
 			|| 'radar-area' == $this->post_meta['type']
 		) {
-			$set_names = $this->post_meta['set_names'];
+			$set_names   = $this->post_meta['set_names'];
+			$many_sheets = 1 < count( $this->post_meta['data']['sets'] );
+			$label_key   = ( M_Chart_Parse::PARSE_ROWS == $this->post_meta['parse_in'] ) ? M_Chart_Parse::LABELS_FIRST_COLUMN : M_Chart_Parse::LABELS_FIRST_ROW;
+			$datasets    = [];
 
 			foreach ( $this->post_meta['data']['sets'] as $key => $data ) {
 				$parse = m_chart()->parse()->parse_data( $data, $this->post_meta['parse_in'], m_chart()->parse_text_mode( 'chartjs' ) );
 
 				$data_array = array_map( [ $this, 'fix_null_values' ], $parse->set_data );
+				$sheet_name = isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1';
 
-				$chart_args['data']['datasets'][ $key ] = [
-					'label'   => isset( $set_names[ $key ] ) ? $set_names[ $key ] : 'Sheet 1',
-					'data'    => $data_array,
-					'rawData' => $parse->raw_data,
-				];
+				// A label and a value on every line is one shape, named after the sheet
+				if ( M_Chart_Parse::LABELS_BOTH != $parse->value_labels_position ) {
+					$datasets[] = [
+						'label'   => $sheet_name,
+						'data'    => $data_array,
+						'rawData' => $parse->raw_data,
+					];
+
+					continue;
+				}
+
+				// Names along both edges is the layout of a line or column chart, a series on every line and each one its own shape
+				// The parser hands back a list of values per series there, and Chart.js throws when a point is a list
+				foreach ( $data_array as $series => $values ) {
+					$series_name = $parse->value_labels[ $label_key ][ $series ] ?? '';
+
+					// With several sheets the sheet name goes in front, two sheets can hold a series of the same name
+					if ( '' === $series_name ) {
+						$series_name = $sheet_name;
+					} elseif ( $many_sheets ) {
+						$series_name = $sheet_name . ': ' . $series_name;
+					}
+
+					$datasets[] = [
+						'label'   => $series_name,
+						'data'    => array_values( (array) $values ),
+						'rawData' => isset( $parse->raw_data[ $series ] ) ? array_values( (array) $parse->raw_data[ $series ] ) : [],
+					];
+				}
+			}
+
+			// Left unset when no sheet held anything to draw, the caller then adds the empty data set Chart.js needs
+			if ( [] !== $datasets ) {
+				$chart_args['data']['datasets'] = $datasets;
 			}
 		} elseif ( 'scatter' == $this->post_meta['type'] ) {
 			$set_names = $this->post_meta['set_names'];

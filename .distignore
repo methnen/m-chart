@@ -39,6 +39,7 @@
 /playwright.config.js
 /playwright-report
 /playwright-report-*
+/e2e-failures*.html
 /test-results
 /test-results-*
 /vendor

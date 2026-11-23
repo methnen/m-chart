@@ -6,7 +6,7 @@
  */
 
 const fs = require( 'fs' );
-const { test, expect, readSheet, watchPage } = require( './fixtures' );
+const { test, expect, step, readSheet, watchPage, expectNoPageErrors, expectNoDialogs } = require( './fixtures' );
 
 // Cells a CSV is easy to get wrong: a separator inside a cell, special characters, and a cell that looks like a formula
 const ROWS = [
@@ -57,39 +57,45 @@ test.describe( 'CSV import and export', () => {
 
 		await chartEditPage.open( { title: 'CSV round trip' } );
 
-		await page.locator( '#m-chart-csv input[type="file"]' ).setInputFiles( {
-			name:     'figures.csv',
-			mimeType: 'text/csv',
-			buffer:   Buffer.from( IMPORT_FILE, 'utf8' ),
+		await step( 'Choose a CSV file', async () => {
+			await page.locator( '#m-chart-csv input[type="file"]' ).setInputFiles( {
+				name:     'figures.csv',
+				mimeType: 'text/csv',
+				buffer:   Buffer.from( IMPORT_FILE, 'utf8' ),
+			} );
+
+			// The file is named and the user is warned before anything is replaced
+			await expect( page.locator( '#m-chart-csv .file-info' ), 'the name of the chosen file' ).toContainText( 'figures.csv' );
 		} );
 
-		// The file is named and the user is warned before anything is replaced
-		await expect( page.locator( '#m-chart-csv .file-info' ) ).toContainText( 'figures.csv' );
+		await step( 'Import it', async () => {
+			await page.locator( '#m-chart-csv' ).getByRole( 'button', { name: 'Import', exact: true } ).click();
 
-		await page.locator( '#m-chart-csv' ).getByRole( 'button', { name: 'Import', exact: true } ).click();
+			// The cells are text as typed: the formula is shown, not run
+			await expect.poll( () => readSheet( page ), { message: 'the sheet never came to hold what the file holds' } ).toEqual( ROWS );
+			await expect( page.locator( '#m-chart-csv .error' ), 'import errors shown' ).toHaveCount( 0 );
+		} );
 
-		// The cells are text as typed: the formula is shown, not run
-		await expect.poll( () => readSheet( page ) ).toEqual( ROWS );
-		await expect( page.locator( '#m-chart-csv .error' ) ).toHaveCount( 0 );
+		await step( 'Export the sheet', async () => {
+			// Wait for the preview to catch up with the new data before exporting
+			await page.waitForSelector( '.m-chart-container[data-image-capture-state="ready"]', { state: 'attached', timeout: 15000 } );
 
-		// Wait for the preview to catch up with the new data before exporting
-		await page.waitForSelector( '.m-chart-container[data-image-capture-state="ready"]', { state: 'attached', timeout: 15000 } );
+			const downloading = page.waitForEvent( 'download' );
 
-		const downloading = page.waitForEvent( 'download' );
+			await page.locator( '#m-chart-csv' ).getByRole( 'button', { name: 'Export', exact: true } ).click();
 
-		await page.locator( '#m-chart-csv' ).getByRole( 'button', { name: 'Export', exact: true } ).click();
+			const download = await downloading;
 
-		const download = await downloading;
+			expect( download.suggestedFilename(), 'the name of the downloaded file' ).toMatch( /\.csv$/ );
+			const exported = fs.readFileSync( await download.path(), 'utf8' );
 
-		expect( download.suggestedFilename() ).toMatch( /\.csv$/ );
-		const exported = fs.readFileSync( await download.path(), 'utf8' );
+			// Every line ends CRLF, a bare line feed would be a broken file in Excel
+			expect( exported.replace( /\r\n/g, '' ), 'the exported file with its CRLF line ends taken out, which should leave no line breaks' ).not.toMatch( /[\r\n]/ );
+			expect( withoutPadding( exported ), 'the exported file, without the empty padding cells' ).toBe( EXPORT_FILE );
+		} );
 
-		// Every line ends CRLF, a bare line feed would be a broken file in Excel
-		expect( exported.replace( /\r\n/g, '' ) ).not.toMatch( /[\r\n]/ );
-		expect( withoutPadding( exported ) ).toBe( EXPORT_FILE );
-
-		expect( seen.dialogs ).toEqual( [] );
-		expect( seen.errors ).toEqual( [] );
+		await expectNoDialogs( seen );
+		await expectNoPageErrors( seen );
 	} );
 
 	test( 'a file that is not a CSV is refused before anything is sent', async ( { page, chartEditPage } ) => {
@@ -103,7 +109,7 @@ test.describe( 'CSV import and export', () => {
 			buffer:   Buffer.from( 'not a csv' ),
 		} );
 
-		await expect( page.locator( '#m-chart-csv .file.error' ) ).toBeVisible();
-		expect( await readSheet( page ) ).toEqual( before );
+		await expect( page.locator( '#m-chart-csv .file.error' ), 'the message refusing the file' ).toBeVisible();
+		expect( await readSheet( page ), 'the sheet, which should be as it was before the file was chosen' ).toEqual( before );
 	} );
 } );

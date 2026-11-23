@@ -30,7 +30,7 @@
  *   - ChartPreview.js — Chart.js onComplete must trigger image capture
  *   - JspreadsheetWrapper.js — onafterchanges must keep dispatching SET_SHEET_DATA
  */
-import { test, expect, getChartImageTextarea, getSavedPostMeta } from './fixtures';
+import { test, expect, step, getChartImageTextarea, getSavedPostMeta } from './fixtures';
 
 const SHEET_FOR_EDIT = [
 	[ '',     'Series' ],
@@ -57,56 +57,62 @@ test.describe( '@regression submit gate — cell-edit + save-click race', () => 
 		const pre = await getChartImageTextarea( page );
 		expect( pre.value.length, 'expected an initial chart image after mount' ).toBeGreaterThan( 0 );
 
-		// Open the editor and stage a new value WITHOUT committing
-		// editCell uses jspreadsheet.openEditor + .fill — no Enter, Tab, or blur fires
-		// from the test side; the only thing that can commit is the upcoming Publish click
-		await cellEditor.editCell( EDIT_ROW, EDIT_COL, NEW_VALUE );
+		const params = await step( 'Type into a cell and click Publish without leaving the cell', async () => {
+			// Open the editor and stage a new value WITHOUT committing
+			// editCell uses jspreadsheet.openEditor + .fill — no Enter, Tab, or blur fires
+			// from the test side; the only thing that can commit is the upcoming Publish click
+			await cellEditor.editCell( EDIT_ROW, EDIT_COL, NEW_VALUE );
 
-		// Intercept the form-submit POST so we can assert what actually got sent
-		const submitPromise = page.waitForRequest(
-			req => req.url().includes( '/wp-admin/post.php' ) && req.method() === 'POST',
-			{ timeout: 15000 }
-		);
+			// Intercept the form-submit POST so we can assert what actually got sent
+			const submitPromise = page.waitForRequest(
+				req => req.url().includes( '/wp-admin/post.php' ) && req.method() === 'POST',
+				{ timeout: 15000 }
+			);
 
-		// Real click — browsers fire mousedown → blur(editor) → click in that order
-		// The blur on the editor input causes Jspreadsheet to commit the value,
-		// which dispatches SET_SHEET_DATA → formEnabled=false. THEN the click handler
-		// runs and finds formEnabled=false, engaging the submit gate
-		await page.locator( '#publish' ).click();
+			// Real click — browsers fire mousedown → blur(editor) → click in that order
+			// The blur on the editor input causes Jspreadsheet to commit the value,
+			// which dispatches SET_SHEET_DATA → formEnabled=false. THEN the click handler
+			// runs and finds formEnabled=false, engaging the submit gate
+			await page.locator( '#publish' ).click();
 
-		// Wait for the auto-submit once the gate releases
-		const req = await submitPromise;
-		const body = req.postData() || '';
-		const params = new URLSearchParams( body );
+			// Wait for the auto-submit once the gate releases
+			const req = await submitPromise;
 
-		// (a) Data loss check — the typed value must appear in the submitted form body
-		const submittedData = params.get( 'm-chart[data]' ) || '';
-		expect(
-			submittedData,
-			`submitted post body must contain the typed cell value '${ NEW_VALUE }' — submit gate likely fired before the cell commit`
-		).toContain( NEW_VALUE );
+			return new URLSearchParams( req.postData() || '' );
+		} );
 
-		// (b) Stale image check — the submitted PNG must be valid AND must differ
-		// from the pre-edit snapshot, proving capture happened AFTER the new value
-		// was rendered into the chart
-		const submittedImg = params.get( 'm-chart[img]' ) || '';
-		expect( submittedImg, 'm-chart[img] must be present in submitted form' ).not.toBe( '' );
-		expect(
-			submittedImg.startsWith( 'data:image/png;base64,iVBORw0KGgo' ),
-			'm-chart[img] must be a valid PNG data URL'
-		).toBe( true );
-		expect(
-			submittedImg,
-			'm-chart[img] must differ from the pre-edit snapshot — image capture must run AFTER cell-edit dispatch'
-		).not.toBe( pre.value );
+		await step( 'Check what the form sent', async () => {
+			// (a) Data loss check — the typed value must appear in the submitted form body
+			const submittedData = params.get( 'm-chart[data]' ) || '';
+			expect(
+				submittedData,
+				`submitted post body must contain the typed cell value '${ NEW_VALUE }' — submit gate likely fired before the cell commit`
+			).toContain( NEW_VALUE );
 
-		// Persistence cross-check via WP-CLI — the saved post_meta must contain the typed value
-		await page.waitForURL( /post\.php\?post=\d+/, { timeout: 15000 } );
-		const meta = await getSavedPostMeta( chartEditPage.postId );
-		const savedData = JSON.stringify( meta?.data?.sets || meta?.data || [] );
-		expect(
-			savedData,
-			`post_meta.data must contain '${ NEW_VALUE }' after round-trip — confirms the in-progress edit reached storage`
-		).toContain( NEW_VALUE );
+			// (b) Stale image check — the submitted PNG must be valid AND must differ
+			// from the pre-edit snapshot, proving capture happened AFTER the new value
+			// was rendered into the chart
+			const submittedImg = params.get( 'm-chart[img]' ) || '';
+			expect( submittedImg, 'm-chart[img] must be present in submitted form' ).not.toBe( '' );
+			expect(
+				submittedImg.startsWith( 'data:image/png;base64,iVBORw0KGgo' ),
+				'm-chart[img] must be a valid PNG data URL'
+			).toBe( true );
+			expect(
+				submittedImg,
+				'm-chart[img] must differ from the pre-edit snapshot — image capture must run AFTER cell-edit dispatch'
+			).not.toBe( pre.value );
+		} );
+
+		await step( 'Check what was saved', async () => {
+			// Persistence cross-check via WP-CLI — the saved post_meta must contain the typed value
+			await page.waitForURL( /post\.php\?post=\d+/, { timeout: 15000 } );
+			const meta = await getSavedPostMeta( chartEditPage.postId );
+			const savedData = JSON.stringify( meta?.data?.sets || meta?.data || [] );
+			expect(
+				savedData,
+				`post_meta.data must contain '${ NEW_VALUE }' after round-trip — confirms the in-progress edit reached storage`
+			).toContain( NEW_VALUE );
+		} );
 	} );
 } );

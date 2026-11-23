@@ -14,7 +14,7 @@
  * real theme, so the full flow is testable again.
  */
 
-const { test, expect, trackChartRender, expectChartRendered } = require( './fixtures' );
+const { test, expect, step, trackChartRender, expectChartRendered } = require( './fixtures' );
 
 test.describe( 'Chart edit flow', () => {
 	test( 'published chart renders canvas + accessible data table on the front-end', async ( {
@@ -48,34 +48,38 @@ test.describe( 'Chart edit flow', () => {
 			title:   'Chart embed test',
 		} );
 
-		await trackChartRender( page );
-		await page.goto( `/?p=${ post.id }` );
+		await step( 'Open the public page that embeds the chart', async () => {
+			await trackChartRender( page );
+			await page.goto( `/?p=${ post.id }` );
 
-		// The canvas should be on the page and the chart drawn on it, a canvas alone is there before any script runs
-		await expectChartRendered( page );
+			// The canvas should be on the page and the chart drawn on it, a canvas alone is there before any script runs
+			await expectChartRendered( page );
 
-		const canvas = page.locator( 'canvas.m-chart' );
-		await expect( canvas ).toBeVisible();
-
-		// Parsed by rows, so each row is a series and the top row holds the labels
-		const drawn = await page.evaluate( () => {
-			const instance = window.Chart.getChart( document.querySelector( 'canvas.m-chart' ) );
-
-			return { labels: instance.data.labels, series: instance.data.datasets.map( ( dataset ) => dataset.label ) };
+			await expect( page.locator( 'canvas.m-chart' ), 'the chart canvas' ).toBeVisible();
 		} );
 
-		expect( drawn ).toEqual( { labels: [ 'Revenue' ], series: [ 'Q1', 'Q2', 'Q3' ] } );
+		await step( 'Check what the chart drew', async () => {
+			// Parsed by rows, so each row is a series and the top row holds the labels
+			const drawn = await page.evaluate( () => {
+				const instance = window.Chart.getChart( document.querySelector( 'canvas.m-chart' ) );
 
-		// The screen-reader data table fallback should contain the expected cell values
-		const figure = page.locator( 'figure.m-chart-container' );
-		await expect( figure ).toBeAttached();
+				return { labels: instance.data.labels, series: instance.data.datasets.map( ( dataset ) => dataset.label ) };
+			} );
 
-		const fallbackTable = figure.locator( 'table.m-chart-table' );
-		await expect( fallbackTable ).toContainText( 'Revenue' );
-		await expect( fallbackTable ).toContainText( 'Q1' );
-		await expect( fallbackTable ).toContainText( '100' );
-		await expect( fallbackTable ).toContainText( 'Q2' );
-		await expect( fallbackTable ).toContainText( '200' );
+			expect( drawn, 'the labels and series the chart was drawn with' ).toEqual( { labels: [ 'Revenue' ], series: [ 'Q1', 'Q2', 'Q3' ] } );
+		} );
+
+		await step( 'Check the data table kept for screen readers', async () => {
+			// The screen-reader data table fallback should contain the expected cell values
+			const figure = page.locator( 'figure.m-chart-container' );
+			await expect( figure, 'the figure around the chart' ).toBeAttached();
+
+			const fallbackTable = figure.locator( 'table.m-chart-table' );
+
+			for ( const cell of [ 'Revenue', 'Q1', '100', 'Q2', '200' ] ) {
+				await expect( fallbackTable, 'the screen reader data table' ).toContainText( cell );
+			}
+		} );
 	} );
 
 	test( '[chart show="table"] renders only the table', async ( {
@@ -103,13 +107,13 @@ test.describe( 'Chart edit flow', () => {
 		// The table is there to be read, and there is no chart
 		const table = page.locator( 'table.m-chart-table' );
 
-		await expect( table ).toBeVisible();
-		await expect( page.locator( 'canvas' ) ).toHaveCount( 0 );
+		await expect( table, 'the chart as a table' ).toBeVisible();
+		await expect( page.locator( 'canvas' ), 'a drawn chart, where only the table should be' ).toHaveCount( 0 );
 
 		// The values are in the table's own cells, not merely somewhere on the page
 		const cells = ( await table.locator( 'th, td' ).allTextContents() ).map( ( cell ) => cell.trim() );
 
-		expect( cells ).toEqual( expect.arrayContaining( [ 'Sales', 'A', 'B', '50', '75' ] ) );
+		expect( cells, 'the text of the table cells' ).toEqual( expect.arrayContaining( [ 'Sales', 'A', 'B', '50', '75' ] ) );
 	} );
 
 	test( 'editor can open the chart edit screen', async ( { admin, page, chartFactory } ) => {
@@ -119,11 +123,11 @@ test.describe( 'Chart edit flow', () => {
 
 		// Confirm we landed on the edit screen for this chart
 		// The title lives in the classic-editor #title input, so assert its value (inputs have no text content)
-		await expect( page.locator( '#title' ) ).toHaveValue( 'Editable Chart' );
+		await expect( page.locator( '#title' ), 'the title field' ).toHaveValue( 'Editable Chart' );
 
 		// The React admin UI has mounted into each of its roots
-		await expect( page.locator( '#m-chart-spreadsheet-root > *' ).first() ).toBeAttached();
-		await expect( page.locator( '#m-chart-chart-root > *' ).first() ).toBeAttached();
-		await expect( page.locator( '#m-chart-subtitle-root [name="m-chart[subtitle]"]' ) ).toBeVisible();
+		await expect( page.locator( '#m-chart-spreadsheet-root > *' ).first(), 'the spreadsheet part of the editor' ).toBeAttached();
+		await expect( page.locator( '#m-chart-chart-root > *' ).first(), 'the chart preview part of the editor' ).toBeAttached();
+		await expect( page.locator( '#m-chart-subtitle-root [name="m-chart[subtitle]"]' ), 'the subtitle field' ).toBeVisible();
 	} );
 } );
