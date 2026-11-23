@@ -99,6 +99,45 @@ describe( 'MChartHelper.isSafeSourceUrl', () => {
 	} );
 } );
 
+describe( 'MChartHelper.treemapSourceEntry', () => {
+	// chartjs-chart-treemap hands every rectangle a raw object, its own fields are on raw._data
+	// A rectangle below the top level only has the group fields from its own level down there,
+	// the rows it was built from are under raw._data.children and each of those has every field
+
+	test( 'a rectangle of a flat treemap gives its own row', () => {
+		const row = { label: 'Apples', value: 1200, prefix: '$' };
+
+		expect( window.MChartHelper.treemapSourceEntry( { _data: row } ) ).toBe( row );
+	} );
+
+	test( 'a rectangle of a grouped treemap gives the first of the rows it was built from, which has every group field', () => {
+		const rows = [
+			{ sector: 'Technology', company: 'Apple', value: 50 },
+			{ sector: 'Technology', company: 'Acer', value: 30 },
+		];
+
+		// What the library keeps on a leaf two levels down: its own level and the value, not the sector above it
+		const raw = { l: 1, g: 'Apple', _data: { company: 'Apple', value: 50, children: rows } };
+
+		expect( window.MChartHelper.treemapSourceEntry( raw ) ).toBe( rows[ 0 ] );
+		expect( window.MChartHelper.treemapSourceEntry( raw ).sector ).toBe( 'Technology' );
+	} );
+
+	test( 'a rectangle with no rows under it falls back to its own data', () => {
+		const data = { company: 'Apple', value: 50, children: [] };
+
+		expect( window.MChartHelper.treemapSourceEntry( { _data: data } ) ).toBe( data );
+	} );
+
+	test.each( [
+		[ 'a rectangle with no data', {} ],
+		[ 'null', null ],
+		[ 'nothing', undefined ],
+	] )( '%s gives null', ( name, raw ) => {
+		expect( window.MChartHelper.treemapSourceEntry( raw ) ).toBeNull();
+	} );
+} );
+
 describe( 'MChartHelper.afterEvent source link', () => {
 	const bounds = { left: 10, right: 110, top: 380, bottom: 396 };
 

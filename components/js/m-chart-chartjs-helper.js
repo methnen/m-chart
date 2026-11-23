@@ -838,6 +838,26 @@ function paintTreemapCaptions( chart ) {
 }
 
 /**
+ * The source row behind a treemap rectangle
+ *
+ * chartjs-chart-treemap hands every rectangle a raw object with the rectangle's own fields on raw._data
+ * A rectangle below the top level of a grouped treemap only carries the group fields from its own level down there
+ * The rows it was built from sit under raw._data.children and each of them has every field,
+ * so the first of those is where the names of the levels above are read from, a top-level group's colour for one
+ * A rectangle of a flat treemap has no children and its own data is the row
+ *
+ * @param {Object} raw A treemap rectangle's raw object (context.raw in a scriptable option, item.raw in a tooltip)
+ * @return {Object|null} The row, or null when there is nothing to read it from
+ */
+function treemapSourceEntry( raw ) {
+	if ( ! raw || ! raw._data ) {
+		return null;
+	}
+
+	return raw._data.children?.[0] || raw._data;
+}
+
+/**
  * Wire the tooltip callbacks, datalabels formatter, and dataset color/label scriptables for a treemap chart
  *
  * Called from beforeUpdate rather than once at install because the admin preview swaps chart.data and chart.options
@@ -873,22 +893,10 @@ function wireTreemap( chart ) {
 		const hoverAlphaBump    = 0.06;
 		const leafHoverBump     = 0.18;
 
-		// The original tree entry behind a rectangle
-		// Grouped rectangles only carry the fields from their own level down on _data —
-		// the source rows sit under _data.children, and children[0] always has every field
-		// including the top-level group needed for color lookups at 3+ nesting levels
-		const sourceEntry = ( raw ) => {
-			if ( ! raw._data ) {
-				return null;
-			}
-
-			return raw._data.children?.[0] || raw._data;
-		};
-
 		const colorFor = ( raw, active ) => {
 			// At l=0 the group identifier is on raw.g; at deeper levels and leaves we walk
 			// back to the top-level identifier via the original tree entry
-			const entry = sourceEntry( raw );
+			const entry = treemapSourceEntry( raw );
 			const topId = ( 0 === raw.l ) ? raw.g : ( entry && entry[ topField ] );
 			const rgb   = topRgb[ topId ];
 
@@ -937,7 +945,7 @@ function wireTreemap( chart ) {
 		// parent rectangles fall back to the dataset-level affixes since the library aggregates
 		const formatWithAffixes = ( raw ) => {
 			const isLeaf  = raw.l >= leafLevel;
-			const leafRaw = isLeaf ? ( sourceEntry( raw ) || {} ) : null;
+			const leafRaw = isLeaf ? ( treemapSourceEntry( raw ) || {} ) : null;
 			const prefix  = isLeaf ? ( leafRaw.prefix || datasetPrefix ) : datasetPrefix;
 			const suffix  = isLeaf ? ( leafRaw.suffix || datasetSuffix ) : datasetSuffix;
 
@@ -1604,5 +1612,8 @@ MChartHelper.dispatchRenderDone = function ( el, detail ) {
 };
 
 MChartHelper.isSafeSourceUrl = isSafeSourceUrl;
+
+// For plugins that draw on a treemap and need a rectangle's place in the hierarchy
+MChartHelper.treemapSourceEntry = treemapSourceEntry;
 
 window.MChartHelper = MChartHelper;
