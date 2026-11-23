@@ -27,10 +27,15 @@ module.exports = defineConfig( {
 	//   - 'html'  — interactive trace viewer at playwright-report/ (uploaded as artifact in CI)
 	//   - 'junit' — XML feed for mikepenz/action-junit-report so failed test
 	//                names show inline in the PR Checks tab
+	//                includeRetries writes down the tries that failed before one passed, without it a test
+	//                that needed a retry is reported as a plain pass
+	//   - failure-report — only when something failed or needed a retry: a plain account of it on the run's
+	//                summary page and one HTML file with the screenshots and videos in it
 	reporter: [
 		[ process.env.CI ? 'github' : 'list' ],
 		[ 'html',  { outputFolder: `playwright-report${ RUN }`, open: 'never' } ],
-		[ 'junit', { outputFile:   `tests/junit/playwright${ RUN }.xml` } ],
+		[ 'junit', { outputFile:   `tests/junit/playwright${ RUN }.xml`, includeRetries: true } ],
+		[ './tests/e2e/reporters/failure-report.js' ],
 	],
 	outputDir: `test-results${ RUN }`,
 	use: {
@@ -38,8 +43,11 @@ module.exports = defineConfig( {
 		// WP_BASE_URL in @wordpress/e2e-test-utils-playwright. The "dev"
 		// instance (8888) holds development data and isn't used by E2E.
 		baseURL:      'http://localhost:8889',
-		trace:        'on-first-retry',
-		screenshot:   'only-on-failure',
+		// Every try is recorded and only the tries that failed are kept
+		// Recording from the first retry on would keep the try that passed and throw away the one worth seeing
+		trace:        'retain-on-failure',
+		video:        { mode: 'retain-on-failure', size: { width: 1280, height: 720 } },
+		screenshot:   { mode: 'only-on-failure', fullPage: true },
 		// Pre-authenticated session written by global-setup.js — every test
 		// starts already logged in as admin so admin.visitAdminPage works
 		storageState: STORAGE_STATE_PATH,

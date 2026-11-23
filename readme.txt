@@ -3,8 +3,8 @@ Contributors: methnen
 Tags: chartjs, graphs, charts, tables, data
 Requires PHP: 8.1
 Requires at least: 6.6
-Tested up to: 7.1.4
-Stable tag: 2.4.1
+Tested up to: 7.1.5
+Stable tag: 2.4.2
 License: MIT
 
 Manage data sets in a spreadsheet, display them as charts with the bundled Chart.js library, and embed them anywhere with a shortcode or block.
@@ -54,6 +54,10 @@ To contribute, report issues, or make feature requests, use [GitHub](https://git
 3. M Chart Block UI
 
 == Changelog ==
+
+= 2.4.2 =
+
+* Fixed an issue with Publish doing nothing when clicked just as the chart preview finished updating
 
 = 2.4.1 =
 

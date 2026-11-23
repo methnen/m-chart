@@ -19,6 +19,7 @@ m-chart-*.zip
 artifacts/
 coverage/
 playwright-report/
+e2e-failures*.html
 playwright-report-*/
 test-results/
 test-results-*/

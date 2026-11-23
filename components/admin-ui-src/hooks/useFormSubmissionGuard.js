@@ -1,4 +1,4 @@
-import { useEffect } from '@wordpress/element';
+import { useLayoutEffect } from '@wordpress/element';
 import { useChartAdmin } from '../context/ChartAdminContext';
 
 const BUTTON_IDS = [ 'save-post', 'wp-preview', 'post-preview', 'publish' ];
@@ -18,8 +18,14 @@ export function useFormSubmissionGuard() {
 	const { state } = useChartAdmin();
 	const { formEnabled } = state;
 
+	// Both of these are layout effects, so the buttons and the form change in the same breath as formEnabled does
+	// A plain effect runs a moment later, and a click made while the preview was finishing is handled in that moment:
+	// the click handlers in SpreadsheetMetaBox already saw the form as ready and let it through,
+	// while WordPress still saw the disabled class and ignored it, or this hook's own submit listener still refused it
+	// Either way nothing was saved, and the second way WordPress had already disabled its buttons for the save
+
 	// Toggle disabled class on WP buttons
-	useEffect( () => {
+	useLayoutEffect( () => {
 		BUTTON_IDS.forEach( ( id ) => {
 			const el = document.getElementById( id );
 
@@ -30,7 +36,7 @@ export function useFormSubmissionGuard() {
 	}, [ formEnabled ] );
 
 	// Block form submission when not ready
-	useEffect( () => {
+	useLayoutEffect( () => {
 		const form = document.getElementById( 'post' );
 
 		if ( ! form ) {

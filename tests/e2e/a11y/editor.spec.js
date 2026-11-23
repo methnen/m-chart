@@ -19,6 +19,20 @@ const { AxeBuilder } = require( '@axe-core/playwright' );
 
 const WCAG_TAGS = [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa' ];
 
+/**
+ * Turns axe's findings into lines a person can read
+ * A failure then names the rule, what it means and the element, where the raw objects run to hundreds of lines
+ *
+ * @param {Array} violations what axe reported
+ * @return {string[]} one line for each element that breaks a rule
+ */
+const readable = ( violations ) => violations.flatMap( ( violation ) => {
+	const rule = `${ violation.id } (${ violation.help })`;
+
+	// A finding with no element is still a finding
+	return violation.nodes.length ? violation.nodes.map( ( node ) => `${ rule } at ${ node.target.join( ' ' ) }` ) : [ rule ];
+} );
+
 test.describe( '@a11y chart edit screen', () => {
 	test( 'plugin UI mounts have no WCAG 2.1 A/AA violations', async ( {
 		page,
@@ -34,7 +48,7 @@ test.describe( '@a11y chart edit screen', () => {
 			.exclude( '.jss_container' )
 			.analyze();
 
-		expect( results.violations ).toEqual( [] );
+		expect( readable( results.violations ), 'accessibility rules broken in the chart editor' ).toEqual( [] );
 	} );
 
 	// A line chart has one sheet and the sheet tab bar is hidden for it, so the scan above never looks at the tabs
@@ -54,14 +68,14 @@ test.describe( '@a11y chart edit screen', () => {
 			.exclude( '.jss_container' )
 			.analyze();
 
-		await expect( page.locator( '#spreadsheet-tabs' ) ).toBeVisible();
-		expect( ( await scan() ).violations ).toEqual( [] );
+		await expect( page.locator( '#spreadsheet-tabs' ), 'the sheet tab bar' ).toBeVisible();
+		expect( readable( ( await scan() ).violations ), 'accessibility rules broken in the sheet tab bar' ).toEqual( [] );
 
 		// And again while a sheet's name is open for editing
 		await page.locator( '#spreadsheet-tabs [role="tab"]' ).nth( 1 ).dblclick();
-		await expect( page.locator( '#spreadsheet-tabs' ).getByRole( 'textbox', { name: 'Rename sheet' } ) ).toBeVisible();
+		await expect( page.locator( '#spreadsheet-tabs' ).getByRole( 'textbox', { name: 'Rename sheet' } ), 'the name field of the sheet being renamed' ).toBeVisible();
 
-		expect( ( await scan() ).violations ).toEqual( [] );
+		expect( readable( ( await scan() ).violations ), 'accessibility rules broken in the sheet tab bar while a sheet is being renamed' ).toEqual( [] );
 	} );
 
 	// A test of its own, on a page axe has not scanned
@@ -79,7 +93,7 @@ test.describe( '@a11y chart edit screen', () => {
 
 		// What assistive technology is given: a tab list of the three sheets and nothing else,
 		// with the buttons beside it and each delete button naming its sheet
-		await expect( page.locator( '#spreadsheet-tabs' ) ).toMatchAriaSnapshot( `
+		await expect( page.locator( '#spreadsheet-tabs' ), 'what the sheet tab bar gives assistive technology' ).toMatchAriaSnapshot( `
 			- tablist "Spreadsheet sheets":
 				- tab "Alpha" [selected]
 				- tab "Beta"
