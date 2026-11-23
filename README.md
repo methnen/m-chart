@@ -1,4 +1,4 @@
-# M Chart #
+# M Chart – Visualize your data with Charts, Graphs, & Tables #
 **Contributors:** [methnen](https://profiles.wordpress.org/methnen/)  
 **Tags:** chartjs, graphs, charts, tables, data  
 **Requires PHP:** 8.1  
